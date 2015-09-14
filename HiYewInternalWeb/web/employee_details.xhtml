@@ -1,0 +1,70 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+    <h:head>
+        <title>Human Resource System</title>
+    </h:head>
+    <h:body>
+        <h:form id = "formMain">
+            <h1>Employees Details</h1>
+            <p:menubar>
+                <p:menuitem value ="Home" url ="index.xhtml"  />
+                <p:menuitem value ="Register employee" url ="employeeRegistration.xhtml" disabled="#{loginControlBean.checkValid()}"/>
+                <p:menuitem value ="View Employee" url ="employee_details.xhtml" />
+                <p:menuitem value ="Apply for Leave" url ="leaveApplication.xhtml" />
+                <p:menuitem value ="Approve Leave" url ="approveLeave.xhtml" disabled="#{loginControlBean.checkValid()}"/>
+                <p:menuitem value ="Check Leave Status" url ="leaveStatus.xhtml" />
+                <p:menuitem value ="#{hiYewManagedBean.getEAlert()}" url ="alertEmployee.xhtml" />
+            </p:menubar>
+            <br/>
+
+            <p:growl id = "msgs" showDetail="true"/>
+            <p:dataTable var="im" value="#{loginControlBean.employees}" editable = "true" >
+                <f:facet name="header">
+                    View Employee
+                </f:facet>
+                <p:ajax event="rowEdit" listener="#{hiYewManagedBean.updateEmployee}" update =":formMain:msgs" />
+                <p:column headerText ="Employee ID" >
+                    <h:outputText value="#{im.id}" style="text-align: center" />
+                </p:column>                   
+                <p:column headerText ="Employee Name">
+                    <h:outputText value="#{im.employee_name}" style="text-align: center" /> 
+                </p:column>
+                <p:column headerText = "Employee Address">
+                    <p:cellEditor>
+                        <f:facet name ="output"><h:outputText value="#{im.employee_address}" style="text-align: center" /></f:facet>
+                        <f:facet name ="input"><p:inputText id = "employeeAddress" value ="#{hiYewManagedBean.employeeAddress}" /></f:facet>
+                    </p:cellEditor>
+                </p:column>
+                <p:column headerText = "Employee Contact">
+                    <p:cellEditor>
+                        <f:facet name ="output"><h:outputText value="#{im.employee_contact}" style="text-align: center" /></f:facet>
+                        <f:facet name ="input"><p:inputText id = "employeeContact" value ="#{hiYewManagedBean.employeeContact}" /></f:facet>
+                    </p:cellEditor>
+                </p:column>
+                <p:column headerText = "Employee Pass Number">
+                    <h:outputText value="#{im.employee_passNumber}" style="text-align: center" />
+                </p:column>
+                <p:column headerText = "Employee Pass Expiry">
+                    <p:cellEditor>
+                        <f:facet name ="output"><h:outputText  value= "#{im.employee_passExpiry}" /></f:facet>
+                        <f:facet name ="input"><p:inputText id = "employeePassExpiry" value ="#{hiYewManagedBean.employeePassExpiry}" /></f:facet>
+                    </p:cellEditor>
+                </p:column>
+                <p:column headerText = "Employee Leaves">
+                    <h:outputText value="#{im.number_of_leaves}" style="text-align: center" />
+                </p:column>
+                <p:column headerText = "Employee Position">
+                    <h:outputText value="#{im.employee_account_status}" style="text-align: center" />
+                </p:column>
+                <p:column style="width:32px">
+                    <p:rowEditor />
+                </p:column>
+            </p:dataTable>
+        </h:form>
+    </h:body>
+</html>
+

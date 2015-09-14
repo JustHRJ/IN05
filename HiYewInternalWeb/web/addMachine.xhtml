@@ -1,0 +1,72 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:head>
+        <title>Machine Control System</title>
+    </h:head>
+    <h:body>
+        <h:form id ="formMain">
+            <h1>Add Machinery</h1>
+            <p:menubar>
+                <p:menuitem value ="Home" url ="index.xhtml" />
+                <p:menuitem value ="Add Machinery" url ="addMachine.xhtml" />
+                <p:menuitem value ="View Machinery" url ="viewMachine.xhtml" />
+                <p:menuitem value ="#{hiYewManagedBean.getMAlert()}" url ="alertMachine.xhtml" />
+            </p:menubar>
+            <p:panel id ="panel" header="Add new Machinery">
+                <p:growl id ="msgs" showDetail="true"/>
+                <p:panelGrid>
+                    <p:row>
+                        <p:column>
+                            <p:outputLabel for ="machine_name" style ="font-weight: bold" value ="Machine Name:  "/>
+                        </p:column>
+                        <p:column>
+                            <p:inputText label ="Machine Name" id ="machine_name" value ="#{hiYewManagedBean.machineName}"> </p:inputText>
+                        </p:column>
+                    </p:row>
+                    <p:row>   
+                        <p:column>
+                            <p:outputLabel for ="machine_id" style ="font-weight: bold" value ="Machine ID:  "/>
+                        </p:column>
+                        <p:column>
+                            <p:inputText label ="Machine_Id" id ="machine_id" value ="#{hiYewManagedBean.machineId}"> </p:inputText>
+                        </p:column>
+                    </p:row>
+                    <p:row>   
+                        <p:column>
+                            <p:outputLabel for ="machine_description" style ="font-weight: bold" value ="machine description:  "/>
+                        </p:column>
+                        <p:column>
+                            <p:inputText label ="Machine_Description" id ="machine_description" value ="#{hiYewManagedBean.machineDescript}"> </p:inputText>
+                        </p:column>
+                    </p:row>
+                    <p:row>   
+                        <p:column>
+                            <p:outputLabel for ="machine_nxtMaint" style ="font-weight: bold" value ="machine next maintainence (yyyy-mm-dd):  "/>
+                        </p:column>
+                        <p:column>
+                            <p:inputText label ="Machine_NxtMaint" id ="machine_nxtMaint" value ="#{hiYewManagedBean.machineNxtMaint}"> </p:inputText>
+                        </p:column>
+                    </p:row>
+
+                    <p:row>   
+                        <p:column>
+                            <p:outputLabel for ="machine_subMaint" style ="font-weight: bold" value ="subsequent maintainence schedule (in months):  "/>
+                        </p:column>
+                        <p:column>
+                            <p:inputText label ="Machine_SubMaint" id ="machine_subMaint" value ="#{hiYewManagedBean.machineSubMaint}"> </p:inputText>
+                        </p:column>
+                    </p:row>
+
+                </p:panelGrid>
+                <p:commandButton id="btn" value="Add new Machine"  actionListener="#{hiYewManagedBean.addMachine}"  update =":formMain:msgs" />
+            </p:panel>
+
+        </h:form>
+
+    </h:body>
+</html>
+

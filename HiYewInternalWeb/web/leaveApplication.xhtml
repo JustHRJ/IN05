@@ -1,0 +1,66 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+    <h:head>
+        <title>Human Resource System</title>
+    </h:head>
+    <h:body>
+        <h1>Application for Leave</h1>
+        <h:form id = "formMain">
+            <p:menubar>
+            <p:menuitem value ="Home" url ="index.xhtml"  />
+            <p:menuitem value ="Register employee" url ="employeeRegistration.xhtml" disabled="#{loginControlBean.checkValid()}"/>
+            <p:menuitem value ="View Employee" url ="employee_details.xhtml" />
+            <p:menuitem value ="Apply for Leave" url ="leaveApplication.xhtml" />
+            <p:menuitem value ="Approve Leave" url ="approveLeave.xhtml" disabled="#{loginControlBean.checkValid()}"/>
+            <p:menuitem value ="Check Leave Status" url ="leaveStatus.xhtml" />
+            <p:menuitem value ="#{hiYewManagedBean.getEAlert()}" url ="alertEmployee.xhtml" />
+        </p:menubar>
+            <br/>
+            <p:growl id ="msgs" showDetail="true" />
+            <p:panelGrid>
+                <p:row>
+                    <p:column>
+                        <p:outputLabel style ="font-weight: bold" value ="Employee Name:  "/>
+                    </p:column>
+                    <p:column>
+                        <h:selectOneMenu value="#{hiYewManagedBean.employeeName}" style="width:100%">
+                            <f:selectItems value="#{loginControlBean.validateLeaveName()}"  />
+                        </h:selectOneMenu> 
+                    </p:column>
+                </p:row>
+                <p:row>
+                    <p:column>
+                        <p:outputLabel style ="font-weight: bold" value ="Start Date :"/>
+                    </p:column>
+                    <p:column>
+                        <p:calendar value = "#{hiYewManagedBean.startDate}" mindate="#{hiYewManagedBean.getToday()}" pattern ="dd/MM/yyyy" />
+                    </p:column>
+                </p:row>
+                <p:row>
+                    <p:column>
+                        <p:outputLabel  style ="font-weight: bold" value ="End Date :"/>
+                    </p:column>
+                    <p:column>
+                        <p:calendar value = "#{hiYewManagedBean.endDate}" mindate="#{hiYewManagedBean.getToday()}" pattern ="dd/MM/yyyy" />
+                    </p:column>
+                </p:row>
+                <p:row>
+                    <p:column>
+                        <p:outputLabel for = "leave_Remarks" style ="font-weight: bold" value ="Remarks:  "/>
+                    </p:column>
+                    <p:column>
+                        <p:inputText label = "leaveRemarks" id = "leave_Remarks" value ="#{hiYewManagedBean.leaveRemarks}" />
+                    </p:column>
+                </p:row>
+          
+            </p:panelGrid>
+                  <p:commandButton id ="btn" value ="Submit Leave Application" actionListener ="#{hiYewManagedBean.applyLeave}" update =":formMain:msgs" />
+        </h:form>
+    </h:body>
+</html>
+
+
