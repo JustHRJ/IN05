@@ -1,0 +1,85 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:head>
+        <title>Facelet Title</title>
+    </h:head>
+    <h:body>
+        <h:form id="formMain">
+            <p:panelGrid style = "width: 100%" id = "lll">
+                <p:row>
+                    <p:column colspan = "2">
+                        <h2>Search Criteria</h2>      
+                    </p:column>
+                </p:row>    
+                <p:row>
+                    <p:column style = "width: 30%">
+                        <p:outputLabel value ="View by Employee"/>
+                    </p:column>
+                    <p:column style = "width: 70%">
+                        <p:selectOneMenu id ="panelG" value ="#{hiYewManagedBean.employeeName}" style = "width: 100%">
+                            <f:selectItem itemValue ="select" itemLabel ="Select One"/>
+                            <f:selectItems value ="#{loginControlBean.validateLeaveName()}"/>
+                        </p:selectOneMenu>
+                    </p:column>
+                </p:row>
+                <p:row>
+                    <p:column>
+                        <p:outputLabel value ="View by Month" />                        
+                    </p:column>
+                    <p:column>
+                        <p:selectOneMenu id = "panelF" value ="#{hiYewManagedBean.months}" style="width: 100%">
+                            <f:selectItem itemValue ="select" itemLabel = "Select One" />
+                            <f:selectItem itemValue ="Jan" itemLabel = "January" />
+                            <f:selectItem itemValue ="Feb" itemLabel = "Feburary" />
+                            <f:selectItem itemValue ="Mar" itemLabel = "March" />
+                            <f:selectItem itemValue ="Apr" itemLabel = "April" />
+                            <f:selectItem itemValue ="May" itemLabel = "May" />
+                            <f:selectItem itemValue ="Jun" itemLabel ="June" />
+                            <f:selectItem itemValue ="Jul" itemLabel = "July" />
+                            <f:selectItem itemValue ="Aug" itemLabel ="Auguest" />
+                            <f:selectItem itemValue ="Sep" itemLabel ="September" />
+                            <f:selectItem itemValue ="Oct" itemLabel ="October" />
+                            <f:selectItem itemValue ="Nov" itemLabel ="November" />
+                            <f:selectItem itemValue ="Dec" itemLabel ="December" />
+                        </p:selectOneMenu>
+                    </p:column>
+                </p:row>
+            </p:panelGrid>
+            <p:commandButton value="Search for Pay Slips" id = "btn" update =":formMain:lll" >
+                <f:ajax execute ="lll" render="data1"/>
+         
+                <br/><br/><br/><br/><br/>
+                <p:panel id ="panel">
+                    <p:dataTable  id = "data1" var ="im" value = "#{hiYewManagedBean.payrolls}" paginator="true" rows="5" emptyMessage="No Pays Yet" >
+                        <p:column headerText="Employee Name">
+                            <p:outputLabel value ="#{im.get(0)}"/>
+                        </p:column>
+                        <p:column headerText="Period">
+                            <p:outputLabel value ="#{im.get(1)}"/>
+                        </p:column>
+                        <p:column headerText="Basic Salary">
+                            <p:outputLabel value ="#{im.get(2)}"/>
+                        </p:column>
+                        <p:column headerText="Bonus">
+                            <p:outputLabel value ="#{im.get(3)}"/>
+                        </p:column>
+                        <p:column headerText="Total Salary">
+                            <p:outputLabel value ="#{im.get(4)}"/>
+                        </p:column>
+                        <p:column headerText="Pay Status">
+                            <p:outputLabel value ="#{im.get(5)}"/>
+                        </p:column>
+
+                    </p:dataTable>
+                </p:panel>
+            </p:commandButton>
+
+
+        </h:form>
+    </h:body>
+</html>
+

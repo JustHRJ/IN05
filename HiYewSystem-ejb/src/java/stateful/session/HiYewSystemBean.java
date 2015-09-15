@@ -14,6 +14,7 @@ import entity.LeaveEntity;
 import entity.PayrollEntity;
 import java.security.MessageDigest;
 import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
@@ -47,7 +48,7 @@ public class HiYewSystemBean implements HiYewSystemServerRemote {
             machine.setMachine_name(machineName);
             machine.setMachine_number(machineIdentity);
             machine.setMachine_expiry(machineExpiry);
-            machine.setStatus("available");
+            machine.setStatus("Available");
             machine.setDescription(description);
             machine.setExtension(extension);
             em.persist(machine);
@@ -162,12 +163,129 @@ public class HiYewSystemBean implements HiYewSystemServerRemote {
         }
     }
 
-    public void updateMachine(String machineName, MachineEntity machine) {
-        try {
-            machine.setMachine_name(machineName);
-            em.merge(machine);
-        } catch (Exception ex) {
+    //to calculate factor of the pay (in the case that the worker work less than a month when hired)
+    public List<Vector> getPayroll(String employeeName, String month) {
+        List<Vector> result = new ArrayList();
 
+        if (!("select".equals(employeeName))) {
+            try {
+                double total = 0.00;
+                SimpleDateFormat format = new SimpleDateFormat("MMM");
+                EmployeeEntity e = new EmployeeEntity();
+                Query q = em.createQuery("select e from EmployeeEntity e where e.employee_name=:id");
+                q.setParameter("id", employeeName);
+                e = (EmployeeEntity) q.getSingleResult();
+                Collection<PayrollEntity> pays = e.getPayRecords();
+                if (!("select".equals(month))) {
+                    for (Object o : pays) {
+                        PayrollEntity p = (PayrollEntity) o;
+                        if (p.getMonth().substring(0, 3).equals(month) && (!(p.getStatus().equals("unset") || p.getStatus().equals("unissued")))) {
+                            Vector im = new Vector();
+                            im.add(e.getEmployee_name());
+                            im.add(p.getMonth());
+                            im.add(e.getEmployee_basic());
+                            if (p.isBonus()) {
+                                im.add("100.00");
+                                total = e.getEmployee_basic() + 100.00;
+                            } else {
+                                im.add("0.00");
+                                total = e.getEmployee_basic();
+                            }
+                            im.add(total);
+                            im.add(p.getStatus());
+                            result.add(im);
+                        }
+                    }
+
+                    if (result.isEmpty()) {
+                        return null;
+                    }
+                    return result;
+                } else if ("select".equals(month)){
+                    for (Object o : pays) {
+                        PayrollEntity p = (PayrollEntity) o;
+                        if (!(p.getStatus().equals("unset") || p.getStatus().equals("unissued"))) {
+                            Vector im = new Vector();
+                            im.add(e.getEmployee_name());
+                            im.add(p.getMonth());
+                            im.add(e.getEmployee_basic());
+                            if (p.isBonus()) {
+                                im.add("100.00");
+                                total = e.getEmployee_basic() + 100.00;
+                            } else {
+                                im.add("0.00");
+                                total = e.getEmployee_basic();
+                            }
+                            im.add(total);
+                            im.add(p.getStatus());
+                            result.add(im);
+                        }
+                    }
+                    if (result.isEmpty()) {
+                        return null;
+                    }
+                    return result;
+                }
+
+            } catch (Exception ex) {
+                return null;
+            }
+        } else if (!("select".equals(month))) {
+            Query q = em.createQuery("Select c from EmployeeEntity c");
+            double total = 0.00;
+            for (Object o : q.getResultList()) {
+                EmployeeEntity e = (EmployeeEntity) o;
+                Collection<PayrollEntity> pay = e.getPayRecords();
+                for (Object d : pay) {
+                    PayrollEntity p = (PayrollEntity) d;
+                    if (p.getMonth().substring(0, 3).equals(month) && (!(p.getStatus().equals("unset") || p.getStatus().equals("unissued")))) {
+                        Vector im = new Vector();
+                        im.add(e.getEmployee_name());
+                        im.add(p.getMonth());
+                        im.add(e.getEmployee_basic());
+                        if (p.isBonus()) {
+                            im.add("100.00");
+                            total = e.getEmployee_basic() + 100.00;
+                        } else {
+                            im.add("0.00");
+                            total = e.getEmployee_basic();
+                        }
+                        im.add(total);
+                        im.add(p.getStatus());
+                        result.add(im);
+                    }
+                }
+
+            }
+            if (result.isEmpty()) {
+                return null;
+            }
+            return result;
+        }
+        return null;
+    }
+
+    public boolean updateMachine(String machineName, MachineEntity machine, String status) {
+        try {
+            boolean check = false;
+            if (!(machineName.isEmpty())) {
+                machine.setMachine_name(machineName);
+            }
+            if (!(status.isEmpty())) {
+                if (!(machine.getStatus().equals(status))) {
+                    if (!(machine.getStatus().equals("Used"))) {
+                        machine.setStatus(status);
+                        check = true;
+                    }
+                }
+            }
+            if ((!(machineName.isEmpty())) || check) {
+                em.merge(machine);
+                return true;
+            }
+            return false;
+        } catch (Exception ex) {
+            return false;
         }
     }
 
@@ -378,20 +496,20 @@ public class HiYewSystemBean implements HiYewSystemServerRemote {
             Timestamp time = java.sql.Timestamp.valueOf(pass + " 00:00:00");
             employee.setEmployee_passExpiry(time);
         }
-        
-        if(!(position.isEmpty())){
-            if(!(employee.getEmployee_account_status().equals(position))){
-                if(position.equals("Disable")){
+
+        if (!(position.isEmpty())) {
+            if (!(employee.getEmployee_account_status().equals(position))) {
+                if (position.equals("Disable")) {
                     employee.setPreviousPosition(employee.getEmployee_account_status());
                     employee.setEmployee_account_status(position);
                     check = true;
-                }else{
+                } else {
                     employee.setEmployee_account_status(position);
                     check = true;
                 }
             }
         }
-        
+
         if ((!(pass.isEmpty())) || (!(contact.isEmpty())) || (!(employeeA.isEmpty())) || check) {
             em.merge(employee);
             return true;

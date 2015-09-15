@@ -10,39 +10,52 @@
     <h:body>
         <h:form id = "formMain">
             <h1>View Machines</h1>
-       <p:menubar>
-            <p:menuitem value ="Home" url ="index.xhtml" />
-            <p:menuitem value ="Add Machinery" url ="addMachine.xhtml" />
-            <p:menuitem value ="View Machinery" url ="viewMachine.xhtml" />
-            <p:menuitem value ="#{hiYewManagedBean.getMAlert()}" url ="alertMachine.xhtml" />
-        </p:menubar>
+            <p:menubar>
+                <p:menuitem value ="Home" url ="index.xhtml" />
+                <p:menuitem value ="Add Machinery" url ="addMachine.xhtml" />
+                <p:menuitem value ="View Machinery" url ="viewMachine.xhtml" />
+                <p:menuitem value ="#{hiYewManagedBean.getMAlert()}" url ="alertMachine.xhtml" />
+            </p:menubar>
             <br/>
-            <p:growl id = "msgs" showDetail="true">
-                <p:dataTable var="im" value="#{hiYewDataTableBean.machines}" editable = "true">
-                    <f:facet name="header">
-                        View Machines
-                    </f:facet>
-                    <p:ajax event="rowEdit" listener="#{hiYewManagedBean.updateMachinery}" />
-                    <p:column headerText ="Machine ID" >
-                        <h:outputText value="#{im.id}" style="text-align: center" />
-                    </p:column>                   
-                    <p:column headerText ="Machine Name">
-                        <p:cellEditor>
-                            <f:facet name ="output"><h:outputText value="#{im.machine_name}" style="text-align: center" /></f:facet>
-                            <f:facet name ="input"><p:inputText id = "machineName" value ="#{hiYewManagedBean.machineName}" required="true" /></f:facet>
-                        </p:cellEditor>
-                    </p:column>
-                    <p:column headerText = "Machine Expiry">
-                        <h:outputText value="#{im.machine_expiry}" style="text-align: center" />
-                    </p:column>
-                    <p:column headerText = "Machine Description">
-                        <h:outputText value="#{im.description}" style="text-align: center" />
-                    </p:column>
-                    <p:column style="width:32px">
-                        <p:rowEditor />
-                    </p:column>
-                </p:dataTable>
-            </p:growl>
+            <p:growl id = "msgs" showDetail="true"/>
+            <p:dataTable var="im" value="#{hiYewDataTableBean.machines}" editable = "true">
+                <f:facet name="header">
+                    View Machines
+                </f:facet>
+                <p:ajax event="rowEdit" listener="#{hiYewManagedBean.updateMachinery}" update =":formMain:msgs" />
+                <p:column headerText ="Machine ID" >
+                    <h:outputText value="#{im.id}" style="text-align: center" />
+                </p:column>                   
+                <p:column headerText ="Machine Name">
+                    <p:cellEditor>
+                        <f:facet name ="output"><h:outputText value="#{im.machine_name}" style="text-align: center" /></f:facet>
+                        <f:facet name ="input"><p:inputText id = "machineName" value ="#{hiYewManagedBean.machineName}"  /></f:facet>
+                    </p:cellEditor>
+                </p:column>
+                <p:column headerText = "Machine Expiry">
+                    <h:outputText value="#{im.machine_expiry}" style="text-align: center" />
+                </p:column>
+                <p:column headerText = "Machine Description">
+                    <h:outputText value="#{im.description}" style="text-align: center" />
+                </p:column>
+                <p:column headerText = "Machine Status">
+                    <p:cellEditor>
+                        <f:facet name = "output"> <h:outputText value="#{im.status}" style="text-align: center" /> </f:facet>
+                        <f:facet name ="input">
+                            <h:selectOneMenu value ="#{hiYewManagedBean.machine_status}">
+                                <f:selectItem itemValue ="Available" />
+                                <f:selectItem itemValue="Disable" />
+                                <f:selectItem itemValue ="Maintainence" />
+                                <f:selectItem itemValue ="Out of order" />
+                            </h:selectOneMenu>
+                        </f:facet>
+                    </p:cellEditor>
+                </p:column>
+                <p:column style="width:32px">
+                    <p:rowEditor />
+                </p:column>
+            </p:dataTable>
+
         </h:form>
     </h:body>
 </html>

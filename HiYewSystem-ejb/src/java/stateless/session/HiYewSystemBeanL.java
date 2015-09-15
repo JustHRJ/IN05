@@ -42,7 +42,7 @@ public class HiYewSystemBeanL {
             EmployeeEntity e = (EmployeeEntity) o;
             PayrollEntity p = new PayrollEntity();
             Calendar c = Calendar.getInstance();
-            SimpleDateFormat format = new SimpleDateFormat("MMM");
+            SimpleDateFormat format = new SimpleDateFormat("MMM,yyyy");
             p.setStatus("unset");
             p.setMonth(format.format(c.getTime()));
             em.persist(p);

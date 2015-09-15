@@ -21,6 +21,7 @@
                 <p:menuitem value ="Approve Leave" url ="approveLeave.xhtml" disabled="#{loginControlBean.checkValid()}"/>
                 <p:menuitem value ="Check Leave Status" url ="leaveStatus.xhtml" />
                 <p:menuitem value ="#{loginControlBean.getEAlert()}" url ="alertEmployee.xhtml" />
+                <p:menuitem value ="Assign Payroll" url ="createPayroll.xhtml" disabled = "#{loginControlBean.checkValid()}"/>
             </p:menubar>
         <br/>
         <h2>Machine Control System</h2>

@@ -13,6 +13,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Vector;
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
@@ -42,6 +43,7 @@ public class HiYewManagedBean {
     private String employeeContact;
     private String leaveRemarks;
     private String fireOrDisabled;
+    private String machine_status;
     private String username;
     private String password;
     private String loginPosition = "";
@@ -54,6 +56,7 @@ public class HiYewManagedBean {
     private Date endDate;
     private int lateArrival;
     private int absentee;
+    private String months;
 
     /**
      * Creates a new instance of HiYewManagedBean
@@ -77,6 +80,10 @@ public class HiYewManagedBean {
         }
     }
 
+    public List<Vector> getPayrolls(){
+        return hiYewSystemBean.getPayroll(employeeName, months);
+    }
+    
     public String registerFirst() {
         Timestamp expiry = null;
         if (employeePassExpiry.isEmpty()) {
@@ -87,7 +94,6 @@ public class HiYewManagedBean {
         hiYewSystemBean.addEmployee(employeeName, employeePassNumber, employeeAddress, employeeLeave, password, username, password, expiry, employeeContact);
         return "login";
     }
-
 
     public String extendEmployeePass() {
         Timestamp next = java.sql.Timestamp.valueOf(employeePassExpiry + " 00:00:00");
@@ -105,23 +111,23 @@ public class HiYewManagedBean {
         return c.getTime();
     }
 
-    public void createPayroll(){
+    public void createPayroll() {
         boolean check = hiYewSystemBean.createPayroll(employeeName, lateArrival, absentee);
-        if(check){
+        if (check) {
             FacesMessage msg = new FacesMessage("Payroll created", null);
             FacesContext.getCurrentInstance().addMessage(null, msg);
-        }else{
+        } else {
             FacesMessage msg = new FacesMessage("Failed to createPayroll", "Please recheck");
             FacesContext.getCurrentInstance().addMessage(null, msg);
         }
     }
-    
-    public String getMonth(){
+
+    public String getMonth() {
         Calendar c = Calendar.getInstance();
-        SimpleDateFormat format = new SimpleDateFormat("MMM");
+        SimpleDateFormat format = new SimpleDateFormat("MMM,yyyy");
         return format.format(c.getTime());
     }
-    
+
     public String addEmployee() {
         Timestamp expiry = null;
         if (employeePassExpiry.isEmpty()) {
@@ -190,9 +196,14 @@ public class HiYewManagedBean {
     }
 
     public void updateMachinery(RowEditEvent event) {
-        hiYewSystemBean.updateMachine(machineName, (MachineEntity) event.getObject());
-        FacesMessage msg = new FacesMessage("Edited", ((MachineEntity) event.getObject()).getMachine_name());
-        FacesContext.getCurrentInstance().addMessage(null, msg);
+        boolean check = hiYewSystemBean.updateMachine(machineName, (MachineEntity) event.getObject(), machine_status);
+        if (check) {
+            FacesMessage msg = new FacesMessage("Edited", ((MachineEntity) event.getObject()).getMachine_number());
+            FacesContext.getCurrentInstance().addMessage(null, msg);
+        } else {
+            FacesMessage msg = new FacesMessage("Not Edited", ((MachineEntity) event.getObject()).getMachine_number());
+            FacesContext.getCurrentInstance().addMessage(null, msg);
+        }
     }
 
     public void updateEmployee(RowEditEvent event) {
@@ -563,5 +574,33 @@ public class HiYewManagedBean {
      */
     public void setAbsentee(int absentee) {
         this.absentee = absentee;
+    }
+
+    /**
+     * @return the machine_status
+     */
+    public String getMachine_status() {
+        return machine_status;
+    }
+
+    /**
+     * @param machine_status the machine_status to set
+     */
+    public void setMachine_status(String machine_status) {
+        this.machine_status = machine_status;
+    }
+
+    /**
+     * @return the months
+     */
+    public String getMonths() {
+        return months;
+    }
+
+    /**
+     * @param months the months to set
+     */
+    public void setMonths(String months) {
+        this.months = months;
     }
 }

@@ -25,7 +25,7 @@ public interface HiYewSystemServerRemote {
 
     public void deleteMachine(String machineName);
 
-    public void updateMachine(String machineName, MachineEntity machine);
+    public boolean updateMachine(String machineName, MachineEntity machine, String status);
 
     public List<MachineEntity> checkMachineExpiry();
     
@@ -86,5 +86,7 @@ public interface HiYewSystemServerRemote {
     public List<EmployeeEntity> expiredEmployees(String username);
 
     public int getENoAlert(String username);
+
+    public List<Vector> getPayroll(String employeeName, String month);
     
 }
