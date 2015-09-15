@@ -18,7 +18,7 @@
                 <p:menuitem value ="Apply for Leave" url ="leaveApplication.xhtml" />
                 <p:menuitem value ="Approve Leave" url ="approveLeave.xhtml" disabled="#{loginControlBean.checkValid()}"/>
                 <p:menuitem value ="Check Leave Status" url ="leaveStatus.xhtml" />
-                <p:menuitem value ="#{hiYewManagedBean.getEAlert()}" url ="alertEmployee.xhtml" />
+                <p:menuitem value ="#{loginControlBean.getEAlert()}" url ="alertEmployee.xhtml" />
             </p:menubar>
             <br/><br/>
             <p:growl id ="msgs" showDetail="true"/>
