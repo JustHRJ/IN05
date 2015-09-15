@@ -88,10 +88,6 @@ public class HiYewManagedBean {
         return "login";
     }
 
-    public String getEAlert() {
-        int noOfAlert = hiYewSystemBean.getENoAlert();
-        return "Pass Expiry Alert (" + String.valueOf(noOfAlert) + ")";
-    }
 
     public String extendEmployeePass() {
         Timestamp next = java.sql.Timestamp.valueOf(employeePassExpiry + " 00:00:00");
@@ -201,7 +197,7 @@ public class HiYewManagedBean {
 
     public void updateEmployee(RowEditEvent event) {
 
-        boolean check = hiYewSystemBean.updateEmployee((EmployeeEntity) event.getObject(), employeeAddress, employeeContact, employeePassExpiry);
+        boolean check = hiYewSystemBean.updateEmployee((EmployeeEntity) event.getObject(), employeeAddress, employeeContact, employeePassExpiry, employeePosition);
 
         if (check) {
             FacesMessage msg = new FacesMessage("Edited", ((EmployeeEntity) event.getObject()).getEmployee_name());

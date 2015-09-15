@@ -55,21 +55,21 @@ public class HiYewSystemBean implements HiYewSystemServerRemote {
         }
 
     }
-    
-    public boolean createPayroll(String employeeName, int late, int sick){
+
+    public boolean createPayroll(String employeeName, int late, int sick) {
         EmployeeEntity e = new EmployeeEntity();
-        try{
+        try {
             Query q = em.createQuery("Select e from EmployeeEntity e where e.employee_name =:id");
             q.setParameter("id", employeeName);
             e = (EmployeeEntity) q.getSingleResult();
             Collection<PayrollEntity> pay = e.getPayRecords();
-            for(Object o: pay){
+            for (Object o : pay) {
                 PayrollEntity p = (PayrollEntity) o;
-                if(p.getStatus().equals("unset")){
+                if (p.getStatus().equals("unset")) {
                     p.setStatus("set");
-                    if(late < 3 && sick < 2){
+                    if (late < 3 && sick < 2) {
                         p.setBonus(true);
-                    }else{
+                    } else {
                         p.setBonus(false);
                     }
                     em.merge(p);
@@ -77,20 +77,20 @@ public class HiYewSystemBean implements HiYewSystemServerRemote {
                 }
             }
             return false;
-        }catch(Exception ex){
+        } catch (Exception ex) {
             return false;
         }
     }
 
-    public List<Vector> payRecords(){
+    public List<Vector> payRecords() {
         Query q = em.createQuery("select c from EmployeeEntity c");
         List<Vector> result = new ArrayList();
-        for(Object o: q.getResultList()){
+        for (Object o : q.getResultList()) {
             EmployeeEntity e = (EmployeeEntity) o;
             Collection<PayrollEntity> pays = e.getPayRecords();
-            for(Object d: pays){
+            for (Object d : pays) {
                 PayrollEntity p = (PayrollEntity) d;
-                if(p.getStatus().equals("unset")){
+                if (p.getStatus().equals("unset")) {
                     Vector im = new Vector();
                     im.add(e.getEmployee_name());
                     im.add(e.getEmployee_basic());
@@ -100,14 +100,13 @@ public class HiYewSystemBean implements HiYewSystemServerRemote {
                 }
             }
         }
-        if(result.isEmpty()){
+        if (result.isEmpty()) {
             return null;
-        }
-        else{
+        } else {
             return result;
         }
     }
-    
+
     public List<String> getEmployee() {
         List<String> result = new ArrayList<String>();
         Query q = em.createQuery("select c from EmployeeEntity c");
@@ -245,6 +244,34 @@ public class HiYewSystemBean implements HiYewSystemServerRemote {
         }
     }
 
+    public List<EmployeeEntity> expiredEmployees(String username) {
+        Timestamp ts = new Timestamp(new java.util.Date().getTime());
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(ts);
+        cal.add(Calendar.MONTH, 1);
+        ts.setTime(cal.getTime().getTime());
+        List<EmployeeEntity> results = new ArrayList<EmployeeEntity>();
+        EmployeeEntity c = new EmployeeEntity();
+        try {
+            Query q = em.createQuery("select c from EmployeeEntity c where c.username =:id");
+            q.setParameter("id", username);
+            c = (EmployeeEntity) q.getSingleResult();
+            if (c.getEmployee_passExpiry() != null) {
+                Timestamp time = c.getEmployee_passExpiry();
+
+                if (ts.after(time)) {
+                    results.add(c);
+                }
+            }
+            if (results.isEmpty()) {
+                return null;
+            }
+            return results;
+        } catch (Exception ex) {
+            return null;
+        }
+    }
+
     public List<EmployeeEntity> expiredEmployees() {
         Timestamp ts = new Timestamp(new java.util.Date().getTime());
         Calendar cal = Calendar.getInstance();
@@ -272,6 +299,16 @@ public class HiYewSystemBean implements HiYewSystemServerRemote {
 
     public int getENoAlert() {
         List<EmployeeEntity> employees = expiredEmployees();
+        if (employees == null) {
+            return 0;
+        } else {
+            return employees.size();
+        }
+
+    }
+
+    public int getENoAlert(String username) {
+        List<EmployeeEntity> employees = expiredEmployees(username);
         if (employees == null) {
             return 0;
         } else {
@@ -329,23 +366,37 @@ public class HiYewSystemBean implements HiYewSystemServerRemote {
         }
     }
 
-    public boolean updateEmployee(EmployeeEntity employee, String employeeA, String contact, String pass) {
+    public boolean updateEmployee(EmployeeEntity employee, String employeeA, String contact, String pass, String position) {
+        boolean check = false;
+        if (!(employeeA.isEmpty())) {
+            employee.setEmployee_address(employeeA);
+        }
+        if (!(contact.isEmpty())) {
+            employee.setEmployee_contact(contact);
+        }
+        if (!(pass.isEmpty())) {
+            Timestamp time = java.sql.Timestamp.valueOf(pass + " 00:00:00");
+            employee.setEmployee_passExpiry(time);
+        }
         
-            if (!(employeeA.isEmpty())) {
-                employee.setEmployee_address(employeeA);
+        if(!(position.isEmpty())){
+            if(!(employee.getEmployee_account_status().equals(position))){
+                if(position.equals("Disable")){
+                    employee.setPreviousPosition(employee.getEmployee_account_status());
+                    employee.setEmployee_account_status(position);
+                    check = true;
+                }else{
+                    employee.setEmployee_account_status(position);
+                    check = true;
+                }
             }
-            if(!(contact.isEmpty())){
-                employee.setEmployee_contact(contact);
-            }
-            if(!(pass.isEmpty())){
-                Timestamp time =java.sql.Timestamp.valueOf(pass + " 00:00:00");
-                employee.setEmployee_passExpiry(time);
-            }
-            if((!(pass.isEmpty())) || (!(contact.isEmpty())) || (!(employeeA.isEmpty()))){
-                em.merge(employee);
-                return true;
-            }
-            return false;
+        }
+        
+        if ((!(pass.isEmpty())) || (!(contact.isEmpty())) || (!(employeeA.isEmpty())) || check) {
+            em.merge(employee);
+            return true;
+        }
+        return false;
     }
 
     private boolean checkBetween(Collection<LeaveEntity> leaveRecords, Date start, Date end) {

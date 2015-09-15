@@ -10,15 +10,15 @@
     <h:body>
         <h:form id = "formMain">
             <h1>View Leave Records</h1>
-         <p:menubar>
-            <p:menuitem value ="Home" url ="index.xhtml"  />
-            <p:menuitem value ="Register employee" url ="employeeRegistration.xhtml" disabled="#{loginControlBean.checkValid()}"/>
-            <p:menuitem value ="View Employee" url ="employee_details.xhtml" />
-            <p:menuitem value ="Apply for Leave" url ="leaveApplication.xhtml" />
-            <p:menuitem value ="Approve Leave" url ="approveLeave.xhtml" disabled="#{loginControlBean.checkValid()}"/>
-            <p:menuitem value ="Check Leave Status" url ="leaveStatus.xhtml" />
-            <p:menuitem value ="#{hiYewManagedBean.getEAlert()}" url ="alertEmployee.xhtml" />
-        </p:menubar>
+             <p:menubar>
+                <p:menuitem value ="Home" url ="index.xhtml"  />
+                <p:menuitem value ="Register employee" url ="employeeRegistration.xhtml" disabled="#{loginControlBean.checkValid()}"/>
+                <p:menuitem value ="View Employee" url ="employee_details.xhtml" />
+                <p:menuitem value ="Apply for Leave" url ="leaveApplication.xhtml" />
+                <p:menuitem value ="Approve Leave" url ="approveLeave.xhtml" disabled="#{loginControlBean.checkValid()}"/>
+                <p:menuitem value ="Check Leave Status" url ="leaveStatus.xhtml" />
+                <p:menuitem value ="#{loginControlBean.getEAlert()}" url ="alertEmployee.xhtml" />
+            </p:menubar>
             <br/>
             <p:outputLabel style ="font-weight: bold" value ="Employee Name" />
 

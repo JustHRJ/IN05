@@ -10,3 +10,20 @@
 
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
+/nbproject/private/
+/HiYewSystem-ejb/nbproject/private/
+/HiYewInternalWeb/nbproject/private/
+/HiYewExternalWeb/nbproject/private/
+/HiYewPublicWeb/nbproject/private/
+/HiYewSystemRemoteInterface/nbproject/private/
+/HiYewExternalWeb/dist/
+/HiYewExternalWeb/build/
+/HiYewSystemRemoteInterface/build/
+/build/
+/HiYewInternalWeb/build/
+/HiYewSystemRemoteInterface/dist/
+/HiYewPublicWeb/build/
+/HiYewInternalWeb/dist/
+/HiYewPublicWeb/dist/
+/HiYewSystem-ejb/build/
+/HiYewSystem-ejb/dist/

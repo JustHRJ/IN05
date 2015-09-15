@@ -38,21 +38,30 @@ public class loginControlBean implements Serializable {
     public loginControlBean() {
     }
 
-    
-    public List<EmployeeEntity> getExpiredEmployee(){
-        if(loginPosition.equals("admin")){
+    public String getEAlert() {
+        if (loginPosition.equals("admin")) {
+            int noOfAlert = hiYewSystemBean.getENoAlert();
+            return "Pass Expiry Alert (" + String.valueOf(noOfAlert) + ")";
+        } else {
+            int noOfAlert = hiYewSystemBean.getENoAlert(username);
+            return "Pass Expiry Alert (" + String.valueOf(noOfAlert) + ")";
+        }
+    }
+
+    public List<EmployeeEntity> getExpiredEmployee() {
+        if (loginPosition.equals("admin")) {
             return hiYewSystemBean.expiredEmployees();
-        } else{
+        } else {
             return hiYewSystemBean.expiredEmployee(username);
         }
     }
-    
+
     public List<String> validateLeaveName() {
-       if(loginPosition.equals("admin")){
-           return hiYewSystemBean.getEmployee();
-       } else{
-           return hiYewSystemBean.getEmployeeE(username);
-       }
+        if (loginPosition.equals("admin")) {
+            return hiYewSystemBean.getEmployee();
+        } else {
+            return hiYewSystemBean.getEmployeeE(username);
+        }
     }
 
     public List<EmployeeEntity> getEmployees() {

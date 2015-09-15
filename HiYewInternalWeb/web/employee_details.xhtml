@@ -17,7 +17,7 @@
                 <p:menuitem value ="Apply for Leave" url ="leaveApplication.xhtml" />
                 <p:menuitem value ="Approve Leave" url ="approveLeave.xhtml" disabled="#{loginControlBean.checkValid()}"/>
                 <p:menuitem value ="Check Leave Status" url ="leaveStatus.xhtml" />
-                <p:menuitem value ="#{hiYewManagedBean.getEAlert()}" url ="alertEmployee.xhtml" />
+                <p:menuitem value ="#{loginControlBean.getEAlert()}" url ="alertEmployee.xhtml" />
             </p:menubar>
             <br/>
 
@@ -58,7 +58,16 @@
                     <h:outputText value="#{im.number_of_leaves}" style="text-align: center" />
                 </p:column>
                 <p:column headerText = "Employee Position">
-                    <h:outputText value="#{im.employee_account_status}" style="text-align: center" />
+                    <p:cellEditor>
+                        <f:facet name ="output"> <h:outputText value="#{im.employee_account_status}" style="text-align: center" /></f:facet>
+                        <f:facet name ="input"> 
+                            <h:selectOneMenu value="#{hiYewManagedBean.employeePosition}" >
+                                <f:selectItem itemValue ="#{im.employee_account_status}"  />
+                                <f:selectItem itemValue="Disable"  />
+                                <f:selectItem itemValue ="#{im.previousPosition}" />
+                            </h:selectOneMenu> 
+                        </f:facet>
+                    </p:cellEditor>
                 </p:column>
                 <p:column style="width:32px">
                     <p:rowEditor />
