@@ -180,6 +180,7 @@ public class HiYewSystemBean implements HiYewSystemServerRemote {
                     for (Object o : pays) {
                         PayrollEntity p = (PayrollEntity) o;
                         if (p.getMonth().substring(0, 3).equals(month) && (!(p.getStatus().equals("unset") || p.getStatus().equals("unissued")))) {
+                            
                             Vector im = new Vector();
                             im.add(e.getEmployee_name());
                             im.add(p.getMonth());
