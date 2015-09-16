@@ -13,7 +13,7 @@ import java.util.Vector;
 import javax.ejb.EJB;
 import javax.inject.Named;
 import javax.enterprise.context.RequestScoped;
-import stateful.session.HiYewSystemServerRemote;
+import session.stateful.HiYewSystemServerRemote;
 
 /**
  *

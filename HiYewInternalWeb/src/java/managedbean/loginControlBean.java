@@ -14,7 +14,7 @@ import java.util.List;
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
-import stateful.session.HiYewSystemServerRemote;
+import session.stateful.HiYewSystemServerRemote;
 
 /**
  *

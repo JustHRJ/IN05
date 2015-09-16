@@ -79,7 +79,7 @@
                             <p:outputLabel style ="font-weight: bold" value ="Employee Leave:  "/>
                         </p:column>
                         <p:column>
-                            <p:inputText id = "leave" label ="Employee Leave"  value ="#{hiYewManagedBean.employeeLeave}" validatorMessage="Please Enter Range from 0 to 15"> 
+                            <p:inputText id = "leave" label ="Employee Leave"  value ="#{hiYewManagedBean.employeeLeave}" validatorMessage="Please Enter Range from 0 to 15" > 
                                 <f:validateDoubleRange minimum="0" maximum="15"  />
                             </p:inputText>
                         </p:column>
@@ -101,9 +101,12 @@
                             <p:outputLabel for ="employee_password" style ="font-weight: bold" value ="Employee Password:  "/>
                         </p:column>
                         <p:column>
-                            <p:inputText label ="Employee Password" id ="employee_password" value ="#{hiYewManagedBean.password}" required = "true" validatorMessage="Password too short. At least length of 7">
-                                <f:validateLength minimum="0" maximum="7"  />
+                            <p:inputText label ="Employee Password" id ="employee_password" value ="#{hiYewManagedBean.password}" required = "true" validatorMessage="Password too short. At least length of 7" requiredMessage="Please enter a password of more than 7 characters">
+                                <f:validateLength minimum="7"  />
                             </p:inputText>
+                        </p:column>
+                        <p:column>
+                            <p:message for="employee_password" />
                         </p:column>
                     </p:row>
                 </p:panelGrid>

@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package stateful.session;
+package session.stateful;
 
 import entity.EmployeeEntity;
 import entity.LeaveEntity;

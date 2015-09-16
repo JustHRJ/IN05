@@ -20,7 +20,7 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
 import javax.faces.context.FacesContext;
 import org.primefaces.event.RowEditEvent;
-import stateful.session.HiYewSystemServerRemote;
+import session.stateful.HiYewSystemServerRemote;
 
 /**
  *
