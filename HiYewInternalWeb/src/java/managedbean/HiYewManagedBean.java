@@ -38,7 +38,7 @@ public class HiYewManagedBean {
     private int employeeLeave;
     private Long employeeId;
     private String employeePosition;
-    private String employeePassExpiry;
+    private Date employeePassExpiry;
     private int leaveNumber;
     private String employeeContact;
     private String leaveRemarks;
@@ -86,17 +86,17 @@ public class HiYewManagedBean {
 
     public String registerFirst() {
         Timestamp expiry = null;
-        if (employeePassExpiry.isEmpty()) {
+        if (employeePassExpiry == null) {
             expiry = null;
         } else {
-            expiry = java.sql.Timestamp.valueOf(employeePassExpiry + " 00:00:00");
+            expiry = new Timestamp(employeePassExpiry.getTime());
         }
         hiYewSystemBean.addEmployee(employeeName, employeePassNumber, employeeAddress, employeeLeave, password, username, password, expiry, employeeContact);
         return "login";
     }
 
     public String extendEmployeePass() {
-        Timestamp next = java.sql.Timestamp.valueOf(employeePassExpiry + " 00:00:00");
+        Timestamp next = new Timestamp(employeePassExpiry.getTime());
         hiYewSystemBean.extendEmployeePass(employeeName, next);
         return "employee_details";
     }
@@ -130,10 +130,10 @@ public class HiYewManagedBean {
 
     public String addEmployee() {
         Timestamp expiry = null;
-        if (employeePassExpiry.isEmpty()) {
+        if (employeePassExpiry == null) {
             expiry = null;
         } else {
-            expiry = java.sql.Timestamp.valueOf(employeePassExpiry + " 00:00:00");
+            expiry = new Timestamp(employeePassExpiry.getTime());
         }
         boolean result = hiYewSystemBean.addEmployee(employeeName, employeePassNumber, employeeAddress, employeeLeave, employeePosition, username, password, expiry, employeeContact);
         if (result) {
@@ -146,12 +146,16 @@ public class HiYewManagedBean {
         }
     }
 
-    public String formatDate(Timestamp date){
-        Date date1 = new Date(date.getTime());
-        SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
-        return format.format(date1);
+    public String formatDate(Timestamp date) {
+        if (date != null) {
+            Date date1 = new Date(date.getTime());
+            SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
+            return format.format(date1);
+        } else{
+            return "";
+        }
     }
-    
+
     public String getMAlert() {
 
         int noOfAlert = hiYewSystemBean.getNoAlert();
@@ -529,14 +533,14 @@ public class HiYewManagedBean {
     /**
      * @return the employeePassExpiry
      */
-    public String getEmployeePassExpiry() {
+    public Date getEmployeePassExpiry() {
         return employeePassExpiry;
     }
 
     /**
      * @param employeePassExpiry the employeePassExpiry to set
      */
-    public void setEmployeePassExpiry(String employeePassExpiry) {
+    public void setEmployeePassExpiry(Date employeePassExpiry) {
         this.employeePassExpiry = employeePassExpiry;
     }
 

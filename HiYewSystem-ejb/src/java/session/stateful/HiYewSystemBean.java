@@ -485,7 +485,7 @@ public class HiYewSystemBean implements HiYewSystemServerRemote {
         }
     }
 
-    public boolean updateEmployee(EmployeeEntity employee, String employeeA, String contact, String pass, String position) {
+    public boolean updateEmployee(EmployeeEntity employee, String employeeA, String contact, Date pass, String position) {
         boolean check = false;
         if (!(employeeA.isEmpty())) {
             employee.setEmployee_address(employeeA);
@@ -493,10 +493,8 @@ public class HiYewSystemBean implements HiYewSystemServerRemote {
         if (!(contact.isEmpty())) {
             employee.setEmployee_contact(contact);
         }
-        if (!(pass.isEmpty())) {
-
-            Timestamp time = java.sql.Timestamp.valueOf(pass + " 00:00:00");
-            employee.setEmployee_passExpiry(time);
+        if (!(pass == null)) {
+            employee.setEmployee_passExpiry(new Timestamp(pass.getTime()));
 
         }
 
@@ -513,11 +511,58 @@ public class HiYewSystemBean implements HiYewSystemServerRemote {
             }
         }
 
-        if ((!(pass.isEmpty())) || (!(contact.isEmpty())) || (!(employeeA.isEmpty())) || check) {
+        if ((!(pass == null)) || (!(contact.isEmpty())) || (!(employeeA.isEmpty())) || check) {
             em.merge(employee);
             return true;
         }
         return false;
+    }
+
+    public boolean existEmployeeName(String employeeName) {
+        EmployeeEntity e = new EmployeeEntity();
+        try {
+            Query q = em.createQuery("select  e from EmployeeEntity e where e.employee_name =:id");
+            q.setParameter("id", employeeName);
+            e = (EmployeeEntity) q.getSingleResult();
+            return true;
+        } catch (Exception ex) {
+            return false;
+        }
+    }
+
+    public boolean existEmployeeNumber(String employeeNumber) {
+        EmployeeEntity e = new EmployeeEntity();
+        try {
+            Query q = em.createQuery("select  e from EmployeeEntity e where e.employee_passNumber =:id");
+            q.setParameter("id", employeeNumber);
+            e = (EmployeeEntity) q.getSingleResult();
+            return true;
+        } catch (Exception ex) {
+            return false;
+        }
+    }
+
+    public boolean notExistExpiredName(String name){
+        List<EmployeeEntity> employees = expiredEmployees();
+        for(Object o: employees){
+            EmployeeEntity e = (EmployeeEntity) o;
+            if(e.getEmployee_name().equals(name)){
+                return false;
+            }
+        }
+        return true;
+    }
+    
+    public boolean existEmployeeUsername(String username) {
+        EmployeeEntity e = new EmployeeEntity();
+        try {
+            Query q = em.createQuery("select  e from EmployeeEntity e where e.username =:id");
+            q.setParameter("id", username);
+            e = (EmployeeEntity) q.getSingleResult();
+            return true;
+        } catch (Exception ex) {
+            return false;
+        }
     }
 
     private boolean checkBetween(Collection<LeaveEntity> leaveRecords, Date start, Date end) {

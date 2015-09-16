@@ -18,6 +18,7 @@
                 <p:menuitem value ="#{loginControlBean.getEAlert()}" url ="alertEmployee.xhtml" />
             </p:menubar>
             <br/>
+            <p:growl id ="msgs" showDetail="true"/>
             <p:commandButton value ="Refresh alerts" id ="btn">          
                 <p:panel header ="View Leave">
                     <p:dataTable id = "data1" var="im" value="#{loginControlBean.expiredEmployee}" paginator="true" rows="5" emptyMessage="No leave" >
@@ -36,13 +37,35 @@
                     </p:dataTable>
                 </p:panel>
             </p:commandButton>
-            <br/>
-            <p:outputLabel value ="Enter employee number to extend date"/>
-            <p:inputText value ="#{hiYewManagedBean.employeeName}" required="true"/>
-            <br/>
-            <p:outputLabel value ="Enter next expiry date to extend date (yyyy/mm/dd)"/>
-            <p:inputText id ="machine_id" value ="#{hiYewManagedBean.employeePassExpiry}" required="true"/>
-            <p:commandButton value ="extend" action ="#{hiYewManagedBean.extendEmployeePass()}" disabled="#{loginControlBean.checkValid()}" />
+            <br/><br/>
+            <p:panel>
+                <p:panelGrid id = "grid">
+                    <p:row>
+                        <p:column>
+                            <p:outputLabel value ="Enter employee name to extend date"/>
+                        </p:column>
+                        <p:column>
+                            <p:inputText id ="in1" value ="#{hiYewManagedBean.employeeName}" required="true" requiredMessage="Enter employee Name to extend" validator="#{registrationValidator.validateExpiredName}" validatorMessage="No existing expiring employee" />
+                        </p:column>
+                        <p:column>
+                            <p:message for ="in1"/>
+                        </p:column>
+                    </p:row>
+                    <p:row>
+                        <p:column>
+                            <p:outputLabel value ="Enter next expiry date to extend date"/>
+                        </p:column>
+                        <p:column>
+                            <p:calendar id ="cal1"  value = "#{hiYewManagedBean.employeePassExpiry}" mindate="#{hiYewManagedBean.getToday()}" pattern ="dd/MM/yyyy" required="true" requiredMessage="Enter a date" />
+                        </p:column>
+                        <p:column>
+                            <p:message for="cal1"/>
+                        </p:column>
+                    </p:row>
+                </p:panelGrid>
+                <br/>
+                <p:commandButton value ="extend" action ="#{hiYewManagedBean.extendEmployeePass()}" disabled="#{loginControlBean.checkValid()}" update ="grid" />
+            </p:panel>
         </h:form>
     </h:body>
 </html>

@@ -31,7 +31,7 @@ public interface HiYewSystemServerRemote {
     
     public boolean addEmployee(String employee, String employee_passNumber, String employee_address, int number_of_leave, String position, String username, String password, Timestamp expiry,String contact);
 
-    public boolean updateEmployee(EmployeeEntity employee, String a, String b, String c, String d );
+    public boolean updateEmployee(EmployeeEntity employee, String a, String b, Date c, String d );
     
     public boolean applyLeave(String employee, int days, String remarks, Date start, Date end);
     //view all pending leaves
@@ -88,5 +88,13 @@ public interface HiYewSystemServerRemote {
     public int getENoAlert(String username);
 
     public List<Vector> getPayroll(String employeeName, String month);
+
+    public boolean existEmployeeName(String employeeName);
+
+    public boolean existEmployeeNumber(String employeeNumber);
+
+    public boolean existEmployeeUsername(String username);
+
+    public boolean notExistExpiredName(String name);
     
 }

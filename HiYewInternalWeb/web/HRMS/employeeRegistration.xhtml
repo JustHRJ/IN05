@@ -31,10 +31,12 @@
                             <p:outputLabel for ="employee_name" style ="font-weight: bold" value ="Employee Name:  "/>
                         </p:column>
                         <p:column>
-                            <p:inputText label ="Employee Name" id ="employee_name" value ="#{hiYewManagedBean.employeeName}"  required="true" requiredMessage="Please enter employee Name"> </p:inputText>
+                            <p:inputText label ="Employee Name" id ="employee_name" value ="#{hiYewManagedBean.employeeName}"  required="true" requiredMessage="Please enter employee Name" validator="#{registrationValidator.validate}" validatorMessage="EmployeeName is used"> 
+
+                            </p:inputText>
                         </p:column>
                         <p:column>
-                            <p:message for="employee_name"/>
+                            <p:message for="employee_name" />
                         </p:column>
                     </p:row>
                     <p:row>   
@@ -42,7 +44,7 @@
                             <p:outputLabel for ="employee_passNumber" style ="font-weight: bold" value ="Employee Number:  "/>
                         </p:column>
                         <p:column>
-                            <p:inputText label ="Employee Number" id ="employee_passNumber" value ="#{hiYewManagedBean.employeePassNumber}" required = "true" requiredMessage="Please enter employee Number"> </p:inputText>
+                            <p:inputText label ="Employee Number" id ="employee_passNumber" value ="#{hiYewManagedBean.employeePassNumber}" required = "true" requiredMessage="Please enter employee Number" validator = "#{registrationValidator.validateN}" validatorMessage="EmployeeNumber exist"> </p:inputText>
                         </p:column>
                         <p:column>
                             <p:message for="employee_passNumber"/>
@@ -108,7 +110,7 @@
                             <p:outputLabel for ="employee_userName" style ="font-weight: bold" value ="Employee username:  "/>
                         </p:column>
                         <p:column>
-                            <p:inputText label ="Employee username" id ="employee_userName" value ="#{hiYewManagedBean.username}" required = "true" requiredMessage="Please enter a username"> </p:inputText>
+                            <p:inputText label ="Employee username" id ="employee_userName" value ="#{hiYewManagedBean.username}" required = "true" requiredMessage="Please enter a username" validator="#{registrationValidator.validateU}" validatorMessage="Username has been taken"> </p:inputText>
                         </p:column>
                         <p:column>
                             <p:message for="employee_userName"/>

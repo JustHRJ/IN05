@@ -51,7 +51,7 @@
                 <p:column headerText = "Employee Pass Expiry">
                     <p:cellEditor>
                         <f:facet name ="output"><h:outputText  value= "#{hiYewManagedBean.formatDate(im.employee_passExpiry)}" /></f:facet>
-                        <f:facet name ="input"><p:inputText id = "employeePassExpiry" value ="#{hiYewManagedBean.employeePassExpiry}" /></f:facet>
+                        <f:facet name ="input"> <p:calendar value = "#{hiYewManagedBean.employeePassExpiry}" mindate="#{hiYewManagedBean.getToday()}" pattern ="dd/MM/yyyy" /></f:facet>
                     </p:cellEditor>
                 </p:column>
                 <p:column headerText = "Employee Leaves">

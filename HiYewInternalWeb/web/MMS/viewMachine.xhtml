@@ -33,7 +33,7 @@
                     </p:cellEditor>
                 </p:column>
                 <p:column headerText = "Machine Expiry">
-                    <h:outputText value="#{im.machine_expiry}" style="text-align: center" />
+                    <h:outputText value="#{hiYewManagedBean.formatDate(im.machine_expiry)}" style="text-align: center" />
                 </p:column>
                 <p:column headerText = "Machine Description">
                     <h:outputText value="#{im.description}" style="text-align: center" />

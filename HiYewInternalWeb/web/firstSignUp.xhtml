@@ -32,10 +32,10 @@
                     </p:row>
                     <p:row>   
                         <p:column>
-                            <p:outputLabel for ="employee_passExpiry" style ="font-weight: bold" value ="Employee pass Expiry (yyyy-mm-dd):  "/>
+                            <p:outputLabel style ="font-weight: bold" value ="Employee pass Expiry (yyyy-mm-dd):  "/>
                         </p:column>
                         <p:column>
-                            <p:inputText label ="Employee expiry" id ="employee_passExpiry" value ="#{hiYewManagedBean.employeePassExpiry}"> </p:inputText>
+                            <p:calendar value = "#{hiYewManagedBean.employeePassExpiry}" mindate="#{hiYewManagedBean.getToday()}" pattern ="dd/MM/yyyy" />
                         </p:column>
                     </p:row>
                     <p:row>   

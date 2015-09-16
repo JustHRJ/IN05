@@ -25,11 +25,11 @@
                         <p:column headerText ="Machine Name">
                             <h:outputText value ="#{im.machine_name}" />
                         </p:column>
-                        <p:column id ="cl1" headerText ="Machine Number" sortBy="#{im.get(2)}">
+                        <p:column id ="cl1" headerText ="Machine Number">
                             <h:outputText value ="#{im.machine_number}" />
                         </p:column>
-                        <p:column headerText ="Machine Expiry" sortBy="#{im.get(3)}">
-                            <h:outputText value ="#{im.machine_expiry}" />
+                        <p:column headerText ="Machine Expiry" >
+                            <h:outputText value ="#{hiYewManagedBean.formatDate(im.machine_expiry)}" />
                         </p:column>
                     </p:dataTable>
                     <p:outputLabel value ="Enter machine number to extend date"/>
