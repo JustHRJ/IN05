@@ -8,10 +8,10 @@
         <title>Human Resource System</title>
     </h:head>
     <h:body>
-        <h:form id ="formMain">
+        <h:form>
             <h1>Employee Registration</h1>
-              <p:menubar>
-                <p:menuitem value ="Home" url ="index.xhtml"  />
+            <p:menubar>
+                <p:menuitem value ="Home" url ="/index.xhtml"  />
                 <p:menuitem value ="Register employee" url ="employeeRegistration.xhtml" disabled="#{loginControlBean.checkValid()}"/>
                 <p:menuitem value ="View Employee" url ="employee_details.xhtml" />
                 <p:menuitem value ="Apply for Leave" url ="leaveApplication.xhtml" />
@@ -25,13 +25,13 @@
             <p:growl id ="msgs" showDetail="true"/>
 
             <p:panel id ="panel" header="Add new Employee">
-                <p:panelGrid>
+                <p:panelGrid id = "grid">
                     <p:row>
                         <p:column>
                             <p:outputLabel for ="employee_name" style ="font-weight: bold" value ="Employee Name:  "/>
                         </p:column>
                         <p:column>
-                            <p:inputText label ="Employee Name" id ="employee_name" value ="#{hiYewManagedBean.employeeName}"> </p:inputText>
+                            <p:inputText label ="Employee Name" id ="employee_name" value ="#{hiYewManagedBean.employeeName}" required="true"> </p:inputText>
                         </p:column>
                     </p:row>
                     <p:row>   
@@ -39,7 +39,7 @@
                             <p:outputLabel for ="employee_passNumber" style ="font-weight: bold" value ="Employee Number:  "/>
                         </p:column>
                         <p:column>
-                            <p:inputText label ="Employee Number" id ="employee_passNumber" value ="#{hiYewManagedBean.employeePassNumber}"> </p:inputText>
+                            <p:inputText label ="Employee Number" id ="employee_passNumber" value ="#{hiYewManagedBean.employeePassNumber}" required = "true" > </p:inputText>
                         </p:column>
                     </p:row>
                     <p:row>   
@@ -47,7 +47,7 @@
                             <p:outputLabel for ="employee_passExpiry" style ="font-weight: bold" value ="Employee pass Expiry (yyyy-mm-dd):  "/>
                         </p:column>
                         <p:column>
-                            <p:inputText label ="Employee expiry" id ="employee_passExpiry" value ="#{hiYewManagedBean.employeePassExpiry}"> </p:inputText>
+                            <p:inputText label ="Employee expiry" id ="employee_passExpiry" value ="#{hiYewManagedBean.employeePassExpiry}" > </p:inputText>
                         </p:column>
                     </p:row>
                     <p:row>   
@@ -55,7 +55,7 @@
                             <p:outputLabel for ="employee_address" style ="font-weight: bold" value ="Employee Address:  "/>
                         </p:column>
                         <p:column>
-                            <p:inputText label ="Employee Address" id ="employee_address" value ="#{hiYewManagedBean.employeeAddress}"> </p:inputText>
+                            <p:inputText label ="Employee Address" id ="employee_address" value ="#{hiYewManagedBean.employeeAddress}" required = "true"> </p:inputText>
                         </p:column>
                     </p:row>
                     <p:row>   
@@ -63,7 +63,7 @@
                             <p:outputLabel for ="employee_contact" style ="font-weight: bold" value ="Employee Address:  "/>
                         </p:column>
                         <p:column>
-                            <p:inputText label ="Employee Address" id ="employee_contact" value ="#{hiYewManagedBean.employeeContact}"> </p:inputText>
+                            <p:inputText label ="Employee Address" id ="employee_contact" value ="#{hiYewManagedBean.employeeContact}" required = "true"> </p:inputText>
                         </p:column>
                     </p:row>
                     <p:row>   
@@ -71,15 +71,20 @@
                             <p:outputLabel for ="employee_status" style ="font-weight: bold" value ="Employee Status:  "/>
                         </p:column>
                         <p:column>
-                            <p:inputText label ="Employee status" id ="employee_status" value ="#{hiYewManagedBean.employeePosition}"> </p:inputText>
+                            <p:inputText label ="Employee status" id ="employee_status" value ="#{hiYewManagedBean.employeePosition}" required ="true"> </p:inputText>
                         </p:column>
                     </p:row>
                     <p:row>   
                         <p:column>
-                            <p:outputLabel for ="employee_leave" style ="font-weight: bold" value ="Employee Leave:  "/>
+                            <p:outputLabel style ="font-weight: bold" value ="Employee Leave:  "/>
                         </p:column>
                         <p:column>
-                            <p:inputText label ="Employee Leave" id ="employee_leave" value ="#{hiYewManagedBean.employeeLeave}"> </p:inputText>
+                            <p:inputText id = "leave" label ="Employee Leave"  value ="#{hiYewManagedBean.employeeLeave}" validatorMessage="Please Enter Range from 0 to 15"> 
+                                <f:validateDoubleRange minimum="0" maximum="15"  />
+                            </p:inputText>
+                        </p:column>
+                        <p:column>
+                            <p:message for="leave"/>
                         </p:column>
                     </p:row>
 
@@ -88,7 +93,7 @@
                             <p:outputLabel for ="employee_userName" style ="font-weight: bold" value ="Employee username:  "/>
                         </p:column>
                         <p:column>
-                            <p:inputText label ="Employee username" id ="employee_userName" value ="#{hiYewManagedBean.username}"> </p:inputText>
+                            <p:inputText label ="Employee username" id ="employee_userName" value ="#{hiYewManagedBean.username}" required = "true"> </p:inputText>
                         </p:column>
                     </p:row>
                     <p:row>   
@@ -96,11 +101,13 @@
                             <p:outputLabel for ="employee_password" style ="font-weight: bold" value ="Employee Password:  "/>
                         </p:column>
                         <p:column>
-                            <p:inputText label ="Employee Password" id ="employee_password" value ="#{hiYewManagedBean.password}"> </p:inputText>
+                            <p:inputText label ="Employee Password" id ="employee_password" value ="#{hiYewManagedBean.password}" required = "true" validatorMessage="Password too short. At least length of 7">
+                                <f:validateLength minimum="0" maximum="7"  />
+                            </p:inputText>
                         </p:column>
                     </p:row>
                 </p:panelGrid>
-                <p:commandButton id="btn" value="Add new Employee" action="#{hiYewManagedBean.addEmployee}" update =":formMain:msgs" />
+                <p:commandButton update="grid" icon="ui-icon-check" validateClient="true" style="margin-right:10px" id="btn" value="Add new Employee" action="#{hiYewManagedBean.addEmployee}" />
             </p:panel>
         </h:form>    
     </h:body>
