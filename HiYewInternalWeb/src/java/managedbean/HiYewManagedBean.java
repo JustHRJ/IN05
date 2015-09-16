@@ -146,6 +146,12 @@ public class HiYewManagedBean {
         }
     }
 
+    public String formatDate(Timestamp date){
+        Date date1 = new Date(date.getTime());
+        SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
+        return format.format(date1);
+    }
+    
     public String getMAlert() {
 
         int noOfAlert = hiYewSystemBean.getNoAlert();

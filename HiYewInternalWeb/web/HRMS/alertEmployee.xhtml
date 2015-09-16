@@ -9,7 +9,7 @@
         <h:form id = "formMain">
             <h1>Expiring Employee Pass</h1>
             <p:menubar>
-                <p:menuitem value ="Home" url ="index.xhtml"  />
+                <p:menuitem value ="Home" url ="/index.xhtml"  />
                 <p:menuitem value ="Register employee" url ="employeeRegistration.xhtml" disabled="#{loginControlBean.checkValid()}"/>
                 <p:menuitem value ="View Employee" url ="employee_details.xhtml" />
                 <p:menuitem value ="Apply for Leave" url ="leaveApplication.xhtml" />
@@ -31,7 +31,7 @@
                             <h:outputText value ="#{im.employee_passNumber}" />
                         </p:column>
                         <p:column headerText ="Pass Expiry" >
-                            <h:outputText value ="#{im.employee_passExpiry}" />
+                            <h:outputText value ="#{hiYewManagedBean.formatDate(im.employee_passExpiry)}" />
                         </p:column>
                     </p:dataTable>
                 </p:panel>

@@ -50,7 +50,7 @@
                 </p:column>
                 <p:column headerText = "Employee Pass Expiry">
                     <p:cellEditor>
-                        <f:facet name ="output"><h:outputText  value= "#{im.employee_passExpiry}" /></f:facet>
+                        <f:facet name ="output"><h:outputText  value= "#{hiYewManagedBean.formatDate(im.employee_passExpiry)}" /></f:facet>
                         <f:facet name ="input"><p:inputText id = "employeePassExpiry" value ="#{hiYewManagedBean.employeePassExpiry}" /></f:facet>
                     </p:cellEditor>
                 </p:column>

@@ -581,7 +581,7 @@ public class HiYewSystemBean implements HiYewSystemServerRemote {
     public List<Vector> viewAllLeave() {
         List<Vector> allRecords = new ArrayList();
         Query q = em.createQuery("Select c from EmployeeEntity c");
-
+        SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
         for (Object o : q.getResultList()) {
             EmployeeEntity employee = (EmployeeEntity) o;
             Collection<LeaveEntity> appliedLeaves = employee.getLeaveRecords();
@@ -592,10 +592,10 @@ public class HiYewSystemBean implements HiYewSystemServerRemote {
                     im.add(employee.getEmployee_name());
                     im.add(leave.getId());
                     im.add(leave.getNumber_of_leave());
-                    im.add(leave.getStartDate());
-                    im.add(leave.getEndDate());
+                    im.add(format.format(new Date(leave.getStartDate().getTime())));
+                    im.add(format.format(new Date(leave.getEndDate().getTime())));
                     im.add(leave.getRemarks());
-                    im.add(leave.getAppliedTime());
+                    im.add(format.format(new Date(leave.getAppliedTime().getTime())));
                     allRecords.add(im);
                 }
             }

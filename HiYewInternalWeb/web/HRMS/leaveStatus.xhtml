@@ -11,7 +11,7 @@
         <h:form id = "formMain">
             <h1>View Leave Records</h1>
              <p:menubar>
-                <p:menuitem value ="Home" url ="index.xhtml"  />
+                <p:menuitem value ="Home" url ="/index.xhtml"  />
                 <p:menuitem value ="Register employee" url ="employeeRegistration.xhtml" disabled="#{loginControlBean.checkValid()}"/>
                 <p:menuitem value ="View Employee" url ="employee_details.xhtml" />
                 <p:menuitem value ="Apply for Leave" url ="leaveApplication.xhtml" />
@@ -36,22 +36,22 @@
                             <h:outputText value ="#{im.number_of_leave}" />
                         </p:column>
                         <p:column headerText ="Start Date">
-                            <h:outputText value ="#{im.startDate}" />
+                            <h:outputText value ="#{hiYewManagedBean.formatDate(im.startDate)}" />
                         </p:column>
                         <p:column headerText ="End Date">
-                            <h:outputText value ="#{im.endDate}" />
+                            <h:outputText value ="#{hiYewManagedBean.formatDate(im.endDate)}" />
                         </p:column>
                         <p:column headerText ="Leave Remarks">
                             <h:outputText value ="#{im.remarks}" />
                         </p:column>
                         <p:column headerText ="Applied Time" >
-                            <h:outputText value ="#{im.appliedTime}" />
+                            <h:outputText value ="#{hiYewManagedBean.formatDate(im.appliedTime)}" />
                         </p:column>
                         <p:column headerText ="Status" >
                             <h:outputText value ="#{im.status}" />
                         </p:column>
                         <p:column headerText ="Approve Time">
-                            <h:outputText value ="#{im.approvedTime}" />
+                            <h:outputText value ="#{hiYewManagedBean.formatDate(im.approvedTime)}" />
                         </p:column>
                     </p:dataTable>
                 </p:panel>
