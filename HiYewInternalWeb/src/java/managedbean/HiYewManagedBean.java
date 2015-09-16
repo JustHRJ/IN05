@@ -75,7 +75,7 @@ public class HiYewManagedBean {
             FacesMessage msg = new FacesMessage("Machine Added", null);
             FacesContext.getCurrentInstance().addMessage(null, msg);
         } else {
-            FacesMessage msg = new FacesMessage("Failed to Add", "Please check for existing machine details");
+            FacesMessage msg = new FacesMessage("Failed to Add", "Please check for existing machine number");
             FacesContext.getCurrentInstance().addMessage(null, msg);
         }
     }
