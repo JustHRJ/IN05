@@ -81,4 +81,16 @@ public class registrationValidator implements Validator {
         }
     }
 
+    public void validateMachineExpiry(FacesContext context, UIComponent component, Object submittedAndConvertedValue) throws ValidatorException {
+        String name = (String) submittedAndConvertedValue;
+
+        if (name == null || name.isEmpty()) {
+            return; // Let required="true" or @NotNull handle it.
+        }
+
+        if (hiYewSystemBean.notExistMachine(name)) {
+            throw new ValidatorException(new FacesMessage("Machine not existent. Please check"));
+        }
+    }
+
 }

@@ -96,5 +96,7 @@ public interface HiYewSystemServerRemote {
     public boolean existEmployeeUsername(String username);
 
     public boolean notExistExpiredName(String name);
+
+    public boolean notExistMachine(String id);
     
 }

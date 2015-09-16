@@ -50,7 +50,7 @@ public class HiYewManagedBean {
     private String machineName;
     private String machineId;
     private String machineDescript;
-    private String machineNxtMaint;
+    private Date machineNxtMaint;
     private int machineSubMaint;
     private Date startDate;
     private Date endDate;
@@ -69,7 +69,7 @@ public class HiYewManagedBean {
      * @return the employee_name
      */
     public void addMachine() {
-        Timestamp machineTime = java.sql.Timestamp.valueOf(machineNxtMaint + " 00:00:00");
+        Timestamp machineTime = new Timestamp(machineNxtMaint.getTime());
         boolean check = hiYewSystemBean.addMachine(machineName, machineId, machineTime, machineDescript, machineSubMaint);
         if (check) {
             FacesMessage msg = new FacesMessage("Machine Added", null);
@@ -422,14 +422,14 @@ public class HiYewManagedBean {
     /**
      * @return the machineNxtMaint
      */
-    public String getMachineNxtMaint() {
+    public Date getMachineNxtMaint() {
         return machineNxtMaint;
     }
 
     /**
      * @param machineNxtMaint the machineNxtMaint to set
      */
-    public void setMachineNxtMaint(String machineNxtMaint) {
+    public void setMachineNxtMaint(Date machineNxtMaint) {
         this.machineNxtMaint = machineNxtMaint;
     }
 

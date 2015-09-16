@@ -8,12 +8,12 @@
     <h:body>
         <h:form id = "formMain">
             <h1>View Machines</h1>
-        <p:menubar>
-            <p:menuitem value ="Home" url ="index.xhtml" />
-            <p:menuitem value ="Add Machinery" url ="addMachine.xhtml" />
-            <p:menuitem value ="View Machinery" url ="viewMachine.xhtml" />
-            <p:menuitem value ="#{hiYewManagedBean.getMAlert()}" url ="alertMachine.xhtml" />
-        </p:menubar>
+            <p:menubar>
+                <p:menuitem value ="Home" url ="/index.xhtml" />
+                <p:menuitem value ="Add Machinery" url ="addMachine.xhtml" />
+                <p:menuitem value ="View Machinery" url ="viewMachine.xhtml" />
+                <p:menuitem value ="#{hiYewManagedBean.getMAlert()}" url ="alertMachine.xhtml" />
+            </p:menubar>
 
             <p:commandButton value ="Refresh alerts" id ="btn">
                 <f:ajax execute="btn" render ="data1"/>
@@ -32,11 +32,27 @@
                             <h:outputText value ="#{hiYewManagedBean.formatDate(im.machine_expiry)}" />
                         </p:column>
                     </p:dataTable>
-                    <p:outputLabel value ="Enter machine number to extend date"/>
-                    <p:inputText id ="machine_id" value ="#{hiYewManagedBean.machineId}"/>
-                    <p:commandButton value ="extend" action ="#{hiYewManagedBean.extendMachine()}"/>
                 </p:panel>
             </p:commandButton>
+
+            <br/><br/>
+            <p:panel>
+                <p:panelGrid id ="grid">
+                    <p:row>
+                        <p:column>
+                            <p:outputLabel value ="Enter machine number to extend date"/>
+                        </p:column>
+                        <p:column>
+                            <p:inputText id ="machine_id" value ="#{hiYewManagedBean.machineId}" required = "true" requiredMessage="Please enter machine ID" validator="#{registrationValidator.validateMachineExpiry}"  validatorMessage="No existing expiring Machine" />
+                        </p:column>
+                        <p:column>
+                            <p:message for="machine_id"/>
+                        </p:column>
+                    </p:row>
+                </p:panelGrid>
+            </p:panel>
+            <p:commandButton value ="extend" action ="#{hiYewManagedBean.extendMachine()}" update = "grid"/>
+
         </h:form>
     </h:body>
 </html>

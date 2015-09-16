@@ -108,6 +108,17 @@ public class HiYewSystemBean implements HiYewSystemServerRemote {
         }
     }
 
+    public boolean notExistMachine(String id){
+        List<MachineEntity> machines = checkMachineExpiry();
+        for(Object o: machines){
+            MachineEntity m = (MachineEntity) o;
+            if(m.getMachine_number().equals(id)){
+                return false;
+            }
+        }
+        return true;
+    }
+    
     public List<String> getEmployee() {
         List<String> result = new ArrayList<String>();
         Query q = em.createQuery("select c from EmployeeEntity c");
