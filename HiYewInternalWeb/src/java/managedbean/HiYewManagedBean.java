@@ -80,10 +80,10 @@ public class HiYewManagedBean {
         }
     }
 
-    public List<Vector> getPayrolls(){
+    public List<Vector> getPayrolls() {
         return hiYewSystemBean.getPayroll(employeeName, months);
     }
-    
+
     public String registerFirst() {
         Timestamp expiry = null;
         if (employeePassExpiry.isEmpty()) {

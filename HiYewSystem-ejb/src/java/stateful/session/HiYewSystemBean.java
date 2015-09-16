@@ -67,7 +67,7 @@ public class HiYewSystemBean implements HiYewSystemServerRemote {
             for (Object o : pay) {
                 PayrollEntity p = (PayrollEntity) o;
                 if (p.getStatus().equals("unset")) {
-                    p.setStatus("set");
+                    p.setStatus("unissued");
                     if (late < 3 && sick < 2) {
                         p.setBonus(true);
                     } else {
@@ -180,7 +180,7 @@ public class HiYewSystemBean implements HiYewSystemServerRemote {
                     for (Object o : pays) {
                         PayrollEntity p = (PayrollEntity) o;
                         if (p.getMonth().substring(0, 3).equals(month) && (!(p.getStatus().equals("unset") || p.getStatus().equals("unissued")))) {
-                            
+
                             Vector im = new Vector();
                             im.add(e.getEmployee_name());
                             im.add(p.getMonth());
@@ -202,7 +202,7 @@ public class HiYewSystemBean implements HiYewSystemServerRemote {
                         return null;
                     }
                     return result;
-                } else if ("select".equals(month)){
+                } else if ("select".equals(month)) {
                     for (Object o : pays) {
                         PayrollEntity p = (PayrollEntity) o;
                         if (!(p.getStatus().equals("unset") || p.getStatus().equals("unissued"))) {
@@ -494,8 +494,10 @@ public class HiYewSystemBean implements HiYewSystemServerRemote {
             employee.setEmployee_contact(contact);
         }
         if (!(pass.isEmpty())) {
+
             Timestamp time = java.sql.Timestamp.valueOf(pass + " 00:00:00");
             employee.setEmployee_passExpiry(time);
+
         }
 
         if (!(position.isEmpty())) {
