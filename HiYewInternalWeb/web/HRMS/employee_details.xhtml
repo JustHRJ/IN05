@@ -35,7 +35,7 @@
                 </p:column>
                 <p:column headerText = "Employee Address">
                     <p:cellEditor>
-                        <f:facet name ="output"><h:outputText value="#{im.employee_address}" style="text-align: center" /></f:facet>
+                        <f:facet name ="output"><h:outputText value="#{im.unit} #{im.employee_address} #{im.optional} #{im.addressPostal}" style="text-align: center" /></f:facet>
                         <f:facet name ="input"><p:inputText id = "employeeAddress" value ="#{hiYewManagedBean.employeeAddress}" /></f:facet>
                     </p:cellEditor>
                 </p:column>

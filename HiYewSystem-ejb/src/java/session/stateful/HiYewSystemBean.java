@@ -67,7 +67,7 @@ public class HiYewSystemBean implements HiYewSystemBeanLocal {
             for (Object o : pay) {
                 PayrollEntity p = (PayrollEntity) o;
                 if (p.getStatus().equals("unset")) {
-                    p.setStatus("unissued");
+                    p.setStatus("unissue");
                     if (late < 3 && sick < 2) {
                         p.setBonus(true);
                     } else {
@@ -146,7 +146,54 @@ public class HiYewSystemBean implements HiYewSystemBeanLocal {
             return null;
         }
     }
+    
+    public List<Vector> getReleasingPayRecords(){
+        List<Vector> results = new ArrayList();
+        double total = 0.00;
+        Query q = em.createQuery("select c from EmployeeEntity c");
+        for(Object o: q.getResultList()){
+            total = 0.00;
+            EmployeeEntity e = (EmployeeEntity) o;
+            Collection<PayrollEntity> payrolls = e.getPayRecords();
+            for(Object d: payrolls){
+                PayrollEntity p = (PayrollEntity) d;
+                if(p.getStatus().equals("unissue")){
+                    Vector im = new Vector();
+                    im.add(e.getEmployee_name());
+                    im.add(p.getMonth());
+                    im.add(e.getEmployee_basic());
+                    
+                    if(p.isBonus()){
+                        total = e.getEmployee_basic() + 100.00;
+                        im.add("100.00");
+                        im.add(total);
+                    }else{
+                        im.add("0.00");
+                        im.add(e.getEmployee_basic());
+                    }
+                    im.add(p.getStatus());
+                    results.add(im);
+                }
+            }
+        }
+        if(results.isEmpty()){
+            return null;
+        }else{
+            return results;
+        }
+    }
 
+    public void releaseAllPay(){
+        Query q = em.createQuery("select c from PayrollEntity c");
+        for(Object o: q.getResultList()){
+            PayrollEntity p = (PayrollEntity) o;
+            if(p.getStatus().equals("unissue")){
+                p.setStatus("Issued");
+                em.merge(p);
+            }
+        }
+    }
+    
     public List<MachineEntity> getAllMachine() {
         Query q = em.createQuery("Select c from MachineEntity c");
         List<MachineEntity> machineRecords = new ArrayList<MachineEntity>();

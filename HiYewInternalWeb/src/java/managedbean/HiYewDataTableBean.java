@@ -45,6 +45,10 @@ public class HiYewDataTableBean {
         return hiYewSystemBean.checkMachineExpiry();
     }
     
+    public List<Vector> getReleasePay(){
+        return hiYewSystemBean.getReleasingPayRecords();
+    }
+    
     public List<Vector> getPayRecords(){
         return hiYewSystemBean.payRecords();
     }

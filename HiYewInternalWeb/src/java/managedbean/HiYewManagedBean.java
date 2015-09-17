@@ -210,6 +210,10 @@ public class HiYewManagedBean {
         }
     }
 
+    public void releaseAllPay(){
+        hiYewSystemBean.releaseAllPay();
+    }
+    
     public void updateMachinery(RowEditEvent event) {
         boolean check = hiYewSystemBean.updateMachine(machineName, (MachineEntity) event.getObject(), machine_status);
         if (check) {

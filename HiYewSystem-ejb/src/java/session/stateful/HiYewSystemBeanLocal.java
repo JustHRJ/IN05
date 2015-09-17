@@ -104,4 +104,8 @@ public interface HiYewSystemBeanLocal {
     public boolean notExistExpiredName(String name);
 
     public boolean notExistMachine(String id);
+
+    public List<Vector> getReleasingPayRecords();
+
+    public void releaseAllPay();
 }
