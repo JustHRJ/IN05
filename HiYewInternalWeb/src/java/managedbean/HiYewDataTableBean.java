@@ -13,7 +13,8 @@ import java.util.Vector;
 import javax.ejb.EJB;
 import javax.inject.Named;
 import javax.enterprise.context.RequestScoped;
-import session.stateful.HiYewSystemServerRemote;
+import session.stateful.HiYewSystemBeanLocal;
+
 
 /**
  *
@@ -23,7 +24,8 @@ import session.stateful.HiYewSystemServerRemote;
 @RequestScoped
 public class HiYewDataTableBean {
     @EJB
-    private HiYewSystemServerRemote hiYewSystemBean;
+    private HiYewSystemBeanLocal hiYewSystemBean;
+ 
     /**
      * Creates a new instance of HiYewDataTableBean
      */

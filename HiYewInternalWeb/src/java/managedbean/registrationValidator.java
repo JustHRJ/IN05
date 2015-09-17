@@ -13,7 +13,8 @@ import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.validator.Validator;
 import javax.faces.validator.ValidatorException;
-import session.stateful.HiYewSystemServerRemote;
+import session.stateful.HiYewSystemBeanLocal;
+
 
 /**
  *
@@ -23,8 +24,9 @@ import session.stateful.HiYewSystemServerRemote;
 @RequestScoped
 public class registrationValidator implements Validator {
 
-    @EJB
-    private HiYewSystemServerRemote hiYewSystemBean;
+     @EJB
+    private HiYewSystemBeanLocal hiYewSystemBean;
+ 
 
     /**
      * Creates a new instance of registrationValidator

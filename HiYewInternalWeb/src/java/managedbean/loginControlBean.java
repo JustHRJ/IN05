@@ -14,7 +14,8 @@ import java.util.List;
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
-import session.stateful.HiYewSystemServerRemote;
+import session.stateful.HiYewSystemBeanLocal;
+
 
 /**
  *
@@ -23,9 +24,9 @@ import session.stateful.HiYewSystemServerRemote;
 @Named(value = "loginControlBean")
 @SessionScoped
 public class loginControlBean implements Serializable {
-
     @EJB
-    private HiYewSystemServerRemote hiYewSystemBean;
+    private HiYewSystemBeanLocal hiYewSystemBean;
+ 
     private String loginPosition = "";
     private String username;
     private String password;

@@ -14,8 +14,8 @@
                     <file>${libs.PrimeFaces_5.2.classpath}</file>
                     <path-in-war>WEB-INF/lib</path-in-war>
                 </library>
-                <library dirs="200">
-                    <file>${reference.HiYewSystemRemoteInterface.jar}</file>
+                <library dirs="100">
+                    <file>${reference.HiYewSystem-ejb.dist}</file>
                     <path-in-war>WEB-INF/lib</path-in-war>
                 </library>
             </web-module-libraries>
@@ -29,12 +29,12 @@
         </data>
         <references xmlns="http://www.netbeans.org/ns/ant-project-references/1">
             <reference>
-                <foreign-project>HiYewSystemRemoteInterface</foreign-project>
+                <foreign-project>HiYewSystem-ejb</foreign-project>
                 <artifact-type>jar</artifact-type>
                 <script>build.xml</script>
-                <target>jar</target>
+                <target>dist</target>
                 <clean-target>clean</clean-target>
-                <id>jar</id>
+                <id>dist</id>
             </reference>
         </references>
     </configuration>
