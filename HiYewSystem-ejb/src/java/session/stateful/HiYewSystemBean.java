@@ -29,7 +29,7 @@ import javax.persistence.Query;
  * @author JustHRJ
  */
 @Stateful
-public class HiYewSystemBean implements HiYewSystemServerRemote {
+public class HiYewSystemBean implements HiYewSystemBeanLocal {
 
     // Add business logic below. (Right-click in editor and choose
     // "Insert Code > Add Business Method")

@@ -20,7 +20,8 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
 import javax.faces.context.FacesContext;
 import org.primefaces.event.RowEditEvent;
-import session.stateful.HiYewSystemServerRemote;
+import session.stateful.HiYewSystemBeanLocal;
+
 
 /**
  *
@@ -30,8 +31,9 @@ import session.stateful.HiYewSystemServerRemote;
 @RequestScoped
 public class HiYewManagedBean {
 
-    @EJB
-    private HiYewSystemServerRemote hiYewSystemBean;
+      @EJB
+    private HiYewSystemBeanLocal hiYewSystemBean;
+ 
     private String employeeName;
     private String employeeAddress;
     private String employeePassNumber;

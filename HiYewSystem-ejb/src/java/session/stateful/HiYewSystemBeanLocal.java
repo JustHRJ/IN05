@@ -12,14 +12,14 @@ import java.sql.Timestamp;
 import java.util.Date;
 import java.util.List;
 import java.util.Vector;
-import javax.ejb.Remote;
+import javax.ejb.Local;
 
 /**
  *
  * @author JustHRJ
  */
-@Remote
-public interface HiYewSystemServerRemote {
+@Local
+public interface HiYewSystemBeanLocal {
 
     public boolean addMachine(String machineName, String machineIdentity, Timestamp machineExpiry, String description, int extension);
 
@@ -28,19 +28,25 @@ public interface HiYewSystemServerRemote {
     public boolean updateMachine(String machineName, MachineEntity machine, String status);
 
     public List<MachineEntity> checkMachineExpiry();
-    
-    public boolean addEmployee(String employee, String employee_passNumber, String employee_address, int number_of_leave, String position, String username, String password, Timestamp expiry,String contact);
 
-    public boolean updateEmployee(EmployeeEntity employee, String a, String b, Date c, String d );
-    
+    public boolean addEmployee(String employee, String employee_passNumber, String employee_address, int number_of_leave, String position, String username, String password, Timestamp expiry, String contact);
+
+    public boolean updateEmployee(EmployeeEntity employee, String a, String b, Date c, String d);
+
     public boolean applyLeave(String employee, int days, String remarks, Date start, Date end);
+
     //view all pending leaves
+
     public List<Vector> viewAllLeave();
+
     // approve by leave id, employeeName
+
     public void approveLeaveID(Long id, String name);
-    
+
     public List<EmployeeEntity> viewEmployee(String employeeName);
+
     // view by employeename
+
     public List<LeaveEntity> viewEmployeeLeave(String employeeName);
 
     public List<EmployeeEntity> viewAllEmployee();
@@ -98,5 +104,4 @@ public interface HiYewSystemServerRemote {
     public boolean notExistExpiredName(String name);
 
     public boolean notExistMachine(String id);
-    
 }
