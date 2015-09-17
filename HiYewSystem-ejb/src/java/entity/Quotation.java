@@ -1,0 +1,165 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package entity;
+
+import java.io.Serializable;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.List;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+
+/**
+ *
+ * @author Jit Cheong
+ */
+@Entity
+public class Quotation implements Serializable {
+    private static final long serialVersionUID = 1L;
+    @Id
+    private String quotationNo;
+    private String date;
+    private String termsOfPayment = "30"; //30, 60, 90 days
+    //private QuotationDescription quotationDescription;
+    
+    @OneToMany(mappedBy = "quotation")
+    private List<QuotationDescription> quotationDescriptions = new ArrayList<>();
+    @ManyToOne
+    private Customer customer;
+
+    public Quotation() {
+        customer = new Customer();
+        //quotationDescription = new QuotationDescription();
+    }
+    
+    public Quotation(String date, String termsOfPayment, String quotationNo, Customer customer, QuotationDescription qd) {
+        
+        this.date = date;
+        this.termsOfPayment = termsOfPayment;
+        this.quotationNo = quotationNo;
+        this.customer = customer;
+        //this.quotationDescription = qd;
+    }
+    
+    /**
+     * @return the quotationNo
+     */
+    public String getQuotationNo() {
+        return quotationNo;
+    }
+
+    /**
+     * @param quotationNo the quotationNo to set
+     */
+    public void setQuotationNo(String quotationNo) {
+        this.quotationNo = quotationNo;
+    }
+
+    /**
+     * @return the date
+     */
+    public String getDate() {
+        return date;
+    }
+
+    /**
+     * @param date the date to set
+     */
+    public void setDate(String date) {
+        this.date = date;
+    }
+
+    /**
+     * @return the termsOfPayment
+     */
+    public String getTermsOfPayment() {
+        return termsOfPayment;
+    }
+
+    /**
+     * @param termsOfPayment the termsOfPayment to set
+     */
+    public void setTermsOfPayment(String termsOfPayment) {
+        this.termsOfPayment = termsOfPayment;
+    }
+
+    /**
+     * @return the rfqDescriptions
+     */
+    public List<QuotationDescription> getQuotationDescriptions() {
+        return quotationDescriptions;
+    }
+
+    /**
+     * @param quotationDescriptions the rfqDescriptions to set
+     */
+    public void setQuotationDescriptions(List<QuotationDescription> quotationDescriptions) {
+        this.quotationDescriptions = quotationDescriptions;
+    }
+    
+    public void setQuotationDescriptions(QuotationDescription qd) {
+        this.quotationDescriptions.add(qd);
+    }
+
+    /**
+     * @return the customer
+     */
+    public Customer getCustomer() {
+        return customer;
+    }
+
+    /**
+     * @param customer the customer to set
+     */
+    public void setCustomer(Customer customer) {
+        this.customer = customer;
+    }
+    
+    
+    
+    @Override
+    public int hashCode() {
+        int hash = 0;
+        hash += (getQuotationNo() != null ? getQuotationNo().hashCode() : 0);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object object) {
+        // TODO: Warning - this method won't work in the case the id fields are not set
+        if (!(object instanceof Quotation)) {
+            return false;
+        }
+        Quotation other = (Quotation) object;
+        if ((this.getQuotationNo() == null && other.getQuotationNo() != null) || (this.getQuotationNo() != null && !this.quotationNo.equals(other.quotationNo))) {
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public String toString() {
+        return "entity.RFQ[ id=" + getQuotationNo() + " ]";
+    }
+
+    /**
+     * @return the qd
+     */
+    //public QuotationDescription getQuotationDescription() {
+    //    return quotationDescription;
+    //}
+
+    /**
+     * @param quotationDescription the qd to set
+     */
+    //public void setQuotationDescription(QuotationDescription quotationDescription) {
+     //   this.quotationDescription = quotationDescription;
+    //}
+    
+}

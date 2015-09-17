@@ -108,17 +108,17 @@ public class HiYewSystemBean implements HiYewSystemServerRemote {
         }
     }
 
-    public boolean notExistMachine(String id){
+    public boolean notExistMachine(String id) {
         List<MachineEntity> machines = checkMachineExpiry();
-        for(Object o: machines){
+        for (Object o : machines) {
             MachineEntity m = (MachineEntity) o;
-            if(m.getMachine_number().equals(id)){
+            if (m.getMachine_number().equals(id)) {
                 return false;
             }
         }
         return true;
     }
-    
+
     public List<String> getEmployee() {
         List<String> result = new ArrayList<String>();
         Query q = em.createQuery("select c from EmployeeEntity c");
@@ -553,17 +553,20 @@ public class HiYewSystemBean implements HiYewSystemServerRemote {
         }
     }
 
-    public boolean notExistExpiredName(String name){
+    public boolean notExistExpiredName(String name) {
         List<EmployeeEntity> employees = expiredEmployees();
-        for(Object o: employees){
+        if (employees.isEmpty()) {
+            return true;
+        } 
+        for (Object o : employees) {
             EmployeeEntity e = (EmployeeEntity) o;
-            if(e.getEmployee_name().equals(name)){
+            if (e.getEmployee_name().equals(name)) {
                 return false;
             }
         }
         return true;
     }
-    
+
     public boolean existEmployeeUsername(String username) {
         EmployeeEntity e = new EmployeeEntity();
         try {

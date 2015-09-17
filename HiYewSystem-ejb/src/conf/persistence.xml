@@ -6,6 +6,11 @@
     <class>entity.LeaveEntity</class>
     <class>entity.MachineEntity</class>
     <class>entity.PayrollEntity</class>
+    <class>entity.Customer</class>
+    <class>entity.Quotation</class>
+    <class>entity.QuotationDescription</class>
+    <class>entity.RFQ</class>
+    <class>entity.RFQDescription</class>
     <exclude-unlisted-classes>true</exclude-unlisted-classes>
     <properties>
       <property name="javax.persistence.schema-generation.database.action" value="drop-and-create"/>

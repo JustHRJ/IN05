@@ -25,7 +25,7 @@ import javax.persistence.Query;
  */
 @Stateless
 @LocalBean
-public class HiYewSystemBeanL {
+public class HiYewSystemTimer {
 
     // Add business logic below. (Right-click in editor and choose
     // "Insert Code > Add Business Method")
@@ -33,7 +33,7 @@ public class HiYewSystemBeanL {
     private EntityManager em;
 
     private final Logger log = Logger
-            .getLogger(HiYewSystemBeanL.class.getName());
+            .getLogger(HiYewSystemTimer.class.getName());
 
     @Schedule(minute = "*/1", hour = "*")
     public void runEveryMonth() {
