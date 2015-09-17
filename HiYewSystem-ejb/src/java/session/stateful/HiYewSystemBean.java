@@ -337,7 +337,7 @@ public class HiYewSystemBean implements HiYewSystemBeanLocal {
         }
     }
 
-    public boolean addEmployee(String employee, String employee_passNumber, String employee_address, int number_of_leave, String position, String username, String password, Timestamp expiry, String contact) {
+    public boolean addEmployee(String employee, String employee_passNumber, String employee_address, int number_of_leave, String position, String username, String password, Timestamp expiry, String contact, String addressPostal, String unit, String optional) {
         EmployeeEntity xin = new EmployeeEntity();
         try {
             Query q = em.createQuery("Select xin from EmployeeEntity xin where xin.employee_name = :id");
@@ -356,9 +356,12 @@ public class HiYewSystemBean implements HiYewSystemBeanLocal {
                 xin.setLeaveRecords(leaveRecords);
                 Collection<PayrollEntity> payRecords = new ArrayList();
                 xin.setPayRecords(payRecords);
+                xin.setAddressPostal(addressPostal);
                 xin.setEmployee_account_status(position);
                 xin.setPreviousPosition("none");
                 xin.setUsername(username);
+                xin.setUnit(unit);
+                xin.setOptional(optional);
                 String passwordHashed = hashingPassword(password);
                 xin.setPassword(passwordHashed);
                 xin.setEmployee_passExpiry(expiry);

@@ -29,7 +29,7 @@ public interface HiYewSystemBeanLocal {
 
     public List<MachineEntity> checkMachineExpiry();
 
-    public boolean addEmployee(String employee, String employee_passNumber, String employee_address, int number_of_leave, String position, String username, String password, Timestamp expiry, String contact);
+    public boolean addEmployee(String employee, String employee_passNumber, String employee_address, int number_of_leave, String position, String username, String password, Timestamp expiry, String contact, String addressPostal, String unit, String optional);
 
     public boolean updateEmployee(EmployeeEntity employee, String a, String b, Date c, String d);
 

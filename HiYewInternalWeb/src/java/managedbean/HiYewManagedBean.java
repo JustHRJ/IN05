@@ -35,7 +35,10 @@ public class HiYewManagedBean {
     private HiYewSystemBeanLocal hiYewSystemBean;
  
     private String employeeName;
+    private String address_postal;
     private String employeeAddress;
+    private String employeeAddressUnit;
+    private String employeeAdressOptional;
     private String employeePassNumber;
     private int employeeLeave;
     private Long employeeId;
@@ -93,7 +96,7 @@ public class HiYewManagedBean {
         } else {
             expiry = new Timestamp(employeePassExpiry.getTime());
         }
-        hiYewSystemBean.addEmployee(employeeName, employeePassNumber, employeeAddress, employeeLeave, password, username, password, expiry, employeeContact);
+        hiYewSystemBean.addEmployee(employeeName, employeePassNumber, employeeAddress, employeeLeave, employeePosition, username, password, expiry, employeeContact, address_postal, employeeAddressUnit, employeeAdressOptional);
         return "login";
     }
 
@@ -137,7 +140,7 @@ public class HiYewManagedBean {
         } else {
             expiry = new Timestamp(employeePassExpiry.getTime());
         }
-        boolean result = hiYewSystemBean.addEmployee(employeeName, employeePassNumber, employeeAddress, employeeLeave, employeePosition, username, password, expiry, employeeContact);
+        boolean result = hiYewSystemBean.addEmployee(employeeName, employeePassNumber, employeeAddress, employeeLeave, employeePosition, username, password, expiry, employeeContact, address_postal, employeeAddressUnit, employeeAdressOptional);
         if (result) {
             return "employee_details";
         } else {
@@ -614,5 +617,47 @@ public class HiYewManagedBean {
      */
     public void setMonths(String months) {
         this.months = months;
+    }
+
+    /**
+     * @return the address_postal
+     */
+    public String getAddress_postal() {
+        return address_postal;
+    }
+
+    /**
+     * @param address_postal the address_postal to set
+     */
+    public void setAddress_postal(String address_postal) {
+        this.address_postal = address_postal;
+    }
+
+    /**
+     * @return the employeeAddressUnit
+     */
+    public String getEmployeeAddressUnit() {
+        return employeeAddressUnit;
+    }
+
+    /**
+     * @param employeeAddressUnit the employeeAddressUnit to set
+     */
+    public void setEmployeeAddressUnit(String employeeAddressUnit) {
+        this.employeeAddressUnit = employeeAddressUnit;
+    }
+
+    /**
+     * @return the employeeAdressOptional
+     */
+    public String getEmployeeAdressOptional() {
+        return employeeAdressOptional;
+    }
+
+    /**
+     * @param employeeAdressOptional the employeeAdressOptional to set
+     */
+    public void setEmployeeAdressOptional(String employeeAdressOptional) {
+        this.employeeAdressOptional = employeeAdressOptional;
     }
 }

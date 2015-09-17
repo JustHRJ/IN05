@@ -42,6 +42,9 @@ public class EmployeeEntity implements Serializable {
     private String employee_contact;
     private double employee_basic;
     private Timestamp employee_employedDate;
+    private String addressPostal;
+    private String unit;
+    private String optional;
     
     
     public EmployeeEntity() {
@@ -264,6 +267,48 @@ public class EmployeeEntity implements Serializable {
      */
     public void setEmployee_employedDate(Timestamp employee_employedDate) {
         this.employee_employedDate = employee_employedDate;
+    }
+
+    /**
+     * @return the addressPostal
+     */
+    public String getAddressPostal() {
+        return addressPostal;
+    }
+
+    /**
+     * @param addressPostal the addressPostal to set
+     */
+    public void setAddressPostal(String addressPostal) {
+        this.addressPostal = addressPostal;
+    }
+
+    /**
+     * @return the unit
+     */
+    public String getUnit() {
+        return unit;
+    }
+
+    /**
+     * @param unit the unit to set
+     */
+    public void setUnit(String unit) {
+        this.unit = unit;
+    }
+
+    /**
+     * @return the optional
+     */
+    public String getOptional() {
+        return optional;
+    }
+
+    /**
+     * @param optional the optional to set
+     */
+    public void setOptional(String optional) {
+        this.optional = optional;
     }
 
 }

@@ -15,7 +15,6 @@ import javax.faces.validator.Validator;
 import javax.faces.validator.ValidatorException;
 import session.stateful.HiYewSystemBeanLocal;
 
-
 /**
  *
  * @author JustHRJ
@@ -24,9 +23,8 @@ import session.stateful.HiYewSystemBeanLocal;
 @RequestScoped
 public class registrationValidator implements Validator {
 
-     @EJB
+    @EJB
     private HiYewSystemBeanLocal hiYewSystemBean;
- 
 
     /**
      * Creates a new instance of registrationValidator
@@ -57,6 +55,42 @@ public class registrationValidator implements Validator {
         if (hiYewSystemBean.existEmployeeNumber(username)) {
             throw new ValidatorException(new FacesMessage("Employee Number already in use, choose another"));
         }
+    }
+
+    public void validateNumeric(FacesContext context, UIComponent component, Object submittedAndConvertedValue) throws ValidatorException {
+        String numeric = (String) submittedAndConvertedValue;
+
+        if (numeric == null || numeric.isEmpty()) {
+            return; // Let required="true" or @NotNull handle it.
+        }
+
+        try {
+            Integer i = Integer.parseInt(numeric);
+            if (numeric.substring(0, 1).equals("8") || numeric.substring(0, 1).equals("9") || numeric.substring(0, 1).equals("6")) {
+            } else {
+                throw new ValidatorException(new FacesMessage("Contact number is invalid"));
+            }
+
+        } catch (Exception ex) {
+            throw new ValidatorException(new FacesMessage("String is not numeric"));
+        }
+
+    }
+
+    public void validateNumericA(FacesContext context, UIComponent component, Object submittedAndConvertedValue) throws ValidatorException {
+        String numeric = (String) submittedAndConvertedValue;
+
+        if (numeric == null || numeric.isEmpty()) {
+            return; // Let required="true" or @NotNull handle it.
+        }
+
+        try {
+            Integer.parseInt(numeric);
+
+        } catch (Exception ex) {
+            throw new ValidatorException(new FacesMessage("String is not numeric"));
+        }
+
     }
 
     public void validateU(FacesContext context, UIComponent component, Object submittedAndConvertedValue) throws ValidatorException {
