@@ -51,4 +51,8 @@ public class HiYewDataTableBean {
     public List<Vector> getPayRecords(){
         return hiYewSystemBean.payRecords();
     }
+    
+    public List<String> getMachineNames(){
+        return hiYewSystemBean.machineNames();
+    } 
 }

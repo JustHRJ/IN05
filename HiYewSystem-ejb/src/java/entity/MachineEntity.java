@@ -7,10 +7,14 @@ package entity;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.Collection;
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 
 /**
  *
@@ -29,11 +33,22 @@ public class MachineEntity implements Serializable {
     private String status;
     private int extension;
     private String description;
+    private Collection<MachineMaintainenceEntity> machineMaintainence = new ArrayList<MachineMaintainenceEntity>();
+    
     
     public MachineEntity() {
 
     }
 
+    @OneToMany(cascade ={CascadeType.ALL})
+    public Collection<MachineMaintainenceEntity> getMachineMaintainence(){
+        return machineMaintainence;
+    }
+    
+    public void setMachineMaintainence(Collection<MachineMaintainenceEntity> machineMaintainence){
+        this.machineMaintainence = machineMaintainence;
+    }
+    
     public Long getId() {
         return id;
     }

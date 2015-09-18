@@ -8,6 +8,7 @@ package managedbean;
 import entity.EmployeeEntity;
 import entity.LeaveEntity;
 import entity.MachineEntity;
+import entity.MachineMaintainenceEntity;
 import entity.PayrollEntity;
 import java.io.IOException;
 import java.sql.Timestamp;
@@ -65,6 +66,12 @@ public class HiYewManagedBean {
     private int absentee;
     private String months;
 
+    private Date mScheduleDate;
+    private String mScheduleHour;
+    private String maintainenceComments;
+    private String mServiceProvider;
+    private String mServiceContact;
+
     /**
      * Creates a new instance of HiYewManagedBean
      */
@@ -83,6 +90,17 @@ public class HiYewManagedBean {
             FacesContext.getCurrentInstance().addMessage(null, msg);
         } else {
             FacesMessage msg = new FacesMessage("Failed to Add", "Please check for existing machine number");
+            FacesContext.getCurrentInstance().addMessage(null, msg);
+        }
+    }
+
+    public void addMachineSchedule() {
+        boolean check = hiYewSystemBean.addMachineMaintainence(machineName, mScheduleDate, mScheduleHour, maintainenceComments, mServiceProvider, mServiceContact);
+        if (check) {
+            FacesMessage msg = new FacesMessage("Schedule Added", machineName +" has a maintainence schedule");
+            FacesContext.getCurrentInstance().addMessage(null, msg);
+        } else {
+            FacesMessage msg = new FacesMessage("Failed to Add", "Please check for exisiting schedule");
             FacesContext.getCurrentInstance().addMessage(null, msg);
         }
     }
@@ -693,5 +711,75 @@ public class HiYewManagedBean {
      */
     public void setBonus(boolean bonus) {
         this.bonus = bonus;
+    }
+
+    /**
+     * @return the mScheduleDate
+     */
+    public Date getmScheduleDate() {
+        return mScheduleDate;
+    }
+
+    /**
+     * @param mScheduleDate the mScheduleDate to set
+     */
+    public void setmScheduleDate(Date mScheduleDate) {
+        this.mScheduleDate = mScheduleDate;
+    }
+
+    /**
+     * @return the mScheduleHour
+     */
+    public String getmScheduleHour() {
+        return mScheduleHour;
+    }
+
+    /**
+     * @param mScheduleHour the mScheduleHour to set
+     */
+    public void setmScheduleHour(String mScheduleHour) {
+        this.mScheduleHour = mScheduleHour;
+    }
+
+    /**
+     * @return the maintainenceComments
+     */
+    public String getMaintainenceComments() {
+        return maintainenceComments;
+    }
+
+    /**
+     * @param maintainenceComments the maintainenceComments to set
+     */
+    public void setMaintainenceComments(String maintainenceComments) {
+        this.maintainenceComments = maintainenceComments;
+    }
+
+    /**
+     * @return the mServiceProvider
+     */
+    public String getmServiceProvider() {
+        return mServiceProvider;
+    }
+
+    /**
+     * @param mServiceProvider the mServiceProvider to set
+     */
+    public void setmServiceProvider(String mServiceProvider) {
+        this.mServiceProvider = mServiceProvider;
+    }
+
+    /**
+     * @return the mServiceContact
+     */
+    public String getmServiceContact() {
+        return mServiceContact;
+    }
+
+    /**
+     * @param mServiceContact the mServiceContact to set
+     */
+    public void setmServiceContact(String mServiceContact) {
+        this.mServiceContact = mServiceContact;
     }
 }

@@ -111,4 +111,8 @@ public interface HiYewSystemBeanLocal {
     public void releaseAllPay();
 
     public boolean updatePay(PayrollEntity pay, boolean bonus);
+
+    public boolean addMachineMaintainence(String machineName, Date mScheduleDate, String mScheduleHour, String maintainenceComments, String mServiceProvider, String mServiceContact);
+
+    public List<String> machineNames();
 }

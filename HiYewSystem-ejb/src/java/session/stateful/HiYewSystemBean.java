@@ -11,6 +11,7 @@ import javax.persistence.PersistenceContext;
 import entity.MachineEntity;
 import entity.EmployeeEntity;
 import entity.LeaveEntity;
+import entity.MachineMaintainenceEntity;
 import entity.PayrollEntity;
 import java.security.MessageDigest;
 import java.sql.Timestamp;
@@ -51,10 +52,39 @@ public class HiYewSystemBean implements HiYewSystemBeanLocal {
             machine.setStatus("Available");
             machine.setDescription(description);
             machine.setExtension(extension);
+            Collection<MachineMaintainenceEntity> machineMaint = new ArrayList<MachineMaintainenceEntity>();
+            machine.setMachineMaintainence(machineMaint);
             em.persist(machine);
             return true;
         }
 
+    }
+
+    public boolean addMachineMaintainence(String machineName, Date mScheduleDate, String mScheduleHour, String maintainenceComments, String mServiceProvider, String mServiceContact) {
+        MachineEntity machine = new MachineEntity();
+        try {
+            Query q = em.createQuery("select machine from MachineEntity machine where machine.machine_name =:id");
+            q.setParameter("id", machineName);
+            machine = (MachineEntity) q.getSingleResult();
+            // to check whether is there conflict
+            // - is it available the machine during that time?
+            // - is it already having an existing schedule?
+            MachineMaintainenceEntity maint = new MachineMaintainenceEntity();
+
+            maint.setComments(machineName);
+            maint.setScheduleTime(mScheduleHour);
+            maint.setServiceProvider(mServiceProvider);
+            maint.setServiceContact(mServiceContact);
+            Timestamp time = new Timestamp(mScheduleDate.getTime());
+            maint.setScheduleDate(time);
+            maint.setComments(maintainenceComments);
+            em.persist(maint);
+            machine.getMachineMaintainence().add(maint);
+            em.merge(machine);
+            return true;
+        } catch (Exception ex) {
+            return false;
+        }
     }
 
     public boolean updatePay(PayrollEntity pay, boolean bonus) {
@@ -98,6 +128,21 @@ public class HiYewSystemBean implements HiYewSystemBeanLocal {
         } catch (Exception ex) {
             return false;
         }
+    }
+
+    public List<String> machineNames() {
+        List<String> names = new ArrayList<String>();
+
+        Query q = em.createQuery("Select c from MachineEntity c");
+        for (Object o : q.getResultList()) {
+            MachineEntity m = (MachineEntity) o;
+            names.add(m.getMachine_name());
+        }
+
+        if (names.isEmpty()) {
+            return null;
+        }
+        return names;
     }
 
     public List<Vector> payRecords() {
