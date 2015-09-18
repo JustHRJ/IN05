@@ -1,0 +1,65 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
+    <h:head>
+        <title>Facelet Title</title>
+    </h:head>
+    <h:body>
+        <h:form id ="formMain">
+
+            <p:dataTable id ="data1" value ="#{hiYewDataTableBean.maintainenceMachineWeek}" var ="im" paginator="true" rows="5" emptyMessage="No machine maintainence" editable = "true">
+                <p:column headerText="Maintainence ID">
+                    <p:outputLabel value = "#{im.id}"/>
+                </p:column>
+                <p:column headerText="Machine Name">
+                    <p:outputLabel value ="#{im.machine.machine_name}"/>
+                </p:column>
+                <p:column headerText="Machine ID">
+                    <p:outputLabel value ="#{im.machine.machine_number}"/>
+                </p:column>
+                <p:column headerText="Schedule Date">
+                    <p:outputLabel value ="#{hiYewManagedBean.formatDate(im.scheduleDate)}"/>
+                </p:column>
+                <p:column headerText="Schedule Time">
+                    <p:outputLabel value ="#{im.scheduleTime}"/>
+                </p:column>
+                <p:column headerText="Service Provider">
+                    <p:outputLabel value ="#{im.serviceProvider}"/>
+                </p:column>
+                <p:column headerText="Service Contact Number">
+                    <p:outputLabel value ="#{im.serviceContact}"/>
+                </p:column>
+            </p:dataTable>
+
+            <br/><br/>
+
+
+            <p:dataTable id ="data2" value ="#{hiYewDataTableBean.maintainenceMachineExpired}" var ="im" paginator="true" rows="5" emptyMessage="No machine maintainence" editable = "true">
+                <p:column headerText="Maintainence ID">
+                    <p:outputLabel value = "#{im.id}"/>
+                </p:column>
+                <p:column headerText="Machine Name">
+                    <p:outputLabel value ="#{im.machine.machine_name}"/>
+                </p:column>
+                <p:column headerText="Machine ID">
+                    <p:outputLabel value ="#{im.machine.machine_number}"/>
+                </p:column>
+                <p:column headerText="Schedule Date">
+                    <p:outputLabel value ="#{hiYewManagedBean.formatDate(im.scheduleDate)}"/>
+                </p:column>
+                <p:column headerText="Schedule Time">
+                    <p:outputLabel value ="#{im.scheduleTime}"/>
+                </p:column>
+                <p:column headerText="Service Provider">
+                    <p:outputLabel value ="#{im.serviceProvider}"/>
+                </p:column>
+                <p:column headerText="Service Contact Number">
+                    <p:outputLabel value ="#{im.serviceContact}"/>
+                </p:column>
+            </p:dataTable>
+        </h:form>
+    </h:body>
+</html>
+

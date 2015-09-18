@@ -60,6 +60,49 @@ public class HiYewSystemBean implements HiYewSystemBeanLocal {
 
     }
 
+    public List<MachineMaintainenceEntity> machineMaintainenceListWeek() {
+        List<MachineMaintainenceEntity> result = new ArrayList<MachineMaintainenceEntity>();
+        Calendar c = Calendar.getInstance();
+        c.add(Calendar.DATE, 6);
+        Calendar d = Calendar.getInstance();
+        Timestamp time = new Timestamp(c.getTime().getTime());
+        Timestamp time1 = new Timestamp(d.getTime().getTime());
+        Query q = em.createQuery("select c from MachineMaintainenceEntity c");
+
+        for (Object o : q.getResultList()) {
+            MachineMaintainenceEntity m = (MachineMaintainenceEntity) o;
+            if (time.after(m.getScheduleDate())) {
+                if (!time1.after(m.getScheduleDate())) {
+                    result.add(m);
+                }
+            }
+        }
+        if (result.isEmpty()) {
+            return null;
+        }
+        return result;
+    }
+
+    public List<MachineMaintainenceEntity> machineMaintainenceListExpired() {
+        List<MachineMaintainenceEntity> result = new ArrayList<MachineMaintainenceEntity>();
+        Calendar d = Calendar.getInstance();
+        Timestamp time1 = new Timestamp(d.getTime().getTime());
+        Query q = em.createQuery("select c from MachineMaintainenceEntity c");
+
+        for (Object o : q.getResultList()) {
+            MachineMaintainenceEntity m = (MachineMaintainenceEntity) o;
+            if (time1.after(m.getScheduleDate())) {
+
+                result.add(m);
+
+            }
+        }
+        if (result.isEmpty()) {
+            return null;
+        }
+        return result;
+    }
+
     public boolean addMachineMaintainence(String machineName, Date mScheduleDate, String mScheduleHour, String maintainenceComments, String mServiceProvider, String mServiceContact) {
         MachineEntity machine = new MachineEntity();
         try {
@@ -78,6 +121,7 @@ public class HiYewSystemBean implements HiYewSystemBeanLocal {
             Timestamp time = new Timestamp(mScheduleDate.getTime());
             maint.setScheduleDate(time);
             maint.setComments(maintainenceComments);
+            maint.setMachine(machine);
             em.persist(maint);
             machine.getMachineMaintainence().add(maint);
             em.merge(machine);

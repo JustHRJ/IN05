@@ -8,6 +8,7 @@ package session.stateful;
 import entity.EmployeeEntity;
 import entity.LeaveEntity;
 import entity.MachineEntity;
+import entity.MachineMaintainenceEntity;
 import entity.PayrollEntity;
 import java.sql.Timestamp;
 import java.util.Date;
@@ -115,4 +116,8 @@ public interface HiYewSystemBeanLocal {
     public boolean addMachineMaintainence(String machineName, Date mScheduleDate, String mScheduleHour, String maintainenceComments, String mServiceProvider, String mServiceContact);
 
     public List<String> machineNames();
+
+    public List<MachineMaintainenceEntity> machineMaintainenceListWeek();
+
+    public List<MachineMaintainenceEntity> machineMaintainenceListExpired();
 }

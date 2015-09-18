@@ -40,7 +40,7 @@ public class MachineEntity implements Serializable {
 
     }
 
-    @OneToMany(cascade ={CascadeType.ALL})
+    @OneToMany(cascade ={CascadeType.ALL}, mappedBy = "machine")
     public Collection<MachineMaintainenceEntity> getMachineMaintainence(){
         return machineMaintainence;
     }

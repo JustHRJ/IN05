@@ -6,6 +6,7 @@
 package managedbean;
 
 import entity.MachineEntity;
+import entity.MachineMaintainenceEntity;
 import entity.PayrollEntity;
 import java.util.List;
 import java.util.Vector;
@@ -14,7 +15,6 @@ import javax.inject.Named;
 import javax.enterprise.context.RequestScoped;
 import session.stateful.HiYewSystemBeanLocal;
 
-
 /**
  *
  * @author JustHRJ
@@ -22,37 +22,46 @@ import session.stateful.HiYewSystemBeanLocal;
 @Named(value = "hiYewDataTableBean")
 @RequestScoped
 public class HiYewDataTableBean {
+
     @EJB
     private HiYewSystemBeanLocal hiYewSystemBean;
- 
+
     /**
      * Creates a new instance of HiYewDataTableBean
      */
     public HiYewDataTableBean() {
-        
+
     }
-    
-    public List<Vector> getLeaves(){
+
+    public List<MachineMaintainenceEntity> getMaintainenceMachineWeek() {
+        return hiYewSystemBean.machineMaintainenceListWeek();
+    }
+
+    public List<MachineMaintainenceEntity> getMaintainenceMachineExpired() {
+        return hiYewSystemBean.machineMaintainenceListExpired();
+    }
+
+    public List<Vector> getLeaves() {
         return hiYewSystemBean.viewAllLeave();
     }
-    
-    public List<MachineEntity> getMachines(){
+
+    public List<MachineEntity> getMachines() {
         return hiYewSystemBean.getAllMachine();
     }
-    
-    public List<MachineEntity> getExpiredMachines(){
+
+    public List<MachineEntity> getExpiredMachines() {
         return hiYewSystemBean.checkMachineExpiry();
     }
-    
-    public List<PayrollEntity> getReleasePay(){
+
+    public List<PayrollEntity> getReleasePay() {
         return hiYewSystemBean.getReleasingPayRecords();
     }
-    
-    public List<Vector> getPayRecords(){
+
+    public List<Vector> getPayRecords() {
         return hiYewSystemBean.payRecords();
     }
-    
-    public List<String> getMachineNames(){
+
+    public List<String> getMachineNames() {
         return hiYewSystemBean.machineNames();
-    } 
+    }
 }

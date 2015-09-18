@@ -11,6 +11,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 
 /**
  *
@@ -27,11 +28,23 @@ public class MachineMaintainenceEntity implements Serializable {
     private String comments;
     private String ServiceContact;
     private String serviceProvider;
-
+    private MachineEntity machine = new MachineEntity();
+   
+    
     public Long getId() {
         return id;
     }
 
+    
+    @ManyToOne
+    public MachineEntity getMachine(){
+        return machine;
+    }
+    
+    public void setMachine(MachineEntity machine){
+        this.machine = machine;
+    }
+    
     public void setId(Long id) {
         this.id = id;
     }
