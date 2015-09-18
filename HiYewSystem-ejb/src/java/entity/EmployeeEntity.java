@@ -51,7 +51,7 @@ public class EmployeeEntity implements Serializable {
 
     }
     
-    @OneToMany(cascade = {CascadeType.ALL})
+    @OneToMany(cascade = {CascadeType.ALL}, mappedBy ="employee")
     public Collection<PayrollEntity> getPayRecords(){
         return payRecords;
     }

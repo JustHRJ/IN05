@@ -16,23 +16,33 @@
                 <f:facet name="header">
                     View Employee
                 </f:facet>
+                <p:ajax event="rowEdit" listener="#{hiYewManagedBean.updatePay}" update ="data1" />
                 <p:column headerText="Employee Name">
-                    <p:outputLabel value ="#{im.get(0)}"/>
+                    <p:outputLabel value ="#{im.employee.employee_name}"/>
                 </p:column>
                 <p:column headerText="Pay Month">
-                    <p:outputLabel value ="#{im.get(1)}"/>
+                    <p:outputLabel value ="#{im.month}"/>
                 </p:column>
                 <p:column headerText="Basic Salary">
-                    <p:outputLabel value ="$#{im.get(2)}"/>
+                    <p:outputLabel value ="$#{im.employee.employee_basic}"/>
                 </p:column>
                 <p:column headerText="Bonus">
-                    <p:outputLabel value ="$#{im.get(3)}"/>
+                    <p:cellEditor>
+                        <f:facet name ="output"> <p:outputLabel value ="$#{im.bonus}" /></f:facet>
+                        <f:facet name ="input">
+                            <p:selectBooleanCheckbox value="#{hiYewManagedBean.bonus}" >
+                            </p:selectBooleanCheckbox>
+                        </f:facet>
+                    </p:cellEditor>
                 </p:column>
                 <p:column headerText="Total Salary">
-                    <p:outputLabel value ="$#{im.get(4)}"/>
+                    <p:outputLabel value ="$#{hiYewManagedBean.calculateTotal(im.employee.employee_basic, im.bonus)}"/>
                 </p:column>
                 <p:column headerText="Pay status">
-                    <p:outputLabel value ="#{im.get(5)}"/>
+                    <p:outputLabel value ="#{im.status}"/>
+                </p:column>
+                <p:column style="width:32px">
+                    <p:rowEditor />
                 </p:column>
             </p:dataTable>
 

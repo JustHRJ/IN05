@@ -57,6 +57,23 @@ public class HiYewSystemBean implements HiYewSystemBeanLocal {
 
     }
 
+    public boolean updatePay(PayrollEntity pay, boolean bonus) {
+        if (bonus) {
+            if (pay.getBonus() == 0) {
+                pay.setBonus(100.00);
+                em.merge(pay);
+                return true;
+            }
+        } else {
+            if (pay.getBonus() > 0) {
+                pay.setBonus(0.00);
+                em.merge(pay);
+                return true;
+            }
+        }
+        return false;
+    }
+
     public boolean createPayroll(String employeeName, int late, int sick) {
         EmployeeEntity e = new EmployeeEntity();
         try {
@@ -67,11 +84,11 @@ public class HiYewSystemBean implements HiYewSystemBeanLocal {
             for (Object o : pay) {
                 PayrollEntity p = (PayrollEntity) o;
                 if (p.getStatus().equals("unset")) {
-                    p.setStatus("unissue");
+                    p.setStatus("unissued");
                     if (late < 3 && sick < 2) {
-                        p.setBonus(true);
+                        p.setBonus(100.00);
                     } else {
-                        p.setBonus(false);
+                        p.setBonus(0.00);
                     }
                     em.merge(p);
                     return true;
@@ -146,54 +163,40 @@ public class HiYewSystemBean implements HiYewSystemBeanLocal {
             return null;
         }
     }
-    
-    public List<Vector> getReleasingPayRecords(){
-        List<Vector> results = new ArrayList();
+
+    public List<PayrollEntity> getReleasingPayRecords() {
+        List<PayrollEntity> results = new ArrayList<PayrollEntity>();
         double total = 0.00;
         Query q = em.createQuery("select c from EmployeeEntity c");
-        for(Object o: q.getResultList()){
+        for (Object o : q.getResultList()) {
             total = 0.00;
             EmployeeEntity e = (EmployeeEntity) o;
             Collection<PayrollEntity> payrolls = e.getPayRecords();
-            for(Object d: payrolls){
+            for (Object d : payrolls) {
                 PayrollEntity p = (PayrollEntity) d;
-                if(p.getStatus().equals("unissue")){
-                    Vector im = new Vector();
-                    im.add(e.getEmployee_name());
-                    im.add(p.getMonth());
-                    im.add(e.getEmployee_basic());
-                    
-                    if(p.isBonus()){
-                        total = e.getEmployee_basic() + 100.00;
-                        im.add("100.00");
-                        im.add(total);
-                    }else{
-                        im.add("0.00");
-                        im.add(e.getEmployee_basic());
-                    }
-                    im.add(p.getStatus());
-                    results.add(im);
+                if (p.getStatus().equals("unissued")) {
+                    results.add(p);
                 }
             }
         }
-        if(results.isEmpty()){
+        if (results.isEmpty()) {
             return null;
-        }else{
+        } else {
             return results;
         }
     }
 
-    public void releaseAllPay(){
+    public void releaseAllPay() {
         Query q = em.createQuery("select c from PayrollEntity c");
-        for(Object o: q.getResultList()){
+        for (Object o : q.getResultList()) {
             PayrollEntity p = (PayrollEntity) o;
-            if(p.getStatus().equals("unissue")){
+            if (p.getStatus().equals("unissued")) {
                 p.setStatus("Issued");
                 em.merge(p);
             }
         }
     }
-    
+
     public List<MachineEntity> getAllMachine() {
         Query q = em.createQuery("Select c from MachineEntity c");
         List<MachineEntity> machineRecords = new ArrayList<MachineEntity>();
@@ -243,13 +246,10 @@ public class HiYewSystemBean implements HiYewSystemBeanLocal {
                             im.add(e.getEmployee_name());
                             im.add(p.getMonth());
                             im.add(e.getEmployee_basic());
-                            if (p.isBonus()) {
-                                im.add("100.00");
-                                total = e.getEmployee_basic() + 100.00;
-                            } else {
-                                im.add("0.00");
-                                total = e.getEmployee_basic();
-                            }
+
+                            im.add(p.getBonus());
+                            total = e.getEmployee_basic() + 100.00;
+
                             im.add(total);
                             im.add(p.getStatus());
                             result.add(im);
@@ -268,13 +268,10 @@ public class HiYewSystemBean implements HiYewSystemBeanLocal {
                             im.add(e.getEmployee_name());
                             im.add(p.getMonth());
                             im.add(e.getEmployee_basic());
-                            if (p.isBonus()) {
-                                im.add("100.00");
-                                total = e.getEmployee_basic() + 100.00;
-                            } else {
-                                im.add("0.00");
-                                total = e.getEmployee_basic();
-                            }
+
+                            im.add(p.getBonus());
+                            total = e.getEmployee_basic() + 100.00;
+
                             im.add(total);
                             im.add(p.getStatus());
                             result.add(im);
@@ -302,13 +299,9 @@ public class HiYewSystemBean implements HiYewSystemBeanLocal {
                         im.add(e.getEmployee_name());
                         im.add(p.getMonth());
                         im.add(e.getEmployee_basic());
-                        if (p.isBonus()) {
-                            im.add("100.00");
-                            total = e.getEmployee_basic() + 100.00;
-                        } else {
-                            im.add("0.00");
-                            total = e.getEmployee_basic();
-                        }
+
+                        im.add(p.getBonus());
+                        total = e.getEmployee_basic() + 100.00;
                         im.add(total);
                         im.add(p.getStatus());
                         result.add(im);
@@ -321,6 +314,7 @@ public class HiYewSystemBean implements HiYewSystemBeanLocal {
             }
             return result;
         }
+
         return null;
     }
 
@@ -607,7 +601,7 @@ public class HiYewSystemBean implements HiYewSystemBeanLocal {
         List<EmployeeEntity> employees = expiredEmployees();
         if (employees.isEmpty()) {
             return true;
-        } 
+        }
         for (Object o : employees) {
             EmployeeEntity e = (EmployeeEntity) o;
             if (e.getEmployee_name().equals(name)) {

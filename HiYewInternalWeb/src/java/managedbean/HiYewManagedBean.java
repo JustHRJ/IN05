@@ -8,8 +8,8 @@ package managedbean;
 import entity.EmployeeEntity;
 import entity.LeaveEntity;
 import entity.MachineEntity;
+import entity.PayrollEntity;
 import java.io.IOException;
-import java.net.URLEncoder;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -35,7 +35,7 @@ public class HiYewManagedBean {
 
     @EJB
     private HiYewSystemBeanLocal hiYewSystemBean;
-
+    private boolean bonus;
     private String employeeName;
     private String address_postal;
     private String employeeAddress;
@@ -87,7 +87,14 @@ public class HiYewManagedBean {
         }
     }
 
-    
+    public double calculateTotal(double basic, double bonus) {
+        return basic + bonus;
+    }
+
+    public void updatePay(RowEditEvent event) {
+        hiYewSystemBean.updatePay((PayrollEntity) event.getObject(), bonus);
+    }
+
     public List<Vector> getPayrolls() {
         return hiYewSystemBean.getPayroll(employeeName, months);
     }
@@ -229,7 +236,7 @@ public class HiYewManagedBean {
     }
 
     public void indexRedirect() throws IOException {
-         FacesContext facesCtx=FacesContext.getCurrentInstance();
+        FacesContext facesCtx = FacesContext.getCurrentInstance();
         ExternalContext externalContext = facesCtx.getExternalContext();
         externalContext.redirect("/HiYewExternalWeb/csLoginPage.xhtml");
     }
@@ -672,5 +679,19 @@ public class HiYewManagedBean {
      */
     public void setEmployeeAdressOptional(String employeeAdressOptional) {
         this.employeeAdressOptional = employeeAdressOptional;
+    }
+
+    /**
+     * @return the bonus
+     */
+    public boolean isBonus() {
+        return bonus;
+    }
+
+    /**
+     * @param bonus the bonus to set
+     */
+    public void setBonus(boolean bonus) {
+        this.bonus = bonus;
     }
 }

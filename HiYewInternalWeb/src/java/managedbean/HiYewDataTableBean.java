@@ -5,9 +5,8 @@
  */
 package managedbean;
 
-import entity.EmployeeEntity;
-import entity.LeaveEntity;
 import entity.MachineEntity;
+import entity.PayrollEntity;
 import java.util.List;
 import java.util.Vector;
 import javax.ejb.EJB;
@@ -45,7 +44,7 @@ public class HiYewDataTableBean {
         return hiYewSystemBean.checkMachineExpiry();
     }
     
-    public List<Vector> getReleasePay(){
+    public List<PayrollEntity> getReleasePay(){
         return hiYewSystemBean.getReleasingPayRecords();
     }
     

@@ -8,6 +8,7 @@ package session.stateful;
 import entity.EmployeeEntity;
 import entity.LeaveEntity;
 import entity.MachineEntity;
+import entity.PayrollEntity;
 import java.sql.Timestamp;
 import java.util.Date;
 import java.util.List;
@@ -105,7 +106,9 @@ public interface HiYewSystemBeanLocal {
 
     public boolean notExistMachine(String id);
 
-    public List<Vector> getReleasingPayRecords();
+    public List<PayrollEntity> getReleasingPayRecords();
 
     public void releaseAllPay();
+
+    public boolean updatePay(PayrollEntity pay, boolean bonus);
 }
