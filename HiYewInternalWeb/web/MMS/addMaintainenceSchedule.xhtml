@@ -9,7 +9,7 @@
     </h:head>
     <h:body>
         <h:form id ="formMain">
-            Machines:<t></t>
+            Machines:
             <p:selectOneMenu value ="#{hiYewManagedBean.machineName}">
                 <f:selectItem itemValue ="" itemLabel ="Select One"/>
                 <f:selectItems value ="#{hiYewDataTableBean.machineNames}"/>
@@ -22,7 +22,7 @@
                         <p:outputLabel value ="Schedule Date"/>
                     </p:column>
                     <p:column>
-                        <p:calendar value ="#{hiYewManagedBean.mScheduleDate}" pattern="dd/mm/yyyy"/>
+                         <p:calendar id = "cal" value = "#{hiYewManagedBean.mScheduleDate}" mindate="#{hiYewManagedBean.getToday()}" pattern ="dd/MM/yyyy" />
                     </p:column>
                 </p:row>
                 <p:row>
