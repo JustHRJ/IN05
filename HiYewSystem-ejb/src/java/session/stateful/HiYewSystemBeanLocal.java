@@ -120,4 +120,6 @@ public interface HiYewSystemBeanLocal {
     public List<MachineMaintainenceEntity> machineMaintainenceListWeek();
 
     public List<MachineMaintainenceEntity> machineMaintainenceListExpired();
+
+    public List<MachineMaintainenceEntity> machineMaintainenceList();
 }

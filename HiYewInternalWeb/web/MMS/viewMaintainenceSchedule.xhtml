@@ -59,6 +59,30 @@
                     <p:outputLabel value ="#{im.serviceContact}"/>
                 </p:column>
             </p:dataTable>
+            
+             <p:dataTable id ="data3" value ="#{hiYewDataTableBean.maintainenceMachine}" var ="im" paginator="true" rows="5" emptyMessage="No machine maintainence" editable = "true">
+                <p:column headerText="Maintainence ID">
+                    <p:outputLabel value = "#{im.id}"/>
+                </p:column>
+                <p:column headerText="Machine Name">
+                    <p:outputLabel value ="#{im.machine.machine_name}"/>
+                </p:column>
+                <p:column headerText="Machine ID">
+                    <p:outputLabel value ="#{im.machine.machine_number}"/>
+                </p:column>
+                <p:column headerText="Schedule Date">
+                    <p:outputLabel value ="#{hiYewManagedBean.formatDate(im.scheduleDate)}"/>
+                </p:column>
+                <p:column headerText="Schedule Time">
+                    <p:outputLabel value ="#{im.scheduleTime}"/>
+                </p:column>
+                <p:column headerText="Service Provider">
+                    <p:outputLabel value ="#{im.serviceProvider}"/>
+                </p:column>
+                <p:column headerText="Service Contact Number">
+                    <p:outputLabel value ="#{im.serviceContact}"/>
+                </p:column>
+            </p:dataTable>
         </h:form>
     </h:body>
 </html>

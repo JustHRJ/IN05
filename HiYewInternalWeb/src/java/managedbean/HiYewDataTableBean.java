@@ -41,6 +41,10 @@ public class HiYewDataTableBean {
         return hiYewSystemBean.machineMaintainenceListExpired();
     }
 
+    public List<MachineMaintainenceEntity> getMaintainenceMachine() {
+        return hiYewSystemBean.machineMaintainenceList();
+    }
+
     public List<Vector> getLeaves() {
         return hiYewSystemBean.viewAllLeave();
     }
