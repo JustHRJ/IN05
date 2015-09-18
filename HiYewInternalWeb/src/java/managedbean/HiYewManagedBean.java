@@ -8,6 +8,8 @@ package managedbean;
 import entity.EmployeeEntity;
 import entity.LeaveEntity;
 import entity.MachineEntity;
+import java.io.IOException;
+import java.net.URLEncoder;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -18,10 +20,10 @@ import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
+import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import org.primefaces.event.RowEditEvent;
 import session.stateful.HiYewSystemBeanLocal;
-
 
 /**
  *
@@ -31,9 +33,9 @@ import session.stateful.HiYewSystemBeanLocal;
 @RequestScoped
 public class HiYewManagedBean {
 
-      @EJB
+    @EJB
     private HiYewSystemBeanLocal hiYewSystemBean;
- 
+
     private String employeeName;
     private String address_postal;
     private String employeeAddress;
@@ -85,6 +87,7 @@ public class HiYewManagedBean {
         }
     }
 
+    
     public List<Vector> getPayrolls() {
         return hiYewSystemBean.getPayroll(employeeName, months);
     }
@@ -156,7 +159,7 @@ public class HiYewManagedBean {
             Date date1 = new Date(date.getTime());
             SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
             return format.format(date1);
-        } else{
+        } else {
             return "";
         }
     }
@@ -210,10 +213,10 @@ public class HiYewManagedBean {
         }
     }
 
-    public void releaseAllPay(){
+    public void releaseAllPay() {
         hiYewSystemBean.releaseAllPay();
     }
-    
+
     public void updateMachinery(RowEditEvent event) {
         boolean check = hiYewSystemBean.updateMachine(machineName, (MachineEntity) event.getObject(), machine_status);
         if (check) {
@@ -223,6 +226,12 @@ public class HiYewManagedBean {
             FacesMessage msg = new FacesMessage("Not Edited", ((MachineEntity) event.getObject()).getMachine_number());
             FacesContext.getCurrentInstance().addMessage(null, msg);
         }
+    }
+
+    public void indexRedirect() throws IOException {
+         FacesContext facesCtx=FacesContext.getCurrentInstance();
+        ExternalContext externalContext = facesCtx.getExternalContext();
+        externalContext.redirect("/HiYewExternalWeb/csLoginPage.xhtml");
     }
 
     public void updateEmployee(RowEditEvent event) {
