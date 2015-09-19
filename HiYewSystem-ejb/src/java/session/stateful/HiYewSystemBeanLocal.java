@@ -122,4 +122,8 @@ public interface HiYewSystemBeanLocal {
     public List<MachineMaintainenceEntity> machineMaintainenceListExpired();
 
     public List<MachineMaintainenceEntity> machineMaintainenceList();
+
+    public List<String> machineMaintainenceNames();
+
+    public List<Long> getMachineMaintID(String machineName);
 }

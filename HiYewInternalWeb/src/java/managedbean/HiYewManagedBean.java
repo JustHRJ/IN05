@@ -8,11 +8,11 @@ package managedbean;
 import entity.EmployeeEntity;
 import entity.LeaveEntity;
 import entity.MachineEntity;
-import entity.MachineMaintainenceEntity;
 import entity.PayrollEntity;
 import java.io.IOException;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -54,7 +54,7 @@ public class HiYewManagedBean {
     private String machine_status;
     private String username;
     private String password;
-    private String loginPosition = "";
+    private List<Long> machineMaintainenceIDList;
     private String machineName;
     private String machineId;
     private String machineDescript;
@@ -65,7 +65,7 @@ public class HiYewManagedBean {
     private int lateArrival;
     private int absentee;
     private String months;
-
+    private Long machineMaintainenceID;
     private Date mScheduleDate;
     private String mScheduleHour;
     private String maintainenceComments;
@@ -97,7 +97,7 @@ public class HiYewManagedBean {
     public void addMachineSchedule() {
         boolean check = hiYewSystemBean.addMachineMaintainence(machineName, mScheduleDate, mScheduleHour, maintainenceComments, mServiceProvider, mServiceContact);
         if (check) {
-            FacesMessage msg = new FacesMessage("Schedule Added", machineName +" has a maintainence schedule");
+            FacesMessage msg = new FacesMessage("Schedule Added", machineName + " has a maintainence schedule");
             FacesContext.getCurrentInstance().addMessage(null, msg);
         } else {
             FacesMessage msg = new FacesMessage("Failed to Add", "Please check for exisiting schedule");
@@ -208,6 +208,12 @@ public class HiYewManagedBean {
         return hiYewSystemBean.viewEmployee(objectId);
     }
 
+   
+
+    public List<Long> getMaintainenceIDList() {
+        return machineMaintainenceIDList;
+    }
+
     public void approveLeave() {
         hiYewSystemBean.approveLeaveID((Long.valueOf(objectId1).longValue()), objectId);
     }
@@ -236,6 +242,13 @@ public class HiYewManagedBean {
             FacesMessage msg = new FacesMessage("Failed To Apply", employeeName);
             FacesContext.getCurrentInstance().addMessage(null, msg);
         }
+    }
+
+    public void onMachineChange(){
+          if(machineName !=null && !machineName.equals(""))
+            machineMaintainenceIDList = hiYewSystemBean.getMachineMaintID(machineName);
+        else
+            machineMaintainenceIDList  = new ArrayList<Long>();
     }
 
     public void releaseAllPay() {
@@ -534,17 +547,6 @@ public class HiYewManagedBean {
     /**
      * @return the loginPosition
      */
-    public String getLoginPosition() {
-        return loginPosition;
-    }
-
-    /**
-     * @param loginPosition the loginPosition to set
-     */
-    public void setLoginPosition(String loginPosition) {
-        this.loginPosition = loginPosition;
-    }
-
     /**
      * @return the startDate
      */
@@ -781,5 +783,19 @@ public class HiYewManagedBean {
      */
     public void setmServiceContact(String mServiceContact) {
         this.mServiceContact = mServiceContact;
+    }
+
+    /**
+     * @return the machineMaintainenceID
+     */
+    public Long getMachineMaintainenceID() {
+        return machineMaintainenceID;
+    }
+
+    /**
+     * @param machineMaintainenceID the machineMaintainenceID to set
+     */
+    public void setMachineMaintainenceID(Long machineMaintainenceID) {
+        this.machineMaintainenceID = machineMaintainenceID;
     }
 }

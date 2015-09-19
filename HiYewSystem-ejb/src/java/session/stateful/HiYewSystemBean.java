@@ -74,6 +74,10 @@ public class HiYewSystemBean implements HiYewSystemBeanLocal {
             if (time.after(m.getScheduleDate())) {
                 if (!time1.after(m.getScheduleDate())) {
                     result.add(m);
+                } else if(time1.after(m.getScheduleDate())){
+                    if(time1.getDay() == m.getScheduleDate().getDay() && time1.getMonth() == m.getScheduleDate().getMonth() && time1.getYear() == m.getScheduleDate().getYear()){
+                        result.add(m);
+                    }
                 }
             }
         }
@@ -83,9 +87,42 @@ public class HiYewSystemBean implements HiYewSystemBeanLocal {
         return result;
     }
 
+    public List<String> machineMaintainenceNames() {
+        List<String> result = new ArrayList<String>();
+        List<MachineMaintainenceEntity> expiredMachine = machineMaintainenceListExpired();
+        List<MachineMaintainenceEntity> weekMachine = machineMaintainenceListWeek();
+        List<MachineMaintainenceEntity> otherMachine = machineMaintainenceList();
+
+        for (int i = 0; i < expiredMachine.size(); i++) {
+            MachineMaintainenceEntity m = expiredMachine.get(i);
+            if (!(result.contains(m.getMachine().getMachine_name()))) {
+                result.add(m.getMachine().getMachine_name());
+            }
+        }
+        for (int i = 0; i < weekMachine.size(); i++) {
+            MachineMaintainenceEntity m = weekMachine.get(i);
+            if (!(result.contains(m.getMachine().getMachine_name()))) {
+                result.add(m.getMachine().getMachine_name());
+            }
+        }
+        for (int i = 0; i < otherMachine.size(); i++) {
+            MachineMaintainenceEntity m = otherMachine.get(i);
+            if (!(result.contains(m.getMachine().getMachine_name()))) {
+                result.add(m.getMachine().getMachine_name());
+            }
+        }
+
+        if (result.isEmpty()) {
+            return null;
+        } else {
+            return result;
+        }
+    }
+
     public List<MachineMaintainenceEntity> machineMaintainenceListExpired() {
         List<MachineMaintainenceEntity> result = new ArrayList<MachineMaintainenceEntity>();
         Calendar d = Calendar.getInstance();
+        d.add(Calendar.DATE, -1);
         Timestamp time1 = new Timestamp(d.getTime().getTime());
         Query q = em.createQuery("select c from MachineMaintainenceEntity c");
 
@@ -101,6 +138,29 @@ public class HiYewSystemBean implements HiYewSystemBeanLocal {
             return null;
         }
         return result;
+    }
+
+    public List<Long> getMachineMaintID(String machineName) {
+        MachineEntity machine = new MachineEntity();
+        List<Long> result = new ArrayList<Long>();
+        try {
+            Query q = em.createQuery("Select machine from MachineEntity machine where machine.machine_name =:id");
+            q.setParameter("id", machineName);
+            machine = (MachineEntity) q.getSingleResult();
+            Collection<MachineMaintainenceEntity> main = machine.getMachineMaintainence();
+            for (Object o : main) {
+                MachineMaintainenceEntity m = (MachineMaintainenceEntity) o;
+                result.add(m.getId());
+            }
+
+            if (result.isEmpty()) {
+                return null;
+            } else {
+                return result;
+            }
+        } catch (Exception ex) {
+            return null;
+        }
     }
 
     public List<MachineMaintainenceEntity> machineMaintainenceList() {

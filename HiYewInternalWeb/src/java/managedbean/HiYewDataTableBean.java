@@ -68,4 +68,8 @@ public class HiYewDataTableBean {
     public List<String> getMachineNames() {
         return hiYewSystemBean.machineNames();
     }
+
+    public List<String> getMachineMaint() {
+        return hiYewSystemBean.machineMaintainenceNames();
+    }
 }
