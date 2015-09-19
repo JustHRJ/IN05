@@ -126,4 +126,6 @@ public interface HiYewSystemBeanLocal {
     public List<String> machineMaintainenceNames();
 
     public List<Long> getMachineMaintID(String machineName);
+
+    public boolean updateMachineSchedule(MachineMaintainenceEntity mSchedule, Date scheduleDate, String mScheduleHour, String mServiceProvider, String mServiceContact);
 }

@@ -8,6 +8,7 @@ package managedbean;
 import entity.EmployeeEntity;
 import entity.LeaveEntity;
 import entity.MachineEntity;
+import entity.MachineMaintainenceEntity;
 import entity.PayrollEntity;
 import java.io.IOException;
 import java.sql.Timestamp;
@@ -94,8 +95,17 @@ public class HiYewManagedBean {
         }
     }
 
+    public void updateMachineSchedule(RowEditEvent event) throws IOException {
+        boolean check = hiYewSystemBean.updateMachineSchedule((MachineMaintainenceEntity) event.getObject(), mScheduleDate, mScheduleHour, mServiceProvider, mServiceContact);
+        if (check) {
+            FacesContext facesCtx = FacesContext.getCurrentInstance();
+            ExternalContext externalContext = facesCtx.getExternalContext();
+            externalContext.redirect("viewMaintainenceSchedule.xhtml");
+        }
+    }
+
     public void addMachineSchedule() {
-        boolean check = hiYewSystemBean.addMachineMaintainence(machineName, mScheduleDate, mScheduleHour, maintainenceComments, mServiceProvider, mServiceContact);
+        boolean check = hiYewSystemBean.addMachineMaintainence(machineName, getmScheduleDate(), getmScheduleHour(), getMaintainenceComments(), getmServiceProvider(), getmServiceContact());
         if (check) {
             FacesMessage msg = new FacesMessage("Schedule Added", machineName + " has a maintainence schedule");
             FacesContext.getCurrentInstance().addMessage(null, msg);
@@ -208,8 +218,6 @@ public class HiYewManagedBean {
         return hiYewSystemBean.viewEmployee(objectId);
     }
 
-   
-
     public List<Long> getMaintainenceIDList() {
         return machineMaintainenceIDList;
     }
@@ -244,11 +252,12 @@ public class HiYewManagedBean {
         }
     }
 
-    public void onMachineChange(){
-          if(machineName !=null && !machineName.equals(""))
+    public void onMachineChange() {
+        if (machineName != null && !machineName.equals("")) {
             machineMaintainenceIDList = hiYewSystemBean.getMachineMaintID(machineName);
-        else
-            machineMaintainenceIDList  = new ArrayList<Long>();
+        } else {
+            machineMaintainenceIDList = new ArrayList<Long>();
+        }
     }
 
     public void releaseAllPay() {

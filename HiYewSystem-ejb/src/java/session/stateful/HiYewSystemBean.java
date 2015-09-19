@@ -60,6 +60,28 @@ public class HiYewSystemBean implements HiYewSystemBeanLocal {
 
     }
 
+    public boolean updateMachineSchedule(MachineMaintainenceEntity mSchedule, Date scheduleDate, String mScheduleHour, String mServiceProvider, String mServiceContact) {
+        if (!(scheduleDate == null)) {
+            Timestamp time = new Timestamp(scheduleDate.getTime());
+            mSchedule.setScheduleDate(time);
+        }
+        if (!mScheduleHour.isEmpty()) {
+            mSchedule.setScheduleTime(mScheduleHour);
+        }
+        if (!mServiceProvider.isEmpty()) {
+            mSchedule.setServiceProvider(mServiceProvider);
+        }
+        if (!mServiceContact.isEmpty()) {
+            mSchedule.setServiceContact(mServiceContact);
+        }
+
+        if (!mServiceContact.isEmpty() || !mServiceProvider.isEmpty() || !mScheduleHour.isEmpty() || !(scheduleDate == null)) {
+            em.merge(mSchedule);
+            return true;
+        }
+        return false;
+    }
+
     public List<MachineMaintainenceEntity> machineMaintainenceListWeek() {
         List<MachineMaintainenceEntity> result = new ArrayList<MachineMaintainenceEntity>();
         Calendar c = Calendar.getInstance();
@@ -74,8 +96,8 @@ public class HiYewSystemBean implements HiYewSystemBeanLocal {
             if (time.after(m.getScheduleDate())) {
                 if (!time1.after(m.getScheduleDate())) {
                     result.add(m);
-                } else if(time1.after(m.getScheduleDate())){
-                    if(time1.getDay() == m.getScheduleDate().getDay() && time1.getMonth() == m.getScheduleDate().getMonth() && time1.getYear() == m.getScheduleDate().getYear()){
+                } else if (time1.after(m.getScheduleDate())) {
+                    if (time1.getDay() == m.getScheduleDate().getDay() && time1.getMonth() == m.getScheduleDate().getMonth() && time1.getYear() == m.getScheduleDate().getYear()) {
                         result.add(m);
                     }
                 }
