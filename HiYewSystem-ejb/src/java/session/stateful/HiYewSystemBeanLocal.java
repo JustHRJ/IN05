@@ -8,6 +8,8 @@ package session.stateful;
 import entity.EmployeeEntity;
 import entity.LeaveEntity;
 import entity.MachineEntity;
+import entity.MachineMaintainenceEntity;
+import entity.PayrollEntity;
 import java.sql.Timestamp;
 import java.util.Date;
 import java.util.List;
@@ -29,7 +31,7 @@ public interface HiYewSystemBeanLocal {
 
     public List<MachineEntity> checkMachineExpiry();
 
-    public boolean addEmployee(String employee, String employee_passNumber, String employee_address, int number_of_leave, String position, String username, String password, Timestamp expiry, String contact);
+    public boolean addEmployee(String employee, String employee_passNumber, String employee_address, int number_of_leave, String position, String username, String password, Timestamp expiry, String contact, String addressPostal, String unit, String optional);
 
     public boolean updateEmployee(EmployeeEntity employee, String a, String b, Date c, String d);
 
@@ -104,4 +106,28 @@ public interface HiYewSystemBeanLocal {
     public boolean notExistExpiredName(String name);
 
     public boolean notExistMachine(String id);
+
+    public List<PayrollEntity> getReleasingPayRecords();
+
+    public void releaseAllPay();
+
+    public boolean updatePay(PayrollEntity pay, boolean bonus);
+
+    public boolean addMachineMaintainence(String machineName, Date mScheduleDate, String mScheduleHour, String maintainenceComments, String mServiceProvider, String mServiceContact);
+
+    public List<String> machineNames();
+
+    public List<MachineMaintainenceEntity> machineMaintainenceListWeek();
+
+    public List<MachineMaintainenceEntity> machineMaintainenceListExpired();
+
+    public List<MachineMaintainenceEntity> machineMaintainenceList();
+
+    public List<String> machineMaintainenceNames();
+
+    public List<Long> getMachineMaintID(String machineName);
+
+    public boolean updateMachineSchedule(MachineMaintainenceEntity mSchedule, Date scheduleDate, String mScheduleHour, String mServiceProvider, String mServiceContact);
+
+    public boolean addTrainngSchedule(String trainingName, Date trainingStart, Date trainingEnd, String trainingDescription, int size, String trainingCode);
 }

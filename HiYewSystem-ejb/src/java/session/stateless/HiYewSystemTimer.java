@@ -45,6 +45,7 @@ public class HiYewSystemTimer {
             SimpleDateFormat format = new SimpleDateFormat("MMM,yyyy");
             p.setStatus("unset");
             p.setMonth(format.format(c.getTime()));
+            p.setEmployee(e);
             em.persist(p);
             e.getPayRecords().add(p);
             em.merge(e);

@@ -16,7 +16,6 @@ import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import session.stateful.HiYewSystemBeanLocal;
 
-
 /**
  *
  * @author JustHRJ
@@ -24,9 +23,10 @@ import session.stateful.HiYewSystemBeanLocal;
 @Named(value = "loginControlBean")
 @SessionScoped
 public class loginControlBean implements Serializable {
+
     @EJB
     private HiYewSystemBeanLocal hiYewSystemBean;
- 
+
     private String loginPosition = "";
     private String username;
     private String password;
@@ -95,11 +95,10 @@ public class loginControlBean implements Serializable {
 
     public String userAction() {
         if (logined) {
-            username = new String();
-            password = new String();
-            employeeName = new String();
-            logined = false;
-            loginPosition = new String();
+            FacesContext.getCurrentInstance().getExternalContext().invalidateSession();
+            username = "";
+            password = "";
+            
             return "login";
         } else {
             return "login";

@@ -8,8 +8,12 @@ package managedbean;
 import entity.EmployeeEntity;
 import entity.LeaveEntity;
 import entity.MachineEntity;
+import entity.MachineMaintainenceEntity;
+import entity.PayrollEntity;
+import java.io.IOException;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -18,10 +22,10 @@ import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
+import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import org.primefaces.event.RowEditEvent;
 import session.stateful.HiYewSystemBeanLocal;
-
 
 /**
  *
@@ -31,11 +35,14 @@ import session.stateful.HiYewSystemBeanLocal;
 @RequestScoped
 public class HiYewManagedBean {
 
-      @EJB
+    @EJB
     private HiYewSystemBeanLocal hiYewSystemBean;
- 
+    private boolean bonus;
     private String employeeName;
+    private String address_postal;
     private String employeeAddress;
+    private String employeeAddressUnit;
+    private String employeeAdressOptional;
     private String employeePassNumber;
     private int employeeLeave;
     private Long employeeId;
@@ -48,7 +55,7 @@ public class HiYewManagedBean {
     private String machine_status;
     private String username;
     private String password;
-    private String loginPosition = "";
+    private List<Long> machineMaintainenceIDList;
     private String machineName;
     private String machineId;
     private String machineDescript;
@@ -59,7 +66,19 @@ public class HiYewManagedBean {
     private int lateArrival;
     private int absentee;
     private String months;
-
+    private Long machineMaintainenceID;
+    private Date mScheduleDate;
+    private String mScheduleHour;
+    private String maintainenceComments;
+    private String mServiceProvider;
+    private String mServiceContact;
+    private String trainingDescription;
+    private Date trainingStartDate;
+    private Date trainingEndDate;
+    private int trainingSize;
+    private String trainingName;
+    private String trainingCode;
+    
     /**
      * Creates a new instance of HiYewManagedBean
      */
@@ -82,6 +101,50 @@ public class HiYewManagedBean {
         }
     }
 
+    public void updateMachineSchedule(RowEditEvent event) throws IOException {
+        boolean check = hiYewSystemBean.updateMachineSchedule((MachineMaintainenceEntity) event.getObject(), mScheduleDate, mScheduleHour, mServiceProvider, mServiceContact);
+        if (check) {
+
+            FacesContext facesCtx = FacesContext.getCurrentInstance();
+            ExternalContext externalContext = facesCtx.getExternalContext();
+            externalContext.redirect("viewMaintainenceSchedule.xhtml");
+        } else {
+            FacesMessage msg = new FacesMessage("Not Edited", ((MachineMaintainenceEntity) event.getObject()).getMachine().getMachine_name());
+            FacesContext.getCurrentInstance().addMessage(null, msg);
+        }
+    }
+
+    
+    public void addTrainingSchedule(){
+        boolean check = hiYewSystemBean.addTrainngSchedule(trainingName, trainingStartDate, trainingEndDate, trainingDescription, trainingSize, trainingCode);
+        if(check){
+            FacesMessage msg = new FacesMessage("Added", trainingCode);
+            FacesContext.getCurrentInstance().addMessage(null, msg);
+        } else{
+            FacesMessage msg = new FacesMessage("Not Added", "Existing Training Schedule");
+            FacesContext.getCurrentInstance().addMessage(null, msg);
+        }
+    }
+    
+    public void addMachineSchedule() {
+        boolean check = hiYewSystemBean.addMachineMaintainence(machineName, getmScheduleDate(), getmScheduleHour(), getMaintainenceComments(), getmServiceProvider(), getmServiceContact());
+        if (check) {
+            FacesMessage msg = new FacesMessage("Schedule Added", machineName + " has a maintainence schedule");
+            FacesContext.getCurrentInstance().addMessage(null, msg);
+        } else {
+            FacesMessage msg = new FacesMessage("Failed to Add", "Please check for exisiting schedule");
+            FacesContext.getCurrentInstance().addMessage(null, msg);
+        }
+    }
+
+    public double calculateTotal(double basic, double bonus) {
+        return basic + bonus;
+    }
+
+    public void updatePay(RowEditEvent event) {
+        hiYewSystemBean.updatePay((PayrollEntity) event.getObject(), bonus);
+    }
+
     public List<Vector> getPayrolls() {
         return hiYewSystemBean.getPayroll(employeeName, months);
     }
@@ -93,7 +156,7 @@ public class HiYewManagedBean {
         } else {
             expiry = new Timestamp(employeePassExpiry.getTime());
         }
-        hiYewSystemBean.addEmployee(employeeName, employeePassNumber, employeeAddress, employeeLeave, password, username, password, expiry, employeeContact);
+        hiYewSystemBean.addEmployee(employeeName, employeePassNumber, employeeAddress, employeeLeave, employeePosition, username, password, expiry, employeeContact, address_postal, employeeAddressUnit, employeeAdressOptional);
         return "login";
     }
 
@@ -137,7 +200,7 @@ public class HiYewManagedBean {
         } else {
             expiry = new Timestamp(employeePassExpiry.getTime());
         }
-        boolean result = hiYewSystemBean.addEmployee(employeeName, employeePassNumber, employeeAddress, employeeLeave, employeePosition, username, password, expiry, employeeContact);
+        boolean result = hiYewSystemBean.addEmployee(employeeName, employeePassNumber, employeeAddress, employeeLeave, employeePosition, username, password, expiry, employeeContact, address_postal, employeeAddressUnit, employeeAdressOptional);
         if (result) {
             return "employee_details";
         } else {
@@ -153,7 +216,7 @@ public class HiYewManagedBean {
             Date date1 = new Date(date.getTime());
             SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
             return format.format(date1);
-        } else{
+        } else {
             return "";
         }
     }
@@ -175,6 +238,10 @@ public class HiYewManagedBean {
 
     public List<EmployeeEntity> getEmployees() {
         return hiYewSystemBean.viewEmployee(objectId);
+    }
+
+    public List<Long> getMaintainenceIDList() {
+        return machineMaintainenceIDList;
     }
 
     public void approveLeave() {
@@ -207,6 +274,18 @@ public class HiYewManagedBean {
         }
     }
 
+    public void onMachineChange() {
+        if (machineName != null && !machineName.equals("")) {
+            machineMaintainenceIDList = hiYewSystemBean.getMachineMaintID(machineName);
+        } else {
+            machineMaintainenceIDList = new ArrayList<Long>();
+        }
+    }
+
+    public void releaseAllPay() {
+        hiYewSystemBean.releaseAllPay();
+    }
+
     public void updateMachinery(RowEditEvent event) {
         boolean check = hiYewSystemBean.updateMachine(machineName, (MachineEntity) event.getObject(), machine_status);
         if (check) {
@@ -216,6 +295,12 @@ public class HiYewManagedBean {
             FacesMessage msg = new FacesMessage("Not Edited", ((MachineEntity) event.getObject()).getMachine_number());
             FacesContext.getCurrentInstance().addMessage(null, msg);
         }
+    }
+
+    public void indexRedirect() throws IOException {
+        FacesContext facesCtx = FacesContext.getCurrentInstance();
+        ExternalContext externalContext = facesCtx.getExternalContext();
+        externalContext.redirect("/HiYewExternalWeb/csLoginPage.xhtml");
     }
 
     public void updateEmployee(RowEditEvent event) {
@@ -493,17 +578,6 @@ public class HiYewManagedBean {
     /**
      * @return the loginPosition
      */
-    public String getLoginPosition() {
-        return loginPosition;
-    }
-
-    /**
-     * @param loginPosition the loginPosition to set
-     */
-    public void setLoginPosition(String loginPosition) {
-        this.loginPosition = loginPosition;
-    }
-
     /**
      * @return the startDate
      */
@@ -614,5 +688,229 @@ public class HiYewManagedBean {
      */
     public void setMonths(String months) {
         this.months = months;
+    }
+
+    /**
+     * @return the address_postal
+     */
+    public String getAddress_postal() {
+        return address_postal;
+    }
+
+    /**
+     * @param address_postal the address_postal to set
+     */
+    public void setAddress_postal(String address_postal) {
+        this.address_postal = address_postal;
+    }
+
+    /**
+     * @return the employeeAddressUnit
+     */
+    public String getEmployeeAddressUnit() {
+        return employeeAddressUnit;
+    }
+
+    /**
+     * @param employeeAddressUnit the employeeAddressUnit to set
+     */
+    public void setEmployeeAddressUnit(String employeeAddressUnit) {
+        this.employeeAddressUnit = employeeAddressUnit;
+    }
+
+    /**
+     * @return the employeeAdressOptional
+     */
+    public String getEmployeeAdressOptional() {
+        return employeeAdressOptional;
+    }
+
+    /**
+     * @param employeeAdressOptional the employeeAdressOptional to set
+     */
+    public void setEmployeeAdressOptional(String employeeAdressOptional) {
+        this.employeeAdressOptional = employeeAdressOptional;
+    }
+
+    /**
+     * @return the bonus
+     */
+    public boolean isBonus() {
+        return bonus;
+    }
+
+    /**
+     * @param bonus the bonus to set
+     */
+    public void setBonus(boolean bonus) {
+        this.bonus = bonus;
+    }
+
+    /**
+     * @return the mScheduleDate
+     */
+    public Date getmScheduleDate() {
+        return mScheduleDate;
+    }
+
+    /**
+     * @param mScheduleDate the mScheduleDate to set
+     */
+    public void setmScheduleDate(Date mScheduleDate) {
+        this.mScheduleDate = mScheduleDate;
+    }
+
+    /**
+     * @return the mScheduleHour
+     */
+    public String getmScheduleHour() {
+        return mScheduleHour;
+    }
+
+    /**
+     * @param mScheduleHour the mScheduleHour to set
+     */
+    public void setmScheduleHour(String mScheduleHour) {
+        this.mScheduleHour = mScheduleHour;
+    }
+
+    /**
+     * @return the maintainenceComments
+     */
+    public String getMaintainenceComments() {
+        return maintainenceComments;
+    }
+
+    /**
+     * @param maintainenceComments the maintainenceComments to set
+     */
+    public void setMaintainenceComments(String maintainenceComments) {
+        this.maintainenceComments = maintainenceComments;
+    }
+
+    /**
+     * @return the mServiceProvider
+     */
+    public String getmServiceProvider() {
+        return mServiceProvider;
+    }
+
+    /**
+     * @param mServiceProvider the mServiceProvider to set
+     */
+    public void setmServiceProvider(String mServiceProvider) {
+        this.mServiceProvider = mServiceProvider;
+    }
+
+    /**
+     * @return the mServiceContact
+     */
+    public String getmServiceContact() {
+        return mServiceContact;
+    }
+
+    /**
+     * @param mServiceContact the mServiceContact to set
+     */
+    public void setmServiceContact(String mServiceContact) {
+        this.mServiceContact = mServiceContact;
+    }
+
+    /**
+     * @return the machineMaintainenceID
+     */
+    public Long getMachineMaintainenceID() {
+        return machineMaintainenceID;
+    }
+
+    /**
+     * @param machineMaintainenceID the machineMaintainenceID to set
+     */
+    public void setMachineMaintainenceID(Long machineMaintainenceID) {
+        this.machineMaintainenceID = machineMaintainenceID;
+    }
+
+    /**
+     * @return the trainingDescription
+     */
+    public String getTrainingDescription() {
+        return trainingDescription;
+    }
+
+    /**
+     * @param trainingDescription the trainingDescription to set
+     */
+    public void setTrainingDescription(String trainingDescription) {
+        this.trainingDescription = trainingDescription;
+    }
+
+    /**
+     * @return the trainingStartDate
+     */
+    public Date getTrainingStartDate() {
+        return trainingStartDate;
+    }
+
+    /**
+     * @param trainingStartDate the trainingStartDate to set
+     */
+    public void setTrainingStartDate(Date trainingStartDate) {
+        this.trainingStartDate = trainingStartDate;
+    }
+
+    /**
+     * @return the trainingEndDate
+     */
+    public Date getTrainingEndDate() {
+        return trainingEndDate;
+    }
+
+    /**
+     * @param trainingEndDate the trainingEndDate to set
+     */
+    public void setTrainingEndDate(Date trainingEndDate) {
+        this.trainingEndDate = trainingEndDate;
+    }
+
+    /**
+     * @return the trainingSize
+     */
+    public int getTrainingSize() {
+        return trainingSize;
+    }
+
+    /**
+     * @param trainingSize the trainingSize to set
+     */
+    public void setTrainingSize(int trainingSize) {
+        this.trainingSize = trainingSize;
+    }
+
+    /**
+     * @return the trainingName
+     */
+    public String getTrainingName() {
+        return trainingName;
+    }
+
+    /**
+     * @param trainingName the trainingName to set
+     */
+    public void setTrainingName(String trainingName) {
+        this.trainingName = trainingName;
+    }
+
+    /**
+     * @return the trainingCode
+     */
+    public String getTrainingCode() {
+        return trainingCode;
+    }
+
+    /**
+     * @param trainingCode the trainingCode to set
+     */
+    public void setTrainingCode(String trainingCode) {
+        this.trainingCode = trainingCode;
     }
 }

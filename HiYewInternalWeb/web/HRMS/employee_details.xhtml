@@ -22,7 +22,7 @@
             <br/>
 
             <p:growl id = "msgs" showDetail="true"/>
-            <p:dataTable var="im" value="#{loginControlBean.employees}" editable = "true" >
+            <p:dataTable var="im" value="#{loginControlBean.employees}" editable = "true" paginator="true" rows="5" emptyMessage="No employees">
                 <f:facet name="header">
                     View Employee
                 </f:facet>
@@ -35,14 +35,19 @@
                 </p:column>
                 <p:column headerText = "Employee Address">
                     <p:cellEditor>
-                        <f:facet name ="output"><h:outputText value="#{im.employee_address}" style="text-align: center" /></f:facet>
-                        <f:facet name ="input"><p:inputText id = "employeeAddress" value ="#{hiYewManagedBean.employeeAddress}" /></f:facet>
+                        <f:facet name ="output"><h:outputText value="#{im.unit} #{im.employee_address} #{im.optional} #{im.addressPostal}" style="text-align: center" /></f:facet>
+                        <f:facet name ="input">
+                            <p:inputText id = "employeeAddress" value ="#{hiYewManagedBean.employeeAddressUnit}" />
+                            <p:inputText id = "employeeAddress1" value ="#{hiYewManagedBean.employeeAddress}" />
+                            <p:inputText id = "employeeAddress2" value ="#{hiYewManagedBean.employeeAdressOptional}" />
+                            <p:inputText id = "employeeAddress3" value ="#{hiYewManagedBean.address_postal}" />
+                        </f:facet>
                     </p:cellEditor>
                 </p:column>
                 <p:column headerText = "Employee Contact">
                     <p:cellEditor>
                         <f:facet name ="output"><h:outputText value="#{im.employee_contact}" style="text-align: center" /></f:facet>
-                        <f:facet name ="input"><p:inputText id = "employeeContact" value ="#{hiYewManagedBean.employeeContact}" /></f:facet>
+                        <f:facet name ="input"><p:inputText id = "employeeContact" value ="#{hiYewManagedBean.employeeContact}" validator="#{registrationValidator.validateNumeric}" validatorMessage="Enter valid number"/></f:facet>
                     </p:cellEditor>
                 </p:column>
                 <p:column headerText = "Employee Pass Number">
@@ -51,7 +56,11 @@
                 <p:column headerText = "Employee Pass Expiry">
                     <p:cellEditor>
                         <f:facet name ="output"><h:outputText  value= "#{hiYewManagedBean.formatDate(im.employee_passExpiry)}" /></f:facet>
-                        <f:facet name ="input"> <p:calendar value = "#{hiYewManagedBean.employeePassExpiry}" mindate="#{hiYewManagedBean.getToday()}" pattern ="dd/MM/yyyy" /></f:facet>
+                        <f:facet name ="input"> 
+                            <p:calendar value = "#{hiYewManagedBean.employeePassExpiry}" mindate="#{hiYewManagedBean.getToday()}" pattern ="dd/MM/yyyy" validatorMessage="Please enter correct format">
+
+                            </p:calendar>
+                        </f:facet>
                     </p:cellEditor>
                 </p:column>
                 <p:column headerText = "Employee Leaves">
