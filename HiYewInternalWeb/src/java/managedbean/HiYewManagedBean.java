@@ -72,7 +72,13 @@ public class HiYewManagedBean {
     private String maintainenceComments;
     private String mServiceProvider;
     private String mServiceContact;
-
+    private String trainingDescription;
+    private Date trainingStartDate;
+    private Date trainingEndDate;
+    private int trainingSize;
+    private String trainingName;
+    private String trainingCode;
+    
     /**
      * Creates a new instance of HiYewManagedBean
      */
@@ -108,6 +114,18 @@ public class HiYewManagedBean {
         }
     }
 
+    
+    public void addTrainingSchedule(){
+        boolean check = hiYewSystemBean.addTrainngSchedule(trainingName, trainingStartDate, trainingEndDate, trainingDescription, trainingSize, trainingCode);
+        if(check){
+            FacesMessage msg = new FacesMessage("Added", trainingCode);
+            FacesContext.getCurrentInstance().addMessage(null, msg);
+        } else{
+            FacesMessage msg = new FacesMessage("Not Added", "Existing Training Schedule");
+            FacesContext.getCurrentInstance().addMessage(null, msg);
+        }
+    }
+    
     public void addMachineSchedule() {
         boolean check = hiYewSystemBean.addMachineMaintainence(machineName, getmScheduleDate(), getmScheduleHour(), getMaintainenceComments(), getmServiceProvider(), getmServiceContact());
         if (check) {
@@ -810,5 +828,89 @@ public class HiYewManagedBean {
      */
     public void setMachineMaintainenceID(Long machineMaintainenceID) {
         this.machineMaintainenceID = machineMaintainenceID;
+    }
+
+    /**
+     * @return the trainingDescription
+     */
+    public String getTrainingDescription() {
+        return trainingDescription;
+    }
+
+    /**
+     * @param trainingDescription the trainingDescription to set
+     */
+    public void setTrainingDescription(String trainingDescription) {
+        this.trainingDescription = trainingDescription;
+    }
+
+    /**
+     * @return the trainingStartDate
+     */
+    public Date getTrainingStartDate() {
+        return trainingStartDate;
+    }
+
+    /**
+     * @param trainingStartDate the trainingStartDate to set
+     */
+    public void setTrainingStartDate(Date trainingStartDate) {
+        this.trainingStartDate = trainingStartDate;
+    }
+
+    /**
+     * @return the trainingEndDate
+     */
+    public Date getTrainingEndDate() {
+        return trainingEndDate;
+    }
+
+    /**
+     * @param trainingEndDate the trainingEndDate to set
+     */
+    public void setTrainingEndDate(Date trainingEndDate) {
+        this.trainingEndDate = trainingEndDate;
+    }
+
+    /**
+     * @return the trainingSize
+     */
+    public int getTrainingSize() {
+        return trainingSize;
+    }
+
+    /**
+     * @param trainingSize the trainingSize to set
+     */
+    public void setTrainingSize(int trainingSize) {
+        this.trainingSize = trainingSize;
+    }
+
+    /**
+     * @return the trainingName
+     */
+    public String getTrainingName() {
+        return trainingName;
+    }
+
+    /**
+     * @param trainingName the trainingName to set
+     */
+    public void setTrainingName(String trainingName) {
+        this.trainingName = trainingName;
+    }
+
+    /**
+     * @return the trainingCode
+     */
+    public String getTrainingCode() {
+        return trainingCode;
+    }
+
+    /**
+     * @param trainingCode the trainingCode to set
+     */
+    public void setTrainingCode(String trainingCode) {
+        this.trainingCode = trainingCode;
     }
 }

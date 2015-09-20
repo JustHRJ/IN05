@@ -13,6 +13,7 @@ import entity.EmployeeEntity;
 import entity.LeaveEntity;
 import entity.MachineMaintainenceEntity;
 import entity.PayrollEntity;
+import entity.TrainingScheduleEntity;
 import java.security.MessageDigest;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
@@ -82,6 +83,27 @@ public class HiYewSystemBean implements HiYewSystemBeanLocal {
         return false;
     }
 
+    public boolean addTrainngSchedule(String trainingName, Date trainingStart, Date trainingEnd, String trainingDescription, int size, String trainingCode){
+        TrainingScheduleEntity t = new TrainingScheduleEntity();
+        try{
+            Query q = em.createQuery("select t from TrainingScheduleEntity t where t.trainingCode = :id");
+            q.setParameter("id", trainingCode);
+            t = (TrainingScheduleEntity) q.getSingleResult();
+            return false;
+        }catch(Exception ex){
+            t.setTrainingCode(trainingCode);
+            t.setTrainingDescription(trainingDescription);
+            t.setTrainingName(trainingName);
+            t.setTrianingSize(size);
+            Timestamp time = new Timestamp(trainingStart.getTime());
+            t.setTrainingStartDate(time);
+            time = new Timestamp(trainingEnd.getTime());
+            t.setTrainingEndDate(time);
+            em.persist(t);
+            return true;
+        }
+    }
+    
     public List<MachineMaintainenceEntity> machineMaintainenceListWeek() {
         List<MachineMaintainenceEntity> result = new ArrayList<MachineMaintainenceEntity>();
         Calendar c = Calendar.getInstance();
