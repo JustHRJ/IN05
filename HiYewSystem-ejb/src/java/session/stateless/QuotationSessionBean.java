@@ -5,8 +5,10 @@
  */
 package session.stateless;
 
+import entity.CompositeQuotationDescKey;
 import entity.Customer;
 import entity.Quotation;
+import entity.QuotationDescription;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import javax.ejb.Stateless;
@@ -54,6 +56,15 @@ public class QuotationSessionBean implements QuotationSessionBeanLocal {
     @Override
     public void createQuotation(Quotation quotation) {
         em.persist(quotation);
+    }
+    
+    @Override
+    public void createQuotationDesciption(QuotationDescription quotationDescription){
+        CompositeQuotationDescKey cqd = new CompositeQuotationDescKey();
+        cqd.setQuotationNo(quotationDescription.getQuotationNo());
+        cqd.setQuotationDescNo(quotationDescription.getQuotationDescNo());
+        
+        em.persist(quotationDescription);
     }
     
     //@Override

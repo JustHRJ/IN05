@@ -25,8 +25,12 @@ public class Customer implements Serializable {
     private String userName;
     private String pw;
     private String name;
-    private String address;
+    private String address1;
+    private String address2;
     private String phone;
+    private String email;
+    private String postalCode;
+    
     //private Integer active; // set 1 for existing customer;
     //@Enumerated(EnumType.STRING)
     private CustomerStatusEnum customerStatusEnum;
@@ -42,7 +46,7 @@ public class Customer implements Serializable {
         this.userName = userName;
         this.pw = pw;
         this.name = name;
-        this.address = address;
+        this.address1 = address;
         this.phone = phone;
         //this.active = active;
         this.customerStatusEnum = customerStatusEnum;
@@ -92,17 +96,17 @@ public class Customer implements Serializable {
     }
 
     /**
-     * @return the address
+     * @return the address1
      */
-    public String getAddress() {
-        return address;
+    public String getAddress1() {
+        return address1;
     }
 
     /**
-     * @param address the address to set
+     * @param address1 the address1 to set
      */
-    public void setAddress(String address) {
-        this.address = address;
+    public void setAddress1(String address1) {
+        this.address1 = address1;
     }
 
     /**
@@ -117,6 +121,48 @@ public class Customer implements Serializable {
      */
     public void setPhone(String phone) {
         this.phone = phone;
+    }
+    
+    /**
+     * @return the address2
+     */
+    public String getAddress2() {
+        return address2;
+    }
+
+    /**
+     * @param address2 the address2 to set
+     */
+    public void setAddress2(String address2) {
+        this.address2 = address2;
+    }
+
+    /**
+     * @return the email
+     */
+    public String getEmail() {
+        return email;
+    }
+
+    /**
+     * @param email the email to set
+     */
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    /**
+     * @return the postalCode
+     */
+    public String getPostalCode() {
+        return postalCode;
+    }
+
+    /**
+     * @param postalCode the postalCode to set
+     */
+    public void setPostalCode(String postalCode) {
+        this.postalCode = postalCode;
     }
 
     @Override
@@ -175,6 +221,8 @@ public class Customer implements Serializable {
     public void addQuotations(Quotation q){
         this.quotations.add(q);
     }
+
+    
 
     
     

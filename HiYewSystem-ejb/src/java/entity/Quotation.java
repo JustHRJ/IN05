@@ -103,7 +103,7 @@ public class Quotation implements Serializable {
         this.quotationDescriptions = quotationDescriptions;
     }
     
-    public void setQuotationDescriptions(QuotationDescription qd) {
+    public void addQuotationDescriptions(QuotationDescription qd) {
         this.quotationDescriptions.add(qd);
     }
 
@@ -148,18 +148,5 @@ public class Quotation implements Serializable {
         return "entity.RFQ[ id=" + getQuotationNo() + " ]";
     }
 
-    /**
-     * @return the qd
-     */
-    //public QuotationDescription getQuotationDescription() {
-    //    return quotationDescription;
-    //}
-
-    /**
-     * @param quotationDescription the qd to set
-     */
-    //public void setQuotationDescription(QuotationDescription quotationDescription) {
-     //   this.quotationDescription = quotationDescription;
-    //}
     
 }

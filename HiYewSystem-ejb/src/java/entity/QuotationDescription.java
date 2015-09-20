@@ -23,7 +23,7 @@ import javax.persistence.ManyToOne;
 public class QuotationDescription implements Serializable {
     private static final long serialVersionUID = 1L;
     
-    private Integer count = 1;
+    
     @Id
     private Integer quotationDescNo;
     private String itemDesc;
@@ -36,17 +36,16 @@ public class QuotationDescription implements Serializable {
     private String quotationNo;
 
     public QuotationDescription() {
-        quotationDescNo = count;
-        count +=1;
+        
     }
 
-    public QuotationDescription(String jobDesc, Integer qty, Double price, Quotation quotation) {
-        quotationDescNo = count;
+    public QuotationDescription(Integer quotationDescNo, String jobDesc, Integer qty, Double price, Quotation quotation) {
+        this.quotationDescNo = quotationDescNo;
         this.itemDesc = jobDesc;
         this.qty = qty;
         this.price = price;
         this.quotation = quotation;
-        count += 1;
+       
     }
 
     /**

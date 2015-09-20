@@ -11,8 +11,8 @@
         <h1>Welcome to HiYew!</h1> 
         <h:form id="mainForm">
          
-            <p:link outcome="AddNewCustomer" value="Register"></p:link>
-            
+            <p:link outcome="AddNewCustomer" value="Register as Customer"></p:link>&nbsp;
+            <p:link value="Register as Supplier"></p:link>
                 <p:growl id="msgs" showDetail="true" />
                 <h:messages globalOnly="true" style="color:red"></h:messages>
                 <p:panel header="HiYew Portal" style="margin-bottom:10px;">
@@ -33,6 +33,9 @@
                     <p:separator />
                     
                     <p:commandButton value="Log me in" action="#{csLoginManagedBean.login()}" update="msgs" icon="ui-icon-check" />
+                </p:panel>
+                <p:panel>
+                    <p:link value="Forgot Password"></p:link>
                 </p:panel>
                 
 
