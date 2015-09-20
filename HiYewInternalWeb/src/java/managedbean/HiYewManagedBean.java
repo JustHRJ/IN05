@@ -98,9 +98,13 @@ public class HiYewManagedBean {
     public void updateMachineSchedule(RowEditEvent event) throws IOException {
         boolean check = hiYewSystemBean.updateMachineSchedule((MachineMaintainenceEntity) event.getObject(), mScheduleDate, mScheduleHour, mServiceProvider, mServiceContact);
         if (check) {
+
             FacesContext facesCtx = FacesContext.getCurrentInstance();
             ExternalContext externalContext = facesCtx.getExternalContext();
             externalContext.redirect("viewMaintainenceSchedule.xhtml");
+        } else {
+            FacesMessage msg = new FacesMessage("Not Edited", ((MachineMaintainenceEntity) event.getObject()).getMachine().getMachine_name());
+            FacesContext.getCurrentInstance().addMessage(null, msg);
         }
     }
 

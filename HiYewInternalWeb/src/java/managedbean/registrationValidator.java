@@ -70,9 +70,12 @@ public class registrationValidator implements Validator {
             } else {
                 throw new ValidatorException(new FacesMessage("Contact number is invalid"));
             }
+            if (!(numeric.length() == 8)) {
+                throw new ValidatorException(new FacesMessage("Contact number is invalid"));
+            }
 
         } catch (Exception ex) {
-            throw new ValidatorException(new FacesMessage("String is not numeric"));
+            throw new ValidatorException(new FacesMessage("Contzct number is invalid."));
         }
 
     }
@@ -89,6 +92,37 @@ public class registrationValidator implements Validator {
 
         } catch (Exception ex) {
             throw new ValidatorException(new FacesMessage("String is not numeric"));
+        }
+
+    }
+
+    public void validateTime(FacesContext context, UIComponent component, Object submittedAndConvertedValue) throws ValidatorException {
+        String numeric = (String) submittedAndConvertedValue;
+
+        if (numeric == null || numeric.isEmpty()) {
+            return; // Let required="true" or @NotNull handle it.
+        }
+
+        try {
+            if (!(numeric.length() == 4)) {
+                throw new ValidatorException(new FacesMessage("Time is invalid."));
+            }
+
+            String first2 = numeric.substring(0, 2);
+            String last2 = numeric.substring(2, 4);
+
+            Integer j = Integer.parseInt(first2);
+            if (j > 23) {
+                throw new ValidatorException(new FacesMessage("Time is invalid."));
+            }
+
+            if (Integer.parseInt(last2) > 59) {
+                throw new ValidatorException(new FacesMessage("Time is invalid."));
+            }
+            Integer i = Integer.parseInt(numeric);
+
+        } catch (Exception ex) {
+            throw new ValidatorException(new FacesMessage("Time is invalid"));
         }
 
     }
