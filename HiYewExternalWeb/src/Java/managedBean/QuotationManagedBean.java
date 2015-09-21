@@ -11,13 +11,14 @@ import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
+import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 import javax.inject.Named;
 import javax.faces.view.ViewScoped;
+import session.stateless.CustomerSessionBeanLocal;
 import session.stateless.QuotationSessionBeanLocal;
 
 /**
@@ -27,13 +28,16 @@ import session.stateless.QuotationSessionBeanLocal;
 @Named(value = "quotationManagedBean")
 @ViewScoped
 public class QuotationManagedBean implements Serializable {
-
     @EJB
     private QuotationSessionBeanLocal quotationSessionBean;
+    @EJB
+    private CustomerSessionBeanLocal customerSessionBean;
+    
 
     private String username = "";
     private String date = "";
     private String quotationNo = "";
+    private Integer count;
     
     private ArrayList <QuotationDescription> cacheList;
     private Quotation newQuotation;
@@ -46,38 +50,65 @@ public class QuotationManagedBean implements Serializable {
         newQuotation = new Quotation();
         newQuotationDesc = new QuotationDescription();
         cacheList = new ArrayList <>();
-       
     }
 
     @PostConstruct
     public void init() {
-
+        count = 1;
         if (FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("user") != null) {
-            this.setUsername(FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("user").toString());
+            username = FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("user").toString();
+            System.out.println("Q: Username is " + username);
         }
-        if (FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("qNo") != null) {
-            quotationNo = FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("qNo").toString();
-        }else{
-            quotationNo = quotationSessionBean.getQuotationNo(username);
-        }
+        //if (FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("qNo") != null) {
+          //  quotationNo = FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("qNo").toString();
+        //}
         
         date = new SimpleDateFormat("dd-MM-yyyy").format(Calendar.getInstance().getTime());
         System.out.println(date);
     }
     
-    public void createQuotation() {
-        quotationSessionBean.createQuotation(newQuotation);
-    }
     
     public void addToCacheList(ActionEvent event){
-        newQuotation.setQuotationNo(quotationNo);
+        
+        if(newQuotationDesc.getItemDesc().equals("") || newQuotationDesc.getQty() == null){
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Descriptions and quantity must not be left unfilled!"));
+        }else{
+        newQuotationDesc.setQuotationNo(quotationNo);
+        newQuotationDesc.setQuotationDescNo(count);
+        count += 1;
         cacheList.add(newQuotationDesc);
-        System.out.println("items: " + cacheList.size());
-        System.out.println("items: " + cacheList.get(0).getItemDesc() + " " + cacheList.get(0).getQty());
+        
+        //reinitialise quotation description
         newQuotationDesc = new QuotationDescription();
+        //set textbox to blank again
+        }
+    }
+    
+    public void createQuotation(ActionEvent event){
+        //generate quotatioNo
+        quotationNo = quotationSessionBean.getQuotationNo(username);
+        newQuotation.setQuotationNo(quotationNo);
+        
+        System.out.println("1");
+        quotationSessionBean.createQuotation(newQuotation);
+        System.out.println("2");
+        for(QuotationDescription qd: cacheList){
+            newQuotation.addQuotationDescriptions(qd);
+            quotationSessionBean.createQuotationDesciption(qd);
+        }
+        System.out.println("3");
+        //username = FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("user").toString();
+        customerSessionBean.addQuotation(username, newQuotation);
+        //empty cachelist
+        cacheList.clear();
+        //set count back to 1
+        count = 1;
+        //reinitialise quotation
+        newQuotation = new Quotation();
+        //set quotation tab to be selected
+        
     }
 
-    
     /**
      * @return the username
      */

@@ -6,12 +6,11 @@
 package session.stateless;
 
 import entity.Customer;
-import java.util.ArrayList;
+import entity.Quotation;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.PersistenceException;
 import javax.persistence.Query;
 
 /**
@@ -36,7 +35,16 @@ public class CustomerSessionBean implements CustomerSessionBeanLocal {
             return null;
         }
         return c;
+    }
 
+    @Override
+    public void addQuotation(String username, Quotation quotation) {
+        Customer c = em.find(Customer.class, username);
+        if (c == null) {
+            System.out.println("Customer is null");
+        } else {
+            c.addQuotations(quotation);
+        }
     }
 
     @Override
@@ -46,11 +54,14 @@ public class CustomerSessionBean implements CustomerSessionBeanLocal {
     }
 
     @Override
-    public void updateCustomer(Customer c1){
+    public void updateCustomer(Customer c1) {
         Customer c = em.find(Customer.class, c1.getUserName());
         c.setName(c1.getName());
-        c.setAddress(c1.getAddress());
+        c.setAddress1(c1.getAddress1());
         c.setPhone(c1.getPhone());
         c.setPw(c1.getPw());
+        c.setAddress2(c1.getAddress2());
+        c.setEmail(c1.getEmail());
+        c.setPostalCode(c1.getPostalCode());
     }
 }

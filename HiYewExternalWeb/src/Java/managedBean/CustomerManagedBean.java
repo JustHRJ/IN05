@@ -7,14 +7,13 @@ package managedBean;
 
 import entity.Customer;
 import java.io.Serializable;
-import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
-import javax.faces.event.ActionEvent;
 import javax.faces.view.ViewScoped;
 import javax.inject.Named;
+import org.primefaces.context.RequestContext;
 import session.stateless.CustomerSessionBeanLocal;
 
 /**
@@ -32,6 +31,11 @@ public class CustomerManagedBean implements Serializable {
     private Customer newCustomer;
 
     private String username = ""; //when log on taken from session
+    private String rePassword = "";
+
+    //for changing of password
+    private String changePasswordInput = "";
+    private String newPassword = "";
 
     /**
      * Creates a new instance of NewJSFManagedBean
@@ -48,6 +52,7 @@ public class CustomerManagedBean implements Serializable {
             this.username = FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("user").toString();
 
             customer = customerSessionBean.getCustomerByUsername(this.username);
+            System.out.println("@C: Username is " + username);
             //customers = customerSessionBean.getAllCustomer();
         }
     }
@@ -57,16 +62,18 @@ public class CustomerManagedBean implements Serializable {
         customer = customerSessionBean.getCustomerByUsername(newCustomer.getUserName());
 
         if (customer == null) {
-            //System.out.println("Customer is null");
-            customerSessionBean.createCustomer(newCustomer);
-            newCustomer = new Customer(); //To reinitialise and create new customer
-            return "csLoginPage?faces-redirect=true";
+            if (newCustomer.getPw().equals(rePassword)) {
+                customerSessionBean.createCustomer(newCustomer);
+                newCustomer = new Customer(); //To reinitialise and create new customer
+                return "csLoginPage?faces-redirect=true";
+            } else {
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Password mismatch!"));
+            }
         } else {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Username is taken. Try again with a different user name!"));
             System.out.println("Duplicate primary key for username");
-            return "";
         }
-
+        return "";
     }
 
     //public void checkUsername() {
@@ -78,8 +85,35 @@ public class CustomerManagedBean implements Serializable {
     //}
     //System.out.println("Check username availability");
     //}
+    //update customer
     public void handleSave() {
         customerSessionBean.updateCustomer(customer);
+    }
+
+    public void changePassword() {
+        
+        if (changePasswordInput.equals("") || newPassword.equals("") || rePassword.equals("")) {
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Changing Password requires all password fields to be filled!"));
+        } else {
+            if (customer.getPw().equals(changePasswordInput)) {
+                if (newPassword.equals(customer.getPw())) {
+                    FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("New Password is same as current password!"));
+                } else {
+                    if (newPassword.equals(rePassword)) {
+                        customer.setPw(newPassword);
+                        handleSave();
+                        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Password changed successfully!"));
+                         
+                    } else {
+                        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Password Mismatch!"));
+                    }
+                }
+
+            } else {
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Invalid password!"));
+            }
+        }
+        
     }
 
     /**
@@ -123,6 +157,48 @@ public class CustomerManagedBean implements Serializable {
      */
     public void setCustomer(Customer customer) {
         this.customer = customer;
+    }
+
+    /**
+     * @return the rePassword
+     */
+    public String getRePassword() {
+        return rePassword;
+    }
+
+    /**
+     * @param rePassword the rePassword to set
+     */
+    public void setRePassword(String rePassword) {
+        this.rePassword = rePassword;
+    }
+
+    /**
+     * @return the changePasswordInput
+     */
+    public String getChangePasswordInput() {
+        return changePasswordInput;
+    }
+
+    /**
+     * @param changePasswordInput the changePasswordInput to set
+     */
+    public void setChangePasswordInput(String changePasswordInput) {
+        this.changePasswordInput = changePasswordInput;
+    }
+
+    /**
+     * @return the newPassword
+     */
+    public String getNewPassword() {
+        return newPassword;
+    }
+
+    /**
+     * @param newPassword the newPassword to set
+     */
+    public void setNewPassword(String newPassword) {
+        this.newPassword = newPassword;
     }
 
 }

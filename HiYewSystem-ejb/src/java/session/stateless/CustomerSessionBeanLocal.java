@@ -6,6 +6,7 @@
 package session.stateless;
 
 import entity.Customer;
+import entity.Quotation;
 import java.util.List;
 import javax.ejb.Local;
 
@@ -23,6 +24,8 @@ public interface CustomerSessionBeanLocal {
     public Customer getCustomerByUsername(String username);
 
     public void updateCustomer(Customer c1);
+
+    public void addQuotation(String username, Quotation quotation);
 
     
     
