@@ -61,6 +61,19 @@ public class HiYewSystemBean implements HiYewSystemBeanLocal {
 
     }
 
+   public boolean deleteMachineMaintainence(Long id){
+       MachineMaintainenceEntity mm = em.find(MachineMaintainenceEntity.class, id);
+       if(mm == null){
+           return false;
+       } else{
+           MachineEntity m = mm.getMachine();
+           m.getMachineMaintainence().remove(mm);
+           em.remove(mm);
+           em.merge(m);
+           return true;
+       } 
+   }
+
     public boolean updateMachineSchedule(MachineMaintainenceEntity mSchedule, Date scheduleDate, String mScheduleHour, String mServiceProvider, String mServiceContact) {
         if (!(scheduleDate == null)) {
             Timestamp time = new Timestamp(scheduleDate.getTime());
@@ -83,14 +96,75 @@ public class HiYewSystemBean implements HiYewSystemBeanLocal {
         return false;
     }
 
-    public boolean addTrainngSchedule(String trainingName, Date trainingStart, Date trainingEnd, String trainingDescription, int size, String trainingCode){
+    public boolean deleteTrainingEmployee(TrainingScheduleEntity training, String employee) {
+        if (training == null || employee == null) {
+            return false;
+        }
+        try {
+            EmployeeEntity e = new EmployeeEntity();
+            Query q = em.createQuery("select e from EmployeeEntity e where e.employee_name =:id");
+            q.setParameter("id", employee);
+            e = (EmployeeEntity) q.getSingleResult();
+            if (!(training.getEmployeeRecords().contains(e))) {
+                return false;
+            } else {
+                training.getEmployeeRecords().remove(e);
+                em.merge(training);
+                return true;
+            }
+
+        } catch (Exception ex) {
+            return false;
+        }
+    }
+
+    public boolean addTrainingEmployee(TrainingScheduleEntity schedule, String name) {
+        EmployeeEntity e = new EmployeeEntity();
         TrainingScheduleEntity t = new TrainingScheduleEntity();
-        try{
+        try {
+            Query q = em.createQuery("select e from EmployeeEntity e where e.employee_name =:id");
+            q.setParameter("id", name);
+            e = (EmployeeEntity) q.getSingleResult();
+            if (schedule.getEmployeeRecords().contains(e)) {
+                return false;
+            }
+            if (schedule.getTrianingSize() - schedule.getEmployeeRecords().size() == 0) {
+                return false;
+            }
+            schedule.getEmployeeRecords().add(e);
+            em.merge(schedule);
+            return true;
+
+        } catch (Exception ex) {
+            return false;
+        }
+    }
+
+    public List<EmployeeEntity> employeeTraining(TrainingScheduleEntity schedule) {
+        List<EmployeeEntity> result = new ArrayList<EmployeeEntity>();
+        if (schedule == null) {
+            return null;
+        }
+
+        for (Object o : schedule.getEmployeeRecords()) {
+            EmployeeEntity e = (EmployeeEntity) o;
+            result.add(e);
+
+        }
+        if (result.isEmpty()) {
+            return null;
+        }
+        return result;
+    }
+
+    public boolean addTrainngSchedule(String trainingName, Date trainingStart, Date trainingEnd, String trainingDescription, int size, String trainingCode) {
+        TrainingScheduleEntity t = new TrainingScheduleEntity();
+        try {
             Query q = em.createQuery("select t from TrainingScheduleEntity t where t.trainingCode = :id");
             q.setParameter("id", trainingCode);
             t = (TrainingScheduleEntity) q.getSingleResult();
             return false;
-        }catch(Exception ex){
+        } catch (Exception ex) {
             t.setTrainingCode(trainingCode);
             t.setTrainingDescription(trainingDescription);
             t.setTrainingName(trainingName);
@@ -98,12 +172,29 @@ public class HiYewSystemBean implements HiYewSystemBeanLocal {
             Timestamp time = new Timestamp(trainingStart.getTime());
             t.setTrainingStartDate(time);
             time = new Timestamp(trainingEnd.getTime());
+            Collection<EmployeeEntity> employee = new ArrayList<EmployeeEntity>();
+            t.setEmployeeRecords(employee);
             t.setTrainingEndDate(time);
             em.persist(t);
             return true;
         }
     }
-    
+
+    public List<TrainingScheduleEntity> trainingSchedueList() {
+        List<TrainingScheduleEntity> result = new ArrayList<TrainingScheduleEntity>();
+
+        Query q = em.createQuery("select c from TrainingScheduleEntity c");
+        for (Object o : q.getResultList()) {
+            TrainingScheduleEntity t = (TrainingScheduleEntity) o;
+            result.add(t);
+        }
+        if (result.isEmpty()) {
+            return null;
+        } else {
+            return result;
+        }
+    }
+
     public List<MachineMaintainenceEntity> machineMaintainenceListWeek() {
         List<MachineMaintainenceEntity> result = new ArrayList<MachineMaintainenceEntity>();
         Calendar c = Calendar.getInstance();
@@ -754,10 +845,19 @@ public class HiYewSystemBean implements HiYewSystemBeanLocal {
         }
     }
 
-    public boolean updateEmployee(EmployeeEntity employee, String employeeA, String contact, Date pass, String position) {
+    public boolean updateEmployee(EmployeeEntity employee, String employeeA, String employeeUnit, String employeeOptional, String address_postal, String contact, Date pass, String position) {
         boolean check = false;
         if (!(employeeA.isEmpty())) {
             employee.setEmployee_address(employeeA);
+        }
+        if(!(employeeUnit.isEmpty())){
+            employee.setUnit(employeeUnit);
+        }
+        if(!(employeeOptional.isEmpty())){
+            employee.setOptional(employeeOptional);
+        }
+        if(!(address_postal.isEmpty())){
+            employee.setAddressPostal(address_postal);
         }
         if (!(contact.isEmpty())) {
             employee.setEmployee_contact(contact);
@@ -780,7 +880,7 @@ public class HiYewSystemBean implements HiYewSystemBeanLocal {
             }
         }
 
-        if ((!(pass == null)) || (!(contact.isEmpty())) || (!(employeeA.isEmpty())) || check) {
+        if ((!(pass == null)) || (!(contact.isEmpty())) || (!(employeeA.isEmpty())) || check || !(employeeOptional.isEmpty()) || !(address_postal.isEmpty()) || !(employeeUnit.isEmpty())) {
             em.merge(employee);
             return true;
         }

@@ -9,13 +9,11 @@
         <h:form id = "formMain">
             <h1>Expiring Employee Pass</h1>
             <p:menubar>
-                <p:menuitem value ="Home" url ="/index.xhtml"  />
-                <p:menuitem value ="Register employee" url ="employeeRegistration.xhtml" disabled="#{loginControlBean.checkValid()}"/>
-                <p:menuitem value ="View Employee" url ="employee_details.xhtml" />
-                <p:menuitem value ="Apply for Leave" url ="leaveApplication.xhtml" />
-                <p:menuitem value ="Approve Leave" url ="approveLeave.xhtml" disabled="#{loginControlBean.checkValid()}"/>
-                <p:menuitem value ="Check Leave Status" url ="leaveStatus.xhtml" />
+                <p:menuitem value ="Home" url="/index.xhtml" />
                 <p:menuitem value ="#{loginControlBean.getEAlert()}" url ="alertEmployee.xhtml" />
+                <p:menuitem value ="Add Training Schedule" url ="addTrainingSchedule.xhtml" disabled="#{loginControlBean.checkValid()}" />
+                <p:menuitem value ="Add Employee Training" url ="addEmployeeTraining.xhtml" disabled="#{loginControlBean.checkValid()}" />
+                <p:menuitem value ="view Upcoming training" url ="viewTrainingSchedule.xhtml"/>
             </p:menubar>
             <br/>
             <p:growl id ="msgs" showDetail="true"/>

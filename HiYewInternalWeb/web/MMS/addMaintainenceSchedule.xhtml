@@ -9,6 +9,16 @@
     </h:head>
     <h:body>
         <h:form id ="formMain">
+            <h1>Add Machine Maintainence Schedule</h1>
+            <p:menubar>
+                <p:menuitem value ="Home" url ="/index.xhtml"/>
+                <p:menuitem value ="#{hiYewManagedBean.getMAlert()}" url ="alertMachine.xhtml" />
+                <p:menuitem value ="Add Maintainence Schedule" url ="addMaintainenceSchedule.xhtml"/>
+                <p:menuitem value ="View Maintainence Schedule" url ="viewMaintainenceSchedule.xhtml" />
+            </p:menubar>
+            <br/>
+
+
             Machines:
             <p:selectOneMenu value ="#{hiYewManagedBean.machineName}"  >
                 <f:selectItem itemValue ="" itemLabel ="Select One" noSelectionOption="true" />
@@ -22,7 +32,7 @@
                         <p:outputLabel value ="Schedule Date"/>
                     </p:column>
                     <p:column>
-                         <p:calendar id = "cal" value = "#{hiYewManagedBean.mScheduleDate}" mindate="#{hiYewManagedBean.getToday()}" pattern ="dd/MM/yyyy"  required ="true"/>
+                        <p:calendar id = "cal" value = "#{hiYewManagedBean.mScheduleDate}" mindate="#{hiYewManagedBean.getToday()}" pattern ="dd/MM/yyyy"  required ="true"/>
                     </p:column>
                 </p:row>
                 <p:row>

@@ -7,10 +7,14 @@ package entity;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.Collection;
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 
 /**
  *
@@ -28,7 +32,17 @@ public class TrainingScheduleEntity implements Serializable {
     private int trianingSize;
     private String TrainingDescription;
     private String trainingCode;
+    private Collection<EmployeeEntity> employeeRecords = new ArrayList<EmployeeEntity>();
     
+    
+    @OneToMany(cascade = {CascadeType.ALL})
+    public Collection<EmployeeEntity> getEmployeeRecords(){
+        return employeeRecords;
+    }
+    
+    public void setEmployeeRecords(Collection<EmployeeEntity> employeeRecords){
+        this.employeeRecords = employeeRecords;
+    }
     
     public Long getId() {
         return id;

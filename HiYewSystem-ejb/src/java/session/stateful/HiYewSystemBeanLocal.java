@@ -10,6 +10,7 @@ import entity.LeaveEntity;
 import entity.MachineEntity;
 import entity.MachineMaintainenceEntity;
 import entity.PayrollEntity;
+import entity.TrainingScheduleEntity;
 import java.sql.Timestamp;
 import java.util.Date;
 import java.util.List;
@@ -33,7 +34,7 @@ public interface HiYewSystemBeanLocal {
 
     public boolean addEmployee(String employee, String employee_passNumber, String employee_address, int number_of_leave, String position, String username, String password, Timestamp expiry, String contact, String addressPostal, String unit, String optional);
 
-    public boolean updateEmployee(EmployeeEntity employee, String a, String b, Date c, String d);
+    public boolean updateEmployee(EmployeeEntity employee, String employeeA, String employeeUnit, String employeeOptional, String address_postal, String contact, Date pass, String position);
 
     public boolean applyLeave(String employee, int days, String remarks, Date start, Date end);
 
@@ -130,4 +131,16 @@ public interface HiYewSystemBeanLocal {
     public boolean updateMachineSchedule(MachineMaintainenceEntity mSchedule, Date scheduleDate, String mScheduleHour, String mServiceProvider, String mServiceContact);
 
     public boolean addTrainngSchedule(String trainingName, Date trainingStart, Date trainingEnd, String trainingDescription, int size, String trainingCode);
+
+    public List<TrainingScheduleEntity> trainingSchedueList();
+
+    public boolean addTrainingEmployee(TrainingScheduleEntity schedule, String name);
+
+    public List<EmployeeEntity> employeeTraining(TrainingScheduleEntity schedule);
+
+    public boolean deleteTrainingEmployee(TrainingScheduleEntity training, String employee);
+
+    public boolean deleteMachineMaintainence(Long id);
+
+    
 }

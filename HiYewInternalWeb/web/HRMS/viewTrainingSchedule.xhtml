@@ -1,0 +1,77 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:head>
+        <title>Facelet Title</title>
+    </h:head>
+    <h:body>
+        <h:form id ="formMain">
+            <h1>View Training Schedule</h1>
+            <p:menubar>
+                <p:menuitem value ="Home" url="/index.xhtml" />
+                <p:menuitem value ="#{loginControlBean.getEAlert()}" url ="alertEmployee.xhtml" />
+                <p:menuitem value ="Add Training Schedule" url ="addTrainingSchedule.xhtml" disabled="#{loginControlBean.checkValid()}" />
+                <p:menuitem value ="Add Employee Training" url ="addEmployeeTraining.xhtml" disabled="#{loginControlBean.checkValid()}" />
+                <p:menuitem value ="view Upcoming training" url ="viewTrainingSchedule.xhtml"/>
+            </p:menubar>
+            <br/>
+            <p:growl id="msgs" showDetail="true"/>
+            <p:dataTable id = "data1" var ="im" value = "#{hiYewDataTableBean.trainingSchedule}" selection="#{hiYewManagedBeanView.selectedTraining}" rowKey = "#{im.id}">
+                <f:facet name="header">
+                    Available Training
+                </f:facet>
+                <p:column selectionMode="single" style="width:16px;text-align:center">
+                </p:column>
+                <p:column headerText="Training Code">
+                    <p:outputLabel value ="#{im.trainingCode}"/>
+                </p:column>
+                <p:column headerText="Training Name">
+                    <p:outputLabel value ="#{im.trainingName}"/>
+                </p:column>
+                <p:column headerText="Trainging Start Date">
+                    <p:outputLabel value ="#{hiYewManagedBean.formatDate(im.trainingStartDate)}"/>
+                </p:column>
+                <p:column headerText="Training End Date">
+                    <p:outputLabel value ="#{hiYewManagedBean.formatDate(im.trainingEndDate)}"/>
+                </p:column>
+                <p:column headerText="Training Description">
+                    <p:outputLabel value ="#{im.trainingDescription}"/>
+                </p:column>
+                <p:column headerText="Training Size (Remainder)">
+                    <p:outputLabel value ="#{hiYewManagedBeanView.getRemainder(im)}"/>
+                </p:column>
+                <f:facet name="footer">
+                </f:facet>
+            </p:dataTable>
+            <p:commandButton value ="view Employee involved" update ="data2"/>
+            <br/>
+            <br/>
+            <p:dataTable id="data2" var="im" value="#{hiYewManagedBeanView.employeeTraining}" paginator="true" rows="5" emptyMessage="No employees" >
+                <f:facet name="header">
+                    Employees involved
+                </f:facet>
+
+
+                <p:column headerText="Employee Name">
+                    <h:outputText value="#{im.employee_name}" />
+                </p:column>
+                <p:column headerText="Employee Pass Number">
+                    <h:outputText value="#{im.employee_passNumber}" />
+                </p:column>
+                <f:facet name="footer">
+
+                </f:facet>
+            </p:dataTable>
+            <p:outputLabel value = "Please enter employeeName" />
+            <p:inputText value ="#{hiYewManagedBeanView.employeeName}"/>
+            <p:commandButton value ="Delete Employee from training" action = "#{hiYewManagedBeanView.deleteTrainingEmployee()}" update ="data2"/>
+
+
+        </h:form>
+
+    </h:body>
+</html>
+

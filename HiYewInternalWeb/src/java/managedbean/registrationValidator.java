@@ -86,9 +86,12 @@ public class registrationValidator implements Validator {
         if (numeric == null || numeric.isEmpty()) {
             return; // Let required="true" or @NotNull handle it.
         }
-
+       
         try {
             Integer.parseInt(numeric);
+            if(numeric.length() != 6){
+                  throw new ValidatorException(new FacesMessage("numeric not postal code"));
+            }
 
         } catch (Exception ex) {
             throw new ValidatorException(new FacesMessage("String is not numeric"));

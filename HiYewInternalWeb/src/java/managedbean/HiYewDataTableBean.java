@@ -8,6 +8,7 @@ package managedbean;
 import entity.MachineEntity;
 import entity.MachineMaintainenceEntity;
 import entity.PayrollEntity;
+import entity.TrainingScheduleEntity;
 import java.util.List;
 import java.util.Vector;
 import javax.ejb.EJB;
@@ -71,5 +72,13 @@ public class HiYewDataTableBean {
 
     public List<String> getMachineMaint() {
         return hiYewSystemBean.machineMaintainenceNames();
+    }
+    
+    public List<String> getEmployeeNames(){
+        return hiYewSystemBean.getEmployee();
+    }
+    
+    public List<TrainingScheduleEntity> getTrainingSchedule(){
+        return hiYewSystemBean.trainingSchedueList();
     }
 }

@@ -24,7 +24,7 @@ import javax.persistence.OneToMany;
 public class EmployeeEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
-    
+
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Id
     private Long id;
@@ -45,20 +45,22 @@ public class EmployeeEntity implements Serializable {
     private String addressPostal;
     private String unit;
     private String optional;
-    
-    
+
     public EmployeeEntity() {
 
     }
+
+
     
-    @OneToMany(cascade = {CascadeType.ALL}, mappedBy ="employee")
-    public Collection<PayrollEntity> getPayRecords(){
+    @OneToMany(cascade = {CascadeType.ALL}, mappedBy = "employee")
+    public Collection<PayrollEntity> getPayRecords() {
         return payRecords;
     }
-    public void setPayRecords(Collection<PayrollEntity> payRecords){
+
+    public void setPayRecords(Collection<PayrollEntity> payRecords) {
         this.payRecords = payRecords;
     }
-    
+
     @OneToMany(cascade = {CascadeType.ALL})
     public Collection<LeaveEntity> getLeaveRecords() {
         return leaveRecords;

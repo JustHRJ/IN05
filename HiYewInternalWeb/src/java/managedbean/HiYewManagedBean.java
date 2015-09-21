@@ -10,6 +10,7 @@ import entity.LeaveEntity;
 import entity.MachineEntity;
 import entity.MachineMaintainenceEntity;
 import entity.PayrollEntity;
+import entity.TrainingScheduleEntity;
 import java.io.IOException;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
@@ -25,6 +26,7 @@ import javax.faces.bean.RequestScoped;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import org.primefaces.event.RowEditEvent;
+import org.primefaces.event.SelectEvent;
 import session.stateful.HiYewSystemBeanLocal;
 
 /**
@@ -67,6 +69,7 @@ public class HiYewManagedBean {
     private int absentee;
     private String months;
     private Long machineMaintainenceID;
+
     private Date mScheduleDate;
     private String mScheduleHour;
     private String maintainenceComments;
@@ -78,7 +81,7 @@ public class HiYewManagedBean {
     private int trainingSize;
     private String trainingName;
     private String trainingCode;
-    
+
     /**
      * Creates a new instance of HiYewManagedBean
      */
@@ -101,6 +104,18 @@ public class HiYewManagedBean {
         }
     }
 
+    public void deleteMachineMaintainence() throws IOException {
+        boolean check = hiYewSystemBean.deleteMachineMaintainence(machineMaintainenceID);
+        if (check) {
+            FacesContext facesCtx = FacesContext.getCurrentInstance();
+            ExternalContext externalContext = facesCtx.getExternalContext();
+            externalContext.redirect("viewMaintainenceSchedule.xhtml");
+        } else {
+            FacesMessage msg = new FacesMessage("Not Edited", String.valueOf(machineMaintainenceID));
+            FacesContext.getCurrentInstance().addMessage(null, msg);
+        }
+    }
+
     public void updateMachineSchedule(RowEditEvent event) throws IOException {
         boolean check = hiYewSystemBean.updateMachineSchedule((MachineMaintainenceEntity) event.getObject(), mScheduleDate, mScheduleHour, mServiceProvider, mServiceContact);
         if (check) {
@@ -114,18 +129,22 @@ public class HiYewManagedBean {
         }
     }
 
-    
-    public void addTrainingSchedule(){
-        boolean check = hiYewSystemBean.addTrainngSchedule(trainingName, trainingStartDate, trainingEndDate, trainingDescription, trainingSize, trainingCode);
-        if(check){
+    public void addTrainingSchedule() {
+        boolean check = false;
+        if (trainingStartDate.after(trainingEndDate)) {
+            check = false;
+        } else {
+            check = hiYewSystemBean.addTrainngSchedule(trainingName, trainingStartDate, trainingEndDate, trainingDescription, trainingSize, trainingCode);
+        }
+        if (check) {
             FacesMessage msg = new FacesMessage("Added", trainingCode);
             FacesContext.getCurrentInstance().addMessage(null, msg);
-        } else{
-            FacesMessage msg = new FacesMessage("Not Added", "Existing Training Schedule");
+        } else {
+            FacesMessage msg = new FacesMessage("Not Added", "Either existing schedule, else end date should not be before start date");
             FacesContext.getCurrentInstance().addMessage(null, msg);
         }
     }
-    
+
     public void addMachineSchedule() {
         boolean check = hiYewSystemBean.addMachineMaintainence(machineName, getmScheduleDate(), getmScheduleHour(), getMaintainenceComments(), getmServiceProvider(), getmServiceContact());
         if (check) {
@@ -193,7 +212,7 @@ public class HiYewManagedBean {
         return format.format(c.getTime());
     }
 
-    public String addEmployee() {
+    public void addEmployee() throws IOException {
         Timestamp expiry = null;
         if (employeePassExpiry == null) {
             expiry = null;
@@ -202,11 +221,14 @@ public class HiYewManagedBean {
         }
         boolean result = hiYewSystemBean.addEmployee(employeeName, employeePassNumber, employeeAddress, employeeLeave, employeePosition, username, password, expiry, employeeContact, address_postal, employeeAddressUnit, employeeAdressOptional);
         if (result) {
-            return "employee_details";
+            FacesContext facesCtx = FacesContext.getCurrentInstance();
+            ExternalContext externalContext = facesCtx.getExternalContext();
+            externalContext.redirect("/HiYewInternalWeb/HRMS/employee_details.xhtml");
+       
         } else {
             FacesMessage msg = new FacesMessage("Failed to Add", "Please check if existing username and other details");
             FacesContext.getCurrentInstance().addMessage(null, msg);
-            return "employeeRegistration";
+     
 
         }
     }
@@ -305,7 +327,7 @@ public class HiYewManagedBean {
 
     public void updateEmployee(RowEditEvent event) {
 
-        boolean check = hiYewSystemBean.updateEmployee((EmployeeEntity) event.getObject(), employeeAddress, employeeContact, employeePassExpiry, employeePosition);
+        boolean check = hiYewSystemBean.updateEmployee((EmployeeEntity) event.getObject(), employeeAddress, employeeAddressUnit, employeeAdressOptional, address_postal, employeeContact, employeePassExpiry, employeePosition);
 
         if (check) {
             FacesMessage msg = new FacesMessage("Edited", ((EmployeeEntity) event.getObject()).getEmployee_name());
@@ -913,4 +935,8 @@ public class HiYewManagedBean {
     public void setTrainingCode(String trainingCode) {
         this.trainingCode = trainingCode;
     }
+
+    /**
+     * @return the selectedEmployee
+     */
 }
