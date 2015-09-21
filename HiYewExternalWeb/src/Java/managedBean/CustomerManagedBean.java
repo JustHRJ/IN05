@@ -7,7 +7,17 @@ package managedBean;
 
 import entity.Customer;
 import java.io.Serializable;
+import java.security.InvalidKeyException;
+import java.security.Key;
+import java.security.NoSuchAlgorithmException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
+import javax.crypto.BadPaddingException;
+import javax.crypto.Cipher;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
+import javax.crypto.spec.SecretKeySpec;
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
@@ -63,6 +73,8 @@ public class CustomerManagedBean implements Serializable {
 
         if (customer == null) {
             if (newCustomer.getPw().equals(rePassword)) {
+                //encrypt password
+                newCustomer.setPw(customerSessionBean.encryptPassword(newCustomer.getPw()));
                 customerSessionBean.createCustomer(newCustomer);
                 newCustomer = new Customer(); //To reinitialise and create new customer
                 return "csLoginPage?faces-redirect=true";
@@ -95,12 +107,13 @@ public class CustomerManagedBean implements Serializable {
         if (changePasswordInput.equals("") || newPassword.equals("") || rePassword.equals("")) {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Changing Password requires all password fields to be filled!"));
         } else {
-            if (customer.getPw().equals(changePasswordInput)) {
-                if (newPassword.equals(customer.getPw())) {
+            String decryptedPassword = customerSessionBean.decryptPassword(customer.getPw());
+            if (decryptedPassword.equals(changePasswordInput)) {
+                if (newPassword.equals(decryptedPassword)) {
                     FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("New Password is same as current password!"));
                 } else {
                     if (newPassword.equals(rePassword)) {
-                        customer.setPw(newPassword);
+                        customer.setPw(customerSessionBean.encryptPassword(newPassword));
                         handleSave();
                         FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Password changed successfully!"));
                          
@@ -115,6 +128,9 @@ public class CustomerManagedBean implements Serializable {
         }
         
     }
+    
+    
+
 
     /**
      * @return the newCustomer

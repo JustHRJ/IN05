@@ -28,29 +28,29 @@ public class QuotationSessionBean implements QuotationSessionBeanLocal {
     @Override
     public String getQuotationNo(String username){
         Customer c = em.find(Customer.class, username);
-        return generateRFQ(c);
+        return generateQuotationNo(c);
     }
     
-    public String generateRFQ(Customer customer){
+    public String generateQuotationNo(Customer customer){
         String custName = customer.getName();
-        String newRFQ = "";
+        String newQuotationNo = "";
         String [] splitArray = null;
         if(custName.contains("-")){
             splitArray = custName.split("-");
             for(String s: splitArray){
-                newRFQ += s.substring(0, 1);
+                newQuotationNo += s.substring(0, 1);
             }
         }else if(custName.contains(" ")){
             splitArray = custName.split(" ");
             for(String s: splitArray){
-                newRFQ += s.substring(0, 1);
+                newQuotationNo += s.substring(0, 1);
             }
         }else{
-            newRFQ = custName.substring(0, 4);
+            newQuotationNo = custName.substring(0, 4);
         }
-            newRFQ += new SimpleDateFormat("yyyyMMddss").format(Calendar.getInstance().getTime());
+            newQuotationNo += new SimpleDateFormat("yyyyMMddss").format(Calendar.getInstance().getTime());
             
-            return newRFQ; 
+            return newQuotationNo; 
     }
     
     @Override
@@ -60,9 +60,9 @@ public class QuotationSessionBean implements QuotationSessionBeanLocal {
     
     @Override
     public void createQuotationDesciption(QuotationDescription quotationDescription){
-        CompositeQuotationDescKey cqd = new CompositeQuotationDescKey();
-        cqd.setQuotationNo(quotationDescription.getQuotationNo());
-        cqd.setQuotationDescNo(quotationDescription.getQuotationDescNo());
+        //CompositeQuotationDescKey cqd = new CompositeQuotationDescKey();
+        //cqd.setQuotationNo(quotationDescription.getQuotationNo());
+        //cqd.setQuotationDescNo(quotationDescription.getQuotationDescNo());
         
         em.persist(quotationDescription);
     }

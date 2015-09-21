@@ -14,6 +14,7 @@
 
             <p:commandButton value="Log Out" action="#{csLoginManagedBean.logout()}" icon="ui-icon-check" />
             <p></p>
+            <f:ajax render=":content">
             <p:tabView dynamic="true" cache="false" >
                 <p:tab title="Profile">
                     <h:panelGrid columns="2" columnClasses="column" cellpadding="5" id="gridProfile" style="margin-left: 10px">
@@ -92,7 +93,7 @@
                 </p:tab>
 
                 <p:tab title="RFQ">
-                    <p:panel>
+                    <p:panel id="content">
 
                         <h:outputLabel value="DATE:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;#{quotationManagedBean.date}" style="font-weight: bolder">
@@ -164,6 +165,7 @@
                     <p:panel>Notifications or alerts (email, sms)...</p:panel>
                 </p:tab>
             </p:tabView>
+                </f:ajax>
         </h:form>
     </h:body>
 </html>

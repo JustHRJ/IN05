@@ -73,7 +73,7 @@ public class QuotationManagedBean implements Serializable {
         if(newQuotationDesc.getItemDesc().equals("") || newQuotationDesc.getQty() == null){
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Descriptions and quantity must not be left unfilled!"));
         }else{
-        newQuotationDesc.setQuotationNo(quotationNo);
+        
         newQuotationDesc.setQuotationDescNo(count);
         count += 1;
         cacheList.add(newQuotationDesc);
@@ -87,26 +87,31 @@ public class QuotationManagedBean implements Serializable {
     public void createQuotation(ActionEvent event){
         //generate quotatioNo
         quotationNo = quotationSessionBean.getQuotationNo(username);
-        newQuotation.setQuotationNo(quotationNo);
-        
-        System.out.println("1");
+        //create quotation
+        newQuotation.setQuotationNo(quotationNo);        
+        newQuotation.setDate(date);
+        newQuotation.setCustomer(customerSessionBean.getCustomerByUsername(username));
         quotationSessionBean.createQuotation(newQuotation);
-        System.out.println("2");
+        
+        //add quotation to customer
+        customerSessionBean.addQuotation(username, newQuotation);
+        
+        //add quotationDescription into its respective quotation
         for(QuotationDescription qd: cacheList){
+            qd.setQuotationNo(quotationNo);
             newQuotation.addQuotationDescriptions(qd);
             quotationSessionBean.createQuotationDesciption(qd);
         }
-        System.out.println("3");
-        //username = FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("user").toString();
-        customerSessionBean.addQuotation(username, newQuotation);
+        
         //empty cachelist
         cacheList.clear();
         //set count back to 1
         count = 1;
         //reinitialise quotation
         newQuotation = new Quotation();
+        newQuotationDesc = new QuotationDescription();
         //set quotation tab to be selected
-        
+        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Your RFQ has been submitted successfully!"));
     }
 
     /**

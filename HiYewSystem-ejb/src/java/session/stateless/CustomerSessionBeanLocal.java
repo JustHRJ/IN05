@@ -27,6 +27,10 @@ public interface CustomerSessionBeanLocal {
 
     public void addQuotation(String username, Quotation quotation);
 
+    public String encryptPassword(String password);
+
+    public String decryptPassword(String password);
+
     
     
 }
