@@ -31,7 +31,7 @@
                     <p:outputLabel value ="#{im.month}"/>
                 </p:column>
                 <p:column headerText="Basic Salary">
-                    <p:outputLabel value ="$#{im.employee.employee_basic}"/>
+                    <p:outputLabel value ="$#{im.salary}"/>
                 </p:column>
                 <p:column headerText="Bonus">
                     <p:cellEditor>
@@ -43,7 +43,7 @@
                     </p:cellEditor>
                 </p:column>
                 <p:column headerText="Total Salary">
-                    <p:outputLabel value ="$#{hiYewManagedBean.calculateTotal(im.employee.employee_basic, im.bonus)}"/>
+                    <p:outputLabel value ="$#{hiYewManagedBean.calculateTotal(im.salary, im.bonus)}"/>
                 </p:column>
                 <p:column headerText="Pay status">
                     <p:outputLabel value ="#{im.status}"/>

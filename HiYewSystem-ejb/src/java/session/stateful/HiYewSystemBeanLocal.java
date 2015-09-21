@@ -28,11 +28,11 @@ public interface HiYewSystemBeanLocal {
 
     public void deleteMachine(String machineName);
 
-    public boolean updateMachine(String machineName, MachineEntity machine, String status);
+    public boolean updateMachine(String machineName, MachineEntity machine, String status, Date machineMaint);
 
     public List<MachineEntity> checkMachineExpiry();
 
-    public boolean addEmployee(String employee, String employee_passNumber, String employee_address, int number_of_leave, String position, String username, String password, Timestamp expiry, String contact, String addressPostal, String unit, String optional);
+    public boolean addEmployee(String employee, String employee_passNumber, String employee_address, int number_of_leave, String position, String username, String password, Timestamp expiry, String contact, String addressPostal, String unit, String optional, double pay, Date employedDate);
 
     public boolean updateEmployee(EmployeeEntity employee, String employeeA, String employeeUnit, String employeeOptional, String address_postal, String contact, Date pass, String position);
 
@@ -88,7 +88,7 @@ public interface HiYewSystemBeanLocal {
 
     public int getENoAlert();
 
-    public List<Vector> payRecords();
+    public List<PayrollEntity> payRecords();
 
     public boolean createPayroll(String employeeName, int late, int sick);
 
@@ -96,7 +96,7 @@ public interface HiYewSystemBeanLocal {
 
     public int getENoAlert(String username);
 
-    public List<Vector> getPayroll(String employeeName, String month);
+    public List<PayrollEntity> getPayroll(String employeeName, String month);
 
     public boolean existEmployeeName(String employeeName);
 
@@ -141,6 +141,8 @@ public interface HiYewSystemBeanLocal {
     public boolean deleteTrainingEmployee(TrainingScheduleEntity training, String employee);
 
     public boolean deleteMachineMaintainence(Long id);
+
+    public List<PayrollEntity> getPayroll(String employeeName);
 
     
 }

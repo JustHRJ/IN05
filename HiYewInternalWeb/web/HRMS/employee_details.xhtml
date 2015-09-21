@@ -10,7 +10,7 @@
     <h:body>
         <h:form id = "formMain">
             <h1>Employees Details</h1>
-             <p:menubar>
+            <p:menubar>
                 <p:menuitem value ="Home" url="/index.xhtml"  />
                 <p:menuitem value ="Register employee" url ="employeeRegistration.xhtml" disabled="#{loginControlBean.checkValid()}"/>
                 <p:menuitem value ="View Employee" url ="employee_details.xhtml" />
@@ -37,7 +37,7 @@
                             <p:inputText id = "employeeAddress1" value ="#{hiYewManagedBean.employeeAddress}" />
                             <p:inputText id = "employeeAddress2" value ="#{hiYewManagedBean.employeeAdressOptional}" />
                             <p:inputText id = "employeeAddress3" value ="#{hiYewManagedBean.address_postal}" validator="#{registrationValidator.validateNumericA}" validatorMessage="Please input correct numeric 6 digit address postal">
-                   
+
                             </p:inputText>
                         </f:facet>
                     </p:cellEditor>
@@ -56,7 +56,6 @@
                         <f:facet name ="output"><h:outputText  value= "#{hiYewManagedBean.formatDate(im.employee_passExpiry)}" /></f:facet>
                         <f:facet name ="input"> 
                             <p:calendar value = "#{hiYewManagedBean.employeePassExpiry}" mindate="#{hiYewManagedBean.getToday()}" pattern ="dd/MM/yyyy" validatorMessage="Please enter correct format">
-
                             </p:calendar>
                         </f:facet>
                     </p:cellEditor>
@@ -75,6 +74,9 @@
                             </h:selectOneMenu> 
                         </f:facet>
                     </p:cellEditor>
+                </p:column>
+                <p:column headerText="Employee Pay">
+                    <p:outputLabel value ="$#{im.employee_basic}"/>
                 </p:column>
                 <p:column style="width:32px">
                     <p:rowEditor />

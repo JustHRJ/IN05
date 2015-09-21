@@ -39,7 +39,7 @@
                         <p:outputLabel value ="View by Month" />                        
                     </p:column>
                     <p:column>
-                        <p:selectOneMenu id = "panelF" value ="#{hiYewManagedBean.months}" style="width: 100%">
+                        <p:selectOneMenu id = "panelF" value ="#{hiYewManagedBean.months}" style="width: 100%" disabled="#{loginControlBean.checkValid()}">
                             <f:selectItem itemValue ="select" itemLabel = "Select One" />
                             <f:selectItem itemValue ="Jan" itemLabel = "January" />
                             <f:selectItem itemValue ="Feb" itemLabel = "Feburary" />
@@ -64,24 +64,23 @@
                 <p:panel id ="panel">
                     <p:dataTable  id = "data1" var ="im" value = "#{hiYewManagedBean.payrolls}" paginator="true" rows="5" emptyMessage="No Pays Yet" >
                         <p:column headerText="Employee Name">
-                            <p:outputLabel value ="#{im.get(0)}"/>
+                            <p:outputLabel value ="#{im.employee.employee_name}"/>
                         </p:column>
                         <p:column headerText="Period">
-                            <p:outputLabel value ="#{im.get(1)}"/>
+                            <p:outputLabel value ="#{im.month}"/>
                         </p:column>
                         <p:column headerText="Basic Salary">
-                            <p:outputLabel value ="$ #{im.get(2)}"/>
+                            <p:outputLabel value ="$ #{im.salary}"/>
                         </p:column>
                         <p:column headerText="Bonus">
-                            <p:outputLabel value ="$ #{im.get(3)}"/>
+                            <p:outputLabel value ="$ #{im.bonus}"/>
                         </p:column>
                         <p:column headerText="Total Salary">
-                            <p:outputLabel value ="$ #{im.get(4)}"/>
+                            <p:outputLabel value ="$ #{hiYewManagedBean.calculateTotal(im.bonus, im.salary)}"/>
                         </p:column>
                         <p:column headerText="Pay Status">
-                            <p:outputLabel value ="#{im.get(5)}"/>
+                            <p:outputLabel value ="#{im.status}"/>
                         </p:column>
-
                     </p:dataTable>
                 </p:panel>
             </p:commandButton>

@@ -32,7 +32,7 @@
                         <p:outputLabel value ="Schedule Date"/>
                     </p:column>
                     <p:column>
-                        <p:calendar id = "cal" value = "#{hiYewManagedBean.mScheduleDate}" mindate="#{hiYewManagedBean.getToday()}" pattern ="dd/MM/yyyy"  required ="true"/>
+                        <p:calendar id = "cal" value = "#{hiYewManagedBean.mScheduleDate}" mindate="#{hiYewManagedBean.getToday()}" pattern ="dd/MM/yyyy"  required ="true" requiredMessage="Please input date"/>
                     </p:column>
                 </p:row>
                 <p:row>
@@ -40,7 +40,7 @@
                         <p:outputLabel value ="Schedule Time (hhmm format)" />
                     </p:column>
                     <p:column>
-                        <p:inputText value ="#{hiYewManagedBean.mScheduleHour}" required ="true" validator="#{registrationValidator.validateTime}" />
+                        <p:inputText value ="#{hiYewManagedBean.mScheduleHour}" required ="true" validator="#{registrationValidator.validateTime}" requiredMessage="Please input Time" validatorMessage="Please input correct time"/>
                     </p:column>
                 </p:row>
                 <p:row>
@@ -57,7 +57,7 @@
                         <p:outputLabel value ="Service Provider"/>
                     </p:column>
                     <p:column>
-                        <p:inputText value ="#{hiYewManagedBean.mServiceProvider}" required="true"/>
+                        <p:inputText value ="#{hiYewManagedBean.mServiceProvider}" required="true" requiredMessage="Please input service provider"/>
                     </p:column>
                 </p:row>
                 <p:row>
@@ -65,7 +65,7 @@
                         <p:outputLabel value ="Service Contact"/>
                     </p:column>
                     <p:column>
-                        <p:inputText value ="#{hiYewManagedBean.mServiceContact}" required = "true" validator ="#{registrationValidator.validateNumeric}" />
+                        <p:inputText value ="#{hiYewManagedBean.mServiceContact}" required = "true" validator ="#{registrationValidator.validateNumeric}" requiredMessage="Please input contact" validatorMessage="Please input correct contact" />
                     </p:column>
                 </p:row>
             </p:panelGrid>

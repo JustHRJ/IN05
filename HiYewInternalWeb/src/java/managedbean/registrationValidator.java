@@ -45,6 +45,24 @@ public class registrationValidator implements Validator {
         }
     }
 
+    public void validatePay(FacesContext context, UIComponent component, Object submittedAndConvertedValue) throws ValidatorException {
+
+        try {
+            Double numeric = (Double) submittedAndConvertedValue;
+
+            if (numeric == null) {
+                return; // Let required="true" or @NotNull handle it.
+            }
+            if (numeric < 500) {
+                throw new ValidatorException(new FacesMessage("not enough pay"));
+            }
+
+        } catch (Exception ex) {
+            throw new ValidatorException(new FacesMessage("String is not numeric"));
+        }
+
+    }
+
     public void validateN(FacesContext context, UIComponent component, Object submittedAndConvertedValue) throws ValidatorException {
         String username = (String) submittedAndConvertedValue;
 
@@ -86,11 +104,11 @@ public class registrationValidator implements Validator {
         if (numeric == null || numeric.isEmpty()) {
             return; // Let required="true" or @NotNull handle it.
         }
-       
+
         try {
             Integer.parseInt(numeric);
-            if(numeric.length() != 6){
-                  throw new ValidatorException(new FacesMessage("numeric not postal code"));
+            if (numeric.length() != 6) {
+                throw new ValidatorException(new FacesMessage("numeric not postal code"));
             }
 
         } catch (Exception ex) {

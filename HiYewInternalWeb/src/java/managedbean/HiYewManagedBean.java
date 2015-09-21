@@ -64,12 +64,13 @@ public class HiYewManagedBean {
     private Date machineNxtMaint;
     private int machineSubMaint;
     private Date startDate;
+    private Date employedDate;
     private Date endDate;
     private int lateArrival;
     private int absentee;
     private String months;
     private Long machineMaintainenceID;
-
+    private double employeePay;
     private Date mScheduleDate;
     private String mScheduleHour;
     private String maintainenceComments;
@@ -164,7 +165,10 @@ public class HiYewManagedBean {
         hiYewSystemBean.updatePay((PayrollEntity) event.getObject(), bonus);
     }
 
-    public List<Vector> getPayrolls() {
+    public List<PayrollEntity> getPayrolls() {
+        if (months == null) {
+            return hiYewSystemBean.getPayroll(employeeName);
+        }
         return hiYewSystemBean.getPayroll(employeeName, months);
     }
 
@@ -175,7 +179,7 @@ public class HiYewManagedBean {
         } else {
             expiry = new Timestamp(employeePassExpiry.getTime());
         }
-        hiYewSystemBean.addEmployee(employeeName, employeePassNumber, employeeAddress, employeeLeave, employeePosition, username, password, expiry, employeeContact, address_postal, employeeAddressUnit, employeeAdressOptional);
+        hiYewSystemBean.addEmployee(employeeName, employeePassNumber, employeeAddress, employeeLeave, employeePosition, username, password, expiry, employeeContact, address_postal, employeeAddressUnit, employeeAdressOptional, employeePay, employedDate);
         return "login";
     }
 
@@ -206,6 +210,13 @@ public class HiYewManagedBean {
         }
     }
 
+    public String getMonth2() {
+        Calendar c = Calendar.getInstance();
+        c.add(Calendar.MONTH, -1);
+        SimpleDateFormat format = new SimpleDateFormat("MMM,yyyy");
+        return format.format(c.getTime());
+    }
+
     public String getMonth() {
         Calendar c = Calendar.getInstance();
         SimpleDateFormat format = new SimpleDateFormat("MMM,yyyy");
@@ -219,16 +230,15 @@ public class HiYewManagedBean {
         } else {
             expiry = new Timestamp(employeePassExpiry.getTime());
         }
-        boolean result = hiYewSystemBean.addEmployee(employeeName, employeePassNumber, employeeAddress, employeeLeave, employeePosition, username, password, expiry, employeeContact, address_postal, employeeAddressUnit, employeeAdressOptional);
+        boolean result = hiYewSystemBean.addEmployee(employeeName, employeePassNumber, employeeAddress, employeeLeave, employeePosition, username, password, expiry, employeeContact, address_postal, employeeAddressUnit, employeeAdressOptional, employeePay, employedDate);
         if (result) {
             FacesContext facesCtx = FacesContext.getCurrentInstance();
             ExternalContext externalContext = facesCtx.getExternalContext();
             externalContext.redirect("/HiYewInternalWeb/HRMS/employee_details.xhtml");
-       
+
         } else {
             FacesMessage msg = new FacesMessage("Failed to Add", "Please check if existing username and other details");
             FacesContext.getCurrentInstance().addMessage(null, msg);
-     
 
         }
     }
@@ -309,7 +319,7 @@ public class HiYewManagedBean {
     }
 
     public void updateMachinery(RowEditEvent event) {
-        boolean check = hiYewSystemBean.updateMachine(machineName, (MachineEntity) event.getObject(), machine_status);
+        boolean check = hiYewSystemBean.updateMachine(machineName, (MachineEntity) event.getObject(), machine_status, machineNxtMaint);
         if (check) {
             FacesMessage msg = new FacesMessage("Edited", ((MachineEntity) event.getObject()).getMachine_number());
             FacesContext.getCurrentInstance().addMessage(null, msg);
@@ -934,6 +944,34 @@ public class HiYewManagedBean {
      */
     public void setTrainingCode(String trainingCode) {
         this.trainingCode = trainingCode;
+    }
+
+    /**
+     * @return the employeePay
+     */
+    public double getEmployeePay() {
+        return employeePay;
+    }
+
+    /**
+     * @param employeePay the employeePay to set
+     */
+    public void setEmployeePay(double employeePay) {
+        this.employeePay = employeePay;
+    }
+
+    /**
+     * @return the employedDate
+     */
+    public Date getEmployedDate() {
+        return employedDate;
+    }
+
+    /**
+     * @param employedDate the employedDate to set
+     */
+    public void setEmployedDate(Date employedDate) {
+        this.employedDate = employedDate;
     }
 
     /**

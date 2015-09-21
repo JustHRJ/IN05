@@ -62,7 +62,7 @@ public class HiYewDataTableBean {
         return hiYewSystemBean.getReleasingPayRecords();
     }
 
-    public List<Vector> getPayRecords() {
+    public List<PayrollEntity> getPayRecords() {
         return hiYewSystemBean.payRecords();
     }
 

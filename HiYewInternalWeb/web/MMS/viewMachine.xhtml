@@ -33,7 +33,11 @@
                     </p:cellEditor>
                 </p:column>
                 <p:column headerText = "Machine Expiry">
-                    <h:outputText value="#{hiYewManagedBean.formatDate(im.machine_expiry)}" style="text-align: center" />
+                    <p:cellEditor>
+                        <f:facet name ="output"> <h:outputText value="#{hiYewManagedBean.formatDate(im.machine_expiry)}" style="text-align: center" /></f:facet>
+                        <f:facet name ="input"><p:calendar value = "#{hiYewManagedBean.machineNxtMaint}" pattern = "dd/MM/yyyy"  mindate="#{hiYewManagedBean.getToday()}" /> </f:facet>
+                    </p:cellEditor>
+                   
                 </p:column>
                 <p:column headerText = "Machine Description">
                     <h:outputText value="#{im.description}" style="text-align: center" />

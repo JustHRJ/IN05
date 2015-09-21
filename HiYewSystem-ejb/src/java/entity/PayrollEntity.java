@@ -29,7 +29,8 @@ public class PayrollEntity implements Serializable {
     private String status;
     private Timestamp last_payment;
     private EmployeeEntity employee;
-
+    private double salary;
+    
     public Long getId() {
         return id;
     }
@@ -139,6 +140,20 @@ public class PayrollEntity implements Serializable {
      */
     public void setLast_payment(Timestamp last_payment) {
         this.last_payment = last_payment;
+    }
+
+    /**
+     * @return the salary
+     */
+    public double getSalary() {
+        return salary;
+    }
+
+    /**
+     * @param salary the salary to set
+     */
+    public void setSalary(double salary) {
+        this.salary = salary;
     }
     
 }
