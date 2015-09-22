@@ -5,15 +5,18 @@
  */
 package session.stateless;
 
-import entity.CompositeQuotationDescKey;
 import entity.Customer;
 import entity.Quotation;
 import entity.QuotationDescription;
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 
 /**
  *
@@ -60,36 +63,16 @@ public class QuotationSessionBean implements QuotationSessionBeanLocal {
     
     @Override
     public void createQuotationDesciption(QuotationDescription quotationDescription){
-        //CompositeQuotationDescKey cqd = new CompositeQuotationDescKey();
-        //cqd.setQuotationNo(quotationDescription.getQuotationNo());
-        //cqd.setQuotationDescNo(quotationDescription.getQuotationDescNo());
         
         em.persist(quotationDescription);
     }
     
-    //@Override
-    //public String createQuotationByUsername(String username){
-      //  String quotationNo = "";
+    //public List<Quotation> receiveQuotations(){
+      //  Query query = em.createQuery("Select q FROM Quotation AS q, where q.status='Processed' and (:curDate - :quoteDate)<= 30 ");
+       // Date curDate = new Date();
         
-        //Quotation q;
-        //if(q == null){
-          //  Customer c = em.find(Customer.class, username);
-            
-            //q = new Quotation();
-        //    quotationNo = q.getQuotationNo();
-          //  em.persist(q);
-            //set quotation into customer
-            //c.addQuotations(q);
-            //System.out.println("Created new quotation");
-        //}
-    //    return quotationNo;
+       // return null;
     //}
-    
-    //@Override
-   // public Quotation getQuotationById(String quotationNo){
-   //     Quotation q = em.find(Quotation.class, quotationNo);
-   //     return q;
-   // }
 }
     
     

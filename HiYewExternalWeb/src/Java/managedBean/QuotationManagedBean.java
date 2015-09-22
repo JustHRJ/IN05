@@ -43,6 +43,11 @@ public class QuotationManagedBean implements Serializable {
     private ArrayList<QuotationDescription> cacheList;
     private Quotation newQuotation;
     private QuotationDescription newQuotationDesc;
+    
+    /**
+     * 
+     */
+    private Quotation rcvQuotationDescriptions;
 
     /**
      * Creates a new instance of QuotationManagedBean
@@ -60,12 +65,10 @@ public class QuotationManagedBean implements Serializable {
             username = FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("user").toString();
             System.out.println("Q: Username is " + username);
         }
-        //if (FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("qNo") != null) {
-        //  quotationNo = FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("qNo").toString();
-        //}
-
         date = new SimpleDateFormat("dd-MM-yyyy").format(Calendar.getInstance().getTime());
         System.out.println(date);
+        
+        //rcvQuotationDescriptions = 
     }
 
     public void addToCacheList(ActionEvent event) {
@@ -89,7 +92,16 @@ public class QuotationManagedBean implements Serializable {
     public void deleteQuotationDescription(QuotationDescription qd){
         if(qd != null){
             cacheList.remove(qd.getQuotationDescNo()-1);
+            reassignQuotationNo();
         }
+    }
+    
+    public void reassignQuotationNo(){
+
+        for(int i=0; i<cacheList.size();i++){
+            cacheList.get(i).setQuotationDescNo(i+1);
+        }
+        count = cacheList.size() + 1;
     }
 
     public void createQuotation(ActionEvent event) {
@@ -127,7 +139,7 @@ public class QuotationManagedBean implements Serializable {
         }
 
     }
-
+    
     /**
      * @return the username
      */

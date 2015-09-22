@@ -9,13 +9,24 @@
     </h:head>
     <h:body>
         <h:form id="mainForm">
-            <p:growl id="msgs" showDetail="true">
+            <p:growl id="msgs" showDetail="true" />
 
-            </p:growl>
+            
             <p:messages id="msg"  showDetail="true" />
-            <h:outputText value="Signed in as #{user}" />
+             <h:panelGrid>
+                                    <p:row>
+                                        <p:column>
+                                            <h:outputText value="Signed in as #{user}" style="font-weight: bolder;font-size: 18px"/>
+                                            
+                                        </p:column> 
+                                        <p:column width="50px" style="margin-left: 50px">
+                                            <h:outputText value="" style="margin-left: 523px"/>
+                                            <p:commandButton value="Log Out" styleClass="ui-priority-primary" action="#{csLoginManagedBean.logout()}" />
+                                        </p:column> 
+                                    </p:row>
+             </h:panelGrid>
 
-            <p:commandButton value="Log Out" action="#{csLoginManagedBean.logout()}" />
+            
             <p></p>
             <f:ajax render=":content">
                 <p:tabView dynamic="true" cache="false" >
@@ -161,7 +172,7 @@
                                     <p:rowEditor  />
                                 </p:column>
                                 <p:column headerText="Delete" width="6%">
-                                    <p:commandLink update="mydata" id="deleteLink" styleClass="ui-icon ui-icon-trash"  action="#{quotationManagedBean.deleteQuotationDescription(item)}"/>
+                                    <p:commandLink update="mydata" id="deleteLink" styleClass="ui-icon ui-icon-trash" action="#{quotationManagedBean.deleteQuotationDescription(item)}"/>
                                 </p:column>
                             </p:dataTable>
                             <br />
@@ -175,11 +186,15 @@
                         </p:panel>
                     </p:tab>
                     <p:tab title="Quotations">
+                        
                         <p:panel>Current(use data table with buttons and pop up for PO) and expired...</p:panel>
                         <h:outputLabel value="We are glad to quote you the following:" /><br />
-                        <h:outputLabel value="*Quotation is valid for 30 days as from above date." style="font-weight: bolder"/><br />
-                        <h:outputLabel value="We trust the offer is favourable to you."/><br />
-                        <h:outputLabel value="Should you need any further clarifications, please do not hesitate to contact us."/><br />
+                        <p:dataTable value="#{quotationManagedBean.cacheList}" var="item" id="mydata" editable="true">
+
+                                <p:column headerText="ID" width="10%">
+                                    <h:outputText value="#{item.quotationDescNo}"/>
+                                </p:column>
+                        </p:dataTable>
 
                     </p:tab>
 

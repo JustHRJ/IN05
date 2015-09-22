@@ -26,6 +26,7 @@ public class Quotation implements Serializable {
     private String quotationNo;
     private String date;
     private String termsOfPayment = "30"; //30, 60, 90 days
+    private String status; //Processed, Pending, Accepted, Rejected
     //private QuotationDescription quotationDescription;
     
     @OneToMany(mappedBy = "quotation")
@@ -36,14 +37,16 @@ public class Quotation implements Serializable {
     public Quotation() {
         //customer = new Customer();
         //quotationDescription = new QuotationDescription();
+        status = "Pending"; 
     }
     
-    public Quotation(String date, String termsOfPayment, String quotationNo, Customer customer, QuotationDescription qd) {
+    public Quotation(String date, String termsOfPayment, String quotationNo, Customer customer, QuotationDescription qd, String status) {
         
         this.date = date;
         this.termsOfPayment = termsOfPayment;
         this.quotationNo = quotationNo;
         this.customer = customer;
+        this.status = status;
         //this.quotationDescription = qd;
     }
     
@@ -144,6 +147,20 @@ public class Quotation implements Serializable {
     @Override
     public String toString() {
         return "entity.quotation[ id=" + getQuotationNo() + " ]";
+    }
+
+    /**
+     * @return the status
+     */
+    public String getStatus() {
+        return status;
+    }
+
+    /**
+     * @param status the status to set
+     */
+    public void setStatus(String status) {
+        this.status = status;
     }
 
     
