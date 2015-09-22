@@ -31,10 +31,10 @@ public class Quotation implements Serializable {
     @OneToMany(mappedBy = "quotation")
     private List<QuotationDescription> quotationDescriptions = new ArrayList<>();
     @ManyToOne
-    private Customer customer;
+    private Customer customer = new Customer();
 
     public Quotation() {
-        customer = new Customer();
+        //customer = new Customer();
         //quotationDescription = new QuotationDescription();
     }
     
@@ -90,14 +90,14 @@ public class Quotation implements Serializable {
     }
 
     /**
-     * @return the rfqDescriptions
+     * @return the quotationDescriptions
      */
     public List<QuotationDescription> getQuotationDescriptions() {
         return quotationDescriptions;
     }
 
     /**
-     * @param quotationDescriptions the rfqDescriptions to set
+     * @param quotationDescriptions the quotationDescriptions to set
      */
     public void setQuotationDescriptions(List<QuotationDescription> quotationDescriptions) {
         this.quotationDescriptions = quotationDescriptions;
@@ -121,8 +121,6 @@ public class Quotation implements Serializable {
         this.customer = customer;
     }
     
-    
-    
     @Override
     public int hashCode() {
         int hash = 0;
@@ -145,7 +143,7 @@ public class Quotation implements Serializable {
 
     @Override
     public String toString() {
-        return "entity.RFQ[ id=" + getQuotationNo() + " ]";
+        return "entity.quotation[ id=" + getQuotationNo() + " ]";
     }
 
     

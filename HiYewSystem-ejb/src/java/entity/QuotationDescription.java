@@ -49,14 +49,14 @@ public class QuotationDescription implements Serializable {
     }
 
     /**
-     * @return the rfqDescNo
+     * @return the quotationDescNo
      */
     public Integer getQuotationDescNo() {
         return quotationDescNo;
     }
 
     /**
-     * @param quotationDescNo the rfqDescNo to set
+     * @param quotationDescNo the quotationDescNo to set
      */
     public void setQuotationDescNo(Integer quotationDescNo) {
         this.quotationDescNo = quotationDescNo;
@@ -142,7 +142,7 @@ public class QuotationDescription implements Serializable {
 
     @Override
     public String toString() {
-        return "entity.RFQDescription[ id=" + getQuotationDescNo() + " ]";
+        return "entity.quotationDescription[ id=" + getQuotationDescNo() + " ]";
     }
 
     /**

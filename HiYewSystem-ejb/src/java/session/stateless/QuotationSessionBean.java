@@ -46,7 +46,7 @@ public class QuotationSessionBean implements QuotationSessionBeanLocal {
                 newQuotationNo += s.substring(0, 1);
             }
         }else{
-            newQuotationNo = custName.substring(0, 4);
+            newQuotationNo = custName;
         }
             newQuotationNo += new SimpleDateFormat("yyyyMMddss").format(Calendar.getInstance().getTime());
             

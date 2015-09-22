@@ -18,6 +18,7 @@ import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 import javax.inject.Named;
 import javax.faces.view.ViewScoped;
+import org.primefaces.event.RowEditEvent;
 import session.stateless.CustomerSessionBeanLocal;
 import session.stateless.QuotationSessionBeanLocal;
 
@@ -28,18 +29,18 @@ import session.stateless.QuotationSessionBeanLocal;
 @Named(value = "quotationManagedBean")
 @ViewScoped
 public class QuotationManagedBean implements Serializable {
+
     @EJB
     private QuotationSessionBeanLocal quotationSessionBean;
     @EJB
     private CustomerSessionBeanLocal customerSessionBean;
-    
 
     private String username = "";
     private String date = "";
     private String quotationNo = "";
     private Integer count;
-    
-    private ArrayList <QuotationDescription> cacheList;
+
+    private ArrayList<QuotationDescription> cacheList;
     private Quotation newQuotation;
     private QuotationDescription newQuotationDesc;
 
@@ -49,7 +50,7 @@ public class QuotationManagedBean implements Serializable {
     public QuotationManagedBean() {
         newQuotation = new Quotation();
         newQuotationDesc = new QuotationDescription();
-        cacheList = new ArrayList <>();
+        cacheList = new ArrayList<>();
     }
 
     @PostConstruct
@@ -60,58 +61,71 @@ public class QuotationManagedBean implements Serializable {
             System.out.println("Q: Username is " + username);
         }
         //if (FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("qNo") != null) {
-          //  quotationNo = FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("qNo").toString();
+        //  quotationNo = FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("qNo").toString();
         //}
-        
+
         date = new SimpleDateFormat("dd-MM-yyyy").format(Calendar.getInstance().getTime());
         System.out.println(date);
     }
-    
-    
-    public void addToCacheList(ActionEvent event){
-        
-        if(newQuotationDesc.getItemDesc().equals("") || newQuotationDesc.getQty() == null){
+
+    public void addToCacheList(ActionEvent event) {
+
+        if (newQuotationDesc.getItemDesc().equals("") || newQuotationDesc.getQty() == null) {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Descriptions and quantity must not be left unfilled!"));
-        }else{
-        
-        newQuotationDesc.setQuotationDescNo(count);
-        count += 1;
-        cacheList.add(newQuotationDesc);
-        
-        //reinitialise quotation description
-        newQuotationDesc = new QuotationDescription();
-        //set textbox to blank again
+        } else {
+
+            newQuotationDesc.setQuotationDescNo(count);
+            count += 1;
+            cacheList.add(newQuotationDesc);
+
+            //reinitialise quotation description
+            newQuotationDesc = new QuotationDescription();
+            //set textbox to blank again
+            
+            
         }
     }
     
-    public void createQuotation(ActionEvent event){
-        //generate quotatioNo
-        quotationNo = quotationSessionBean.getQuotationNo(username);
-        //create quotation
-        newQuotation.setQuotationNo(quotationNo);        
-        newQuotation.setDate(date);
-        newQuotation.setCustomer(customerSessionBean.getCustomerByUsername(username));
-        quotationSessionBean.createQuotation(newQuotation);
-        
-        //add quotation to customer
-        customerSessionBean.addQuotation(username, newQuotation);
-        
-        //add quotationDescription into its respective quotation
-        for(QuotationDescription qd: cacheList){
-            qd.setQuotationNo(quotationNo);
-            newQuotation.addQuotationDescriptions(qd);
-            quotationSessionBean.createQuotationDesciption(qd);
+    public void deleteQuotationDescription(QuotationDescription qd){
+        if(qd != null){
+            cacheList.remove(qd.getQuotationDescNo()-1);
         }
-        
-        //empty cachelist
-        cacheList.clear();
-        //set count back to 1
-        count = 1;
-        //reinitialise quotation
-        newQuotation = new Quotation();
-        newQuotationDesc = new QuotationDescription();
-        //set quotation tab to be selected
-        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Your RFQ has been submitted successfully!"));
+    }
+
+    public void createQuotation(ActionEvent event) {
+        if (cacheList.size() < 1) {
+            FacesContext.getCurrentInstance().addMessage(null,  new FacesMessage("RFQ creation must have at least one item job!"));
+        } else {
+            //generate quotatioNo
+            quotationNo = quotationSessionBean.getQuotationNo(username);
+            //create quotation
+            newQuotation.setQuotationNo(quotationNo);
+            newQuotation.setDate(date);
+            newQuotation.setCustomer(customerSessionBean.getCustomerByUsername(username));
+            quotationSessionBean.createQuotation(newQuotation);
+
+            //add quotation to customer
+            customerSessionBean.addQuotation(username, newQuotation);
+
+            //add quotationDescription into its respective quotation
+            for (QuotationDescription qd : cacheList) {
+                qd.setQuotationNo(quotationNo);
+                newQuotation.addQuotationDescriptions(qd);
+                quotationSessionBean.createQuotationDesciption(qd);
+            }
+
+            //empty cachelist
+            cacheList.clear();
+            //set count back to 1
+            count = 1;
+            //reinitialise quotation
+            newQuotation = new Quotation();
+            newQuotationDesc = new QuotationDescription();
+            //set quotation tab to be selected
+            System.out.println("Your RFQ has been submitted successfully!");
+            FacesContext.getCurrentInstance().addMessage("msg", new FacesMessage("Your RFQ has been submitted successfully!"));
+        }
+
     }
 
     /**

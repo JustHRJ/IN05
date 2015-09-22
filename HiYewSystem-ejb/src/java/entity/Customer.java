@@ -6,8 +6,18 @@
 package entity;
 
 import java.io.Serializable;
+import java.security.InvalidKeyException;
+import java.security.Key;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.crypto.BadPaddingException;
+import javax.crypto.Cipher;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
+import javax.crypto.spec.SecretKeySpec;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
@@ -19,8 +29,9 @@ import util.enumeration.CustomerStatusEnum;
  */
 @Entity
 public class Customer implements Serializable {
+
     private static final long serialVersionUID = 1L;
-    
+
     @Id
     private String userName;
     private String pw;
@@ -30,19 +41,19 @@ public class Customer implements Serializable {
     private String phone;
     private String email;
     private String postalCode;
-    
+
     //private Integer active; // set 1 for existing customer;
     //@Enumerated(EnumType.STRING)
     private CustomerStatusEnum customerStatusEnum;
-    
-    @OneToMany(mappedBy="customer")
-    private List <Quotation> quotations;
+
+    @OneToMany(mappedBy = "customer")
+    private List<Quotation> quotations = new ArrayList<>();
 
     public Customer() {
         customerStatusEnum = CustomerStatusEnum.ACTIVE;
     }
 
-    public Customer(String userName, String pw, String name, String address, String phone, CustomerStatusEnum customerStatusEnum, List <Quotation> quotations) {
+    public Customer(String userName, String pw, String name, String address, String phone, CustomerStatusEnum customerStatusEnum, List<Quotation> quotations) {
         this.userName = userName;
         this.pw = pw;
         this.name = name;
@@ -52,7 +63,10 @@ public class Customer implements Serializable {
         this.customerStatusEnum = customerStatusEnum;
         this.quotations = quotations;
     }
+
+
     
+
     /**
      * @return the userName
      */
@@ -78,6 +92,7 @@ public class Customer implements Serializable {
      * @param pw the pw to set
      */
     public void setPw(String pw) {
+        
         this.pw = pw;
     }
 
@@ -122,7 +137,7 @@ public class Customer implements Serializable {
     public void setPhone(String phone) {
         this.phone = phone;
     }
-    
+
     /**
      * @return the address2
      */
@@ -205,25 +220,21 @@ public class Customer implements Serializable {
     }
 
     /**
-     * @return the rfqs
+     * @return the quotations
      */
-    public List <Quotation> getQuotations() {
+    public List<Quotation> getQuotations() {
         return quotations;
     }
 
     /**
-     * @param quotations the rfqs to set
+     * @param quotations the quotations to set
      */
-    public void setQuotations(List <Quotation> quotations) {
+    public void setQuotations(List<Quotation> quotations) {
         this.quotations = quotations;
     }
-    
-    public void addQuotations(Quotation q){
+
+    public void addQuotations(Quotation q) {
         this.quotations.add(q);
     }
 
-    
-
-    
-    
 }
