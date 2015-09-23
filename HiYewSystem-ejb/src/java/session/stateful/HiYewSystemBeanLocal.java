@@ -34,7 +34,7 @@ public interface HiYewSystemBeanLocal {
 
     public boolean addEmployee(String employee, String employee_passNumber, String employee_address, int number_of_leave, String position, String username, String password, Timestamp expiry, String contact, String addressPostal, String unit, String optional, double pay, Date employedDate);
 
-    public boolean updateEmployee(EmployeeEntity employee, String employeeA, String employeeUnit, String employeeOptional, String address_postal, String contact, Date pass, String position);
+    public boolean updateEmployee(EmployeeEntity employee, String employeeA, String employeeUnit, String employeeOptional, String address_postal, String contact, Date pass, String position, double pay, int leave);
 
     public boolean applyLeave(String employee, int days, String remarks, Date start, Date end);
 
@@ -84,7 +84,7 @@ public interface HiYewSystemBeanLocal {
 
     public List<EmployeeEntity> expiredEmployee(String username);
 
-    public void extendEmployeePass(String employeeName, Timestamp next);
+    public boolean extendEmployeePass(String employeeName, Timestamp next);
 
     public int getENoAlert();
 
@@ -145,6 +145,12 @@ public interface HiYewSystemBeanLocal {
     public List<PayrollEntity> getPayroll(String employeeName);
 
     public boolean deleteTraining(String trainingCode);
+
+    public boolean changePassword(String employeeName, String oldPass, String newPass);
+
+    public boolean updateEmployee(EmployeeEntity employee, String employeeA, String employeeUnit, String employeeOptional, String address_postal, String contact);
+
+    public void reenableEmployee(String employeeName);
 
     
 }

@@ -9,6 +9,7 @@
     </h:head>
     <h:body>
         <h:form id ="formMain">
+              #{loginControlBean.checkLoginRedirect()}
             <p:menubar>
                 <p:menuitem value ="Home" url="/index.xhtml" />
                 <p:menuitem value ="#{loginControlBean.getEAlert()}" url ="alertEmployee.xhtml" />
@@ -58,7 +59,7 @@
                         <f:facet name="footer">
                         </f:facet>
                     </p:dataTable>
-                    <p:commandButton action ="#{hiYewManagedBeanView.processEmployeeTraining()}" update="data1" icon="ui-icon-search" value="add" />
+                    <p:commandButton action ="#{hiYewManagedBeanView.processEmployeeTraining()}" update="data1 msgs" icon="ui-icon-search" value="add" />
                 </p:row>
             </panelGrid>
         </h:form>

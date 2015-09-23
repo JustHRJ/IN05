@@ -9,6 +9,7 @@
     </h:head>
     <h:body>
         <h1>Edit and Release Payroll</h1>
+          #{loginControlBean.checkLoginRedirect()}
         <p:menubar>
             <p:menuitem value ="Home" url="/index.xhtml" />   
             <p:menuitem value ="Assign Payroll" url ="createPayroll.xhtml" disabled = "#{loginControlBean.checkValid()}"/>

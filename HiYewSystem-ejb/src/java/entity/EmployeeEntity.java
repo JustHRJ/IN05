@@ -45,6 +45,7 @@ public class EmployeeEntity implements Serializable {
     private String addressPostal;
     private String unit;
     private String optional;
+    private String account_status;
 
     public EmployeeEntity() {
 
@@ -311,6 +312,20 @@ public class EmployeeEntity implements Serializable {
      */
     public void setOptional(String optional) {
         this.optional = optional;
+    }
+
+    /**
+     * @return the account_status
+     */
+    public String getAccount_status() {
+        return account_status;
+    }
+
+    /**
+     * @param account_status the account_status to set
+     */
+    public void setAccount_status(String account_status) {
+        this.account_status = account_status;
     }
 
 }

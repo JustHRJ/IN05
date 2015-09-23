@@ -40,48 +40,49 @@ public class HiYewManagedBean {
     @EJB
     private HiYewSystemBeanLocal hiYewSystemBean;
     private boolean bonus;
-    private String employeeName;
-    private String address_postal;
-    private String employeeAddress;
-    private String employeeAddressUnit;
-    private String employeeAdressOptional;
-    private String employeePassNumber;
-    private int employeeLeave;
+    private String employeeName = "";
+    private String address_postal = "";
+    private String employeeAddress = "";
+    private String employeeAddressUnit = "";
+    private String employeeAdressOptional = "";
+    private String employeePassNumber = "";
+    private int employeeLeave = 0;
     private Long employeeId;
-    private String employeePosition;
-    private Date employeePassExpiry;
-    private int leaveNumber;
-    private String employeeContact;
-    private String leaveRemarks;
+    private String employeePosition = "";
+    private Date employeePassExpiry = null;
+    private int leaveNumber = 0;
+    private String employeeContact = "";
+    private String leaveRemarks = "";
     private String fireOrDisabled;
-    private String machine_status;
-    private String username;
-    private String password;
+    private String machine_status = "";
+    private String username = "";
+    private String password = "";
+    private String oldPassword = "";
     private List<Long> machineMaintainenceIDList;
-    private String machineName;
-    private String machineId;
-    private String machineDescript;
-    private Date machineNxtMaint;
-    private int machineSubMaint;
-    private Date startDate;
-    private Date employedDate;
-    private Date endDate;
-    private int lateArrival;
-    private int absentee;
-    private String months;
+    private String machineName = "";
+    private String machineId = "";
+    private String machineDescript = "";
+    private Date machineNxtMaint = null;
+    private int machineSubMaint = 0;
+    private Date startDate = null;
+    private Date employedDate = null;
+    private Date endDate = null;
+    private int lateArrival = 0;
+    private int absentee = 0;
+    private String months = "";
     private Long machineMaintainenceID;
-    private double employeePay;
-    private Date mScheduleDate;
-    private String mScheduleHour;
-    private String maintainenceComments;
-    private String mServiceProvider;
-    private String mServiceContact;
-    private String trainingDescription;
-    private Date trainingStartDate;
-    private Date trainingEndDate;
+    private double employeePay = 0.00;
+    private Date mScheduleDate = null;
+    private String mScheduleHour = "";
+    private String maintainenceComments = "";
+    private String mServiceProvider = "";
+    private String mServiceContact = "";
+    private String trainingDescription = "";
+    private Date trainingStartDate = null;
+    private Date trainingEndDate = null;
     private int trainingSize;
-    private String trainingName;
-    private String trainingCode;
+    private String trainingName = "";
+    private String trainingCode = "";
 
     /**
      * Creates a new instance of HiYewManagedBean
@@ -194,8 +195,12 @@ public class HiYewManagedBean {
 
     public String extendEmployeePass() {
         Timestamp next = new Timestamp(employeePassExpiry.getTime());
-        hiYewSystemBean.extendEmployeePass(employeeName, next);
-        return "employee_details";
+        boolean check = hiYewSystemBean.extendEmployeePass(employeeName, next);
+        if (check) {
+            return "employee_details";
+        } else {
+            return "alertEmployee.xhtml";
+        }
     }
 
     public String extendMachine() {
@@ -230,6 +235,19 @@ public class HiYewManagedBean {
         Calendar c = Calendar.getInstance();
         SimpleDateFormat format = new SimpleDateFormat("MMM,yyyy");
         return format.format(c.getTime());
+    }
+
+    public void changePassword() throws IOException {
+        System.out.println(employeeName);
+        boolean check = hiYewSystemBean.changePassword(employeeName, oldPassword, password);
+        if (check) {
+            FacesContext facesCtx = FacesContext.getCurrentInstance();
+            ExternalContext externalContext = facesCtx.getExternalContext();
+            externalContext.redirect("/HiYewInternalWeb/login.xhtml");
+        } else {
+            FacesMessage msg = new FacesMessage("Failed to change", "Please check old password / same previous password");
+            FacesContext.getCurrentInstance().addMessage(null, msg);
+        }
     }
 
     public void addEmployee() throws IOException {
@@ -289,6 +307,8 @@ public class HiYewManagedBean {
         hiYewSystemBean.approveLeaveID((Long.valueOf(objectId1).longValue()), objectId);
     }
 
+
+
     public void approveLeaveEs() {
         hiYewSystemBean.approveByEmployee(employeeName);
     }
@@ -346,8 +366,17 @@ public class HiYewManagedBean {
 
     public void updateEmployee(RowEditEvent event) {
 
-        boolean check = hiYewSystemBean.updateEmployee((EmployeeEntity) event.getObject(), employeeAddress, employeeAddressUnit, employeeAdressOptional, address_postal, employeeContact, employeePassExpiry, employeePosition);
-
+        boolean check = false;
+        System.out.println("here");
+        System.out.println(employeePay);
+        System.out.println(employeeLeave);
+        if (employeePassExpiry == null && employeePosition.isEmpty() && employeePay == 0 && employeeLeave == 0) {
+            check = hiYewSystemBean.updateEmployee((EmployeeEntity) event.getObject(), employeeAddress, employeeAddressUnit, employeeAdressOptional, address_postal, employeeContact);
+        } else {
+            System.out.println("here");
+            check = hiYewSystemBean.updateEmployee((EmployeeEntity) event.getObject(), employeeAddress, employeeAddressUnit, employeeAdressOptional, address_postal, employeeContact, employeePassExpiry, employeePosition, employeePay, employeeLeave);
+            System.out.println(check);
+        }
         if (check) {
             FacesMessage msg = new FacesMessage("Edited", ((EmployeeEntity) event.getObject()).getEmployee_name());
             FacesContext.getCurrentInstance().addMessage(null, msg);
@@ -981,6 +1010,20 @@ public class HiYewManagedBean {
      */
     public void setEmployedDate(Date employedDate) {
         this.employedDate = employedDate;
+    }
+
+    /**
+     * @return the oldPassword
+     */
+    public String getOldPassword() {
+        return oldPassword;
+    }
+
+    /**
+     * @param oldPassword the oldPassword to set
+     */
+    public void setOldPassword(String oldPassword) {
+        this.oldPassword = oldPassword;
     }
 
     /**

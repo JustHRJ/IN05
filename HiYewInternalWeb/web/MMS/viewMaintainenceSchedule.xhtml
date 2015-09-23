@@ -10,6 +10,7 @@
     <h:body>
         <h:form id ="formMain">
             <h1>View Maintainence Schedule</h1>
+            #{loginControlBean.checkLoginRedirect()}
             <p:menubar>
                 <p:menuitem value ="Home" url ="/index.xhtml"/>
                 <p:menuitem value ="#{hiYewManagedBean.getMAlert()}" url ="alertMachine.xhtml" />

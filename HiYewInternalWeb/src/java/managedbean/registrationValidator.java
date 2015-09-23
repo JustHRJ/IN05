@@ -63,6 +63,25 @@ public class registrationValidator implements Validator {
 
     }
 
+    public void validatePayE(FacesContext context, UIComponent component, Object submittedAndConvertedValue) throws ValidatorException {
+
+        try {
+            Double numeric = (Double) submittedAndConvertedValue;
+
+            if (numeric == null) {
+                return; // Let required="true" or @NotNull handle it.
+            }
+            if (numeric != 0) {
+                if (numeric < 500) {
+                    throw new ValidatorException(new FacesMessage("not enough pay"));
+                }
+            }
+        } catch (Exception ex) {
+            throw new ValidatorException(new FacesMessage("String is not numeric"));
+        }
+
+    }
+
     public void validateN(FacesContext context, UIComponent component, Object submittedAndConvertedValue) throws ValidatorException {
         String username = (String) submittedAndConvertedValue;
 
@@ -70,9 +89,23 @@ public class registrationValidator implements Validator {
             return; // Let required="true" or @NotNull handle it.
         }
 
+        char first = username.charAt(0);
+        char last = username.charAt(username.length() - 1);
+
+        if (Character.isLetter(first) && Character.isLetter(last)) {
+            try {
+                Integer.parseInt(username.substring(1, username.length() - 1));
+            } catch (Exception ex) {
+                throw new ValidatorException(new FacesMessage("Middle is not numeric"));
+            }
+        } else {
+            throw new ValidatorException(new FacesMessage("Employee Number already in use, choose another"));
+        }
+
         if (hiYewSystemBean.existEmployeeNumber(username)) {
             throw new ValidatorException(new FacesMessage("Employee Number already in use, choose another"));
         }
+
     }
 
     public void validateNumeric(FacesContext context, UIComponent component, Object submittedAndConvertedValue) throws ValidatorException {

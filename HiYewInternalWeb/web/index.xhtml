@@ -10,8 +10,13 @@
         <h1>HiYew Web Home Page</h1>
         <br/>
         <h:form>
+
+            #{loginControlBean.checkLoginRedirect()}
             <p:commandButton value ="#{loginControlBean.logged()}" action ="#{loginControlBean.userAction()}"/>
             <h2>Human Resource Management System - Employee Management</h2>
+            <br/>
+            <p:commandLink value ="Change Password" action ="changePassword"/> 
+            <h3>logged in as: #{loginControlBean.employeeNameLog} </h3>
             <p:menubar>
                 <p:menuitem value ="Home" url="/index.xhtml"  />
                 <p:menuitem value ="Register employee" url ="HRMS/employeeRegistration.xhtml" disabled="#{loginControlBean.checkValid()}"/>
@@ -51,7 +56,7 @@
                 <p:menuitem value ="Home" url ="index.xhtml" />
                 <p:menuitem value ="Add Machinery" url ="MMS/addMachine.xhtml" />
                 <p:menuitem value ="View Machinery" url ="MMS/viewMachine.xhtml" />
-        
+
             </p:menubar>
             <br/>
             <h2>Machine Control System - Maintainence Management</h2>

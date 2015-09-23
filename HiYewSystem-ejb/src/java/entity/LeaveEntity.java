@@ -11,6 +11,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 
 /**
  *
@@ -30,7 +31,16 @@ public class LeaveEntity implements Serializable {
     private Timestamp approvedTime;
     private Timestamp startDate;
     private Timestamp endDate;
-
+    private EmployeeEntity employee = new EmployeeEntity();
+    
+    @ManyToOne
+    public EmployeeEntity getEmployee(){
+        return employee;
+    }
+    public void setEmployee(EmployeeEntity employee){
+        this.employee = employee;
+    }
+    
     public LeaveEntity() {
 
     }
