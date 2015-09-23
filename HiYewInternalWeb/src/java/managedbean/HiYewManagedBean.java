@@ -114,7 +114,12 @@ public class HiYewManagedBean {
 
         }
     }
-
+    
+    public void redirectP() throws IOException{
+           FacesContext.getCurrentInstance().getExternalContext().redirect("/HiYewInternalWeb/changePassword.xhtml");
+    }
+    
+    
     public void deleteMachineMaintainence() throws IOException {
         boolean check = hiYewSystemBean.deleteMachineMaintainence(machineMaintainenceID);
         if (check) {

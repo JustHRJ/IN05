@@ -15,7 +15,7 @@
             <p:commandButton value ="#{loginControlBean.logged()}" action ="#{loginControlBean.userAction()}"/>
             <h2>Human Resource Management System - Employee Management</h2>
             <br/>
-            <p:commandLink value ="Change Password" action ="changePassword"/> 
+            <p:commandLink value ="Change Password" action ="#{hiYewManagedBean.redirectP}"/> 
             <h3>logged in as: #{loginControlBean.employeeNameLog} </h3>
             <p:menubar>
                 <p:menuitem value ="Home" url="/index.xhtml"  />
