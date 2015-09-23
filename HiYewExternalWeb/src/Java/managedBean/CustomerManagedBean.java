@@ -59,10 +59,10 @@ public class CustomerManagedBean implements Serializable {
                 newCustomer = new Customer(); //To reinitialise and create new customer
                 return "csLoginPage?faces-redirect=true";
             } else {
-                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Password mismatch!"));
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Password mismatch!",""));
             }
         } else {
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Username is taken. Try again with a different user name!"));
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Username is taken. Try again with a different user name!",""));
             System.out.println("Duplicate primary key for username");
         }
         return "";
@@ -85,24 +85,26 @@ public class CustomerManagedBean implements Serializable {
     public void changePassword() {
 
         if (changePasswordInput.equals("") || newPassword.equals("") || rePassword.equals("")) {
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Changing Password requires all password fields to be filled!"));
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Changing Password requires all password fields to be filled!",""));
         } else {
             String encryptedPassword = customer.getPw();
+            System.out.println(encryptedPassword);
+            System.out.println(customerSessionBean.encryptPassword(changePasswordInput));
             if (encryptedPassword.equals(customerSessionBean.encryptPassword(changePasswordInput))) {
-                if (newPassword.equals(encryptedPassword)) {
-                    FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("New Password is same as current password!"));
+                if (customerSessionBean.encryptPassword(newPassword).equals(encryptedPassword)) {
+                    FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("New Password is same as current password!",""));
                 } else {
                     if (newPassword.equals(rePassword)) {
                         customer.setPw(customerSessionBean.encryptPassword(newPassword));
                         handleSave();
-                        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Password changed successfully!"));
+                        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Password changed successfully!",""));
 
                     } else {
-                        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Password Mismatch!"));
+                        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Password Mismatch!",""));
                     }
                 }
             } else {
-                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Invalid password!"));
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Invalid password!",""));
             }
         }
     }

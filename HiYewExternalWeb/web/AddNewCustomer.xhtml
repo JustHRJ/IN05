@@ -12,7 +12,7 @@
         <h:form id="mainForm">
             
             <p:panel id="panel" header="Add New Customer">
-                <p:messages id="msgs" showDetail="true" />
+                <p:messages id="msgs" showDetail="false" />
                 
                 <p:dialog widgetVar="statusDialog" modal="true" draggable="false" closable="false" resizable="false" showHeader="false">
                     <p:graphicImage value="/images/progress_bar.gif" />
@@ -30,6 +30,7 @@
                         <p:column>
                             <p:inputText value="#{customerManagedBean.newCustomer.name}" required="true" requiredMessage="Name is required." id="customerName"  />
                         </p:column>
+                        
                     </p:row>
                     <p:row>
                         <p:column>
@@ -37,8 +38,8 @@
                         </p:column>
                         <p:column>
                             <p:inputText value="#{customerManagedBean.newCustomer.phone}" required="true" maxlength="8" requiredMessage="Phone is required." id="Phone" 
-                                         validatorMessage="Please enter only 8 digits.">
-                                <f:validateRegex pattern="(^[0-9]{8}$)"/>
+                                         validatorMessage="[Phone] Please enter only 8 digits starting with 6,8 and 9.">
+                                <f:validateRegex pattern="(^[6,8,9]{1}[0-9]{7}$)"/>
                             </p:inputText>
                         </p:column>
                     </p:row>
@@ -50,25 +51,27 @@
                         </p:column>
                         <p:column>
                             <p:inputText placeholder="e.g. someone@gmail.com" value="#{customerManagedBean.newCustomer.email}" required="true" requiredMessage="Email is required." id="Email"
-                                         validatorMessage="Invalid email format. Example: Someone@gmail.com">
+                                         validatorMessage="[Email] Invalid email format. Example: Someone@gmail.com">
                                 <f:validateRegex pattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$" />
                             </p:inputText>
                         </p:column>
                     </p:row>
                     <p:row>
                         <p:column>
-                            <p:outputLabel for="Address1" value="Unit Number:" />
+                            <p:outputLabel for="Address1" value="Address:" />
                             
                             <br />
                             <br />
-                            <p:outputLabel for="Address2" value="Street Name:" />
+                            <p:outputLabel for="Address2" value="" />
                             
                         </p:column> 
                         <p:column>
-                            <p:inputText placeholder="e.g. 12, #01-02" value="#{customerManagedBean.newCustomer.address1}" required="true" requiredMessage="Unit number is required." id="Address1"  />
+                            <p:inputText style="margin-top: 5px" placeholder="e.g. Beach Road" value="#{customerManagedBean.newCustomer.address1}" required="true" requiredMessage="Street name is required." id="Address1"  />
                             <br />
-                            <p:inputText style="margin-top: 5px" placeholder="e.g. Beach Road" value="#{customerManagedBean.newCustomer.address2}" required="true" requiredMessage="Street name is required." id="Address2"  />
-                        </p:column>
+                            
+                            <p:inputText placeholder="e.g. 12, #01-02" value="#{customerManagedBean.newCustomer.address2}" id="Address2"  />
+                            
+                            </p:column>
                     </p:row>
                     
                     <p:row>
@@ -77,7 +80,7 @@
                         </p:column>
                         <p:column>
                             <p:inputText value="#{customerManagedBean.newCustomer.postalCode}" required="true" maxlength="6" requiredMessage="Postal Code is required." id="Postal"
-                                         validatorMessage="Please enter only 6 digits.">
+                                         validatorMessage="[Postal Code] Please enter only 6 digits.">
                                 <f:validateRegex pattern="(^[0-9]{6}$)"/>
                                 
                             </p:inputText>
@@ -97,7 +100,10 @@
                             <p:outputLabel for="Password" value="Password:" />
                         </p:column> 
                         <p:column>
-                            <p:password value="#{customerManagedBean.newCustomer.pw}" required="true" feedback="true" inline="true" requiredMessage="Password is required." id="Password"  />
+                            <p:password value="#{customerManagedBean.newCustomer.pw}" required="true" feedback="true" inline="true" requiredMessage="Password is required." id="Password"
+                                        validatorMessage="[Password] Password should be at least 8 characters(only digit and alphabets).">
+                                <f:validateRegex pattern="(^[0-9a-zA-Z]{8,}$)"/>
+                            </p:password>
                         </p:column>
                     </p:row>
                     <p:row>
@@ -105,7 +111,10 @@
                             <p:outputLabel for="Re-Password" value="Re-type Password:" />
                         </p:column> 
                         <p:column>
-                            <p:password value="#{customerManagedBean.rePassword}" required="true" inline="true" requiredMessage="Retype Password." id="Re-Password"  />
+                            <p:password value="#{customerManagedBean.rePassword}" required="true" inline="true" requiredMessage="Retype Password." id="Re-Password"  
+                                        validatorMessage="[Re-type Password] Re-typed password is not the same.">
+                                <f:validateRegex pattern="(^[0-9a-zA-Z]{8,}$)"/>
+                                </p:password>
                         </p:column>
                     </p:row>
                     

@@ -53,11 +53,12 @@ public class Customer implements Serializable {
         customerStatusEnum = CustomerStatusEnum.ACTIVE;
     }
 
-    public Customer(String userName, String pw, String name, String address, String phone, CustomerStatusEnum customerStatusEnum, List<Quotation> quotations) {
+    public Customer(String userName, String pw, String name, String address1, String address2, String phone, CustomerStatusEnum customerStatusEnum, List<Quotation> quotations) {
         this.userName = userName;
         this.pw = pw;
         this.name = name;
-        this.address1 = address;
+        this.address1 = address1;
+        this.address2 = address2;
         this.phone = phone;
         //this.active = active;
         this.customerStatusEnum = customerStatusEnum;
