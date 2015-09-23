@@ -11,22 +11,22 @@
         <h:form id="mainForm">
             <p:growl id="msgs" showDetail="true" />
 
-            
-            <p:messages id="msg"  showDetail="true" />
-             <h:panelGrid>
-                                    <p:row>
-                                        <p:column>
-                                            <h:outputText value="Signed in as #{user}" style="font-weight: bolder;font-size: 18px"/>
-                                            
-                                        </p:column> 
-                                        <p:column width="50px" style="margin-left: 50px">
-                                            <h:outputText value="" style="margin-left: 523px"/>
-                                            <p:commandButton value="Log Out" styleClass="ui-priority-primary" action="#{csLoginManagedBean.logout()}" />
-                                        </p:column> 
-                                    </p:row>
-             </h:panelGrid>
 
-            
+            <p:messages id="msg"  showDetail="true" />
+            <h:panelGrid>
+                <p:row>
+                    <p:column>
+                        <h:outputText value="Signed in as #{user}" style="font-weight: bolder;font-size: 18px"/>
+
+                    </p:column> 
+                    <p:column width="50px" style="margin-left: 50px">
+                        <h:outputText value="" style="margin-left: 523px"/>
+                        <p:commandButton value="Log Out" styleClass="ui-priority-primary" action="#{csLoginManagedBean.logout()}" />
+                    </p:column> 
+                </p:row>
+            </h:panelGrid>
+
+
             <p></p>
             <f:ajax render=":content">
                 <p:tabView dynamic="true" cache="false" >
@@ -186,14 +186,14 @@
                         </p:panel>
                     </p:tab>
                     <p:tab title="Quotations">
-                        
+
                         <p:panel>Current(use data table with buttons and pop up for PO) and expired...</p:panel>
                         <h:outputLabel value="We are glad to quote you the following:" /><br />
                         <p:dataTable value="#{quotationManagedBean.cacheList}" var="item" id="mydata" editable="true">
 
-                                <p:column headerText="ID" width="10%">
-                                    <h:outputText value="#{item.quotationDescNo}"/>
-                                </p:column>
+                            <p:column headerText="ID" width="10%">
+                                <h:outputText value="#{item.quotationDescNo}"/>
+                            </p:column>
                         </p:dataTable>
 
                     </p:tab>
