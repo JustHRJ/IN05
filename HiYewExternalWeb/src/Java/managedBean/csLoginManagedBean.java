@@ -21,7 +21,6 @@ public class csLoginManagedBean implements Serializable {
     private List<String> users;
     private String user = "";
     private Customer customer;
-
     private String username = "";
     private String password = "";
 
@@ -74,7 +73,16 @@ public class csLoginManagedBean implements Serializable {
         System.out.println("logout");
         return "csLoginPage?faces-redirect=true"; //navigation
     }
-
+    
+    public String sendPassword() {
+        customer = customerSessionBean.getCustomerByUsername(username);
+        
+        
+        System.out.println(customer.getEmail());
+        
+        return "login?faces-redirect=true"; //navigation
+    }
+    
     /**
      * public void sendPassword() { customer =
      * customerSessionBean.getCustomerByUsername(username);
@@ -120,11 +128,13 @@ public class csLoginManagedBean implements Serializable {
      * Your password: " + customerSessionBean.decryptPassword(customer.getPw())
      * + "</p>", "text/html");
      *
-     * // Send message Transport.send(message); System.out.println("Sent message
-     * successfully...."); FacesContext.getCurrentInstance().addMessage(null,
-     * new FacesMessage("Password successfully sent!")); } catch
-     * (MessagingException mex) { mex.printStackTrace(); } }
+     * // Send message Transport.send(message); System.out.println("Sent
+     * message successfully....");
+     * FacesContext.getCurrentInstance().addMessage(null, new
+     * FacesMessage("Password successfully sent!")); } catch (MessagingException
+     * mex) { mex.printStackTrace(); } }
      */
+    
     /**
      * @return the username
      */
