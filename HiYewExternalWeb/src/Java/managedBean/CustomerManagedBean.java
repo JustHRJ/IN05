@@ -88,8 +88,10 @@ public class CustomerManagedBean implements Serializable {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Changing Password requires all password fields to be filled!",""));
         } else {
             String encryptedPassword = customer.getPw();
+            System.out.println(encryptedPassword);
+            System.out.println(customerSessionBean.encryptPassword(changePasswordInput));
             if (encryptedPassword.equals(customerSessionBean.encryptPassword(changePasswordInput))) {
-                if (newPassword.equals(encryptedPassword)) {
+                if (customerSessionBean.encryptPassword(newPassword).equals(encryptedPassword)) {
                     FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("New Password is same as current password!",""));
                 } else {
                     if (newPassword.equals(rePassword)) {

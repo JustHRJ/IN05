@@ -12,7 +12,7 @@
         <h:form id="mainForm">
             
             <p:panel id="panel" header="Add New Customer">
-                <p:messages id="msgs" showDetail="true" />
+                <p:messages id="msgs" showDetail="false" />
                 
                 <p:dialog widgetVar="statusDialog" modal="true" draggable="false" closable="false" resizable="false" showHeader="false">
                     <p:graphicImage value="/images/progress_bar.gif" />
@@ -37,8 +37,8 @@
                         </p:column>
                         <p:column>
                             <p:inputText value="#{customerManagedBean.newCustomer.phone}" required="true" maxlength="8" requiredMessage="Phone is required." id="Phone" 
-                                         validatorMessage="Please enter only 8 digits.">
-                                <f:validateRegex pattern="(^[0-9]{8}$)"/>
+                                         validatorMessage="Please enter only 8 digits starting with 6,8 and 9.">
+                                <f:validateRegex pattern="(^[6,8,9]{1}[0-9]{7}$)"/>
                             </p:inputText>
                         </p:column>
                     </p:row>
@@ -99,7 +99,10 @@
                             <p:outputLabel for="Password" value="Password:" />
                         </p:column> 
                         <p:column>
-                            <p:password value="#{customerManagedBean.newCustomer.pw}" required="true" feedback="true" inline="true" requiredMessage="Password is required." id="Password"  />
+                            <p:password value="#{customerManagedBean.newCustomer.pw}" required="true" feedback="true" inline="true" requiredMessage="Password is required." id="Password"
+                                        validatorMessage="Password should be at least 8 characters(only digit and alphabets)">
+                                <f:validateRegex pattern="(^[0-9a-zA-Z]{8,}$)"/>
+                            </p:password>
                         </p:column>
                     </p:row>
                     <p:row>
@@ -107,7 +110,10 @@
                             <p:outputLabel for="Re-Password" value="Re-type Password:" />
                         </p:column> 
                         <p:column>
-                            <p:password value="#{customerManagedBean.rePassword}" required="true" inline="true" requiredMessage="Retype Password." id="Re-Password"  />
+                            <p:password value="#{customerManagedBean.rePassword}" required="true" inline="true" requiredMessage="Retype Password." id="Re-Password"  
+                                        validatorMessage="Re-Password should be at least 8 characters(only digit and alphabets)">
+                                <f:validateRegex pattern="(^[0-9a-zA-Z]{8,}$)"/>
+                                </p:password>
                         </p:column>
                     </p:row>
                     
