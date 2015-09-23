@@ -28,7 +28,7 @@ public interface QuotationSessionBeanLocal {
 
     public void createQuotationDesciption(QuotationDescription quotationDescription);
 
-    public List<Quotation> receivedQuotations();
+    public List<Quotation> receivedQuotations(String username);
 
 
 

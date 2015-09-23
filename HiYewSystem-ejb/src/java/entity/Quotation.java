@@ -38,6 +38,7 @@ public class Quotation implements Serializable {
         //customer = new Customer();
         //quotationDescription = new QuotationDescription();
         status = "Pending"; 
+        date = new Timestamp(Calendar.getInstance().getTime().getTime());
     }
     
     public Quotation(String termsOfPayment, String quotationNo, Customer customer, QuotationDescription qd, String status) {

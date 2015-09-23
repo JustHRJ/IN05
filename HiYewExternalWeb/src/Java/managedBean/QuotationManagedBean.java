@@ -56,6 +56,7 @@ public class QuotationManagedBean implements Serializable {
         newQuotation = new Quotation();
         newQuotationDesc = new QuotationDescription();
         cacheList = new ArrayList<>();
+        receivedQuotations = new ArrayList();
     }
 
     @PostConstruct
@@ -68,7 +69,7 @@ public class QuotationManagedBean implements Serializable {
         date = new SimpleDateFormat("dd/MM/yyyy").format(Calendar.getInstance().getTime());
         System.out.println(date);
 
-        receivedQuotations = new ArrayList<Quotation>(quotationSessionBean.receivedQuotations());
+        receivedQuotations = new ArrayList<Quotation>(quotationSessionBean.receivedQuotations(username));
 
     }
 

@@ -197,14 +197,18 @@
                                 <p:commandLink value="#{item.quotationNo}" update=""/>
                                
                             </p:column>
-                             <p:column headerText="Date" width="10%">
+                             <p:column headerText="Date" width="15%">
                                  <h:outputText value="#{quotationManagedBean.formatDate(item.date)}"/>
                             </p:column>
-                             <p:column headerText="Status" width="10%">
+                             <p:column headerText="Status" width="15%">
                                 <h:outputText value="#{item.status}"/>
                             </p:column>
                              <p:column headerText="Payment Terms" width="10%">
                                  <h:outputText value="#{item.termsOfPayment}"/>
+                            </p:column>
+                            <p:column width="12%">
+                                <p:commandLink value="Approve" style="color:green"/> &nbsp;|&nbsp;
+                                <p:commandLink value="Reject" style="color: red"/>
                             </p:column>
                         </p:dataTable>
 

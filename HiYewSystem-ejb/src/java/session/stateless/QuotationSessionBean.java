@@ -68,15 +68,16 @@ public class QuotationSessionBean implements QuotationSessionBeanLocal {
     }
     
     @Override
-    public List<Quotation> receivedQuotations(){
+    public List<Quotation> receivedQuotations(String username){
         
         
-        Query query = em.createQuery("Select q FROM Quotation AS q where q.status='Processed' and q.date >= :thirtyDaysAgo ");
+        Query query = em.createQuery("Select q FROM Quotation AS q where q.status='Processed' and q.date >= :thirtyDaysAgo AND q.customer.userName=:username ");
         
         Date now = addDays(new Date(), -30);
         Timestamp thirtyDaysAgo = new Timestamp(now.getTime());
         
         query.setParameter("thirtyDaysAgo", thirtyDaysAgo);
+        query.setParameter("username", username);
         
         List <Quotation> quotations = query.getResultList();
         return quotations;
