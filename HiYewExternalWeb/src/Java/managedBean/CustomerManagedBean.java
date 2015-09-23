@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package managedBean;
 
 import entity.Customer;
@@ -13,13 +8,8 @@ import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
 import javax.inject.Named;
-import org.primefaces.context.RequestContext;
 import session.stateless.CustomerSessionBeanLocal;
 
-/**
- *
- * @author: Jit Cheong
- */
 @Named(value = "customerManagedBean")
 @ViewScoped
 public class CustomerManagedBean implements Serializable {
@@ -63,6 +53,8 @@ public class CustomerManagedBean implements Serializable {
 
         if (customer == null) {
             if (newCustomer.getPw().equals(rePassword)) {
+                //encrypt password
+                newCustomer.setPw(customerSessionBean.encryptPassword(newCustomer.getPw()));
                 customerSessionBean.createCustomer(newCustomer);
                 newCustomer = new Customer(); //To reinitialise and create new customer
                 return "csLoginPage?faces-redirect=true";
@@ -91,29 +83,28 @@ public class CustomerManagedBean implements Serializable {
     }
 
     public void changePassword() {
-        
+
         if (changePasswordInput.equals("") || newPassword.equals("") || rePassword.equals("")) {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Changing Password requires all password fields to be filled!"));
         } else {
-            if (customer.getPw().equals(changePasswordInput)) {
-                if (newPassword.equals(customer.getPw())) {
+            String encryptedPassword = customer.getPw();
+            if (encryptedPassword.equals(customerSessionBean.encryptPassword(changePasswordInput))) {
+                if (newPassword.equals(encryptedPassword)) {
                     FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("New Password is same as current password!"));
                 } else {
                     if (newPassword.equals(rePassword)) {
-                        customer.setPw(newPassword);
+                        customer.setPw(customerSessionBean.encryptPassword(newPassword));
                         handleSave();
                         FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Password changed successfully!"));
-                         
+
                     } else {
                         FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Password Mismatch!"));
                     }
                 }
-
             } else {
                 FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Invalid password!"));
             }
         }
-        
     }
 
     /**
@@ -200,5 +191,4 @@ public class CustomerManagedBean implements Serializable {
     public void setNewPassword(String newPassword) {
         this.newPassword = newPassword;
     }
-
 }
