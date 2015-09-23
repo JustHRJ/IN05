@@ -105,6 +105,15 @@ public class HiYewManagedBean {
         }
     }
 
+    public void deleteTrainingSchedule() {
+        boolean check = hiYewSystemBean.deleteTraining(trainingCode);
+        if (!check) {
+            FacesMessage msg = new FacesMessage("Failed to Delete", "Please check for correct scheduleCode");
+            FacesContext.getCurrentInstance().addMessage(null, msg);
+
+        }
+    }
+
     public void deleteMachineMaintainence() throws IOException {
         boolean check = hiYewSystemBean.deleteMachineMaintainence(machineMaintainenceID);
         if (check) {
@@ -135,7 +144,7 @@ public class HiYewManagedBean {
         if (trainingStartDate.after(trainingEndDate)) {
             check = false;
         } else {
-            check = hiYewSystemBean.addTrainngSchedule(trainingName, trainingStartDate, trainingEndDate, trainingDescription, trainingSize, trainingCode);
+            check = hiYewSystemBean.addTrainingSchedule(trainingName, trainingStartDate, trainingEndDate, trainingDescription, trainingSize, trainingCode);
         }
         if (check) {
             FacesMessage msg = new FacesMessage("Added", trainingCode);

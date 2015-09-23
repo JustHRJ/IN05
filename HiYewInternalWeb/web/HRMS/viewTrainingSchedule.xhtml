@@ -68,7 +68,10 @@
             <p:outputLabel value = "Please enter employeeName" />
             <p:inputText value ="#{hiYewManagedBeanView.employeeName}"/>
             <p:commandButton value ="Delete Employee from training" action = "#{hiYewManagedBeanView.deleteTrainingEmployee()}" update ="data2"/>
-
+            <br/>
+            <p:outputLabel value ="Please enter Training Code"/>
+            <p:inputText value ="#{hiYewManagedBean.trainingCode}"/>
+            <p:commandButton value ="Delete Training schedule" action ="#{hiYewManagedBean. deleteTrainingSchedule()}" update ="data1"/>
 
         </h:form>
 

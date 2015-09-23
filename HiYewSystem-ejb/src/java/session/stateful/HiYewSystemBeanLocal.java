@@ -130,7 +130,7 @@ public interface HiYewSystemBeanLocal {
 
     public boolean updateMachineSchedule(MachineMaintainenceEntity mSchedule, Date scheduleDate, String mScheduleHour, String mServiceProvider, String mServiceContact);
 
-    public boolean addTrainngSchedule(String trainingName, Date trainingStart, Date trainingEnd, String trainingDescription, int size, String trainingCode);
+    public boolean addTrainingSchedule(String trainingName, Date trainingStart, Date trainingEnd, String trainingDescription, int size, String trainingCode);
 
     public List<TrainingScheduleEntity> trainingSchedueList();
 
@@ -143,6 +143,8 @@ public interface HiYewSystemBeanLocal {
     public boolean deleteMachineMaintainence(Long id);
 
     public List<PayrollEntity> getPayroll(String employeeName);
+
+    public boolean deleteTraining(String trainingCode);
 
     
 }

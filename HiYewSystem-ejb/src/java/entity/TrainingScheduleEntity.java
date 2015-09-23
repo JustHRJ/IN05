@@ -14,6 +14,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 
 /**
@@ -35,7 +36,7 @@ public class TrainingScheduleEntity implements Serializable {
     private Collection<EmployeeEntity> employeeRecords = new ArrayList<EmployeeEntity>();
     
     
-    @OneToMany(cascade = {CascadeType.ALL})
+    @ManyToMany(cascade = {CascadeType.ALL})
     public Collection<EmployeeEntity> getEmployeeRecords(){
         return employeeRecords;
     }

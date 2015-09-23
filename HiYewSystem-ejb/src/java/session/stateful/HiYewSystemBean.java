@@ -96,6 +96,19 @@ public class HiYewSystemBean implements HiYewSystemBeanLocal {
         return false;
     }
 
+    public boolean deleteTraining(String trainingCode) {
+        TrainingScheduleEntity t = new TrainingScheduleEntity();
+        try {
+            Query q = em.createQuery("select t from TrainingScheduleEntity t where t.trainingCode =:id");
+            q.setParameter("id", trainingCode);
+            t = (TrainingScheduleEntity) q.getSingleResult();
+            em.remove(t);
+            return true;
+        } catch (Exception ex) {
+            return false;
+        }
+    }
+
     public boolean deleteTrainingEmployee(TrainingScheduleEntity training, String employee) {
         if (training == null || employee == null) {
             return false;
@@ -127,13 +140,34 @@ public class HiYewSystemBean implements HiYewSystemBeanLocal {
             e = (EmployeeEntity) q.getSingleResult();
             if (schedule.getEmployeeRecords().contains(e)) {
                 return false;
+            } else {
+                if (schedule.getTrianingSize() - schedule.getEmployeeRecords().size() == 0) {
+                    return false;
+                }
+                q = em.createQuery("select c from TrainingScheduleEntity c");
+                for (Object o : q.getResultList()) {
+                    t = (TrainingScheduleEntity) o;
+                    if (!t.getTrainingCode().equals(schedule.getTrainingCode())) {
+                        for (Object w : t.getEmployeeRecords()) {
+                            EmployeeEntity ee = (EmployeeEntity) w;
+                            if (ee.getEmployee_name().equals(name)) {
+                                if (schedule.getTrainingStartDate().after(t.getTrainingStartDate()) && schedule.getTrainingStartDate().before(t.getTrainingEndDate())) {
+                                    return false;
+                                } else if (schedule.getTrainingEndDate().after(t.getTrainingStartDate()) && schedule.getTrainingEndDate().before(t.getTrainingEndDate())) {
+                                    return false;
+                                } else if (schedule.getTrainingStartDate().before(t.getTrainingEndDate()) && schedule.getTrainingEndDate().after(t.getTrainingEndDate())) {
+                                    return false;
+                                } else if (schedule.getTrainingStartDate().equals(t.getTrainingStartDate()) || schedule.getTrainingStartDate().equals(t.getTrainingEndDate()) || schedule.getTrainingEndDate().equals(t.getTrainingStartDate()) || schedule.getTrainingEndDate().equals(t.getTrainingEndDate())) {
+                                    return false;
+                                }
+                            }
+                        }
+                    }
+                }
+                schedule.getEmployeeRecords().add(e);
+                em.merge(schedule);
+                return true;
             }
-            if (schedule.getTrianingSize() - schedule.getEmployeeRecords().size() == 0) {
-                return false;
-            }
-            schedule.getEmployeeRecords().add(e);
-            em.merge(schedule);
-            return true;
 
         } catch (Exception ex) {
             return false;
@@ -157,7 +191,7 @@ public class HiYewSystemBean implements HiYewSystemBeanLocal {
         return result;
     }
 
-    public boolean addTrainngSchedule(String trainingName, Date trainingStart, Date trainingEnd, String trainingDescription, int size, String trainingCode) {
+    public boolean addTrainingSchedule(String trainingName, Date trainingStart, Date trainingEnd, String trainingDescription, int size, String trainingCode) {
         TrainingScheduleEntity t = new TrainingScheduleEntity();
         try {
             Query q = em.createQuery("select t from TrainingScheduleEntity t where t.trainingCode = :id");
@@ -584,7 +618,7 @@ public class HiYewSystemBean implements HiYewSystemBeanLocal {
                     for (Object o : pays) {
                         PayrollEntity p = (PayrollEntity) o;
                         if (!(p.getStatus().equals("unset") || p.getStatus().equals("unissued"))) {
-                           
+
                             result.add(p);
                         }
                     }

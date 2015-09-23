@@ -10,7 +10,7 @@
     <h:body>
         <h:form>
             <h1>Employee Registration</h1>
-             <p:menubar>
+            <p:menubar>
                 <p:menuitem value ="Home" url="/index.xhtml"  />
                 <p:menuitem value ="Register employee" url ="employeeRegistration.xhtml" disabled="#{loginControlBean.checkValid()}"/>
                 <p:menuitem value ="View Employee" url ="employee_details.xhtml" />
@@ -21,7 +21,7 @@
             <p:growl id ="msgs" showDetail="true"/>
 
             <p:panel id ="panel" header="Add new Employee">
-                <p:panelGrid id = "grid" >
+                <p:panelGrid id = "grid"  >
                     <p:row>
                         <p:column>
                             <p:outputLabel for ="employee_name" style ="font-weight: bold" value ="Employee Name:  "/>
@@ -52,7 +52,7 @@
                         </p:column>
                         <p:column>
                             <p:calendar id = "cal" value = "#{hiYewManagedBean.employeePassExpiry}" mindate="#{hiYewManagedBean.getToday()}" pattern ="dd/MM/yyyy">
-                        
+
                             </p:calendar>
                         </p:column>
                         <p:column>
@@ -169,9 +169,9 @@
                             <p:outputLabel for ="employee_password" style ="font-weight: bold" value ="Employee Password:  "/>
                         </p:column>
                         <p:column>
-                            <p:inputText label ="Employee Password" id ="employee_password" value ="#{hiYewManagedBean.password}" required = "true" requiredMessage="Password too short. At least length of 7" validatorMessage="Please enter a password of more than 7 characters">
+                            <p:password  id ="employee_password" value ="#{hiYewManagedBean.password}" required = "true" requiredMessage = "Please input password" validatorMessage="Please enter a password of more than 7 characters" feedback="true" inline="true">
                                 <f:validateLength minimum="7"  />
-                            </p:inputText>
+                            </p:password>
                         </p:column>
                         <p:column>
                             <p:message for="employee_password" />
@@ -179,12 +179,24 @@
                     </p:row>
                     <p:row>
                         <p:column>
-                            <p:outputLabel value ="Enter employmentDate"/>
+                            <h:outputLabel for="pwd2" value="retype password" style = "font-weight: bold"  />      
+                        </p:column>
+                        <p:column>
+                            <p:password id="pwd2" value="#{hiYewManagedBean.password}" match ="employee_password" required="true" requiredMessage="Please retype password" validatorMessage="Please input correct matching password"/>
+                        </p:column>
+                        <p:column>
+                            <p:message for ="pwd2"/>
                         </p:column>
                     </p:row>
-                    <p:column>
-                        <p:calendar value ="#{hiYewManagedBean.employedDate}" pattern ="dd/MM/yyyy"/>
-                    </p:column>
+                    <p:row>
+                        <p:column>
+                            <p:outputLabel value ="Enter employmentDate" style = "font-weight: bold"  />
+                        </p:column>
+
+                        <p:column>
+                            <p:calendar value ="#{hiYewManagedBean.employedDate}" pattern ="dd/MM/yyyy"/>
+                        </p:column>
+                    </p:row>
                 </p:panelGrid>
                 <p:commandButton update="grid" icon="ui-icon-check" validateClient="true" style="margin-right:10px" id="btn" value="Add new Employee" action="#{hiYewManagedBean.addEmployee}" />
             </p:panel>
