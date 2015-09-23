@@ -57,18 +57,20 @@
                     </p:row>
                     <p:row>
                         <p:column>
-                            <p:outputLabel for="Address1" value="Unit Number:" />
+                            <p:outputLabel for="Address1" value="Address:" />
                             
                             <br />
                             <br />
-                            <p:outputLabel for="Address2" value="Street Name:" />
+                            <p:outputLabel for="Address2" value="" />
                             
                         </p:column> 
                         <p:column>
-                            <p:inputText placeholder="e.g. 12, #01-02" value="#{customerManagedBean.newCustomer.address1}" required="true" requiredMessage="Unit number is required." id="Address1"  />
+                            <p:inputText style="margin-top: 5px" placeholder="e.g. Beach Road" value="#{customerManagedBean.newCustomer.address1}" required="true" requiredMessage="Street name is required." id="Address1"  />
                             <br />
-                            <p:inputText style="margin-top: 5px" placeholder="e.g. Beach Road" value="#{customerManagedBean.newCustomer.address2}" required="true" requiredMessage="Street name is required." id="Address2"  />
-                        </p:column>
+                            
+                            <p:inputText placeholder="e.g. 12, #01-02" value="#{customerManagedBean.newCustomer.address2}" id="Address2"  />
+                            
+                            </p:column>
                     </p:row>
                     
                     <p:row>

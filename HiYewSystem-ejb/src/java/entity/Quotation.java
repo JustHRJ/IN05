@@ -6,7 +6,7 @@
 package entity;
 
 import java.io.Serializable;
-import java.text.SimpleDateFormat;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -24,7 +24,7 @@ public class Quotation implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
     private String quotationNo;
-    private String date;
+    private Timestamp date;
     private String termsOfPayment = "30"; //30, 60, 90 days
     private String status; //Processed, Pending, Accepted, Rejected
     //private QuotationDescription quotationDescription;
@@ -40,9 +40,9 @@ public class Quotation implements Serializable {
         status = "Pending"; 
     }
     
-    public Quotation(String date, String termsOfPayment, String quotationNo, Customer customer, QuotationDescription qd, String status) {
+    public Quotation(String termsOfPayment, String quotationNo, Customer customer, QuotationDescription qd, String status) {
         
-        this.date = date;
+        this.date = new Timestamp(Calendar.getInstance().getTime().getTime());
         this.termsOfPayment = termsOfPayment;
         this.quotationNo = quotationNo;
         this.customer = customer;
@@ -67,14 +67,14 @@ public class Quotation implements Serializable {
     /**
      * @return the date
      */
-    public String getDate() {
+    public Timestamp getDate() {
         return date;
     }
 
     /**
      * @param date the date to set
      */
-    public void setDate(String date) {
+    public void setDate(Timestamp date) {
         this.date = date;
     }
 
