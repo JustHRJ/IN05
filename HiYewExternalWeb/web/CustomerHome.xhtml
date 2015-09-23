@@ -138,12 +138,12 @@
                                 <h:outputLabel for="Description" value="Item Desc: " />
                                 <p:inputTextarea id="Description" autoResize="false" placeholder="Include metal code/name and welding instructions" value="#{quotationManagedBean.newQuotationDesc.itemDesc}" rows="6" cols="68" />
                                 <h:outputLabel for="Quantity" value="Qty: " />
-                                <p:inputText id="Quantity" value="#{quotationManagedBean.newQuotationDesc.qty}" maxlength="5" converterMessage="Please enter digits only.">
+                                <p:inputText id="Quantity" value="#{quotationManagedBean.newQuotationDesc.qty}" maxlength="5" converterMessage="Quantity must be a number consisting of one or more digits.">
                                     <f:validateLongRange minimum="1" />
                                 </p:inputText>
 
-                                <p:commandButton value="Add" actionListener="#{quotationManagedBean.addToCacheList}" update=":mainForm:msg mydata weldPanel" icon="ui-icon-check"  style="margin:0;height:60px">
-                                    <p:ajax update="weldPanel" resetValues="true"/>
+                                <p:commandButton value="Add" actionListener="#{quotationManagedBean.addToCacheList}" update=":mainForm:msgs mydata weldPanel" icon="ui-icon-check"  style="margin:0;height:60px">
+                                    
                                 </p:commandButton>
                             </p:panelGrid>
 
@@ -190,10 +190,12 @@
                         <!-- <p:panel>Current(use data table with buttons and pop up for PO) and expired...</p:panel>  -->
                         
                         <h:outputLabel value="We are glad to quote you the following:" /><br /><br />
-                        <p:dataTable value="#{quotationManagedBean.receivedQuotations}" var="item" id="rcvQuote" editable="true">
+                        <p:dataTable value="#{quotationManagedBean.receivedQuotations}" var="item" paginator="true" rows="5" id="rcvQuote" editable="true">
 
                             <p:column headerText="Quotation No" width="10%">
-                                <h:outputText value="#{item.quotationNo}"/>
+                                
+                                <p:commandLink value="#{item.quotationNo}" update=""/>
+                               
                             </p:column>
                              <p:column headerText="Date" width="10%">
                                  <h:outputText value="#{quotationManagedBean.formatDate(item.date)}"/>
