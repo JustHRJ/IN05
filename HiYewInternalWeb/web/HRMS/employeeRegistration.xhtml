@@ -169,7 +169,7 @@
                             <p:outputLabel for ="employee_password" style ="font-weight: bold" value ="Employee Password:  "/>
                         </p:column>
                         <p:column>
-                            <p:password  id ="employee_password" value ="#{hiYewManagedBean.password}" required = "true" requiredMessage = "Please input password" validatorMessage="Please enter a password of more than 7 characters" feedback="true" inline="true">
+                            <p:password  match = "pwd2" id ="employee_password" value ="#{hiYewManagedBean.password}" required = "true" requiredMessage = "Please input password" validatorMessage="Enter password of at least length 7 / mismatch password" feedback="true" inline="true">
                                 <f:validateLength minimum="7"  />
                             </p:password>
                         </p:column>
@@ -182,7 +182,7 @@
                             <h:outputLabel for="pwd2" value="retype password" style = "font-weight: bold"  />      
                         </p:column>
                         <p:column>
-                            <p:password id="pwd2" value="#{hiYewManagedBean.password}" match ="employee_password" required="true" requiredMessage="Please retype password" validatorMessage="Please input correct matching password"/>
+                            <p:password id="pwd2" value="#{hiYewManagedBean.password}" required="true" requiredMessage="Please retype password" />
                         </p:column>
                         <p:column>
                             <p:message for ="pwd2"/>
@@ -194,7 +194,7 @@
                         </p:column>
 
                         <p:column>
-                            <p:calendar value ="#{hiYewManagedBean.employedDate}" pattern ="dd/MM/yyyy"/>
+                            <p:calendar value ="#{hiYewManagedBean.employedDate}" pattern ="dd/MM/yyyy" required ="true" requiredMessage="Please enter employed date" />
                         </p:column>
                     </p:row>
                 </p:panelGrid>
