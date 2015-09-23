@@ -43,13 +43,13 @@
                             <h:outputLabel for="Address1" value="Address:" />
                             <p:inplace id="Address1" editor="true">
                                 <p:ajax  event="save" listener="#{customerManagedBean.handleSave}" update=":mainForm:msgs"/>
-                                <p:inputText value="#{customerManagedBean.customer.address1}" required="true" requiredMessage="Unit number is required." label="text" />
+                                <p:inputText value="#{customerManagedBean.customer.address1}" required="true" requiredMessage="Sreet name is required." label="text" />
                             </p:inplace>
 
                             <h:outputLabel for="Address2" value="" />
                             <p:inplace id="Address2" editor="true">
                                 <p:ajax  event="save" listener="#{customerManagedBean.handleSave}" update=":mainForm:msgs"/>
-                                <p:inputText value="#{customerManagedBean.customer.address2}" required="true" requiredMessage="Sreet name is required." label="text" />
+                                <p:inputText value="#{customerManagedBean.customer.address2}" required="true" requiredMessage="Unit number is required." label="text" />
                             </p:inplace>
 
                             <h:outputLabel for="PostalCode" value="Postal Code:" />
@@ -142,7 +142,7 @@
                                     <f:validateLongRange minimum="1" />
                                 </p:inputText>
 
-                                <p:commandButton value="Add" actionListener="#{quotationManagedBean.addToCacheList}" update=":mainForm:msg mydata" icon="ui-icon-check"  style="margin:0;height:60px">
+                                <p:commandButton value="Add" actionListener="#{quotationManagedBean.addToCacheList}" update=":mainForm:msg mydata weldPanel" icon="ui-icon-check"  style="margin:0;height:60px">
                                     <p:ajax update="weldPanel" resetValues="true"/>
                                 </p:commandButton>
                             </p:panelGrid>
@@ -176,7 +176,7 @@
                                 </p:column>
                             </p:dataTable>
                             <br />
-                            <p:commandButton value="Submit my request" actionListener="#{quotationManagedBean.createQuotation}" update=":mainForm:msg mydata" icon="ui-icon-check">
+                            <p:commandButton value="Submit my request" actionListener="#{quotationManagedBean.createQuotation}" update=":mainForm:msg mydata weldPanel" icon="ui-icon-check">
                                 <p:ajax update="weldPanel" resetValues="true"/>
                             </p:commandButton>
                             <br />
@@ -187,12 +187,22 @@
                     </p:tab>
                     <p:tab title="Quotations">
 
-                        <p:panel>Current(use data table with buttons and pop up for PO) and expired...</p:panel>
-                        <h:outputLabel value="We are glad to quote you the following:" /><br />
-                        <p:dataTable value="#{quotationManagedBean.cacheList}" var="item" id="mydata" editable="true">
+                        <!-- <p:panel>Current(use data table with buttons and pop up for PO) and expired...</p:panel>  -->
+                        
+                        <h:outputLabel value="We are glad to quote you the following:" /><br /><br />
+                        <p:dataTable value="#{quotationManagedBean.receivedQuotations}" var="item" id="rcvQuote" editable="true">
 
-                            <p:column headerText="ID" width="10%">
-                                <h:outputText value="#{item.quotationDescNo}"/>
+                            <p:column headerText="Quotation No" width="10%">
+                                <h:outputText value="#{item.quotationNo}"/>
+                            </p:column>
+                             <p:column headerText="Date" width="10%">
+                                 <h:outputText value="#{quotationManagedBean.formatDate(item.date)}"/>
+                            </p:column>
+                             <p:column headerText="Status" width="10%">
+                                <h:outputText value="#{item.status}"/>
+                            </p:column>
+                             <p:column headerText="Payment Terms" width="10%">
+                                 <h:outputText value="#{item.termsOfPayment}"/>
                             </p:column>
                         </p:dataTable>
 
