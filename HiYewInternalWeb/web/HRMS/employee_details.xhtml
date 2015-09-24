@@ -49,6 +49,12 @@
                         <f:facet name ="input"><p:inputText id = "employeeContact" maxlength="8" value ="#{hiYewManagedBean.employeeContact}" validator="#{registrationValidator.validateNumeric}" validatorMessage="Enter valid number"/></f:facet>
                     </p:cellEditor>
                 </p:column>
+                <p:column headerText="Email Address" >
+                    <p:cellEditor>
+                        <f:facet name ="output"><p:outputLabel value ="#{im.emailAddress}"/> </f:facet>
+                        <f:facet name ="input"><p:inputText value = "#{hiYewManagedBean.employeeEmail}" validatorMessage="Please enter proper format" >   <f:validateRegex pattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$" /></p:inputText>   </f:facet>
+                    </p:cellEditor>
+                </p:column>
                 <p:column headerText = "Employee Pass Number">
                     <h:outputText value="#{im.employee_passNumber}" style="text-align: center" />
                 </p:column>

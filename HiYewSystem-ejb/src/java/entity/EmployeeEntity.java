@@ -46,6 +46,7 @@ public class EmployeeEntity implements Serializable {
     private String unit;
     private String optional;
     private String account_status;
+    private String emailAddress;
 
     public EmployeeEntity() {
 
@@ -326,6 +327,20 @@ public class EmployeeEntity implements Serializable {
      */
     public void setAccount_status(String account_status) {
         this.account_status = account_status;
+    }
+
+    /**
+     * @return the emailAddress
+     */
+    public String getEmailAddress() {
+        return emailAddress;
+    }
+
+    /**
+     * @param emailAddress the emailAddress to set
+     */
+    public void setEmailAddress(String emailAddress) {
+        this.emailAddress = emailAddress;
     }
 
 }

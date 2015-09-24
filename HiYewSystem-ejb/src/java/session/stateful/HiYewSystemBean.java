@@ -723,7 +723,7 @@ public class HiYewSystemBean implements HiYewSystemBeanLocal {
         }
     }
 
-    public boolean addEmployee(String employee, String employee_passNumber, String employee_address, int number_of_leave, String position, String username, String password, Timestamp expiry, String contact, String addressPostal, String unit, String optional, double employeePay, Date employedDate) {
+    public boolean addEmployee(String employee, String employee_passNumber, String employee_address, int number_of_leave, String position, String username, String password, Timestamp expiry, String contact, String addressPostal, String unit, String optional, double employeePay, Date employedDate, String email) {
         EmployeeEntity xin = new EmployeeEntity();
         try {
             Query q = em.createQuery("Select xin from EmployeeEntity xin where xin.employee_name = :id");
@@ -752,6 +752,7 @@ public class HiYewSystemBean implements HiYewSystemBeanLocal {
                 xin.setPassword(passwordHashed);
                 xin.setEmployee_passExpiry(expiry);
                 xin.setEmployee_contact(contact);
+                xin.setEmailAddress(email);
                 xin.setAccount_status("firstTime");
                 xin.setEmployee_basic(employeePay);
                 Timestamp time = new Timestamp(employedDate.getTime());
@@ -890,7 +891,7 @@ public class HiYewSystemBean implements HiYewSystemBeanLocal {
         }
     }
 
-    public boolean updateEmployee(EmployeeEntity employee, String employeeA, String employeeUnit, String employeeOptional, String address_postal, String contact, Date pass, String position, double pay, int leave) {
+    public boolean updateEmployee(EmployeeEntity employee, String employeeA, String employeeUnit, String employeeOptional, String address_postal, String contact, Date pass, String position, double pay, int leave, String email) {
         boolean check = false;
         if (!(employeeA.isEmpty())) {
             employee.setEmployee_address(employeeA);
@@ -905,6 +906,11 @@ public class HiYewSystemBean implements HiYewSystemBeanLocal {
         if (!(address_postal.isEmpty())) {
             employee.setAddressPostal(address_postal);
         }
+        if(!(email.isEmpty())){
+            employee.setEmailAddress(email);
+            check = true;
+        }
+        
         if (!(contact.isEmpty())) {
             employee.setEmployee_contact(contact);
         }
@@ -947,25 +953,36 @@ public class HiYewSystemBean implements HiYewSystemBeanLocal {
         return false;
     }
 
-    public boolean updateEmployee(EmployeeEntity employee, String employeeA, String employeeUnit, String employeeOptional, String address_postal, String contact) {
+    public boolean updateEmployee(EmployeeEntity employee, String employeeA, String employeeUnit, String employeeOptional, String address_postal, String contact, String email) {
         boolean check = false;
         if (!(employeeA.isEmpty())) {
             employee.setEmployee_address(employeeA);
+            check = true;
         }
         if (!(employeeUnit.isEmpty())) {
             employee.setUnit(employeeUnit);
+             check = true;
         }
         if (!(employeeOptional.isEmpty())) {
             employee.setOptional(employeeOptional);
+             check = true;
         }
         if (!(address_postal.isEmpty())) {
             employee.setAddressPostal(address_postal);
+             check = true;
         }
+        
+        if(!(email.isEmpty())){
+            employee.setEmailAddress(email);
+             check = true;
+        }
+        
         if (!(contact.isEmpty())) {
             employee.setEmployee_contact(contact);
+             check = true;
         }
 
-        if ((!(contact.isEmpty())) || (!(employeeA.isEmpty())) || !(employeeOptional.isEmpty()) || !(address_postal.isEmpty()) || !(employeeUnit.isEmpty())) {
+        if (check) {
             em.merge(employee);
             return true;
         }

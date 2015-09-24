@@ -45,6 +45,7 @@ public class HiYewManagedBean {
     private String employeeAddress = "";
     private String employeeAddressUnit = "";
     private String employeeAdressOptional = "";
+    private String employeeEmail = "";
     private String employeePassNumber = "";
     private int employeeLeave = 0;
     private Long employeeId;
@@ -194,7 +195,7 @@ public class HiYewManagedBean {
         } else {
             expiry = new Timestamp(employeePassExpiry.getTime());
         }
-        hiYewSystemBean.addEmployee(employeeName, employeePassNumber, employeeAddress, employeeLeave, employeePosition, username, password, expiry, employeeContact, address_postal, employeeAddressUnit, employeeAdressOptional, employeePay, employedDate);
+        hiYewSystemBean.addEmployee(employeeName, employeePassNumber, employeeAddress, employeeLeave, employeePosition, username, password, expiry, employeeContact, address_postal, employeeAddressUnit, employeeAdressOptional, employeePay, employedDate, employeeEmail);
         return "login";
     }
 
@@ -262,7 +263,7 @@ public class HiYewManagedBean {
         } else {
             expiry = new Timestamp(employeePassExpiry.getTime());
         }
-        boolean result = hiYewSystemBean.addEmployee(employeeName, employeePassNumber, employeeAddress, employeeLeave, employeePosition, username, password, expiry, employeeContact, address_postal, employeeAddressUnit, employeeAdressOptional, employeePay, employedDate);
+        boolean result = hiYewSystemBean.addEmployee(employeeName, employeePassNumber, employeeAddress, employeeLeave, employeePosition, username, password, expiry, employeeContact, address_postal, employeeAddressUnit, employeeAdressOptional, employeePay, employedDate, employeeEmail);
         if (result) {
             FacesContext facesCtx = FacesContext.getCurrentInstance();
             ExternalContext externalContext = facesCtx.getExternalContext();
@@ -376,10 +377,10 @@ public class HiYewManagedBean {
         System.out.println(employeePay);
         System.out.println(employeeLeave);
         if (employeePassExpiry == null && employeePosition.isEmpty() && employeePay == 0 && employeeLeave == 0) {
-            check = hiYewSystemBean.updateEmployee((EmployeeEntity) event.getObject(), employeeAddress, employeeAddressUnit, employeeAdressOptional, address_postal, employeeContact);
+            check = hiYewSystemBean.updateEmployee((EmployeeEntity) event.getObject(), employeeAddress, employeeAddressUnit, employeeAdressOptional, address_postal, employeeContact, employeeEmail);
         } else {
             System.out.println("here");
-            check = hiYewSystemBean.updateEmployee((EmployeeEntity) event.getObject(), employeeAddress, employeeAddressUnit, employeeAdressOptional, address_postal, employeeContact, employeePassExpiry, employeePosition, employeePay, employeeLeave);
+            check = hiYewSystemBean.updateEmployee((EmployeeEntity) event.getObject(), employeeAddress, employeeAddressUnit, employeeAdressOptional, address_postal, employeeContact, employeePassExpiry, employeePosition, employeePay, employeeLeave, employeeEmail);
             System.out.println(check);
         }
         if (check) {
@@ -1029,6 +1030,20 @@ public class HiYewManagedBean {
      */
     public void setOldPassword(String oldPassword) {
         this.oldPassword = oldPassword;
+    }
+
+    /**
+     * @return the employeeEmail
+     */
+    public String getEmployeeEmail() {
+        return employeeEmail;
+    }
+
+    /**
+     * @param employeeEmail the employeeEmail to set
+     */
+    public void setEmployeeEmail(String employeeEmail) {
+        this.employeeEmail = employeeEmail;
     }
 
     /**
