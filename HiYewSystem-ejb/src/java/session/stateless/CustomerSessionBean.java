@@ -9,6 +9,7 @@ import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
+import java.security.SecureRandom;
 
 @Stateless
 public class CustomerSessionBean implements CustomerSessionBeanLocal {
@@ -54,7 +55,7 @@ public class CustomerSessionBean implements CustomerSessionBeanLocal {
         }
     }
 
-    //decryption of password dont happen as admin should not be able to view
+    // decryption of password dont happen as admin should not be able to view
     @Override
     public List<Customer> getAllCustomer() {
         Query query = em.createQuery("SELECT c FROM Customer c");
@@ -72,5 +73,16 @@ public class CustomerSessionBean implements CustomerSessionBeanLocal {
         c.setAddress2(c1.getAddress2());
         c.setEmail(c1.getEmail());
         c.setPostalCode(c1.getPostalCode());
+    }
+
+    @Override
+    public String resetCustomerPassword(String username) {
+        Customer c = em.find(Customer.class, username);
+        SecureRandom random = new SecureRandom();
+        String newPassword = new BigInteger(50, random).toString(32);
+        c.setPw(encryptPassword(newPassword));
+        em.persist(c);
+        em.flush();
+        return c.getName() + ":" + newPassword;
     }
 }

@@ -1,0 +1,171 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+    <h:head>
+        <title>Singapore Welding | SgWeld.com | Welding Service in Singapore | Welding</title>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="description" content="" />
+        <meta name="keywords" content="admin, bootstrap,admin template, bootstrap admin, simple, awesome" />
+        <meta name="author" content="" />
+
+        <!-- BOOTSTRAP -->
+        <link href="assets/css/bootstrap.min.css" rel="stylesheet" />
+
+        <!-- LANCENG CSS -->
+        <link href="assets/css/style.css" rel="stylesheet" />
+        <link href="assets/css/style-responsive.css" rel="stylesheet" />
+
+        <!-- VENDOR -->
+        <link href="assets/css/animate.css" rel="stylesheet" />
+        <link href="assets/third/font-awesome/css/font-awesome.min.css" rel="stylesheet" />
+        <link href="assets/third/weather-icon/css/weather-icons.min.css" rel="stylesheet" />
+        <link href="assets/third/morris/morris.css" rel="stylesheet" />
+        <link href="assets/third/nifty-modal/css/component.css" rel="stylesheet" />
+        <link href="assets/third/sortable/sortable-theme-bootstrap.css" rel="stylesheet" /> 
+        <link href="assets/third/icheck/skins/minimal/grey.css" rel="stylesheet" /> 
+        <link href="assets/third/select/bootstrap-select.min.css" rel="stylesheet" /> 
+        <link href="assets/third/summernote/summernote.css" rel="stylesheet" />
+        <link href="assets/third/magnific-popup/magnific-popup.css" rel="stylesheet" /> 
+        <link href="assets/third/datepicker/css/datepicker.css" rel="stylesheet" />
+        <link rel="shortcut icon" href="http://www.sgweld.com/favicon.ico" type="image/x-icon" />
+    </h:head>
+    <h:body class="tooltips full-content">
+        <!-- BEGIN PAGE -->
+        <div class="container">
+            <!-- Begin Login Page -->
+            <div class="full-content-center animated fadeInDownBig">
+                <a href=""><img src="images/logo4.jpg" class="logo-login img-circle" alt=""></img></a>
+                <div class="login-wrap">
+                    <div class="box-info">
+                        <h2 class="text-center"><strong>Login</strong> form</h2>
+                        <h:form id="mainForm">
+                            <p:growl id="msgs" showDetail="false" />
+                            <h:outputText value="#{loginMessage}" style="font-weight: bold; color: red; margin-bottom: 100%" />
+                            <p style="margin-bottom: 5%"></p>
+                            <div class="form-group">
+                                I am a:&nbsp;&nbsp;
+                                <p:selectOneMenu style="width: 315px" styleClass="form-control selectpicker" value="#{LoginManagedBean.user}" >
+                                    <f:selectItems class="form-control selectpicker" value="#{LoginManagedBean.users}" />
+                                </p:selectOneMenu>
+                            </div>
+                            <div class="form-group login-input">
+                                <i class="fa fa-sign-in overlay"></i>
+                                <p:inputText class="form-control text-input" placeholder="Username" value="#{LoginManagedBean.username}" required="true" requiredMessage="Username is required." id="Username"/>
+                            </div>
+                            <div class="form-group login-input">
+                                <i class="fa fa-key overlay"></i>
+                                <p:password class="form-control text-input" placeholder="Password" value="#{LoginManagedBean.password}"  required="true" requiredMessage="Password is required." id="Password"/>
+                            </div>
+                            <div class="checkbox">
+                                <label>
+                                    <input type="checkbox" />&nbsp;&nbsp;Remember me
+                                </label>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <p:commandButton style="border: none; font-family: 'Open Sans';" styleClass="btn btn-success btn-block" value="Login" action="#{LoginManagedBean.login()}" update="msgs" />
+                                </div>
+                                <div class="col-sm-6">
+                                    <a class="md-trigger" data-modal="logout-modal" style="color: #333; text-decoration: none;"><p style="padding-top: 7px; font-family: 'Open Sans'; height: 35px" class="btn btn-default btn-block" >Register</p></a>
+                                </div>
+                            </div>
+                        </h:form>
+                    </div>
+                    <p class="text-center"><a href="forgot-password.xhtml"><i class="fa fa-lock"> </i>Forgot password?</a></p>
+                </div>
+            </div>
+            <!-- End Login Page -->
+
+            <!--
+            ============================================================================
+            MODAL DIALOG EXAMPLE
+            You can change transition style, just view element page
+            ============================================================================
+            -->
+
+            <!-- Modal Logout Primary -->
+            <div class="md-modal md-fall" id="logout-modal">
+                <div class="md-content">
+                    <br />
+                    <h3><strong>Register</strong> new account</h3>
+                    <div>
+                        <p class="text-center">Please select one:</p>
+                        <p class="text-center">
+                            <a style="padding-top: 7px; font-family: 'Open Sans'; height: 35px" href="register-customer.xhtml" class="btn btn-default btn-block">Register as <strong>Customer</strong></a>
+                            <a style="padding-top: 7px; font-family: 'Open Sans'; height: 35px" href="register-supplier.xhtml" class="btn btn-default btn-block">Register as <strong>Supplier</strong></a>
+                        </p>
+                    </div>
+                </div>
+            </div><!-- End .md-modal -->
+            <!--
+            ============================================================================
+            END MODAL DIALOG EXAMPLE
+            ============================================================================
+            -->
+
+            <!--
+            MODAL OVERLAY
+            Always place this div at the end of the page content
+            -->
+            <div class="md-overlay"></div>
+
+        </div><!-- End div .container -->
+        <!-- END PAGE -->
+
+        <!--
+        ================================================
+        JAVASCRIPT
+        ================================================
+        -->
+        <!-- Basic Javascripts (Jquery and bootstrap) -->
+        <!--        <script src="assets/js/jquery.js"></script>-->
+        <script src="assets/js/bootstrap.min.js"></script>
+
+        <!-- VENDOR -->
+
+        <!-- Slimscroll js -->
+        <script src="assets/third/slimscroll/jquery.slimscroll.min.js"></script>
+
+        <!-- Morris js -->
+        <script src="http://cdnjs.cloudflare.com/ajax/libs/raphael/2.1.0/raphael-min.js"></script>
+        <script src="assets/third/morris/morris.js"></script>
+
+        <!-- Nifty modals js -->
+        <script src="assets/third/nifty-modal/js/classie.js"></script>
+        <script src="assets/third/nifty-modal/js/modalEffects.js"></script>
+
+        <!-- Sortable js -->
+        <script src="assets/third/sortable/sortable.min.js"></script>
+
+        <!-- Bootstrao selectpicker js -->
+        <script src="assets/third/select/bootstrap-select.min.js"></script>
+
+        <!-- Summernote js -->
+        <script src="assets/third/summernote/summernote.js"></script>
+
+        <!-- Magnific popup js -->
+        <script src="assets/third/magnific-popup/jquery.magnific-popup.min.js"></script> 
+
+        <!-- Bootstrap file input js -->
+        <script src="assets/third/input/bootstrap.file-input.js"></script>
+
+        <!-- Bootstrao datepicker js -->
+        <script src="assets/third/datepicker/js/bootstrap-datepicker.js"></script>
+
+        <!-- Icheck js -->
+        <script src="assets/third/icheck/icheck.min.js"></script>
+
+        <!-- Form wizard js -->
+        <script src="assets/third/wizard/jquery.snippet.min.js"></script>
+        <script src="assets/third/wizard/jquery.easyWizard.js"></script>
+        <script src="assets/third/wizard/scripts.js"></script>
+
+        <!-- LANCENG TEMPLATE JAVASCRIPT -->
+        <script src="assets/js/lanceng.js"></script>
+    </h:body>
+</html>

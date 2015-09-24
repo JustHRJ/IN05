@@ -16,6 +16,8 @@ public interface CustomerSessionBeanLocal {
 
     public void updateCustomer(Customer c1);
 
+    public String resetCustomerPassword(String username);
+
     public void addQuotation(String username, Quotation quotation);
 
     public String encryptPassword(String password);
