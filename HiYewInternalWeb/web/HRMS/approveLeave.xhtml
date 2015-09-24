@@ -10,19 +10,25 @@
     <h:body>
         <h:form id ="formMain">
             <h1>Leave Approval</h1>
-               <p:menubar>
-                <p:menuitem value ="Home" url ="/index.xhtml"  />
-                <p:menuitem value ="Register employee" url ="employeeRegistration.xhtml" disabled="#{loginControlBean.checkValid()}"/>
-                <p:menuitem value ="View Employee" url ="employee_details.xhtml" />
+              #{loginControlBean.checkLoginRedirect()}
+            <p:menubar>
+                <p:menuitem value ="Home" url="/index.xhtml"  />      
                 <p:menuitem value ="Apply for Leave" url ="leaveApplication.xhtml" />
                 <p:menuitem value ="Approve Leave" url ="approveLeave.xhtml" disabled="#{loginControlBean.checkValid()}"/>
                 <p:menuitem value ="Check Leave Status" url ="leaveStatus.xhtml" />
-                <p:menuitem value ="#{loginControlBean.getEAlert()}" url ="alertEmployee.xhtml" />
             </p:menubar>
             <br/>
 
             <p:panel header ="View A Employee Leave">                
-                <p:inputText id ="inputTxt1" value ="#{hiYewManagedBean.employeeName}" />
+                <p:column>
+                    <p:outputLabel value ="Select Employee"/>
+                </p:column>
+                <p:column>
+                    <p:selectOneMenu value ="#{hiYewManagedBean.employeeName}" required ="true" requiredMessage="Please add Name" id ="inputTxt1" >
+                        <f:selectItem itemValue="" itemLabel="Select One" noSelectionOption="true" />
+                        <f:selectItems value ="#{loginControlBean.validateLeaveName()}"/>
+                    </p:selectOneMenu>
+                </p:column>
                 <p:commandButton id ="btn1" value ="Search for Employee">
                     <f:ajax execute ="inputTxt1" render ="data1" />
                     <f:ajax execute ="inputTxt1" render ="data2" />
@@ -48,13 +54,14 @@
                         <p:column headerText ="Leave status" >
                             <h:outputText value ="#{im.status}" />
                         </p:column>
+
                     </p:dataTable>
                 </p:commandButton>
 
                 <br/><br/>
                 <p:commandButton value ="approve all leave" action ="#{hiYewManagedBean.approveLeaveEs}" update = ":formMain">
                     <p:inputText id ="data2" value ="#{hiYewManagedBean.employeeName}" />
-                    <p:confirm header="Confirmation" message="Approve all Employee Leave?" icon="ui-icon-alert" />
+                    <p:confirm header="Confirmation" message="Approve all leave for this Employee?" icon="ui-icon-alert" />
                     <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
                         <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
                         <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />

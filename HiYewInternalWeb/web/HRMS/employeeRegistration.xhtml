@@ -9,15 +9,12 @@
     </h:head>
     <h:body>
         <h:form>
+            #{loginControlBean.checkLoginRedirect()}
             <h1>Employee Registration</h1>
             <p:menubar>
-                <p:menuitem value ="Home" url ="/index.xhtml"  />
+                <p:menuitem value ="Home" url="/index.xhtml"  />
                 <p:menuitem value ="Register employee" url ="employeeRegistration.xhtml" disabled="#{loginControlBean.checkValid()}"/>
                 <p:menuitem value ="View Employee" url ="employee_details.xhtml" />
-                <p:menuitem value ="Apply for Leave" url ="leaveApplication.xhtml" />
-                <p:menuitem value ="Approve Leave" url ="approveLeave.xhtml" disabled="#{loginControlBean.checkValid()}"/>
-                <p:menuitem value ="Check Leave Status" url ="leaveStatus.xhtml" />
-                <p:menuitem value ="#{loginControlBean.getEAlert()}" url ="alertEmployee.xhtml" />
             </p:menubar>
 
             <br/>
@@ -25,7 +22,7 @@
             <p:growl id ="msgs" showDetail="true"/>
 
             <p:panel id ="panel" header="Add new Employee">
-                <p:panelGrid id = "grid" >
+                <p:panelGrid id = "grid"  >
                     <p:row>
                         <p:column>
                             <p:outputLabel for ="employee_name" style ="font-weight: bold" value ="Employee Name:  "/>
@@ -44,7 +41,8 @@
                             <p:outputLabel for ="employee_passNumber" style ="font-weight: bold" value ="Employee Pass Number:  "/>
                         </p:column>
                         <p:column>
-                            <p:inputText label ="Employee Number" id ="employee_passNumber" value ="#{hiYewManagedBean.employeePassNumber}" required = "true" requiredMessage="Please enter employee Number" validator = "#{registrationValidator.validateN}" validatorMessage="EmployeeNumber exist"> </p:inputText>
+                            <p:inputText label ="Employee Number" placeholder="e.g. G1234567X" id ="employee_passNumber" value ="#{hiYewManagedBean.employeePassNumber}" required = "true" requiredMessage="Please enter employee Number" validator = "#{registrationValidator.validateN}" validatorMessage="EmployeeNumber exist / EmployeeNumber format is wrong"> 
+                            </p:inputText>
                         </p:column>
                         <p:column>
                             <p:message for="employee_passNumber"/>
@@ -55,18 +53,16 @@
                             <p:outputLabel  style ="font-weight: bold" value ="Employee pass Expiry:  "/>
                         </p:column>
                         <p:column>
-                            <p:calendar id = "cal" value = "#{hiYewManagedBean.employeePassExpiry}" mindate="#{hiYewManagedBean.getToday()}" pattern ="dd/MM/yyyy">
-                        
+                            <p:calendar id = "cal" value = "#{hiYewManagedBean.employeePassExpiry}" placeholder="e.g 01/01/2015" mindate="#{hiYewManagedBean.getToday()}" pattern ="dd/MM/yyyy">
                             </p:calendar>
                         </p:column>
                         <p:column>
                             <p:message for ="cal" />
                         </p:column>
-
                     </p:row>
                     <p:row>   
                         <p:column>
-                            <p:outputLabel for ="employee_address" style ="font-weight: bold" value ="Employee Address:  "/>
+                            <p:outputLabel for ="employee_address" style ="font-weight: bold" value ="Employee Address Block:  "/>
                         </p:column>
                         <p:column>
                             <p:inputText label ="Employee Address" id ="employee_address" value ="#{hiYewManagedBean.employeeAddressUnit}" required = "true" requiredMessage="Please enter an address unit"/> <br/>
@@ -77,7 +73,7 @@
                     </p:row>
                     <p:row>   
                         <p:column>
-                            <p:outputLabel for ="employee_address" style ="font-weight: bold" value ="Employee Address:  "/>
+                            <p:outputLabel for ="employee_address" style ="font-weight: bold" value ="Employee Address Street:  "/>
                         </p:column>
                         <p:column>
                             <p:inputText label ="Employee Address" id ="employee_address1" value ="#{hiYewManagedBean.employeeAddress}" required = "true" requiredMessage="Please enter an address"/> <br/>
@@ -88,7 +84,7 @@
                     </p:row>
                     <p:row>   
                         <p:column>
-                            <p:outputLabel for ="employee_address2" style ="font-weight: bold" value ="Employee Address:  "/>
+                            <p:outputLabel for ="employee_address2" style ="font-weight: bold" value ="Employee Address Unit (Optional):  "/>
                         </p:column>
                         <p:column>
                             <p:inputText label ="Employee Address" id ="employee_address2" value ="#{hiYewManagedBean.employeeAdressOptional}"/> <br/>
@@ -97,10 +93,10 @@
 
                     <p:row>
                         <p:column>
-                            <p:outputLabel style ="font-weight: bold" value ="Address Postal Code: "/>
+                            <p:outputLabel for ="address_postal"  style ="font-weight: bold" value ="Address Postal Code: "/>
                         </p:column>
                         <p:column>
-                            <p:inputText id ="address_postal" value ="#{hiYewManagedBean.address_postal}" required ="true" requiredMessage="Please enter postal code" validator="#{registrationValidator.validateNumericA(context, component, submittedAndConvertedValue)}" validatorMessage="Please enter numeric of 6 digits">
+                            <p:inputText id ="address_postal" maxlength="6" value ="#{hiYewManagedBean.address_postal}" required ="true" requiredMessage="Please enter postal code" validator="#{registrationValidator.validateNumericA}" validatorMessage="Please enter numeric of 6 digits">
                                 <f:validateLength minimum="6" maximum="6"/>
                             </p:inputText>
                         </p:column>
@@ -113,7 +109,7 @@
                             <p:outputLabel for ="employee_contact" style ="font-weight: bold" value ="Employee Contact Number:  "/>
                         </p:column>
                         <p:column>
-                            <p:inputText  id ="employee_contact" value ="#{hiYewManagedBean.employeeContact}" required = "true" requiredMessage="Please enter a phone Number" validator="#{registrationValidator.validateNumeric}" validatorMessage="Please input a valid numeric contact no, of 8 digits"> 
+                            <p:inputText  id ="employee_contact" maxlength="8" value ="#{hiYewManagedBean.employeeContact}" required = "true" requiredMessage="Please enter a phone Number" validator="#{registrationValidator.validateNumeric}" validatorMessage="Please input a valid numeric contact no, of 8 digits"> 
                                 <f:validateLength minimum="8" maximum="8"/>
                             </p:inputText>
                         </p:column>
@@ -121,20 +117,49 @@
                             <p:message for="employee_contact"/>
                         </p:column>
                     </p:row>
+                    <p:row>
+                        <p:column>
+                            <p:outputLabel value ="Employee Email Address" for ="emailAddress"/>
+                        </p:column>
+                        <p:column>
+                            <p:inputText id ="emailAddress" value ="#{hiYewManagedBean.employeeEmail}" required ="true" requiredMessage="Please enter email address" placeholder="e.g. someone@gmail.com" validatorMessage="Please enter correct email format">
+                                <f:validateRegex pattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$" />
+                            </p:inputText>
+                        </p:column>
+                        <p:column>
+                            <p:message for ="emailAddress"/>
+                        </p:column>
+                    </p:row>
                     <p:row>   
+
                         <p:column>
                             <p:outputLabel for ="employee_status" style ="font-weight: bold" value ="Employee Position:  "/>
                         </p:column>
                         <p:column>
-                            <p:inputText label ="Employee status" id ="employee_status" value ="#{hiYewManagedBean.employeePosition}" required ="true" requiredMessage="Please enter employee Position"> </p:inputText>
+                            <p:selectOneMenu value ="#{hiYewManagedBean.employeePosition}" id = "employee_status" required ="true" requiredMessage="Please input a position">
+                                <f:selectItem itemLabel="Select One" itemValue ="" noSelectionOption="true"/>
+                                <f:selectItem itemLabel="Staff" itemValue ="staff"/>
+                                <f:selectItem itemLabel ="Admin" itemValue="admin" />
+                            </p:selectOneMenu>
                         </p:column>
                         <p:column>
                             <p:message for="employee_status"/>
                         </p:column>
                     </p:row>
+                    <p:row>
+                        <p:column>
+                            <p:outputLabel for ="employeePay"  value ="Employee Pay" style="font-weight: bold"/>
+                        </p:column>
+                        <p:column>
+                            <p:inputText id ="employeePay"  maxlength="5" value ="#{hiYewManagedBean.employeePay}" required = "true" requiredMessage="Please add salary" validator="#{registrationValidator.validatePay}" validatorMessage="Please enter proper pay (double value and more than $500.00"/>
+                        </p:column>
+                        <p:column>
+                            <p:message for="employeePay" />
+                        </p:column>
+                    </p:row>
                     <p:row>   
                         <p:column>
-                            <p:outputLabel style ="font-weight: bold" value ="Employee Leave:  "/>
+                            <p:outputLabel for = "leave"  style ="font-weight: bold" value ="Employee Leave:  "/>
                         </p:column>
                         <p:column>
                             <p:inputText id = "leave" label ="Employee Leave"  value ="#{hiYewManagedBean.employeeLeave}" validatorMessage="Please Enter Range from 1 to 15" > 
@@ -148,7 +173,7 @@
 
                     <p:row>   
                         <p:column>
-                            <p:outputLabel for ="employee_userName" style ="font-weight: bold" value ="Employee username:  "/>
+                            <p:outputLabel for ="employee_userName" style ="font-weight: bold" value ="Employee Username:  "/>
                         </p:column>
                         <p:column>
                             <p:inputText label ="Employee username" id ="employee_userName" value ="#{hiYewManagedBean.username}" required = "true" requiredMessage="Please enter a username" validator="#{registrationValidator.validateU}" validatorMessage="Username has been taken"> </p:inputText>
@@ -162,12 +187,34 @@
                             <p:outputLabel for ="employee_password" style ="font-weight: bold" value ="Employee Password:  "/>
                         </p:column>
                         <p:column>
-                            <p:inputText label ="Employee Password" id ="employee_password" value ="#{hiYewManagedBean.password}" required = "true" requiredMessage="Password too short. At least length of 7" validatorMessage="Please enter a password of more than 7 characters">
+                            <p:password  match = "pwd2" id ="employee_password" value ="#{hiYewManagedBean.password}" required = "true" requiredMessage = "Please input password" validatorMessage="Enter password of at least length 7 / mismatch password" feedback="true" inline="true">
                                 <f:validateLength minimum="7"  />
-                            </p:inputText>
+                            </p:password>
                         </p:column>
                         <p:column>
                             <p:message for="employee_password" />
+                        </p:column>
+                    </p:row>
+                    <p:row>
+                        <p:column>
+                            <p:outputLabel for="pwd2" value="Retype Employee Password" style = "font-weight: bold"  />      
+                        </p:column>
+                        <p:column>
+                            <p:password id="pwd2" value="#{hiYewManagedBean.password}" required="true" requiredMessage="Please retype password" />
+                        </p:column>
+                        <p:column>
+                            <p:message for ="pwd2"/>
+                        </p:column>
+                    </p:row>
+                    <p:row>
+                        <p:column>
+                            <p:outputLabel for ="cal2"  value ="Enter Employment Date" style = "font-weight: bold"  />
+                        </p:column>
+                        <p:column>
+                            <p:calendar id ="cal2" value ="#{hiYewManagedBean.employedDate}" pattern ="dd/MM/yyyy" required ="true" requiredMessage="Please enter employed date" />
+                        </p:column>
+                        <p:column>
+                            <p:message for ="cal2"/>
                         </p:column>
                     </p:row>
                 </p:panelGrid>

@@ -10,15 +10,12 @@
     <h:body>
         <h:form id ="formMain">
             <h1>Assigning of Payroll</h1>
-
+  #{loginControlBean.checkLoginRedirect()}
             <p:menubar>
-                <p:menuitem value ="Home" url ="/index.xhtml"  />
-                <p:menuitem value ="Register employee" url ="employeeRegistration.xhtml" disabled="#{loginControlBean.checkValid()}"/>
-                <p:menuitem value ="View Employee" url ="employee_details.xhtml" />
-                <p:menuitem value ="Apply for Leave" url ="leaveApplication.xhtml" />
-                <p:menuitem value ="Approve Leave" url ="approveLeave.xhtml" disabled="#{loginControlBean.checkValid()}"/>
-                <p:menuitem value ="Check Leave Status" url ="leaveStatus.xhtml" />
-                <p:menuitem value ="#{loginControlBean.getEAlert()}" url ="alertEmployee.xhtml" />
+                <p:menuitem value ="Home" url="/index.xhtml" />   
+                <p:menuitem value ="Assign Payroll" url ="createPayroll.xhtml" disabled = "#{loginControlBean.checkValid()}"/>
+                <p:menuitem value ="View Payroll" url ="viewPayroll.xhtml"/>
+                <p:menuitem value ="Release Payroll" url ="releasePayroll.xhtml" disabled="#{loginControlBean.checkValid()}"/>
             </p:menubar>
             <br/><br/>
             <p:growl id ="msgs" showDetail="true"/>
@@ -33,7 +30,7 @@
                             <p:outputLabel value = "Number of Late Arrival" />
                         </p:column>
                         <p:column>
-                            <p:inputText value = "#{hiYewManagedBean.lateArrival}" />
+                            <p:inputText value = "#{hiYewManagedBean.lateArrival}" validatorMessage="Please input numeric"/>
                         </p:column>
                     </p:row>
                     <p:row>
@@ -50,21 +47,21 @@
             <br/>
             <br/>
 
-            <p:dataTable id ="table" var ="im" value ="#{hiYewDataTableBean.payRecords}"  paginator="true" rows="5" emptyMessage="No leave">
+            <p:dataTable id ="table" var ="im" value ="#{hiYewDataTableBean.payRecords}"  paginator="true" rows="5" emptyMessage="No outstanding pay">
                 <f:facet name="header">
-                    Month: #{hiYewManagedBean.getMonth()}
+                    Month: #{hiYewManagedBean.getMonth2()} to #{hiYewManagedBean.getMonth()}
                 </f:facet>
                 <p:column headerText ="Employee Name">
-                    <h:outputText value ="#{im.get(0)}" />
+                    <h:outputText value ="#{im.employee.employee_name}" />
                 </p:column>
                 <p:column headerText="Basic Salary">
-                    <h:outputText value ="#{im.get(1)}" />
+                    <h:outputText value ="$#{im.salary}" />
                 </p:column>
                 <p:column headerText = "Bonus">
-                    <h:outputText value ="#{im.get(2)}" />
+                    <h:outputText value ="unconfirm" />
                 </p:column>
                 <p:column headerText="Total Salary">
-                    <h:outputText value ="#{im.get(3)}"/>
+                    <h:outputText value ="unconfirm"/>
                 </p:column>
             </p:dataTable>
         </h:form>

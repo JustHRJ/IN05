@@ -24,7 +24,7 @@ import javax.persistence.OneToMany;
 public class EmployeeEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
-    
+
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Id
     private Long id;
@@ -45,20 +45,24 @@ public class EmployeeEntity implements Serializable {
     private String addressPostal;
     private String unit;
     private String optional;
-    
-    
+    private String account_status;
+    private String emailAddress;
+
     public EmployeeEntity() {
 
     }
+
+
     
-    @OneToMany(cascade = {CascadeType.ALL}, mappedBy ="employee")
-    public Collection<PayrollEntity> getPayRecords(){
+    @OneToMany(cascade = {CascadeType.ALL}, mappedBy = "employee")
+    public Collection<PayrollEntity> getPayRecords() {
         return payRecords;
     }
-    public void setPayRecords(Collection<PayrollEntity> payRecords){
+
+    public void setPayRecords(Collection<PayrollEntity> payRecords) {
         this.payRecords = payRecords;
     }
-    
+
     @OneToMany(cascade = {CascadeType.ALL})
     public Collection<LeaveEntity> getLeaveRecords() {
         return leaveRecords;
@@ -309,6 +313,34 @@ public class EmployeeEntity implements Serializable {
      */
     public void setOptional(String optional) {
         this.optional = optional;
+    }
+
+    /**
+     * @return the account_status
+     */
+    public String getAccount_status() {
+        return account_status;
+    }
+
+    /**
+     * @param account_status the account_status to set
+     */
+    public void setAccount_status(String account_status) {
+        this.account_status = account_status;
+    }
+
+    /**
+     * @return the emailAddress
+     */
+    public String getEmailAddress() {
+        return emailAddress;
+    }
+
+    /**
+     * @param emailAddress the emailAddress to set
+     */
+    public void setEmailAddress(String emailAddress) {
+        this.emailAddress = emailAddress;
     }
 
 }

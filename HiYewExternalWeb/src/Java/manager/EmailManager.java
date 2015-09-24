@@ -23,16 +23,19 @@ public class EmailManager {
     String toEmailAddress = "Mabel<yiwenkoh@nus.edu.sg>";
     String mailer = "JavaMailer";
 
-    public EmailManager(String newPassword) {
-        this.emailPassword(newPassword);
+    public EmailManager() {
+    }
+
+    public EmailManager(String name, String newPassword) {
+        this.emailPassword(name, newPassword);
     }
 
     // For testing purpose
     public static void main(String args[]) throws Exception {
-        EmailManager emailManager = new EmailManager("your_new_password");
+        EmailManager emailManager = new EmailManager("your_name", "your_new_password");
     }
 
-    public void emailPassword(String newPassword) {
+    public void emailPassword(String name, String newPassword) {
         try {
             Properties props = new Properties();
             props.put("mail.transport.protocol", "smtp");
@@ -49,27 +52,26 @@ public class EmailManager {
                 msg.setFrom(InternetAddress.parse(emailFromAddress, false)[0]);
                 msg.setRecipients(Message.RecipientType.TO, InternetAddress.parse(toEmailAddress, false));
                 msg.setSubject("HiYew - Your password has been reset successfully!");
-                
+
                 Multipart multipart = new MimeMultipart("related");
-		BodyPart htmlPart = new MimeBodyPart();
-                
+                BodyPart htmlPart = new MimeBodyPart();
+
                 String messageText = "Your new password: " + newPassword;
 
                 String message = "<div class=\"text\">";
-                message = message + "<font face=\"Century Gothic\" size=\"2\"><b>";
-                message = message + "<font color=\"#8A4117\">";
-                message = message + "Hi,</font><br /><br />";
-                message = message + "<font color=\"#C58917\">";
-                message = message + "Your Username: " + "<br />";
-                message = message + "Your New Password: " + "</font>" + "<br /><br /><br /><br />";
-                message = message + "<font color=\"#8A4117\">";
+                message = message + "<font face=\"'Open Sans', Arial\">";
+                message = message + "<font color=\"#333\">";
+                message = message + "Dear <b>" + name + "</b>,</font><br /><br />";
+                message = message + "<font color=\"#333\">";
+                message = message + "Your new password: <b>" + newPassword + "</b></font>" + "<br /><br />";
+                message = message + "<font color=\"#333\">";
                 message = message + "Sincerely,<br />";
-                message = message + "The Fantasy Team</font>";
-                message = message + "</b></font></div>";
+                message = message + "HiYew Team</font>";
+                message = message + "</font></div>";
                 message = "<html><style type=\"text/css\"></style><body>" + message + "</body></html>";
 
                 htmlPart.setContent(message, "text/html");
-		multipart.addBodyPart(htmlPart);
+                multipart.addBodyPart(htmlPart);
                 msg.setContent(multipart);
                 msg.setHeader("X-Mailer", mailer);
                 Date timeStamp = new Date();

@@ -10,11 +10,12 @@
     <h:body>
         <h:form id ="formMain">
             <h1>Add Machinery</h1>
+             #{loginControlBean.checkLoginRedirect()}
             <p:menubar>
                 <p:menuitem value ="Home" url ="/index.xhtml" />
                 <p:menuitem value ="Add Machinery" url ="addMachine.xhtml" />
                 <p:menuitem value ="View Machinery" url ="viewMachine.xhtml" />
-                <p:menuitem value ="#{hiYewManagedBean.getMAlert()}" url ="alertMachine.xhtml" />
+
             </p:menubar>
             <p:panel id ="panel" header="Add new Machinery">
                 <p:growl id ="msgs" showDetail="true"/>

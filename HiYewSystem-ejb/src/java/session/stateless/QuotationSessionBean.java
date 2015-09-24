@@ -8,7 +8,7 @@ package session.stateless;
 import entity.Customer;
 import entity.Quotation;
 import entity.QuotationDescription;
-import java.text.DateFormat;
+import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -67,12 +67,29 @@ public class QuotationSessionBean implements QuotationSessionBeanLocal {
         em.persist(quotationDescription);
     }
     
-    //public List<Quotation> receiveQuotations(){
-      //  Query query = em.createQuery("Select q FROM Quotation AS q, where q.status='Processed' and (:curDate - :quoteDate)<= 30 ");
-       // Date curDate = new Date();
+    @Override
+    public List<Quotation> receivedQuotations(String username){
         
-       // return null;
-    //}
+        
+        Query query = em.createQuery("Select q FROM Quotation AS q where q.status='Processed' and q.date >= :thirtyDaysAgo AND q.customer.userName=:username ");
+        
+        Date now = addDays(new Date(), -30);
+        Timestamp thirtyDaysAgo = new Timestamp(now.getTime());
+        
+        query.setParameter("thirtyDaysAgo", thirtyDaysAgo);
+        query.setParameter("username", username);
+        
+        List <Quotation> quotations = query.getResultList();
+        return quotations;
+    }
+    
+    public static Date addDays(Date date, int days)
+    {
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(date);
+        cal.add(Calendar.DATE, days); //minus number would decrement the days
+        return cal.getTime();
+    }
 }
     
     

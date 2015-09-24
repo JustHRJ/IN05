@@ -16,67 +16,28 @@ public class CustomerManagedBean implements Serializable {
 
     @EJB
     private CustomerSessionBeanLocal customerSessionBean;
-
     private Customer customer;
-    private Customer newCustomer;
-
-    private String username = ""; //when log on taken from session
+    private String username = ""; // when log on taken from session
     private String rePassword = "";
-
-    //for changing of password
     private String changePasswordInput = "";
     private String newPassword = "";
 
-    /**
-     * Creates a new instance of NewJSFManagedBean
-     */
     public CustomerManagedBean() {
-        newCustomer = new Customer();
-        //customers = new ArrayList<>();
+        FacesContext.getCurrentInstance().getExternalContext().getSessionMap().remove("loginMessage");
+        FacesContext.getCurrentInstance().getExternalContext().getSessionMap().remove("forgotMessage");
+        FacesContext.getCurrentInstance().getExternalContext().getSessionMap().remove("registerMessage");
     }
 
     @PostConstruct
     public void init() {
-
-        if (FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("user") != null) {
-            this.username = FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("user").toString();
+        if (FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("username") != null) {
+            this.username = FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("username").toString();
 
             customer = customerSessionBean.getCustomerByUsername(this.username);
-            System.out.println("@C: Username is " + username);
-            //customers = customerSessionBean.getAllCustomer();
+            System.out.println("@Customer: Username is " + username);
         }
     }
 
-    public String createCustomer() {
-
-        customer = customerSessionBean.getCustomerByUsername(newCustomer.getUserName());
-
-        if (customer == null) {
-            if (newCustomer.getPw().equals(rePassword)) {
-                //encrypt password
-                newCustomer.setPw(customerSessionBean.encryptPassword(newCustomer.getPw()));
-                customerSessionBean.createCustomer(newCustomer);
-                newCustomer = new Customer(); //To reinitialise and create new customer
-                return "csLoginPage?faces-redirect=true";
-            } else {
-                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Password mismatch!"));
-            }
-        } else {
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Username is taken. Try again with a different user name!"));
-            System.out.println("Duplicate primary key for username");
-        }
-        return "";
-    }
-
-    //public void checkUsername() {
-    //  setCustomer(customerSessionBean.getCustomerByUsername(this.username));
-    // if (customer != null) {
-    //    FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Username is in used."));
-    //}else{
-    //   FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Username is not in used."));
-    //}
-    //System.out.println("Check username availability");
-    //}
     //update customer
     public void handleSave() {
         customerSessionBean.updateCustomer(customer);
@@ -85,40 +46,28 @@ public class CustomerManagedBean implements Serializable {
     public void changePassword() {
 
         if (changePasswordInput.equals("") || newPassword.equals("") || rePassword.equals("")) {
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Changing Password requires all password fields to be filled!"));
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Changing Password requires all password fields to be filled!", ""));
         } else {
             String encryptedPassword = customer.getPw();
+            // System.out.println(encryptedPassword);
+            // System.out.println(customerSessionBean.encryptPassword(changePasswordInput));
             if (encryptedPassword.equals(customerSessionBean.encryptPassword(changePasswordInput))) {
-                if (newPassword.equals(encryptedPassword)) {
-                    FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("New Password is same as current password!"));
+                if (customerSessionBean.encryptPassword(newPassword).equals(encryptedPassword)) {
+                    FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("New Password is same as current password!", ""));
                 } else {
                     if (newPassword.equals(rePassword)) {
                         customer.setPw(customerSessionBean.encryptPassword(newPassword));
                         handleSave();
-                        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Password changed successfully!"));
+                        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Password changed successfully!", ""));
 
                     } else {
-                        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Password Mismatch!"));
+                        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Password Mismatch!", ""));
                     }
                 }
             } else {
-                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Invalid password!"));
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Invalid password!", ""));
             }
         }
-    }
-
-    /**
-     * @return the newCustomer
-     */
-    public Customer getNewCustomer() {
-        return newCustomer;
-    }
-
-    /**
-     * @param newCustomer the newCustomer to set
-     */
-    public void setNewCustomer(Customer newCustomer) {
-        this.newCustomer = newCustomer;
     }
 
     /**

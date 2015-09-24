@@ -7,12 +7,14 @@ package managedbean;
 
 import entity.EmployeeEntity;
 import entity.LeaveEntity;
+import java.io.IOException;
 import javax.inject.Named;
 import javax.enterprise.context.SessionScoped;
 import java.io.Serializable;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
+import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import session.stateful.HiYewSystemBeanLocal;
 
@@ -28,10 +30,10 @@ public class loginControlBean implements Serializable {
     private HiYewSystemBeanLocal hiYewSystemBean;
 
     private String loginPosition = "";
-    private String username;
-    private String password;
+    private String username = "";
+    private String password = "";
     private boolean logined = false;
-    private String employeeName;
+    private String employeeName = "";
 
     /**
      * Creates a new instance of loginControlBean
@@ -73,6 +75,23 @@ public class loginControlBean implements Serializable {
         }
     }
 
+    public void checkLoginRedirect() throws IOException {
+        if (logined) {
+
+        } else {
+            FacesContext.getCurrentInstance().getExternalContext().redirect("/HiYewInternalWeb/login.xhtml");
+        }
+    }
+
+    public String getEmployeeNameLog() {
+        if (username == "") {
+            return "";
+        }
+
+        List<String> s = hiYewSystemBean.getEmployeeE(username);
+        return s.get(0);
+    }
+
     public List<LeaveEntity> getLeave() {
         if (loginPosition.equals("admin")) {
             return hiYewSystemBean.viewEmployeeLeave(employeeName);
@@ -93,29 +112,40 @@ public class loginControlBean implements Serializable {
         }
     }
 
-    public String userAction() {
+    public void userAction() throws IOException {
         if (logined) {
             FacesContext.getCurrentInstance().getExternalContext().invalidateSession();
             username = "";
             password = "";
-            
-            return "login";
+            FacesContext.getCurrentInstance().getExternalContext().redirect("/HiYewInternalWeb/login.xhtml");
+
         } else {
-            return "login";
         }
     }
 
-    public String checkLogin() {
+    public void checkLogin() throws IOException {
         String result = hiYewSystemBean.login(username, password);
-        if (result.equals("disabled") || result.equals("fail")) {
-            FacesMessage msg = new FacesMessage("Failed to login", "Please check username or password");
+        if (result.equals("disabled")) {
+            FacesMessage msg = new FacesMessage("Failed to login", "Account has been locked");
             FacesContext.getCurrentInstance().addMessage(null, msg);
-            return "login";
+
+        } else if (result.equals("firstTime")) {
+            password = "";
+            FacesContext.getCurrentInstance().getExternalContext().redirect("/HiYewInternalWeb/changePassword.xhtml");
+
+        } else if (result.equals("fail")) {
+            FacesMessage msg = new FacesMessage("Failed to login", "Wrong username or password");
+            FacesContext.getCurrentInstance().addMessage(null, msg);
         } else {
             loginPosition = result;
             logined = true;
-            return "index";
+            FacesContext.getCurrentInstance().getExternalContext().redirect("/HiYewInternalWeb/index.xhtml");
+
         }
+    }
+
+    public List<String> getEmployeeNameP() {
+        return hiYewSystemBean.getEmployeeE(username);
     }
 
     /**

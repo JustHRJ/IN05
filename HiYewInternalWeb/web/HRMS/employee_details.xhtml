@@ -9,20 +9,17 @@
     </h:head>
     <h:body>
         <h:form id = "formMain">
+            #{loginControlBean.checkLoginRedirect()}
             <h1>Employees Details</h1>
             <p:menubar>
-                <p:menuitem value ="Home" url ="/index.xhtml"  />
+                <p:menuitem value ="Home" url="/index.xhtml"  />
                 <p:menuitem value ="Register employee" url ="employeeRegistration.xhtml" disabled="#{loginControlBean.checkValid()}"/>
                 <p:menuitem value ="View Employee" url ="employee_details.xhtml" />
-                <p:menuitem value ="Apply for Leave" url ="leaveApplication.xhtml" />
-                <p:menuitem value ="Approve Leave" url ="approveLeave.xhtml" disabled="#{loginControlBean.checkValid()}"/>
-                <p:menuitem value ="Check Leave Status" url ="leaveStatus.xhtml" />
-                <p:menuitem value ="#{loginControlBean.getEAlert()}" url ="alertEmployee.xhtml" />
             </p:menubar>
             <br/>
 
-            <p:growl id = "msgs" showDetail="true"/>
-            <p:dataTable var="im" value="#{loginControlBean.employees}" editable = "true" paginator="true" rows="5" emptyMessage="No employees">
+            <p:growl id = "msgs" showDetail="false"/>
+            <p:dataTable id ="data1" var="im" value="#{loginControlBean.employees}" editable = "true" paginator="true" rows="5" emptyMessage="No employees">
                 <f:facet name="header">
                     View Employee
                 </f:facet>
@@ -40,14 +37,22 @@
                             <p:inputText id = "employeeAddress" value ="#{hiYewManagedBean.employeeAddressUnit}" />
                             <p:inputText id = "employeeAddress1" value ="#{hiYewManagedBean.employeeAddress}" />
                             <p:inputText id = "employeeAddress2" value ="#{hiYewManagedBean.employeeAdressOptional}" />
-                            <p:inputText id = "employeeAddress3" value ="#{hiYewManagedBean.address_postal}" />
+                            <p:inputText id = "employeeAddress3" maxlength="6" value ="#{hiYewManagedBean.address_postal}" validator="#{registrationValidator.validateNumericA}" validatorMessage="Please input correct numeric 6 digit address postal">
+
+                            </p:inputText>
                         </f:facet>
                     </p:cellEditor>
                 </p:column>
                 <p:column headerText = "Employee Contact">
                     <p:cellEditor>
                         <f:facet name ="output"><h:outputText value="#{im.employee_contact}" style="text-align: center" /></f:facet>
-                        <f:facet name ="input"><p:inputText id = "employeeContact" value ="#{hiYewManagedBean.employeeContact}" validator="#{registrationValidator.validateNumeric}" validatorMessage="Enter valid number"/></f:facet>
+                        <f:facet name ="input"><p:inputText id = "employeeContact" maxlength="8" value ="#{hiYewManagedBean.employeeContact}" validator="#{registrationValidator.validateNumeric}" validatorMessage="Enter valid number"/></f:facet>
+                    </p:cellEditor>
+                </p:column>
+                <p:column headerText="Email Address" >
+                    <p:cellEditor>
+                        <f:facet name ="output"><p:outputLabel value ="#{im.emailAddress}"/> </f:facet>
+                        <f:facet name ="input"><p:inputText value = "#{hiYewManagedBean.employeeEmail}" validatorMessage="Please enter proper format" >   <f:validateRegex pattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$" /></p:inputText>   </f:facet>
                     </p:cellEditor>
                 </p:column>
                 <p:column headerText = "Employee Pass Number">
@@ -57,25 +62,35 @@
                     <p:cellEditor>
                         <f:facet name ="output"><h:outputText  value= "#{hiYewManagedBean.formatDate(im.employee_passExpiry)}" /></f:facet>
                         <f:facet name ="input"> 
-                            <p:calendar value = "#{hiYewManagedBean.employeePassExpiry}" mindate="#{hiYewManagedBean.getToday()}" pattern ="dd/MM/yyyy" validatorMessage="Please enter correct format">
-
+                            <p:calendar value = "#{hiYewManagedBean.employeePassExpiry}" mindate="#{hiYewManagedBean.getToday()}" pattern ="dd/MM/yyyy" disabled="#{loginControlBean.checkValid()}" validatorMessage="Please enter correct format">
                             </p:calendar>
                         </f:facet>
                     </p:cellEditor>
                 </p:column>
                 <p:column headerText = "Employee Leaves">
-                    <h:outputText value="#{im.number_of_leaves}" style="text-align: center" />
+                    <p:cellEditor>
+                        <f:facet name ="output"><h:outputText value="#{im.number_of_leaves}" style="text-align: center" /></f:facet>
+                        <f:facet name ="input"><p:inputText value ="#{hiYewManagedBean.employeeLeave}" maxlength="2" disabled="#{loginControlBean.checkValid()}">
+                                <f:validateDoubleRange minimum="0" maximum="15"/>
+                            </p:inputText></f:facet>    
+                    </p:cellEditor>
                 </p:column>
                 <p:column headerText = "Employee Position">
                     <p:cellEditor>
                         <f:facet name ="output"> <h:outputText value="#{im.employee_account_status}" style="text-align: center" /></f:facet>
                         <f:facet name ="input"> 
-                            <h:selectOneMenu value="#{hiYewManagedBean.employeePosition}">
+                            <h:selectOneMenu value="#{hiYewManagedBean.employeePosition}" disabled ="#{loginControlBean.checkValid()}">
                                 <f:selectItem itemValue ="#{im.employee_account_status}"  />
-                                <f:selectItem itemValue="Disable"  />
+                                <f:selectItem itemValue="disabled" itemLabel="Disable"  />
                                 <f:selectItem itemValue ="#{im.previousPosition}" />
                             </h:selectOneMenu> 
                         </f:facet>
+                    </p:cellEditor>
+                </p:column>
+                <p:column headerText="Employee Pay">
+                    <p:cellEditor>
+                        <f:facet name ="output"> <p:outputLabel value ="$#{im.employee_basic}"/></f:facet>
+                        <f:facet name ="input"><p:inputText value = "#{hiYewManagedBean.employeePay}" maxlength="5" validator ="#{registrationValidator.validatePayE}" validatorMessage="Pay should not be less than 500.00" disabled="#{loginControlBean.checkValid()}"></p:inputText></f:facet>
                     </p:cellEditor>
                 </p:column>
                 <p:column style="width:32px">
