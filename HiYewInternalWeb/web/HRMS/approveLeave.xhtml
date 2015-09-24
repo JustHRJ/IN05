@@ -18,21 +18,22 @@
                 <p:menuitem value ="Check Leave Status" url ="leaveStatus.xhtml" />
             </p:menubar>
             <br/>
-
-            <p:panel header ="View A Employee Leave">                
+            <p:growl id ="msgs" showDetail="false"/>
+            
+            <p:panel header ="View Leave By Employee">                
                 <p:column>
                     <p:outputLabel value ="Select Employee"/>
                 </p:column>
                 <p:column>
-                    <p:selectOneMenu value ="#{hiYewManagedBean.employeeName}"  requiredMessage="Please add Name" id ="inputTxt1" >
+                    <p:selectOneMenu value ="#{hiYewManagedBean.employeeName}"  requiredMessage="Please select Name" required ="true" id ="inputTxt1" >
                         <f:selectItem itemValue="" itemLabel="Select One" noSelectionOption="true" />
                         <f:selectItems value ="#{loginControlBean.validateLeaveName()}"/>
                     </p:selectOneMenu>
                 </p:column>
-                <p:commandButton id ="btn1" value ="Search for Employee">
+                <p:commandButton id ="btn1" value ="Search for Employee" update = "msgs">
                     <f:ajax execute ="inputTxt1" render ="data1" />
                     <f:ajax execute ="inputTxt1" render ="data2" />
-                    <p:dataTable id = "data1" var="im" value="#{hiYewManagedBean.leaveE}" paginator="true" rows="5" emptyMessage="No employee pending">
+                    <p:dataTable id = "data1" var="im" value="#{hiYewManagedBean.leaveE}" paginator="true" rows="5" emptyMessage="No leave pending">
                         <p:column headerText ="Leave ID">
                             <h:outputText value ="#{im.id}" />
                         </p:column>

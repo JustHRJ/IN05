@@ -140,7 +140,7 @@ public interface HiYewSystemBeanLocal {
 
     public boolean deleteTrainingEmployee(TrainingScheduleEntity training, String employee);
 
-    public boolean deleteMachineMaintainence(Long id);
+    public boolean deleteMachineMaintainence(String id);
 
     public List<PayrollEntity> getPayroll(String employeeName);
 
@@ -153,6 +153,10 @@ public interface HiYewSystemBeanLocal {
     public void reenableEmployee(String employeeName);
 
     public void rejectLeaveID(Long id, String employee1);
+
+    public boolean existMachineName(String name);
+
+    public List<String> employeeTrainingName(TrainingScheduleEntity schedule);
 
     
 }

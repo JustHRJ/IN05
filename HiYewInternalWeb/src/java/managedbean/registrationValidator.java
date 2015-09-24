@@ -209,6 +209,20 @@ public class registrationValidator implements Validator {
         }
     }
 
+     public void validateMachineName(FacesContext context, UIComponent component, Object submittedAndConvertedValue) throws ValidatorException {
+        String username = (String) submittedAndConvertedValue;
+
+        if (username == null || username.isEmpty()) {
+            return; // Let required="true" or @NotNull handle it.
+        }
+
+        if (hiYewSystemBean.existMachineName(username)) {
+            throw new ValidatorException(new FacesMessage("Machine Name already in use, choose another"));
+        }
+    }
+
+    
+    
     public void validateExpiredName(FacesContext context, UIComponent component, Object submittedAndConvertedValue) throws ValidatorException {
         String name = (String) submittedAndConvertedValue;
 

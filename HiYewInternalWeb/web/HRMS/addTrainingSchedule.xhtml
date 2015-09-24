@@ -23,7 +23,7 @@
                 <p:growl id ="msgs" showDetail="false"/>
                 <p:row>
                     <p:column>
-                        <p:outputLabel value ="Please input Name of Training"/>
+                        <p:outputLabel value ="Name of Training"/>
                     </p:column>
                     <p:column>
                         <p:inputText value ="#{hiYewManagedBean.trainingName}" required = "true" requiredMessage="Please input Training Name"/>
@@ -31,7 +31,7 @@
                 </p:row>
                 <p:row>
                     <p:column>
-                        <p:outputLabel value ="Please input Training Code" />
+                        <p:outputLabel value ="Training Code" />
                     </p:column>
                     <p:column>
                         <p:inputText value ="#{hiYewManagedBean.trainingCode}" required = "true" requiredMessage="Please input Training Code"/>
@@ -39,7 +39,7 @@
                 </p:row>
                 <p:row>
                     <p:column>
-                        <p:outputLabel value ="Please input Start Date of training"/>    
+                        <p:outputLabel value ="Start Date of training"/>    
                     </p:column>
                     <p:column>
                         <p:calendar id = "cal" value = "#{hiYewManagedBean.trainingStartDate}" mindate="#{hiYewManagedBean.getToday()}" pattern ="dd/MM/yyyy"  required ="true" requiredMessage="Please input startDate"/>
@@ -47,7 +47,7 @@
                 </p:row>
                 <p:row>
                     <p:column>
-                        <p:outputLabel value ="Please input End Date of Training"/>
+                        <p:outputLabel value ="End Date of Training"/>
                     </p:column>
                     <p:column>
                         <p:calendar id = "cal1" value = "#{hiYewManagedBean.trainingEndDate}" mindate="#{hiYewManagedBean.getToday()}" pattern ="dd/MM/yyyy"  required ="true" requiredMessage="Please input endDate" />
@@ -55,7 +55,7 @@
                 </p:row>
                 <p:row>
                     <p:column>
-                        <p:outputLabel value ="Please input Description"/>
+                        <p:outputLabel value ="Description"/>
                     </p:column>
                     <p:column>
                         <p:inputTextarea value ="#{hiYewManagedBean.trainingDescription}" style="width: 95%"/>
@@ -63,7 +63,7 @@
                 </p:row>
                 <p:row>
                     <p:column>
-                        <p:outputLabel value ="Please input Training Size"/>
+                        <p:outputLabel value ="Training Size"/>
                     </p:column>
                     <p:column>
                         <p:inputText value ="#{hiYewManagedBean.trainingSize}" required = "true" requiredMessage="Please input training size" validatorMessage="Please input proper range between 1 - 15">

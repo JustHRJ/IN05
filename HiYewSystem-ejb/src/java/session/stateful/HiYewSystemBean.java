@@ -61,16 +61,34 @@ public class HiYewSystemBean implements HiYewSystemBeanLocal {
 
     }
 
-    public boolean deleteMachineMaintainence(Long id) {
-        MachineMaintainenceEntity mm = em.find(MachineMaintainenceEntity.class, id);
-        if (mm == null) {
-            return false;
-        } else {
-            MachineEntity m = mm.getMachine();
-            m.getMachineMaintainence().remove(mm);
-            em.remove(mm);
-            em.merge(m);
+    public boolean existMachineName(String name) {
+        MachineEntity m = new MachineEntity();
+        try {
+            Query q = em.createQuery("select m from MachineEntity m where m.machine_name = :id");
+            q.setParameter("id", name);
+            m = (MachineEntity) q.getSingleResult();
             return true;
+
+        } catch (Exception ex) {
+            return false;
+        }
+
+    }
+
+    public boolean deleteMachineMaintainence(String id) {
+        try {
+            MachineMaintainenceEntity mm = em.find(MachineMaintainenceEntity.class, Long.parseLong(id));
+            if (mm == null) {
+                return false;
+            } else {
+                MachineEntity m = mm.getMachine();
+                m.getMachineMaintainence().remove(mm);
+                em.remove(mm);
+                em.merge(m);
+                return true;
+            }
+        } catch (Exception ex) {
+            return false;
         }
     }
 
@@ -172,6 +190,23 @@ public class HiYewSystemBean implements HiYewSystemBeanLocal {
         } catch (Exception ex) {
             return false;
         }
+    }
+
+    public List<String> employeeTrainingName(TrainingScheduleEntity schedule) {
+        List<String> result = new ArrayList<String>();
+        if (schedule == null) {
+            return null;
+        }
+
+        for (Object o : schedule.getEmployeeRecords()) {
+            EmployeeEntity e = (EmployeeEntity) o;
+            result.add(e.getEmployee_name());
+
+        }
+        if (result.isEmpty()) {
+            return null;
+        }
+        return result;
     }
 
     public List<EmployeeEntity> employeeTraining(TrainingScheduleEntity schedule) {
@@ -461,6 +496,10 @@ public class HiYewSystemBean implements HiYewSystemBeanLocal {
 
     public boolean notExistMachine(String id) {
         List<MachineEntity> machines = checkMachineExpiry();
+        if (machines == null) {
+            return true;
+        }
+
         for (Object o : machines) {
             MachineEntity m = (MachineEntity) o;
             if (m.getMachine_number().equals(id)) {
