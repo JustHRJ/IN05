@@ -10,7 +10,7 @@
     <h:body>
         <h1>Application for Leave</h1>
         <h:form id = "formMain">
-              #{loginControlBean.checkLoginRedirect()}
+            #{loginControlBean.checkLoginRedirect()}
             <p:menubar>
                 <p:menuitem value ="Home" url="/index.xhtml"  />      
                 <p:menuitem value ="Apply for Leave" url ="leaveApplication.xhtml" />
@@ -18,16 +18,28 @@
                 <p:menuitem value ="Check Leave Status" url ="leaveStatus.xhtml" />
             </p:menubar>
             <br/>
-            <p:growl id ="msgs" showDetail="true" />
+            <p:growl id ="msgs" showDetail="false" />
             <p:panelGrid>
                 <p:row>
                     <p:column>
                         <p:outputLabel style ="font-weight: bold" value ="Employee Name:  "/>
                     </p:column>
                     <p:column>
-                        <h:selectOneMenu value="#{hiYewManagedBean.employeeName}" style="width:100%">
+                        <h:selectOneMenu value="#{hiYewManagedBean.employeeName}" style="width:100%" required = "true" requiredMessage="Please select Employee">
+                            <f:selectItem itemValue ="" itemLabel="Select One" noSelectionOption="true"/>
                             <f:selectItems value="#{loginControlBean.validateLeaveName()}"  />
                         </h:selectOneMenu> 
+                    </p:column>
+                </p:row>
+                <p:row>
+                    <p:column>
+                        <p:outputLabel value ="Type of Leave"  style ="font-weight: bold" />
+                    </p:column>
+                    <p:column>
+                        <p:selectOneMenu value ="#{hiYewManagedBean.leaveType}" style ="width: 100%">
+                            <f:selectItem itemValue ="paid" itemLabel="Paid Leave"/>
+                            <f:selectItem itemValue ="unpaid" itemLabel ="Unpaid Leave" />
+                        </p:selectOneMenu>
                     </p:column>
                 </p:row>
                 <p:row>
@@ -35,7 +47,7 @@
                         <p:outputLabel style ="font-weight: bold" value ="Start Date :"/>
                     </p:column>
                     <p:column>
-                        <p:calendar value = "#{hiYewManagedBean.startDate}" mindate="#{hiYewManagedBean.getToday()}" pattern ="dd/MM/yyyy" />
+                        <p:calendar value = "#{hiYewManagedBean.startDate}"  pattern ="dd/MM/yyyy" required="true" requiredMessage="Please input start date" />
                     </p:column>
                 </p:row>
                 <p:row>
@@ -43,7 +55,7 @@
                         <p:outputLabel  style ="font-weight: bold" value ="End Date :"/>
                     </p:column>
                     <p:column>
-                        <p:calendar value = "#{hiYewManagedBean.endDate}" mindate="#{hiYewManagedBean.getToday()}" pattern ="dd/MM/yyyy" />
+                        <p:calendar value = "#{hiYewManagedBean.endDate}"  pattern ="dd/MM/yyyy" required ="true" requiredMessage="Please input end date" />
                     </p:column>
                 </p:row>
                 <p:row>

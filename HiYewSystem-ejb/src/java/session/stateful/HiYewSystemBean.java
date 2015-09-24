@@ -906,11 +906,11 @@ public class HiYewSystemBean implements HiYewSystemBeanLocal {
         if (!(address_postal.isEmpty())) {
             employee.setAddressPostal(address_postal);
         }
-        if(!(email.isEmpty())){
+        if (!(email.isEmpty())) {
             employee.setEmailAddress(email);
             check = true;
         }
-        
+
         if (!(contact.isEmpty())) {
             employee.setEmployee_contact(contact);
         }
@@ -961,25 +961,25 @@ public class HiYewSystemBean implements HiYewSystemBeanLocal {
         }
         if (!(employeeUnit.isEmpty())) {
             employee.setUnit(employeeUnit);
-             check = true;
+            check = true;
         }
         if (!(employeeOptional.isEmpty())) {
             employee.setOptional(employeeOptional);
-             check = true;
+            check = true;
         }
         if (!(address_postal.isEmpty())) {
             employee.setAddressPostal(address_postal);
-             check = true;
+            check = true;
         }
-        
-        if(!(email.isEmpty())){
+
+        if (!(email.isEmpty())) {
             employee.setEmailAddress(email);
-             check = true;
+            check = true;
         }
-        
+
         if (!(contact.isEmpty())) {
             employee.setEmployee_contact(contact);
-             check = true;
+            check = true;
         }
 
         if (check) {
@@ -1044,14 +1044,16 @@ public class HiYewSystemBean implements HiYewSystemBeanLocal {
         Timestamp ed = new Timestamp(end.getTime());
         for (Object o : leaveRecords) {
             LeaveEntity l = (LeaveEntity) o;
-            if (sd.before(l.getStartDate()) && ed.after(l.getEndDate()) || (sd.after(l.getStartDate()) && sd.before(l.getEndDate())) || ed.after(l.getStartDate()) && ed.before(l.getEndDate()) || sd.equals(l.getStartDate()) || sd.equals(l.getEndDate()) || ed.equals(l.getStartDate()) || ed.equals(l.getEndDate())) {
-                return true;
+            if (!(l.getStatus().equals("rejected"))) {
+                if (sd.before(l.getStartDate()) && ed.after(l.getEndDate()) || (sd.after(l.getStartDate()) && sd.before(l.getEndDate())) || ed.after(l.getStartDate()) && ed.before(l.getEndDate()) || sd.equals(l.getStartDate()) || sd.equals(l.getEndDate()) || ed.equals(l.getStartDate()) || ed.equals(l.getEndDate())) {
+                    return true;
+                }
             }
         }
         return false;
     }
 
-    public boolean applyLeave(String employee, int days, String remarks, Date start, Date end) {
+    public boolean applyLeave(String employee, int days, String remarks, Date start, Date end, String type) {
         EmployeeEntity lao = new EmployeeEntity();
         try {
             Query q = em.createQuery("Select lao from EmployeeEntity lao where lao.employee_name = :id");
@@ -1067,6 +1069,35 @@ public class HiYewSystemBean implements HiYewSystemBeanLocal {
                     sum += l.getNumber_of_leave();
                 }
             }
+            if (type.equals("unpaid")) {
+                if (checkBetween(leaves, start, end)) {
+                    return false;
+                }
+                if (days < 1) {
+                    return false;
+                }
+                if (lao.getEmployee_account_status().equals("disabled")) {
+                    return false;
+                }
+                LeaveEntity application = new LeaveEntity();
+                application.setRemarks(remarks);
+                application.setNumber_of_leave(days);
+                java.util.Date date = new java.util.Date();
+                Timestamp time_applied = new Timestamp(date.getTime());
+                Timestamp sd = new Timestamp(start.getTime());
+                Timestamp ed = new Timestamp(end.getTime());
+                application.setAppliedTime(time_applied);
+                application.setEndDate(ed);
+                application.setStartDate(sd);
+                application.setStatus("pending");
+                application.setType(type);
+                application.setEmployee(lao);
+                em.persist(application);
+                lao.getLeaveRecords().add(application);
+                em.merge(lao);
+                return true;
+            }
+
             if (lao.getNumber_of_leaves() < days + sum) {
                 return false;
             } else if (lao.getEmployee_account_status().equals("disabled")) {
@@ -1088,6 +1119,7 @@ public class HiYewSystemBean implements HiYewSystemBeanLocal {
                 application.setStartDate(sd);
                 application.setStatus("pending");
                 application.setEmployee(lao);
+                application.setType(type);
                 em.persist(application);
                 lao.getLeaveRecords().add(application);
                 em.merge(lao);
@@ -1125,6 +1157,28 @@ public class HiYewSystemBean implements HiYewSystemBeanLocal {
             return null;
         }
         return allRecords;
+    }
+
+    public void rejectLeaveID(Long id, String employee1) {
+        LeaveEntity leave = new LeaveEntity();
+        EmployeeEntity employee = new EmployeeEntity();
+        try {
+            Query q = em.createQuery("select employee from EmployeeEntity employee where employee.employee_name =:id");
+            q.setParameter("id", employee1);
+            employee = (EmployeeEntity) q.getSingleResult();
+            Collection<LeaveEntity> leaveRecords = employee.getLeaveRecords();
+            for (Object o : leaveRecords) {
+                leave = (LeaveEntity) o;
+                if (leave.getId() == id) {
+                    leave.setStatus("rejected");
+                    Calendar c = Calendar.getInstance();
+                    leave.setApprovedTime(new Timestamp(c.getTime().getTime()));
+                    em.merge(leave);
+                }
+            }
+        } catch (Exception ex) {
+
+        }
     }
 
     public void approveLeaveID(Long id, String employee1) {

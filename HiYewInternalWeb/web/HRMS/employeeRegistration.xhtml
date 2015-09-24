@@ -29,7 +29,6 @@
                         </p:column>
                         <p:column>
                             <p:inputText label ="Employee Name" id ="employee_name" value ="#{hiYewManagedBean.employeeName}"  required="true" requiredMessage="Please enter employee Name" validator="#{registrationValidator.validate}" validatorMessage="EmployeeName is used"> 
-
                             </p:inputText>
                         </p:column>
                         <p:column>
@@ -122,8 +121,7 @@
                             <p:outputLabel value ="Employee Email Address" for ="emailAddress"/>
                         </p:column>
                         <p:column>
-                            <p:inputText id ="emailAddress" value ="#{hiYewManagedBean.employeeEmail}" required ="true" requiredMessage="Please enter email address" placeholder="e.g. someone@gmail.com" validatorMessage="Please enter correct email format">
-                                <f:validateRegex pattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$" />
+                            <p:inputText id ="emailAddress" value ="#{hiYewManagedBean.employeeEmail}" required ="true" requiredMessage="Please enter email address" placeholder="e.g. someone@gmail.com" validatorMessage="Please enter correct email format" validator="#{registrationValidator.validateEmail}" >                
                             </p:inputText>
                         </p:column>
                         <p:column>
@@ -131,7 +129,6 @@
                         </p:column>
                     </p:row>
                     <p:row>   
-
                         <p:column>
                             <p:outputLabel for ="employee_status" style ="font-weight: bold" value ="Employee Position:  "/>
                         </p:column>

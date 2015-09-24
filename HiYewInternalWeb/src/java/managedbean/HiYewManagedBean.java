@@ -84,6 +84,7 @@ public class HiYewManagedBean {
     private int trainingSize;
     private String trainingName = "";
     private String trainingCode = "";
+    private String leaveType = "";
 
     /**
      * Creates a new instance of HiYewManagedBean
@@ -115,12 +116,11 @@ public class HiYewManagedBean {
 
         }
     }
-    
-    public void redirectP() throws IOException{
-           FacesContext.getCurrentInstance().getExternalContext().redirect("/HiYewInternalWeb/changePassword.xhtml");
+
+    public void redirectP() throws IOException {
+        FacesContext.getCurrentInstance().getExternalContext().redirect("/HiYewInternalWeb/changePassword.xhtml");
     }
-    
-    
+
     public void deleteMachineMaintainence() throws IOException {
         boolean check = hiYewSystemBean.deleteMachineMaintainence(machineMaintainenceID);
         if (check) {
@@ -313,7 +313,9 @@ public class HiYewManagedBean {
         hiYewSystemBean.approveLeaveID((Long.valueOf(objectId1).longValue()), objectId);
     }
 
-
+    public void rejectLeave() {
+        hiYewSystemBean.rejectLeaveID((Long.valueOf(objectId1).longValue()), objectId);
+    }
 
     public void approveLeaveEs() {
         hiYewSystemBean.approveByEmployee(employeeName);
@@ -331,7 +333,17 @@ public class HiYewManagedBean {
 
     public void applyLeave() {
         leaveNumber = computeNumberLeave(startDate, endDate);
-        boolean check = hiYewSystemBean.applyLeave(employeeName, leaveNumber, leaveRemarks, startDate, endDate);
+        boolean check;
+
+        if (leaveType.equals("paid")) {
+            if (leaveNumber > 10) {
+                check = false;
+            } else {
+                check = hiYewSystemBean.applyLeave(employeeName, leaveNumber, leaveRemarks, startDate, endDate, leaveType);
+            }
+        } else {
+            check = hiYewSystemBean.applyLeave(employeeName, leaveNumber, leaveRemarks, startDate, endDate, leaveType);
+        }
         if (check) {
             FacesMessage msg = new FacesMessage("Applied", employeeName);
             FacesContext.getCurrentInstance().addMessage(null, msg);
@@ -1044,6 +1056,20 @@ public class HiYewManagedBean {
      */
     public void setEmployeeEmail(String employeeEmail) {
         this.employeeEmail = employeeEmail;
+    }
+
+    /**
+     * @return the leaveType
+     */
+    public String getLeaveType() {
+        return leaveType;
+    }
+
+    /**
+     * @param leaveType the leaveType to set
+     */
+    public void setLeaveType(String leaveType) {
+        this.leaveType = leaveType;
     }
 
     /**

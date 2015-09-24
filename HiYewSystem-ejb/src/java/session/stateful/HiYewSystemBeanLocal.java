@@ -36,7 +36,7 @@ public interface HiYewSystemBeanLocal {
 
     public boolean updateEmployee(EmployeeEntity employee, String employeeA, String employeeUnit, String employeeOptional, String address_postal, String contact, Date pass, String position, double pay, int leave, String email);
 
-    public boolean applyLeave(String employee, int days, String remarks, Date start, Date end);
+    public boolean applyLeave(String employee, int days, String remarks, Date start, Date end, String type);
 
     //view all pending leaves
 
@@ -151,6 +151,8 @@ public interface HiYewSystemBeanLocal {
     public boolean updateEmployee(EmployeeEntity employee, String employeeA, String employeeUnit, String employeeOptional, String address_postal, String contact, String email);
 
     public void reenableEmployee(String employeeName);
+
+    public void rejectLeaveID(Long id, String employee1);
 
     
 }

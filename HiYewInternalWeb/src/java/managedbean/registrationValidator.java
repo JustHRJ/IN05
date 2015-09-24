@@ -13,6 +13,7 @@ import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.validator.Validator;
 import javax.faces.validator.ValidatorException;
+import javax.mail.internet.InternetAddress;
 import session.stateful.HiYewSystemBeanLocal;
 
 /**
@@ -43,6 +44,21 @@ public class registrationValidator implements Validator {
         if (hiYewSystemBean.existEmployeeName(username)) {
             throw new ValidatorException(new FacesMessage("Employee Name already in use, choose another"));
         }
+    }
+
+    public void validateEmail(FacesContext context, UIComponent component, Object submittedAndConvertedValue) throws ValidatorException {
+
+        String email = (String) submittedAndConvertedValue;
+
+        try {
+            if (!(email.isEmpty())) {
+                InternetAddress emailAddr = new InternetAddress(email);
+                emailAddr.validate();
+            }
+        } catch (Exception ex) {
+            throw new ValidatorException(new FacesMessage("Email is invalid"));
+        }
+
     }
 
     public void validatePay(FacesContext context, UIComponent component, Object submittedAndConvertedValue) throws ValidatorException {

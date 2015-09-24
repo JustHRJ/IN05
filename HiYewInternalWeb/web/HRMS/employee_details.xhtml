@@ -52,7 +52,7 @@
                 <p:column headerText="Email Address" >
                     <p:cellEditor>
                         <f:facet name ="output"><p:outputLabel value ="#{im.emailAddress}"/> </f:facet>
-                        <f:facet name ="input"><p:inputText value = "#{hiYewManagedBean.employeeEmail}" validatorMessage="Please enter proper format" >   <f:validateRegex pattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$" /></p:inputText>   </f:facet>
+                        <f:facet name ="input"><p:inputText value = "#{hiYewManagedBean.employeeEmail}" validator="#{registrationValidator.validateEmail}" validatorMessage="Please enter proper format" >   </p:inputText>   </f:facet>
                     </p:cellEditor>
                 </p:column>
                 <p:column headerText = "Employee Pass Number">

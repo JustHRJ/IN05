@@ -32,6 +32,7 @@ public class LeaveEntity implements Serializable {
     private Timestamp startDate;
     private Timestamp endDate;
     private EmployeeEntity employee = new EmployeeEntity();
+    private String type;
     
     @ManyToOne
     public EmployeeEntity getEmployee(){
@@ -174,6 +175,20 @@ public class LeaveEntity implements Serializable {
      */
     public void setEndDate(Timestamp endDate) {
         this.endDate = endDate;
+    }
+
+    /**
+     * @return the type
+     */
+    public String getType() {
+        return type;
+    }
+
+    /**
+     * @param type the type to set
+     */
+    public void setType(String type) {
+        this.type = type;
     }
 
 }
