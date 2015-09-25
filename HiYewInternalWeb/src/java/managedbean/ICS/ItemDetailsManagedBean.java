@@ -110,12 +110,17 @@ public class ItemDetailsManagedBean implements Serializable {
         if(activityChoice.equalsIgnoreCase("stockIn")){
            System.out.println("Qty in: " + quantityIn);
            double totalNewCost = ((selectedItem.getCost()*selectedItem.getQuantity())+(round(inCost,2)*quantityIn));
+           System.out.println("Total New Cost: " + totalNewCost);
            int totalNewQty = selectedItem.getQuantity() + quantityIn;
-           double newAvgCost = totalNewCost/totalNewQty;
+           double newAvgCost = round((totalNewCost/totalNewQty),2);
            selectedItem.setQuantity(totalNewQty);
            selectedItem.setCost(newAvgCost);
+           System.out.println("New Total Qty: " +totalNewQty);
+           System.out.println("New Avg Cost: " +newAvgCost);
            hiYewICSSessionBean.stockUp(selectedItem, quantityIn);
+           System.out.println("Stock up here");
            hiYewICSSessionBean.updateCost(selectedItem, newAvgCost);
+           System.out.println("Update Cost here");
            FacesContext.getCurrentInstance().addMessage("lowerMessages", new FacesMessage("Item " +selectedItem.getItemCode() +"'s quantity updated successfully!"));
              
         }else if (activityChoice.equalsIgnoreCase("stockOut")){
