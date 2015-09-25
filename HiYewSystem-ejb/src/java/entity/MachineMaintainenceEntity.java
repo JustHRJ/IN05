@@ -29,7 +29,7 @@ public class MachineMaintainenceEntity implements Serializable {
     private String ServiceContact;
     private String serviceProvider;
     private MachineEntity machine = new MachineEntity();
-   
+    private String status;
     
     public Long getId() {
         return id;
@@ -142,6 +142,20 @@ public class MachineMaintainenceEntity implements Serializable {
      */
     public void setServiceProvider(String serviceProvider) {
         this.serviceProvider = serviceProvider;
+    }
+
+    /**
+     * @return the status
+     */
+    public String getStatus() {
+        return status;
+    }
+
+    /**
+     * @param status the status to set
+     */
+    public void setStatus(String status) {
+        this.status = status;
     }
     
 }

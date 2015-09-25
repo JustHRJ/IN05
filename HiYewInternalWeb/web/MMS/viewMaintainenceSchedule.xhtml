@@ -110,7 +110,7 @@
             <br/><br/>
             <p:dataTable id ="data3" value ="#{hiYewDataTableBean.maintainenceMachine}" var ="im" paginator="true" rows="5" emptyMessage="No machine maintainence" editable = "true">
                 <f:facet name="header">
-                    View Other scheduled Maintainence
+                    View Other Scheduled Maintenance
                 </f:facet>
                 <p:growl id ="msgs" showDetail="false"/>
                 <p:ajax event="rowEdit" listener="#{hiYewManagedBean.updateMachineSchedule}" update =":formMain:msgs" />
@@ -152,10 +152,15 @@
                     <p:rowEditor />
                 </p:column>
             </p:dataTable>
-
+            
             <p:outputLabel value ="Delete by maintainence ID"/>
             <p:inputText value ="#{hiYewManagedBean.machineMaintainenceID}"/>
             <p:commandButton value ="Delete Maintainence" action ="#{hiYewManagedBean.deleteMachineMaintainence()}" update ="msgs" />
+            <br/>
+            <p:outputLabel value ="Complete maintainence by Machine ID"/>
+            <p:inputText value ="#{hiYewManagedBean.machineId}"/>
+            <p:commandButton value ="Update Machine" action ="#{hiYewManagedBean.extendMachine()}" update ="msgs" />
+
         </h:form>
     </h:body>
 </html>

@@ -48,7 +48,7 @@
                     </p:row>
                     <p:row>   
                         <p:column>
-                            <p:outputLabel style ="font-weight: bold" value ="Machine Next Maintainence:  " />
+                            <p:outputLabel for ="cal" style ="font-weight: bold" value ="Machine Next Maintainence:  " />
                         </p:column>
                         <p:column>
                             <p:calendar id = "cal" value = "#{hiYewManagedBean.machineNxtMaint}" mindate="#{hiYewManagedBean.getToday()}" pattern ="dd/MM/yyyy" required = "true" requiredMessage="Please enter next maintainence date"/>
@@ -58,7 +58,7 @@
 
                     <p:row>   
                         <p:column>
-                            <p:outputLabel for ="machine_subMaint" style ="font-weight: bold" value ="Subsequent Maintainence Schedule (in Months):  "/>
+                            <p:outputLabel for ="machine_subMaint" style ="font-weight: bold" value ="Set Periodic Maintainence Schedule (in Months):  "/>
                         </p:column>
                         <p:column>
                             <p:inputText label ="Machine_SubMaint" id ="machine_subMaint" value ="#{hiYewManagedBean.machineSubMaint}" required = "true" validatorMessage="Please enter more than 1 month of next subsequent maintainence date"> 

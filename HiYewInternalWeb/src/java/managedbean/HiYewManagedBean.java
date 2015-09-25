@@ -86,6 +86,9 @@ public class HiYewManagedBean {
     private String trainingCode = "";
     private String leaveType = "";
 
+    
+    
+    
     /**
      * Creates a new instance of HiYewManagedBean
      */
@@ -107,6 +110,10 @@ public class HiYewManagedBean {
             return "";
         }
     }
+    
+    public String retrieveMachineName(){
+        return (String) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("machineName");
+    }
 
     public void deleteTrainingSchedule() {
         boolean check = hiYewSystemBean.deleteTraining(trainingCode);
@@ -117,6 +124,12 @@ public class HiYewManagedBean {
         }
     }
 
+    public void extendMachineMaintenance() throws IOException{
+        FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("machineName", machineName);
+        
+        FacesContext.getCurrentInstance().getExternalContext().redirect("/HiYewInternalWeb/MMS/addMaintainenceSchedule.xhtml");
+    }
+    
     public void redirectP() throws IOException {
         FacesContext.getCurrentInstance().getExternalContext().redirect("/HiYewInternalWeb/changePassword.xhtml");
     }
@@ -136,7 +149,7 @@ public class HiYewManagedBean {
             ExternalContext externalContext = facesCtx.getExternalContext();
             externalContext.redirect("viewMaintainenceSchedule.xhtml");
         } else {
-            FacesMessage msg = new FacesMessage("machine id does not exist", machineMaintainenceID);
+            FacesMessage msg = new FacesMessage("Maintenance id does not exist", machineMaintainenceID);
             FacesContext.getCurrentInstance().addMessage(null, msg);
         }
     }

@@ -10,7 +10,7 @@
     <h:body>
         <h:form id ="formMain">
             <h1>Add Machine Maintainence Schedule</h1>
-             #{loginControlBean.checkLoginRedirect()}
+            #{loginControlBean.checkLoginRedirect()}
             <p:menubar>
                 <p:menuitem value ="Home" url ="/index.xhtml"/>
                 <p:menuitem value ="#{hiYewManagedBean.getMAlert()}" url ="alertMachine.xhtml" />
@@ -22,7 +22,7 @@
 
             Machines:
             <p:selectOneMenu value ="#{hiYewManagedBean.machineName}" required ="true" requiredMessage="Please select Machine to maintain" >
-                <f:selectItem itemValue ="" itemLabel ="Select One" noSelectionOption="true" />
+                <f:selectItem itemValue ="#{hiYewManagedBean.retrieveMachineName()}" itemLabel="#{hiYewManagedBean.retrieveMachineName()}" />
                 <f:selectItems value ="#{hiYewDataTableBean.machineNames}"/>
             </p:selectOneMenu>
 
