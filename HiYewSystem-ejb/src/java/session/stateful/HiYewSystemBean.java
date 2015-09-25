@@ -14,7 +14,9 @@ import entity.LeaveEntity;
 import entity.MachineMaintainenceEntity;
 import entity.PayrollEntity;
 import entity.TrainingScheduleEntity;
+import java.math.BigInteger;
 import java.security.MessageDigest;
+import java.security.SecureRandom;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -247,6 +249,52 @@ public class HiYewSystemBean implements HiYewSystemBeanLocal {
             em.persist(t);
             return true;
         }
+    }
+
+    public boolean updateTraining(TrainingScheduleEntity training, Date start, Date end, int size) {
+        boolean check = false;
+        if (start != null) {
+            Timestamp time = new Timestamp(start.getTime());
+
+            if (end != null) {
+                if (start.after(end)) {
+                    return false;
+                }
+            } else {
+                if (time.after(training.getTrainingEndDate())) {
+                    return false;
+                }
+            }
+
+            training.setTrainingStartDate(time);
+            check = true;
+        }
+        if (end != null) {
+            Timestamp time1 = new Timestamp(end.getTime());
+
+            if (start != null) {
+                if (start.after(end)) {
+                    return false;
+                }
+            } else {
+                if (training.getTrainingStartDate().after(end)) {
+                    return false;
+                }
+            }
+
+            training.setTrainingEndDate(time1);
+            check = true;
+        }
+        if (size != 0 && size != training.getTrianingSize()) {
+            training.setTrianingSize(size);
+            check = true;
+        }
+
+        if (check) {
+            em.merge(training);
+            return true;
+        }
+        return false;
     }
 
     public List<TrainingScheduleEntity> trainingSchedueList() {
@@ -782,13 +830,14 @@ public class HiYewSystemBean implements HiYewSystemBeanLocal {
         }
     }
 
-    public boolean addEmployee(String employee, String employee_passNumber, String employee_address, int number_of_leave, String position, String username, String password, Timestamp expiry, String contact, String addressPostal, String unit, String optional, double employeePay, Date employedDate, String email) {
+    public Vector addEmployee(String employee, String employee_passNumber, String employee_address, int number_of_leave, String position, String username, Timestamp expiry, String contact, String addressPostal, String unit, String optional, double employeePay, Date employedDate, String email) {
+
         EmployeeEntity xin = new EmployeeEntity();
         try {
             Query q = em.createQuery("Select xin from EmployeeEntity xin where xin.employee_name = :id");
             q.setParameter("id", employee);
             xin = (EmployeeEntity) q.getSingleResult();
-            return false;
+            return null;
         } catch (Exception ex) {
             boolean check = checkUsername(username);
             boolean check2 = checkPass(employee_passNumber);
@@ -807,7 +856,8 @@ public class HiYewSystemBean implements HiYewSystemBeanLocal {
                 xin.setUsername(username);
                 xin.setUnit(unit);
                 xin.setOptional(optional);
-                String passwordHashed = hashingPassword(password);
+                String password1 = createRandomPass();
+                String passwordHashed = hashingPassword(password1);
                 xin.setPassword(passwordHashed);
                 xin.setEmployee_passExpiry(expiry);
                 xin.setEmployee_contact(contact);
@@ -818,10 +868,42 @@ public class HiYewSystemBean implements HiYewSystemBeanLocal {
                 xin.setEmployee_employedDate(time);
                 //xin.setEmployee_employedDate(ts);
                 em.persist(xin);
-                return true;
+                Vector im = new Vector();
+                im.add(xin.getEmployee_name());
+                im.add(xin.getUsername());
+                im.add(password1);
+                im.add(xin.getEmailAddress());
+                return im;
             } else {
-                return false;
+                return null;
             }
+        }
+    }
+
+    public Vector resetPassword(String username) {
+        EmployeeEntity e = new EmployeeEntity();
+        try {
+            Query q = em.createQuery("select e from EmployeeEntity e where e.username =:id");
+            q.setParameter("id", username);
+            e = (EmployeeEntity) q.getSingleResult();
+            if (e.getEmployee_account_status().equals("disabled")) {
+                return null;
+            }
+                
+            String password = createRandomPass();
+            e.setPassword(hashingPassword(password));
+            e.setAccount_status("firstTime");
+            em.merge(e);
+            Vector im = new Vector();
+            im.add(e.getEmployee_name());
+            im.add(username);
+            im.add(password);
+            im.add(e.getEmailAddress());
+
+            return im;
+
+        } catch (Exception ex) {
+            return null;
         }
     }
 
@@ -1618,5 +1700,13 @@ public class HiYewSystemBean implements HiYewSystemBeanLocal {
         } catch (Exception ex) {
             return null;
         }
+    }
+
+    private String createRandomPass() {
+        SecureRandom random = new SecureRandom();
+        String newPassword = new BigInteger(50, random).toString(32);
+        System.out.println(newPassword);
+        return newPassword;
+
     }
 }

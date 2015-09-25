@@ -196,6 +196,7 @@ public class registrationValidator implements Validator {
         }
 
     }
+    
 
     public void validateU(FacesContext context, UIComponent component, Object submittedAndConvertedValue) throws ValidatorException {
         String username = (String) submittedAndConvertedValue;

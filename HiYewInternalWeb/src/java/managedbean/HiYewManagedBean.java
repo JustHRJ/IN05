@@ -25,6 +25,7 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
+import manager.EmailManager;
 import org.primefaces.event.RowEditEvent;
 import org.primefaces.event.SelectEvent;
 import session.stateful.HiYewSystemBeanLocal;
@@ -86,9 +87,6 @@ public class HiYewManagedBean {
     private String trainingCode = "";
     private String leaveType = "";
 
-    
-    
-    
     /**
      * Creates a new instance of HiYewManagedBean
      */
@@ -110,9 +108,20 @@ public class HiYewManagedBean {
             return "";
         }
     }
-    
-    public String retrieveMachineName(){
+
+    public String retrieveMachineName() {
         return (String) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("machineName");
+    }
+
+    public void updateTraining(RowEditEvent event) {
+        boolean check = hiYewSystemBean.updateTraining((TrainingScheduleEntity) event.getObject(), trainingStartDate, trainingEndDate, trainingSize);
+        if (check) {
+            FacesMessage msg = new FacesMessage("Trainng edited");
+            FacesContext.getCurrentInstance().addMessage(null, msg);
+        } else {
+            FacesMessage msg = new FacesMessage("Trainng not edited. Error, or nothing to edit");
+            FacesContext.getCurrentInstance().addMessage(null, msg);
+        }
     }
 
     public void deleteTrainingSchedule() {
@@ -124,12 +133,12 @@ public class HiYewManagedBean {
         }
     }
 
-    public void extendMachineMaintenance() throws IOException{
+    public void extendMachineMaintenance() throws IOException {
         FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("machineName", machineName);
-        
+
         FacesContext.getCurrentInstance().getExternalContext().redirect("/HiYewInternalWeb/MMS/addMaintainenceSchedule.xhtml");
     }
-    
+
     public void redirectP() throws IOException {
         FacesContext.getCurrentInstance().getExternalContext().redirect("/HiYewInternalWeb/changePassword.xhtml");
     }
@@ -175,7 +184,7 @@ public class HiYewManagedBean {
             check = hiYewSystemBean.addTrainingSchedule(trainingName, trainingStartDate, trainingEndDate, trainingDescription, trainingSize, trainingCode);
         }
         if (check) {
-           FacesContext.getCurrentInstance().getExternalContext().redirect("/HiYewInternalWeb/HRMS/addEmployeeTraining.xhtml");
+            FacesContext.getCurrentInstance().getExternalContext().redirect("/HiYewInternalWeb/HRMS/viewTraining.xhtml");
         } else {
             FacesMessage msg = new FacesMessage("Not Added", "Either existing schedule, else end date should not be before start date");
             FacesContext.getCurrentInstance().addMessage(null, msg);
@@ -209,15 +218,23 @@ public class HiYewManagedBean {
         return hiYewSystemBean.getPayroll(employeeName, months);
     }
 
-    public String registerFirst() {
+    public void registerFirst() throws IOException {
         Timestamp expiry = null;
         if (employeePassExpiry == null) {
             expiry = null;
         } else {
             expiry = new Timestamp(employeePassExpiry.getTime());
         }
-        hiYewSystemBean.addEmployee(employeeName, employeePassNumber, employeeAddress, employeeLeave, employeePosition, username, password, expiry, employeeContact, address_postal, employeeAddressUnit, employeeAdressOptional, employeePay, employedDate, employeeEmail);
-        return "login";
+        Vector result = hiYewSystemBean.addEmployee(employeeName, employeePassNumber, employeeAddress, employeeLeave, employeePosition, username, expiry, employeeContact, address_postal, employeeAddressUnit, employeeAdressOptional, employeePay, employedDate, employeeEmail);
+        if (result != null) {
+            EmailManager emailManager = new EmailManager();
+            emailManager.emailPassword(result.get(0).toString(), result.get(1).toString(), result.get(2).toString(), "hurulez@gmail.com");
+            FacesContext facesCtx = FacesContext.getCurrentInstance();
+            ExternalContext externalContext = facesCtx.getExternalContext();
+            externalContext.redirect("/HiYewInternalWeb/login.xhtml");
+
+        }
+
     }
 
     public String extendEmployeePass() {
@@ -284,8 +301,11 @@ public class HiYewManagedBean {
         } else {
             expiry = new Timestamp(employeePassExpiry.getTime());
         }
-        boolean result = hiYewSystemBean.addEmployee(employeeName, employeePassNumber, employeeAddress, employeeLeave, employeePosition, username, password, expiry, employeeContact, address_postal, employeeAddressUnit, employeeAdressOptional, employeePay, employedDate, employeeEmail);
-        if (result) {
+        Vector result = hiYewSystemBean.addEmployee(employeeName, employeePassNumber, employeeAddress, employeeLeave, employeePosition, username, expiry, employeeContact, address_postal, employeeAddressUnit, employeeAdressOptional, employeePay, employedDate, employeeEmail);
+        if (result != null) {
+            EmailManager emailManager = new EmailManager();
+            emailManager.emailPassword(result.get(0).toString(), result.get(1).toString(), result.get(2).toString(), result.get(3).toString());
+
             FacesContext facesCtx = FacesContext.getCurrentInstance();
             ExternalContext externalContext = facesCtx.getExternalContext();
             externalContext.redirect("/HiYewInternalWeb/HRMS/employee_details.xhtml");
@@ -293,6 +313,21 @@ public class HiYewManagedBean {
         } else {
             FacesMessage msg = new FacesMessage("Failed to Add", "Please check if existing username and other details");
             FacesContext.getCurrentInstance().addMessage(null, msg);
+
+        }
+    }
+
+    public void resetPassword() throws IOException {
+        Vector result = hiYewSystemBean.resetPassword(username);
+        if (result == null || result.size() == 0) {
+            FacesMessage msg = new FacesMessage("Failed to Reset Password", "Account is disabled");
+            FacesContext.getCurrentInstance().addMessage(null, msg);
+        } else {
+            EmailManager emailManager = new EmailManager();
+            emailManager.emailPassword(result.get(0).toString(), result.get(1).toString(), result.get(2).toString(), result.get(3).toString());
+            FacesContext facesCtx = FacesContext.getCurrentInstance();
+            ExternalContext externalContext = facesCtx.getExternalContext();
+            externalContext.redirect("/HiYewInternalWeb/HRMS/login.xhtml");
 
         }
     }

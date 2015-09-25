@@ -52,7 +52,7 @@
                 <p:column headerText="Email Address" >
                     <p:cellEditor>
                         <f:facet name ="output"><p:outputLabel value ="#{im.emailAddress}"/> </f:facet>
-                        <f:facet name ="input"><p:inputText value = "#{hiYewManagedBean.employeeEmail}" validator="#{registrationValidator.validateEmail}" validatorMessage="Please enter proper format" >   </p:inputText>   </f:facet>
+                        <f:facet name ="input"><p:inputText value = "#{hiYewManagedBean.employeeEmail}" validator="#{registrationValidator.validateEmail}" validatorMessage="Please enter proper email format" >   </p:inputText>   </f:facet>
                     </p:cellEditor>
                 </p:column>
                 <p:column headerText = "Employee Pass Number">
@@ -70,7 +70,7 @@
                 <p:column headerText = "Employee Leaves">
                     <p:cellEditor>
                         <f:facet name ="output"><h:outputText value="#{im.number_of_leaves}" style="text-align: center" /></f:facet>
-                        <f:facet name ="input"><p:inputText value ="#{hiYewManagedBean.employeeLeave}" maxlength="2" disabled="#{loginControlBean.checkValid()}">
+                        <f:facet name ="input"><p:inputText value ="#{hiYewManagedBean.employeeLeave}" maxlength="2" disabled="#{loginControlBean.checkValid()}" validatorMessage="Please input range 0 - 15">
                                 <f:validateDoubleRange minimum="0" maximum="15"/>
                             </p:inputText></f:facet>    
                     </p:cellEditor>
