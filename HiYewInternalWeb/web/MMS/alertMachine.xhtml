@@ -18,7 +18,7 @@
 
             <p:commandButton value ="Refresh alerts" id ="btn">
                 <f:ajax execute="btn" render ="data1"/>
-                <p:panel header ="View Leave">
+                <p:panel header ="View Machine">
                     <p:dataTable id = "data1" var="im" value="#{hiYewDataTableBean.expiredMachines}" paginator="true" rows="5" emptyMessage="No Machine Maintenance" >
                         <p:column headerText ="Machine ID" >
                             <h:outputText value ="#{im.id}" />
@@ -32,6 +32,7 @@
                         <p:column headerText ="Machine Expiry" >
                             <h:outputText value ="#{hiYewManagedBean.formatDate(im.machine_expiry)}" />
                         </p:column>
+                      
                     </p:dataTable>
                 </p:panel>
             </p:commandButton>
@@ -41,20 +42,18 @@
                 <p:panelGrid id ="grid">
                     <p:row>
                         <p:column>
-                            <p:outputLabel value ="Enter machine number to extend date"/>
+                            <p:outputLabel value ="Enter Machine Name to extend date"/>
                         </p:column>
                         <p:column>
-                            <p:inputText id ="machine_id" value ="#{hiYewManagedBean.machineId}" required = "true" requiredMessage="Please enter machine ID" validator="#{registrationValidator.validateMachineExpiry}"  validatorMessage="No existing expiring Machine" />
+                            <p:inputText id ="machine_id" value ="#{hiYewManagedBean.machineName}" requiredMessage="Please enter machine ID" validator="#{registrationValidator.validateMachineExpiry}"  validatorMessage="No existing expiring Machine" />
                         </p:column>
                         <p:column>
                             <p:message for="machine_id"/>
                         </p:column>
                     </p:row>              
                 </p:panelGrid>
-                <p:commandButton value ="extend" action ="#{hiYewManagedBean.extendMachine()}" update = "grid"/>
+                <p:commandButton value ="extend" action ="#{hiYewManagedBean.extendMachineMaintenance()}" update = "grid"/> 
             </p:panel>
-
-
         </h:form>
     </h:body>
 </html>

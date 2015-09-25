@@ -275,12 +275,14 @@ public class HiYewSystemBean implements HiYewSystemBeanLocal {
 
         for (Object o : q.getResultList()) {
             MachineMaintainenceEntity m = (MachineMaintainenceEntity) o;
-            if (time.after(m.getScheduleDate())) {
-                if (!time1.after(m.getScheduleDate())) {
-                    result.add(m);
-                } else if (time1.after(m.getScheduleDate())) {
-                    if (time1.getDay() == m.getScheduleDate().getDay() && time1.getMonth() == m.getScheduleDate().getMonth() && time1.getYear() == m.getScheduleDate().getYear()) {
+            if (m.getStatus().equals("incomplete")) {
+                if (time.after(m.getScheduleDate())) {
+                    if (!time1.after(m.getScheduleDate())) {
                         result.add(m);
+                    } else if (time1.after(m.getScheduleDate())) {
+                        if (time1.getDay() == m.getScheduleDate().getDay() && time1.getMonth() == m.getScheduleDate().getMonth() && time1.getYear() == m.getScheduleDate().getYear()) {
+                            result.add(m);
+                        }
                     }
                 }
             }
@@ -332,10 +334,10 @@ public class HiYewSystemBean implements HiYewSystemBeanLocal {
 
         for (Object o : q.getResultList()) {
             MachineMaintainenceEntity m = (MachineMaintainenceEntity) o;
-            if (time1.after(m.getScheduleDate())) {
-
-                result.add(m);
-
+            if (m.getStatus().equals("incomplete")) {
+                if (time1.after(m.getScheduleDate())) {
+                    result.add(m);
+                }
             }
         }
         if (result.isEmpty()) {
@@ -378,14 +380,27 @@ public class HiYewSystemBean implements HiYewSystemBeanLocal {
 
         for (Object o : q.getResultList()) {
             MachineMaintainenceEntity m = (MachineMaintainenceEntity) o;
-            if (!time1.after(m.getScheduleDate()) && !time.after(m.getScheduleDate())) {
-                result.add(m);
+            if (m.getStatus().equals("incomplete")) {
+                if (!time1.after(m.getScheduleDate()) && !time.after(m.getScheduleDate())) {
+                    result.add(m);
+                }
             }
         }
         if (result.isEmpty()) {
             return null;
         }
         return result;
+    }
+
+    private boolean checkClashMaintainence(MachineEntity machine) {
+        Collection<MachineMaintainenceEntity> maint = machine.getMachineMaintainence();
+        for (Object o : maint) {
+            MachineMaintainenceEntity mm = (MachineMaintainenceEntity) o;
+            if (mm.getStatus().equals("incomplete")) {
+                return false;
+            }
+        }
+        return true;
     }
 
     public boolean addMachineMaintainence(String machineName, Date mScheduleDate, String mScheduleHour, String maintainenceComments, String mServiceProvider, String mServiceContact) {
@@ -398,19 +413,24 @@ public class HiYewSystemBean implements HiYewSystemBeanLocal {
             // - is it available the machine during that time?
             // - is it already having an existing schedule?
             MachineMaintainenceEntity maint = new MachineMaintainenceEntity();
-
-            maint.setComments(machineName);
-            maint.setScheduleTime(mScheduleHour);
-            maint.setServiceProvider(mServiceProvider);
-            maint.setServiceContact(mServiceContact);
-            Timestamp time = new Timestamp(mScheduleDate.getTime());
-            maint.setScheduleDate(time);
-            maint.setComments(maintainenceComments);
-            maint.setMachine(machine);
-            em.persist(maint);
-            machine.getMachineMaintainence().add(maint);
-            em.merge(machine);
-            return true;
+            boolean check = checkClashMaintainence(machine);
+            if (check) {
+                maint.setComments(machineName);
+                maint.setScheduleTime(mScheduleHour);
+                maint.setServiceProvider(mServiceProvider);
+                maint.setServiceContact(mServiceContact);
+                Timestamp time = new Timestamp(mScheduleDate.getTime());
+                maint.setScheduleDate(time);
+                maint.setComments(maintainenceComments);
+                maint.setMachine(machine);
+                maint.setStatus("incomplete");
+                em.persist(maint);
+                machine.getMachineMaintainence().add(maint);
+                em.merge(machine);
+                return true;
+            } else {
+                return false;
+            }
         } catch (Exception ex) {
             return false;
         }
@@ -502,7 +522,7 @@ public class HiYewSystemBean implements HiYewSystemBeanLocal {
 
         for (Object o : machines) {
             MachineEntity m = (MachineEntity) o;
-            if (m.getMachine_number().equals(id)) {
+            if (m.getMachine_name().equals(id)) {
                 return false;
             }
         }
@@ -1227,7 +1247,7 @@ public class HiYewSystemBean implements HiYewSystemBeanLocal {
             Query q = em.createQuery("select employee from EmployeeEntity employee where employee.employee_name =:id");
             q.setParameter("id", employee1);
             employee = (EmployeeEntity) q.getSingleResult();
-
+            System.out.println("here");
             Collection<LeaveEntity> leaveRecords = employee.getLeaveRecords();
             for (Object o : leaveRecords) {
                 leave = (LeaveEntity) o;
@@ -1245,7 +1265,7 @@ public class HiYewSystemBean implements HiYewSystemBeanLocal {
             }
 
         } catch (Exception ex) {
-
+            System.out.println("here");
         }
     }
 
@@ -1507,11 +1527,20 @@ public class HiYewSystemBean implements HiYewSystemBeanLocal {
             Query q = em.createQuery("select machine from MachineEntity machine where machine.machine_number =:id");
             q.setParameter("id", machineNumber);
             machine = (MachineEntity) q.getSingleResult();
+            Collection<MachineMaintainenceEntity> machineR = machine.getMachineMaintainence();
+            for (Object o : machineR) {
+                MachineMaintainenceEntity mm = (MachineMaintainenceEntity) o;
+                if (mm.getStatus().equals("incomplete")) {
+                    mm.setStatus("complete");
+                    em.merge(mm);
+                }
+            }
             Calendar cal = Calendar.getInstance();
             cal.setTime(machine.getMachine_expiry());
             cal.add(Calendar.MONTH, machine.getExtension());
             Timestamp ts = new Timestamp(cal.getTime().getTime());
             machine.setMachine_expiry(ts);
+            machine.setStatus("available");
             em.merge(machine);
         } catch (Exception ex) {
 
