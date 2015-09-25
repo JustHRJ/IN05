@@ -33,9 +33,9 @@ public class BinEntity implements Serializable {
     @ManyToOne
     private ShelveEntity shelve = new ShelveEntity();
     
-    @ManyToMany(cascade={CascadeType.PERSIST})
-    @JoinTable
-    private Set<ItemEntity> items = new HashSet<ItemEntity>();
+//    @ManyToMany(cascade={CascadeType.PERSIST})
+//    @JoinTable
+//    private Set<ItemEntity> items = new HashSet<ItemEntity>();
 
     public BinEntity() {
     }
@@ -171,19 +171,19 @@ public class BinEntity implements Serializable {
     /**
      * @return the items
      */
-    public Set<ItemEntity> getItems() {
-        return items;
-    }
-
-    /**
-     * @param items the items to set
-     */
-    public void setItems(Set<ItemEntity> items) {
-        this.items = items;
-    }
-    
-    public void addItemToBin(ItemEntity item){
-        this.items.add(item);
-    }
+//    public Set<ItemEntity> getItems() {
+//        return items;
+//    }
+//
+//    /**
+//     * @param items the items to set
+//     */
+//    public void setItems(Set<ItemEntity> items) {
+//        this.items = items;
+//    }
+//    
+//    public void addItemToBin(ItemEntity item){
+//        this.items.add(item);
+//    }
     
 }

@@ -41,8 +41,8 @@ public class ItemEntity implements Serializable {
     private int reorderPoint;
     private double averageWeight;
     
-    @ManyToMany(cascade={CascadeType.PERSIST},mappedBy="items")
-    private Set<BinEntity> bins = new HashSet<BinEntity>();
+//    @ManyToMany(cascade={CascadeType.PERSIST},mappedBy="items")
+//    private Set<BinEntity> bins = new HashSet<BinEntity>();
 
     public ItemEntity() {
     }
@@ -202,19 +202,19 @@ public class ItemEntity implements Serializable {
     /**
      * @return the bins
      */
-    public Set<BinEntity> getBins() {
-        return bins;
-    }
-
-    /**
-     * @param bins the bins to set
-     */
-    public void setBins(Set<BinEntity> bins) {
-        this.bins = bins;
-    }
-    
-    public void addBin(BinEntity bin){
-        this.bins.add(bin);
-    }
+//    public Set<BinEntity> getBins() {
+//        return bins;
+//    }
+//
+//    /**
+//     * @param bins the bins to set
+//     */
+//    public void setBins(Set<BinEntity> bins) {
+//        this.bins = bins;
+//    }
+//    
+//    public void addBin(BinEntity bin){
+//        this.bins.add(bin);
+//    }
     
 }

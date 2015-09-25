@@ -46,7 +46,7 @@ public interface HiYewICSSessionBeanLocal {
 
     public void addBinToShelve(ShelveEntity shelve, BinEntity bin);
 
-    public void addItemToBin(ItemEntity item, BinEntity bin);
+//    public void addItemToBin(ItemEntity item, BinEntity bin);
 
     public RackEntity getExistingRack(String rackID);
 
@@ -58,7 +58,7 @@ public interface HiYewICSSessionBeanLocal {
 
     public ArrayList<BinEntity> getBinsInShelve(String shelveID);
 
-    public ArrayList<ItemEntity> getItemInBins(String binID);
+ //   public ArrayList<ItemEntity> getItemInBins(String binID);
 
     public String getNextIDForRack();
 
