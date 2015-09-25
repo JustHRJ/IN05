@@ -66,12 +66,14 @@ public class HiYewICSSessionBean implements HiYewICSSessionBeanLocal {
     public void stockUp(ItemEntity item, int inQty) {
         ItemEntity i = em.find(ItemEntity.class, item.getItemCode());
         i.setQuantity(i.getQuantity() + inQty);
+        System.out.println("StatelessBean: stockUpOk");
     }
 
     @Override
     public void stockDown(ItemEntity item, int outQty) {
         ItemEntity i = em.find(ItemEntity.class, item.getItemCode());
         i.setQuantity(i.getQuantity() - outQty);
+        System.out.println("StatelessBean: stockDownOk");
     }
 
     @Override
@@ -84,6 +86,7 @@ public class HiYewICSSessionBean implements HiYewICSSessionBeanLocal {
     public void updateCost(ItemEntity item, double newCost){
         ItemEntity i = em.find(ItemEntity.class, item.getItemCode());
         i.setCost(newCost);
+        System.out.println("StatelessBean: updateCost");
     }
     
     @Override
@@ -113,10 +116,10 @@ public class HiYewICSSessionBean implements HiYewICSSessionBeanLocal {
         
     }
     
-    @Override
-    public void addItemToBin(ItemEntity item, BinEntity bin){
-        bin.addItemToBin(item);
-    }
+//    @Override
+//    public void addItemToBin(ItemEntity item, BinEntity bin){
+//        bin.addItemToBin(item);
+//    }
     
     @Override
    public RackEntity getExistingRack(String rackID) {
@@ -175,17 +178,17 @@ public class HiYewICSSessionBean implements HiYewICSSessionBeanLocal {
       }
   }
   
-  @Override
-  public ArrayList<ItemEntity> getItemInBins(String binID){
-      ArrayList<ItemEntity> items = new ArrayList<ItemEntity>();
-      if(getExistingBin(binID)!=null){
-          BinEntity selectedBin = getExistingBin(binID);
-          items.addAll(selectedBin.getItems());
-          return items;
-      }else{
-          return items;
-      }
-  }
+//  @Override
+//  public ArrayList<ItemEntity> getItemInBins(String binID){
+//      ArrayList<ItemEntity> items = new ArrayList<ItemEntity>();
+//      if(getExistingBin(binID)!=null){
+//          BinEntity selectedBin = getExistingBin(binID);
+//          items.addAll(selectedBin.getItems());
+//          return items;
+//      }else{
+//          return items;
+//      }
+//  }
   
     @Override
   public String getNextIDForRack(){
