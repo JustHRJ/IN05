@@ -24,7 +24,7 @@ import javax.persistence.OneToMany;
 public class EmployeeEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
-    
+
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Id
     private Long id;
@@ -42,20 +42,27 @@ public class EmployeeEntity implements Serializable {
     private String employee_contact;
     private double employee_basic;
     private Timestamp employee_employedDate;
-    
-    
+    private String addressPostal;
+    private String unit;
+    private String optional;
+    private String account_status;
+    private String emailAddress;
+
     public EmployeeEntity() {
 
     }
+
+
     
-    @OneToMany(cascade = {CascadeType.ALL})
-    public Collection<PayrollEntity> getPayRecords(){
+    @OneToMany(cascade = {CascadeType.ALL}, mappedBy = "employee")
+    public Collection<PayrollEntity> getPayRecords() {
         return payRecords;
     }
-    public void setPayRecords(Collection<PayrollEntity> payRecords){
+
+    public void setPayRecords(Collection<PayrollEntity> payRecords) {
         this.payRecords = payRecords;
     }
-    
+
     @OneToMany(cascade = {CascadeType.ALL})
     public Collection<LeaveEntity> getLeaveRecords() {
         return leaveRecords;
@@ -264,6 +271,76 @@ public class EmployeeEntity implements Serializable {
      */
     public void setEmployee_employedDate(Timestamp employee_employedDate) {
         this.employee_employedDate = employee_employedDate;
+    }
+
+    /**
+     * @return the addressPostal
+     */
+    public String getAddressPostal() {
+        return addressPostal;
+    }
+
+    /**
+     * @param addressPostal the addressPostal to set
+     */
+    public void setAddressPostal(String addressPostal) {
+        this.addressPostal = addressPostal;
+    }
+
+    /**
+     * @return the unit
+     */
+    public String getUnit() {
+        return unit;
+    }
+
+    /**
+     * @param unit the unit to set
+     */
+    public void setUnit(String unit) {
+        this.unit = unit;
+    }
+
+    /**
+     * @return the optional
+     */
+    public String getOptional() {
+        return optional;
+    }
+
+    /**
+     * @param optional the optional to set
+     */
+    public void setOptional(String optional) {
+        this.optional = optional;
+    }
+
+    /**
+     * @return the account_status
+     */
+    public String getAccount_status() {
+        return account_status;
+    }
+
+    /**
+     * @param account_status the account_status to set
+     */
+    public void setAccount_status(String account_status) {
+        this.account_status = account_status;
+    }
+
+    /**
+     * @return the emailAddress
+     */
+    public String getEmailAddress() {
+        return emailAddress;
+    }
+
+    /**
+     * @param emailAddress the emailAddress to set
+     */
+    public void setEmailAddress(String emailAddress) {
+        this.emailAddress = emailAddress;
     }
 
 }

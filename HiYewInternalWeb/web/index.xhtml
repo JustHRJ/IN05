@@ -10,28 +10,63 @@
         <h1>HiYew Web Home Page</h1>
         <br/>
         <h:form>
-            <p:commandButton value ="#{loginControlBean.logged()}" action ="#{loginControlBean.userAction()}"/>
-        </h:form>
-        <h2>Human Resource Management System</h2>
-        <p:menubar>
-            <p:menuitem value ="Home" url ="index.xhtml"  />
-            <p:menuitem value ="Register employee" url ="HRMS/employeeRegistration.xhtml" disabled="#{loginControlBean.checkValid()}"/>
-            <p:menuitem value ="View Employee" url ="HRMS/employee_details.xhtml" />
-            <p:menuitem value ="Apply for Leave" url ="HRMS/leaveApplication.xhtml" />
-            <p:menuitem value ="Approve Leave" url ="HRMS/approveLeave.xhtml" disabled="#{loginControlBean.checkValid()}"/>
-            <p:menuitem value ="Check Leave Status" url ="HRMS/leaveStatus.xhtml" />
-            <p:menuitem value ="#{loginControlBean.getEAlert()}" url ="HRMS/alertEmployee.xhtml" />
-            <p:menuitem value ="Assign Payroll" url ="HRMS/createPayroll.xhtml" disabled = "#{loginControlBean.checkValid()}"/>
-        </p:menubar>
-        <br/>
-        <h2>Machine Control System</h2>
-        <p:menubar>
-            <p:menuitem value ="Home" url ="index.xhtml" />
-            <p:menuitem value ="Add Machinery" url ="MMS/addMachine.xhtml" />
-            <p:menuitem value ="View Machinery" url ="MMS/viewMachine.xhtml" />
-            <p:menuitem value ="#{hiYewManagedBean.getMAlert()}" url ="MMS/alertMachine.xhtml" />
-        </p:menubar>
 
+            #{loginControlBean.checkLoginRedirect()}
+            <p:commandButton value ="#{loginControlBean.logged()}" action ="#{loginControlBean.userAction()}"/>
+            <h2>Human Resource Management System - Employee Management</h2>
+            <br/>
+            <p:commandLink value ="Change Password" action ="#{hiYewManagedBean.redirectP}"/> 
+            <h3>logged in as: #{loginControlBean.employeeNameLog} </h3>
+            <p:menubar>
+                <p:menuitem value ="Home" url="/index.xhtml"  />
+                <p:menuitem value ="Register employee" url ="HRMS/employeeRegistration.xhtml" disabled="#{loginControlBean.checkValid()}"/>
+                <p:menuitem value ="View Employee" url ="HRMS/employee_details.xhtml" />
+            </p:menubar>
+            <br/>
+
+            <h2>Human Resource Management - Leave Management</h2>
+            <p:menubar>
+                <p:menuitem value ="Home" url="/index.xhtml"  />      
+                <p:menuitem value ="Apply for Leave" url ="HRMS/leaveApplication.xhtml" />
+                <p:menuitem value ="Approve Leave" url ="HRMS/approveLeave.xhtml" disabled="#{loginControlBean.checkValid()}"/>
+                <p:menuitem value ="Check Leave Status" url ="HRMS/leaveStatus.xhtml" />
+            </p:menubar>
+            <br/>
+            <h2>Human Resource Management - Training and Expiry</h2>
+            <p:menubar>
+                <p:menuitem value ="Home" url="/index.xhtml" />
+                <p:menuitem value ="#{loginControlBean.getEAlert()}" url ="HRMS/alertEmployee.xhtml" />
+                <p:menuitem value ="Add Training Schedule" url ="HRMS/addTrainingSchedule.xhtml" disabled="#{loginControlBean.checkValid()}" />
+                <p:menuitem value ="Add Employee Training" url ="HRMS/addEmployeeTraining.xhtml" disabled="#{loginControlBean.checkValid()}" />
+                <p:menuitem value ="view Upcoming training" url ="HRMS/viewTrainingSchedule.xhtml"/>
+            </p:menubar>
+            <br/>
+            <h2>Human Resource Management - PayRoll Control</h2>
+            <p:menubar>
+                <p:menuitem value ="Home" url="/index.xhtml" />   
+                <p:menuitem value ="Assign Payroll" url ="HRMS/createPayroll.xhtml" disabled = "#{loginControlBean.checkValid()}"/>
+                <p:menuitem value ="View Payroll" url ="HRMS/viewPayroll.xhtml"/>
+                <p:menuitem value ="Release Payroll" url ="HRMS/releasePayroll.xhtml" disabled="#{loginControlBean.checkValid()}"/>
+            </p:menubar>
+
+            <br/>
+
+            <h2>Machine Control System - Machine Management</h2>
+            <p:menubar>
+                <p:menuitem value ="Home" url ="index.xhtml" />
+                <p:menuitem value ="Add Machinery" url ="MMS/addMachine.xhtml" />
+                <p:menuitem value ="View Machinery" url ="MMS/viewMachine.xhtml" />
+
+            </p:menubar>
+            <br/>
+            <h2>Machine Control System - Maintainence Management</h2>
+            <p:menubar>
+                <p:menuitem value ="Home" url ="/index.xhtml"/>
+                <p:menuitem value ="#{hiYewManagedBean.getMAlert()}" url ="MMS/alertMachine.xhtml" />
+                <p:menuitem value ="Add Maintainence Schedule" url ="MMS/addMaintainenceSchedule.xhtml"/>
+                <p:menuitem value ="View Maintainence Schedule" url ="MMS/viewMaintainenceSchedule.xhtml" />
+            </p:menubar>
+        </h:form>
     </h:body>
 </html>
 

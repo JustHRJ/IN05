@@ -40,10 +40,34 @@
                     </p:row>
                     <p:row>   
                         <p:column>
+                            <p:outputLabel for ="employee_addressU" style ="font-weight: bold" value ="Employee Address Unit:  "/>
+                        </p:column>
+                        <p:column>
+                            <p:inputText  id ="employee_addressU" value ="#{hiYewManagedBean.employeeAddressUnit}"> </p:inputText>
+                        </p:column>
+                    </p:row>
+                    <p:row>   
+                        <p:column>
                             <p:outputLabel for ="employee_address" style ="font-weight: bold" value ="Employee Address:  "/>
                         </p:column>
                         <p:column>
-                            <p:inputText label ="Employee Address" id ="employee_address" value ="#{hiYewManagedBean.employeeAddress}"> </p:inputText>
+                            <p:inputText  id ="employee_address" value ="#{hiYewManagedBean.employeeAddress}"> </p:inputText>
+                        </p:column>
+                    </p:row>
+                    <p:row>   
+                        <p:column>
+                            <p:outputLabel for ="employee_addressO" style ="font-weight: bold" value ="Employee Address (Optional)  :  "/>
+                        </p:column>
+                        <p:column>
+                            <p:inputText  id ="employee_addressO" value ="#{hiYewManagedBean.employeeAdressOptional}"> </p:inputText>
+                        </p:column>
+                    </p:row>
+                    <p:row>   
+                        <p:column>
+                            <p:outputLabel for ="employee_addressP" style ="font-weight: bold" value ="Employee Address Postal:  "/>
+                        </p:column>
+                        <p:column>
+                            <p:inputText  id ="employee_addressP" value ="#{hiYewManagedBean.address_postal}"> </p:inputText>
                         </p:column>
                     </p:row>
                     <p:row>   
@@ -62,7 +86,14 @@
                             <p:inputText label ="Employee status" id ="employee_status" value ="#{hiYewManagedBean.employeePosition}"> </p:inputText>
                         </p:column>
                     </p:row>
-
+                    <p:row>   
+                        <p:column>
+                            <p:outputLabel for ="employee_pay" style ="font-weight: bold" value ="Employee pay:  "/>
+                        </p:column>
+                        <p:column>
+                            <p:inputText label ="Employee status" id ="employee_pay" value ="#{hiYewManagedBean.employeePay}"> </p:inputText>
+                        </p:column>
+                    </p:row>
                     <p:row>   
                         <p:column>
                             <p:outputLabel for ="employee_leave" style ="font-weight: bold" value ="Employee Leave:  "/>
@@ -86,6 +117,14 @@
                         </p:column>
                         <p:column>
                             <p:inputText label ="Employee Password" id ="employee_password" value ="#{hiYewManagedBean.password}"> </p:inputText>
+                        </p:column>
+                    </p:row>
+                    <p:row>
+                        <p:column>
+                            <p:outputLabel value ="Enter employedDate" style = "font-weight: bold"/>
+                        </p:column>
+                        <p:column>
+                            <p:calendar value ="#{hiYewManagedBean.employedDate}" pattern ="dd/MM/yyyy"/>
                         </p:column>
                     </p:row>
                 </p:panelGrid>

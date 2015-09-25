@@ -6,16 +6,15 @@
         <title>Human Resource System</title>
     </h:head>
     <h:body>
-        <h:form id = "formMain">
+        <h:form id ="formMain"> 
             <h1>Expiring Employee Pass</h1>
+              #{loginControlBean.checkLoginRedirect()}
             <p:menubar>
-                <p:menuitem value ="Home" url ="/index.xhtml"  />
-                <p:menuitem value ="Register employee" url ="employeeRegistration.xhtml" disabled="#{loginControlBean.checkValid()}"/>
-                <p:menuitem value ="View Employee" url ="employee_details.xhtml" />
-                <p:menuitem value ="Apply for Leave" url ="leaveApplication.xhtml" />
-                <p:menuitem value ="Approve Leave" url ="approveLeave.xhtml" disabled="#{loginControlBean.checkValid()}"/>
-                <p:menuitem value ="Check Leave Status" url ="leaveStatus.xhtml" />
+                <p:menuitem value ="Home" url="/index.xhtml" />
                 <p:menuitem value ="#{loginControlBean.getEAlert()}" url ="alertEmployee.xhtml" />
+                <p:menuitem value ="Add Training Schedule" url ="addTrainingSchedule.xhtml" disabled="#{loginControlBean.checkValid()}" />
+                <p:menuitem value ="Add Employee Training" url ="addEmployeeTraining.xhtml" disabled="#{loginControlBean.checkValid()}" />
+                <p:menuitem value ="view Upcoming training" url ="viewTrainingSchedule.xhtml"/>
             </p:menubar>
             <br/>
             <p:growl id ="msgs" showDetail="true"/>
@@ -38,14 +37,17 @@
                 </p:panel>
             </p:commandButton>
             <br/><br/>
-            <p:panel>
+            <p:panel style = "border: none">
                 <p:panelGrid id = "grid">
                     <p:row>
                         <p:column>
                             <p:outputLabel value ="Enter employee name to extend date"/>
                         </p:column>
                         <p:column>
-                            <p:inputText id ="in1" value ="#{hiYewManagedBean.employeeName}" required="true" requiredMessage="Enter employee Name to extend" validator="#{registrationValidator.validateExpiredName}" validatorMessage="No existing expiring employee" />
+                            <p:selectOneMenu style="width: 100%"  id ="in1" value ="#{hiYewManagedBean.employeeName}" disabled="#{loginControlBean.checkValid()}"  required="true" requiredMessage="Please input employee" validator="#{registrationValidator.validateExpiredName}" validatorMessage="Please input expiring employee">
+                                <f:selectItem itemValue ="" itemLabel="Select One" noSelectionOption="true"/>
+                                <f:selectItems value ="#{loginControlBean.validateLeaveName()}"/>
+                            </p:selectOneMenu>
                         </p:column>
                         <p:column>
                             <p:message for ="in1"/>
@@ -53,10 +55,10 @@
                     </p:row>
                     <p:row>
                         <p:column>
-                            <p:outputLabel value ="Enter next expiry date to extend date"/>
+                            <p:outputLabel value ="Enter Updated Expiry Date"/>
                         </p:column>
                         <p:column>
-                            <p:calendar id ="cal1"  value = "#{hiYewManagedBean.employeePassExpiry}" mindate="#{hiYewManagedBean.getToday()}" pattern ="dd/MM/yyyy" required="true" requiredMessage="Enter a date" />
+                            <p:calendar id ="cal1"  value = "#{hiYewManagedBean.employeePassExpiry}" mindate="#{hiYewManagedBean.getToday()}" pattern ="dd/MM/yyyy" required="true" requiredMessage="Enter a date" disabled ="#{loginControlBean.checkValid()}" />
                         </p:column>
                         <p:column>
                             <p:message for="cal1"/>
@@ -64,7 +66,7 @@
                     </p:row>
                 </p:panelGrid>
                 <br/>
-                <p:commandButton value ="extend" action ="#{hiYewManagedBean.extendEmployeePass()}" disabled="#{loginControlBean.checkValid()}" update ="grid" />
+                <p:commandButton value ="extend" action ="#{hiYewManagedBean.extendEmployeePass()}" disabled="#{loginControlBean.checkValid()}" update ="grid msgs" />
             </p:panel>
         </h:form>
     </h:body>

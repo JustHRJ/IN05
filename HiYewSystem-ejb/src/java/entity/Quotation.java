@@ -6,7 +6,7 @@
 package entity;
 
 import java.io.Serializable;
-import java.text.SimpleDateFormat;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -24,26 +24,30 @@ public class Quotation implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
     private String quotationNo;
-    private String date;
+    private Timestamp date;
     private String termsOfPayment = "30"; //30, 60, 90 days
+    private String status; //Processed, Pending, Accepted, Rejected
     //private QuotationDescription quotationDescription;
     
     @OneToMany(mappedBy = "quotation")
     private List<QuotationDescription> quotationDescriptions = new ArrayList<>();
     @ManyToOne
-    private Customer customer;
+    private Customer customer = new Customer();
 
     public Quotation() {
-        customer = new Customer();
+        //customer = new Customer();
         //quotationDescription = new QuotationDescription();
+        status = "Pending"; 
+        date = new Timestamp(Calendar.getInstance().getTime().getTime());
     }
     
-    public Quotation(String date, String termsOfPayment, String quotationNo, Customer customer, QuotationDescription qd) {
+    public Quotation(String termsOfPayment, String quotationNo, Customer customer, QuotationDescription qd, String status) {
         
-        this.date = date;
+        this.date = new Timestamp(Calendar.getInstance().getTime().getTime());
         this.termsOfPayment = termsOfPayment;
         this.quotationNo = quotationNo;
         this.customer = customer;
+        this.status = status;
         //this.quotationDescription = qd;
     }
     
@@ -64,14 +68,14 @@ public class Quotation implements Serializable {
     /**
      * @return the date
      */
-    public String getDate() {
+    public Timestamp getDate() {
         return date;
     }
 
     /**
      * @param date the date to set
      */
-    public void setDate(String date) {
+    public void setDate(Timestamp date) {
         this.date = date;
     }
 
@@ -90,20 +94,20 @@ public class Quotation implements Serializable {
     }
 
     /**
-     * @return the rfqDescriptions
+     * @return the quotationDescriptions
      */
     public List<QuotationDescription> getQuotationDescriptions() {
         return quotationDescriptions;
     }
 
     /**
-     * @param quotationDescriptions the rfqDescriptions to set
+     * @param quotationDescriptions the quotationDescriptions to set
      */
     public void setQuotationDescriptions(List<QuotationDescription> quotationDescriptions) {
         this.quotationDescriptions = quotationDescriptions;
     }
     
-    public void setQuotationDescriptions(QuotationDescription qd) {
+    public void addQuotationDescriptions(QuotationDescription qd) {
         this.quotationDescriptions.add(qd);
     }
 
@@ -120,8 +124,6 @@ public class Quotation implements Serializable {
     public void setCustomer(Customer customer) {
         this.customer = customer;
     }
-    
-    
     
     @Override
     public int hashCode() {
@@ -145,21 +147,22 @@ public class Quotation implements Serializable {
 
     @Override
     public String toString() {
-        return "entity.RFQ[ id=" + getQuotationNo() + " ]";
+        return "entity.quotation[ id=" + getQuotationNo() + " ]";
     }
 
     /**
-     * @return the qd
+     * @return the status
      */
-    //public QuotationDescription getQuotationDescription() {
-    //    return quotationDescription;
-    //}
+    public String getStatus() {
+        return status;
+    }
 
     /**
-     * @param quotationDescription the qd to set
+     * @param status the status to set
      */
-    //public void setQuotationDescription(QuotationDescription quotationDescription) {
-     //   this.quotationDescription = quotationDescription;
-    //}
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
     
 }

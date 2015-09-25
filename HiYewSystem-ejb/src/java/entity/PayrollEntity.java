@@ -11,6 +11,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 
 /**
  *
@@ -23,14 +24,23 @@ public class PayrollEntity implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     private String months;
-    private boolean bonus;
+    private double bonus;
     private Timestamp payment;
     private String status;
     private Timestamp last_payment;
+    private EmployeeEntity employee;
+    private double salary;
     
-
     public Long getId() {
         return id;
+    }
+    
+    @ManyToOne
+    public EmployeeEntity getEmployee(){
+        return employee;
+    }
+    public void setEmployee(EmployeeEntity employee){
+        this.employee = employee;
     }
 
     public void setId(Long id) {
@@ -79,14 +89,14 @@ public class PayrollEntity implements Serializable {
     /**
      * @return the bonus
      */
-    public boolean isBonus() {
+    public double getBonus() {
         return bonus;
     }
 
     /**
      * @param bonus the bonus to set
      */
-    public void setBonus(boolean bonus) {
+    public void setBonus(double bonus) {
         this.bonus = bonus;
     }
 
@@ -130,6 +140,20 @@ public class PayrollEntity implements Serializable {
      */
     public void setLast_payment(Timestamp last_payment) {
         this.last_payment = last_payment;
+    }
+
+    /**
+     * @return the salary
+     */
+    public double getSalary() {
+        return salary;
+    }
+
+    /**
+     * @param salary the salary to set
+     */
+    public void setSalary(double salary) {
+        this.salary = salary;
     }
     
 }

@@ -9,6 +9,15 @@
     </h:head>
     <h:body>
         <h:form id="formMain">
+            <h1>view PayRoll</h1>
+              #{loginControlBean.checkLoginRedirect()}
+            <p:menubar>
+                <p:menuitem value ="Home" url="/index.xhtml" />   
+                <p:menuitem value ="Assign Payroll" url ="createPayroll.xhtml" disabled = "#{loginControlBean.checkValid()}"/>
+                <p:menuitem value ="View Payroll" url ="viewPayroll.xhtml"/>
+                <p:menuitem value ="Release Payroll" url ="releasePayroll.xhtml" disabled="#{loginControlBean.checkValid()}"/>
+            </p:menubar>
+            <br/>
             <p:panelGrid style = "width: 100%" id = "lll">
                 <p:row>
                     <p:column colspan = "2">
@@ -31,7 +40,7 @@
                         <p:outputLabel value ="View by Month" />                        
                     </p:column>
                     <p:column>
-                        <p:selectOneMenu id = "panelF" value ="#{hiYewManagedBean.months}" style="width: 100%">
+                        <p:selectOneMenu id = "panelF" value ="#{hiYewManagedBean.months}" style="width: 100%" disabled="#{loginControlBean.checkValid()}">
                             <f:selectItem itemValue ="select" itemLabel = "Select One" />
                             <f:selectItem itemValue ="Jan" itemLabel = "January" />
                             <f:selectItem itemValue ="Feb" itemLabel = "Feburary" />
@@ -51,29 +60,28 @@
             </p:panelGrid>
             <p:commandButton value="Search for Pay Slips" id = "btn" update =":formMain:lll" >
                 <f:ajax execute ="lll" render="data1"/>
-         
+
                 <br/><br/><br/><br/><br/>
                 <p:panel id ="panel">
                     <p:dataTable  id = "data1" var ="im" value = "#{hiYewManagedBean.payrolls}" paginator="true" rows="5" emptyMessage="No Pays Yet" >
                         <p:column headerText="Employee Name">
-                            <p:outputLabel value ="#{im.get(0)}"/>
+                            <p:outputLabel value ="#{im.employee.employee_name}"/>
                         </p:column>
                         <p:column headerText="Period">
-                            <p:outputLabel value ="#{im.get(1)}"/>
+                            <p:outputLabel value ="#{im.month}"/>
                         </p:column>
                         <p:column headerText="Basic Salary">
-                            <p:outputLabel value ="#{im.get(2)}"/>
+                            <p:outputLabel value ="$ #{im.salary}"/>
                         </p:column>
                         <p:column headerText="Bonus">
-                            <p:outputLabel value ="#{im.get(3)}"/>
+                            <p:outputLabel value ="$ #{im.bonus}"/>
                         </p:column>
                         <p:column headerText="Total Salary">
-                            <p:outputLabel value ="#{im.get(4)}"/>
+                            <p:outputLabel value ="$ #{hiYewManagedBean.calculateTotal(im.bonus, im.salary)}"/>
                         </p:column>
                         <p:column headerText="Pay Status">
-                            <p:outputLabel value ="#{im.get(5)}"/>
+                            <p:outputLabel value ="#{im.status}"/>
                         </p:column>
-
                     </p:dataTable>
                 </p:panel>
             </p:commandButton>

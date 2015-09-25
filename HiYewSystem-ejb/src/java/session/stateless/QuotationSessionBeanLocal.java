@@ -7,6 +7,8 @@ package session.stateless;
 
 import entity.Customer;
 import entity.Quotation;
+import entity.QuotationDescription;
+import java.util.List;
 import javax.ejb.Local;
 
 /**
@@ -23,6 +25,10 @@ public interface QuotationSessionBeanLocal {
     public String getQuotationNo(String username);
 
     public void createQuotation(Quotation quotation);
+
+    public void createQuotationDesciption(QuotationDescription quotationDescription);
+
+    public List<Quotation> receivedQuotations(String username);
 
 
 

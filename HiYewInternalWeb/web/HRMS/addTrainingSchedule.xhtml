@@ -1,0 +1,79 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:head>
+        <title>Facelet Title</title>
+    </h:head>
+    <h:body>
+        <h:form id = "formMain">
+            <h1>Add Training Schedule</h1>
+              #{loginControlBean.checkLoginRedirect()}
+            <p:menubar>
+                <p:menuitem value ="Home" url="/index.xhtml" />
+                <p:menuitem value ="#{loginControlBean.getEAlert()}" url ="alertEmployee.xhtml" />
+                <p:menuitem value ="Add Training Schedule" url ="addTrainingSchedule.xhtml" disabled="#{loginControlBean.checkValid()}" />
+                <p:menuitem value ="Add Employee Training" url ="addEmployeeTraining.xhtml" disabled="#{loginControlBean.checkValid()}" />
+                <p:menuitem value ="view Upcoming training" url ="viewTrainingSchedule.xhtml"/>
+            </p:menubar>
+            <br/>
+            <p:panelGrid>
+                <p:growl id ="msgs" showDetail="false"/>
+                <p:row>
+                    <p:column>
+                        <p:outputLabel value ="Name of Training"/>
+                    </p:column>
+                    <p:column>
+                        <p:inputText value ="#{hiYewManagedBean.trainingName}" required = "true" requiredMessage="Please input Training Name"/>
+                    </p:column>
+                </p:row>
+                <p:row>
+                    <p:column>
+                        <p:outputLabel value ="Training Code" />
+                    </p:column>
+                    <p:column>
+                        <p:inputText value ="#{hiYewManagedBean.trainingCode}" required = "true" requiredMessage="Please input Training Code"/>
+                    </p:column>
+                </p:row>
+                <p:row>
+                    <p:column>
+                        <p:outputLabel value ="Start Date of training"/>    
+                    </p:column>
+                    <p:column>
+                        <p:calendar id = "cal" value = "#{hiYewManagedBean.trainingStartDate}" mindate="#{hiYewManagedBean.getToday()}" pattern ="dd/MM/yyyy"  required ="true" requiredMessage="Please input startDate"/>
+                    </p:column>
+                </p:row>
+                <p:row>
+                    <p:column>
+                        <p:outputLabel value ="End Date of Training"/>
+                    </p:column>
+                    <p:column>
+                        <p:calendar id = "cal1" value = "#{hiYewManagedBean.trainingEndDate}" mindate="#{hiYewManagedBean.getToday()}" pattern ="dd/MM/yyyy"  required ="true" requiredMessage="Please input endDate" />
+                    </p:column>
+                </p:row>
+                <p:row>
+                    <p:column>
+                        <p:outputLabel value ="Description"/>
+                    </p:column>
+                    <p:column>
+                        <p:inputTextarea value ="#{hiYewManagedBean.trainingDescription}" style="width: 95%"/>
+                    </p:column>
+                </p:row>
+                <p:row>
+                    <p:column>
+                        <p:outputLabel value ="Training Size"/>
+                    </p:column>
+                    <p:column>
+                        <p:inputText value ="#{hiYewManagedBean.trainingSize}" required = "true" requiredMessage="Please input training size" validatorMessage="Please input proper range between 1 - 15">
+                            <f:validateDoubleRange minimum="1" maximum="15"/>
+                        </p:inputText>
+                    </p:column>
+                </p:row>
+            </p:panelGrid>
+            <p:commandButton value ="Submit new Training" action ="#{hiYewManagedBean.addTrainingSchedule()}" update=":formMain:msgs" />
+        </h:form>
+    </h:body>
+</html>
+

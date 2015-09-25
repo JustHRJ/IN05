@@ -1,0 +1,77 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:head>
+        <title>Facelet Title</title>
+    </h:head>
+    <h:body>
+        <h:form id ="formMain">
+            <h1>Add Machine Maintainence Schedule</h1>
+             #{loginControlBean.checkLoginRedirect()}
+            <p:menubar>
+                <p:menuitem value ="Home" url ="/index.xhtml"/>
+                <p:menuitem value ="#{hiYewManagedBean.getMAlert()}" url ="alertMachine.xhtml" />
+                <p:menuitem value ="Add Maintainence Schedule" url ="addMaintainenceSchedule.xhtml"/>
+                <p:menuitem value ="View Maintainence Schedule" url ="viewMaintainenceSchedule.xhtml" />
+            </p:menubar>
+            <br/>
+
+
+            Machines:
+            <p:selectOneMenu value ="#{hiYewManagedBean.machineName}" required ="true" requiredMessage="Please select Machine to maintain" >
+                <f:selectItem itemValue ="" itemLabel ="Select One" noSelectionOption="true" />
+                <f:selectItems value ="#{hiYewDataTableBean.machineNames}"/>
+            </p:selectOneMenu>
+
+            <p:growl id ="msgs" showDetail="false"/>
+            <p:panelGrid>
+                <p:row>
+                    <p:column>
+                        <p:outputLabel value ="Schedule Date"/>
+                    </p:column>
+                    <p:column>
+                        <p:calendar id = "cal" value = "#{hiYewManagedBean.mScheduleDate}" mindate="#{hiYewManagedBean.getToday()}" pattern ="dd/MM/yyyy"  required ="true" requiredMessage="Please input Schedule Date"/>
+                    </p:column>
+                </p:row>
+                <p:row>
+                    <p:column>
+                        <p:outputLabel value ="Schedule Time (hhmm format)" />
+                    </p:column>
+                    <p:column>
+                        <p:inputText value ="#{hiYewManagedBean.mScheduleHour}" required ="true" validator="#{registrationValidator.validateTime}" requiredMessage="Please input Schedule Time" validatorMessage="Please input correct Schedule Time (hhmm) format"/>
+                    </p:column>
+                </p:row>
+                <p:row>
+                    <p:column>
+                        <p:outputLabel value ="Comments"/>
+                    </p:column>
+                    <p:column>
+                        <p:inputTextarea id="desc" value="#{hiYewManagedBean.maintainenceComments}" style ="width: 95%" >
+                        </p:inputTextarea>
+                    </p:column>
+                </p:row>
+                <p:row>
+                    <p:column>
+                        <p:outputLabel value ="Service Provider"/>
+                    </p:column>
+                    <p:column>
+                        <p:inputText value ="#{hiYewManagedBean.mServiceProvider}" required="true" requiredMessage="Please input service provider"/>
+                    </p:column>
+                </p:row>
+                <p:row>
+                    <p:column>
+                        <p:outputLabel value ="Service Contact"/>
+                    </p:column>
+                    <p:column>
+                        <p:inputText value ="#{hiYewManagedBean.mServiceContact}" required = "true" validator ="#{registrationValidator.validateNumeric}" requiredMessage="Please input contact" validatorMessage="Please input correct contact" />
+                    </p:column>
+                </p:row>
+            </p:panelGrid>
+            <p:commandButton value ="Submit machine Schedule" action="#{hiYewManagedBean.addMachineSchedule()}" update =":formMain:msgs" />
+        </h:form>
+    </h:body>
+</html>
+

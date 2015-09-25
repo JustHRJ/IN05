@@ -10,11 +10,12 @@
     <h:body>
         <h:form id = "formMain">
             <h1>View Machines</h1>
+             #{loginControlBean.checkLoginRedirect()}
             <p:menubar>
                 <p:menuitem value ="Home" url ="/index.xhtml" />
                 <p:menuitem value ="Add Machinery" url ="addMachine.xhtml" />
                 <p:menuitem value ="View Machinery" url ="viewMachine.xhtml" />
-                <p:menuitem value ="#{hiYewManagedBean.getMAlert()}" url ="alertMachine.xhtml" />
+         
             </p:menubar>
             <br/>
             <p:growl id = "msgs" showDetail="true"/>
@@ -24,7 +25,7 @@
                 </f:facet>
                 <p:ajax event="rowEdit" listener="#{hiYewManagedBean.updateMachinery}" update =":formMain:msgs" />
                 <p:column headerText ="Machine ID" >
-                    <h:outputText value="#{im.id}" style="text-align: center" />
+                    <h:outputText value="#{im.machine_number}" style="text-align: center" />
                 </p:column>                   
                 <p:column headerText ="Machine Name">
                     <p:cellEditor>
@@ -33,7 +34,11 @@
                     </p:cellEditor>
                 </p:column>
                 <p:column headerText = "Machine Expiry">
-                    <h:outputText value="#{hiYewManagedBean.formatDate(im.machine_expiry)}" style="text-align: center" />
+                    <p:cellEditor>
+                        <f:facet name ="output"> <h:outputText value="#{hiYewManagedBean.formatDate(im.machine_expiry)}" style="text-align: center" /></f:facet>
+                        <f:facet name ="input"><p:calendar value = "#{hiYewManagedBean.machineNxtMaint}" pattern = "dd/MM/yyyy"  mindate="#{hiYewManagedBean.getToday()}" /> </f:facet>
+                    </p:cellEditor>
+                   
                 </p:column>
                 <p:column headerText = "Machine Description">
                     <h:outputText value="#{im.description}" style="text-align: center" />

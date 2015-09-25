@@ -23,12 +23,14 @@ import javax.persistence.ManyToOne;
 public class QuotationDescription implements Serializable {
     private static final long serialVersionUID = 1L;
     
-    private Integer count = 1;
+    
     @Id
     private Integer quotationDescNo;
     private String itemDesc;
     private Integer qty;
     private Double price;
+    private String requestForMetalSample;
+    
     
     @ManyToOne
     private Quotation quotation;
@@ -36,28 +38,27 @@ public class QuotationDescription implements Serializable {
     private String quotationNo;
 
     public QuotationDescription() {
-        quotationDescNo = count;
-        count +=1;
+        requestForMetalSample = "No";
     }
 
-    public QuotationDescription(String jobDesc, Integer qty, Double price, Quotation quotation) {
-        quotationDescNo = count;
+    public QuotationDescription(Integer quotationDescNo, String jobDesc, Integer qty, Double price, Quotation quotation, String requestForMetalSample) {
+        this.quotationDescNo = quotationDescNo;
         this.itemDesc = jobDesc;
         this.qty = qty;
         this.price = price;
         this.quotation = quotation;
-        count += 1;
+        this.requestForMetalSample = requestForMetalSample;
     }
 
     /**
-     * @return the rfqDescNo
+     * @return the quotationDescNo
      */
     public Integer getQuotationDescNo() {
         return quotationDescNo;
     }
 
     /**
-     * @param quotationDescNo the rfqDescNo to set
+     * @param quotationDescNo the quotationDescNo to set
      */
     public void setQuotationDescNo(Integer quotationDescNo) {
         this.quotationDescNo = quotationDescNo;
@@ -143,7 +144,7 @@ public class QuotationDescription implements Serializable {
 
     @Override
     public String toString() {
-        return "entity.RFQDescription[ id=" + getQuotationDescNo() + " ]";
+        return "entity.quotationDescription[ id=" + getQuotationDescNo() + " ]";
     }
 
     /**
@@ -158,6 +159,20 @@ public class QuotationDescription implements Serializable {
      */
     public void setQuotationNo(String quotationNo) {
         this.quotationNo = quotationNo;
+    }
+
+    /**
+     * @return the requestForMetalSample
+     */
+    public String getRequestForMetalSample() {
+        return requestForMetalSample;
+    }
+
+    /**
+     * @param requestForMetalSample the requestForMetalSample to set
+     */
+    public void setRequestForMetalSample(String requestForMetalSample) {
+        this.requestForMetalSample = requestForMetalSample;
     }
     
 }

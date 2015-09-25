@@ -10,21 +10,22 @@
     <h:body>
         <h:form id ="formMain">
             <h1>Add Machinery</h1>
+             #{loginControlBean.checkLoginRedirect()}
             <p:menubar>
                 <p:menuitem value ="Home" url ="/index.xhtml" />
                 <p:menuitem value ="Add Machinery" url ="addMachine.xhtml" />
                 <p:menuitem value ="View Machinery" url ="viewMachine.xhtml" />
-                <p:menuitem value ="#{hiYewManagedBean.getMAlert()}" url ="alertMachine.xhtml" />
+
             </p:menubar>
-            <p:panel id ="panel" header="Add new Machinery">
-                <p:growl id ="msgs" showDetail="true"/>
+            <p:panel id ="panel" header="Add New Machinery">
+                <p:growl id ="msgs" showDetail="false"/>
                 <p:panelGrid id = "grid">
                     <p:row>
                         <p:column>
                             <p:outputLabel for ="machine_name" style ="font-weight: bold" value ="Machine Name:  "/>
                         </p:column>
                         <p:column>
-                            <p:inputText label ="Machine Name" id ="machine_name" value ="#{hiYewManagedBean.machineName}" required="true" requiredMessage="Please enter a machine name"> </p:inputText>
+                            <p:inputText label ="Machine Name" id ="machine_name" value ="#{hiYewManagedBean.machineName}" required="true" requiredMessage="Please enter a machine name" validator="#{registrationValidator.validateMachineName}" validatorMessage="Machine Name exist" > </p:inputText>
                         </p:column>
                       
                     </p:row>
@@ -39,7 +40,7 @@
                     </p:row>
                     <p:row>   
                         <p:column>
-                            <p:outputLabel for ="machine_description" style ="font-weight: bold" value ="machine description:  "/>
+                            <p:outputLabel for ="machine_description" style ="font-weight: bold" value ="Machine Description:  "/>
                         </p:column>
                         <p:column>
                             <p:inputText label ="Machine_Description" id ="machine_description" value ="#{hiYewManagedBean.machineDescript}"> </p:inputText>
@@ -47,7 +48,7 @@
                     </p:row>
                     <p:row>   
                         <p:column>
-                            <p:outputLabel style ="font-weight: bold" value ="machine next maintainence:  " />
+                            <p:outputLabel style ="font-weight: bold" value ="Machine Next Maintainence:  " />
                         </p:column>
                         <p:column>
                             <p:calendar id = "cal" value = "#{hiYewManagedBean.machineNxtMaint}" mindate="#{hiYewManagedBean.getToday()}" pattern ="dd/MM/yyyy" required = "true" requiredMessage="Please enter next maintainence date"/>
@@ -57,7 +58,7 @@
 
                     <p:row>   
                         <p:column>
-                            <p:outputLabel for ="machine_subMaint" style ="font-weight: bold" value ="subsequent maintainence schedule (in months):  "/>
+                            <p:outputLabel for ="machine_subMaint" style ="font-weight: bold" value ="Subsequent Maintainence Schedule (in Months):  "/>
                         </p:column>
                         <p:column>
                             <p:inputText label ="Machine_SubMaint" id ="machine_subMaint" value ="#{hiYewManagedBean.machineSubMaint}" required = "true" validatorMessage="Please enter more than 1 month of next subsequent maintainence date"> 
