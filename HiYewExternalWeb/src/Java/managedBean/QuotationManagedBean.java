@@ -63,8 +63,8 @@ public class QuotationManagedBean implements Serializable {
     @PostConstruct
     public void init() {
         count = 1;
-        if (FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("user") != null) {
-            username = FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("user").toString();
+        if (FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("username") != null) {
+            username = FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("username").toString();
             System.out.println("Q: Username is " + username);
         }
         date = new SimpleDateFormat("dd/MM/yyyy").format(Calendar.getInstance().getTime());
@@ -162,6 +162,7 @@ public class QuotationManagedBean implements Serializable {
     }
     
     public void setRejectionStatus(Quotation q){
+        System.out.println("Customer rejected quotation!");
         q.setStatus("Rejected");
         quotationSessionBean.conductMerge(q);
     }

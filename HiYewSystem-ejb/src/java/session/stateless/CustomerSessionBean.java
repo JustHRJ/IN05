@@ -84,6 +84,7 @@ public class CustomerSessionBean implements CustomerSessionBeanLocal {
         c.setAddress2(c1.getAddress2());
         c.setEmail(c1.getEmail());
         c.setPostalCode(c1.getPostalCode());
+        c.setSubscribeEmail(c1.getSubscribeEmail());
     }
 
     @Override
@@ -94,6 +95,6 @@ public class CustomerSessionBean implements CustomerSessionBeanLocal {
         c.setPw(encryptPassword(newPassword));
         em.persist(c);
         em.flush();
-        return c.getName() + ":" + newPassword;
+        return c.getName() + ":" + newPassword + ":" + c.getEmail();
     }
 }

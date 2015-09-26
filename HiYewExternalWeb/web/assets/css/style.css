@@ -9,6 +9,69 @@ body{
     font-family: 'Open Sans', Arial;
 }
 
+.ui-draggable .ui-dialog-titlebar {
+    cursor: move;
+    width: 100%;
+}
+
+.ui-tabs .ui-tabs-nav {
+    margin: 0;
+    width: 100%;
+}
+
+.ui-state-highlight, .ui-widget-content .ui-state-highlight, .ui-widget-header .ui-state-highlight {
+    border: 1px solid #666666;
+    /* background: #aaaaaa; */
+    background: white;
+    /* background: #aaaaaa -webkit-gradient(linear, left top, left bottom, from(rgba(0,0,0,0.25)), to(rgba(0,0,0,0))); */
+    background: white;
+    color: #ffffff;
+    text-shadow: 1px 1px 1px #333333;
+}
+
+.ui-helper-clearfix {
+    display: inline-block;
+}
+
+.ui-panelgrid .ui-panelgrid-cell {
+    border-width: 1px;
+    border-style: none; 
+    border-color: inherit;
+    padding: 4px 10px;
+}
+
+.ui-tabs {
+    position: relative;
+    padding: .2em;
+    zoom: 1;
+    font-size: 14px;
+    font-family: 'Open Sans';
+}
+
+.ui-panel .ui-panel-content {
+    border: 0;
+    background: none;
+    padding: 0em;
+    font-size: smaller;
+}
+
+.ui-icon {
+    display: inline-block;
+    text-indent: -99999px;
+    overflow: hidden;
+    background-repeat: no-repeat;
+}
+
+.ui-datatable tbody td {
+    border-color: inherit;
+    text-align: left;
+    font-family: 'Open Sans';
+    font-size: 14px;
+    height: 40px;
+    color: black;
+    font-weight: normal;
+}
+
 .subscribe .ui-chkbox .ui-chkbox-box {
     width: 16px;
     height: 16px;
@@ -40,6 +103,8 @@ body{
     font-weight: bold;
     color: #4f4f4f;
     text-shadow: 0px 1px 0px rgba(255,255,255,0.7);
+    font-family: 'Open Sans';
+    font-size: 14px;
 }
 .subscribe .ui-widget {
     /*font-family: Arial,sans-serif;*/
@@ -649,7 +714,7 @@ i.danger{color: #E85344}
     bottom: 0px;
     background: #E5E9EC;
     padding: 20px;
-    font-size: 13px;
+    font-size: 14px;
 }
 .button-menu-mobile{
     display: none;

@@ -6,27 +6,13 @@
 package entity;
 
 import java.io.Serializable;
-import java.security.InvalidKeyException;
-import java.security.Key;
-import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.crypto.BadPaddingException;
-import javax.crypto.Cipher;
-import javax.crypto.IllegalBlockSizeException;
-import javax.crypto.NoSuchPaddingException;
-import javax.crypto.spec.SecretKeySpec;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import util.enumeration.CustomerStatusEnum;
 
-/**
- *
- * @author: Jit Cheong
- */
 @Entity
 public class Customer implements Serializable {
 
@@ -41,6 +27,7 @@ public class Customer implements Serializable {
     private String phone;
     private String email;
     private String postalCode;
+    private String subscribeEmail;
 
     //private Integer active; // set 1 for existing customer;
     //@Enumerated(EnumType.STRING)
@@ -68,10 +55,21 @@ public class Customer implements Serializable {
         this.quotations = quotations;
         this.customerPOs = customerPOs;
     }
-
-
     
+    /**
+     * @return the subscribeEmail
+     */
+    public String getSubscribeEmail() {
+        return subscribeEmail;
+    }
 
+    /**
+     * @param subscribeEmail the subscribeEmail to set
+     */
+    public void setSubscribeEmail(String subscribeEmail) {
+        this.subscribeEmail = subscribeEmail;
+    }
+    
     /**
      * @return the userName
      */

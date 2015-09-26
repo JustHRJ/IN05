@@ -71,8 +71,8 @@ public class CustomerPOManagedBean implements Serializable {
 
     @PostConstruct
     public void init() {
-        if (FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("user") != null) {
-            username = FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("user").toString();
+        if (FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("username") != null) {
+            username = FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("username").toString();
             System.out.println("Q: Username is " + username);
         }
 
@@ -106,6 +106,7 @@ public class CustomerPOManagedBean implements Serializable {
     }
 
     public void generatePurchaseOrder(Quotation q) {
+        System.out.println("Customer sent purchase order!");
         purOrderNo = q.getQuotationNo();
         attn = q.getCustomer().getName();
         paymentTerms = q.getTermsOfPayment();
@@ -144,6 +145,7 @@ public class CustomerPOManagedBean implements Serializable {
     }
 
     public void showDialog() {
+        System.out.println("Show Dialog - AFTER Customer sent purchase order!");
         RequestContext context = RequestContext.getCurrentInstance();
         context.execute("PF('myDialogVar').show();");
     }
