@@ -56,7 +56,7 @@
                 <f:facet name="header">
                     Payroll Template: For the Month of #{hiYewManagedBean.getMonth2()} 
                 </f:facet>
-                <p:column headerText ="Employee Name">
+                <p:column headerText ="Employee Name" filterBy="#{im.employee.employee_name}" sortBy="#{im.employee.employee_name}">
                     <h:outputText value ="#{im.employee.employee_name}" />
                 </p:column>
                 <p:column headerText="Basic Salary">
