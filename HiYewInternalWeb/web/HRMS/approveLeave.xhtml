@@ -5,18 +5,80 @@
       xmlns:p="http://primefaces.org/ui"
       xmlns:f="http://xmlns.jcp.org/jsf/core">
     <h:head>
-        <title>Human Resource Front Page</title>
+        <title>Human Resource Management Page</title>
+        <style>
+            .menu{
+                margin-top:20px;
+                margin-bottom:30px;
+                background-color: lightblue;
+            }
+        </style>
     </h:head>
     <h:body>
         <h:form id ="formMain">
-            <h1>Leave Approval</h1>
+      <a href ="/HiYewInternalWeb/index.xhtml"><img src = "../image/hiyew.gif"/> ></a>       <h1>Leave Approval</h1>
             #{loginControlBean.checkLoginRedirect()}
-            <p:menubar>
-                <p:menuitem value ="Home" url="/index.xhtml"  />      
-                <p:menuitem value ="Apply for Leave" url ="leaveApplication.xhtml" />
-                <p:menuitem value ="Approve Leave" url ="approveLeave.xhtml" disabled="#{loginControlBean.checkValid()}"/>
-                <p:menuitem value ="Check Leave Status" url ="leaveStatus.xhtml" />
-            </p:menubar>
+                <p:megaMenu orientation="horizontal"  styleClass="menu">
+                <p:submenu label ="Human Resource Management System" icon ="ui-icon-check" style ="font-weight: bold">
+                    <p:column>
+                        <p:submenu label ="Employee Management">
+                            <p:menuitem value ="Register employee" url ="employeeRegistration.xhtml" disabled="#{loginControlBean.checkValid()}"/>
+                            <p:menuitem value ="View Employee" url = "employee_details.xhtml" />
+                        </p:submenu>
+                        <p:submenu label="Payroll Management">
+                            <p:menuitem value ="Assign Payroll" url ="createPayroll.xhtml" disabled = "#{loginControlBean.checkValid()}"/>
+                            <p:menuitem value ="Release Payroll" url ="releasePayroll.xhtml" disabled="#{loginControlBean.checkValid()}"/>
+                            <p:menuitem value ="View Released Payroll" url ="viewPayroll.xhtml"/>
+                            
+                        </p:submenu>
+
+                    </p:column>
+                    <p:column>
+                        <p:submenu label="Training and Expiry">
+                            <p:menuitem value ="#{loginControlBean.getEAlert()}" url ="alertEmployee.xhtml" />
+                            <p:menuitem value ="Add Training Schedule" url ="addTrainingSchedule.xhtml" disabled="#{loginControlBean.checkValid()}" />
+                            <p:menuitem value ="Add Employee Training" url ="addEmployeeTraining.xhtml" disabled="#{loginControlBean.checkValid()}" />
+                            <p:menuitem value ="view Upcoming training" url ="viewTrainingSchedule.xhtml"/>
+                        </p:submenu>
+                        <p:submenu label ="Leave Management">
+                            <p:menuitem value ="Apply for Leave" url ="leaveApplication.xhtml" />
+                            <p:menuitem value ="Approve Leave" url ="approveLeave.xhtml" disabled="#{loginControlBean.checkValid()}"/>
+                            <p:menuitem value ="Check Leave Status" url ="leaveStatus.xhtml" />
+                        </p:submenu>
+
+                    </p:column>
+
+                </p:submenu>
+
+                <p:submenu label="Inventory Control System" icon="ui-icon-check" style="font-weight:bold">
+                    <p:column>
+                        <p:submenu label="Items Management">
+                            <p:menuitem value="View Inventory" url="/ICS/viewInventory.xhtml" />
+                            <p:menuitem value="Add New Item" url="/ICS/addNewItem.xhtml" />
+                        </p:submenu>
+                        <p:submenu label="Storage Management">
+                            <p:menuitem value="View Storage" url="#" />
+                            <p:menuitem value="Storage Allocation" url="#" />
+                            <p:menuitem value="Create Storage" url="#" />
+                        </p:submenu>
+                    </p:column>
+                </p:submenu>
+
+             <p:submenu label ="Machine Management System" icon ="ui-icon-check" style ="font-weight: bold">
+                    <p:column>
+                        <p:submenu label = "Machine Management" >
+                            <p:menuitem value ="Add Machinery" url ="/MMS/addMachine.xhtml" />
+                            <p:menuitem value ="View Machinery" url ="/MMS/viewMachine.xhtml" />
+
+                        </p:submenu>
+                        <p:submenu label ="Machine Maintenance">
+                            <p:menuitem value ="#{hiYewManagedBean.getMAlert()}" url ="/MMS/alertMachine.xhtml" />
+                           <p:menuitem value ="Add Maintenance Schedule" url ="/MMS/addMaintainenceSchedule.xhtml"/>
+                            <p:menuitem value ="View WMaintenance Schedule" url ="/MMS/viewMaintainenceSchedule.xhtml" />
+                        </p:submenu>
+                    </p:column>
+                </p:submenu>
+            </p:megaMenu>
             <br/>
             <p:growl id ="msgs" showDetail="false"/>
             
@@ -25,7 +87,7 @@
                     <p:outputLabel value ="Select Employee"/>
                 </p:column>
                 <p:column>
-                    <p:selectOneMenu value ="#{hiYewManagedBean.employeeName}"  requiredMessage="Please select Name" required ="true" id ="inputTxt1" >
+                    <p:selectOneMenu value ="#{hiYewManagedBean.employeeName}"   id ="inputTxt1" >
                         <f:selectItem itemValue="" itemLabel="Select One" noSelectionOption="true" />
                         <f:selectItems value ="#{loginControlBean.validateLeaveName()}"/>
                     </p:selectOneMenu>
@@ -48,6 +110,9 @@
                         </p:column>
                         <p:column headerText ="Leave Remarks">
                             <h:outputText value ="#{im.remarks}" />
+                        </p:column>
+                        <p:column headerText="Leave Type">
+                            <h:outputText value ="#{im.type}"/>
                         </p:column>
                         <p:column headerText ="Application Time" >
                             <h:outputText value ="#{hiYewManagedBean.formatDate(im.appliedTime)}" />
@@ -91,8 +156,11 @@
                     <p:column headerText ="Leave Remarks" sortBy="#{im.get(5)}">
                         <h:outputText value ="#{im.get(5)}" />
                     </p:column>
+                    <p:column headerText="Leave Type">
+                        <h:outputText value ="#{im.get(6)}"/>
+                    </p:column>
                     <p:column headerText ="Application Time" sortBy="#{im.get(6)}">
-                        <h:outputText value ="#{im.get(6)}" />
+                        <h:outputText value ="#{im.get(7)}" />
                     </p:column>
                     <p:column headerText="Action">
                         <p:commandLink ajax="false" title="Approve" action="#{hiYewManagedBean.approveLeave}"

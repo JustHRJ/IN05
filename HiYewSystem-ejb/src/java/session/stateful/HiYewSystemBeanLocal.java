@@ -66,7 +66,7 @@ public interface HiYewSystemBeanLocal {
 
     public List<MachineEntity> getAllMachine();
 
-    public void extendMachineExpiry(String machineNumber);
+    public boolean extendMachineExpiry(String machineNumber);
 
     public String login(String username, String password);
 
@@ -161,6 +161,30 @@ public interface HiYewSystemBeanLocal {
     public boolean updateTraining(TrainingScheduleEntity training, Date start, Date end, int size);
 
     public Vector resetPassword(String username);
+
+    public List<LeaveEntity> employeeLeaveToday();
+
+    public List<LeaveEntity> employeeLeave7days();
+
+    public List<Vector> employeeTrainingToday();
+
+    public List<Vector> employeeTraining7Days();
+
+    public List<LeaveEntity> employeeLeaveMonth();
+
+    public List<Vector> employeeTrainingMonth();
+
+    public List<LeaveEntity> employeeLeaveTodayUser(String username);
+
+    public List<Vector> employeeTrainingTodayUser(String username);
+
+    public List<LeaveEntity> employeeLeave7daysUser(String username);
+
+    public List<Vector> employeeTraining7DaysUser(String username);
+
+    public List<LeaveEntity> employeeLeaveMonthUser(String username);
+
+    public List<Vector> employeeTrainingMonthUser(String username);
 
     
 }

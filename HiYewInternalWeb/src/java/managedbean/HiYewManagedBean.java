@@ -109,6 +109,12 @@ public class HiYewManagedBean {
         }
     }
 
+    public String getMonth() {
+        Date date = new Date();
+        SimpleDateFormat format = new SimpleDateFormat("MMM,yyyy");
+        return format.format(date);
+    }
+
     public String retrieveMachineName() {
         return (String) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("machineName");
     }
@@ -248,8 +254,14 @@ public class HiYewManagedBean {
     }
 
     public String extendMachine() {
-        hiYewSystemBean.extendMachineExpiry(machineId);
-        return "viewMachine";
+        boolean check = hiYewSystemBean.extendMachineExpiry(machineId);
+        if (check) {
+            return "viewMachine";
+        } else {
+            FacesMessage msg = new FacesMessage("Machine not updated.", "Please enter Machine ID");
+            FacesContext.getCurrentInstance().addMessage(null, msg);
+            return "";
+        }
     }
 
     public Date getToday() {
@@ -271,12 +283,6 @@ public class HiYewManagedBean {
     public String getMonth2() {
         Calendar c = Calendar.getInstance();
         c.add(Calendar.MONTH, -1);
-        SimpleDateFormat format = new SimpleDateFormat("MMM,yyyy");
-        return format.format(c.getTime());
-    }
-
-    public String getMonth() {
-        Calendar c = Calendar.getInstance();
         SimpleDateFormat format = new SimpleDateFormat("MMM,yyyy");
         return format.format(c.getTime());
     }
@@ -323,11 +329,13 @@ public class HiYewManagedBean {
             FacesMessage msg = new FacesMessage("Failed to Reset Password", "Account is disabled");
             FacesContext.getCurrentInstance().addMessage(null, msg);
         } else {
+            FacesMessage msg = new FacesMessage("Password is reset");
+            FacesContext.getCurrentInstance().addMessage(null, msg);
             EmailManager emailManager = new EmailManager();
             emailManager.emailPassword(result.get(0).toString(), result.get(1).toString(), result.get(2).toString(), result.get(3).toString());
             FacesContext facesCtx = FacesContext.getCurrentInstance();
             ExternalContext externalContext = facesCtx.getExternalContext();
-            externalContext.redirect("/HiYewInternalWeb/HRMS/login.xhtml");
+            externalContext.redirect("/HiYewInternalWeb/login.xhtml");
 
         }
     }
@@ -385,6 +393,16 @@ public class HiYewManagedBean {
         int diffInDays = (int) ((end.getTime() - start.getTime())
                 / (1000 * 60 * 60 * 24));
         return diffInDays + 1;
+    }
+
+    public String view7Days() {
+        Calendar c = Calendar.getInstance();
+        c.add(Calendar.DATE, 1);
+        SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
+        Calendar d = Calendar.getInstance();
+        d.add(Calendar.DATE, 8);
+
+        return format.format(c.getTime()) + " - " + format.format(d.getTime());
     }
 
     public void applyLeave() {
