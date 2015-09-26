@@ -15,7 +15,7 @@
         </style>
     </h:head>
     <h:body>
-     <a href ="/HiYewInternalWeb/index.xhtml"><img src = "image/hiyew.gif" /></a>    <h1>HiYew Web Home Page</h1>
+        <a href ="/HiYewInternalWeb/index.xhtml"><img src = "image/hiyew.gif" /></a>    
         <br/>
         <h:form>
 
@@ -23,10 +23,9 @@
 
             <p:commandButton value ="#{loginControlBean.logged()}" action ="#{loginControlBean.userAction()}"/>
 
-            <br/>
             <p:commandLink value ="Change Password" action ="#{hiYewManagedBean.redirectP}"/> 
             <h3>logged in as: #{loginControlBean.employeeNameLog} </h3>
-
+            <h1>HiYew Web Home Page</h1>
 
             <p:megaMenu orientation="horizontal"  styleClass="menu">
                 <p:submenu label ="Human Resource Management System" icon ="ui-icon-check" style ="font-weight: bold">
@@ -39,7 +38,7 @@
                             <p:menuitem value ="Assign Payroll" url ="HRMS/createPayroll.xhtml" disabled = "#{loginControlBean.checkValid()}"/>
                             <p:menuitem value ="Release Payroll" url ="HRMS/releasePayroll.xhtml" disabled="#{loginControlBean.checkValid()}"/>
                             <p:menuitem value ="View Released Payroll" url ="HRMS/viewPayroll.xhtml"/>
-                            
+
                         </p:submenu>
 
                     </p:column>
@@ -83,8 +82,8 @@
                         </p:submenu>
                         <p:submenu label ="Machine Maintenance">
                             <p:menuitem value ="#{hiYewManagedBean.getMAlert()}" url ="MMS/alertMachine.xhtml" />
-                            <p:menuitem value ="Maintenance Schedule" url ="MMS/addMaintainenceSchedule.xhtml"/>
-                            <p:menuitem value ="Maintenance Schedule" url ="MMS/viewMaintainenceSchedule.xhtml" />
+                          <p:menuitem value ="Add Maintenance Schedule" url ="/MMS/addMaintainenceSchedule.xhtml"/>
+                            <p:menuitem value ="View WMaintenance Schedule" url ="/MMS/viewMaintainenceSchedule.xhtml" />
                         </p:submenu>
                     </p:column>
                 </p:submenu>

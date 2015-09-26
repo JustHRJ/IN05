@@ -72,8 +72,8 @@
                         </p:submenu>
                         <p:submenu label ="Machine Maintenance">
                             <p:menuitem value ="#{hiYewManagedBean.getMAlert()}" url ="alertMachine.xhtml" />
-                            <p:menuitem value ="Maintenance Schedule" url ="addMaintainenceSchedule.xhtml"/>
-                            <p:menuitem value ="Maintenance Schedule" url ="viewMaintainenceSchedule.xhtml" />
+                         <p:menuitem value ="Add Maintenance Schedule" url ="/MMS/addMaintainenceSchedule.xhtml"/>
+                            <p:menuitem value ="View WMaintenance Schedule" url ="/MMS/viewMaintainenceSchedule.xhtml" />
                         </p:submenu>
                     </p:column>
                 </p:submenu>
@@ -127,7 +127,7 @@
                         <p:outputLabel value ="Service Contact"/>
                     </p:column>
                     <p:column>
-                        <p:inputText value ="#{hiYewManagedBean.mServiceContact}" required = "true" validator ="#{registrationValidator.validateNumeric}" requiredMessage="Please input contact" validatorMessage="Please input correct contact" />
+                        <p:inputText value ="#{hiYewManagedBean.mServiceContact}"  maxlength="8" required = "true" validator ="#{registrationValidator.validateNumeric}" requiredMessage="Please input contact" validatorMessage="Please input correct contact" />
                     </p:column>
                 </p:row>
             </p:panelGrid>
