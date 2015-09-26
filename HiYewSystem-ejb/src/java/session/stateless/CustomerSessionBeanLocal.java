@@ -1,6 +1,7 @@
 package session.stateless;
 
 import entity.Customer;
+import entity.CustomerPO;
 import entity.Quotation;
 import java.util.List;
 import javax.ejb.Local;
@@ -21,5 +22,7 @@ public interface CustomerSessionBeanLocal {
     public void addQuotation(String username, Quotation quotation);
 
     public String encryptPassword(String password);
+
+    public void addPurchaseOrder(String username, CustomerPO cpo);
 
 }
