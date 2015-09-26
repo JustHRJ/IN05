@@ -109,6 +109,12 @@ public class HiYewManagedBean {
         }
     }
 
+    public String getMonth(){
+        Date date = new Date();
+        SimpleDateFormat format = new SimpleDateFormat("MMM,yyyy");
+        return format.format(date);
+    }
+    
     public String retrieveMachineName() {
         return (String) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("machineName");
     }
@@ -275,12 +281,6 @@ public class HiYewManagedBean {
         return format.format(c.getTime());
     }
 
-    public String getMonth() {
-        Calendar c = Calendar.getInstance();
-        SimpleDateFormat format = new SimpleDateFormat("MMM,yyyy");
-        return format.format(c.getTime());
-    }
-
     public void changePassword() throws IOException {
         System.out.println(employeeName);
         boolean check = hiYewSystemBean.changePassword(employeeName, oldPassword, password);
@@ -323,6 +323,8 @@ public class HiYewManagedBean {
             FacesMessage msg = new FacesMessage("Failed to Reset Password", "Account is disabled");
             FacesContext.getCurrentInstance().addMessage(null, msg);
         } else {
+            FacesMessage msg = new FacesMessage("Password is reset");
+            FacesContext.getCurrentInstance().addMessage(null, msg);
             EmailManager emailManager = new EmailManager();
             emailManager.emailPassword(result.get(0).toString(), result.get(1).toString(), result.get(2).toString(), result.get(3).toString());
             FacesContext facesCtx = FacesContext.getCurrentInstance();

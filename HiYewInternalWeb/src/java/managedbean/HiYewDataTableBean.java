@@ -35,6 +35,8 @@ public class HiYewDataTableBean {
 
     }
 
+    
+
     public List<MachineMaintainenceEntity> getMaintainenceMachineWeek() {
         return hiYewSystemBean.machineMaintainenceListWeek();
     }
@@ -82,21 +84,9 @@ public class HiYewDataTableBean {
     public List<TrainingScheduleEntity> getTrainingSchedule() {
         return hiYewSystemBean.trainingSchedueList();
     }
-
-    public List<LeaveEntity> getEmployeeLeaveToday() {
-        return hiYewSystemBean.employeeLeaveToday();
-    }
     
-    public List<Vector> getEmployeeTrainingToday(){
-        return hiYewSystemBean.employeeTrainingToday();
-    }
 
-    public List<Vector> getEmployeeTraining7Days(){
-        return hiYewSystemBean.employeeTraining7Days();
-    }
     
-    public List<LeaveEntity> getEmployeeLeave7Days() {
-        return hiYewSystemBean.employeeLeave7days();
-    }
+   
 
 }

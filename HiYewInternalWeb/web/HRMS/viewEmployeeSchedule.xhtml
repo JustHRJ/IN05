@@ -34,14 +34,17 @@
                                 <p:column headerText="Employee Pass Number">
                                     <p:outputLabel value ="#{im.get(1)}"/>
                                 </p:column>
-                                <p:column headerText="Training Code">
+                                <p:column headerText="Training Name">
                                     <p:outputLabel value ="#{im.get(2)}"/>
                                 </p:column>
+                                <p:column headerText="Training Code">
+                                    <p:outputLabel value ="#{im.get(3)}"/>
+                                </p:column>
                                 <p:column headerText="Training Start Date">
-                                    <p:outputLabel value ="#{hiYewManagedBean.formatDate(im.get(3))}"/>
+                                    <p:outputLabel value ="#{hiYewManagedBean.formatDate(im.get(4))}"/>
                                 </p:column>
                                 <p:column headerText="Training End Date">
-                                    <p:outputLabel value ="#{hiYewManagedBean.formatDate(im.get(4))}"/>
+                                    <p:outputLabel value ="#{hiYewManagedBean.formatDate(im.get(5))}"/>
                                 </p:column>
                             </p:dataTable>
                         </p:tab>    
@@ -70,21 +73,60 @@
                                 <p:column headerText="Employee Pass Number">
                                     <p:outputLabel value ="#{im.get(1)}"/>
                                 </p:column>
-                                <p:column headerText="Training Code">
+                                <p:column headerText="Training Name">
                                     <p:outputLabel value ="#{im.get(2)}"/>
                                 </p:column>
+                                <p:column headerText="Training Code">
+                                    <p:outputLabel value ="#{im.get(3)}"/>
+                                </p:column>
                                 <p:column headerText="Training Start Date">
-                                    <p:outputLabel value ="#{hiYewManagedBean.formatDate(im.get(3))}"/>
+                                    <p:outputLabel value ="#{hiYewManagedBean.formatDate(im.get(4))}"/>
                                 </p:column>
                                 <p:column headerText="Training End Date">
-                                    <p:outputLabel value ="#{hiYewManagedBean.formatDate(im.get(4))}"/>
+                                    <p:outputLabel value ="#{hiYewManagedBean.formatDate(im.get(5))}"/>
                                 </p:column>
                             </p:dataTable>
                         </p:tab>
                     </p:accordionPanel>
                 </p:tab>
-                <p:tab title ="For the Month">
-
+                <p:tab title ="For the Month #{hiYewManagedBean.month}">
+                    <p:accordionPanel multiple="true">
+                        <p:tab title ="Leave">
+                            <p:dataTable var ="im" value ="#{hiYewDataTableBean.employeeLeaveMonth}"  paginator="true" rows="5" emptyMessage="No Approved Leaves For the Month" >
+                                <p:column headerText="Employee Name">
+                                    <p:outputLabel value ="#{im.employee.employee_name}"/>
+                                </p:column>
+                                <p:column headerText="Leave Start Date">
+                                    <p:outputLabel value ="#{hiYewManagedBean.formatDate(im.startDate)}"/>
+                                </p:column>
+                                <p:column headerText="Leave End Date">
+                                    <p:outputLabel value ="#{hiYewManagedBean.formatDate(im.endDate)}"/>
+                                </p:column>
+                            </p:dataTable>
+                        </p:tab>
+                        <p:tab title ="Training">
+                            <p:dataTable var ="im" value ="#{hiYewDataTableBean.employeeTrainingMonth}"  paginator="true" rows="5" emptyMessage="No Employee under Training For the Month" >
+                                <p:column headerText="Employee Name">
+                                    <p:outputLabel value = "#{im.get(0)}"/>
+                                </p:column>
+                                <p:column headerText="Employee Pass Number">
+                                    <p:outputLabel value ="#{im.get(1)}"/>
+                                </p:column>
+                                <p:column headerText="Training Name">
+                                    <p:outputLabel value ="#{im.get(2)}"/>
+                                </p:column>
+                                <p:column headerText="Training Code">
+                                    <p:outputLabel value ="#{im.get(3)}"/>
+                                </p:column>
+                                <p:column headerText="Training Start Date">
+                                    <p:outputLabel value ="#{hiYewManagedBean.formatDate(im.get(4))}"/>
+                                </p:column>
+                                <p:column headerText="Training End Date">
+                                    <p:outputLabel value ="#{hiYewManagedBean.formatDate(im.get(5))}"/>
+                                </p:column>
+                            </p:dataTable>
+                        </p:tab>
+                    </p:accordionPanel>
                 </p:tab>
             </p:accordionPanel>
         </h:form>

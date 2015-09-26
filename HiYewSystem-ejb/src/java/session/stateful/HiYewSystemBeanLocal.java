@@ -170,5 +170,21 @@ public interface HiYewSystemBeanLocal {
 
     public List<Vector> employeeTraining7Days();
 
+    public List<LeaveEntity> employeeLeaveMonth();
+
+    public List<Vector> employeeTrainingMonth();
+
+    public List<LeaveEntity> employeeLeaveTodayUser(String username);
+
+    public List<Vector> employeeTrainingTodayUser(String username);
+
+    public List<LeaveEntity> employeeLeave7daysUser(String username);
+
+    public List<Vector> employeeTraining7DaysUser(String username);
+
+    public List<LeaveEntity> employeeLeaveMonthUser(String username);
+
+    public List<Vector> employeeTrainingMonthUser(String username);
+
     
 }
