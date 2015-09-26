@@ -327,7 +327,7 @@ public class HiYewManagedBean {
             emailManager.emailPassword(result.get(0).toString(), result.get(1).toString(), result.get(2).toString(), result.get(3).toString());
             FacesContext facesCtx = FacesContext.getCurrentInstance();
             ExternalContext externalContext = facesCtx.getExternalContext();
-            externalContext.redirect("/HiYewInternalWeb/HRMS/login.xhtml");
+            externalContext.redirect("/HiYewInternalWeb/login.xhtml");
 
         }
     }
@@ -387,6 +387,16 @@ public class HiYewManagedBean {
         return diffInDays + 1;
     }
 
+    public String view7Days(){
+        Calendar c = Calendar.getInstance();
+        c.add(Calendar.DATE, 1);
+        SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
+        Calendar d = Calendar.getInstance();
+        d.add(Calendar.DATE, 8);
+        
+        return format.format(c.getTime()) + " - " + format.format(d.getTime());
+    }
+    
     public void applyLeave() {
         leaveNumber = computeNumberLeave(startDate, endDate);
         boolean check;

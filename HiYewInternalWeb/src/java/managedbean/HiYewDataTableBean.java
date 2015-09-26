@@ -5,6 +5,7 @@
  */
 package managedbean;
 
+import entity.LeaveEntity;
 import entity.MachineEntity;
 import entity.MachineMaintainenceEntity;
 import entity.PayrollEntity;
@@ -73,12 +74,29 @@ public class HiYewDataTableBean {
     public List<String> getMachineMaint() {
         return hiYewSystemBean.machineMaintainenceNames();
     }
-    
-    public List<String> getEmployeeNames(){
+
+    public List<String> getEmployeeNames() {
         return hiYewSystemBean.getEmployee();
     }
-    
-    public List<TrainingScheduleEntity> getTrainingSchedule(){
+
+    public List<TrainingScheduleEntity> getTrainingSchedule() {
         return hiYewSystemBean.trainingSchedueList();
     }
+
+    public List<LeaveEntity> getEmployeeLeaveToday() {
+        return hiYewSystemBean.employeeLeaveToday();
+    }
+    
+    public List<Vector> getEmployeeTrainingToday(){
+        return hiYewSystemBean.employeeTrainingToday();
+    }
+
+    public List<Vector> getEmployeeTraining7Days(){
+        return hiYewSystemBean.employeeTraining7Days();
+    }
+    
+    public List<LeaveEntity> getEmployeeLeave7Days() {
+        return hiYewSystemBean.employeeLeave7days();
+    }
+
 }

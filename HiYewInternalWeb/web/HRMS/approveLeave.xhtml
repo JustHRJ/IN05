@@ -25,7 +25,7 @@
                     <p:outputLabel value ="Select Employee"/>
                 </p:column>
                 <p:column>
-                    <p:selectOneMenu value ="#{hiYewManagedBean.employeeName}"  requiredMessage="Please select Name" required ="true" id ="inputTxt1" >
+                    <p:selectOneMenu value ="#{hiYewManagedBean.employeeName}"   id ="inputTxt1" >
                         <f:selectItem itemValue="" itemLabel="Select One" noSelectionOption="true" />
                         <f:selectItems value ="#{loginControlBean.validateLeaveName()}"/>
                     </p:selectOneMenu>

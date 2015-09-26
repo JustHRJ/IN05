@@ -162,5 +162,13 @@ public interface HiYewSystemBeanLocal {
 
     public Vector resetPassword(String username);
 
+    public List<LeaveEntity> employeeLeaveToday();
+
+    public List<LeaveEntity> employeeLeave7days();
+
+    public List<Vector> employeeTrainingToday();
+
+    public List<Vector> employeeTraining7Days();
+
     
 }
