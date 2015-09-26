@@ -1707,6 +1707,7 @@ public class HiYewSystemBean implements HiYewSystemBeanLocal {
                     im.add(format.format(new Date(leave.getStartDate().getTime())));
                     im.add(format.format(new Date(leave.getEndDate().getTime())));
                     im.add(leave.getRemarks());
+                    im.add(leave.getType());
                     im.add(format.format(new Date(leave.getAppliedTime().getTime())));
                     allRecords.add(im);
                 }
@@ -2021,7 +2022,7 @@ public class HiYewSystemBean implements HiYewSystemBeanLocal {
         }
     }
 
-    public void extendMachineExpiry(String machineNumber) {
+    public boolean extendMachineExpiry(String machineNumber) {
         MachineEntity machine = new MachineEntity();
 
         try {
@@ -2043,8 +2044,9 @@ public class HiYewSystemBean implements HiYewSystemBeanLocal {
             machine.setMachine_expiry(ts);
             machine.setStatus("available");
             em.merge(machine);
+            return true;
         } catch (Exception ex) {
-
+            return false;
         }
     }
 

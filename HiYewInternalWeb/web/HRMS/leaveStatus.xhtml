@@ -42,6 +42,9 @@
                         <p:column headerText ="Leave Remarks">
                             <h:outputText value ="#{im.remarks}" />
                         </p:column>
+                        <p:column headerText="Leave Type">
+                            <h:outputText value ="#{im.type}"/>
+                        </p:column>
                         <p:column headerText ="Applied Date" >
                             <h:outputText value ="#{hiYewManagedBean.formatDate(im.appliedTime)}" />
                         </p:column>

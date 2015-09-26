@@ -49,6 +49,9 @@
                         <p:column headerText ="Leave Remarks">
                             <h:outputText value ="#{im.remarks}" />
                         </p:column>
+                        <p:column headerText="Leave Type">
+                            <h:outputText value ="#{im.type}"/>
+                        </p:column>
                         <p:column headerText ="Application Time" >
                             <h:outputText value ="#{hiYewManagedBean.formatDate(im.appliedTime)}" />
                         </p:column>
@@ -91,8 +94,11 @@
                     <p:column headerText ="Leave Remarks" sortBy="#{im.get(5)}">
                         <h:outputText value ="#{im.get(5)}" />
                     </p:column>
+                    <p:column headerText="Leave Type">
+                        <h:outputText value ="#{im.get(6)}"/>
+                    </p:column>
                     <p:column headerText ="Application Time" sortBy="#{im.get(6)}">
-                        <h:outputText value ="#{im.get(6)}" />
+                        <h:outputText value ="#{im.get(7)}" />
                     </p:column>
                     <p:column headerText="Action">
                         <p:commandLink ajax="false" title="Approve" action="#{hiYewManagedBean.approveLeave}"

@@ -37,8 +37,9 @@
                         </p:submenu>
                         <p:submenu label="Payroll Management">
                             <p:menuitem value ="Assign Payroll" url ="HRMS/createPayroll.xhtml" disabled = "#{loginControlBean.checkValid()}"/>
-                            <p:menuitem value ="View Payroll" url ="HRMS/viewPayroll.xhtml"/>
                             <p:menuitem value ="Release Payroll" url ="HRMS/releasePayroll.xhtml" disabled="#{loginControlBean.checkValid()}"/>
+                            <p:menuitem value ="View Released Payroll" url ="HRMS/viewPayroll.xhtml"/>
+                            
                         </p:submenu>
 
                     </p:column>

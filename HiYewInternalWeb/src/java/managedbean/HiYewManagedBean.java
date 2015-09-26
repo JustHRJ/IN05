@@ -109,12 +109,12 @@ public class HiYewManagedBean {
         }
     }
 
-    public String getMonth(){
+    public String getMonth() {
         Date date = new Date();
         SimpleDateFormat format = new SimpleDateFormat("MMM,yyyy");
         return format.format(date);
     }
-    
+
     public String retrieveMachineName() {
         return (String) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("machineName");
     }
@@ -254,8 +254,14 @@ public class HiYewManagedBean {
     }
 
     public String extendMachine() {
-        hiYewSystemBean.extendMachineExpiry(machineId);
-        return "viewMachine";
+        boolean check = hiYewSystemBean.extendMachineExpiry(machineId);
+        if (check) {
+            return "viewMachine";
+        } else {
+            FacesMessage msg = new FacesMessage("Machine not updated.", "Please enter Machine ID");
+            FacesContext.getCurrentInstance().addMessage(null, msg);
+            return "";
+        }
     }
 
     public Date getToday() {
@@ -389,16 +395,16 @@ public class HiYewManagedBean {
         return diffInDays + 1;
     }
 
-    public String view7Days(){
+    public String view7Days() {
         Calendar c = Calendar.getInstance();
         c.add(Calendar.DATE, 1);
         SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
         Calendar d = Calendar.getInstance();
         d.add(Calendar.DATE, 8);
-        
+
         return format.format(c.getTime()) + " - " + format.format(d.getTime());
     }
-    
+
     public void applyLeave() {
         leaveNumber = computeNumberLeave(startDate, endDate);
         boolean check;

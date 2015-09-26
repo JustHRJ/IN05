@@ -66,7 +66,7 @@ public interface HiYewSystemBeanLocal {
 
     public List<MachineEntity> getAllMachine();
 
-    public void extendMachineExpiry(String machineNumber);
+    public boolean extendMachineExpiry(String machineNumber);
 
     public String login(String username, String password);
 
