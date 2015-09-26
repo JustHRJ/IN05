@@ -38,7 +38,7 @@ public class QuotationDescription implements Serializable {
     private String quotationNo;
 
     public QuotationDescription() {
-        requestForMetalSample = "No";
+        //requestForMetalSample = "No";
     }
 
     public QuotationDescription(Integer quotationDescNo, String jobDesc, Integer qty, Double price, Quotation quotation, String requestForMetalSample) {

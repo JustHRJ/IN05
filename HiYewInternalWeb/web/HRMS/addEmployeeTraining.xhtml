@@ -19,14 +19,14 @@
             </p:menubar>
             <br/>
 
-            <p:growl id ="msgs" showDetail="true"/>
+            <p:growl id ="msgs" showDetail="false"/>
             <panelGrid>
                 <p:row>
                     <p:column>
                         <p:outputLabel value ="Select Employee"/>
                     </p:column>
                     <p:column>
-                        <p:selectOneMenu value ="#{hiYewManagedBeanView.employeeName}">
+                        <p:selectOneMenu value ="#{hiYewManagedBeanView.employeeName}" required="true" requiredMessage="Please select an employee">
                             <f:selectItem itemValue ="" itemLabel ="Select One" noSelectionOption="true"/>
                             <f:selectItems value ="#{hiYewDataTableBean.employeeNames}"/>
                         </p:selectOneMenu>
@@ -36,7 +36,7 @@
                         <f:facet name="header">
                             Available Training
                         </f:facet>
-                        <p:column selectionMode="single" style="width:16px;text-align:center">
+                        <p:column selectionMode="single" style="width:16px;text-align:center" >
                         </p:column>
                         <p:column headerText="Training Code">
                             <p:outputLabel value ="#{im.trainingCode}"/>
@@ -62,6 +62,10 @@
                     <p:commandButton action ="#{hiYewManagedBeanView.processEmployeeTraining()}" update="data1 msgs" icon="ui-icon-search" value="add" />
                 </p:row>
             </panelGrid>
+        </h:form>
+        <br/><br/>
+        <h:form>    
+            <p:commandButton value ="Training not available?" action ="#{redirector.employeeTraining()}"/>
         </h:form>
     </h:body>
 </html>

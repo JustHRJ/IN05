@@ -10,7 +10,7 @@
     <h:body>
         <h:form id ="formMain">
             <h1>Assigning of Payroll</h1>
-  #{loginControlBean.checkLoginRedirect()}
+            #{loginControlBean.checkLoginRedirect()}
             <p:menubar>
                 <p:menuitem value ="Home" url="/index.xhtml" />   
                 <p:menuitem value ="Assign Payroll" url ="createPayroll.xhtml" disabled = "#{loginControlBean.checkValid()}"/>
@@ -22,7 +22,7 @@
             <h:selectOneMenu value="#{hiYewManagedBean.employeeName}" style="width:20%">
                 <f:selectItems value="#{loginControlBean.validateLeaveName()}"  />
             </h:selectOneMenu> 
-            <p:commandButton id="btn" value="Dynamic" type="button" />
+            <p:commandButton id="btn" value="Create Payroll" type="button" update = "table"  />
             <p:overlayPanel id="moviePanel" for="btn" hideEffect="fade" dynamic="true" >
                 <p:panelGrid>
                     <p:row>
@@ -30,15 +30,20 @@
                             <p:outputLabel value = "Number of Late Arrival" />
                         </p:column>
                         <p:column>
-                            <p:inputText value = "#{hiYewManagedBean.lateArrival}" validatorMessage="Please input numeric"/>
+                            <p:inputText value = "#{hiYewManagedBean.lateArrival}" maxlength="2" validatorMessage="Please input range of 0 - 31">
+                                <f:validateDoubleRange minimum="0" maximum="31"/>
+                            </p:inputText>
+
                         </p:column>
                     </p:row>
                     <p:row>
                         <p:column>
-                            <p:outputLabel value ="Number of Absentee from Work" />
+                            <p:outputLabel value ="Number of Absentee from Work" /> 
                         </p:column>
                         <p:column>
-                            <p:inputText value ="#{hiYewManagedBean.absentee}" />
+                            <p:inputText value ="#{hiYewManagedBean.absentee}" validatorMessage="Please input ramge from 0 - 31" >
+                                <f:validateDoubleRange minimum="0" maximum="31"/>
+                            </p:inputText>
                         </p:column>
                     </p:row>
                     <p:commandButton value ="Submit" action ="#{hiYewManagedBean.createPayroll()}" update = ":formMain:msgs" />               
@@ -49,7 +54,7 @@
 
             <p:dataTable id ="table" var ="im" value ="#{hiYewDataTableBean.payRecords}"  paginator="true" rows="5" emptyMessage="No outstanding pay">
                 <f:facet name="header">
-                    Month: #{hiYewManagedBean.getMonth2()} to #{hiYewManagedBean.getMonth()}
+                    Payroll Template: For the Month of #{hiYewManagedBean.getMonth2()} 
                 </f:facet>
                 <p:column headerText ="Employee Name">
                     <h:outputText value ="#{im.employee.employee_name}" />

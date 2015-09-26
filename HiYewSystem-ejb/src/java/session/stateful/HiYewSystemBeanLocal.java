@@ -32,11 +32,11 @@ public interface HiYewSystemBeanLocal {
 
     public List<MachineEntity> checkMachineExpiry();
 
-    public boolean addEmployee(String employee, String employee_passNumber, String employee_address, int number_of_leave, String position, String username, String password, Timestamp expiry, String contact, String addressPostal, String unit, String optional, double pay, Date employedDate, String employeeEmail);
+    public Vector addEmployee(String employee, String employee_passNumber, String employee_address, int number_of_leave, String position, String username, Timestamp expiry, String contact, String addressPostal, String unit, String optional, double pay, Date employedDate, String employeeEmail);
 
     public boolean updateEmployee(EmployeeEntity employee, String employeeA, String employeeUnit, String employeeOptional, String address_postal, String contact, Date pass, String position, double pay, int leave, String email);
 
-    public boolean applyLeave(String employee, int days, String remarks, Date start, Date end);
+    public boolean applyLeave(String employee, int days, String remarks, Date start, Date end, String type);
 
     //view all pending leaves
 
@@ -140,7 +140,7 @@ public interface HiYewSystemBeanLocal {
 
     public boolean deleteTrainingEmployee(TrainingScheduleEntity training, String employee);
 
-    public boolean deleteMachineMaintainence(Long id);
+    public boolean deleteMachineMaintainence(String id);
 
     public List<PayrollEntity> getPayroll(String employeeName);
 
@@ -151,6 +151,16 @@ public interface HiYewSystemBeanLocal {
     public boolean updateEmployee(EmployeeEntity employee, String employeeA, String employeeUnit, String employeeOptional, String address_postal, String contact, String email);
 
     public void reenableEmployee(String employeeName);
+
+    public void rejectLeaveID(Long id, String employee1);
+
+    public boolean existMachineName(String name);
+
+    public List<String> employeeTrainingName(TrainingScheduleEntity schedule);
+
+    public boolean updateTraining(TrainingScheduleEntity training, Date start, Date end, int size);
+
+    public Vector resetPassword(String username);
 
     
 }

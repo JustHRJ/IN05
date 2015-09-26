@@ -1,6 +1,7 @@
 package session.stateless;
 
 import entity.Customer;
+import entity.CustomerPO;
 import entity.Quotation;
 import java.math.BigInteger;
 import java.security.MessageDigest;
@@ -52,6 +53,16 @@ public class CustomerSessionBean implements CustomerSessionBeanLocal {
             System.out.println("Customer is null");
         } else {
             c.addQuotations(quotation);
+        }
+    }
+
+    @Override
+    public void addPurchaseOrder(String username, CustomerPO cpo) {
+        Customer c = em.find(Customer.class, username);
+        if (c == null) {
+            System.out.println("Customer is null");
+        } else {
+            c.addCustomerPO(cpo);
         }
     }
 

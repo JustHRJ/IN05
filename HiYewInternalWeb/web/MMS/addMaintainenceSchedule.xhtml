@@ -10,7 +10,7 @@
     <h:body>
         <h:form id ="formMain">
             <h1>Add Machine Maintainence Schedule</h1>
-             #{loginControlBean.checkLoginRedirect()}
+            #{loginControlBean.checkLoginRedirect()}
             <p:menubar>
                 <p:menuitem value ="Home" url ="/index.xhtml"/>
                 <p:menuitem value ="#{hiYewManagedBean.getMAlert()}" url ="alertMachine.xhtml" />
@@ -21,19 +21,19 @@
 
 
             Machines:
-            <p:selectOneMenu value ="#{hiYewManagedBean.machineName}"  >
-                <f:selectItem itemValue ="" itemLabel ="Select One" noSelectionOption="true" />
+            <p:selectOneMenu value ="#{hiYewManagedBean.machineName}" required ="true" requiredMessage="Please select Machine to maintain" >
+                <f:selectItem itemValue ="#{hiYewManagedBean.retrieveMachineName()}" itemLabel="#{hiYewManagedBean.retrieveMachineName()}" />
                 <f:selectItems value ="#{hiYewDataTableBean.machineNames}"/>
             </p:selectOneMenu>
 
-            <p:growl id ="msgs" showDetail="true"/>
+            <p:growl id ="msgs" showDetail="false"/>
             <p:panelGrid>
                 <p:row>
                     <p:column>
                         <p:outputLabel value ="Schedule Date"/>
                     </p:column>
                     <p:column>
-                        <p:calendar id = "cal" value = "#{hiYewManagedBean.mScheduleDate}" mindate="#{hiYewManagedBean.getToday()}" pattern ="dd/MM/yyyy"  required ="true" requiredMessage="Please input date"/>
+                        <p:calendar id = "cal" value = "#{hiYewManagedBean.mScheduleDate}" mindate="#{hiYewManagedBean.getToday()}" pattern ="dd/MM/yyyy"  required ="true" requiredMessage="Please input Schedule Date"/>
                     </p:column>
                 </p:row>
                 <p:row>
@@ -41,7 +41,7 @@
                         <p:outputLabel value ="Schedule Time (hhmm format)" />
                     </p:column>
                     <p:column>
-                        <p:inputText value ="#{hiYewManagedBean.mScheduleHour}" required ="true" validator="#{registrationValidator.validateTime}" requiredMessage="Please input Time" validatorMessage="Please input correct time"/>
+                        <p:inputText value ="#{hiYewManagedBean.mScheduleHour}" required ="true" validator="#{registrationValidator.validateTime}" requiredMessage="Please input Schedule Time" validatorMessage="Please input correct Schedule Time (hhmm) format"/>
                     </p:column>
                 </p:row>
                 <p:row>

@@ -1,6 +1,7 @@
 package managedBean;
 
 import entity.Customer;
+import java.io.IOException;
 import java.io.Serializable;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
@@ -23,9 +24,7 @@ public class CustomerManagedBean implements Serializable {
     private String newPassword = "";
 
     public CustomerManagedBean() {
-        FacesContext.getCurrentInstance().getExternalContext().getSessionMap().remove("loginMessage");
-        FacesContext.getCurrentInstance().getExternalContext().getSessionMap().remove("forgotMessage");
-        FacesContext.getCurrentInstance().getExternalContext().getSessionMap().remove("registerMessage");
+        FacesContext.getCurrentInstance().getExternalContext().getSessionMap().remove("popupMessage");
     }
 
     @PostConstruct
@@ -38,34 +37,35 @@ public class CustomerManagedBean implements Serializable {
         }
     }
 
-    //update customer
-    public void handleSave() {
+    // update customer
+    public void handleSave() throws IOException {
         customerSessionBean.updateCustomer(customer);
+        FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("popupMessage", "Profile has been updated successfully!");
+        FacesContext.getCurrentInstance().getExternalContext().redirect("/HiYewExternalWeb/user-profile.xhtml");
     }
 
-    public void changePassword() {
+    public void changePassword() throws IOException {
 
         if (changePasswordInput.equals("") || newPassword.equals("") || rePassword.equals("")) {
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Changing Password requires all password fields to be filled!", ""));
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Changing password requires all password fields to be filled!", ""));
         } else {
             String encryptedPassword = customer.getPw();
-            // System.out.println(encryptedPassword);
-            // System.out.println(customerSessionBean.encryptPassword(changePasswordInput));
             if (encryptedPassword.equals(customerSessionBean.encryptPassword(changePasswordInput))) {
                 if (customerSessionBean.encryptPassword(newPassword).equals(encryptedPassword)) {
-                    FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("New Password is same as current password!", ""));
+                    FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "New Password and current password should not be same.", ""));
                 } else {
                     if (newPassword.equals(rePassword)) {
                         customer.setPw(customerSessionBean.encryptPassword(newPassword));
                         handleSave();
-                        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Password changed successfully!", ""));
-
+                        //FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Password has been changed successfully!", ""));
+                        FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("popupMessage", "Password has been changed successfully!");
+                        FacesContext.getCurrentInstance().getExternalContext().redirect("/HiYewExternalWeb/user-profile.xhtml");
                     } else {
-                        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Password Mismatch!", ""));
+                        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Password mismatch!", ""));
                     }
                 }
             } else {
-                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Invalid password!", ""));
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Incorrect current password!", ""));
             }
         }
     }

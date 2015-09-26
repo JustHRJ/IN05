@@ -1,0 +1,82 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:head>
+        <title>Human Resource Management System</title>
+    </h:head>
+    <h:body>
+        <h1>View Available Training</h1>
+        
+         <p:menubar>
+                <p:menuitem value ="Home" url="/index.xhtml" />
+                <p:menuitem value ="#{loginControlBean.getEAlert()}" url ="alertEmployee.xhtml" />
+                <p:menuitem value ="Add Training Schedule" url ="addTrainingSchedule.xhtml" disabled="#{loginControlBean.checkValid()}" />
+                <p:menuitem value ="Add Employee Training" url ="addEmployeeTraining.xhtml" disabled="#{loginControlBean.checkValid()}" />
+                <p:menuitem value ="view Upcoming training" url ="viewTrainingSchedule.xhtml"/>
+            </p:menubar>
+        <br/>   
+        
+        <h:form id ="formMain">
+            <p:growl id ="msgs" />
+            <p:dataTable id ="data1" var="im" value="#{hiYewDataTableBean.trainingSchedule}" editable = "true" paginator="true" rows="5" emptyMessage="No Training">
+                <p:ajax event="rowEdit" listener="#{hiYewManagedBean.updateTraining}" update =":formMain:msgs" />
+                <f:facet name="header">
+                    Available Training
+                </f:facet>
+                <p:column headerText="Training Code">
+                    <p:outputLabel value ="#{im.trainingCode}"/>
+                </p:column>
+                <p:column headerText="Training Name">
+                    <p:outputLabel value ="#{im.trainingName}"/>
+                </p:column>
+                <p:column headerText="Trainging Start Date">
+                    <p:cellEditor>
+                        <f:facet name ="output"><p:outputLabel value ="#{hiYewManagedBean.formatDate(im.trainingStartDate)}"/></f:facet>
+                        <f:facet name ="input"><p:calendar value = "#{hiYewManagedBean.trainingStartDate}" mindate="#{hiYewManagedBean.getToday()}" pattern="dd/MM/yyyy" />  </f:facet>
+                    </p:cellEditor>
+                </p:column>
+                <p:column headerText="Training End Date">
+                    <p:cellEditor>
+                        <f:facet name ="output"><p:outputLabel value ="#{hiYewManagedBean.formatDate(im.trainingEndDate)}"/></f:facet>
+                        <f:facet name ="input"> <p:calendar value = "#{hiYewManagedBean.trainingEndDate}" mindate="#{hiYewManagedBean.getToday()}" pattern ="dd/MM/yyyy"/> </f:facet>
+                    </p:cellEditor>
+                </p:column>
+                <p:column headerText="Training Description">
+                    <p:outputLabel value ="#{im.trainingDescription}"/>
+                </p:column>
+                <p:column headerText="Training Size (Remainder)">
+                    <p:cellEditor>
+                        <f:facet name ="output"><p:outputLabel value ="#{hiYewManagedBeanView.getRemainder(im)}"/></f:facet>
+                        <f:facet name ="input"><p:inputText value = "#{hiYewManagedBean.trainingSize}"><f:validateDoubleRange minimum="0" maximum="10" /></p:inputText> </f:facet>
+                    </p:cellEditor>
+                </p:column>
+                <p:column style="width:32px">
+                    <p:rowEditor />
+                </p:column>
+                <f:facet name="footer">
+                </f:facet>
+            </p:dataTable>
+
+
+            <p:panel style ="border: none">
+                <p:panelGrid>
+                    <p:row>
+                        <p:column>
+                            <p:outputLabel value ="Please enter Training Code"/>
+                        </p:column>
+
+                        <p:column>
+                            <p:inputText value ="#{hiYewManagedBean.trainingCode}" disabled="#{loginControlBean.checkValid()}" />
+                        </p:column>
+                    </p:row>
+                </p:panelGrid>
+                <p:commandButton value ="Delete Training schedule" action ="#{hiYewManagedBean.deleteTrainingSchedule()}" update ="data1" disabled="#{loginControlBean.checkValid()}" />
+            </p:panel>
+
+        </h:form>
+    </h:body>
+</html>
+

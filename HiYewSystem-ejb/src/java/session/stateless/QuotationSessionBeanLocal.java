@@ -8,6 +8,7 @@ package session.stateless;
 import entity.Customer;
 import entity.Quotation;
 import entity.QuotationDescription;
+import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.Local;
 
@@ -29,6 +30,14 @@ public interface QuotationSessionBeanLocal {
     public void createQuotationDesciption(QuotationDescription quotationDescription);
 
     public List<Quotation> receivedQuotations(String username);
+
+    public List<Quotation> receivedCustomerNewQuotations(String status, Integer year);
+
+    public void conductMerge(Quotation quotation);
+
+    public void updateQuotationPrices(ArrayList<QuotationDescription> list);
+
+    public void updateQuotationStatus(Quotation q);
 
 
 

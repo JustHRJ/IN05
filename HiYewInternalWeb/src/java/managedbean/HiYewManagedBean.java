@@ -25,6 +25,7 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
+import manager.EmailManager;
 import org.primefaces.event.RowEditEvent;
 import org.primefaces.event.SelectEvent;
 import session.stateful.HiYewSystemBeanLocal;
@@ -71,7 +72,7 @@ public class HiYewManagedBean {
     private int lateArrival = 0;
     private int absentee = 0;
     private String months = "";
-    private Long machineMaintainenceID;
+    private String machineMaintainenceID = "";
     private double employeePay = 0.00;
     private Date mScheduleDate = null;
     private String mScheduleHour = "";
@@ -84,6 +85,7 @@ public class HiYewManagedBean {
     private int trainingSize;
     private String trainingName = "";
     private String trainingCode = "";
+    private String leaveType = "";
 
     /**
      * Creates a new instance of HiYewManagedBean
@@ -95,14 +97,29 @@ public class HiYewManagedBean {
     /**
      * @return the employee_name
      */
-    public void addMachine() {
+    public String addMachine() {
         Timestamp machineTime = new Timestamp(machineNxtMaint.getTime());
         boolean check = hiYewSystemBean.addMachine(machineName, machineId, machineTime, machineDescript, machineSubMaint);
         if (check) {
-            FacesMessage msg = new FacesMessage("Machine Added", null);
+            return "viewMachine";
+        } else {
+            FacesMessage msg = new FacesMessage("Failed to Add", "Please check for existing machine number or machine Name");
+            FacesContext.getCurrentInstance().addMessage(null, msg);
+            return "";
+        }
+    }
+
+    public String retrieveMachineName() {
+        return (String) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("machineName");
+    }
+
+    public void updateTraining(RowEditEvent event) {
+        boolean check = hiYewSystemBean.updateTraining((TrainingScheduleEntity) event.getObject(), trainingStartDate, trainingEndDate, trainingSize);
+        if (check) {
+            FacesMessage msg = new FacesMessage("Trainng edited");
             FacesContext.getCurrentInstance().addMessage(null, msg);
         } else {
-            FacesMessage msg = new FacesMessage("Failed to Add", "Please check for existing machine number");
+            FacesMessage msg = new FacesMessage("Trainng not edited. Error, or nothing to edit");
             FacesContext.getCurrentInstance().addMessage(null, msg);
         }
     }
@@ -115,20 +132,33 @@ public class HiYewManagedBean {
 
         }
     }
-    
-    public void redirectP() throws IOException{
-           FacesContext.getCurrentInstance().getExternalContext().redirect("/HiYewInternalWeb/changePassword.xhtml");
+
+    public void extendMachineMaintenance() throws IOException {
+        FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("machineName", machineName);
+
+        FacesContext.getCurrentInstance().getExternalContext().redirect("/HiYewInternalWeb/MMS/addMaintainenceSchedule.xhtml");
     }
-    
-    
+
+    public void redirectP() throws IOException {
+        FacesContext.getCurrentInstance().getExternalContext().redirect("/HiYewInternalWeb/changePassword.xhtml");
+    }
+
     public void deleteMachineMaintainence() throws IOException {
-        boolean check = hiYewSystemBean.deleteMachineMaintainence(machineMaintainenceID);
+
+        boolean check = false;
+        if (machineMaintainenceID.isEmpty()) {
+            FacesMessage msg = new FacesMessage("Nothing to delete", machineMaintainenceID);
+            FacesContext.getCurrentInstance().addMessage(null, msg);
+            return;
+        } else {
+            check = hiYewSystemBean.deleteMachineMaintainence(machineMaintainenceID);
+        }
         if (check) {
             FacesContext facesCtx = FacesContext.getCurrentInstance();
             ExternalContext externalContext = facesCtx.getExternalContext();
             externalContext.redirect("viewMaintainenceSchedule.xhtml");
         } else {
-            FacesMessage msg = new FacesMessage("Not Edited", String.valueOf(machineMaintainenceID));
+            FacesMessage msg = new FacesMessage("Maintenance id does not exist", machineMaintainenceID);
             FacesContext.getCurrentInstance().addMessage(null, msg);
         }
     }
@@ -146,7 +176,7 @@ public class HiYewManagedBean {
         }
     }
 
-    public void addTrainingSchedule() {
+    public void addTrainingSchedule() throws IOException {
         boolean check = false;
         if (trainingStartDate.after(trainingEndDate)) {
             check = false;
@@ -154,19 +184,19 @@ public class HiYewManagedBean {
             check = hiYewSystemBean.addTrainingSchedule(trainingName, trainingStartDate, trainingEndDate, trainingDescription, trainingSize, trainingCode);
         }
         if (check) {
-            FacesMessage msg = new FacesMessage("Added", trainingCode);
-            FacesContext.getCurrentInstance().addMessage(null, msg);
+            FacesContext.getCurrentInstance().getExternalContext().redirect("/HiYewInternalWeb/HRMS/viewTraining.xhtml");
         } else {
             FacesMessage msg = new FacesMessage("Not Added", "Either existing schedule, else end date should not be before start date");
             FacesContext.getCurrentInstance().addMessage(null, msg);
         }
     }
 
-    public void addMachineSchedule() {
+    public void addMachineSchedule() throws IOException {
         boolean check = hiYewSystemBean.addMachineMaintainence(machineName, getmScheduleDate(), getmScheduleHour(), getMaintainenceComments(), getmServiceProvider(), getmServiceContact());
         if (check) {
             FacesMessage msg = new FacesMessage("Schedule Added", machineName + " has a maintainence schedule");
             FacesContext.getCurrentInstance().addMessage(null, msg);
+            FacesContext.getCurrentInstance().getExternalContext().redirect("/HiYewInternalWeb/MMS/viewMaintainenceSchedule.xhtml");
         } else {
             FacesMessage msg = new FacesMessage("Failed to Add", "Please check for exisiting schedule");
             FacesContext.getCurrentInstance().addMessage(null, msg);
@@ -188,15 +218,23 @@ public class HiYewManagedBean {
         return hiYewSystemBean.getPayroll(employeeName, months);
     }
 
-    public String registerFirst() {
+    public void registerFirst() throws IOException {
         Timestamp expiry = null;
         if (employeePassExpiry == null) {
             expiry = null;
         } else {
             expiry = new Timestamp(employeePassExpiry.getTime());
         }
-        hiYewSystemBean.addEmployee(employeeName, employeePassNumber, employeeAddress, employeeLeave, employeePosition, username, password, expiry, employeeContact, address_postal, employeeAddressUnit, employeeAdressOptional, employeePay, employedDate, employeeEmail);
-        return "login";
+        Vector result = hiYewSystemBean.addEmployee(employeeName, employeePassNumber, employeeAddress, employeeLeave, employeePosition, username, expiry, employeeContact, address_postal, employeeAddressUnit, employeeAdressOptional, employeePay, employedDate, employeeEmail);
+        if (result != null) {
+            EmailManager emailManager = new EmailManager();
+            emailManager.emailPassword(result.get(0).toString(), result.get(1).toString(), result.get(2).toString(), "hurulez@gmail.com");
+            FacesContext facesCtx = FacesContext.getCurrentInstance();
+            ExternalContext externalContext = facesCtx.getExternalContext();
+            externalContext.redirect("/HiYewInternalWeb/login.xhtml");
+
+        }
+
     }
 
     public String extendEmployeePass() {
@@ -263,8 +301,11 @@ public class HiYewManagedBean {
         } else {
             expiry = new Timestamp(employeePassExpiry.getTime());
         }
-        boolean result = hiYewSystemBean.addEmployee(employeeName, employeePassNumber, employeeAddress, employeeLeave, employeePosition, username, password, expiry, employeeContact, address_postal, employeeAddressUnit, employeeAdressOptional, employeePay, employedDate, employeeEmail);
-        if (result) {
+        Vector result = hiYewSystemBean.addEmployee(employeeName, employeePassNumber, employeeAddress, employeeLeave, employeePosition, username, expiry, employeeContact, address_postal, employeeAddressUnit, employeeAdressOptional, employeePay, employedDate, employeeEmail);
+        if (result != null) {
+            EmailManager emailManager = new EmailManager();
+            emailManager.emailPassword(result.get(0).toString(), result.get(1).toString(), result.get(2).toString(), result.get(3).toString());
+
             FacesContext facesCtx = FacesContext.getCurrentInstance();
             ExternalContext externalContext = facesCtx.getExternalContext();
             externalContext.redirect("/HiYewInternalWeb/HRMS/employee_details.xhtml");
@@ -272,6 +313,21 @@ public class HiYewManagedBean {
         } else {
             FacesMessage msg = new FacesMessage("Failed to Add", "Please check if existing username and other details");
             FacesContext.getCurrentInstance().addMessage(null, msg);
+
+        }
+    }
+
+    public void resetPassword() throws IOException {
+        Vector result = hiYewSystemBean.resetPassword(username);
+        if (result == null || result.size() == 0) {
+            FacesMessage msg = new FacesMessage("Failed to Reset Password", "Account is disabled");
+            FacesContext.getCurrentInstance().addMessage(null, msg);
+        } else {
+            EmailManager emailManager = new EmailManager();
+            emailManager.emailPassword(result.get(0).toString(), result.get(1).toString(), result.get(2).toString(), result.get(3).toString());
+            FacesContext facesCtx = FacesContext.getCurrentInstance();
+            ExternalContext externalContext = facesCtx.getExternalContext();
+            externalContext.redirect("/HiYewInternalWeb/HRMS/login.xhtml");
 
         }
     }
@@ -313,7 +369,9 @@ public class HiYewManagedBean {
         hiYewSystemBean.approveLeaveID((Long.valueOf(objectId1).longValue()), objectId);
     }
 
-
+    public void rejectLeave() {
+        hiYewSystemBean.rejectLeaveID((Long.valueOf(objectId1).longValue()), objectId);
+    }
 
     public void approveLeaveEs() {
         hiYewSystemBean.approveByEmployee(employeeName);
@@ -331,7 +389,17 @@ public class HiYewManagedBean {
 
     public void applyLeave() {
         leaveNumber = computeNumberLeave(startDate, endDate);
-        boolean check = hiYewSystemBean.applyLeave(employeeName, leaveNumber, leaveRemarks, startDate, endDate);
+        boolean check;
+
+        if (leaveType.equals("paid")) {
+            if (leaveNumber > 10) {
+                check = false;
+            } else {
+                check = hiYewSystemBean.applyLeave(employeeName, leaveNumber, leaveRemarks, startDate, endDate, leaveType);
+            }
+        } else {
+            check = hiYewSystemBean.applyLeave(employeeName, leaveNumber, leaveRemarks, startDate, endDate, leaveType);
+        }
         if (check) {
             FacesMessage msg = new FacesMessage("Applied", employeeName);
             FacesContext.getCurrentInstance().addMessage(null, msg);
@@ -895,14 +963,14 @@ public class HiYewManagedBean {
     /**
      * @return the machineMaintainenceID
      */
-    public Long getMachineMaintainenceID() {
+    public String getMachineMaintainenceID() {
         return machineMaintainenceID;
     }
 
     /**
      * @param machineMaintainenceID the machineMaintainenceID to set
      */
-    public void setMachineMaintainenceID(Long machineMaintainenceID) {
+    public void setMachineMaintainenceID(String machineMaintainenceID) {
         this.machineMaintainenceID = machineMaintainenceID;
     }
 
@@ -1044,6 +1112,20 @@ public class HiYewManagedBean {
      */
     public void setEmployeeEmail(String employeeEmail) {
         this.employeeEmail = employeeEmail;
+    }
+
+    /**
+     * @return the leaveType
+     */
+    public String getLeaveType() {
+        return leaveType;
+    }
+
+    /**
+     * @param leaveType the leaveType to set
+     */
+    public void setLeaveType(String leaveType) {
+        this.leaveType = leaveType;
     }
 
     /**

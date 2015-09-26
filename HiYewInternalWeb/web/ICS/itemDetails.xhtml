@@ -1,0 +1,162 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <h:head>
+        <title>Hi-Yew Inventory System</title>
+        <style>
+            .menu{
+                margin-top:20px;
+                margin-bottom:30px;
+                background-color: lightblue;
+            }
+        </style>
+    </h:head>
+    <h:body>
+        <h1>Hi-Yew Internal System</h1>
+        <p:megaMenu orientation="horizontal"  styleClass="menu">
+            <p:submenu label="Inventory Control System" icon="ui-icon-check" style="font-weight:bold">
+                <p:column>
+                    <p:submenu label="Items Management">
+                        <p:menuitem value="View Inventory" url="viewInventory.xhtml" />
+                        <p:menuitem value="Add New Item" url="addNewItem.xhtml" />
+                    </p:submenu>
+                    <p:submenu label="Storage Management">
+                        <p:menuitem value="View Storage" url="#" />
+                        <p:menuitem value="Storage Allocation" url="#" />
+                        <p:menuitem value="Create Storage" url="#" />
+                    </p:submenu>
+                </p:column>
+            </p:submenu>
+        </p:megaMenu>
+        <h:form id="upperForm">
+            <p:growl id="message" showDetail="true" />
+            <p:messages  id="upperMessages" autoUpdate="true"/>
+            <p:panel id="itemDetailsPanel" header="Item Details(Click values for editing)" toggleable="true" toggleSpeed="500" closeSpeed="500" style="margin-bottom:20px">
+
+                <h:panelGrid id="itemDetailsGrid" columns="3" columnClasses="column" cellpadding="5">
+
+                    <h:outputLabel for="itemCode" value="Item Code:" style="font-weight:bold" />
+                    <h:outputText id="itemCode" value="#{itemDetailsManagedBean.selectedItem.itemCode}" />
+                    <p:message for="itemCode" />
+
+
+                    <h:outputLabel for="itemName" value="Item Name:" style="font-weight:bold"/>
+                    <p:inplace id="itemName" editor="true">
+                        <p:ajax  event="save"/>
+                        <p:inputText value="#{itemDetailsManagedBean.selectedItem.itemName}" required="true" label="text" />
+                    </p:inplace>
+                    <p:message for="itemName" />
+
+
+
+                    <h:outputLabel for="itemType" value="Item Type:" style="font-weight:bold"/>
+                    <p:inplace id="itemType" editor="true">
+                        <p:ajax  event="save"/>
+                        <p:selectOneMenu id="itemType1" value="#{itemDetailsManagedBean.selectedItem.itemType}" required="true" requiredMessage="Item Type is required, please select one." style="width:125px" >
+                            <f:selectItem itemLabel="Select One" itemValue="" />
+                            <f:selectItem itemLabel="Wires" itemValue="Wires" />
+                            <f:selectItem itemLabel="Metals" itemValue="Metals" />
+                        </p:selectOneMenu>
+                    </p:inplace>
+                    <p:message for="itemType" />
+
+
+
+                    <h:outputLabel for="quantity" value="Quantity:" style="font-weight:bold"/>
+                    <p:inplace id="quantity" editor="true">
+                        <p:ajax  event="save"/>
+                        <p:inputText value="#{itemDetailsManagedBean.selectedItem.quantity}"  label="text" />
+                    </p:inplace>
+                    <p:message for="quantity" />
+
+
+                    <h:outputLabel for="cost" value="Cost(SGD): " style="font-weight:bold"/>
+                    <p:inplace id="cost" editor="true">
+                        <p:ajax  event="save"/>
+                        <p:inputText value="#{itemDetailsManagedBean.selectedItem.cost}"  label="text" />
+                    </p:inplace>
+                    <p:message for="cost" />
+
+
+                    <h:outputLabel for="sellingPrice" value="Selling price(SGD): " style="font-weight:bold"/>
+                    <p:inplace id="sellingPrice" editor="true">
+                        <p:ajax  event="save"/>
+                        <p:inputText value="#{itemDetailsManagedBean.selectedItem.sellingPrice}"  label="text" />
+                    </p:inplace>
+                    <p:message for="sellingPrice" />
+
+
+                    <h:outputLabel for="reorderPoint" value="Reorder Point: " style="font-weight:bold"/>
+                    <p:inplace id="reorderPoint" editor="true">
+                        <p:ajax  event="save"/>
+                        <p:inputText value="#{itemDetailsManagedBean.selectedItem.reorderPoint}"  label="text" />
+                    </p:inplace>
+                    <p:message for="reorderPoint" />
+
+
+                    <h:outputLabel for="averageWeight" value="Average Weight(grams): " style="font-weight:bold"/>
+                    <p:inplace id="averageWeight" editor="true">
+                        <p:ajax event="save"/>
+                        <p:inputText value="#{itemDetailsManagedBean.selectedItem.averageWeight}"  label="text" />
+                    </p:inplace>
+                    <p:message for="averageWeight" />
+
+                    <p:commandButton value="Update Item Details" update="itemDetailsPanel" icon="ui-icon-check" action="#{itemDetailsManagedBean.updateItemDetails}"/>
+                    <p:commandButton value="Procurement Request"/>
+                    <p:commandButton value="Delete Item" action="#{itemDetailsManagedBean.deleteItem}" update="message">
+                        <p:confirm header="Deletion Confirmation" message="Are you sure you want to delete item #{itemDetailsManagedBean.selectedItem.itemCode}?" icon="ui-icon-alert" />
+                    </p:commandButton>
+                </h:panelGrid>
+
+                <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+                    <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+                    <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+                </p:confirmDialog>
+            </p:panel>
+        </h:form>
+
+        <h:form id="lowerForm">
+            <p:messages id="lowerMessages" showDetail="true" autoUpdate="true" closable="true" />
+            <p:panel id="stockInOutPanel" header="Stock In/Out" toggleable="true" toggleSpeed="500" closeSpeed="500" style="margin-bottom:20px"  collapsed="#{itemDetailsManagedBean.showInOuttPanel}">
+                <h:panelGrid id= "stockInOutGrid" columns="1" cellpadding="10">
+                    <p:panel id="activityPanel">
+                        <h:panelGrid id= "activityPanelGrid" columns="3" cellpadding="10">
+                        <h:outputLabel for="action" value="Choose an activity: " style="font-weight:bold"/>
+                        <p:selectOneRadio id="action" value="#{itemDetailsManagedBean.activityChoice}" required="true" requiredMessage="Please select either Stock Incoming or Stock Outgoing!" >
+                            <p:ajax event = "click" listener="#{itemDetailsManagedBean.clickEventHandler}" update="@form"/>
+                            <f:selectItem itemLabel="Incoming" itemValue="stockIn" />
+                            <f:selectItem itemLabel="Outgoing" itemValue="stockOut" />
+                        </p:selectOneRadio>
+                        <p:message for="action" />
+                        </h:panelGrid>
+                    </p:panel>
+
+
+                    <p:panel header = "Stock Incoming" visible = "#{itemDetailsManagedBean.showInPanel}">
+                        <h:outputLabel for="inQty" value="Please enter the number of quantity coming in: " style="font-weight:bold"/>
+                        <p:inputText id="inQty" value="#{itemDetailsManagedBean.quantityIn}" required="true" requiredMessage="Please enter value for incoming quantity!"/>
+                        <p:message for="inQty" />
+                        <h:outputLabel for="inCost" value="Please enter the cost per unit for this incoming batch: " style="font-weight:bold"/>
+                        <p:inputText id="inCost" value="#{itemDetailsManagedBean.inCost}" required="true" requiredMessage="Please enter the cost per unit for this incoming batch!"/>
+                        <p:message for="inCost" />
+                    </p:panel>
+
+                    <p:panel header = "Stock Outgoing" visible = "#{itemDetailsManagedBean.showOutPanel}">
+                        <h:outputLabel for="outQty" value="Please enter the number of quantity going out: " style="font-weight:bold"/>
+                        <p:inputText id="outQty" value="#{itemDetailsManagedBean.quantityOut}" required="true" requiredMessage="Please enter value for outgoing quantity!"/>
+                        <p:message for="outQty" />
+                    </p:panel>
+
+
+                    <p:commandButton value="Update" update="upperForm:itemDetailsPanel" icon="ui-icon-check" action="#{itemDetailsManagedBean.updateStock()}"/>
+                </h:panelGrid>
+            </p:panel>
+        </h:form>
+
+    </h:body>
+</html>
+

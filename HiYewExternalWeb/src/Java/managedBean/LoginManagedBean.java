@@ -59,7 +59,7 @@ public class LoginManagedBean implements Serializable {
                     FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("userRole", "Customer");
                     FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("username", this.username);
                     System.out.println("Login Success");
-                    path = "customer-home?faces-redirect=true"; //navigation
+                    path = "customer-profile?faces-redirect=true"; //navigation
                 } else {
                     FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("loginMessage", "Invalid Username or password! Please try again.");
                     //FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Invalid Username or password!"));
@@ -112,6 +112,8 @@ public class LoginManagedBean implements Serializable {
                 customerSessionBean.createCustomer(newCustomer);
                 newCustomer = new Customer(); // To reinitialise and create new customer
                 FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("loginMessage", "Your account registration has been successful.");
+                EmailManager emailManager = new EmailManager();
+                emailManager.emailSuccessfulRegistration(newCustomer.getName(), newCustomer.getUserName(), newCustomer.getPw());
                 return "login?faces-redirect=true";
             } else {
                 FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("registerMessage", "Your password and confirmation password do not match.");

@@ -8,6 +8,7 @@ package managedbean;
 import entity.EmployeeEntity;
 import entity.TrainingScheduleEntity;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
@@ -54,7 +55,7 @@ public class HiYewManagedBeanView implements Serializable {
             FacesMessage msg = new FacesMessage("Employee Added", getEmployeeName());
             FacesContext.getCurrentInstance().addMessage(null, msg);
         } else {
-            FacesMessage msg = new FacesMessage("Not Added", "Please check again");
+            FacesMessage msg = new FacesMessage("Please select a course, else it is either full or employee is in the course / clashed");
             FacesContext.getCurrentInstance().addMessage(null, msg);
         }
     }
@@ -70,6 +71,11 @@ public class HiYewManagedBeanView implements Serializable {
   
 // cannot get employee details
         boolean check = hiYewSystemBean.deleteTrainingEmployee(selectedTraining, employeeName);
+        if(check){
+              FacesMessage msg = new FacesMessage("Deleted");
+            FacesContext.getCurrentInstance().addMessage(null, msg);
+        }
+    
     }
 
     /**
@@ -83,6 +89,11 @@ public class HiYewManagedBeanView implements Serializable {
         return hiYewSystemBean.employeeTraining(selectedTraining);
     }
 
+    public List<String> getEmployeeTrainingName() {
+        return hiYewSystemBean.employeeTrainingName(selectedTraining);
+     
+    }
+    
     /**
      * @return the employeeName
      */

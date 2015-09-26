@@ -10,7 +10,7 @@
     <h:body>
         <h:form id ="formMain">
             <h1>Leave Approval</h1>
-              #{loginControlBean.checkLoginRedirect()}
+            #{loginControlBean.checkLoginRedirect()}
             <p:menubar>
                 <p:menuitem value ="Home" url="/index.xhtml"  />      
                 <p:menuitem value ="Apply for Leave" url ="leaveApplication.xhtml" />
@@ -18,21 +18,22 @@
                 <p:menuitem value ="Check Leave Status" url ="leaveStatus.xhtml" />
             </p:menubar>
             <br/>
-
-            <p:panel header ="View A Employee Leave">                
+            <p:growl id ="msgs" showDetail="false"/>
+            
+            <p:panel header ="View Leave By Employee">                
                 <p:column>
                     <p:outputLabel value ="Select Employee"/>
                 </p:column>
                 <p:column>
-                    <p:selectOneMenu value ="#{hiYewManagedBean.employeeName}" required ="true" requiredMessage="Please add Name" id ="inputTxt1" >
+                    <p:selectOneMenu value ="#{hiYewManagedBean.employeeName}"  requiredMessage="Please select Name" required ="true" id ="inputTxt1" >
                         <f:selectItem itemValue="" itemLabel="Select One" noSelectionOption="true" />
                         <f:selectItems value ="#{loginControlBean.validateLeaveName()}"/>
                     </p:selectOneMenu>
                 </p:column>
-                <p:commandButton id ="btn1" value ="Search for Employee">
+                <p:commandButton id ="btn1" value ="Search for Employee" update = "msgs">
                     <f:ajax execute ="inputTxt1" render ="data1" />
                     <f:ajax execute ="inputTxt1" render ="data2" />
-                    <p:dataTable id = "data1" var="im" value="#{hiYewManagedBean.leaveE}" paginator="true" rows="5" emptyMessage="No employee pending">
+                    <p:dataTable id = "data1" var="im" value="#{hiYewManagedBean.leaveE}" paginator="true" rows="5" emptyMessage="No leave pending">
                         <p:column headerText ="Leave ID">
                             <h:outputText value ="#{im.id}" />
                         </p:column>
@@ -54,7 +55,6 @@
                         <p:column headerText ="Leave status" >
                             <h:outputText value ="#{im.status}" />
                         </p:column>
-
                     </p:dataTable>
                 </p:commandButton>
 
@@ -95,8 +95,14 @@
                         <h:outputText value ="#{im.get(6)}" />
                     </p:column>
                     <p:column headerText="Action">
-                        <p:commandLink ajax="false" title="Edit" action="#{hiYewManagedBean.approveLeave}"
+                        <p:commandLink ajax="false" title="Approve" action="#{hiYewManagedBean.approveLeave}"
                                        value="approve" update=":formMain">
+                            <f:param name="objectId" value="#{im.get(0)}" />     
+                            <f:param name="objectId1" value="#{im.get(1)}" />
+                        </p:commandLink>
+                    </p:column>
+                    <p:column headerText="Action2">
+                        <p:commandLink ajax ="false" title ="Disaprove" action ="#{hiYewManagedBean.rejectLeave}" value ="Reject" update = ":formMain" >
                             <f:param name="objectId" value="#{im.get(0)}" />     
                             <f:param name="objectId1" value="#{im.get(1)}" />
                         </p:commandLink>

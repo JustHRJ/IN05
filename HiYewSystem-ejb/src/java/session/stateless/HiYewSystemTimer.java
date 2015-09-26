@@ -6,10 +6,12 @@
 package session.stateless;
 
 import entity.EmployeeEntity;
+import entity.LeaveEntity;
 import entity.PayrollEntity;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Collection;
 import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -42,29 +44,29 @@ public class HiYewSystemTimer {
         double salary;
         for (Object o : q.getResultList()) {
             EmployeeEntity e = (EmployeeEntity) o;
-            PayrollEntity p = new PayrollEntity();
-            Calendar c = Calendar.getInstance();
-            c.add(Calendar.MONTH, -1);
-            SimpleDateFormat format = new SimpleDateFormat("MMM,yyyy");
-            p.setStatus("unset");
-            p.setMonth(format.format(c.getTime()));
-            p.setEmployee(e);
-            
-            Calendar cd = Calendar.getInstance();
-            cd.add(Calendar.MONTH, -1);
-            Timestamp time = new Timestamp(cd.getTime().getTime());
-            Timestamp time1 = e.getEmployee_employedDate();
-            if (time1.after(time)) {
-                cd.add(Calendar.MONTH, 1);
-                time = new Timestamp(cd.getTime().getTime());
-                salary = calculateSalary(e, time, time1);
-            } else {
-                salary = e.getEmployee_basic();
+            if (!(e.getAccount_status().equals("disabled"))) {
+                PayrollEntity p = new PayrollEntity();
+                Calendar c = Calendar.getInstance();
+                c.add(Calendar.MONTH, -1);
+                SimpleDateFormat format = new SimpleDateFormat("MMM,yyyy");
+                p.setStatus("unset");
+                p.setMonth(format.format(c.getTime()));
+                p.setEmployee(e);
+
+                Calendar cd = Calendar.getInstance();
+                cd.add(Calendar.MONTH, -1);
+                Timestamp time = new Timestamp(cd.getTime().getTime());
+                Timestamp time1 = e.getEmployee_employedDate();
+                if (time1.after(time)) {
+                    salary = calculateSalary(e, time, time1);
+                } else {
+                    salary = calculateSalaryFull(e);
+                }
+                p.setSalary(salary);
+                em.persist(p);
+                e.getPayRecords().add(p);
+                em.merge(e);
             }
-            p.setSalary(salary);
-            em.persist(p);
-            e.getPayRecords().add(p);
-            em.merge(e);
         }
     }
 
@@ -76,10 +78,75 @@ public class HiYewSystemTimer {
 
     private double calculateSalary(EmployeeEntity e, Timestamp currentDate, Timestamp employedDate) {
         double currentSalary = e.getEmployee_basic();
-        int diffInDays = (int) ((currentDate.getTime() - employedDate.getTime())
-                / (1000 * 60 * 60 * 24));
-        Calendar calendar = Calendar.getInstance();
-        int numberOfDays = calendar.getActualMaximum(Calendar.DAY_OF_MONTH);
+        Calendar c = Calendar.getInstance();
+        c.add(Calendar.DATE, - 1);
+        Timestamp currentTime = new Timestamp(c.getTime().getTime());
+        int diffInDays = (int) ((currentTime.getTime() - employedDate.getTime())
+                / (1000 * 60 * 60 * 24)) + 1 ;
+
+        int numberOfDays = c.getActualMaximum(Calendar.DAY_OF_MONTH);
+
+        Collection<LeaveEntity> leaveRecords = e.getLeaveRecords();
+
+        for (Object o : leaveRecords) {
+            LeaveEntity l = (LeaveEntity) o;
+            if (l.getStatus().equals("approved") && l.getType().equals("unpaid")) {
+                Timestamp month = l.getStartDate();
+                Timestamp month2 = l.getEndDate();
+                Date date2 = new Date(month2.getTime());
+                Calendar cal2 = Calendar.getInstance();
+                cal2.setTime(date2);
+                Date date1 = new Date(month.getTime());
+                Calendar cal = Calendar.getInstance();
+                cal.setTime(date1);
+                if (cal.get(Calendar.MONTH) == c.get(Calendar.MONTH) || cal2.get(Calendar.MONTH) == c.get(Calendar.MONTH)) {
+                    if (cal2.get(Calendar.MONTH) == cal.get(Calendar.MONTH)) {
+                        diffInDays -= cal2.get(Calendar.DATE) - cal.get(Calendar.DATE) + 1;
+                    } else if (cal.get(Calendar.MONTH) == c.get(Calendar.MONTH)) {
+                        diffInDays -= numberOfDays - cal.get(Calendar.DATE) + 1;
+                    } else if (cal2.get(Calendar.MONTH) == c.get(Calendar.MONTH)) {
+                        diffInDays -= numberOfDays - cal2.get(Calendar.DATE) + 1;
+                    }
+                }
+            }
+        }
+
+        currentSalary = diffInDays / (double) numberOfDays * currentSalary;
+        currentSalary = Math.round(currentSalary * 100.0) / 100.0;
+        return currentSalary;
+    }
+
+    private double calculateSalaryFull(EmployeeEntity e) {
+        double currentSalary = e.getEmployee_basic();
+        Calendar c = Calendar.getInstance();
+        c.add(Calendar.DATE, -1);
+        
+        int numberOfDays = c.getActualMaximum(Calendar.DAY_OF_MONTH);
+        int diffInDays = numberOfDays;
+        Collection<LeaveEntity> leaveRecords = e.getLeaveRecords();
+
+        for (Object o : leaveRecords) {
+            LeaveEntity l = (LeaveEntity) o;
+            if (l.getStatus().equals("approved") && l.getType().equals("unpaid")) {
+                Timestamp month = l.getStartDate();
+                Timestamp month2 = l.getEndDate();
+                Date date2 = new Date(month2.getTime());
+                Calendar cal2 = Calendar.getInstance();
+                cal2.setTime(date2);
+                Date date1 = new Date(month.getTime());
+                Calendar cal = Calendar.getInstance();
+                cal.setTime(date1);
+                if (cal.get(Calendar.MONTH) == c.get(Calendar.MONTH) || cal2.get(Calendar.MONTH) == c.get(Calendar.MONTH)) {
+                    if (cal2.get(Calendar.MONTH) == cal.get(Calendar.MONTH)) {
+                        diffInDays -= cal2.get(Calendar.DATE) - cal.get(Calendar.DATE) + 1;
+                    } else if (cal.get(Calendar.MONTH) == c.get(Calendar.MONTH)) {
+                        diffInDays -= numberOfDays - cal.get(Calendar.DATE) + 1;
+                    } else if (cal2.get(Calendar.MONTH) == c.get(Calendar.MONTH)) {
+                        diffInDays -= numberOfDays - cal2.get(Calendar.DATE) + 1;
+                    }
+                }
+            }
+        }
         currentSalary = diffInDays / (double) numberOfDays * currentSalary;
         currentSalary = Math.round(currentSalary * 100.0) / 100.0;
         return currentSalary;

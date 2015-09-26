@@ -14,7 +14,9 @@ import entity.LeaveEntity;
 import entity.MachineMaintainenceEntity;
 import entity.PayrollEntity;
 import entity.TrainingScheduleEntity;
+import java.math.BigInteger;
 import java.security.MessageDigest;
+import java.security.SecureRandom;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -61,16 +63,34 @@ public class HiYewSystemBean implements HiYewSystemBeanLocal {
 
     }
 
-    public boolean deleteMachineMaintainence(Long id) {
-        MachineMaintainenceEntity mm = em.find(MachineMaintainenceEntity.class, id);
-        if (mm == null) {
-            return false;
-        } else {
-            MachineEntity m = mm.getMachine();
-            m.getMachineMaintainence().remove(mm);
-            em.remove(mm);
-            em.merge(m);
+    public boolean existMachineName(String name) {
+        MachineEntity m = new MachineEntity();
+        try {
+            Query q = em.createQuery("select m from MachineEntity m where m.machine_name = :id");
+            q.setParameter("id", name);
+            m = (MachineEntity) q.getSingleResult();
             return true;
+
+        } catch (Exception ex) {
+            return false;
+        }
+
+    }
+
+    public boolean deleteMachineMaintainence(String id) {
+        try {
+            MachineMaintainenceEntity mm = em.find(MachineMaintainenceEntity.class, Long.parseLong(id));
+            if (mm == null) {
+                return false;
+            } else {
+                MachineEntity m = mm.getMachine();
+                m.getMachineMaintainence().remove(mm);
+                em.remove(mm);
+                em.merge(m);
+                return true;
+            }
+        } catch (Exception ex) {
+            return false;
         }
     }
 
@@ -174,6 +194,23 @@ public class HiYewSystemBean implements HiYewSystemBeanLocal {
         }
     }
 
+    public List<String> employeeTrainingName(TrainingScheduleEntity schedule) {
+        List<String> result = new ArrayList<String>();
+        if (schedule == null) {
+            return null;
+        }
+
+        for (Object o : schedule.getEmployeeRecords()) {
+            EmployeeEntity e = (EmployeeEntity) o;
+            result.add(e.getEmployee_name());
+
+        }
+        if (result.isEmpty()) {
+            return null;
+        }
+        return result;
+    }
+
     public List<EmployeeEntity> employeeTraining(TrainingScheduleEntity schedule) {
         List<EmployeeEntity> result = new ArrayList<EmployeeEntity>();
         if (schedule == null) {
@@ -214,6 +251,52 @@ public class HiYewSystemBean implements HiYewSystemBeanLocal {
         }
     }
 
+    public boolean updateTraining(TrainingScheduleEntity training, Date start, Date end, int size) {
+        boolean check = false;
+        if (start != null) {
+            Timestamp time = new Timestamp(start.getTime());
+
+            if (end != null) {
+                if (start.after(end)) {
+                    return false;
+                }
+            } else {
+                if (time.after(training.getTrainingEndDate())) {
+                    return false;
+                }
+            }
+
+            training.setTrainingStartDate(time);
+            check = true;
+        }
+        if (end != null) {
+            Timestamp time1 = new Timestamp(end.getTime());
+
+            if (start != null) {
+                if (start.after(end)) {
+                    return false;
+                }
+            } else {
+                if (training.getTrainingStartDate().after(end)) {
+                    return false;
+                }
+            }
+
+            training.setTrainingEndDate(time1);
+            check = true;
+        }
+        if (size != 0 && size != training.getTrianingSize()) {
+            training.setTrianingSize(size);
+            check = true;
+        }
+
+        if (check) {
+            em.merge(training);
+            return true;
+        }
+        return false;
+    }
+
     public List<TrainingScheduleEntity> trainingSchedueList() {
         List<TrainingScheduleEntity> result = new ArrayList<TrainingScheduleEntity>();
 
@@ -240,12 +323,14 @@ public class HiYewSystemBean implements HiYewSystemBeanLocal {
 
         for (Object o : q.getResultList()) {
             MachineMaintainenceEntity m = (MachineMaintainenceEntity) o;
-            if (time.after(m.getScheduleDate())) {
-                if (!time1.after(m.getScheduleDate())) {
-                    result.add(m);
-                } else if (time1.after(m.getScheduleDate())) {
-                    if (time1.getDay() == m.getScheduleDate().getDay() && time1.getMonth() == m.getScheduleDate().getMonth() && time1.getYear() == m.getScheduleDate().getYear()) {
+            if (m.getStatus().equals("incomplete")) {
+                if (time.after(m.getScheduleDate())) {
+                    if (!time1.after(m.getScheduleDate())) {
                         result.add(m);
+                    } else if (time1.after(m.getScheduleDate())) {
+                        if (time1.getDay() == m.getScheduleDate().getDay() && time1.getMonth() == m.getScheduleDate().getMonth() && time1.getYear() == m.getScheduleDate().getYear()) {
+                            result.add(m);
+                        }
                     }
                 }
             }
@@ -297,10 +382,10 @@ public class HiYewSystemBean implements HiYewSystemBeanLocal {
 
         for (Object o : q.getResultList()) {
             MachineMaintainenceEntity m = (MachineMaintainenceEntity) o;
-            if (time1.after(m.getScheduleDate())) {
-
-                result.add(m);
-
+            if (m.getStatus().equals("incomplete")) {
+                if (time1.after(m.getScheduleDate())) {
+                    result.add(m);
+                }
             }
         }
         if (result.isEmpty()) {
@@ -343,14 +428,27 @@ public class HiYewSystemBean implements HiYewSystemBeanLocal {
 
         for (Object o : q.getResultList()) {
             MachineMaintainenceEntity m = (MachineMaintainenceEntity) o;
-            if (!time1.after(m.getScheduleDate()) && !time.after(m.getScheduleDate())) {
-                result.add(m);
+            if (m.getStatus().equals("incomplete")) {
+                if (!time1.after(m.getScheduleDate()) && !time.after(m.getScheduleDate())) {
+                    result.add(m);
+                }
             }
         }
         if (result.isEmpty()) {
             return null;
         }
         return result;
+    }
+
+    private boolean checkClashMaintainence(MachineEntity machine) {
+        Collection<MachineMaintainenceEntity> maint = machine.getMachineMaintainence();
+        for (Object o : maint) {
+            MachineMaintainenceEntity mm = (MachineMaintainenceEntity) o;
+            if (mm.getStatus().equals("incomplete")) {
+                return false;
+            }
+        }
+        return true;
     }
 
     public boolean addMachineMaintainence(String machineName, Date mScheduleDate, String mScheduleHour, String maintainenceComments, String mServiceProvider, String mServiceContact) {
@@ -363,19 +461,24 @@ public class HiYewSystemBean implements HiYewSystemBeanLocal {
             // - is it available the machine during that time?
             // - is it already having an existing schedule?
             MachineMaintainenceEntity maint = new MachineMaintainenceEntity();
-
-            maint.setComments(machineName);
-            maint.setScheduleTime(mScheduleHour);
-            maint.setServiceProvider(mServiceProvider);
-            maint.setServiceContact(mServiceContact);
-            Timestamp time = new Timestamp(mScheduleDate.getTime());
-            maint.setScheduleDate(time);
-            maint.setComments(maintainenceComments);
-            maint.setMachine(machine);
-            em.persist(maint);
-            machine.getMachineMaintainence().add(maint);
-            em.merge(machine);
-            return true;
+            boolean check = checkClashMaintainence(machine);
+            if (check) {
+                maint.setComments(machineName);
+                maint.setScheduleTime(mScheduleHour);
+                maint.setServiceProvider(mServiceProvider);
+                maint.setServiceContact(mServiceContact);
+                Timestamp time = new Timestamp(mScheduleDate.getTime());
+                maint.setScheduleDate(time);
+                maint.setComments(maintainenceComments);
+                maint.setMachine(machine);
+                maint.setStatus("incomplete");
+                em.persist(maint);
+                machine.getMachineMaintainence().add(maint);
+                em.merge(machine);
+                return true;
+            } else {
+                return false;
+            }
         } catch (Exception ex) {
             return false;
         }
@@ -461,9 +564,13 @@ public class HiYewSystemBean implements HiYewSystemBeanLocal {
 
     public boolean notExistMachine(String id) {
         List<MachineEntity> machines = checkMachineExpiry();
+        if (machines == null) {
+            return true;
+        }
+
         for (Object o : machines) {
             MachineEntity m = (MachineEntity) o;
-            if (m.getMachine_number().equals(id)) {
+            if (m.getMachine_name().equals(id)) {
                 return false;
             }
         }
@@ -723,13 +830,14 @@ public class HiYewSystemBean implements HiYewSystemBeanLocal {
         }
     }
 
-    public boolean addEmployee(String employee, String employee_passNumber, String employee_address, int number_of_leave, String position, String username, String password, Timestamp expiry, String contact, String addressPostal, String unit, String optional, double employeePay, Date employedDate, String email) {
+    public Vector addEmployee(String employee, String employee_passNumber, String employee_address, int number_of_leave, String position, String username, Timestamp expiry, String contact, String addressPostal, String unit, String optional, double employeePay, Date employedDate, String email) {
+
         EmployeeEntity xin = new EmployeeEntity();
         try {
             Query q = em.createQuery("Select xin from EmployeeEntity xin where xin.employee_name = :id");
             q.setParameter("id", employee);
             xin = (EmployeeEntity) q.getSingleResult();
-            return false;
+            return null;
         } catch (Exception ex) {
             boolean check = checkUsername(username);
             boolean check2 = checkPass(employee_passNumber);
@@ -748,7 +856,8 @@ public class HiYewSystemBean implements HiYewSystemBeanLocal {
                 xin.setUsername(username);
                 xin.setUnit(unit);
                 xin.setOptional(optional);
-                String passwordHashed = hashingPassword(password);
+                String password1 = createRandomPass();
+                String passwordHashed = hashingPassword(password1);
                 xin.setPassword(passwordHashed);
                 xin.setEmployee_passExpiry(expiry);
                 xin.setEmployee_contact(contact);
@@ -759,10 +868,42 @@ public class HiYewSystemBean implements HiYewSystemBeanLocal {
                 xin.setEmployee_employedDate(time);
                 //xin.setEmployee_employedDate(ts);
                 em.persist(xin);
-                return true;
+                Vector im = new Vector();
+                im.add(xin.getEmployee_name());
+                im.add(xin.getUsername());
+                im.add(password1);
+                im.add(xin.getEmailAddress());
+                return im;
             } else {
-                return false;
+                return null;
             }
+        }
+    }
+
+    public Vector resetPassword(String username) {
+        EmployeeEntity e = new EmployeeEntity();
+        try {
+            Query q = em.createQuery("select e from EmployeeEntity e where e.username =:id");
+            q.setParameter("id", username);
+            e = (EmployeeEntity) q.getSingleResult();
+            if (e.getEmployee_account_status().equals("disabled")) {
+                return null;
+            }
+                
+            String password = createRandomPass();
+            e.setPassword(hashingPassword(password));
+            e.setAccount_status("firstTime");
+            em.merge(e);
+            Vector im = new Vector();
+            im.add(e.getEmployee_name());
+            im.add(username);
+            im.add(password);
+            im.add(e.getEmailAddress());
+
+            return im;
+
+        } catch (Exception ex) {
+            return null;
         }
     }
 
@@ -906,11 +1047,11 @@ public class HiYewSystemBean implements HiYewSystemBeanLocal {
         if (!(address_postal.isEmpty())) {
             employee.setAddressPostal(address_postal);
         }
-        if(!(email.isEmpty())){
+        if (!(email.isEmpty())) {
             employee.setEmailAddress(email);
             check = true;
         }
-        
+
         if (!(contact.isEmpty())) {
             employee.setEmployee_contact(contact);
         }
@@ -961,25 +1102,25 @@ public class HiYewSystemBean implements HiYewSystemBeanLocal {
         }
         if (!(employeeUnit.isEmpty())) {
             employee.setUnit(employeeUnit);
-             check = true;
+            check = true;
         }
         if (!(employeeOptional.isEmpty())) {
             employee.setOptional(employeeOptional);
-             check = true;
+            check = true;
         }
         if (!(address_postal.isEmpty())) {
             employee.setAddressPostal(address_postal);
-             check = true;
+            check = true;
         }
-        
-        if(!(email.isEmpty())){
+
+        if (!(email.isEmpty())) {
             employee.setEmailAddress(email);
-             check = true;
+            check = true;
         }
-        
+
         if (!(contact.isEmpty())) {
             employee.setEmployee_contact(contact);
-             check = true;
+            check = true;
         }
 
         if (check) {
@@ -1044,14 +1185,16 @@ public class HiYewSystemBean implements HiYewSystemBeanLocal {
         Timestamp ed = new Timestamp(end.getTime());
         for (Object o : leaveRecords) {
             LeaveEntity l = (LeaveEntity) o;
-            if (sd.before(l.getStartDate()) && ed.after(l.getEndDate()) || (sd.after(l.getStartDate()) && sd.before(l.getEndDate())) || ed.after(l.getStartDate()) && ed.before(l.getEndDate()) || sd.equals(l.getStartDate()) || sd.equals(l.getEndDate()) || ed.equals(l.getStartDate()) || ed.equals(l.getEndDate())) {
-                return true;
+            if (!(l.getStatus().equals("rejected"))) {
+                if (sd.before(l.getStartDate()) && ed.after(l.getEndDate()) || (sd.after(l.getStartDate()) && sd.before(l.getEndDate())) || ed.after(l.getStartDate()) && ed.before(l.getEndDate()) || sd.equals(l.getStartDate()) || sd.equals(l.getEndDate()) || ed.equals(l.getStartDate()) || ed.equals(l.getEndDate())) {
+                    return true;
+                }
             }
         }
         return false;
     }
 
-    public boolean applyLeave(String employee, int days, String remarks, Date start, Date end) {
+    public boolean applyLeave(String employee, int days, String remarks, Date start, Date end, String type) {
         EmployeeEntity lao = new EmployeeEntity();
         try {
             Query q = em.createQuery("Select lao from EmployeeEntity lao where lao.employee_name = :id");
@@ -1067,6 +1210,35 @@ public class HiYewSystemBean implements HiYewSystemBeanLocal {
                     sum += l.getNumber_of_leave();
                 }
             }
+            if (type.equals("unpaid")) {
+                if (checkBetween(leaves, start, end)) {
+                    return false;
+                }
+                if (days < 1) {
+                    return false;
+                }
+                if (lao.getEmployee_account_status().equals("disabled")) {
+                    return false;
+                }
+                LeaveEntity application = new LeaveEntity();
+                application.setRemarks(remarks);
+                application.setNumber_of_leave(days);
+                java.util.Date date = new java.util.Date();
+                Timestamp time_applied = new Timestamp(date.getTime());
+                Timestamp sd = new Timestamp(start.getTime());
+                Timestamp ed = new Timestamp(end.getTime());
+                application.setAppliedTime(time_applied);
+                application.setEndDate(ed);
+                application.setStartDate(sd);
+                application.setStatus("pending");
+                application.setType(type);
+                application.setEmployee(lao);
+                em.persist(application);
+                lao.getLeaveRecords().add(application);
+                em.merge(lao);
+                return true;
+            }
+
             if (lao.getNumber_of_leaves() < days + sum) {
                 return false;
             } else if (lao.getEmployee_account_status().equals("disabled")) {
@@ -1088,6 +1260,7 @@ public class HiYewSystemBean implements HiYewSystemBeanLocal {
                 application.setStartDate(sd);
                 application.setStatus("pending");
                 application.setEmployee(lao);
+                application.setType(type);
                 em.persist(application);
                 lao.getLeaveRecords().add(application);
                 em.merge(lao);
@@ -1127,6 +1300,28 @@ public class HiYewSystemBean implements HiYewSystemBeanLocal {
         return allRecords;
     }
 
+    public void rejectLeaveID(Long id, String employee1) {
+        LeaveEntity leave = new LeaveEntity();
+        EmployeeEntity employee = new EmployeeEntity();
+        try {
+            Query q = em.createQuery("select employee from EmployeeEntity employee where employee.employee_name =:id");
+            q.setParameter("id", employee1);
+            employee = (EmployeeEntity) q.getSingleResult();
+            Collection<LeaveEntity> leaveRecords = employee.getLeaveRecords();
+            for (Object o : leaveRecords) {
+                leave = (LeaveEntity) o;
+                if (leave.getId() == id) {
+                    leave.setStatus("rejected");
+                    Calendar c = Calendar.getInstance();
+                    leave.setApprovedTime(new Timestamp(c.getTime().getTime()));
+                    em.merge(leave);
+                }
+            }
+        } catch (Exception ex) {
+
+        }
+    }
+
     public void approveLeaveID(Long id, String employee1) {
         LeaveEntity leave = new LeaveEntity();
         EmployeeEntity employee = new EmployeeEntity();
@@ -1134,7 +1329,7 @@ public class HiYewSystemBean implements HiYewSystemBeanLocal {
             Query q = em.createQuery("select employee from EmployeeEntity employee where employee.employee_name =:id");
             q.setParameter("id", employee1);
             employee = (EmployeeEntity) q.getSingleResult();
-
+            System.out.println("here");
             Collection<LeaveEntity> leaveRecords = employee.getLeaveRecords();
             for (Object o : leaveRecords) {
                 leave = (LeaveEntity) o;
@@ -1152,7 +1347,7 @@ public class HiYewSystemBean implements HiYewSystemBeanLocal {
             }
 
         } catch (Exception ex) {
-
+            System.out.println("here");
         }
     }
 
@@ -1414,11 +1609,20 @@ public class HiYewSystemBean implements HiYewSystemBeanLocal {
             Query q = em.createQuery("select machine from MachineEntity machine where machine.machine_number =:id");
             q.setParameter("id", machineNumber);
             machine = (MachineEntity) q.getSingleResult();
+            Collection<MachineMaintainenceEntity> machineR = machine.getMachineMaintainence();
+            for (Object o : machineR) {
+                MachineMaintainenceEntity mm = (MachineMaintainenceEntity) o;
+                if (mm.getStatus().equals("incomplete")) {
+                    mm.setStatus("complete");
+                    em.merge(mm);
+                }
+            }
             Calendar cal = Calendar.getInstance();
             cal.setTime(machine.getMachine_expiry());
             cal.add(Calendar.MONTH, machine.getExtension());
             Timestamp ts = new Timestamp(cal.getTime().getTime());
             machine.setMachine_expiry(ts);
+            machine.setStatus("available");
             em.merge(machine);
         } catch (Exception ex) {
 
@@ -1496,5 +1700,13 @@ public class HiYewSystemBean implements HiYewSystemBeanLocal {
         } catch (Exception ex) {
             return null;
         }
+    }
+
+    private String createRandomPass() {
+        SecureRandom random = new SecureRandom();
+        String newPassword = new BigInteger(50, random).toString(32);
+        System.out.println(newPassword);
+        return newPassword;
+
     }
 }

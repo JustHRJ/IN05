@@ -55,7 +55,7 @@
                     </p:row>
                     <p:row>
                         <p:column>
-                            <p:outputLabel value ="Enter next expiry date to extend date"/>
+                            <p:outputLabel value ="Enter Updated Expiry Date"/>
                         </p:column>
                         <p:column>
                             <p:calendar id ="cal1"  value = "#{hiYewManagedBean.employeePassExpiry}" mindate="#{hiYewManagedBean.getToday()}" pattern ="dd/MM/yyyy" required="true" requiredMessage="Enter a date" disabled ="#{loginControlBean.checkValid()}" />

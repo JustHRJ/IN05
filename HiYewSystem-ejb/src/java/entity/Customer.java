@@ -48,12 +48,15 @@ public class Customer implements Serializable {
 
     @OneToMany(mappedBy = "customer")
     private List<Quotation> quotations = new ArrayList<>();
+    
+    @OneToMany(mappedBy = "customer")
+    private List<CustomerPO> customerPOs = new ArrayList<>();
 
     public Customer() {
         customerStatusEnum = CustomerStatusEnum.ACTIVE;
     }
 
-    public Customer(String userName, String pw, String name, String address1, String address2, String phone, CustomerStatusEnum customerStatusEnum, List<Quotation> quotations) {
+    public Customer(String userName, String pw, String name, String address1, String address2, String phone, CustomerStatusEnum customerStatusEnum, List<Quotation> quotations , List<CustomerPO> customerPOs) {
         this.userName = userName;
         this.pw = pw;
         this.name = name;
@@ -63,6 +66,7 @@ public class Customer implements Serializable {
         //this.active = active;
         this.customerStatusEnum = customerStatusEnum;
         this.quotations = quotations;
+        this.customerPOs = customerPOs;
     }
 
 
@@ -236,6 +240,23 @@ public class Customer implements Serializable {
 
     public void addQuotations(Quotation q) {
         this.quotations.add(q);
+    }
+
+    public void addCustomerPO(CustomerPO po){
+        this.customerPOs.add(po);
+    }
+    /**
+     * @return the customerPOs
+     */
+    public List<CustomerPO> getCustomerPOs() {
+        return customerPOs;
+    }
+
+    /**
+     * @param customerPOs the customerPOs to set
+     */
+    public void setCustomerPOs(List<CustomerPO> customerPOs) {
+        this.customerPOs = customerPOs;
     }
 
 }
