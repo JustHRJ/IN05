@@ -17,8 +17,8 @@
     <h:body>
         <h:form>
             #{loginControlBean.checkLoginRedirect()}
-         <a href ="/HiYewInternalWeb/index.xhtml"><img src = "../image/hiyew.gif" /></a>    <h1>Employee Registration</h1>
-               <p:megaMenu orientation="horizontal"  styleClass="menu">
+            <a href ="/HiYewInternalWeb/index.xhtml"><img src = "../image/hiyew.gif" /></a>    <h1>Employee Registration</h1>
+            <p:megaMenu orientation="horizontal"  styleClass="menu">
                 <p:submenu label ="Human Resource Management System" icon ="ui-icon-check" style ="font-weight: bold">
                     <p:column>
                         <p:submenu label ="Employee Management">
@@ -29,7 +29,7 @@
                             <p:menuitem value ="Assign Payroll" url ="createPayroll.xhtml" disabled = "#{loginControlBean.checkValid()}"/>
                             <p:menuitem value ="Release Payroll" url ="releasePayroll.xhtml" disabled="#{loginControlBean.checkValid()}"/>
                             <p:menuitem value ="View Released Payroll" url ="viewPayroll.xhtml"/>
-                            
+
                         </p:submenu>
 
                     </p:column>
@@ -64,7 +64,7 @@
                     </p:column>
                 </p:submenu>
 
-            <p:submenu label ="Machine Management System" icon ="ui-icon-check" style ="font-weight: bold">
+                <p:submenu label ="Machine Management System" icon ="ui-icon-check" style ="font-weight: bold">
                     <p:column>
                         <p:submenu label = "Machine Management" >
                             <p:menuitem value ="Add Machinery" url ="/MMS/addMachine.xhtml" />
@@ -73,8 +73,15 @@
                         </p:submenu>
                         <p:submenu label ="Machine Maintenance">
                             <p:menuitem value ="#{hiYewManagedBean.getMAlert()}" url ="/MMS/alertMachine.xhtml" />
-                           <p:menuitem value ="Add Maintenance Schedule" url ="/MMS/addMaintainenceSchedule.xhtml"/>
-                            <p:menuitem value ="View WMaintenance Schedule" url ="/MMS/viewMaintainenceSchedule.xhtml" />
+                            <p:menuitem value ="Add Maintenance Schedule" url ="/MMS/addMaintainenceSchedule.xhtml"/>
+                            <p:menuitem value ="View Maintenance Schedule" url ="/MMS/viewMaintainenceSchedule.xhtml" />
+                        </p:submenu>
+                    </p:column>
+                </p:submenu>
+                <p:submenu label ="Sales Management System" icon ="ui-icon-check" style ="font-weight: bold">
+                    <p:column>
+                        <p:submenu label ="Quotation">
+                            <p:menuitem value ="View Customer RFQ" url ="/SMS/viewEditQuotations.xhtml"/>
                         </p:submenu>
                     </p:column>
                 </p:submenu>
@@ -242,30 +249,30 @@
                             <p:message for="employee_userName"/>
                         </p:column>
                     </p:row>
-<!--                    <p:row>   
-                        <p:column>
-                            <p:outputLabel for ="employee_password" style ="font-weight: bold" value ="Employee Password:  "/>
-                        </p:column>
-                        <p:column>
-                            <p:password  match = "pwd2" id ="employee_password" value ="#{hiYewManagedBean.password}" required = "true" requiredMessage = "Please input password" validatorMessage="Enter password of at least length 7 / mismatch password" feedback="true" inline="true">
-                                <f:validateLength minimum="7"  />
-                            </p:password>
-                        </p:column>
-                        <p:column>
-                            <p:message for="employee_password" />
-                        </p:column>
-                    </p:row>
-                    <p:row>
-                        <p:column>
-                            <p:outputLabel for="pwd2" value="Retype Employee Password" style = "font-weight: bold"  />      
-                        </p:column>
-                        <p:column>
-                            <p:password id="pwd2" value="#{hiYewManagedBean.password}" required="true" requiredMessage="Please retype password" />
-                        </p:column>
-                        <p:column>
-                            <p:message for ="pwd2"/>
-                        </p:column>
-                    </p:row>-->
+                    <!--                    <p:row>   
+                                            <p:column>
+                                                <p:outputLabel for ="employee_password" style ="font-weight: bold" value ="Employee Password:  "/>
+                                            </p:column>
+                                            <p:column>
+                                                <p:password  match = "pwd2" id ="employee_password" value ="#{hiYewManagedBean.password}" required = "true" requiredMessage = "Please input password" validatorMessage="Enter password of at least length 7 / mismatch password" feedback="true" inline="true">
+                                                    <f:validateLength minimum="7"  />
+                                                </p:password>
+                                            </p:column>
+                                            <p:column>
+                                                <p:message for="employee_password" />
+                                            </p:column>
+                                        </p:row>
+                                        <p:row>
+                                            <p:column>
+                                                <p:outputLabel for="pwd2" value="Retype Employee Password" style = "font-weight: bold"  />      
+                                            </p:column>
+                                            <p:column>
+                                                <p:password id="pwd2" value="#{hiYewManagedBean.password}" required="true" requiredMessage="Please retype password" />
+                                            </p:column>
+                                            <p:column>
+                                                <p:message for ="pwd2"/>
+                                            </p:column>
+                                        </p:row>-->
                     <p:row>
                         <p:column>
                             <p:outputLabel for ="cal2"  value ="Enter Employment Date" style = "font-weight: bold"  />

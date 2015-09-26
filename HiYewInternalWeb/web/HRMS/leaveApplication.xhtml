@@ -15,10 +15,10 @@
         </style>
     </h:head>
     <h:body>
-       <a href ="/HiYewInternalWeb/index.xhtml"><img src = "../image/hiyew.gif"/> ></a>  <h1>Application for Leave</h1>
+        <a href ="/HiYewInternalWeb/index.xhtml"><img src = "../image/hiyew.gif"/> </a>  <h1>Application for Leave</h1>
         <h:form id = "formMain">
             #{loginControlBean.checkLoginRedirect()}
-              <p:megaMenu orientation="horizontal"  styleClass="menu">
+            <p:megaMenu orientation="horizontal"  styleClass="menu">
                 <p:submenu label ="Human Resource Management System" icon ="ui-icon-check" style ="font-weight: bold">
                     <p:column>
                         <p:submenu label ="Employee Management">
@@ -29,7 +29,7 @@
                             <p:menuitem value ="Assign Payroll" url ="createPayroll.xhtml" disabled = "#{loginControlBean.checkValid()}"/>
                             <p:menuitem value ="Release Payroll" url ="releasePayroll.xhtml" disabled="#{loginControlBean.checkValid()}"/>
                             <p:menuitem value ="View Released Payroll" url ="viewPayroll.xhtml"/>
-                            
+
                         </p:submenu>
 
                     </p:column>
@@ -73,8 +73,15 @@
                         </p:submenu>
                         <p:submenu label ="Machine Maintenance">
                             <p:menuitem value ="#{hiYewManagedBean.getMAlert()}" url ="/MMS/alertMachine.xhtml" />
-                       <p:menuitem value ="Add Maintenance Schedule" url ="/MMS/addMaintainenceSchedule.xhtml"/>
-                            <p:menuitem value ="View WMaintenance Schedule" url ="/MMS/viewMaintainenceSchedule.xhtml" />
+                            <p:menuitem value ="Add Maintenance Schedule" url ="/MMS/addMaintainenceSchedule.xhtml"/>
+                            <p:menuitem value ="View Maintenance Schedule" url ="/MMS/viewMaintainenceSchedule.xhtml" />
+                        </p:submenu>
+                    </p:column>
+                </p:submenu>
+                <p:submenu label ="Sales Management System" icon ="ui-icon-check" style ="font-weight: bold">
+                    <p:column>
+                        <p:submenu label ="Quotation">
+                            <p:menuitem value ="View Customer RFQ" url ="/SMS/viewEditQuotations.xhtml"/>
                         </p:submenu>
                     </p:column>
                 </p:submenu>

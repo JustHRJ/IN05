@@ -25,6 +25,8 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.Vector;
 import javax.persistence.Query;
 
@@ -40,7 +42,9 @@ public class HiYewSystemBean implements HiYewSystemBeanLocal {
     @PersistenceContext
     private EntityManager em;
 
-    //all this is for machines
+
+        
+        //all this is for machines
     public boolean addMachine(String machineName, String machineIdentity, Timestamp machineExpiry, String description, int extension) {
         MachineEntity machine = new MachineEntity();
         try {
@@ -77,10 +81,12 @@ public class HiYewSystemBean implements HiYewSystemBeanLocal {
 
     }
 
-    public boolean deleteMachineMaintainence(String id) {
+    public
+            boolean deleteMachineMaintainence(String id) {
         try {
             MachineMaintainenceEntity mm = em.find(MachineMaintainenceEntity.class, Long.parseLong(id));
-            if (mm == null) {
+            if (mm
+                    == null) {
                 return false;
             } else {
                 MachineEntity m = mm.getMachine();
@@ -484,21 +490,31 @@ public class HiYewSystemBean implements HiYewSystemBeanLocal {
         }
     }
 
-    public boolean updatePay(PayrollEntity pay, boolean bonus) {
+    public boolean updatePay(PayrollEntity pay, boolean bonus, double others) {
+
+        boolean check = false;
         if (bonus) {
             if (pay.getBonus() == 0) {
-                pay.setBonus(100.00);
-                em.merge(pay);
-                return true;
+                pay.setBonus(100);
+                check = true;
             }
         } else {
             if (pay.getBonus() > 0) {
-                pay.setBonus(0.00);
-                em.merge(pay);
-                return true;
+                pay.setBonus(0);
+                check = true;
             }
         }
-        return false;
+        if (others != 0 && pay.getOtherAmount() != others) {
+            pay.setOtherAmount(others);
+            check = true;
+        }
+        if (check) {
+            em.merge(pay);
+            return true;
+        } else {
+            return false;
+        }
+
     }
 
     public boolean createPayroll(String employeeName, int late, int sick) {

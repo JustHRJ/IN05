@@ -16,9 +16,9 @@
     </h:head>
     <h:body>
         <h:form id="formMain">
-           <a href ="/HiYewInternalWeb/index.xhtml"><img src = "../image/hiyew.gif" /></a>  <h1>view PayRoll</h1>
-              #{loginControlBean.checkLoginRedirect()}
-               <p:megaMenu orientation="horizontal"  styleClass="menu">
+            <a href ="/HiYewInternalWeb/index.xhtml"><img src = "../image/hiyew.gif" /></a>  <h1>view PayRoll</h1>
+            #{loginControlBean.checkLoginRedirect()}
+            <p:megaMenu orientation="horizontal"  styleClass="menu">
                 <p:submenu label ="Human Resource Management System" icon ="ui-icon-check" style ="font-weight: bold">
                     <p:column>
                         <p:submenu label ="Employee Management">
@@ -29,7 +29,7 @@
                             <p:menuitem value ="Assign Payroll" url ="createPayroll.xhtml" disabled = "#{loginControlBean.checkValid()}"/>
                             <p:menuitem value ="Release Payroll" url ="releasePayroll.xhtml" disabled="#{loginControlBean.checkValid()}"/>
                             <p:menuitem value ="View Released Payroll" url ="viewPayroll.xhtml"/>
-                            
+
                         </p:submenu>
 
                     </p:column>
@@ -64,7 +64,7 @@
                     </p:column>
                 </p:submenu>
 
-        <p:submenu label ="Machine Management System" icon ="ui-icon-check" style ="font-weight: bold">
+                <p:submenu label ="Machine Management System" icon ="ui-icon-check" style ="font-weight: bold">
                     <p:column>
                         <p:submenu label = "Machine Management" >
                             <p:menuitem value ="Add Machinery" url ="/MMS/addMachine.xhtml" />
@@ -73,8 +73,15 @@
                         </p:submenu>
                         <p:submenu label ="Machine Maintenance">
                             <p:menuitem value ="#{hiYewManagedBean.getMAlert()}" url ="/MMS/alertMachine.xhtml" />
-                      <p:menuitem value ="Add Maintenance Schedule" url ="/MMS/addMaintainenceSchedule.xhtml"/>
-                            <p:menuitem value ="View WMaintenance Schedule" url ="/MMS/viewMaintainenceSchedule.xhtml" />
+                            <p:menuitem value ="Add Maintenance Schedule" url ="/MMS/addMaintainenceSchedule.xhtml"/>
+                            <p:menuitem value ="View Maintenance Schedule" url ="/MMS/viewMaintainenceSchedule.xhtml" />
+                        </p:submenu>
+                    </p:column>
+                </p:submenu>
+                <p:submenu label ="Sales Management System" icon ="ui-icon-check" style ="font-weight: bold">
+                    <p:column>
+                        <p:submenu label ="Quotation">
+                            <p:menuitem value ="View Customer RFQ" url ="/SMS/viewEditQuotations.xhtml"/>
                         </p:submenu>
                     </p:column>
                 </p:submenu>
@@ -133,13 +140,16 @@
                             <p:outputLabel value ="#{im.month}"/>
                         </p:column>
                         <p:column headerText="Basic Salary">
-                            <p:outputLabel value ="$ #{im.salary}"/>
+                            <p:outputLabel value =" #{hiYewManagedBean.formatCurrency(im.salary)}"/>
                         </p:column>
                         <p:column headerText="Bonus">
-                            <p:outputLabel value ="$ #{im.bonus}"/>
+                            <p:outputLabel value ="#{hiYewManagedBean.formatCurrency(im.bonus)}"/>
+                        </p:column>
+                        <p:column headerText="other amounts">
+                            <p:outputLabel value ="#{hiYewManagedBean.formatCurrency(im.otherAmount)}"/>
                         </p:column>
                         <p:column headerText="Total Salary">
-                            <p:outputLabel value ="$ #{hiYewManagedBean.calculateTotal(im.bonus, im.salary)}"/>
+                            <p:outputLabel value =" #{hiYewManagedBean.formatCurrency(hiYewManagedBean.calculateTotal(im.bonus, im.salary, im.otherAmount))}"/>
                         </p:column>
                         <p:column headerText="Pay Status">
                             <p:outputLabel value ="#{im.status}"/>

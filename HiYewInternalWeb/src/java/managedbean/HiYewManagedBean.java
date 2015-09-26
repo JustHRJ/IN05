@@ -13,6 +13,7 @@ import entity.PayrollEntity;
 import entity.TrainingScheduleEntity;
 import java.io.IOException;
 import java.sql.Timestamp;
+import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -27,7 +28,6 @@ import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import manager.EmailManager;
 import org.primefaces.event.RowEditEvent;
-import org.primefaces.event.SelectEvent;
 import session.stateful.HiYewSystemBeanLocal;
 
 /**
@@ -50,6 +50,7 @@ public class HiYewManagedBean {
     private String employeePassNumber = "";
     private int employeeLeave = 0;
     private Long employeeId;
+    private double otherPay = 0;
     private String employeePosition = "";
     private Date employeePassExpiry = null;
     private int leaveNumber = 0;
@@ -97,6 +98,8 @@ public class HiYewManagedBean {
     /**
      * @return the employee_name
      */
+   
+
     public String addMachine() {
         Timestamp machineTime = new Timestamp(machineNxtMaint.getTime());
         boolean check = hiYewSystemBean.addMachine(machineName, machineId, machineTime, machineDescript, machineSubMaint);
@@ -115,6 +118,11 @@ public class HiYewManagedBean {
         return format.format(date);
     }
 
+    public String formatCurrency(double amount){
+        NumberFormat nf = NumberFormat.getCurrencyInstance();
+        return nf.format(amount);
+    }
+    
     public String retrieveMachineName() {
         return (String) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("machineName");
     }
@@ -209,12 +217,19 @@ public class HiYewManagedBean {
         }
     }
 
-    public double calculateTotal(double basic, double bonus) {
-        return basic + bonus;
+    public double calculateTotal(double basic, double bonus, double others) {
+        return basic + bonus + others;
     }
 
     public void updatePay(RowEditEvent event) {
-        hiYewSystemBean.updatePay((PayrollEntity) event.getObject(), bonus);
+        boolean check = hiYewSystemBean.updatePay((PayrollEntity) event.getObject(), bonus, getOtherPay());
+        if (check) {
+            FacesMessage msg = new FacesMessage("pay updated", "Please check");
+            FacesContext.getCurrentInstance().addMessage(null, msg);
+        } else {
+            FacesMessage msg = new FacesMessage("Pay not updated", "Error, or nothing changed");
+            FacesContext.getCurrentInstance().addMessage(null, msg);
+        }
     }
 
     public List<PayrollEntity> getPayrolls() {
@@ -323,14 +338,12 @@ public class HiYewManagedBean {
         }
     }
 
-    public void resetPassword() throws IOException {
+    public void resetPassword() throws IOException, InterruptedException {
         Vector result = hiYewSystemBean.resetPassword(username);
         if (result == null || result.size() == 0) {
             FacesMessage msg = new FacesMessage("Failed to Reset Password", "Account is disabled");
             FacesContext.getCurrentInstance().addMessage(null, msg);
         } else {
-            FacesMessage msg = new FacesMessage("Password is reset");
-            FacesContext.getCurrentInstance().addMessage(null, msg);
             EmailManager emailManager = new EmailManager();
             emailManager.emailPassword(result.get(0).toString(), result.get(1).toString(), result.get(2).toString(), result.get(3).toString());
             FacesContext facesCtx = FacesContext.getCurrentInstance();
@@ -1144,6 +1157,20 @@ public class HiYewManagedBean {
      */
     public void setLeaveType(String leaveType) {
         this.leaveType = leaveType;
+    }
+
+    /**
+     * @return the otherPay
+     */
+    public double getOtherPay() {
+        return otherPay;
+    }
+
+    /**
+     * @param otherPay the otherPay to set
+     */
+    public void setOtherPay(double otherPay) {
+        this.otherPay = otherPay;
     }
 
     /**

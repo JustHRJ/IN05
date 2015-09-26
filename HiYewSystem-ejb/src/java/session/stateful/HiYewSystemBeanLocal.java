@@ -112,7 +112,7 @@ public interface HiYewSystemBeanLocal {
 
     public void releaseAllPay();
 
-    public boolean updatePay(PayrollEntity pay, boolean bonus);
+    public boolean updatePay(PayrollEntity pay, boolean bonus, double others);
 
     public boolean addMachineMaintainence(String machineName, Date mScheduleDate, String mScheduleHour, String maintainenceComments, String mServiceProvider, String mServiceContact);
 
@@ -186,5 +186,5 @@ public interface HiYewSystemBeanLocal {
 
     public List<Vector> employeeTrainingMonthUser(String username);
 
-    
+
 }

@@ -17,8 +17,8 @@
     <h:body>
         <h:form id = "formMain">
             #{loginControlBean.checkLoginRedirect()}
-          <a href ="/HiYewInternalWeb/index.xhtml"><img src = "../image/hiyew.gif"/> ></a>   <h1>Employees Details</h1>
-               <p:megaMenu orientation="horizontal"  styleClass="menu">
+            <a href ="/HiYewInternalWeb/index.xhtml"><img src = "../image/hiyew.gif"/> </a>   <h1>Employees Details</h1>
+            <p:megaMenu orientation="horizontal"  styleClass="menu">
                 <p:submenu label ="Human Resource Management System" icon ="ui-icon-check" style ="font-weight: bold">
                     <p:column>
                         <p:submenu label ="Employee Management">
@@ -29,7 +29,7 @@
                             <p:menuitem value ="Assign Payroll" url ="createPayroll.xhtml" disabled = "#{loginControlBean.checkValid()}"/>
                             <p:menuitem value ="Release Payroll" url ="releasePayroll.xhtml" disabled="#{loginControlBean.checkValid()}"/>
                             <p:menuitem value ="View Released Payroll" url ="viewPayroll.xhtml"/>
-                            
+
                         </p:submenu>
 
                     </p:column>
@@ -64,7 +64,7 @@
                     </p:column>
                 </p:submenu>
 
-         <p:submenu label ="Machine Management System" icon ="ui-icon-check" style ="font-weight: bold">
+                <p:submenu label ="Machine Management System" icon ="ui-icon-check" style ="font-weight: bold">
                     <p:column>
                         <p:submenu label = "Machine Management" >
                             <p:menuitem value ="Add Machinery" url ="/MMS/addMachine.xhtml" />
@@ -73,8 +73,15 @@
                         </p:submenu>
                         <p:submenu label ="Machine Maintenance">
                             <p:menuitem value ="#{hiYewManagedBean.getMAlert()}" url ="/MMS/alertMachine.xhtml" />
-                      <p:menuitem value ="Add Maintenance Schedule" url ="/MMS/addMaintainenceSchedule.xhtml"/>
-                            <p:menuitem value ="View WMaintenance Schedule" url ="/MMS/viewMaintainenceSchedule.xhtml" />
+                            <p:menuitem value ="Add Maintenance Schedule" url ="/MMS/addMaintainenceSchedule.xhtml"/>
+                            <p:menuitem value ="View Maintenance Schedule" url ="/MMS/viewMaintainenceSchedule.xhtml" />
+                        </p:submenu>
+                    </p:column>
+                </p:submenu>
+                <p:submenu label ="Sales Management System" icon ="ui-icon-check" style ="font-weight: bold">
+                    <p:column>
+                        <p:submenu label ="Quotation">
+                            <p:menuitem value ="View Customer RFQ" url ="/SMS/viewEditQuotations.xhtml"/>
                         </p:submenu>
                     </p:column>
                 </p:submenu>
@@ -152,7 +159,7 @@
                 </p:column>
                 <p:column headerText="Employee Pay">
                     <p:cellEditor>
-                        <f:facet name ="output"> <p:outputLabel value ="$#{im.employee_basic}"/></f:facet>
+                        <f:facet name ="output"> <p:outputLabel value ="#{hiYewManagedBean.formatCurrency(im.employee_basic)}"/></f:facet>
                         <f:facet name ="input"><p:inputText value = "#{hiYewManagedBean.employeePay}" maxlength="5" validator ="#{registrationValidator.validatePayE}" validatorMessage="Pay should not be less than 500.00" disabled="#{loginControlBean.checkValid()}"></p:inputText></f:facet>
                     </p:cellEditor>
                 </p:column>
