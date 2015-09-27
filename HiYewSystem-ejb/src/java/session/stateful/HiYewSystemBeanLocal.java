@@ -186,5 +186,7 @@ public interface HiYewSystemBeanLocal {
 
     public List<Vector> employeeTrainingMonthUser(String username);
 
+    public void addNewAdmin(String employee, String employee_passNumber, String employee_address, int number_of_leave, String position, String username, Timestamp expiry, String contact, String addressPostal, String unit, String optional, double employeePay, Date employedDate, String email, String password);
+
 
 }

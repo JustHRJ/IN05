@@ -42,9 +42,7 @@ public class HiYewSystemBean implements HiYewSystemBeanLocal {
     @PersistenceContext
     private EntityManager em;
 
-
-        
-        //all this is for machines
+    //all this is for machines
     public boolean addMachine(String machineName, String machineIdentity, Timestamp machineExpiry, String description, int extension) {
         MachineEntity machine = new MachineEntity();
         try {
@@ -843,6 +841,48 @@ public class HiYewSystemBean implements HiYewSystemBeanLocal {
             return false;
         } catch (Exception ex) {
             return true;
+        }
+    }
+
+    public void addNewAdmin(String employee, String employee_passNumber, String employee_address, int number_of_leave, String position, String username, Timestamp expiry, String contact, String addressPostal, String unit, String optional, double employeePay, Date employedDate, String email, String password) {
+        EmployeeEntity xin = new EmployeeEntity();
+        try {
+            Query q = em.createQuery("Select xin from EmployeeEntity xin where xin.employee_name = :id");
+            q.setParameter("id", employee);
+            xin = (EmployeeEntity) q.getSingleResult();
+          
+        } catch (Exception ex) {
+            boolean check = checkUsername(username);
+            boolean check2 = checkPass(employee_passNumber);
+            if (check && check2) {
+                xin.setEmployee_name(employee);
+                xin.setEmployee_address(employee_address);
+                xin.setEmployee_passNumber(employee_passNumber);
+                xin.setNumber_of_leaves(number_of_leave);
+                Collection<LeaveEntity> leaveRecords = new ArrayList();
+                xin.setLeaveRecords(leaveRecords);
+                Collection<PayrollEntity> payRecords = new ArrayList();
+                xin.setPayRecords(payRecords);
+                xin.setAddressPostal(addressPostal);
+                xin.setEmployee_account_status(position);
+                xin.setPreviousPosition("none");
+                xin.setUsername(username);
+                xin.setUnit(unit);
+                xin.setOptional(optional);
+                String passwordHashed = hashingPassword(password);
+                xin.setPassword(passwordHashed);
+                xin.setEmployee_passExpiry(expiry);
+                xin.setEmployee_contact(contact);
+                xin.setEmailAddress(email);
+                xin.setAccount_status("firstTime");
+                xin.setEmployee_basic(employeePay);
+                Timestamp time = new Timestamp(employedDate.getTime());
+                xin.setEmployee_employedDate(time);
+                //xin.setEmployee_employedDate(ts);
+                em.persist(xin);
+
+            } else {
+            }
         }
     }
 

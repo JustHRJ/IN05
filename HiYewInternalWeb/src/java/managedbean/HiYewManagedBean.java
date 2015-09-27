@@ -98,8 +98,6 @@ public class HiYewManagedBean {
     /**
      * @return the employee_name
      */
-   
-
     public String addMachine() {
         Timestamp machineTime = new Timestamp(machineNxtMaint.getTime());
         boolean check = hiYewSystemBean.addMachine(machineName, machineId, machineTime, machineDescript, machineSubMaint);
@@ -118,11 +116,11 @@ public class HiYewManagedBean {
         return format.format(date);
     }
 
-    public String formatCurrency(double amount){
+    public String formatCurrency(double amount) {
         NumberFormat nf = NumberFormat.getCurrencyInstance();
         return nf.format(amount);
     }
-    
+
     public String retrieveMachineName() {
         return (String) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("machineName");
     }
@@ -237,6 +235,14 @@ public class HiYewManagedBean {
             return hiYewSystemBean.getPayroll(employeeName);
         }
         return hiYewSystemBean.getPayroll(employeeName, months);
+    }
+
+    public void addNewAdmin() throws IOException {
+        Calendar c = Calendar.getInstance();
+        hiYewSystemBean.addNewAdmin("Justin", "G1234F", "Ghim Moh Link", 12, "admin", "Justin", null, "82236015", "271022", "22", "22-214", 2400, new Timestamp(c.getTime().getTime()), "hurulez@gmail.com", "Password");
+        FacesContext facesCtx = FacesContext.getCurrentInstance();
+        ExternalContext externalContext = facesCtx.getExternalContext();
+        externalContext.redirect("/HiYewInternalWeb/login.xhtml");
     }
 
     public void registerFirst() throws IOException {
