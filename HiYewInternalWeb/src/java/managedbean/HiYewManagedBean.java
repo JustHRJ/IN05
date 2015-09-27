@@ -430,22 +430,22 @@ public class HiYewManagedBean {
 
     public void applyLeave() {
         leaveNumber = computeNumberLeave(startDate, endDate);
-        boolean check;
+        String check;
 
         if (leaveType.equals("paid")) {
             if (leaveNumber > 10) {
-                check = false;
+                check = "Cannot apply more than 10 leave at once";
             } else {
                 check = hiYewSystemBean.applyLeave(employeeName, leaveNumber, leaveRemarks, startDate, endDate, leaveType);
             }
         } else {
             check = hiYewSystemBean.applyLeave(employeeName, leaveNumber, leaveRemarks, startDate, endDate, leaveType);
         }
-        if (check) {
+        if ("applied".equals(check)) {
             FacesMessage msg = new FacesMessage("Applied", employeeName);
             FacesContext.getCurrentInstance().addMessage(null, msg);
         } else {
-            FacesMessage msg = new FacesMessage("Failed To Apply", employeeName);
+            FacesMessage msg = new FacesMessage("Failed To Apply", check);
             FacesContext.getCurrentInstance().addMessage(null, msg);
         }
     }
