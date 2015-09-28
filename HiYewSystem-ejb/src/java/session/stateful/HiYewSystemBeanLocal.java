@@ -36,7 +36,7 @@ public interface HiYewSystemBeanLocal {
 
     public boolean updateEmployee(EmployeeEntity employee, String employeeA, String employeeUnit, String employeeOptional, String address_postal, String contact, Date pass, String position, double pay, int leave, String email);
 
-    public boolean applyLeave(String employee, int days, String remarks, Date start, Date end, String type);
+    public String applyLeave(String employee, int days, String remarks, Date start, Date end, String type);
 
     //view all pending leaves
 
@@ -66,7 +66,7 @@ public interface HiYewSystemBeanLocal {
 
     public List<MachineEntity> getAllMachine();
 
-    public void extendMachineExpiry(String machineNumber);
+    public boolean extendMachineExpiry(String machineNumber);
 
     public String login(String username, String password);
 
@@ -112,7 +112,7 @@ public interface HiYewSystemBeanLocal {
 
     public void releaseAllPay();
 
-    public boolean updatePay(PayrollEntity pay, boolean bonus);
+    public boolean updatePay(PayrollEntity pay, boolean bonus, double others);
 
     public boolean addMachineMaintainence(String machineName, Date mScheduleDate, String mScheduleHour, String maintainenceComments, String mServiceProvider, String mServiceContact);
 
@@ -146,7 +146,7 @@ public interface HiYewSystemBeanLocal {
 
     public boolean deleteTraining(String trainingCode);
 
-    public boolean changePassword(String employeeName, String oldPass, String newPass);
+    public String changePassword(String employeeName, String oldPass, String newPass);
 
     public boolean updateEmployee(EmployeeEntity employee, String employeeA, String employeeUnit, String employeeOptional, String address_postal, String contact, String email);
 
@@ -162,5 +162,31 @@ public interface HiYewSystemBeanLocal {
 
     public Vector resetPassword(String username);
 
-    
+    public List<LeaveEntity> employeeLeaveToday();
+
+    public List<LeaveEntity> employeeLeave7days();
+
+    public List<Vector> employeeTrainingToday();
+
+    public List<Vector> employeeTraining7Days();
+
+    public List<LeaveEntity> employeeLeaveMonth();
+
+    public List<Vector> employeeTrainingMonth();
+
+    public List<LeaveEntity> employeeLeaveTodayUser(String username);
+
+    public List<Vector> employeeTrainingTodayUser(String username);
+
+    public List<LeaveEntity> employeeLeave7daysUser(String username);
+
+    public List<Vector> employeeTraining7DaysUser(String username);
+
+    public List<LeaveEntity> employeeLeaveMonthUser(String username);
+
+    public List<Vector> employeeTrainingMonthUser(String username);
+
+    public void addNewAdmin(String employee, String employee_passNumber, String employee_address, int number_of_leave, String position, String username, Timestamp expiry, String contact, String addressPostal, String unit, String optional, double employeePay, Date employedDate, String email, String password);
+
+
 }

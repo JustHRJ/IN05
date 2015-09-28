@@ -13,6 +13,7 @@ import entity.PayrollEntity;
 import entity.TrainingScheduleEntity;
 import java.io.IOException;
 import java.sql.Timestamp;
+import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -27,7 +28,6 @@ import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import manager.EmailManager;
 import org.primefaces.event.RowEditEvent;
-import org.primefaces.event.SelectEvent;
 import session.stateful.HiYewSystemBeanLocal;
 
 /**
@@ -50,6 +50,7 @@ public class HiYewManagedBean {
     private String employeePassNumber = "";
     private int employeeLeave = 0;
     private Long employeeId;
+    private double otherPay = 0;
     private String employeePosition = "";
     private Date employeePassExpiry = null;
     private int leaveNumber = 0;
@@ -107,6 +108,17 @@ public class HiYewManagedBean {
             FacesContext.getCurrentInstance().addMessage(null, msg);
             return "";
         }
+    }
+
+    public String getMonth() {
+        Date date = new Date();
+        SimpleDateFormat format = new SimpleDateFormat("MMM,yyyy");
+        return format.format(date);
+    }
+
+    public String formatCurrency(double amount) {
+        NumberFormat nf = NumberFormat.getCurrencyInstance();
+        return nf.format(amount);
     }
 
     public String retrieveMachineName() {
@@ -203,12 +215,19 @@ public class HiYewManagedBean {
         }
     }
 
-    public double calculateTotal(double basic, double bonus) {
-        return basic + bonus;
+    public double calculateTotal(double basic, double bonus, double others) {
+        return basic + bonus + others;
     }
 
     public void updatePay(RowEditEvent event) {
-        hiYewSystemBean.updatePay((PayrollEntity) event.getObject(), bonus);
+        boolean check = hiYewSystemBean.updatePay((PayrollEntity) event.getObject(), bonus, getOtherPay());
+        if (check) {
+            FacesMessage msg = new FacesMessage("pay updated", "Please check");
+            FacesContext.getCurrentInstance().addMessage(null, msg);
+        } else {
+            FacesMessage msg = new FacesMessage("Pay not updated", "Error, or nothing changed");
+            FacesContext.getCurrentInstance().addMessage(null, msg);
+        }
     }
 
     public List<PayrollEntity> getPayrolls() {
@@ -216,6 +235,16 @@ public class HiYewManagedBean {
             return hiYewSystemBean.getPayroll(employeeName);
         }
         return hiYewSystemBean.getPayroll(employeeName, months);
+    }
+
+    public void addNewAdmin() throws IOException {
+        Calendar c = Calendar.getInstance();
+       
+        hiYewSystemBean.addNewAdmin("Justin", "G1234X", "Ghim Moh Link", 14, "admin", "admin", null, "82236015", "271022", "22", "22-214", 2400, new Timestamp(c.getTime().getTime()), "hurulez@gmail.com", "password" );
+        FacesContext facesCtx = FacesContext.getCurrentInstance();
+        ExternalContext externalContext = facesCtx.getExternalContext();
+        externalContext.redirect("/HiYewInternalWeb/login.xhtml");
+
     }
 
     public void registerFirst() throws IOException {
@@ -248,8 +277,14 @@ public class HiYewManagedBean {
     }
 
     public String extendMachine() {
-        hiYewSystemBean.extendMachineExpiry(machineId);
-        return "viewMachine";
+        boolean check = hiYewSystemBean.extendMachineExpiry(machineId);
+        if (check) {
+            return "viewMachine";
+        } else {
+            FacesMessage msg = new FacesMessage("Machine not updated.", "Please enter Machine ID");
+            FacesContext.getCurrentInstance().addMessage(null, msg);
+            return "";
+        }
     }
 
     public Date getToday() {
@@ -275,21 +310,16 @@ public class HiYewManagedBean {
         return format.format(c.getTime());
     }
 
-    public String getMonth() {
-        Calendar c = Calendar.getInstance();
-        SimpleDateFormat format = new SimpleDateFormat("MMM,yyyy");
-        return format.format(c.getTime());
-    }
-
     public void changePassword() throws IOException {
         System.out.println(employeeName);
-        boolean check = hiYewSystemBean.changePassword(employeeName, oldPassword, password);
-        if (check) {
+        String check = hiYewSystemBean.changePassword(employeeName, oldPassword, password);
+        if ("changed".equals(check)) {
+            FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("loginMessage", "Password has been Changed.");
             FacesContext facesCtx = FacesContext.getCurrentInstance();
             ExternalContext externalContext = facesCtx.getExternalContext();
             externalContext.redirect("/HiYewInternalWeb/login.xhtml");
         } else {
-            FacesMessage msg = new FacesMessage("Failed to change", "Please check old password / same previous password");
+            FacesMessage msg = new FacesMessage("Failed to change", check);
             FacesContext.getCurrentInstance().addMessage(null, msg);
         }
     }
@@ -317,7 +347,7 @@ public class HiYewManagedBean {
         }
     }
 
-    public void resetPassword() throws IOException {
+    public void resetPassword() throws IOException, InterruptedException {
         Vector result = hiYewSystemBean.resetPassword(username);
         if (result == null || result.size() == 0) {
             FacesMessage msg = new FacesMessage("Failed to Reset Password", "Account is disabled");
@@ -325,9 +355,10 @@ public class HiYewManagedBean {
         } else {
             EmailManager emailManager = new EmailManager();
             emailManager.emailPassword(result.get(0).toString(), result.get(1).toString(), result.get(2).toString(), result.get(3).toString());
+            FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("loginMessage", "Password has been changed. Please check your Email");
             FacesContext facesCtx = FacesContext.getCurrentInstance();
             ExternalContext externalContext = facesCtx.getExternalContext();
-            externalContext.redirect("/HiYewInternalWeb/HRMS/login.xhtml");
+            externalContext.redirect("/HiYewInternalWeb/login.xhtml");
 
         }
     }
@@ -387,24 +418,34 @@ public class HiYewManagedBean {
         return diffInDays + 1;
     }
 
+    public String view7Days() {
+        Calendar c = Calendar.getInstance();
+        c.add(Calendar.DATE, 1);
+        SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
+        Calendar d = Calendar.getInstance();
+        d.add(Calendar.DATE, 8);
+
+        return format.format(c.getTime()) + " - " + format.format(d.getTime());
+    }
+
     public void applyLeave() {
         leaveNumber = computeNumberLeave(startDate, endDate);
-        boolean check;
+        String check;
 
         if (leaveType.equals("paid")) {
             if (leaveNumber > 10) {
-                check = false;
+                check = "Cannot apply more than 10 leave at once";
             } else {
                 check = hiYewSystemBean.applyLeave(employeeName, leaveNumber, leaveRemarks, startDate, endDate, leaveType);
             }
         } else {
             check = hiYewSystemBean.applyLeave(employeeName, leaveNumber, leaveRemarks, startDate, endDate, leaveType);
         }
-        if (check) {
+        if ("applied".equals(check)) {
             FacesMessage msg = new FacesMessage("Applied", employeeName);
             FacesContext.getCurrentInstance().addMessage(null, msg);
         } else {
-            FacesMessage msg = new FacesMessage("Failed To Apply", employeeName);
+            FacesMessage msg = new FacesMessage("Failed To Apply", check);
             FacesContext.getCurrentInstance().addMessage(null, msg);
         }
     }
@@ -1126,6 +1167,20 @@ public class HiYewManagedBean {
      */
     public void setLeaveType(String leaveType) {
         this.leaveType = leaveType;
+    }
+
+    /**
+     * @return the otherPay
+     */
+    public double getOtherPay() {
+        return otherPay;
+    }
+
+    /**
+     * @param otherPay the otherPay to set
+     */
+    public void setOtherPay(double otherPay) {
+        this.otherPay = otherPay;
     }
 
     /**

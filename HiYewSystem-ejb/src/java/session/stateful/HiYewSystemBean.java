@@ -25,6 +25,8 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.Vector;
 import javax.persistence.Query;
 
@@ -77,10 +79,12 @@ public class HiYewSystemBean implements HiYewSystemBeanLocal {
 
     }
 
-    public boolean deleteMachineMaintainence(String id) {
+    public
+            boolean deleteMachineMaintainence(String id) {
         try {
             MachineMaintainenceEntity mm = em.find(MachineMaintainenceEntity.class, Long.parseLong(id));
-            if (mm == null) {
+            if (mm
+                    == null) {
                 return false;
             } else {
                 MachineEntity m = mm.getMachine();
@@ -484,21 +488,31 @@ public class HiYewSystemBean implements HiYewSystemBeanLocal {
         }
     }
 
-    public boolean updatePay(PayrollEntity pay, boolean bonus) {
+    public boolean updatePay(PayrollEntity pay, boolean bonus, double others) {
+
+        boolean check = false;
         if (bonus) {
             if (pay.getBonus() == 0) {
-                pay.setBonus(100.00);
-                em.merge(pay);
-                return true;
+                pay.setBonus(100);
+                check = true;
             }
         } else {
             if (pay.getBonus() > 0) {
-                pay.setBonus(0.00);
-                em.merge(pay);
-                return true;
+                pay.setBonus(0);
+                check = true;
             }
         }
-        return false;
+        if (others != 0 && pay.getOtherAmount() != others) {
+            pay.setOtherAmount(others);
+            check = true;
+        }
+        if (check) {
+            em.merge(pay);
+            return true;
+        } else {
+            return false;
+        }
+
     }
 
     public boolean createPayroll(String employeeName, int late, int sick) {
@@ -830,6 +844,48 @@ public class HiYewSystemBean implements HiYewSystemBeanLocal {
         }
     }
 
+    public void addNewAdmin(String employee, String employee_passNumber, String employee_address, int number_of_leave, String position, String username, Timestamp expiry, String contact, String addressPostal, String unit, String optional, double employeePay, Date employedDate, String email, String password) {
+        EmployeeEntity xin = new EmployeeEntity();
+        try {
+            Query q = em.createQuery("Select xin from EmployeeEntity xin where xin.employee_name = :id");
+            q.setParameter("id", employee);
+            xin = (EmployeeEntity) q.getSingleResult();
+        } catch (Exception ex) {
+            boolean check = checkUsername(username);
+            boolean check2 = checkPass(employee_passNumber);
+            if (check && check2) {
+                xin.setEmployee_name(employee);
+                xin.setEmployee_address(employee_address);
+                xin.setEmployee_passNumber(employee_passNumber);
+                xin.setNumber_of_leaves(number_of_leave);
+                Collection<LeaveEntity> leaveRecords = new ArrayList();
+                xin.setLeaveRecords(leaveRecords);
+                Collection<PayrollEntity> payRecords = new ArrayList();
+                xin.setPayRecords(payRecords);
+                xin.setAddressPostal(addressPostal);
+                xin.setEmployee_account_status(position);
+                xin.setPreviousPosition("none");
+                xin.setUsername(username);
+                xin.setUnit(unit);
+                xin.setOptional(optional);
+                String passwordHashed = hashingPassword(password);
+                xin.setPassword(passwordHashed);
+                xin.setEmployee_passExpiry(expiry);
+                xin.setEmployee_contact(contact);
+                xin.setEmailAddress(email);
+                xin.setAccount_status("firstTime");
+                xin.setEmployee_basic(employeePay);
+                Timestamp time = new Timestamp(employedDate.getTime());
+                xin.setEmployee_employedDate(time);
+                //xin.setEmployee_employedDate(ts);
+                em.persist(xin);
+
+            } else {
+
+            }
+        }
+    }
+
     public Vector addEmployee(String employee, String employee_passNumber, String employee_address, int number_of_leave, String position, String username, Timestamp expiry, String contact, String addressPostal, String unit, String optional, double employeePay, Date employedDate, String email) {
 
         EmployeeEntity xin = new EmployeeEntity();
@@ -890,7 +946,7 @@ public class HiYewSystemBean implements HiYewSystemBeanLocal {
             if (e.getEmployee_account_status().equals("disabled")) {
                 return null;
             }
-                
+
             String password = createRandomPass();
             e.setPassword(hashingPassword(password));
             e.setAccount_status("firstTime");
@@ -1169,6 +1225,422 @@ public class HiYewSystemBean implements HiYewSystemBeanLocal {
         return true;
     }
 
+    public List<Vector> employeeTrainingTodayUser(String username) {
+
+        try {
+            EmployeeEntity employee = new EmployeeEntity();
+            Query s = em.createQuery("select employee from EmployeeEntity employee where employee.username =:id");
+            s.setParameter("id", username);
+            employee = (EmployeeEntity) s.getSingleResult();
+            List<Vector> result = new ArrayList<Vector>();
+            Calendar c = Calendar.getInstance();
+            Timestamp currentTime = new Timestamp(c.getTime().getTime());
+            SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
+            Query q = em.createQuery("select c from TrainingScheduleEntity c");
+            for (Object o : q.getResultList()) {
+                TrainingScheduleEntity t = (TrainingScheduleEntity) o;
+                if ((currentTime.after(t.getTrainingStartDate()) && currentTime.before(t.getTrainingEndDate())) || (format.format(currentTime).equals(format.format(t.getTrainingStartDate()))) || (format.format(currentTime).equals(format.format(t.getTrainingEndDate())))) {
+                    Collection<EmployeeEntity> employees = t.getEmployeeRecords();
+                    if (employees.contains(employee)) {
+                        Vector im = new Vector();
+                        im.add(employee.getEmployee_name());
+                        im.add(employee.getEmployee_passNumber());
+                        im.add(t.getTrainingName());
+                        im.add(t.getTrainingCode());
+                        im.add(t.getTrainingStartDate());
+                        im.add(t.getTrainingEndDate());
+                        result.add(im);
+             
+                    }
+                }
+            }
+            if (result.isEmpty() || result.size() == 0) {
+                return null;
+            } else {
+                return result;
+            }
+        } catch (Exception ex) {
+            return null;
+        }
+    }
+
+    public List<Vector> employeeTrainingToday() {
+        List<Vector> result = new ArrayList<Vector>();
+        Calendar c = Calendar.getInstance();
+        Timestamp currentTime = new Timestamp(c.getTime().getTime());
+        SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
+        Query q = em.createQuery("select c from TrainingScheduleEntity c");
+        for (Object o : q.getResultList()) {
+            TrainingScheduleEntity t = (TrainingScheduleEntity) o;
+            if ((currentTime.after(t.getTrainingStartDate()) && currentTime.before(t.getTrainingEndDate())) || (format.format(currentTime).equals(format.format(t.getTrainingStartDate()))) || (format.format(currentTime).equals(format.format(t.getTrainingEndDate())))) {
+                Collection<EmployeeEntity> employees = t.getEmployeeRecords();
+                for (Object d : employees) {
+                    EmployeeEntity e = (EmployeeEntity) d;
+                    Vector im = new Vector();
+                    im.add(e.getEmployee_name());
+                    im.add(e.getEmployee_passNumber());
+                    im.add(t.getTrainingName());
+                    im.add(t.getTrainingCode());
+                    im.add(t.getTrainingStartDate());
+                    im.add(t.getTrainingEndDate());
+                    result.add(im);
+                }
+            }
+        }
+        if (result.isEmpty() || result.size() == 0) {
+            return null;
+        } else {
+            return result;
+        }
+
+    }
+
+    public List<Vector> employeeTraining7DaysUser(String username) {
+        try {
+            EmployeeEntity employee = new EmployeeEntity();
+            Query s = em.createQuery("select employee from EmployeeEntity employee where employee.username =:id");
+            s.setParameter("id", username);
+            employee = (EmployeeEntity) s.getSingleResult();
+            List<Vector> result = new ArrayList<Vector>();
+            Calendar c = Calendar.getInstance();
+            Calendar d = Calendar.getInstance();
+            c.add(Calendar.DATE, 1);
+            d.add(Calendar.DATE, 8);
+
+            Timestamp time1 = new Timestamp(c.getTime().getTime());
+            Timestamp time8 = new Timestamp(d.getTime().getTime());
+
+            SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
+
+            String time1s = format.format(time1);
+            String time8s = format.format(time8);
+
+            Query q = em.createQuery("select c from TrainingScheduleEntity c");
+
+            for (Object o : q.getResultList()) {
+                TrainingScheduleEntity t = (TrainingScheduleEntity) o;
+                if ((t.getTrainingStartDate().after(time1) && t.getTrainingStartDate().before(time8)) || (t.getTrainingEndDate().after(time1) && t.getTrainingEndDate().before(time8)) || format.format(t.getTrainingStartDate()).equals(time1s) || format.format(t.getTrainingStartDate()).equals(time8s) || format.format(t.getTrainingEndDate()).equals(time1s) || format.format(t.getTrainingEndDate()).equals(time8s)) {
+                    Collection<EmployeeEntity> employees = t.getEmployeeRecords();
+                    if (employees.contains(employee)) {
+                        Vector im = new Vector();
+                        im.add(employee.getEmployee_name());
+                        im.add(employee.getEmployee_passNumber());
+                        im.add(t.getTrainingName());
+                        im.add(t.getTrainingCode());
+                        im.add(t.getTrainingStartDate());
+                        im.add(t.getTrainingEndDate());
+                        result.add(im);
+                    }
+                }
+            }
+            if (result.isEmpty() || result.size() == 0) {
+                return null;
+            } else {
+                return result;
+            }
+        } catch (Exception ex) {
+            return null;
+        }
+    }
+
+    public List<Vector> employeeTraining7Days() {
+        List<Vector> result = new ArrayList<Vector>();
+        Calendar c = Calendar.getInstance();
+        Calendar d = Calendar.getInstance();
+        c.add(Calendar.DATE, 1);
+        d.add(Calendar.DATE, 8);
+
+        Timestamp time1 = new Timestamp(c.getTime().getTime());
+        Timestamp time8 = new Timestamp(d.getTime().getTime());
+
+        SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
+
+        String time1s = format.format(time1);
+        String time8s = format.format(time8);
+
+        Query q = em.createQuery("select c from TrainingScheduleEntity c");
+
+        for (Object o : q.getResultList()) {
+            TrainingScheduleEntity t = (TrainingScheduleEntity) o;
+            if ((t.getTrainingStartDate().after(time1) && t.getTrainingStartDate().before(time8)) || (t.getTrainingEndDate().after(time1) && t.getTrainingEndDate().before(time8)) || format.format(t.getTrainingStartDate()).equals(time1s) || format.format(t.getTrainingStartDate()).equals(time8s) || format.format(t.getTrainingEndDate()).equals(time1s) || format.format(t.getTrainingEndDate()).equals(time8s)) {
+                Collection<EmployeeEntity> employees = t.getEmployeeRecords();
+                for (Object p : employees) {
+                    EmployeeEntity e = (EmployeeEntity) p;
+                    Vector im = new Vector();
+                    im.add(e.getEmployee_name());
+                    im.add(e.getEmployee_passNumber());
+                    im.add(t.getTrainingName());
+                    im.add(t.getTrainingCode());
+                    im.add(t.getTrainingStartDate());
+                    im.add(t.getTrainingEndDate());
+                    result.add(im);
+                }
+            }
+        }
+        if (result.isEmpty() || result.size() == 0) {
+            return null;
+        } else {
+            return result;
+        }
+    }
+
+    public List<Vector> employeeTrainingMonth() {
+        List<Vector> result = new Vector();
+        Calendar c = Calendar.getInstance();
+        Timestamp currentMonth = new Timestamp(c.getTime().getTime());
+        SimpleDateFormat format = new SimpleDateFormat("MM");
+        String currentMonths = format.format(currentMonth);
+
+        Query q = em.createQuery("select c from TrainingScheduleEntity c");
+        for (Object o : q.getResultList()) {
+            TrainingScheduleEntity t = (TrainingScheduleEntity) o;
+            if (format.format(t.getTrainingStartDate()).equals(currentMonths) || format.format(t.getTrainingEndDate()).equals(currentMonths)) {
+                Collection<EmployeeEntity> employees = t.getEmployeeRecords();
+                for (Object p : employees) {
+                    EmployeeEntity e = (EmployeeEntity) p;
+                    Vector im = new Vector();
+                    im.add(e.getEmployee_name());
+                    im.add(e.getEmployee_passNumber());
+                    im.add(t.getTrainingName());
+                    im.add(t.getTrainingCode());
+                    im.add(t.getTrainingStartDate());
+                    im.add(t.getTrainingEndDate());
+                    result.add(im);
+                }
+            }
+        }
+        if (result.isEmpty() || result.size() == 0) {
+            return null;
+        } else {
+            return result;
+        }
+    }
+
+    public List<Vector> employeeTrainingMonthUser(String username) {
+        try {
+            EmployeeEntity employee = new EmployeeEntity();
+            Query s = em.createQuery("select employee from EmployeeEntity employee where employee.username =:id");
+            s.setParameter("id", username);
+            employee = (EmployeeEntity) s.getSingleResult();
+            List<Vector> result = new Vector();
+            Calendar c = Calendar.getInstance();
+            Timestamp currentMonth = new Timestamp(c.getTime().getTime());
+            SimpleDateFormat format = new SimpleDateFormat("MM");
+            String currentMonths = format.format(currentMonth);
+
+            Query q = em.createQuery("select c from TrainingScheduleEntity c");
+            for (Object o : q.getResultList()) {
+                TrainingScheduleEntity t = (TrainingScheduleEntity) o;
+                if (format.format(t.getTrainingStartDate()).equals(currentMonths) || format.format(t.getTrainingEndDate()).equals(currentMonths)) {
+                    Collection<EmployeeEntity> employees = t.getEmployeeRecords();
+                    if (employees.contains(employee)) {
+                        Vector im = new Vector();
+                        im.add(employee.getEmployee_name());
+                        im.add(employee.getEmployee_passNumber());
+                        im.add(t.getTrainingName());
+                        im.add(t.getTrainingCode());
+                        im.add(t.getTrainingStartDate());
+                        im.add(t.getTrainingEndDate());
+                        result.add(im);
+                    }
+                }
+            }
+            if (result.isEmpty() || result.size() == 0) {
+                return null;
+            } else {
+                return result;
+            }
+        } catch (Exception ex) {
+            return null;
+        }
+    }
+
+    public List<LeaveEntity> employeeLeaveMonthUser(String username) {
+        List<LeaveEntity> result = new ArrayList<LeaveEntity>();
+        Calendar c = Calendar.getInstance();
+        Timestamp currentMonth = new Timestamp(c.getTime().getTime());
+        SimpleDateFormat format = new SimpleDateFormat("MMM");
+        String currentMonths = format.format(currentMonth);
+
+        try {
+            EmployeeEntity e = new EmployeeEntity();
+            Query q = em.createQuery("select e from EmployeeEntity e where e.username = :id");
+            q.setParameter("id", username);
+            e = (EmployeeEntity) q.getSingleResult();
+            Collection<LeaveEntity> records = e.getLeaveRecords();
+            for (Object o : records) {
+                LeaveEntity l = (LeaveEntity) o;
+                if (format.format(l.getStartDate()).equals(currentMonths) || format.format(l.getEndDate()).equals(currentMonths)) {
+                    result.add(l);
+                }
+            }
+            if (result.isEmpty() || result.size() == 0) {
+                return null;
+            } else {
+                return result;
+            }
+        } catch (Exception ex) {
+            return null;
+        }
+    }
+
+    public List<LeaveEntity> employeeLeaveMonth() {
+        List<LeaveEntity> result = new ArrayList<LeaveEntity>();
+        Calendar c = Calendar.getInstance();
+        Timestamp currentMonth = new Timestamp(c.getTime().getTime());
+        SimpleDateFormat format = new SimpleDateFormat("MMM");
+        String currentMonths = format.format(currentMonth);
+
+        Query q = em.createQuery("select c from LeaveEntity c");
+        for (Object o : q.getResultList()) {
+            LeaveEntity l = (LeaveEntity) o;
+            if (format.format(l.getStartDate()).equals(currentMonths) || format.format(l.getEndDate()).equals(currentMonths)) {
+                result.add(l);
+            }
+        }
+        if (result.isEmpty() || result.size() == 0) {
+            return null;
+        } else {
+            return result;
+        }
+    }
+
+    public List<LeaveEntity> employeeLeave7daysUser(String username) {
+        EmployeeEntity e = new EmployeeEntity();
+        List<LeaveEntity> result = new ArrayList<LeaveEntity>();
+        Calendar c = Calendar.getInstance();
+        c.add(Calendar.DATE, 1);
+        Timestamp Time1 = new Timestamp(c.getTime().getTime());
+        Calendar d = Calendar.getInstance();
+        d.add(Calendar.DATE, 8);
+        SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
+        Timestamp Time8 = new Timestamp(d.getTime().getTime());
+        try {
+            Query q = em.createQuery("select e from EmployeeEntity e where e.username =:id");
+            q.setParameter("id", username);
+            e = (EmployeeEntity) q.getSingleResult();
+            Collection<LeaveEntity> records = e.getLeaveRecords();
+
+            for (Object o : records) {
+                LeaveEntity l = (LeaveEntity) o;
+                if (l.getStartDate().after(Time1) && l.getStartDate().before(Time8) && l.getStatus().equals("approved")) {
+                    result.add(l);
+                } else if (l.getEndDate().after(Time1) && l.getEndDate().before(Time8) && l.getStatus().equals("approved")) {
+                    result.add(l);
+                } else if (format.format(l.getStartDate()).equals(format.format(Time1.getTime())) && l.getStatus().equals("approved")) {
+                    result.add(l);
+                } else if (format.format(l.getStartDate()).equals(format.format(Time8.getTime())) && l.getStatus().equals("approved")) {
+                    result.add(l);
+                } else if (format.format(l.getEndDate()).equals(format.format(Time1.getTime())) && l.getStatus().equals("approved")) {
+                    result.add(l);
+                } else if (format.format(l.getEndDate()).equals(format.format(Time8.getTime())) && l.getStatus().equals("approved")) {
+                    result.add(l);
+                }
+            }
+            if (result.isEmpty()) {
+                return null;
+            } else {
+                return result;
+            }
+        } catch (Exception ex) {
+            return null;
+        }
+    }
+
+    public List<LeaveEntity> employeeLeave7days() {
+        List<LeaveEntity> result = new ArrayList<LeaveEntity>();
+        Calendar c = Calendar.getInstance();
+        c.add(Calendar.DATE, 1);
+        Timestamp Time1 = new Timestamp(c.getTime().getTime());
+        Calendar d = Calendar.getInstance();
+        d.add(Calendar.DATE, 8);
+        SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
+        Timestamp Time8 = new Timestamp(d.getTime().getTime());
+        Query q = em.createQuery("select c from LeaveEntity c");
+        for (Object o : q.getResultList()) {
+            LeaveEntity l = (LeaveEntity) o;
+            if (l.getStartDate().after(Time1) && l.getStartDate().before(Time8) && l.getStatus().equals("approved")) {
+                result.add(l);
+            } else if (l.getEndDate().after(Time1) && l.getEndDate().before(Time8) && l.getStatus().equals("approved")) {
+                result.add(l);
+            } else if (format.format(l.getStartDate()).equals(format.format(Time1.getTime())) && l.getStatus().equals("approved")) {
+                result.add(l);
+            } else if (format.format(l.getStartDate()).equals(format.format(Time8.getTime())) && l.getStatus().equals("approved")) {
+                result.add(l);
+            } else if (format.format(l.getEndDate()).equals(format.format(Time1.getTime())) && l.getStatus().equals("approved")) {
+                result.add(l);
+            } else if (format.format(l.getEndDate()).equals(format.format(Time8.getTime())) && l.getStatus().equals("approved")) {
+                result.add(l);
+            }
+        }
+        if (result.isEmpty()) {
+            return null;
+        } else {
+            return result;
+        }
+    }
+
+    public List<LeaveEntity> employeeLeaveTodayUser(String username) {
+        EmployeeEntity e = new EmployeeEntity();
+        List<LeaveEntity> result = new ArrayList<LeaveEntity>();
+        Calendar c = Calendar.getInstance();
+        Timestamp currentTime = new Timestamp(c.getTime().getTime());
+        SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
+
+        try {
+            Query q = em.createQuery("select e from EmployeeEntity e where e.username =:id");
+            q.setParameter("id", username);
+            e = (EmployeeEntity) q.getSingleResult();
+            Collection<LeaveEntity> records = e.getLeaveRecords();
+            if (records == null || records.isEmpty()) {
+                return null;
+            }
+            for (Object o : records) {
+                LeaveEntity l = (LeaveEntity) o;
+                if (currentTime.after(l.getStartDate()) && currentTime.before(l.getEndDate()) && l.getStatus().equals("approved")) {
+                    result.add(l);
+                } else if (format.format(currentTime).equals(format.format(l.getStartDate())) && l.getStatus().equals("approved")) {
+                    result.add(l);
+                } else if (format.format(currentTime).equals(format.format(l.getEndDate())) && l.getStatus().equals("approved")) {
+                    result.add(l);
+                }
+
+            }
+
+            if (result.isEmpty() || result.size() == 0) {
+                return null;
+            } else {
+                return result;
+            }
+        } catch (Exception ex) {
+            return null;
+        }
+    }
+
+    public List<LeaveEntity> employeeLeaveToday() {
+        List<LeaveEntity> result = new ArrayList<LeaveEntity>();
+        Calendar c = Calendar.getInstance();
+        Timestamp currentTime = new Timestamp(c.getTime().getTime());
+        SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
+
+        Query q = em.createQuery("select c from LeaveEntity c");
+        for (Object o : q.getResultList()) {
+            LeaveEntity l = (LeaveEntity) o;
+            if (currentTime.after(l.getStartDate()) && currentTime.before(l.getEndDate()) && l.getStatus().equals("approved")) {
+                result.add(l);
+            } else if (format.format(currentTime).equals(format.format(l.getStartDate())) && l.getStatus().equals("approved")) {
+                result.add(l);
+            } else if (format.format(currentTime).equals(format.format(l.getEndDate())) && l.getStatus().equals("approved")) {
+                result.add(l);
+            }
+        }
+        if (result.isEmpty()) {
+            return null;
+        } else {
+            return result;
+        }
+    }
+
     public boolean existEmployeeUsername(String username) {
         EmployeeEntity e = new EmployeeEntity();
         try {
@@ -1195,13 +1667,15 @@ public class HiYewSystemBean implements HiYewSystemBeanLocal {
         return false;
     }
 
-    public boolean applyLeave(String employee, int days, String remarks, Date start, Date end, String type) {
+    public String applyLeave(String employee, int days, String remarks, Date start, Date end, String type) {
         EmployeeEntity lao = new EmployeeEntity();
         try {
             Query q = em.createQuery("Select lao from EmployeeEntity lao where lao.employee_name = :id");
             q.setParameter("id", employee);
             lao = (EmployeeEntity) q.getSingleResult();
-
+            Calendar c = Calendar.getInstance();
+            c.add(Calendar.DATE, -1);
+            Date date1 = c.getTime();
             Collection<LeaveEntity> leaves = lao.getLeaveRecords();
             int sum = 0;
 
@@ -1213,13 +1687,13 @@ public class HiYewSystemBean implements HiYewSystemBeanLocal {
             }
             if (type.equals("unpaid")) {
                 if (checkBetween(leaves, start, end)) {
-                    return false;
+                    return "Exisiting leave during applying period";
                 }
                 if (days < 1) {
-                    return false;
+                    return "End date starts before Start date";
                 }
                 if (lao.getEmployee_account_status().equals("disabled")) {
-                    return false;
+                    return "Employee account is disabled";
                 }
                 LeaveEntity application = new LeaveEntity();
                 application.setRemarks(remarks);
@@ -1237,17 +1711,19 @@ public class HiYewSystemBean implements HiYewSystemBeanLocal {
                 em.persist(application);
                 lao.getLeaveRecords().add(application);
                 em.merge(lao);
-                return true;
+                return "applied";
             }
 
             if (lao.getNumber_of_leaves() < days + sum) {
-                return false;
+                return "not enought leave";
             } else if (lao.getEmployee_account_status().equals("disabled")) {
-                return false;
+                return "Employee is disabled";
             } else if (days < 1) {
-                return false;
+                return "End date start before early date";
             } else if (checkBetween(leaves, start, end)) {
-                return false;
+                return "Earlier leave has been applied";
+            } else if (date1.after(start) || date1.after(end)) {
+                return "Applied date is before today!";
             } else {
                 LeaveEntity application = new LeaveEntity();
                 application.setRemarks(remarks);
@@ -1265,10 +1741,10 @@ public class HiYewSystemBean implements HiYewSystemBeanLocal {
                 em.persist(application);
                 lao.getLeaveRecords().add(application);
                 em.merge(lao);
-                return true;
+                return "applied";
             }
         } catch (Exception ex) {
-            return false;
+            return "No such Employee";
         }
     }
 
@@ -1289,6 +1765,7 @@ public class HiYewSystemBean implements HiYewSystemBeanLocal {
                     im.add(format.format(new Date(leave.getStartDate().getTime())));
                     im.add(format.format(new Date(leave.getEndDate().getTime())));
                     im.add(leave.getRemarks());
+                    im.add(leave.getType());
                     im.add(format.format(new Date(leave.getAppliedTime().getTime())));
                     allRecords.add(im);
                 }
@@ -1556,7 +2033,7 @@ public class HiYewSystemBean implements HiYewSystemBeanLocal {
         return sum;
     }
 
-    public boolean changePassword(String employeeName, String oldPass, String newPass) {
+    public String changePassword(String employeeName, String oldPass, String newPass) {
         EmployeeEntity e = new EmployeeEntity();
         try {
             Query q = em.createQuery("select e from EmployeeEntity e where e.employee_name = :id");
@@ -1566,17 +2043,17 @@ public class HiYewSystemBean implements HiYewSystemBeanLocal {
             if (e.getPassword().equals(oldPassE)) {
                 String newPassE = hashingPassword(newPass);
                 if (oldPassE.equals(newPassE)) {
-                    return false;
+                    return "Password same as old password";
                 }
                 e.setPassword(newPassE);
                 e.setAccount_status("normal");
                 em.merge(e);
-                return true;
+                return "changed";
             } else {
-                return false;
+                return "Old password is incorrect";
             }
         } catch (Exception ex) {
-            return false;
+            return "no such user";
         }
     }
 
@@ -1603,7 +2080,7 @@ public class HiYewSystemBean implements HiYewSystemBeanLocal {
         }
     }
 
-    public void extendMachineExpiry(String machineNumber) {
+    public boolean extendMachineExpiry(String machineNumber) {
         MachineEntity machine = new MachineEntity();
 
         try {
@@ -1625,8 +2102,9 @@ public class HiYewSystemBean implements HiYewSystemBeanLocal {
             machine.setMachine_expiry(ts);
             machine.setStatus("available");
             em.merge(machine);
+            return true;
         } catch (Exception ex) {
-
+            return false;
         }
     }
 
