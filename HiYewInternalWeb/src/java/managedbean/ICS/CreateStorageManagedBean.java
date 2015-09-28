@@ -5,7 +5,7 @@
  */
 package managedbean.ICS;
 
-import entity.BinEntity;
+
 import entity.RackEntity;
 import entity.ShelveEntity;
 import java.io.Serializable;
@@ -31,13 +31,15 @@ public class CreateStorageManagedBean implements Serializable{
     
     private RackEntity newRack;
     private ShelveEntity newShelve;
-    private BinEntity newBin;
+
     
     private String nextRackID;
     private String nextShelveID;
     private int numOfShelvesForRack;
     private String rackLocationLevel;
     private String rackZone;
+    
+   
     
 
     
@@ -46,6 +48,7 @@ public class CreateStorageManagedBean implements Serializable{
      */
     public CreateStorageManagedBean() {
         newRack = new RackEntity();
+     
 
     }
     @PostConstruct
@@ -57,7 +60,7 @@ public class CreateStorageManagedBean implements Serializable{
     public void createRack(ActionEvent event){
           newRack.setRackID(getNextRackID());
           newRack.setStatus("Not Full");
-          newRack.setLocation("Level " + rackLocationLevel + ", Zone " + rackZone);
+          newRack.setLocation("Level " + rackLocationLevel + ", " + rackZone);
           ArrayList<ShelveEntity> shelves = new ArrayList<ShelveEntity>();
           newRack.setShelves(shelves);
           hiYewICSSessionBean.createRack(getNewRack());
@@ -118,19 +121,7 @@ public class CreateStorageManagedBean implements Serializable{
         this.newShelve = newShelve;
     }
 
-    /**
-     * @return the newBin
-     */
-    public BinEntity getNewBin() {
-        return newBin;
-    }
-
-    /**
-     * @param newBin the newBin to set
-     */
-    public void setNewBin(BinEntity newBin) {
-        this.newBin = newBin;
-    }
+ 
 
     /**
      * @return the nextRackID

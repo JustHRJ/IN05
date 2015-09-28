@@ -1,0 +1,145 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <h:head>
+        <title>Hi-Yew Internal System</title>
+        <style>
+            .menu{
+                margin-top:20px;
+                margin-bottom:30px;
+                background-color: lightblue;
+            }
+        </style>
+    </h:head>
+
+    <h:body>
+        <h1>Hi-Yew Internal System</h1>
+        <p:megaMenu orientation="horizontal"  styleClass="menu">
+            <p:submenu label="Inventory Control System" icon="ui-icon-check" style="font-weight:bold">
+                <p:column>
+                    <p:submenu label="Items Management">
+                        <p:menuitem value="View Inventory" url="viewInventory.xhtml" />
+                        <p:menuitem value="Add New Item" url="addNewItem.xhtml" />
+                        <p:menuitem value="Low Stock Level Alert (#{viewLowStockManagedBean.numOfLowStockItems})" url="viewLowStock.xhtml" />
+                    </p:submenu>
+                    <p:submenu label="Storage Management">
+                        <p:menuitem value="View Storage" url="viewRacks.xhtml" />
+                        <p:menuitem value="Create Storage" url="createStorage.xhtml" />
+                    </p:submenu>
+                </p:column>
+            </p:submenu>
+        </p:megaMenu>
+
+        <h:form id="form">
+            <p:growl id="msgs" showDetail="true" />
+
+
+            <p:dataTable editable="true" var="rack" value="#{viewRacksManagedBean.racks}" widgetVar="racksTable" 
+                         emptyMessage="No racks found with given criteria" filteredValue="#{viewRacksManagedBean.filteredRacks}" rows="10"
+                         paginator="true"
+                         paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                         rowsPerPageTemplate="5,10,15">
+                <p:ajax event="rowEdit" listener="#{viewRacksManagedBean.onRowEdit}" update=":form:msgs" />
+                <p:ajax event="rowEditCancel" listener="#{viewRacksManagedBean.onRowCancel}" update=":form:msgs" />
+                <f:facet name="header">
+                    Hi-Yew's Storage Racks
+                </f:facet>
+                <p:column sortBy="#{rack.rackID}" headerText="RackID" style="text-align:center" >
+                    <h:outputText value="#{rack.rackID}" />
+                </p:column>
+
+                <p:column filterBy="#{rack.location}" sortBy="#{rack.location}" headerText="Rack Location" footerText="contains" filterMatchMode="contains" >
+                    <h:outputText value="#{rack.location}" />
+                </p:column>
+
+                <p:column  headerText="Rack's Size(LxWxH)" style="text-align:center">
+                    <h:outputText value="#{rack.length}cm x #{rack.width}cm x #{rack.height}cm">
+                    </h:outputText>
+                </p:column>
+
+
+<!--                <p:column filterBy="#{rack.status}" headerText="Status" footerText="equals" filterMatchMode="equals" style="text-align:center">
+                    <f:facet name="filter">
+                        <p:selectOneButton onchange="PF('racksTable').filter()">
+                            <f:selectItem itemLabel="All" itemValue="" />
+                            <f:selectItem itemLabel="Not Full" itemValue="Not Full" />
+                            <f:selectItem itemLabel="Full" itemValue="Full" />
+                        </p:selectOneButton>
+                    </f:facet>
+                    <h:outputText value="#{rack.status}" />
+                </p:column>-->
+
+                <p:column  filterBy="#{rack.status}" headerText="Status" footerText="equals" filterMatchMode="equals" style="text-align:center">
+                    <f:facet name="filter">
+                        <p:selectOneButton onchange="PF('racksTable').filter()">
+                            <f:selectItem itemLabel="All" itemValue="" />
+                            <f:selectItem itemLabel="Not Full" itemValue="Not Full" />
+                            <f:selectItem itemLabel="Full" itemValue="Full" />
+                        </p:selectOneButton>
+                    </f:facet>
+                    <p:cellEditor>
+                        <f:facet name="output"><h:outputText value="#{rack.status}" /></f:facet>
+                        <f:facet name="input">
+                            <h:selectOneMenu value="#{rack.status}" style="width:100%">
+                                
+                                <f:selectItem itemLabel="Not Full" itemValue="Not Full" />
+                                <f:selectItem itemLabel="Full" itemValue="Full" />
+                            </h:selectOneMenu>
+                        </f:facet>
+                    </p:cellEditor>
+                </p:column>
+                
+                <p:column style="width:32px">
+                    <p:rowEditor />
+                </p:column>
+                
+                <p:column style="width:32px;text-align: center">
+                    <p:commandButton  action="#{viewRacksManagedBean.passSelectedRackToNext()}" icon="ui-icon-search" update=":form:shelvesOfRackPanel" title="View Rack Details">
+                        <f:setPropertyActionListener value="#{rack}" target="#{viewRacksManagedBean.selectedRack}" />
+                    </p:commandButton>
+                </p:column>
+
+            </p:dataTable>
+            <br/>
+
+            <p:panel id="shelvesOfRackPanel" header="Rack #{viewRacksManagedBean.selectedRack.rackID}'s Shelves Details" toggleable="true" toggleSpeed="500" closeSpeed="500" style="margin-bottom:20px"  collapsed="#{viewRacksManagedBean.openShelvePanel}">
+                <p:dataTable var="shelve" value="#{viewRacksManagedBean.shelvesInsideSelectRack}" widgetVar="shelvesTable" 
+                             emptyMessage="No shelves found with given criteria" filteredValue="#{viewRacksManagedBean.filteredShelves}" >
+
+                    <p:column sortBy="#{shelve.shelveID}" headerText="ShelveID" style="text-align:center" >
+                        <h:outputText value="#{shelve.shelveID}" />
+                    </p:column>
+
+                    <p:column  headerText="Shelve's Size(LxWxH)" style="text-align:center">
+                        <h:outputText value="#{shelve.shelveLength}cm x #{shelve.width}cm x #{shelve.height}cm">
+                        </h:outputText>
+                    </p:column>
+
+
+                    <p:column filterBy="#{shelve.status}" headerText="Status" footerText="equals" filterMatchMode="equals" style="text-align:center">
+                        <f:facet name="filter">
+                            <p:selectOneButton onchange="PF('racksTable').filter()">
+                                <f:selectItem itemLabel="All" itemValue="" />
+                                <f:selectItem itemLabel="Not Full" itemValue="Not Full" />
+                                <f:selectItem itemLabel="Full" itemValue="Full" />
+                            </p:selectOneButton>
+                        </f:facet>
+                        <h:outputText value="#{shelve.status}" />
+                    </p:column>
+
+                    <p:column style="width:32px;text-align: center">
+                        <p:commandButton action="#{viewRacksManagedBean.passSelectedShelveToNext()}" icon="ui-icon-plus"  title="Add Item">
+                            <f:setPropertyActionListener value="#{shelve}" target="#{viewRacksManagedBean.selectedShelve}" />
+                        </p:commandButton>
+                    </p:column>
+                </p:dataTable>
+            </p:panel>
+
+        </h:form>
+    </h:body>
+</html>
+

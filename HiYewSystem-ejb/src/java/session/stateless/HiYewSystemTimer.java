@@ -13,6 +13,8 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.Stateless;
@@ -31,7 +33,7 @@ import javax.persistence.Query;
 public class HiYewSystemTimer {
 
     //   Add business logic below. (Right-click in editor and choose
- //   "Insert Code > Add Business Method")
+    //   "Insert Code > Add Business Method")
     @PersistenceContext
     private EntityManager em;
 
@@ -151,5 +153,4 @@ public class HiYewSystemTimer {
         currentSalary = Math.round(currentSalary * 100.0) / 100.0;
         return currentSalary;
     }
-
 }

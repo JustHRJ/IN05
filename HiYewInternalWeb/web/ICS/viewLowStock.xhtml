@@ -1,0 +1,108 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:head>
+        <title>Hi-Yew Internal System</title>
+        <style>
+            .menu{
+                margin-top:20px;
+                margin-bottom:30px;
+                background-color: lightblue;
+            }
+        </style>
+    </h:head>
+    <h:body>
+        <h1>Hi-Yew Internal System</h1>
+        <p:megaMenu orientation="horizontal"  styleClass="menu">
+            <p:submenu label="Inventory Control System" icon="ui-icon-check" style="font-weight:bold">
+                <p:column>
+                    <p:submenu label="Items Management">
+                        <p:menuitem value="View Inventory" url="viewInventory.xhtml" />
+                        <p:menuitem value="Add New Item" url="addNewItem.xhtml" />
+                        <p:menuitem value="Low Stock Level Alert (#{viewLowStockManagedBean.numOfLowStockItems})" url="viewLowStock.xhtml" />
+                    </p:submenu>
+                    <p:submenu label="Storage Management">
+                        <p:menuitem value="View Storage" url="viewRacks.xhtml" />
+                        <p:menuitem value="Create Storage" url="createStorage.xhtml" />
+                    </p:submenu>
+                </p:column>
+            </p:submenu>
+        </p:megaMenu>
+        <h:form>
+
+            <p:dataTable var="item" value="#{viewLowStockManagedBean.lowStockItems}" widgetVar="itemsTable" 
+                         emptyMessage="No items found with given criteria" filteredValue="#{viewLowStockManagedBean.filteredLowStockItems}" 
+                         rows="10"
+                         paginator="true"
+                         paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                         rowsPerPageTemplate="5,10,15">
+
+
+                <f:facet name="header">
+                     Hi-Yew's Inventory
+                    <p:outputPanel style="text-align:right;">
+                        <h:outputText value="Search all fields:" />
+                        <p:inputText id="globalFilter" onkeyup="PF('itemsTable').filter()" style="width:150px" placeholder="Enter keyword"/>
+                    </p:outputPanel>
+                </f:facet>
+                <p:column filterBy="#{item.itemCode}" sortBy="#{item.itemCode}" headerText="Item Code" footerText="contains" filterMatchMode="contains">
+                    <h:outputText value="#{item.itemCode}" />
+                </p:column>
+
+                <p:column filterBy="#{item.itemName}" sortBy="#{item.itemName}" headerText="Item Name" footerText="contains" filterMatchMode="contains">
+                    <h:outputText value="#{item.itemName}" />
+                </p:column>
+
+                <p:column filterBy="#{item.itemType}" headerText="Item Type" footerText="equals" filterMatchMode="equals" style="width: 250px">
+                    <f:facet name="filter">
+                        <p:selectOneButton onchange="PF('itemsTable').filter()">
+                            <f:selectItem itemLabel="All" itemValue="" />
+                            <f:selectItem itemLabel="Wires" itemValue="Wires" />
+                            <f:selectItem itemLabel="Metals" itemValue="Metals" />
+                        </p:selectOneButton>
+                    </f:facet>
+                    <h:outputText value="#{item.itemType}" />
+                </p:column>
+
+                <p:column filterBy="#{item.quantity}" headerText="Quantity" footerText="less than or equal" filterMatchMode="lte" >
+                    <f:facet name="filter" >      
+                        <p:spinner onchange="PF('itemsTable').filter()" size="5">
+                            <f:converter converterId="javax.faces.Integer" />
+                        </p:spinner>
+                    </f:facet>
+                    <h:outputText value="#{item.quantity}" />
+                </p:column>
+
+                <p:column  headerText="Cost" >
+                    <h:outputText value="#{item.cost}">
+                    </h:outputText>
+                </p:column>
+
+                <p:column  headerText="Selling Price" >
+                    <h:outputText value="#{item.sellingPrice}">
+                    </h:outputText>
+                </p:column>
+
+                <p:column  headerText="Reorder Point">
+                    <h:outputText value="#{item.reorderPoint}">
+                    </h:outputText>
+                </p:column>
+
+                <p:column  headerText="Average Weight" >
+                    <h:outputText value="#{item.averageWeight}">
+                    </h:outputText>
+                </p:column>
+
+                <p:column style="width:32px;text-align: center">
+                    <p:commandButton  action="#{viewLowStockManagedBean.passSelectedItemToNext()}" icon="ui-icon-search" title="View/Update">
+                        <f:setPropertyActionListener value="#{item}" target="#{viewLowStockManagedBean.selectedItem}" />
+                    </p:commandButton>
+                </p:column>
+            </p:dataTable>
+        </h:form>
+    </h:body>
+</html>
+

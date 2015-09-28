@@ -55,6 +55,7 @@
                     <p:submenu label="Items Management">
                         <p:menuitem value="View Inventory" url="viewInventory.xhtml" />
                         <p:menuitem value="Add New Item" url="addNewItem.xhtml" />
+                        <p:menuitem value="Low Stock Level Alert (#{viewLowStockManagedBean.numOfLowStockItems})" url="viewLowStock.xhtml" />
                     </p:submenu>
                     <p:submenu label="Storage Management">
                         <p:menuitem value="View Storage" url="#" />
@@ -88,7 +89,7 @@
         </p:megaMenu>
         <h:form id="upperForm">
             <p:growl id="message" showDetail="true" />
-            <p:messages  id="upperMessages" autoUpdate="true"/>
+            <p:messages  id="upperMessages" autoUpdate="false"/>
             <p:panel id="itemDetailsPanel" header="Item Details(Click values for editing)" toggleable="true" toggleSpeed="500" closeSpeed="500" style="margin-bottom:20px">
 
                 <h:panelGrid id="itemDetailsGrid" columns="3" columnClasses="column" cellpadding="5">
@@ -98,68 +99,78 @@
                     <p:message for="itemCode" />
 
 
-                    <h:outputLabel for="itemName" value="Item Name:" style="font-weight:bold"/>
+                    <h:outputLabel for="itemName1" value="Item Name:" style="font-weight:bold"/>
                     <p:inplace id="itemName" editor="true">
-                        <p:ajax  event="save"/>
-                        <p:inputText value="#{itemDetailsManagedBean.selectedItem.itemName}" required="true" label="text" />
+                        <p:ajax  event="save" update="itemDetailsPanel"/>
+                        <p:inputText id="itemName1" value="#{itemDetailsManagedBean.selectedItem.itemName}" required="true" requiredMessage="Item Name is required!" label="text" />
                     </p:inplace>
-                    <p:message for="itemName" />
+                    <p:message for="itemName1" />
 
 
 
-                    <h:outputLabel for="itemType" value="Item Type:" style="font-weight:bold"/>
+                    <h:outputLabel for="itemType1" value="Item Type:" style="font-weight:bold"/>
                     <p:inplace id="itemType" editor="true">
-                        <p:ajax  event="save"/>
+                        <p:ajax  event="save" update="itemDetailsPanel"/>
                         <p:selectOneMenu id="itemType1" value="#{itemDetailsManagedBean.selectedItem.itemType}" required="true" requiredMessage="Item Type is required, please select one." style="width:125px" >
                             <f:selectItem itemLabel="Select One" itemValue="" />
                             <f:selectItem itemLabel="Wires" itemValue="Wires" />
                             <f:selectItem itemLabel="Metals" itemValue="Metals" />
                         </p:selectOneMenu>
                     </p:inplace>
-                    <p:message for="itemType" />
+                    <p:message for="itemType1" />
 
 
 
-                    <h:outputLabel for="quantity" value="Quantity:" style="font-weight:bold"/>
+                    <h:outputLabel for="quantity1" value="Quantity:" style="font-weight:bold"/>
                     <p:inplace id="quantity" editor="true">
-                        <p:ajax  event="save"/>
-                        <p:inputText value="#{itemDetailsManagedBean.selectedItem.quantity}"  label="text" />
+                        <p:ajax  event="save" update="itemDetailsPanel"/>
+                        <p:inputText id="quantity1" value="#{itemDetailsManagedBean.selectedItem.quantity}"  label="text" validatorMessage="Invalid Input! Please enter a positive integer for quantity(max of up to 6 digits)" converterMessage="Invalid Input! Please enter a positive integer for Quantity(max of up to 6 digits)">
+                            <f:validateLongRange minimum="0" maximum="999999" /> 
+                        </p:inputText>
                     </p:inplace>
-                    <p:message for="quantity" />
+                    <p:message for="quantity1" />
 
 
-                    <h:outputLabel for="cost" value="Cost(SGD): " style="font-weight:bold"/>
+                    <h:outputLabel for="cost1" value="Cost(SGD): " style="font-weight:bold"/>
                     <p:inplace id="cost" editor="true">
-                        <p:ajax  event="save"/>
-                        <p:inputText value="#{itemDetailsManagedBean.selectedItem.cost}"  label="text" />
+                        <p:ajax  event="save" update="itemDetailsPanel"/>
+                        <p:inputText id="cost1" value="#{itemDetailsManagedBean.selectedItem.cost}"  label="text" converterMessage="Invalid Input! Please enter a positive number up to 2 decimal for Cost. Example: 53.0 or 42.53">
+                            <f:validateDoubleRange minimum="0.0"  />
+                        </p:inputText>
                     </p:inplace>
-                    <p:message for="cost" />
+                    <p:message for="cost1" />
 
 
-                    <h:outputLabel for="sellingPrice" value="Selling price(SGD): " style="font-weight:bold"/>
+                    <h:outputLabel for="sellingPrice1" value="Selling price(SGD): " style="font-weight:bold"/>
                     <p:inplace id="sellingPrice" editor="true">
-                        <p:ajax  event="save"/>
-                        <p:inputText value="#{itemDetailsManagedBean.selectedItem.sellingPrice}"  label="text" />
+                        <p:ajax  event="save" update="itemDetailsPanel"/>
+                        <p:inputText id="sellingPrice1" value="#{itemDetailsManagedBean.selectedItem.sellingPrice}"  label="text" converterMessage="Invalid Input! Please enter a positive number up to 2 decimal for Selling Price. Example: 53.0 or 42.53">
+                            <f:validateDoubleRange minimum="0.0"  />
+                        </p:inputText>
                     </p:inplace>
-                    <p:message for="sellingPrice" />
+                    <p:message for="sellingPrice1" />
 
 
-                    <h:outputLabel for="reorderPoint" value="Reorder Point: " style="font-weight:bold"/>
-                    <p:inplace id="reorderPoint" editor="true">
-                        <p:ajax  event="save"/>
-                        <p:inputText value="#{itemDetailsManagedBean.selectedItem.reorderPoint}"  label="text" />
+                    <h:outputLabel for="reorderPoint1" value="Reorder Point: " style="font-weight:bold"/>
+                    <p:inplace id="reorderPoint" editor="true" >
+                        <p:ajax  event="save" update="itemDetailsPanel"/>
+                        <p:inputText id="reorderPoint1" value="#{itemDetailsManagedBean.selectedItem.reorderPoint}"  label="text" validatorMessage="Invalid Input! Please enter a positive integer for Reorder Point(max of up to 6 digits)" converterMessage="Invalid Input! Please enter a positive integer for Reorder Point(max of up to 6 digits)">
+                            <f:validateLongRange minimum="0" maximum="999999" /> 
+                        </p:inputText>
                     </p:inplace>
-                    <p:message for="reorderPoint" />
+                    <p:message for="reorderPoint1" />
 
 
-                    <h:outputLabel for="averageWeight" value="Average Weight(grams): " style="font-weight:bold"/>
+                    <h:outputLabel for="averageWeight1" value="Average Weight(grams): " style="font-weight:bold"/>
                     <p:inplace id="averageWeight" editor="true">
-                        <p:ajax event="save"/>
-                        <p:inputText value="#{itemDetailsManagedBean.selectedItem.averageWeight}"  label="text" />
+                        <p:ajax event="save" update="itemDetailsPanel"/>
+                        <p:inputText id="averageWeight1" value="#{itemDetailsManagedBean.selectedItem.averageWeight}"  label="text" converterMessage="Invalid Input! Please enter a positive number up to 2 decimal for Average weight. Example: 53.0 or 42.53">
+                            <f:validateDoubleRange minimum="0.0"  />
+                        </p:inputText>
                     </p:inplace>
-                    <p:message for="averageWeight" />
+                    <p:message for="averageWeight1" />
 
-                    <p:commandButton value="Update Item Details" update="itemDetailsPanel" icon="ui-icon-check" action="#{itemDetailsManagedBean.updateItemDetails}"/>
+                    <p:commandButton value="Update Item Details" update="upperForm" icon="ui-icon-check" action="#{itemDetailsManagedBean.updateItemDetails}"/>
                     <p:commandButton value="Procurement Request"/>
                     <p:commandButton value="Delete Item" action="#{itemDetailsManagedBean.deleteItem}" update="message">
                         <p:confirm header="Deletion Confirmation" message="Are you sure you want to delete item #{itemDetailsManagedBean.selectedItem.itemCode}?" icon="ui-icon-alert" />
@@ -173,8 +184,31 @@
             </p:panel>
         </h:form>
 
+        <h:form id="middleForm">
+            <p:panel id="shelvesOfItemPanel"  header="Storage Location Details" toggleable="true" toggleSpeed="500" closeSpeed="500" style="margin-bottom:20px"  collapsed="true">
+                <p:dataTable id="infoListTable" var="itemShelve" value="#{itemDetailsManagedBean.infoList}" widgetVar="infoListTable" 
+                             emptyMessage="No shelves found with given criteria" filteredValue="#{allocateStorageManagedBean.filteredInfoList}" >
+
+                    <p:column filterBy="#{itemShelve.shelve.shelveID}" sortBy="#{itemShelve.shelve.shelveID}" headerText="ShelveID" footerText="contains" filterMatchMode="contains">
+                        <h:outputText value="#{itemShelve.shelve.shelveID}" />
+                    </p:column>
+                    
+                    <p:column filterBy="#{itemShelve.shelve.rack.location}" sortBy="#{itemShelve.shelve.rack.location}" headerText="Location" footerText="contains" filterMatchMode="contains">
+                        <h:outputText value="#{itemShelve.shelve.rack.location}" />
+                    </p:column>
+
+                    <p:column sortBy="#{itemShelve.storedQty}"  headerText="Stored Quantity"  >
+                        <h:outputText value="#{itemShelve.storedQty}" />
+                    </p:column>
+
+                </p:dataTable>
+            </p:panel>
+
+        </h:form>
+
+
         <h:form id="lowerForm">
-            <p:messages id="lowerMessages" showDetail="true" autoUpdate="true" closable="true" />
+            <p:messages id="lowerMessages" showDetail="false" autoUpdate="false" closable="true" />
             <p:panel id="stockInOutPanel" header="Stock In/Out" toggleable="true" toggleSpeed="500" closeSpeed="500" style="margin-bottom:20px"  collapsed="#{itemDetailsManagedBean.showInOuttPanel}">
                 <h:panelGrid id= "stockInOutGrid" columns="1" cellpadding="10">
                     <p:panel id="activityPanel">
@@ -192,21 +226,28 @@
 
                     <p:panel header = "Stock Incoming" visible = "#{itemDetailsManagedBean.showInPanel}">
                         <h:outputLabel for="inQty" value="Please enter the number of quantity coming in: " style="font-weight:bold"/>
-                        <p:inputText id="inQty" value="#{itemDetailsManagedBean.quantityIn}" required="true" requiredMessage="Please enter value for incoming quantity!"/>
+                        <p:inputText id="inQty" value="#{itemDetailsManagedBean.quantityIn}" required="true" requiredMessage="Please enter value for incoming quantity!" validatorMessage="Invalid Input! Please enter a positive integer for quantity(max of up to 6 digits)" converterMessage="Invalid Input! Please enter a positive integer for In-Quantity(max of up to 6 digits)">
+                            <f:validateLongRange minimum="0" maximum="999999" /> 
+                        </p:inputText>
                         <p:message for="inQty" />
+
                         <h:outputLabel for="inCost" value="Please enter the cost per unit for this incoming batch: " style="font-weight:bold"/>
-                        <p:inputText id="inCost" value="#{itemDetailsManagedBean.inCost}" required="true" requiredMessage="Please enter the cost per unit for this incoming batch!"/>
+                        <p:inputText id="inCost" value="#{itemDetailsManagedBean.inCost}" required="true" requiredMessage="Please enter the cost per unit for this incoming batch!" converterMessage="Invalid Input! Please enter a positive number up to 2 decimal for Cost. Example: 53.0 or 42.53">
+                            <f:validateDoubleRange minimum="0.0" maximum="999999.99" />
+                        </p:inputText>
                         <p:message for="inCost" />
                     </p:panel>
 
                     <p:panel header = "Stock Outgoing" visible = "#{itemDetailsManagedBean.showOutPanel}">
                         <h:outputLabel for="outQty" value="Please enter the number of quantity going out: " style="font-weight:bold"/>
-                        <p:inputText id="outQty" value="#{itemDetailsManagedBean.quantityOut}" required="true" requiredMessage="Please enter value for outgoing quantity!"/>
+                        <p:inputText id="outQty" value="#{itemDetailsManagedBean.quantityOut}" required="true" requiredMessage="Please enter value for outgoing quantity!" validatorMessage="Invalid Input! Please enter a positive integer for quantity(max of up to Item's Available Quantity)" converterMessage="Invalid Input! Please enter a positive integer for Out-Quantity(max of up to Item's Available Quantity)">
+                            <f:validateLongRange minimum="0" maximum="#{itemDetailsManagedBean.selectedItem.quantity}" /> 
+                        </p:inputText>
                         <p:message for="outQty" />
                     </p:panel>
 
 
-                    <p:commandButton value="Update" update="upperForm:itemDetailsPanel" icon="ui-icon-check" action="#{itemDetailsManagedBean.updateStock()}"/>
+                    <p:commandButton value="Update" update="upperForm:itemDetailsPanel lowerForm:lowerMessages" icon="ui-icon-check" action="#{itemDetailsManagedBean.updateStock()}"/>
                 </h:panelGrid>
             </p:panel>
         </h:form>

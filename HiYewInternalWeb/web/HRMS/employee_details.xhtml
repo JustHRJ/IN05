@@ -163,6 +163,9 @@
                         <f:facet name ="input"><p:inputText value = "#{hiYewManagedBean.employeePay}" maxlength="5" validator ="#{registrationValidator.validatePayE}" validatorMessage="Pay should not be less than 500.00" disabled="#{loginControlBean.checkValid()}"></p:inputText></f:facet>
                     </p:cellEditor>
                 </p:column>
+                <p:column headerText="Employed Date">
+                    <p:outputLabel value ="#{hiYewManagedBean.formatDate(im.employee_employedDate)}"/>
+                </p:column>
                 <p:column style="width:32px">
                     <p:rowEditor />
                 </p:column>
