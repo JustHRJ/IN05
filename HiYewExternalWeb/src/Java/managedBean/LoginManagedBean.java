@@ -18,6 +18,7 @@ public class LoginManagedBean implements Serializable {
 
     @EJB
     private CustomerSessionBeanLocal customerSessionBean;
+    private QuotationManagedBean quotationManagedBean;
     private List<String> users;
     private String user = "";
     private Customer customer;
@@ -38,6 +39,7 @@ public class LoginManagedBean implements Serializable {
         customer = new Customer();
         newCustomer = new Customer();
         users = new ArrayList<>();
+
     }
 
     @PostConstruct
@@ -59,7 +61,7 @@ public class LoginManagedBean implements Serializable {
                     FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("userRole", "Customer");
                     FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("username", this.username);
                     System.out.println("Login Success");
-                    path = "user-profile?faces-redirect=true"; //navigation
+                    path = "c-user-profile?faces-redirect=true"; //navigation
                 } else {
                     FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("loginMessage", "Invalid Username or password! Please try again.");
                     //FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Invalid Username or password!"));
@@ -78,7 +80,8 @@ public class LoginManagedBean implements Serializable {
     }
 
     public String logout() {
-        FacesContext.getCurrentInstance().getExternalContext().getSessionMap().remove("user");
+        FacesContext.getCurrentInstance().getExternalContext().getSessionMap().remove("username");
+        FacesContext.getCurrentInstance().getViewRoot().getViewMap().remove("quotationManagedBean");
         System.out.println("Logout Success");
         return "login?faces-redirect=true"; // navigation
     }

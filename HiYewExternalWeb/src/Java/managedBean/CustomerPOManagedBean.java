@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package managedBean;
 
 import entity.CustomerPO;
@@ -25,10 +20,6 @@ import session.stateless.CustomerPOSessionBeanLocal;
 import session.stateless.CustomerSessionBeanLocal;
 import session.stateless.QuotationSessionBeanLocal;
 
-/**
- *
- * @author: jitcheong
- */
 @Named(value = "pOManagedBean")
 @ViewScoped
 public class CustomerPOManagedBean implements Serializable {

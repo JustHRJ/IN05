@@ -1,0 +1,109 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:c="http://java.sun.com/jsp/jstl/core"
+                xmlns:p="http://primefaces.org/ui"
+                template="./c-template.xhtml">
+
+    <ui:define name="content">
+        <!-- Page header -->
+        <div class="page-heading animated fadeInDownBig">
+            <h1 style="font-weight: bold">Products - View Quotations <small></small></h1>
+            <p style="margin-bottom: 1%"></p>
+            <h:outputText value="" style="font-family: 'Open Sans'; font-weight: bold; color: red;" />
+        </div>
+        <!-- End page header -->
+        <h:form id="mainForm">
+            <p:growl id="msgs" showDetail="false" />
+            <p:messages id="qMsg"  showDetail="false" />
+            <p:commandButton value="Refresh" actionListener="#{productQuotationManagedBean.receivedProductQuotations()}" update="qMsg rcvQuote" icon="" style="padding-top: 5px; padding-bottom: 5px; padding-left: 22px; padding-right: 22px" />
+            <br /><br />
+            <p:dataTable value="#{productQuotationManagedBean.receivedProductQuotationList}" var="item" rows="8" id="rcvQuote" paginator="true" editable="true">
+                <p:column headerText="View" width="5%" >
+                    <p:panel visible="true" style="border:0px; background: none;">
+                        <p:commandButton id="quoteDescBtn" icon="ui-icon-search" title="View" update="quotationDetailPanel" action="#{productQuotationManagedBean.selectProductQuotation(item)}" style="padding-top: 5px; padding-bottom: 5px; padding-left: 20px; padding-right: 20px"/>
+                    </p:panel>
+                    <p:overlayPanel for="quoteDescBtn" showEffect="fade" hideEffect="fade" dismissable="false" showCloseIcon="true" style="width:1050px">
+                        <p:outputPanel id="quotationDetailPanel" style="text-align:center;" >
+                            <p:dataTable var="quoteDescItem" value="#{productQuotationManagedBean.displayProductQuotationDescriptionList}" rows="6" paginator="true">
+                                <p:column headerText="ID" width="4%">
+                                    <h:outputText value="#{quoteDescItem.productQuotationDescNo}" />
+                                </p:column>
+                                <p:column headerText="Item Type" width="9%">
+                                    <h:outputText value="#{quoteDescItem.productType}" />
+                                </p:column>
+                                <p:column headerText="Item Name" width="28%">
+                                    <h:outputText value="#{quoteDescItem.itemName}" />
+                                </p:column>
+                                <p:column headerText="Quantity" width="10%">
+                                    <h:outputText value="#{quoteDescItem.quantity}" />
+                                </p:column>
+                                <p:column headerText="Remarks" width="30%">
+                                    <h:outputText value="#{quoteDescItem.remarks}" />
+                                </p:column>
+                                <p:column headerText="Quoted Unit Price" width="16%">
+                                    <h:outputText value="#{quoteDescItem.unitPrice}" />
+                                </p:column>
+                            </p:dataTable>
+                        </p:outputPanel>
+                    </p:overlayPanel>
+                </p:column>
+                <p:column headerText="Quotation No." width="50%">
+                    <h:outputText value="#{item.productQuotationNo}"/>
+                </p:column>
+                <p:column headerText="Date" width="9%">
+                    <h:outputText value="#{productQuotationManagedBean.formatDate(item.date)}"/>
+                </p:column>
+                <p:column headerText="Status" width="9%">
+                    <h:outputText style="text-align: center" value="#{item.status}"/>
+                </p:column>
+                <p:column headerText="Action" width="11%" >
+                    <p:panel id="approvalPanel" visible="#{productQuotationManagedBean.viewVisibility(item)}" style="border:0px;background: none;">
+                        <p:commandLink value="Accept" style="color: green; font-weight: bold; font-family: 'Open Sans'; font-size: 14px;" action="#{productPurchaseOrderManagedBean.generatePurchaseOrder(item)}" update="myDialogID" /> &nbsp;|&nbsp;
+                        <p:commandLink value="Reject" style="color: red; font-weight: bold; font-family: 'Open Sans'; font-size: 14px;" action="#{productQuotationManagedBean.setRejectionStatus(item)}" />
+                    </p:panel>
+                    <p:dialog styleClass="rfq" id="myDialogID" widgetVar="myDialogVar" modal="true" resizable="false" header="Purchase Order" showEffect="fade" width="630px">
+                        <p:panelGrid id="display" columns="2" columnClasses="label,value">
+                            <h:outputText value="Purchase No.: " style="width: 10%; font-weight: bolder; vertical-align: middle"/>
+                            <h:outputText id="poId" value="#{productPurchaseOrderManagedBean.purchaseOrderNo}" />
+
+                            <h:outputText value="Attention: " style="width: 10%; font-weight: bolder; vertical-align: middle"/>
+                            <h:outputText id="attnId" value="#{productPurchaseOrderManagedBean.attention}" />
+
+                            <h:outputText value="Order Date: " style="width: 10%; font-weight: bolder"/>
+                            <h:outputText id="orderDateId" value="#{productPurchaseOrderManagedBean.orderDate}" />
+
+                            <h:outputText value="Delivery Date: " style="width: 10%; font-weight: bolder"/>
+                            <h:outputText id="deliveryDateId" value="(We will send an email update)" />
+
+                            <h:outputText value="Item Name: " style="width: 15%; font-weight: bolder"/>
+                            <h:outputText id="descId" value="#{productPurchaseOrderManagedBean.description}" style="white-space: pre-wrap" escape="false"/>
+
+                            <h:outputText value="Total Price: " style="width: 10%; font-weight: bolder"/>
+                            <h:outputText id="totalPriceId" value="SGD #{productPurchaseOrderManagedBean.totalPrice}" />
+                            <p:column>
+                                <p:outputLabel for="mailingAddr1" value="Mailing Address:" style="width: 10%; font-weight: bolder"/>
+                                <br />
+                                <p:outputLabel value="*Please do not fill in if the mailing address is " style="font-size: 80%;color: red" />
+                                <br />
+                                <p:outputLabel value="the same as your home address." style="font-size: 80%;color: red" />
+                            </p:column>
+                            <p:column>
+                                <p:inputText style="width: 210px; margin-top: 1px;font-weight: normal; font-size: 14px; font-family: 'Open Sans';" placeholder="e.g. Beach Road" value="#{productPurchaseOrderManagedBean.newPurchaseOrder.mailingAddr1}" id="mailingAddr1"  />
+                                <br />
+                                <p:inputText style="width: 210px; margin-top: 5px; font-weight: normal; font-size: 14px; font-family: 'Open Sans';" placeholder="e.g. 12, #01-02" value="#{productPurchaseOrderManagedBean.newPurchaseOrder.mailingAddr2}" id="mailingAddr2"  />
+                                <br />
+                            </p:column>
+                        </p:panelGrid>
+                        <br />
+                        <p:commandButton icon="" value="Send Purchase Order" action="#{productPurchaseOrderManagedBean.createPurchaseOrder(item)}" update="rcvQuote" style="padding-top: 5px; padding-bottom: 5px; padding-left: 22px; padding-right: 22px" />
+                        <br /><br />
+                    </p:dialog>
+                </p:column>
+            </p:dataTable>
+        </h:form>
+    </ui:define>
+</ui:composition>
