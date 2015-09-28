@@ -82,7 +82,7 @@
                             </div>
                             <div class="form-group login-input">
                                 <i class="fa fa-key overlay"></i>
-                                <p:password class="form-control text-input" placeholder="Password"  value="#{LoginManagedBean.newCustomer.pw}" required="true" feedback="true" inline="true" requiredMessage="Password is required." id="Password" validatorMessage="[Password] Your password should be of at least 8 alphanumeric characters.">
+                                <p:password class="form-control text-input" placeholder="Password" value="#{LoginManagedBean.newCustomer.pw}" required="true" feedback="true" inline="true" promptLabel=" " requiredMessage="Password is required." id="Password" validatorMessage="[Password] Your password should be of at least 8 alphanumeric characters.">
                                     <f:validateRegex pattern="(^[0-9a-zA-Z]{8,}$)"/>
                                 </p:password>
                             </div>
@@ -92,7 +92,7 @@
                                     <f:validateRegex pattern="(^[0-9a-zA-Z]{8,}$)"/>
                                 </p:password>
                             </div>
-                            <p:commandButton style="border: none;" class=" btn btn-success btn-block" action="#{LoginManagedBean.createCustomer()}" value="Register" update="msgs"></p:commandButton>
+                            <p:commandButton style="border: none; font-size: 14px; font-family: 'Open Sans'" class=" btn btn-success btn-block" action="#{LoginManagedBean.createCustomer()}" value="Register" update="msgs"></p:commandButton>
                         </h:form>
                     </div>
                     <p class="text-center"><a href="login.xhtml"><i class="fa fa-sign-in"> </i>Back to login</a></p>

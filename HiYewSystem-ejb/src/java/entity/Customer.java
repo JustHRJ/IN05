@@ -1,32 +1,13 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package entity;
 
 import java.io.Serializable;
-import java.security.InvalidKeyException;
-import java.security.Key;
-import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.crypto.BadPaddingException;
-import javax.crypto.Cipher;
-import javax.crypto.IllegalBlockSizeException;
-import javax.crypto.NoSuchPaddingException;
-import javax.crypto.spec.SecretKeySpec;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import util.enumeration.CustomerStatusEnum;
 
-/**
- *
- * @author: Jit Cheong
- */
 @Entity
 public class Customer implements Serializable {
 
@@ -41,32 +22,55 @@ public class Customer implements Serializable {
     private String phone;
     private String email;
     private String postalCode;
+    private String subscribeEmail;
 
-    //private Integer active; // set 1 for existing customer;
-    //@Enumerated(EnumType.STRING)
+    // private Integer active; // set 1 for existing customer;
+    // @Enumerated(EnumType.STRING)
     private CustomerStatusEnum customerStatusEnum;
 
     @OneToMany(mappedBy = "customer")
     private List<Quotation> quotations = new ArrayList<>();
 
+    @OneToMany(mappedBy = "customer")
+    private List<CustomerPO> customerPOs = new ArrayList<>();
+
+    ///////////////////////////////////// PRODUCTS /////////////////////////////////////
+    @OneToMany(mappedBy = "customer")
+    private List<ProductQuotation> productQuotationList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "customer")
+    private List<ProductPurchaseOrder> productPurchaseOrderList = new ArrayList<>();
+    ///////////////////////////////////// PRODUCTS /////////////////////////////////////
+
     public Customer() {
         customerStatusEnum = CustomerStatusEnum.ACTIVE;
     }
 
-    public Customer(String userName, String pw, String name, String address1, String address2, String phone, CustomerStatusEnum customerStatusEnum, List<Quotation> quotations) {
+    public Customer(String userName, String pw, String name, String address1, String address2, String phone, CustomerStatusEnum customerStatusEnum, List<Quotation> quotations, List<CustomerPO> customerPOs) {
         this.userName = userName;
         this.pw = pw;
         this.name = name;
         this.address1 = address1;
         this.address2 = address2;
         this.phone = phone;
-        //this.active = active;
         this.customerStatusEnum = customerStatusEnum;
         this.quotations = quotations;
+        this.customerPOs = customerPOs;
     }
 
+    /**
+     * @return the subscribeEmail
+     */
+    public String getSubscribeEmail() {
+        return subscribeEmail;
+    }
 
-    
+    /**
+     * @param subscribeEmail the subscribeEmail to set
+     */
+    public void setSubscribeEmail(String subscribeEmail) {
+        this.subscribeEmail = subscribeEmail;
+    }
 
     /**
      * @return the userName
@@ -93,7 +97,7 @@ public class Customer implements Serializable {
      * @param pw the pw to set
      */
     public void setPw(String pw) {
-        
+
         this.pw = pw;
     }
 
@@ -236,6 +240,60 @@ public class Customer implements Serializable {
 
     public void addQuotations(Quotation q) {
         this.quotations.add(q);
+    }
+
+    public void addCustomerPO(CustomerPO po) {
+        this.customerPOs.add(po);
+    }
+
+    /**
+     * @return the customerPOs
+     */
+    public List<CustomerPO> getCustomerPOs() {
+        return customerPOs;
+    }
+
+    /**
+     * @param customerPOs the customerPOs to set
+     */
+    public void setCustomerPOs(List<CustomerPO> customerPOs) {
+        this.customerPOs = customerPOs;
+    }
+
+    /**
+     * @return the productQuotationList
+     */
+    public List<ProductQuotation> getProductQuotationList() {
+        return productQuotationList;
+    }
+
+    /**
+     * @param productQuotationList the productQuotationList to set
+     */
+    public void setProductQuotationList(List<ProductQuotation> productQuotationList) {
+        this.productQuotationList = productQuotationList;
+    }
+
+    /**
+     * @return the productPurchaseOrderList
+     */
+    public List<ProductPurchaseOrder> getProductPurchaseOrderList() {
+        return productPurchaseOrderList;
+    }
+
+    /**
+     * @param productPurchaseOrderList the productPurchaseOrderList to set
+     */
+    public void setProductPurchaseOrderList(List<ProductPurchaseOrder> productPurchaseOrderList) {
+        this.productPurchaseOrderList = productPurchaseOrderList;
+    }
+
+    public void addProductQuotationList(ProductQuotation productQuotation) {
+        this.productQuotationList.add(productQuotation);
+    }
+
+    public void addProductPurchaseOrderList(ProductPurchaseOrder productPurchaseOrder) {
+        this.productPurchaseOrderList.add(productPurchaseOrder);
     }
 
 }

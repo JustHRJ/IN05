@@ -17,8 +17,40 @@
     </h:head>
 
     <h:body>
-        <h1>Hi-Yew Internal System</h1>
+        #{loginControlBean.checkLoginRedirect()}
+        <a href ="/HiYewInternalWeb/index.xhtml"><img src = "../image/hiyew.gif" /></a>  <h1>Hi-Yew Internal System</h1>
         <p:megaMenu orientation="horizontal"  styleClass="menu">
+            <p:submenu label ="Human Resource Management System" icon ="ui-icon-check" style ="font-weight: bold">
+                <p:column>
+                    <p:submenu label ="Employee Management">
+                        <p:menuitem value ="Register employee" url ="/HRMS/employeeRegistration.xhtml" disabled="#{loginControlBean.checkValid()}"/>
+                        <p:menuitem value ="View Employee" url = "/HRMS/employee_details.xhtml" />
+                    </p:submenu>
+                    <p:submenu label="Payroll Management">
+                        <p:menuitem value ="Assign Payroll" url ="/HRMS/createPayroll.xhtml" disabled = "#{loginControlBean.checkValid()}"/>
+                        <p:menuitem value ="Release Payroll" url ="/HRMS/releasePayroll.xhtml" disabled="#{loginControlBean.checkValid()}"/>
+                        <p:menuitem value ="View Released Payroll" url ="/HRMS/viewPayroll.xhtml"/>
+
+                    </p:submenu>
+
+                </p:column>
+                <p:column>
+                    <p:submenu label="Training and Expiry">
+                        <p:menuitem value ="#{loginControlBean.getEAlert()}" url ="/HRMS/alertEmployee.xhtml" />
+                        <p:menuitem value ="Add Training Schedule" url ="/HRMS/addTrainingSchedule.xhtml" disabled="#{loginControlBean.checkValid()}" />
+                        <p:menuitem value ="Add Employee Training" url ="/HRMS/addEmployeeTraining.xhtml" disabled="#{loginControlBean.checkValid()}" />
+                        <p:menuitem value ="view Upcoming training" url ="/HRMS/viewTrainingSchedule.xhtml"/>
+                    </p:submenu>
+                    <p:submenu label ="Leave Management">
+                        <p:menuitem value ="Apply for Leave" url ="/HRMS/leaveApplication.xhtml" />
+                        <p:menuitem value ="Approve Leave" url ="/HRMS/approveLeave.xhtml" disabled="#{loginControlBean.checkValid()}"/>
+                        <p:menuitem value ="Check Leave Status" url ="/HRMS/leaveStatus.xhtml" />
+                    </p:submenu>
+
+                </p:column>
+
+            </p:submenu>
+
             <p:submenu label="Inventory Control System" icon="ui-icon-check" style="font-weight:bold">
                 <p:column>
                     <p:submenu label="Items Management">
@@ -32,13 +64,34 @@
                     </p:submenu>
                 </p:column>
             </p:submenu>
-        </p:megaMenu>
 
+            <p:submenu label ="Machine Management System" icon ="ui-icon-check" style ="font-weight: bold">
+                <p:column>
+                    <p:submenu label = "Machine Management" >
+                        <p:menuitem value ="Add Machinery" url ="/MMS/addMachine.xhtml" />
+                        <p:menuitem value ="View Machinery" url ="/MMS/viewMachine.xhtml" />
+
+                    </p:submenu>
+                    <p:submenu label ="Machine Maintenance">
+                        <p:menuitem value ="#{hiYewManagedBean.getMAlert()}" url ="/MMS/alertMachine.xhtml" />
+                        <p:menuitem value ="Add Maintenance Schedule" url ="/MMS/addMaintainenceSchedule.xhtml"/>
+                        <p:menuitem value ="View Maintenance Schedule" url ="/MMS/viewMaintainenceSchedule.xhtml" />
+                    </p:submenu>
+                </p:column>
+            </p:submenu>
+            <p:submenu label ="Sales Management System" icon ="ui-icon-check" style ="font-weight: bold">
+                <p:column>
+                    <p:submenu label ="Quotation">
+                        <p:menuitem value ="View Customer RFQ" url ="/SMS/viewEditQuotations.xhtml"/>
+                    </p:submenu>
+                </p:column>
+            </p:submenu>
+        </p:megaMenu>
         <h:form>
             <p:panel header="Create Storage">
                 <p:messages autoUpdate="true"/>
                 <h:panelGrid id="grid" columns="3" cellpadding="5">
-                    
+
                     <p:outputLabel for="locationLevel" value="Rack's Location Level:" style="font-weight:bold"/>
                     <p:selectOneMenu id="locationLevel" value="#{createStorageManagedBean.rackLocationLevel}" style="width:125px" required="true" requiredMessage="Please select the location level of this new rack!">
                         <f:selectItem itemLabel="Select One" itemValue="" />
@@ -46,7 +99,7 @@
                         <f:selectItem itemLabel="2" itemValue="2" />
                     </p:selectOneMenu>
                     <p:message for="locationLevel" />
-                    
+
                     <p:outputLabel for="rackZone" value="Rack's Location Zone:" style="font-weight:bold"/>
                     <p:selectOneMenu id="rackZone" value="#{createStorageManagedBean.rackZone}" style="width:125px" required="true" requiredMessage="Please select the zone location of this new rack!">
                         <f:selectItem itemLabel="Select One" itemValue="" />
@@ -54,26 +107,26 @@
                         <f:selectItem itemLabel="Outside Office" itemValue="Outside Office" />
                     </p:selectOneMenu>
                     <p:message for="rackZone" />
-                    
+
                     <h:outputLabel for="rackLength" value="Length of Rack(cm): *" style="font-weight:bold"/>                   
                     <p:inputText id="rackLength" value="#{createStorageManagedBean.newRack.length}" label="rackLength" required="true" requiredMessage="Please enter the length this new rack!">
-                    <f:validateDoubleRange minimum="10.0" />
+                        <f:validateDoubleRange minimum="10.0" />
                     </p:inputText>
                     <p:message for="rackLength" />
 
 
                     <h:outputLabel for="rackWidth" value="Width of Rack(cm): *" style="font-weight:bold"/>                   
                     <p:inputText id="rackWidth" value="#{createStorageManagedBean.newRack.width}" label="rackWidth" required="true" requiredMessage="Please select the width of this new rack!">
-                    <f:validateDoubleRange minimum="1.0" />
+                        <f:validateDoubleRange minimum="1.0" />
                     </p:inputText>
                     <p:message for="rackWidth" />
-                    
+
                     <h:outputLabel for="rackHeight" value="Height of Rack(cm): *" style="font-weight:bold"/>                   
                     <p:inputText id="rackHeight" value="#{createStorageManagedBean.newRack.height}" label="rackHeight" required="true" requiredMessage="Please select the height of this new rack!">
-                    <f:validateDoubleRange minimum="1.0" />
+                        <f:validateDoubleRange minimum="1.0" />
                     </p:inputText>
                     <p:message for="rackHeight" />
-                    
+
                     <p:outputLabel for="numOfShelve" value="Number of Shelves in Rack:" style="font-weight:bold"/>
                     <p:selectOneMenu id="numOfShelve" value="#{createStorageManagedBean.numOfShelvesForRack}" style="width:125px" required="true" requiredMessage="Please select the zone location of this new rack!">
                         <f:selectItem itemLabel="Select One" itemValue="" />

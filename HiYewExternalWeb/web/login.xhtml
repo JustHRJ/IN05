@@ -61,11 +61,11 @@
                                 <i class="fa fa-key overlay"></i>
                                 <p:password class="form-control text-input" placeholder="Password" value="#{LoginManagedBean.password}"  required="true" requiredMessage="Password is required." id="Password"/>
                             </div>
-                            <div class="checkbox">
-                                <label>
-                                    <input type="checkbox" />&nbsp;&nbsp;Remember me
-                                </label>
-                            </div>
+                            <!--                            <div class="checkbox">
+                                                            <label>
+                                                                <input type="checkbox" />&nbsp;&nbsp;Remember me
+                                                            </label>
+                                                        </div>-->
                             <div class="row">
                                 <div class="col-sm-6">
                                     <p:commandButton style="border: none; font-family: 'Open Sans';" styleClass="btn btn-success btn-block" value="Login" action="#{LoginManagedBean.login()}" update="msgs" />

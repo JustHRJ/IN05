@@ -12,6 +12,7 @@ import javax.inject.Named;
 import javax.enterprise.context.SessionScoped;
 import java.io.Serializable;
 import java.util.List;
+import java.util.Vector;
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.ExternalContext;
@@ -59,11 +60,61 @@ public class loginControlBean implements Serializable {
         }
     }
 
+    public List<Vector> getEmployeeTrainingToday() {
+        if (loginPosition.equals("admin")) {
+            return hiYewSystemBean.employeeTrainingToday();
+        } else {
+            return hiYewSystemBean.employeeTrainingTodayUser(username);
+        }
+    }
+
     public List<String> validateLeaveName() {
         if (loginPosition.equals("admin")) {
             return hiYewSystemBean.getEmployee();
         } else {
             return hiYewSystemBean.getEmployeeE(username);
+        }
+    }
+
+    public List<Vector> getEmployeeTraining7Days() {
+        if (loginPosition.equals("admin")) {
+            return hiYewSystemBean.employeeTraining7Days();
+        } else {
+            return hiYewSystemBean.employeeTraining7DaysUser(username);
+        }
+    }
+
+    public List<Vector> getEmployeeTrainingMonth() {
+
+        if (loginPosition.equals("admin")) {
+            return hiYewSystemBean.employeeTrainingMonth();
+        } else {
+            return hiYewSystemBean.employeeTrainingMonthUser(username);
+        }
+    }
+
+    public List<LeaveEntity> getEmployeeLeaveMonth() {
+
+        if (loginPosition.equals("admin")) {
+            return hiYewSystemBean.employeeLeaveMonth();
+        } else {
+            return hiYewSystemBean.employeeLeaveMonthUser(username);
+        }
+    }
+
+    public List<LeaveEntity> getEmployeeLeave7Days() {
+        if (loginPosition.equals("admin")) {
+            return hiYewSystemBean.employeeLeave7days();
+        } else {
+            return hiYewSystemBean.employeeLeave7daysUser(username);
+        }
+    }
+
+    public List<LeaveEntity> getEmployeeLeaveToday() {
+        if (loginPosition.equals("admin")) {
+            return hiYewSystemBean.employeeLeaveToday();
+        } else {
+            return hiYewSystemBean.employeeLeaveTodayUser(username);
         }
     }
 
@@ -125,6 +176,7 @@ public class loginControlBean implements Serializable {
 
     public void checkLogin() throws IOException {
         String result = hiYewSystemBean.login(username, password);
+        FacesContext.getCurrentInstance().getExternalContext().getSessionMap().remove("loginMessage");
         if (result.equals("disabled")) {
             FacesMessage msg = new FacesMessage("Failed to login", "Account has been locked");
             FacesContext.getCurrentInstance().addMessage(null, msg);

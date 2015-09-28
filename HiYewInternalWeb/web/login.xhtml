@@ -10,6 +10,7 @@
         <h1>Login</h1>
         <h:form id ="formMain" >
             <p:growl id ="msgs" showDetail="true"/>
+            <p:outputLabel value ="#{loginMessage}" style="color: red"/>
             <p:panel id ="panel" header="Login">
                 <p:panelGrid>
                     <p:row>
@@ -30,6 +31,7 @@
                     </p:row>
                 </p:panelGrid>
                 <p:commandButton value ="submit" action ="#{loginControlBean.checkLogin()}"  update =":formMain:msgs"/>   
+                <a href="/HiYewInternalWeb/forgetPassword.xhtml" >Forget Password</a>
             </p:panel>
         </h:form>
     </h:body>

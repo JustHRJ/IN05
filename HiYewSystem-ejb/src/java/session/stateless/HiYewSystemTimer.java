@@ -13,6 +13,8 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.Stateless;
@@ -30,15 +32,15 @@ import javax.persistence.Query;
 @LocalBean
 public class HiYewSystemTimer {
 
-    // Add business logic below. (Right-click in editor and choose
-    // "Insert Code > Add Business Method")
+    //   Add business logic below. (Right-click in editor and choose
+    //   "Insert Code > Add Business Method")
     @PersistenceContext
     private EntityManager em;
 
     private final Logger log = Logger
             .getLogger(HiYewSystemTimer.class.getName());
 
-    @Schedule(minute = "*/1", hour = "*")
+    @Schedule(dayOfMonth = "1")
     public void runEveryMonth() {
         Query q = em.createQuery("select c from EmployeeEntity c");
         double salary;
@@ -82,7 +84,7 @@ public class HiYewSystemTimer {
         c.add(Calendar.DATE, - 1);
         Timestamp currentTime = new Timestamp(c.getTime().getTime());
         int diffInDays = (int) ((currentTime.getTime() - employedDate.getTime())
-                / (1000 * 60 * 60 * 24)) + 1 ;
+                / (1000 * 60 * 60 * 24)) + 1;
 
         int numberOfDays = c.getActualMaximum(Calendar.DAY_OF_MONTH);
 
@@ -120,7 +122,7 @@ public class HiYewSystemTimer {
         double currentSalary = e.getEmployee_basic();
         Calendar c = Calendar.getInstance();
         c.add(Calendar.DATE, -1);
-        
+
         int numberOfDays = c.getActualMaximum(Calendar.DAY_OF_MONTH);
         int diffInDays = numberOfDays;
         Collection<LeaveEntity> leaveRecords = e.getLeaveRecords();
@@ -151,5 +153,4 @@ public class HiYewSystemTimer {
         currentSalary = Math.round(currentSalary * 100.0) / 100.0;
         return currentSalary;
     }
-
 }
