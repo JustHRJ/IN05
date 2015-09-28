@@ -42,9 +42,7 @@ public class HiYewSystemBean implements HiYewSystemBeanLocal {
     @PersistenceContext
     private EntityManager em;
 
-
-        
-        //all this is for machines
+    //all this is for machines
     public boolean addMachine(String machineName, String machineIdentity, Timestamp machineExpiry, String description, int extension) {
         MachineEntity machine = new MachineEntity();
         try {
@@ -846,6 +844,48 @@ public class HiYewSystemBean implements HiYewSystemBeanLocal {
         }
     }
 
+    public void addNewAdmin(String employee, String employee_passNumber, String employee_address, int number_of_leave, String position, String username, Timestamp expiry, String contact, String addressPostal, String unit, String optional, double employeePay, Date employedDate, String email, String password) {
+        EmployeeEntity xin = new EmployeeEntity();
+        try {
+            Query q = em.createQuery("Select xin from EmployeeEntity xin where xin.employee_name = :id");
+            q.setParameter("id", employee);
+            xin = (EmployeeEntity) q.getSingleResult();
+        } catch (Exception ex) {
+            boolean check = checkUsername(username);
+            boolean check2 = checkPass(employee_passNumber);
+            if (check && check2) {
+                xin.setEmployee_name(employee);
+                xin.setEmployee_address(employee_address);
+                xin.setEmployee_passNumber(employee_passNumber);
+                xin.setNumber_of_leaves(number_of_leave);
+                Collection<LeaveEntity> leaveRecords = new ArrayList();
+                xin.setLeaveRecords(leaveRecords);
+                Collection<PayrollEntity> payRecords = new ArrayList();
+                xin.setPayRecords(payRecords);
+                xin.setAddressPostal(addressPostal);
+                xin.setEmployee_account_status(position);
+                xin.setPreviousPosition("none");
+                xin.setUsername(username);
+                xin.setUnit(unit);
+                xin.setOptional(optional);
+                String passwordHashed = hashingPassword(password);
+                xin.setPassword(passwordHashed);
+                xin.setEmployee_passExpiry(expiry);
+                xin.setEmployee_contact(contact);
+                xin.setEmailAddress(email);
+                xin.setAccount_status("firstTime");
+                xin.setEmployee_basic(employeePay);
+                Timestamp time = new Timestamp(employedDate.getTime());
+                xin.setEmployee_employedDate(time);
+                //xin.setEmployee_employedDate(ts);
+                em.persist(xin);
+
+            } else {
+
+            }
+        }
+    }
+
     public Vector addEmployee(String employee, String employee_passNumber, String employee_address, int number_of_leave, String position, String username, Timestamp expiry, String contact, String addressPostal, String unit, String optional, double employeePay, Date employedDate, String email) {
 
         EmployeeEntity xin = new EmployeeEntity();
@@ -1210,6 +1250,7 @@ public class HiYewSystemBean implements HiYewSystemBeanLocal {
                         im.add(t.getTrainingStartDate());
                         im.add(t.getTrainingEndDate());
                         result.add(im);
+             
                     }
                 }
             }
@@ -1626,7 +1667,7 @@ public class HiYewSystemBean implements HiYewSystemBeanLocal {
         return false;
     }
 
-    public boolean applyLeave(String employee, int days, String remarks, Date start, Date end, String type) {
+    public String applyLeave(String employee, int days, String remarks, Date start, Date end, String type) {
         EmployeeEntity lao = new EmployeeEntity();
         try {
             Query q = em.createQuery("Select lao from EmployeeEntity lao where lao.employee_name = :id");
@@ -1646,13 +1687,13 @@ public class HiYewSystemBean implements HiYewSystemBeanLocal {
             }
             if (type.equals("unpaid")) {
                 if (checkBetween(leaves, start, end)) {
-                    return false;
+                    return "Exisiting leave during applying period";
                 }
                 if (days < 1) {
-                    return false;
+                    return "End date starts before Start date";
                 }
                 if (lao.getEmployee_account_status().equals("disabled")) {
-                    return false;
+                    return "Employee account is disabled";
                 }
                 LeaveEntity application = new LeaveEntity();
                 application.setRemarks(remarks);
@@ -1670,19 +1711,19 @@ public class HiYewSystemBean implements HiYewSystemBeanLocal {
                 em.persist(application);
                 lao.getLeaveRecords().add(application);
                 em.merge(lao);
-                return true;
+                return "applied";
             }
 
             if (lao.getNumber_of_leaves() < days + sum) {
-                return false;
+                return "not enought leave";
             } else if (lao.getEmployee_account_status().equals("disabled")) {
-                return false;
+                return "Employee is disabled";
             } else if (days < 1) {
-                return false;
+                return "End date start before early date";
             } else if (checkBetween(leaves, start, end)) {
-                return false;
+                return "Earlier leave has been applied";
             } else if (date1.after(start) || date1.after(end)) {
-                return false;
+                return "Applied date is before today!";
             } else {
                 LeaveEntity application = new LeaveEntity();
                 application.setRemarks(remarks);
@@ -1700,10 +1741,10 @@ public class HiYewSystemBean implements HiYewSystemBeanLocal {
                 em.persist(application);
                 lao.getLeaveRecords().add(application);
                 em.merge(lao);
-                return true;
+                return "applied";
             }
         } catch (Exception ex) {
-            return false;
+            return "No such Employee";
         }
     }
 
@@ -1992,7 +2033,7 @@ public class HiYewSystemBean implements HiYewSystemBeanLocal {
         return sum;
     }
 
-    public boolean changePassword(String employeeName, String oldPass, String newPass) {
+    public String changePassword(String employeeName, String oldPass, String newPass) {
         EmployeeEntity e = new EmployeeEntity();
         try {
             Query q = em.createQuery("select e from EmployeeEntity e where e.employee_name = :id");
@@ -2002,17 +2043,17 @@ public class HiYewSystemBean implements HiYewSystemBeanLocal {
             if (e.getPassword().equals(oldPassE)) {
                 String newPassE = hashingPassword(newPass);
                 if (oldPassE.equals(newPassE)) {
-                    return false;
+                    return "Password same as old password";
                 }
                 e.setPassword(newPassE);
                 e.setAccount_status("normal");
                 em.merge(e);
-                return true;
+                return "changed";
             } else {
-                return false;
+                return "Old password is incorrect";
             }
         } catch (Exception ex) {
-            return false;
+            return "no such user";
         }
     }
 

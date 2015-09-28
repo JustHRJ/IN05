@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package managedBean;
 
 import entity.Quotation;
@@ -14,20 +9,16 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
+import javax.enterprise.context.SessionScoped;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 import javax.inject.Named;
-import javax.faces.view.ViewScoped;
 import session.stateless.CustomerSessionBeanLocal;
 import session.stateless.QuotationSessionBeanLocal;
 
-/**
- *
- * @author: Jit Cheong
- */
 @Named(value = "quotationManagedBean")
-@ViewScoped
+@SessionScoped
 public class QuotationManagedBean implements Serializable {
 
     @EJB
@@ -40,23 +31,19 @@ public class QuotationManagedBean implements Serializable {
     private String quotationNo = "";
     private Integer count;
 
-    private ArrayList<QuotationDescription> cacheList;
+    private ArrayList<QuotationDescription> cacheList = new ArrayList<>();
     private Quotation newQuotation;
     private QuotationDescription newQuotationDesc;
 
     private ArrayList<Quotation> receivedQuotations;
     private ArrayList<QuotationDescription> displayQuotationDescriptions;
 
-    /**
-     * Creates a new instance of QuotationManagedBean
-     */
     public QuotationManagedBean() {
+        System.out.println("QuotationManagedBean.java QuotationManagedBean()");
         newQuotation = new Quotation();
         newQuotationDesc = new QuotationDescription();
-        cacheList = new ArrayList<>();
         receivedQuotations = new ArrayList<>();
         displayQuotationDescriptions = new ArrayList<>();
-
     }
 
     @PostConstruct
@@ -64,18 +51,37 @@ public class QuotationManagedBean implements Serializable {
         count = 1;
         if (FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("username") != null) {
             username = FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("username").toString();
-            System.out.println("Q: Username is " + username);
+            System.out.println("QuotationManagedBean.java init() ===== Username is " + username);
         }
         date = new SimpleDateFormat("dd/MM/yyyy").format(Calendar.getInstance().getTime());
-        System.out.println(date);
 
         receivedQuotations = new ArrayList<>(quotationSessionBean.receivedQuotations(username));
     }
+    
+    public void reset() {
+        newQuotation = new Quotation();
+        newQuotationDesc = new QuotationDescription();
+        receivedQuotations = new ArrayList<>();
+        displayQuotationDescriptions = new ArrayList<>();
+        
+        count = 1;
+        if (FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("username") != null) {
+            username = FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("username").toString();
+            System.out.println("QuotationManagedBean.java init(): Username is " + username);
+        }
+        date = new SimpleDateFormat("dd/MM/yyyy").format(Calendar.getInstance().getTime());
+    }
 
     public void receivedQuotations() {
+        System.out.println("QuotationManagedBean.java receivedQuotations() ===== " + username);
+        
+        if (!username.equals(FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("username").toString())) {
+            System.out.println("QuotationManagedBean.java receivedQuotations() ===== call method reset()");
+            reset();
+        }
+        
         receivedQuotations = new ArrayList<>(quotationSessionBean.receivedQuotations(username));
-        FacesContext.getCurrentInstance().addMessage("qMsg",
-                new FacesMessage(FacesMessage.SEVERITY_INFO, "Current quotations are up to date.", ""));
+        FacesContext.getCurrentInstance().addMessage("qMsg", new FacesMessage(FacesMessage.SEVERITY_INFO, "Current quotations are up to date.", ""));
     }
 
     public String formatDate(Timestamp t) {
@@ -86,10 +92,10 @@ public class QuotationManagedBean implements Serializable {
 
     public void selectQuotation(Quotation q) {
         System.out.println(q.getQuotationNo());
-        if(q!=null){
+        if (q != null) {
             displayQuotationDescriptions = new ArrayList<>(q.getQuotationDescriptions());
         }
-        
+
         //System.out.println("quotation descriptions size is " + q.getQuotationDescriptions().size());
     }
 
@@ -159,8 +165,8 @@ public class QuotationManagedBean implements Serializable {
         }
 
     }
-    
-    public void setRejectionStatus(Quotation q){
+
+    public void setRejectionStatus(Quotation q) {
         System.out.println("Customer rejected quotation!");
         q.setStatus("Rejected");
         quotationSessionBean.conductMerge(q);
@@ -278,8 +284,6 @@ public class QuotationManagedBean implements Serializable {
     public void setDisplayQuotationDescriptions(ArrayList<QuotationDescription> displayQuotationDescriptions) {
         this.displayQuotationDescriptions = displayQuotationDescriptions;
     }
-
-   
 
     public boolean setVisibility(Quotation q) {
 

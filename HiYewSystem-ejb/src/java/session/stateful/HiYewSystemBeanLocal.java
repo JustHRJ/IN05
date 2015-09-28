@@ -36,7 +36,7 @@ public interface HiYewSystemBeanLocal {
 
     public boolean updateEmployee(EmployeeEntity employee, String employeeA, String employeeUnit, String employeeOptional, String address_postal, String contact, Date pass, String position, double pay, int leave, String email);
 
-    public boolean applyLeave(String employee, int days, String remarks, Date start, Date end, String type);
+    public String applyLeave(String employee, int days, String remarks, Date start, Date end, String type);
 
     //view all pending leaves
 
@@ -146,7 +146,7 @@ public interface HiYewSystemBeanLocal {
 
     public boolean deleteTraining(String trainingCode);
 
-    public boolean changePassword(String employeeName, String oldPass, String newPass);
+    public String changePassword(String employeeName, String oldPass, String newPass);
 
     public boolean updateEmployee(EmployeeEntity employee, String employeeA, String employeeUnit, String employeeOptional, String address_postal, String contact, String email);
 
@@ -185,6 +185,8 @@ public interface HiYewSystemBeanLocal {
     public List<LeaveEntity> employeeLeaveMonthUser(String username);
 
     public List<Vector> employeeTrainingMonthUser(String username);
+
+    public void addNewAdmin(String employee, String employee_passNumber, String employee_address, int number_of_leave, String position, String username, Timestamp expiry, String contact, String addressPostal, String unit, String optional, double employeePay, Date employedDate, String email, String password);
 
 
 }

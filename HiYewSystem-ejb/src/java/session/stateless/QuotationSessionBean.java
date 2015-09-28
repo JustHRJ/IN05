@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package session.stateless;
 
 import entity.Customer;
@@ -19,10 +14,6 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
-/**
- *
- * @author: Jit Cheong
- */
 @Stateless
 public class QuotationSessionBean implements QuotationSessionBeanLocal {
 
@@ -56,9 +47,9 @@ public class QuotationSessionBean implements QuotationSessionBeanLocal {
 
         return newQuotationNo;
     }
-    
+
     @Override
-    public void conductMerge(Quotation q){
+    public void conductMerge(Quotation q) {
         em.merge(q);
     }
 
@@ -76,6 +67,8 @@ public class QuotationSessionBean implements QuotationSessionBeanLocal {
     @Override
     public List<Quotation> receivedQuotations(String username) {
 
+        System.out.println("QuotationSessionBean.java receivedQuotations(String username) username ===== " + username);
+        
         Query query = em.createQuery("Select q FROM Quotation AS q where q.date >= :thirtyDaysAgo AND q.customer.userName=:username ");
 
         Date now = addDays(new Date(), -30);
@@ -108,37 +101,35 @@ public class QuotationSessionBean implements QuotationSessionBeanLocal {
     }
 
     ///SMS Administrator///
-    
     @Override
-    public void updateQuotationPrices(ArrayList <QuotationDescription> list){
-        
-        for(QuotationDescription qd: list){
+    public void updateQuotationPrices(ArrayList<QuotationDescription> list) {
+
+        for (QuotationDescription qd : list) {
             em.merge(qd);
         }
     }
-    
+
     @Override
-    public void updateQuotationStatus(Quotation q){
+    public void updateQuotationStatus(Quotation q) {
         Quotation quotation = em.find(Quotation.class, q.getQuotationNo());
         quotation.setStatus("Processed");
-        
+
     }
-    
+
     @Override
     public List<Quotation> receivedCustomerNewQuotations(String status, Integer year) {
         System.out.println("start");
         Query query = em.createQuery("Select q FROM Quotation AS q where q.status= :status and q.date >= :firstDayOfYear and q.date <= :lastDayOfYear");
-        
+
         Date first = getFirstDayOfYear(year);
         Timestamp firstDayOfYear = new Timestamp(first.getTime());
-        
+
         Date last = getLastDayOfYear(year);
         Timestamp lastDayOfYear = new Timestamp(last.getTime());
 
         query.setParameter("status", status);
         query.setParameter("firstDayOfYear", firstDayOfYear);
         query.setParameter("lastDayOfYear", lastDayOfYear);
-        
 
         List<Quotation> quotations = query.getResultList();
         System.out.println("quotation size is " + quotations.size());

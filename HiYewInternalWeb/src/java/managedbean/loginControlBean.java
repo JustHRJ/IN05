@@ -176,6 +176,7 @@ public class loginControlBean implements Serializable {
 
     public void checkLogin() throws IOException {
         String result = hiYewSystemBean.login(username, password);
+        FacesContext.getCurrentInstance().getExternalContext().getSessionMap().remove("loginMessage");
         if (result.equals("disabled")) {
             FacesMessage msg = new FacesMessage("Failed to login", "Account has been locked");
             FacesContext.getCurrentInstance().addMessage(null, msg);
