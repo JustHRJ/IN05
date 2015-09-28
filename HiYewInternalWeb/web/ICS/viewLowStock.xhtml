@@ -15,14 +15,41 @@
         </style>
     </h:head>
     <h:body>
+        #{loginControlBean.checkLoginRedirect()}
+
         <h1>Hi-Yew Internal System</h1>
         <p:megaMenu orientation="horizontal"  styleClass="menu">
+            <p:submenu label ="Human Resource Management System" icon ="ui-icon-check" style ="font-weight: bold">
+                <p:column>
+                    <p:submenu label ="Employee Management">
+                        <p:menuitem value ="Register employee" url ="/HRMS/employeeRegistration.xhtml" disabled="#{loginControlBean.checkValid()}"/>
+                        <p:menuitem value ="View Employee" url = "/HRMS/employee_details.xhtml" />
+                    </p:submenu>
+                    <p:submenu label="Payroll Management">
+                        <p:menuitem value ="Assign Payroll" url ="/HRMS/createPayroll.xhtml" disabled = "#{loginControlBean.checkValid()}"/>
+                        <p:menuitem value ="Release Payroll" url ="/HRMS/releasePayroll.xhtml" disabled="#{loginControlBean.checkValid()}"/>
+                        <p:menuitem value ="View Released Payroll" url ="/HRMS/viewPayroll.xhtml"/>
+                    </p:submenu>
+                </p:column>
+                <p:column>
+                    <p:submenu label="Training and Expiry">
+                        <p:menuitem value ="#{loginControlBean.getEAlert()}" url ="/HRMS/alertEmployee.xhtml" />
+                        <p:menuitem value ="Add Training Schedule" url ="/HRMS/addTrainingSchedule.xhtml" disabled="#{loginControlBean.checkValid()}" />
+                        <p:menuitem value ="Add Employee Training" url ="/HRMS/addEmployeeTraining.xhtml" disabled="#{loginControlBean.checkValid()}" />
+                        <p:menuitem value ="view Upcoming training" url ="/HRMS/viewTrainingSchedule.xhtml"/>
+                    </p:submenu>
+                    <p:submenu label ="Leave Management">
+                        <p:menuitem value ="Apply for Leave" url ="/HRMS/leaveApplication.xhtml" />
+                        <p:menuitem value ="Approve Leave" url ="/HRMS/approveLeave.xhtml" disabled="#{loginControlBean.checkValid()}"/>
+                        <p:menuitem value ="Check Leave Status" url ="/HRMS/leaveStatus.xhtml" />
+                    </p:submenu>
+                </p:column>
+            </p:submenu>
             <p:submenu label="Inventory Control System" icon="ui-icon-check" style="font-weight:bold">
                 <p:column>
                     <p:submenu label="Items Management">
                         <p:menuitem value="View Inventory" url="viewInventory.xhtml" />
                         <p:menuitem value="Add New Item" url="addNewItem.xhtml" />
-                        <p:menuitem value="Low Stock Level Alert (#{viewLowStockManagedBean.numOfLowStockItems})" url="viewLowStock.xhtml" />
                     </p:submenu>
                     <p:submenu label="Storage Management">
                         <p:menuitem value="View Storage" url="viewRacks.xhtml" />
@@ -30,7 +57,29 @@
                     </p:submenu>
                 </p:column>
             </p:submenu>
+            <p:submenu label ="Sales Management System" icon ="ui-icon-check" style ="font-weight: bold">
+                <p:column>
+                    <p:submenu label ="Quotation">
+                        <p:menuitem value ="View Customer Services RFQ" url ="/SMS/viewEditQuotations.xhtml"/>
+                        <p:menuitem value ="View Customer Products RFQ" url ="/SMS/viewEditProductQuotations.xhtml" />
+                    </p:submenu>
+                </p:column>
+            </p:submenu>
+            <p:submenu label ="Machine Management System" icon ="ui-icon-check" style ="font-weight: bold">
+                <p:column>
+                    <p:submenu label = "Machine Management" >
+                        <p:menuitem value ="Add Machinery" url ="/MMS/addMachine.xhtml" />
+                        <p:menuitem value ="View Machinery" url ="/MMS/viewMachine.xhtml" />
+                    </p:submenu>
+                    <p:submenu label ="Machine Maintenance">
+                        <p:menuitem value ="#{hiYewManagedBean.getMAlert()}" url ="/MMS/alertMachine.xhtml" />
+                        <p:menuitem value ="Add Maintenance Schedule" url ="/MMS/addMaintainenceSchedule.xhtml"/>
+                        <p:menuitem value ="View Maintenance Schedule" url ="/MMS/viewMaintainenceSchedule.xhtml" />
+                    </p:submenu>
+                </p:column>
+            </p:submenu>
         </p:megaMenu>
+
         <h:form>
 
             <p:dataTable var="item" value="#{viewLowStockManagedBean.lowStockItems}" widgetVar="itemsTable" 
@@ -42,7 +91,7 @@
 
 
                 <f:facet name="header">
-                     Hi-Yew's Inventory
+                    Hi-Yew's Inventory
                     <p:outputPanel style="text-align:right;">
                         <h:outputText value="Search all fields:" />
                         <p:inputText id="globalFilter" onkeyup="PF('itemsTable').filter()" style="width:150px" placeholder="Enter keyword"/>
