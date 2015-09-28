@@ -7,13 +7,14 @@ package managedbean.ICS;
 
 import entity.ItemEntity;
 import java.io.Serializable;
-import java.util.List;
 import javax.ejb.EJB;
 import javax.inject.Named;
 import javax.enterprise.context.RequestScoped;
 import javax.faces.application.FacesMessage;
+import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
+import javax.faces.validator.ValidatorException;
 import session.stateless.HiYewICSSessionBeanLocal;
 
 /**
@@ -39,10 +40,11 @@ public class AddItemManagedBean implements Serializable {
         
     }
     
+    
     public String createItem(ActionEvent event){
         System.out.println("Here");
         if ((hiYewICSSessionBean.getExistingItem(newItem.getItemCode()))!= null){
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN,"Unable to add item! Existing Item Code", ""));
+            FacesContext.getCurrentInstance().addMessage("formMain:itemCode", new FacesMessage(FacesMessage.SEVERITY_ERROR,"Unable to add item! Existing Item Code", "Unable to add item! Existing Item Code"));
             return "";
         }else{
           hiYewICSSessionBean.createItem(newItem);

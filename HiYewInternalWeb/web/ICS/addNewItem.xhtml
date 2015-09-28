@@ -24,26 +24,26 @@
                     <p:submenu label="Items Management">
                         <p:menuitem value="View Inventory" url="viewInventory.xhtml" />
                         <p:menuitem value="Add New Item" url="addNewItem.xhtml" />
+                        <p:menuitem value="Low Stock Level Alert (#{viewLowStockManagedBean.numOfLowStockItems})" url="viewLowStock.xhtml" />
                     </p:submenu>
                     <p:submenu label="Storage Management">
-                        <p:menuitem value="View Storage" url="#" />
-                        <p:menuitem value="Storage Allocation" url="#" />
-                        <p:menuitem value="Create Storage" url="#" />
+                        <p:menuitem value="View Storage" url="viewRacks.xhtml" />
+                        <p:menuitem value="Create Storage" url="createStorage.xhtml" />
                     </p:submenu>
                 </p:column>
             </p:submenu>
         </p:megaMenu>
-        <h:form>
+        <h:form id="formMain">
             <p:panel header="Add New Item">
-                <p:messages autoUpdate="true"/>
+                <p:messages id="msg" autoUpdate="false"/>
                 <h:panelGrid id="grid" columns="3" cellpadding="5">
                     <h:outputLabel for="itemCode" value="Item Code*:" style="font-weight:bold"/>                    
-                    <p:inputText id="itemCode" value="#{addItemManagedBean.newItem.itemCode}" required="true" requiredMessage="Item Code is required" label="Item Code" validatorMessage="Invalid Input! Please enter a positive integer for quantity" />
+                    <p:inputText id="itemCode" value="#{addItemManagedBean.newItem.itemCode}" required="true" requiredMessage="Item Code is required" label="Item Code" />
                     <p:message for="itemCode" />
 
 
                     <h:outputLabel for="itemName" value="Item Name*:" style="font-weight:bold"/>                    
-                    <p:inputText id="itemName" value="#{addItemManagedBean.newItem.itemName}" required="true" requiredMessage="Item Name is required" label="Item Name"/>
+                    <p:inputText id="itemName" value="#{addItemManagedBean.newItem.itemName}" required="true" requiredMessage="Item Name is required" label="Item Name" />
                     <p:message for="itemName" />
 
 
@@ -57,33 +57,35 @@
 
 
                     <h:outputLabel for="quantity" value="Quantity:" style="font-weight:bold"/>                    
-                    <p:inputText id="quantity" value="#{addItemManagedBean.newItem.quantity}" label="Quantity" validatorMessage="Invalid Input! Please enter a positive integer for quantity"> 
+                    <p:inputText id="quantity" value="#{addItemManagedBean.newItem.quantity}" label="Quantity" validatorMessage="Invalid Input! Please enter a positive integer for quantity(max of up to 6 digits)" converterMessage="Invalid Input! Please enter a positive integer for Quantity(max of up to 6 digits)"> 
+                        <f:validateLongRange minimum="0" maximum="999999" />   
                     </p:inputText>
                     <p:message for="quantity" />
 
 
                     <h:outputLabel for="cost" value="Cost ($):" style="font-weight:bold"/>                   
-                    <p:inputText id="cost" value="#{addItemManagedBean.newItem.cost}" label="Cost">
-                        <f:validateDoubleRange minimum="0.0" />
+                    <p:inputText id="cost" value="#{addItemManagedBean.newItem.cost}" label="Cost" converterMessage="Invalid Input! Please enter a positive number up to 2 decimal for Cost. Example: 53.0 or 42.53">
+                        <f:validateDoubleRange minimum="0.0"  />
                     </p:inputText>
                     <p:message for="cost" />
 
 
                     <h:outputLabel for="sellingPrice" value="Selling Price ($):" style="font-weight:bold"/>                   
-                    <p:inputText id="sellingPrice" value="#{addItemManagedBean.newItem.sellingPrice}" label="Selling Price">
+                    <p:inputText id="sellingPrice" value="#{addItemManagedBean.newItem.sellingPrice}" label="Selling Price" converterMessage="Invalid Input! Please enter a positive number up to 2 decimal for Selling Price. Example: 53.0 or 42.53">
                         <f:validateDoubleRange minimum="0.0" />
                     </p:inputText>
                     <p:message for="sellingPrice" />
 
 
                     <h:outputLabel for="reorderPoint" value="Reorder Point:" style="font-weight:bold"/>                    
-                    <p:inputText id="reorderPoint" value="#{addItemManagedBean.newItem.reorderPoint}" label="Reorder Point">
+                    <p:inputText id="reorderPoint" value="#{addItemManagedBean.newItem.reorderPoint}" label="Reorder Point" validatorMessage="Invalid Input! Please enter a positive integer for Reorder Point(max of up to 6 digits)" converterMessage="Invalid Input! Please enter a positive integer for Reorder Point(max of up to 6 digits)">
+                        <f:validateLongRange minimum="0" maximum="999999" />   
                     </p:inputText>
                     <p:message for="reorderPoint" />
 
 
                     <h:outputLabel for="averageWeight" value="Average Weight(grams)" style="font-weight:bold"/>                    
-                    <p:inputText id="averageWeight" value="#{addItemManagedBean.newItem.averageWeight}" converterMessage="Cannot convert value to double. Example: 53.0 or 42.5">
+                    <p:inputText id="averageWeight" value="#{addItemManagedBean.newItem.averageWeight}" label="Average Weight"  converterMessage="Invalid Input! Please enter a positive number up to 2 decimal for Average Weight. Example: 53.0 or 42.53">
                         <f:validateDoubleRange minimum="0.0" />
                     </p:inputText>
                     <p:message for="averageWeight" />

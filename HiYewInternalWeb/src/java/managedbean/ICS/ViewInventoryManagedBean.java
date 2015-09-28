@@ -30,6 +30,7 @@ public class ViewInventoryManagedBean implements Serializable {
     private List<ItemEntity> itemList;
     private List<ItemEntity> filteredItems;
     private ItemEntity selectedItem;
+    
 
     /**
      * Creates a new instance of ViewInventoryManagedBean

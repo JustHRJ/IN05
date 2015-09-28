@@ -7,12 +7,6 @@
     <h:head>
         <title>Hi-Yew Internal System</title>
         <style>
-            .highlight1 {
-                background: salmon;
-            }
-            .highlight2 {
-               
-            }
             .menu{
                 margin-top:20px;
                 margin-bottom:30px;
@@ -39,8 +33,8 @@
         </p:megaMenu>
         <h:form>
 
-            <p:dataTable var="item" value="#{viewInventoryManagedBean.itemList}" widgetVar="itemsTable" 
-                         emptyMessage="No items found with given criteria" filteredValue="#{viewInventoryManagedBean.filteredItems}" rowStyleClass="#{item.quantity le item.reorderPoint ? 'highlight1' : 'highlight2'}"
+            <p:dataTable var="item" value="#{viewLowStockManagedBean.lowStockItems}" widgetVar="itemsTable" 
+                         emptyMessage="No items found with given criteria" filteredValue="#{viewLowStockManagedBean.filteredLowStockItems}" 
                          rows="10"
                          paginator="true"
                          paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
@@ -103,8 +97,8 @@
                 </p:column>
 
                 <p:column style="width:32px;text-align: center">
-                    <p:commandButton  action="#{viewInventoryManagedBean.passSelectedItemToNext()}" icon="ui-icon-search" title="View/Update">
-                        <f:setPropertyActionListener value="#{item}" target="#{viewInventoryManagedBean.selectedItem}" />
+                    <p:commandButton  action="#{viewLowStockManagedBean.passSelectedItemToNext()}" icon="ui-icon-search" title="View/Update">
+                        <f:setPropertyActionListener value="#{item}" target="#{viewLowStockManagedBean.selectedItem}" />
                     </p:commandButton>
                 </p:column>
             </p:dataTable>

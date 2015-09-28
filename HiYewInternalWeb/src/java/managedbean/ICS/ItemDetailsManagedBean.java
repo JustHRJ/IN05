@@ -6,9 +6,13 @@
 package managedbean.ICS;
 
 import entity.ItemEntity;
+import entity.StorageInfoEntity;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.util.ArrayList;
+import java.util.List;
+import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
 import javax.inject.Named;
@@ -39,12 +43,15 @@ public class ItemDetailsManagedBean implements Serializable {
     private double inCost;
     private double totalWeight;
     
+    private List<StorageInfoEntity> infoList;
+    private List<StorageInfoEntity> filteredInfoList;
+    
 
     /**
      * Creates a new instance of ItemDetailsManagedBean
      */
     public ItemDetailsManagedBean() {
-
+        infoList = new ArrayList<>();
         showInOuttPanel =true;
         if (FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("SelectedItem") != null) {
             selectedItem = (ItemEntity) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("SelectedItem");
@@ -52,6 +59,13 @@ public class ItemDetailsManagedBean implements Serializable {
             selectedItem = new ItemEntity();
         }
 
+    }
+    
+    @PostConstruct
+    public void init(){
+        if(selectedItem!=null){
+           infoList = hiYewICSSessionBean.getAllStorageInfoOfItem(selectedItem);
+        }
     }
 
     /**
@@ -121,7 +135,7 @@ public class ItemDetailsManagedBean implements Serializable {
            System.out.println("Stock up here");
            hiYewICSSessionBean.updateCost(selectedItem, newAvgCost);
            System.out.println("Update Cost here");
-           FacesContext.getCurrentInstance().addMessage("lowerMessages", new FacesMessage("Item " +selectedItem.getItemCode() +"'s quantity updated successfully!"));
+           FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Item " +selectedItem.getItemCode() +"'s quantity updated successfully!"));
              
         }else if (activityChoice.equalsIgnoreCase("stockOut")){
             if(quantityOut<=selectedItem.getQuantity()){
@@ -131,7 +145,7 @@ public class ItemDetailsManagedBean implements Serializable {
             hiYewICSSessionBean.stockDown(selectedItem, quantityOut);
             showMessage(totalWeight);
             }else{
-        FacesContext.getCurrentInstance().addMessage("lowerMessages", new FacesMessage(FacesMessage.SEVERITY_WARN, "Invalid Input", "Insufficient Stock!"));
+        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Invalid Input", "Insufficient Stock!"));
             }
         }
          
@@ -264,6 +278,34 @@ public class ItemDetailsManagedBean implements Serializable {
      */
     public void setQuantityOut(int quantityOut) {
         this.quantityOut = quantityOut;
+    }
+
+    /**
+     * @return the infoList
+     */
+    public List<StorageInfoEntity> getInfoList() {
+        return infoList;
+    }
+
+    /**
+     * @param infoList the infoList to set
+     */
+    public void setInfoList(List<StorageInfoEntity> infoList) {
+        this.infoList = infoList;
+    }
+
+    /**
+     * @return the filteredInfoList
+     */
+    public List<StorageInfoEntity> getFilteredInfoList() {
+        return filteredInfoList;
+    }
+
+    /**
+     * @param filteredInfoList the filteredInfoList to set
+     */
+    public void setFilteredInfoList(List<StorageInfoEntity> filteredInfoList) {
+        this.filteredInfoList = filteredInfoList;
     }
 
 }
