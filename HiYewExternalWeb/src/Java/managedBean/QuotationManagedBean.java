@@ -19,7 +19,6 @@ import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 import javax.inject.Named;
 import javax.faces.view.ViewScoped;
-import org.primefaces.context.RequestContext;
 import session.stateless.CustomerSessionBeanLocal;
 import session.stateless.QuotationSessionBeanLocal;
 
