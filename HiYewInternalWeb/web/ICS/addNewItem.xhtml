@@ -19,6 +19,8 @@
     <h:body>
         #{loginControlBean.checkLoginRedirect()}
         <a href ="/HiYewInternalWeb/index.xhtml"><img src = "../image/hiyew.gif" /></a><h1> Hi-Yew Internal System</h1>
+        <h3>logged in as: #{loginControlBean.employeeNameLog} </h3>
+
         <p:megaMenu orientation="horizontal"  styleClass="menu">
             <p:submenu label ="Human Resource Management System" icon ="ui-icon-check" style ="font-weight: bold">
                 <p:column>
@@ -30,9 +32,7 @@
                         <p:menuitem value ="Assign Payroll" url ="/HRMS/createPayroll.xhtml" disabled = "#{loginControlBean.checkValid()}"/>
                         <p:menuitem value ="Release Payroll" url ="/HRMS/releasePayroll.xhtml" disabled="#{loginControlBean.checkValid()}"/>
                         <p:menuitem value ="View Released Payroll" url ="/HRMS/viewPayroll.xhtml"/>
-
                     </p:submenu>
-
                 </p:column>
                 <p:column>
                     <p:submenu label="Training and Expiry">
@@ -46,17 +46,13 @@
                         <p:menuitem value ="Approve Leave" url ="/HRMS/approveLeave.xhtml" disabled="#{loginControlBean.checkValid()}"/>
                         <p:menuitem value ="Check Leave Status" url ="/HRMS/leaveStatus.xhtml" />
                     </p:submenu>
-
                 </p:column>
-
             </p:submenu>
-
             <p:submenu label="Inventory Control System" icon="ui-icon-check" style="font-weight:bold">
                 <p:column>
                     <p:submenu label="Items Management">
                         <p:menuitem value="View Inventory" url="viewInventory.xhtml" />
                         <p:menuitem value="Add New Item" url="addNewItem.xhtml" />
-                        <p:menuitem value="Low Stock Level Alert (#{viewLowStockManagedBean.numOfLowStockItems})" url="viewLowStock.xhtml" />
                     </p:submenu>
                     <p:submenu label="Storage Management">
                         <p:menuitem value="View Storage" url="viewRacks.xhtml" />
@@ -64,13 +60,19 @@
                     </p:submenu>
                 </p:column>
             </p:submenu>
-
+            <p:submenu label ="Sales Management System" icon ="ui-icon-check" style ="font-weight: bold">
+                <p:column>
+                    <p:submenu label ="Quotation">
+                        <p:menuitem value ="View Customer Services RFQ" url ="/SMS/viewEditQuotations.xhtml"/>
+                        <p:menuitem value ="View Customer Products RFQ" url ="/SMS/viewEditProductQuotations.xhtml" />
+                    </p:submenu>
+                </p:column>
+            </p:submenu>
             <p:submenu label ="Machine Management System" icon ="ui-icon-check" style ="font-weight: bold">
                 <p:column>
                     <p:submenu label = "Machine Management" >
                         <p:menuitem value ="Add Machinery" url ="/MMS/addMachine.xhtml" />
                         <p:menuitem value ="View Machinery" url ="/MMS/viewMachine.xhtml" />
-
                     </p:submenu>
                     <p:submenu label ="Machine Maintenance">
                         <p:menuitem value ="#{hiYewManagedBean.getMAlert()}" url ="/MMS/alertMachine.xhtml" />
@@ -79,14 +81,8 @@
                     </p:submenu>
                 </p:column>
             </p:submenu>
-            <p:submenu label ="Sales Management System" icon ="ui-icon-check" style ="font-weight: bold">
-                <p:column>
-                    <p:submenu label ="Quotation">
-                        <p:menuitem value ="View Customer RFQ" url ="/SMS/viewEditQuotations.xhtml"/>
-                    </p:submenu>
-                </p:column>
-            </p:submenu>
         </p:megaMenu>
+        <br/>
         <h:form id="formMain">
             <p:panel header="Add New Item">
                 <p:messages id="msg" autoUpdate="false"/>
