@@ -191,7 +191,8 @@
                             <p:outputLabel value ="Employee Email Address" for ="emailAddress"/>
                         </p:column>
                         <p:column>
-                            <p:inputText id ="emailAddress" value ="#{hiYewManagedBean.employeeEmail}" required ="true" requiredMessage="Please enter email address" placeholder="e.g. someone@gmail.com" validatorMessage="Please enter correct email format" validator="#{registrationValidator.validateEmail}" >                
+                            <p:inputText id ="emailAddress" value ="#{hiYewManagedBean.employeeEmail}" required ="true" requiredMessage="Please enter email address" placeholder="e.g. someone@gmail.com" validatorMessage="Please enter correct email format"  >
+                                <f:validateRegex pattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$" />
                             </p:inputText>
                         </p:column>
                         <p:column>
