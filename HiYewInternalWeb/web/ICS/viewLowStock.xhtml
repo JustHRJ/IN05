@@ -17,6 +17,10 @@
     <h:body>
         #{loginControlBean.checkLoginRedirect()}
 
+        <a href ="/HiYewInternalWeb/index.xhtml"><img src = "../image/hiyew.gif" /></a> <h1>Hi-Yew Internal System</h1>
+
+        <h3>logged in as: #{loginControlBean.employeeNameLog} </h3>
+
         <h1>Hi-Yew Internal System</h1>
         <p:megaMenu orientation="horizontal"  styleClass="menu">
             <p:submenu label ="Human Resource Management System" icon ="ui-icon-check" style ="font-weight: bold">

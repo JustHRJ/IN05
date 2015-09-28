@@ -7,7 +7,7 @@
 
     <h:head>
         <title>View/Edit Product Quotations</title>
-         <style>
+        <style>
             .menu{
                 margin-top:20px;
                 margin-bottom:30px;
@@ -18,6 +18,9 @@
     <h:body>
 
         <a href ="/HiYewInternalWeb/index.xhtml"><img src = "../image/hiyew.gif" /></a>  <h1>View/Edit Product Quotation</h1>
+        #{loginControlBean.checkLoginRedirect()}
+        <h3>logged in as: #{loginControlBean.employeeNameLog} </h3>
+
         <p:megaMenu orientation="horizontal"  styleClass="menu">
             <p:submenu label ="Human Resource Management System" icon ="ui-icon-check" style ="font-weight: bold">
                 <p:column>

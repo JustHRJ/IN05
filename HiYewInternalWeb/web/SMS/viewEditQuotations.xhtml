@@ -17,6 +17,9 @@
     </h:head>
     <h:body>
         <a href ="/HiYewInternalWeb/index.xhtml"><img src = "../image/hiyew.gif" /></a>  <h1>View/Edit Service Quotation</h1>
+        #{loginControlBean.checkLoginRedirect()}
+
+        <h3>logged in as: #{loginControlBean.employeeNameLog} </h3>
 
         <h:form id="form">
             <p:megaMenu orientation="horizontal"  styleClass="menu">

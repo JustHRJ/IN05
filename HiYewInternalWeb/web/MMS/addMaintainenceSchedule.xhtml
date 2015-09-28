@@ -18,6 +18,8 @@
         <h:form id ="formMain">
             <a href ="/HiYewInternalWeb/index.xhtml"><img src = "../image/hiyew.gif"/> </a>      <h1>Add Machine Maintainence Schedule</h1>
             #{loginControlBean.checkLoginRedirect()}
+             <h3>logged in as: #{loginControlBean.employeeNameLog} </h3>
+        
             <p:megaMenu orientation="horizontal"  styleClass="menu">
                 <p:submenu label ="Human Resource Management System" icon ="ui-icon-check" style ="font-weight: bold">
                     <p:column>
