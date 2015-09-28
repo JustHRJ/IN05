@@ -29,6 +29,7 @@ import javax.faces.context.FacesContext;
 import manager.EmailManager;
 import org.primefaces.event.RowEditEvent;
 import session.stateful.HiYewSystemBeanLocal;
+import session.stateless.HiYewSystemTimer;
 
 /**
  *
@@ -37,9 +38,12 @@ import session.stateful.HiYewSystemBeanLocal;
 @ManagedBean
 @RequestScoped
 public class HiYewManagedBean {
+    @EJB
+    private HiYewSystemTimer hiYewSystemTimer;
 
     @EJB
     private HiYewSystemBeanLocal hiYewSystemBean;
+    
     private boolean bonus;
     private String employeeName = "";
     private String address_postal = "";
@@ -116,6 +120,12 @@ public class HiYewManagedBean {
         return format.format(date);
     }
 
+    public void addPay() throws IOException{
+        hiYewSystemTimer.runEveryMonth();
+         FacesContext.getCurrentInstance().getExternalContext().redirect("/HiYewInternalWeb/HRMS/createPayroll.xhtml");
+    }
+    
+    
     public String formatCurrency(double amount) {
         NumberFormat nf = NumberFormat.getCurrencyInstance();
         return nf.format(amount);

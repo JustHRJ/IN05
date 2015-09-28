@@ -87,7 +87,7 @@
                 </p:submenu>
             </p:megaMenu>
 
-
+            <p:commandButton value ="Create month payment" action="#{hiYewManagedBean.addPay()}"/>
 
             <br/><br/>
             <p:growl id ="msgs" showDetail="true"/>
@@ -118,7 +118,7 @@
                             </p:inputText>
                         </p:column>
                     </p:row>
-                    <p:commandButton value ="Submit" action ="#{hiYewManagedBean.createPayroll()}" update = ":formMain:msgs" />               
+                    <p:commandButton value ="Submit" action ="#{hiYewManagedBean.createPayroll()}" update = ":formMain:msgs table" />               
                 </p:panelGrid>
             </p:overlayPanel>
             <br/>
