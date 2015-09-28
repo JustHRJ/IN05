@@ -2,6 +2,8 @@ package session.stateless;
 
 import entity.Customer;
 import entity.CustomerPO;
+import entity.ProductPurchaseOrder;
+import entity.ProductQuotation;
 import entity.Quotation;
 import java.math.BigInteger;
 import java.security.MessageDigest;
@@ -20,7 +22,6 @@ public class CustomerSessionBean implements CustomerSessionBeanLocal {
 
     @Override
     public void createCustomer(Customer customer) {
-        //customer.setPw(encryptPassword(customer.getPw()));
         em.persist(customer);
     }
 
@@ -41,7 +42,6 @@ public class CustomerSessionBean implements CustomerSessionBeanLocal {
     public Customer getCustomerByUsername(String username) {
         Customer c = em.find(Customer.class, username);
         if (c != null) {
-            //c.setPw(decryptPassword(c.getPw()));
         }
         return c;
     }
@@ -66,7 +66,6 @@ public class CustomerSessionBean implements CustomerSessionBeanLocal {
         }
     }
 
-    // decryption of password dont happen as admin should not be able to view
     @Override
     public List<Customer> getAllCustomer() {
         Query query = em.createQuery("SELECT c FROM Customer c");
@@ -79,11 +78,11 @@ public class CustomerSessionBean implements CustomerSessionBeanLocal {
         c.setName(c1.getName());
         c.setAddress1(c1.getAddress1());
         c.setPhone(c1.getPhone());
-        //c.setPw(encryptPassword(c1.getPw()));
         c.setPw(c1.getPw());
         c.setAddress2(c1.getAddress2());
         c.setEmail(c1.getEmail());
         c.setPostalCode(c1.getPostalCode());
+        c.setSubscribeEmail(c1.getSubscribeEmail());
     }
 
     @Override
@@ -94,6 +93,24 @@ public class CustomerSessionBean implements CustomerSessionBeanLocal {
         c.setPw(encryptPassword(newPassword));
         em.persist(c);
         em.flush();
-        return c.getName() + ":" + newPassword;
+        return c.getName() + ":" + newPassword + ":" + c.getEmail();
+    }
+
+    public void addProductQuotation(String username, ProductQuotation productQuotation) {
+        Customer customer = em.find(Customer.class, username);
+        if (customer == null) {
+            System.out.println("Customer is null.");
+        } else {
+            customer.addProductQuotationList(productQuotation);
+        }
+    }
+
+    public void addProductPurchaseOrder(String username, ProductPurchaseOrder productPurchaseOrder) {
+        Customer customer = em.find(Customer.class, username);
+        if (customer == null) {
+            System.out.println("Customer is null.");
+        } else {
+            customer.addProductPurchaseOrderList(productPurchaseOrder);
+        }
     }
 }

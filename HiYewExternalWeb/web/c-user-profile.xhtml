@@ -5,12 +5,12 @@
                 xmlns:h="http://xmlns.jcp.org/jsf/html"
                 xmlns:f="http://xmlns.jcp.org/jsf/core"
                 xmlns:p="http://primefaces.org/ui"
-                template="./template.xhtml">
+                template="./c-template.xhtml">
 
     <ui:define name="content">
         <!-- Page header -->
         <div class="page-heading animated fadeInDownBig">
-            <h1>Customer profile <small></small></h1>
+            <h1 style="font-weight: bold">Customer profile <small></small></h1>
             <p style="margin-bottom: 1%"></p>
             <h:outputText value="#{popupMessage}" style="font-family: 'Open Sans'; font-weight: bold; color: red;" />
         </div>
@@ -42,8 +42,7 @@
                                         <address>
                                             <strong>Address</strong><br />
                                             <abbr style="cursor: default" title="Address"><h:outputText value="#{customerManagedBean.customer.address1}" /></abbr>
-                                        </address>
-                                        <address>
+                                            <br />
                                             <abbr style="cursor: default" title="Postal Code"><h:outputText value="#{customerManagedBean.customer.address2}" /></abbr>
                                         </address>
                                         <address>
@@ -98,7 +97,7 @@
                                             <f:validateRegex pattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$" />
                                         </p:inputText>
                                     </div>
-                                    <p:commandButton style="border: none; font-family: 'Open Sans'; padding-right: 17px" styleClass="btn btn-primary" value="Update" action="#{customerManagedBean.handleSave()}" update=":changePasswordForm:msgs " icon="ui-icon-check"/>
+                                    <p:commandButton style="border: none; font-weight: normal; font-family: 'Open Sans'; padding-top: 6px; padding-bottom: 7px; padding-left: 22px; padding-right: 22px" styleClass="btn btn-primary" value="Update" action="#{customerManagedBean.handleSave()}" update=":changePasswordForm:msgs " icon=""/>
                                 </h:form>
                             </div><!-- End div .user-profile-content -->
                         </div><!-- End div .tab-pane -->
@@ -121,7 +120,7 @@
                                         <label for="">Re-Password</label>
                                         <p:password style="font-family: 'Open Sans';" styleClass="form-control" placeholder="At least 8 alphanumeric characters." value="#{customerManagedBean.rePassword}"  inline="true" requiredMessage="Password is required." id="Re-Password"  />
                                     </div>
-                                    <p:commandButton style="border: none; font-family: 'Open Sans'; padding-right: 17px" styleClass="btn btn-primary" value="Update" action="#{customerManagedBean.changePassword()}" update=":changePasswordForm:msgs " icon="ui-icon-check"/>
+                                    <p:commandButton style="border: none; font-weight: normal; font-family: 'Open Sans'; padding-top: 6px; padding-bottom: 7px; padding-left: 22px; padding-right: 22px" styleClass="btn btn-primary" value="Update" action="#{customerManagedBean.changePassword()}" update=":changePasswordForm:msgs " icon=""/>
                                 </h:form>
                             </div><!-- End div .scroll-user-widget -->
                         </div><!-- End div .tab-pane -->
@@ -130,15 +129,19 @@
                         <!-- Tab Settings -->
                         <div class="tab-pane animated fadeInRight" id="subscription">
                             <div class="user-profile-content">
-                                <h:form>
+                                <h:form id="changeSubscriptionForm">
+                                    <p:growl id="msgs" showDetail="false" />
                                     Subscribe to receive notifications on any changes on updates. 
                                     If you do not wish to receive any notifications, please unsubscribe from the tools.
                                     <br />
                                     <br />
-                                    <h:outputText style="font-weight: bold; vertical-align: bottom" value="Email" />
+                                    <h:outputText style="font-weight: bold;" value="Email" />
                                     <br />
-                                    <p:selectBooleanCheckbox style="vertical-align: bottom" styleClass="subscribe" value="#{selectBooleanView.value1}" />
+                                    <div style="height: 8px"></div>
+                                    <p:selectBooleanCheckbox style="vertical-align: middle" styleClass="subscribe" value="#{customerManagedBean.customer.subscribeEmail}" />
                                     An email will be sent if there are updates.
+                                    <br /><br />
+                                    <p:commandButton style="border: none; font-weight: normal; font-family: 'Open Sans'; padding-top: 6px; padding-bottom: 7px; padding-left: 22px; padding-right: 22px" styleClass="btn btn-primary buttonOverride" value="Update" action="#{customerManagedBean.changeSubscribeEmail()}" icon=""/>
                                 </h:form>
                             </div><!-- End div .scroll-user-widget -->
                         </div><!-- End div .tab-pane -->

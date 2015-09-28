@@ -857,6 +857,7 @@ public class HiYewSystemBean implements HiYewSystemBeanLocal {
                 xin.setUnit(unit);
                 xin.setOptional(optional);
                 String password1 = createRandomPass();
+                System.out.println("admin createRandomPass() ============ " + password1);
                 String passwordHashed = hashingPassword(password1);
                 xin.setPassword(passwordHashed);
                 xin.setEmployee_passExpiry(expiry);

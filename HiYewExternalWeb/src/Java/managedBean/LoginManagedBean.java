@@ -18,6 +18,7 @@ public class LoginManagedBean implements Serializable {
 
     @EJB
     private CustomerSessionBeanLocal customerSessionBean;
+    private QuotationManagedBean quotationManagedBean;
     private List<String> users;
     private String user = "";
     private Customer customer;
@@ -38,6 +39,7 @@ public class LoginManagedBean implements Serializable {
         customer = new Customer();
         newCustomer = new Customer();
         users = new ArrayList<>();
+
     }
 
     @PostConstruct
@@ -59,7 +61,7 @@ public class LoginManagedBean implements Serializable {
                     FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("userRole", "Customer");
                     FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("username", this.username);
                     System.out.println("Login Success");
-                    path = "customer-profile?faces-redirect=true"; //navigation
+                    path = "c-user-profile?faces-redirect=true"; //navigation
                 } else {
                     FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("loginMessage", "Invalid Username or password! Please try again.");
                     //FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Invalid Username or password!"));
@@ -78,7 +80,8 @@ public class LoginManagedBean implements Serializable {
     }
 
     public String logout() {
-        FacesContext.getCurrentInstance().getExternalContext().getSessionMap().remove("user");
+        FacesContext.getCurrentInstance().getExternalContext().getSessionMap().remove("username");
+        FacesContext.getCurrentInstance().getViewRoot().getViewMap().remove("quotationManagedBean");
         System.out.println("Logout Success");
         return "login?faces-redirect=true"; // navigation
     }
@@ -92,7 +95,7 @@ public class LoginManagedBean implements Serializable {
                 String output[] = customerSessionBean.resetCustomerPassword(customer.getUserName()).split(":");
                 System.out.println("User's new password: " + output[0]);
                 EmailManager emailManager = new EmailManager();
-                emailManager.emailPassword(output[0], output[1]);
+                emailManager.emailPassword(output[0], output[1], output[2]);
                 return "login?faces-redirect=true";
             } else {
                 FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("forgotMessage", "Username does not exist!");
@@ -109,11 +112,12 @@ public class LoginManagedBean implements Serializable {
             if (newCustomer.getPw().equals(rePassword)) {
                 // encrypt password
                 newCustomer.setPw(customerSessionBean.encryptPassword(newCustomer.getPw()));
+                newCustomer.setSubscribeEmail("true");
                 customerSessionBean.createCustomer(newCustomer);
+                EmailManager emailManager = new EmailManager();
+                emailManager.emailSuccessfulRegistration(newCustomer.getName(), newCustomer.getUserName(), rePassword, newCustomer.getEmail());
                 newCustomer = new Customer(); // To reinitialise and create new customer
                 FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("loginMessage", "Your account registration has been successful.");
-                EmailManager emailManager = new EmailManager();
-                emailManager.emailSuccessfulRegistration(newCustomer.getName(), newCustomer.getUserName(), newCustomer.getPw());
                 return "login?faces-redirect=true";
             } else {
                 FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("registerMessage", "Your password and confirmation password do not match.");

@@ -1,0 +1,78 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <h:head>
+        <title>View/Edit Product Quotations</title>
+    </h:head>
+    <h:body>
+        <h:form id="innerForm">
+            <h:panelGrid columns="2" cellpadding="5">
+                <p:outputLabel for="QuotationStatus" value="Product Quotation Status: " />
+                <p:selectOneMenu id="QuotationStatus" value="#{adminProductsManagedBean.status}"  style="width:150px">
+                    <p:ajax listener="#{adminProductsManagedBean.filterByYearAndStatus()}" update="rcvQuote" /> 
+                    <f:selectItems value="#{adminProductsManagedBean.statuses}" />
+                </p:selectOneMenu>
+            </h:panelGrid>
+            <p:messages id="msgs"  showDetail="false" />
+            <p:commandButton value="Refresh" actionListener="#{adminProductsManagedBean.filterByYearAndStatus()}" update="msgs rcvQuote" icon="ui-icon-check"/>
+            <br /><br />
+            <p:dataTable value="#{adminProductsManagedBean.receivedNewProductQuotationList}" var="item" rows="5" id="rcvQuote" paginator="true" editable="true">
+                <p:column headerText="Quotation No." width="70%">
+                    <p:outputLabel value="#{item.productQuotationNo}"/>
+                </p:column>
+                <p:column headerText="Date" width="10%">
+                    <h:outputText value="#{adminProductsManagedBean.formatDate(item.date)}"/>
+                </p:column>
+                <p:column headerText="Status" width="10%">
+                    <h:outputText value="#{item.status}"/>
+                </p:column>
+                <p:column width="10%">
+                    <p:commandButton id="quoteDescBtn" icon="ui-icon-search" title="View" update="quotationDetailPanel" action="#{adminProductsManagedBean.selectQuotation(item)}"/>
+                    <p:overlayPanel for="quoteDescBtn" showEffect="fade" hideEffect="fade" dismissable="false" showCloseIcon="true" style="width:1200px">
+                        <p:outputPanel id="quotationDetailPanel">
+                            <br />
+                            <p:commandButton value="Update Quotation Details" action="#{adminProductsManagedBean.updateQuotationPrices()}" update=":innerForm:msgs " icon="ui-icon-check"/>
+                            <br /><br />
+                            <p:commandButton value="Send Notification to Customer" action="#{adminProductsManagedBean.updateQuotationStatus()}" update=":innerForm:msgs rcvQuote" icon="ui-icon-check"/>
+                            <br /><br />
+                            <p:dataTable var="quoteDescItem" value="#{adminProductsManagedBean.displayProductQuotationDescriptionList}" rows="5" paginator="true">
+                                <p:column headerText="ID" width="3%">
+                                    <h:outputText value="#{quoteDescItem.productQuotationDescNo}" />
+                                </p:column>
+
+                                <p:column headerText="Item Type" width="7%">
+                                    <h:outputText value="#{quoteDescItem.productType}" />
+                                </p:column>
+
+                                <p:column headerText="Item Name" width="34%">
+                                    <h:outputText value="#{quoteDescItem.itemName}" />
+                                </p:column>
+
+                                <p:column headerText="Quantity" width="6%">
+                                    <h:outputText value="#{quoteDescItem.quantity}" />
+                                </p:column>
+
+                                <p:column headerText="Remarks" width="14%">
+                                    <h:outputText value="#{quoteDescItem.remarks}" />
+                                </p:column>
+
+                                <p:column headerText="Quoted Unit Price" width="12%">
+                                    <h:inputText value="#{quoteDescItem.unitPrice}" style="width: 60%"
+                                                 maxlength="7" converterMessage="Quantity must be a number consisting of one or more digits.">
+                                        <f:validateLongRange minimum="1" />
+                                    </h:inputText>
+                                </p:column>
+                            </p:dataTable>
+                            <br />
+                        </p:outputPanel>
+                    </p:overlayPanel>
+                </p:column>
+            </p:dataTable>
+        </h:form>
+    </h:body>
+</html>
+

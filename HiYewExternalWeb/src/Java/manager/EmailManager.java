@@ -26,20 +26,20 @@ public class EmailManager {
     public EmailManager() {
     }
 
-    public EmailManager(String name, String newPassword) {
-        this.emailPassword(name, newPassword);
+    public EmailManager(String name, String newPassword, String email) {
+        this.emailPassword(name, newPassword, email);
     }
     
-    public EmailManager(String name, String username, String password) {
-        this.emailSuccessfulRegistration(name, username, password);
+    public EmailManager(String name, String username, String password, String email) {
+        this.emailSuccessfulRegistration(name, username, password, email);
     }
 
     // For testing purpose
     public static void main(String args[]) throws Exception {
-        EmailManager emailManager = new EmailManager("your_name", "your_new_password");
+        // EmailManager emailManager = new EmailManager("your_name", "your_new_password");
     }
     
-    public void emailSuccessfulRegistration(String name, String username, String password) {
+    public void emailSuccessfulRegistration(String name, String username, String password, String email) {
         try {
             Properties props = new Properties();
             props.put("mail.transport.protocol", "smtp");
@@ -54,7 +54,7 @@ public class EmailManager {
             Message msg = new MimeMessage(session);
             if (msg != null) {
                 msg.setFrom(InternetAddress.parse(emailFromAddress, false)[0]);
-                msg.setRecipients(Message.RecipientType.TO, InternetAddress.parse(toEmailAddress, false));
+                msg.setRecipients(Message.RecipientType.TO, InternetAddress.parse(name + "<" + email + ">", false));
                 msg.setSubject("HiYew - Welcome!");
 
                 Multipart multipart = new MimeMultipart("related");
@@ -87,7 +87,7 @@ public class EmailManager {
         }
     }
 
-    public void emailPassword(String name, String newPassword) {
+    public void emailPassword(String name, String newPassword, String email) {
         try {
             Properties props = new Properties();
             props.put("mail.transport.protocol", "smtp");
@@ -102,7 +102,7 @@ public class EmailManager {
             Message msg = new MimeMessage(session);
             if (msg != null) {
                 msg.setFrom(InternetAddress.parse(emailFromAddress, false)[0]);
-                msg.setRecipients(Message.RecipientType.TO, InternetAddress.parse(toEmailAddress, false));
+                msg.setRecipients(Message.RecipientType.TO, InternetAddress.parse(name + "<" + email + ">", false));
                 msg.setSubject("HiYew - Your password has been reset successfully!");
 
                 Multipart multipart = new MimeMultipart("related");
