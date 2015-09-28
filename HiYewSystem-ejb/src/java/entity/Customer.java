@@ -73,13 +73,6 @@ public class Customer implements Serializable {
     }
 
     /**
-     * @param subscribeEmail the subscribeEmail to set
-     */
-    public void setSubscribeEmail(String subscribeEmail) {
-        this.subscribeEmail = subscribeEmail;
-    }
-    
-    /**
      * @return the userName
      */
     public String getUserName() {
