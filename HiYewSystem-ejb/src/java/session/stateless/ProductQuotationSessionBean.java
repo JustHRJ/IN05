@@ -24,7 +24,7 @@ public class ProductQuotationSessionBean implements ProductQuotationSessionBeanL
     }
 
     public String generateProductQuotationNo(Customer customer) {
-        String customerUsername = customer.getUserName();
+        String customerUsername = customer.getName();
         String newProductQuotationNo = "";
         String[] splitArray = null;
         if (customerUsername.contains("-")) {
@@ -81,6 +81,11 @@ public class ProductQuotationSessionBean implements ProductQuotationSessionBeanL
         for (ProductQuotationDescription productQuotationDescription : list) {
             em.merge(productQuotationDescription);
         }
+    }
+
+    public void updateProductQuotationRelayedStatus(ProductQuotation inProductQuotation) {
+        ProductQuotation productQuotation = em.find(ProductQuotation.class, inProductQuotation.getProductQuotationNo());
+        productQuotation.setStatus("Relayed");
     }
 
     public void updateProductQuotationStatus(ProductQuotation inProductQuotation) {

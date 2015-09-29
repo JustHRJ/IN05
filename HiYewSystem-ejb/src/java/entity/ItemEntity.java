@@ -20,31 +20,31 @@ import javax.validation.constraints.Size;
  */
 @Entity
 public class ItemEntity implements Serializable {
+
     private static final long serialVersionUID = 1L;
     @Id
     private String itemCode;
-    
-    @Size(min=3,message = "Please enter item name more than 2 characters!")
+
+    @Size(min = 3, message = "Please enter item name more than 2 characters!")
     private String itemName;
     private String itemType;
-    
+
 //     @Digits(integer=6,fraction=0, message = "Invalid input! Note: only up to 6 digits integer. Example: 1234")
     private int quantity;
-    
-    @Digits(integer=9,fraction=2, message = "Invalid input! Note: only up to 9 integers and 2 decimal places. Example: 1234.32")
+
+    @Digits(integer = 9, fraction = 2, message = "Invalid input! Note: only up to 9 integers and 2 decimal places. Example: 1234.32")
     private double cost;
-    
-    @Digits(integer=9,fraction=2, message = "Invalid input! Note: only up to 9 integers and 2 decimal places. Example: 1234.32")
+
+    @Digits(integer = 9, fraction = 2, message = "Invalid input! Note: only up to 9 integers and 2 decimal places. Example: 1234.32")
     private double sellingPrice;
-    
+
     private int reorderPoint;
-    
-    @Digits(integer=9,fraction=2, message = "Invalid input! Note: only up to 9 integers and 2 decimal places. Example: 1234.32")
+
+    @Digits(integer = 9, fraction = 2, message = "Invalid input! Note: only up to 9 integers and 2 decimal places. Example: 1234.32")
     private double averageWeight;
-    
+
     @OneToMany(mappedBy = "item")
     private Set<StorageInfoEntity> storageInfos = new HashSet<StorageInfoEntity>();
-    
 
     public ItemEntity() {
     }
@@ -59,7 +59,6 @@ public class ItemEntity implements Serializable {
         this.reorderPoint = reorderPoint;
         this.averageWeight = averageWeight;
     }
-
 
     @Override
     public int hashCode() {
@@ -215,5 +214,4 @@ public class ItemEntity implements Serializable {
 //    public void addBin(BinEntity bin){
 //        this.bins.add(bin);
 //    }
-    
 }

@@ -20,25 +20,24 @@ import javax.validation.constraints.Digits;
  */
 @Entity
 public class RackEntity implements Serializable {
+
     private static final long serialVersionUID = 1L;
     @Id
     private String rackID;
-    
+
     private String location;
-    
-    @Digits(integer=9,fraction=1, message = "Invalid input! Note: only up to 9 integers and 1 decimal places. Example: 1234.3")
+
+    @Digits(integer = 9, fraction = 1, message = "Invalid input! Note: only up to 9 integers and 1 decimal places. Example: 1234.3")
     private double length;
-    @Digits(integer=9,fraction=1, message = "Invalid input! Note: only up to 9 integers and 1 decimal places. Example: 1234.3")
+    @Digits(integer = 9, fraction = 1, message = "Invalid input! Note: only up to 9 integers and 1 decimal places. Example: 1234.3")
     private double width;
-    @Digits(integer=9,fraction=1, message = "Invalid input! Note: only up to 9 integers and 1 decimal places. Example: 1234.3")
+    @Digits(integer = 9, fraction = 1, message = "Invalid input! Note: only up to 9 integers and 1 decimal places. Example: 1234.3")
     private double height;
-    
+
     private String status;
-    
-    @OneToMany(cascade={CascadeType.PERSIST},mappedBy="rack")
+
+    @OneToMany(cascade = {CascadeType.PERSIST}, mappedBy = "rack")
     private Collection<ShelveEntity> shelves = new ArrayList<ShelveEntity>();
-    
-    
 
     public RackEntity() {
     }
@@ -51,9 +50,7 @@ public class RackEntity implements Serializable {
         this.height = height;
         this.status = status;
     }
-    
-    
-    
+
     @Override
     public int hashCode() {
         int hash = 0;
@@ -176,9 +173,9 @@ public class RackEntity implements Serializable {
     public void setShelves(Collection<ShelveEntity> shelves) {
         this.shelves = shelves;
     }
-    
-    public void addShelveToRack(ShelveEntity shelve){
+
+    public void addShelveToRack(ShelveEntity shelve) {
         shelves.add(shelve);
     }
-    
+
 }

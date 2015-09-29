@@ -9,15 +9,16 @@ import javax.persistence.ManyToOne;
 @IdClass(CompositeQuotationDescKey.class)
 @Entity
 public class QuotationDescription implements Serializable {
+
     private static final long serialVersionUID = 1L;
-    
+
     @Id
     private Integer quotationDescNo;
     private String itemDesc;
     private Integer qty;
     private Double price;
     private String requestForMetalSample;
-    
+
     @ManyToOne
     private Quotation quotation;
     @Id
@@ -106,8 +107,6 @@ public class QuotationDescription implements Serializable {
         this.quotation = quotation;
     }
 
-    
-    
     @Override
     public int hashCode() {
         int hash = 0;
@@ -160,5 +159,5 @@ public class QuotationDescription implements Serializable {
     public void setRequestForMetalSample(String requestForMetalSample) {
         this.requestForMetalSample = requestForMetalSample;
     }
-    
+
 }

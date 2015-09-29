@@ -7,7 +7,7 @@
       xmlns:p="http://primefaces.org/ui">
 
     <h:head>
-        <title>View/Edit Product Quotations</title>
+        <title>View/Edit Product Purchase Order</title>
         <style>
             .menu{
                 margin-top:20px;
@@ -17,10 +17,9 @@
         </style>
     </h:head>
     <h:body>
-
-        <a href ="/HiYewInternalWeb/index.xhtml"><img src = "../image/hiyew.gif" /></a>  <h1>View/Edit Product Quotation</h1>
+        <a href ="/HiYewInternalWeb/index.xhtml"><img src = "../image/hiyew.gif" /></a>  
         #{loginControlBean.checkLoginRedirect()}
-        <h3>logged in as: #{loginControlBean.employeeNameLog} </h3>
+        <h1>View/Edit Product Purchase Order</h1>
 
         <p:megaMenu orientation="horizontal"  styleClass="menu">
             <p:submenu label ="Human Resource Management System" icon ="ui-icon-check" style ="font-weight: bold">
@@ -33,7 +32,9 @@
                         <p:menuitem value ="Assign Payroll" url ="/HRMS/createPayroll.xhtml" disabled = "#{loginControlBean.checkValid()}"/>
                         <p:menuitem value ="Release Payroll" url ="/HRMS/releasePayroll.xhtml" disabled="#{loginControlBean.checkValid()}"/>
                         <p:menuitem value ="View Released Payroll" url ="/HRMS/viewPayroll.xhtml"/>
+
                     </p:submenu>
+
                 </p:column>
                 <p:column>
                     <p:submenu label="Training and Expiry">
@@ -66,7 +67,7 @@
             </p:submenu>
             <p:submenu label ="Sales Management System" icon ="ui-icon-check" style ="font-weight: bold">
                 <p:column>
-                  <p:submenu label ="Products">
+               <p:submenu label ="Products">
                             <p:menuitem value ="View RFQ" url ="/SMS/viewEditProductQuotations.xhtml" />
                             <p:menuitem value ="View Purchase Order" url ="/SMS/viewEditProductPurchaseOrders.xhtml"/>
                         </p:submenu>
@@ -94,68 +95,95 @@
 
         <h:form id="innerForm">
             <h:panelGrid columns="2" cellpadding="5">
-                <p:outputLabel for="QuotationStatus" value="Product Quotation Status: " />
-                <p:selectOneMenu id="QuotationStatus" value="#{adminProductQuotationManagedBean.status}"  style="width:150px">
-                    <p:ajax listener="#{adminProductQuotationManagedBean.filterByStatusNoMsg()}" update="msgs rcvQuote" /> 
-                    <f:selectItems value="#{adminProductQuotationManagedBean.statuses}" />
+                <p:outputLabel for="QuotationStatus" value="Product Purchase Order Status: " />
+                <p:selectOneMenu id="QuotationStatus" value="#{adminProductPOManagedBean.status}"  style="width:150px">
+                    <p:ajax listener="#{adminProductPOManagedBean.filterByStatusNoMsg()}" update="msgs rcvQuote" /> 
+                    <f:selectItems value="#{adminProductPOManagedBean.statuses}" />
                 </p:selectOneMenu>
             </h:panelGrid>
-            <p:messages id="msgs" showDetail="false" />
-            <p:commandButton value="Refresh" actionListener="#{adminProductQuotationManagedBean.filterByStatus()}" update="msgs rcvQuote" icon="ui-icon-check"/>
+            <p:messages id="msgs"  showDetail="false" />
+            <p:commandButton value="Refresh" actionListener="#{adminProductPOManagedBean.filterByStatus()}" update="msgs rcvQuote" icon="ui-icon-check"/>
             <br /><br />
-            <p:dataTable value="#{adminProductQuotationManagedBean.receivedNewProductQuotationList}" var="item" rows="5" id="rcvQuote" paginator="true" editable="true">
-                <p:column headerText="Quotation No." width="70%">
-                    <p:outputLabel value="#{item.productQuotationNo}"/>
+            <p:dataTable value="#{adminProductPOManagedBean.receivedNewProductPOList}" var="item" rows="5" id="rcvQuote" paginator="true" editable="true">
+                <p:column headerText="PO No.">
+                    <p:outputLabel value="#{item.productPurchaseOrderID}"/>
                 </p:column>
-                <p:column headerText="Date" width="10%">
-                    <h:outputText value="#{adminProductQuotationManagedBean.formatDate(item.date)}"/>
+                <p:column headerText="Issued Date">
+                    <h:outputText value="#{adminProductPOManagedBean.formatDate(item.productPurchaseOrderDate)}"/>
                 </p:column>
-                <p:column headerText="Status" width="10%">
+                <p:column headerText="Delivery Date">
+                    <h:outputText value="#{adminProductPOManagedBean.formatDate(item.deliveryDate)}"/>
+                </p:column>
+                <p:column headerText="Mailing Address">
+                    <h:outputText value="#{item.mailingAddr1}, #{item.mailingAddr2}"/>
+                </p:column>
+                <p:column headerText="Total Price">
+                    <h:outputText value="#{item.totalPrice}"/>
+                </p:column>
+                <p:column headerText="Status">
                     <h:outputText value="#{item.status}"/>
                 </p:column>
-                <p:column width="10%">
-                    <p:commandButton id="quoteDescBtn" icon="ui-icon-search" title="View" update="quotationDetailPanel" action="#{adminProductQuotationManagedBean.selectQuotation(item)}"/>
+
+                <p:column>
+                    <p:commandButton id="quoteDescBtn" icon="ui-icon-search" title="View" update="quotationDetailPanel" action="#{adminProductPOManagedBean.selectPurchaseOrder(item)}"/>
                     <p:overlayPanel for="quoteDescBtn" showEffect="fade" hideEffect="fade" dismissable="false" showCloseIcon="true" style="width:1200px">
                         <p:outputPanel id="quotationDetailPanel">
                             <br />
-                            <p:commandButton rendered="#{item.status eq 'Pending'}" value="Relay Product RFQ" action="#{adminProductQuotationManagedBean.updateQuotationRelayedStatus()}" update=":innerForm:msgs rcvQuote" icon="ui-icon-check"/>
+                            <p:commandButton rendered="#{item.status eq 'Pending'}" value="Relay Product PO" action="#{adminProductPOManagedBean.updatePORelayedStatus()}" update=":innerForm:msgs rcvQuote" icon="ui-icon-check"/>
 
-                            <p:commandButton rendered="#{item.status eq 'Relayed'}" value="Update Quotation Details" action="#{adminProductQuotationManagedBean.updateQuotationPrices()}" update=":innerForm:msgs" icon="ui-icon-check"/>
+                            <p:commandButton rendered="#{item.status eq 'Relayed'}" value="Update PO Details" action="#{adminProductPOManagedBean.updatePODeliveryDate()}" update=":innerForm:msgs rcvQuote" icon="ui-icon-check"/>
 
-                            <p:commandButton rendered="#{item.status eq 'Relayed'}" value="Send Notification to Customer" action="#{adminProductQuotationManagedBean.updateQuotationStatus(item.customer.userName)}" update=":innerForm:msgs rcvQuote" icon="ui-icon-check"/>
-                            <br /><br />
-                            <p:dataTable var="quoteDescItem" value="#{adminProductQuotationManagedBean.displayProductQuotationDescriptionList}" rows="5" paginator="true">
-                                <p:column headerText="ID" width="3%">
+                            <p:panel rendered="#{item.status eq 'Relayed'}" style="border: none" ></p:panel>
+                            <p:commandButton rendered="#{item.status eq 'Relayed'}" value="Send Notification to Customer" action="#{adminProductPOManagedBean.updateProductPOStatus(item.customer.userName)}" update=":innerForm:msgs rcvQuote" icon="ui-icon-check"/>
+
+                            <p:panel rendered="#{item.status != 'Processed'}" style="border: none" ></p:panel>
+
+                            <h:outputText rendered="#{item.status eq 'Relayed' and item.deliveryDate != null}" value="Old Delivery Date: " />
+                            <h:outputText rendered="#{item.status eq 'Relayed' and item.deliveryDate != null}" value="#{adminProductPOManagedBean.formatDate(item.deliveryDate)}" />
+
+                            <p:panel rendered="#{item.status eq 'Relayed' and item.deliveryDate != null}" style="border: none"></p:panel>
+
+                            <h:outputText rendered="#{item.status eq 'Relayed'}" value="Set Delivery Date: " />
+                            <p:calendar rendered="#{item.status eq 'Relayed'}" id="cal" value="#{adminProductPOManagedBean.deliveryDate}" placeholder="e.g 01/01/2015" mindate="#{adminProductPOManagedBean.getToday()}" pattern ="dd/MM/yyyy">
+                            </p:calendar>
+
+                            <p:panel rendered="" style="border: none" ></p:panel>
+
+                            <p:dataTable var="quoteDescItem" value="#{adminProductPOManagedBean.displayProductQuotationDescriptionList}" rows="5" paginator="true">
+                                <p:column headerText="ID">
                                     <h:outputText value="#{quoteDescItem.productQuotationDescNo}" />
                                 </p:column>
 
-                                <p:column headerText="Item Type" width="7%">
+                                <p:column headerText="Item Type">
                                     <h:outputText value="#{quoteDescItem.productType}" />
                                 </p:column>
 
-                                <p:column headerText="Item Name" width="34%">
+                                <p:column headerText="Item Name">
                                     <h:outputText value="#{quoteDescItem.itemName}" />
                                 </p:column>
 
-                                <p:column headerText="Quantity" width="6%">
+                                <p:column headerText="Quantity">
                                     <h:outputText value="#{quoteDescItem.quantity}" />
                                 </p:column>
 
-                                <p:column headerText="Remarks" width="14%">
+                                <p:column headerText="Remarks">
                                     <h:outputText value="#{quoteDescItem.remarks}" />
                                 </p:column>
 
-                                <p:column rendered="#{item.status eq 'Relayed'}" headerText="Quoted Unit Price" width="12%">
-                                    <h:inputText value="#{quoteDescItem.unitPrice}" style="width: 60%"
-                                                 maxlength="7" converterMessage="Quantity must be a number consisting of one or more digits.">
-                                        <f:validateLongRange minimum="1" />
-                                    </h:inputText>
+                                <p:column headerText="Quoted Unit Price">
+                                    <h:outputText value="#{quoteDescItem.unitPrice}" />
                                 </p:column>
-                            </p:dataTable>
+                            </p:dataTable>		
+
+
                             <br />
                         </p:outputPanel>
                     </p:overlayPanel>
                 </p:column>
+
+
+
+
             </p:dataTable>
         </h:form>
     </h:body>

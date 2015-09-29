@@ -21,19 +21,19 @@ import javax.persistence.ManyToOne;
 public class StorageInfoEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
-    
+
     @Id
-    @GeneratedValue(strategy=GenerationType.IDENTITY )
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
     @ManyToOne
     @JoinColumn(name = "itemCode")
     private ItemEntity item;
-    
+
     @ManyToOne
     @JoinColumn(name = "shelveID")
     private ShelveEntity shelve;
-    
+
     private int storedQty;
 
     public StorageInfoEntity() {
@@ -44,7 +44,6 @@ public class StorageInfoEntity implements Serializable {
         this.shelve = shelve;
         this.storedQty = storedQty;
     }
-
 
     @Override
     public String toString() {

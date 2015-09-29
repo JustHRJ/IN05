@@ -3,8 +3,9 @@ package entity;
 import java.io.Serializable;
 
 public class CompositeQuotationDescKey implements Serializable {
+
     private static final long serialVersionUID = 1L;
-   
+
     private String quotationNo;
     private Integer quotationDescNo;
 
@@ -60,5 +61,5 @@ public class CompositeQuotationDescKey implements Serializable {
     public String toString() {
         return "entity.CompositeRFQDescKey[ id=" + quotationNo + " ]";
     }
-    
+
 }

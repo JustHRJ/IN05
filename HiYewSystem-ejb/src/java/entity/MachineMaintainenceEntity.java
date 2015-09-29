@@ -19,6 +19,7 @@ import javax.persistence.ManyToOne;
  */
 @Entity
 public class MachineMaintainenceEntity implements Serializable {
+
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -30,21 +31,20 @@ public class MachineMaintainenceEntity implements Serializable {
     private String serviceProvider;
     private MachineEntity machine = new MachineEntity();
     private String status;
-    
+
     public Long getId() {
         return id;
     }
 
-    
     @ManyToOne
-    public MachineEntity getMachine(){
+    public MachineEntity getMachine() {
         return machine;
     }
-    
-    public void setMachine(MachineEntity machine){
+
+    public void setMachine(MachineEntity machine) {
         this.machine = machine;
     }
-    
+
     public void setId(Long id) {
         this.id = id;
     }
@@ -157,5 +157,5 @@ public class MachineMaintainenceEntity implements Serializable {
     public void setStatus(String status) {
         this.status = status;
     }
-    
+
 }

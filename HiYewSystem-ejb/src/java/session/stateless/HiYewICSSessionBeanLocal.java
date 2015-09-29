@@ -5,7 +5,6 @@
  */
 package session.stateless;
 
-
 import entity.ItemEntity;
 import entity.RackEntity;
 import entity.ShelveEntity;
@@ -74,6 +73,18 @@ public interface HiYewICSSessionBeanLocal {
     public void reduceStorageQty(ItemEntity item, ShelveEntity shelve, int reduceAmt);
 
     public void updateRackStatus(RackEntity rack, String status);
+
+    public ItemEntity getExistingItemByName(String itemName);
+
+    public void updateShelveStatus(ShelveEntity shelve, String status);
+
+    public void checkAllShelvesInRackStatus(RackEntity rack);
+
+    public boolean checkIfGotItemsInRack(RackEntity rack);
+
+    public void deleteRack(RackEntity rack);
+
+    public void deleteShelve(ShelveEntity shelve);
 
 
    

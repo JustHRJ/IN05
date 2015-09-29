@@ -3,8 +3,9 @@ package entity;
 import java.io.Serializable;
 
 public class CompositeProductQuotationDescriptionKey implements Serializable {
+
     private static final long serialVersionUID = 1L;
-   
+
     private String productQuotationNo;
     private Integer productQuotationDescNo;
 
@@ -35,7 +36,7 @@ public class CompositeProductQuotationDescriptionKey implements Serializable {
     public void setProductQuotationDescNo(Integer productQuotationDescNo) {
         this.productQuotationDescNo = productQuotationDescNo;
     }
-    
+
     @Override
     public int hashCode() {
         int hash = 0;

@@ -9,7 +9,6 @@
         <servlet-class>javax.faces.webapp.FacesServlet</servlet-class>
         <load-on-startup>1</load-on-startup>
     </servlet>
-    
     <context-param>
         <param-name>primefaces.PUBLIC_CAPTCHA_KEY</param-name>
         <param-value>6LdcbA0TAAAAAPUgCvcUoSfsq7P2g8I3d5JA_JYp</param-value>
@@ -18,8 +17,6 @@
         <param-name>primefaces.PRIVATE_CAPTCHA_KEY</param-name>
         <param-value>6LdcbA0TAAAAACFSMiSDuqZptVr32vAFVuh1LSX_</param-value>
     </context-param>
-
-    
     <servlet-mapping>
         <servlet-name>Faces Servlet</servlet-name>
         <url-pattern>*.xhtml</url-pattern>

@@ -23,6 +23,7 @@ import javax.persistence.OneToMany;
  */
 @Entity
 public class TrainingScheduleEntity implements Serializable {
+
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -34,17 +35,16 @@ public class TrainingScheduleEntity implements Serializable {
     private String TrainingDescription;
     private String trainingCode;
     private Collection<EmployeeEntity> employeeRecords = new ArrayList<EmployeeEntity>();
-    
-    
+
     @ManyToMany(cascade = {CascadeType.ALL})
-    public Collection<EmployeeEntity> getEmployeeRecords(){
+    public Collection<EmployeeEntity> getEmployeeRecords() {
         return employeeRecords;
     }
-    
-    public void setEmployeeRecords(Collection<EmployeeEntity> employeeRecords){
+
+    public void setEmployeeRecords(Collection<EmployeeEntity> employeeRecords) {
         this.employeeRecords = employeeRecords;
     }
-    
+
     public Long getId() {
         return id;
     }
@@ -161,5 +161,5 @@ public class TrainingScheduleEntity implements Serializable {
     public void setTrainingCode(String trainingCode) {
         this.trainingCode = trainingCode;
     }
-    
+
 }

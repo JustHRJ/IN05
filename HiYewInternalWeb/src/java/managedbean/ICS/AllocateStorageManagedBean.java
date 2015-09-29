@@ -32,13 +32,13 @@ public class AllocateStorageManagedBean implements Serializable {
 
     private String itemCode;
     private int allocationQty;
-    
+
     private int removalQty;
 
     private ShelveEntity selectedShelve;
     private List<StorageInfoEntity> infoList;
     private List<StorageInfoEntity> filteredInfoList;
-    
+
     private ItemEntity selectedItem;
     private StorageInfoEntity selectedSI;
 
@@ -162,8 +162,6 @@ public class AllocateStorageManagedBean implements Serializable {
     public void setSelectedItem(ItemEntity selectedItem) {
         this.selectedItem = selectedItem;
     }
-    
-  
 
     /**
      * @return the removalQty
@@ -178,27 +176,27 @@ public class AllocateStorageManagedBean implements Serializable {
     public void setRemovalQty(int removalQty) {
         this.removalQty = removalQty;
     }
-    
-    public void openDialog(){
-      System.out.println("here at openDialog" + selectedSI.getItem().getItemCode() + " "+selectedShelve.getShelveID());  
-   
+
+    public void openDialog() {
+        System.out.println("here at openDialog" + selectedSI.getItem().getItemCode() + " " + selectedShelve.getShelveID());
+
     }
-    
+
     public String removeItemFromShelve() {
-        System.out.println("here at openDialog " + selectedSI.getItem().getItemCode() + " "+selectedShelve.getShelveID());
+        System.out.println("here at openDialog " + selectedSI.getItem().getItemCode() + " " + selectedShelve.getShelveID());
         selectedItem = selectedSI.getItem();
-        System.out.println("here at removeItemFromShelve" +selectedItem.getItemCode() + " "+selectedShelve.getShelveID());
+        System.out.println("here at removeItemFromShelve" + selectedItem.getItemCode() + " " + selectedShelve.getShelveID());
         StorageInfoEntity sie = hiYewICSSessionBean.getStorageInfo(selectedItem, selectedShelve);
         System.out.println("here at openDialog " + sie.getStoredQty());
-       if(removalQty>sie.getStoredQty()){
-           System.out.println("removalQty higher than stored qty!");
-           FacesContext.getCurrentInstance().addMessage("dialogForm:rQty", new FacesMessage(FacesMessage.SEVERITY_ERROR, "Unable to process request", "Removal Quatity higher than Stored Quantity"));
-           return "";
-       }else{
-           hiYewICSSessionBean.reduceStorageQty(selectedItem, selectedShelve, removalQty);
-           FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Success", "Items removed from shelve"));
-           return "allocateStorage?faces-redirect=true";
-       }
+        if (removalQty > sie.getStoredQty()) {
+            System.out.println("removalQty higher than stored qty!");
+            FacesContext.getCurrentInstance().addMessage("dialogForm:rQty", new FacesMessage(FacesMessage.SEVERITY_ERROR, "Unable to process request", "Removal Quatity higher than Stored Quantity"));
+            return "";
+        } else {
+            hiYewICSSessionBean.reduceStorageQty(selectedItem, selectedShelve, removalQty);
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Success", "Items removed from shelve"));
+            return "allocateStorage?faces-redirect=true";
+        }
     }
 
     /**

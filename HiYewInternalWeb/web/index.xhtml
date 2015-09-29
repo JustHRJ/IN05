@@ -71,6 +71,7 @@
                         <p:submenu label ="Quotation">
                             <p:menuitem value ="View Customer Services RFQ" url ="/SMS/viewEditQuotations.xhtml"/>
                             <p:menuitem value ="View Customer Products RFQ" url ="/SMS/viewEditProductQuotations.xhtml" />
+                              <p:menuitem value ="View Customer Product Purchase Order" url ="/SMS/viewEditProductPurchaseOrders.xhtml"/>
                         </p:submenu>
                     </p:column>
                 </p:submenu>
@@ -96,7 +97,7 @@
                     <p:accordionPanel multiple="true">
                         <p:tab title ="Leave" >
                             <p:dataTable var ="im" value ="#{loginControlBean.employeeLeaveToday}"  paginator="true" rows="5" emptyMessage="No Approved Leave Today" >
-                                <p:column headerText="Employee Name">
+                                <p:column headerText="Employee Name"  filterBy="#{im.employee.employee_name}" >
                                     <p:outputLabel value ="#{im.employee.employee_name}"/>
                                 </p:column>
                                 <p:column headerText="Leave Start Date">
@@ -109,7 +110,7 @@
                         </p:tab>
                         <p:tab title ="Training">
                             <p:dataTable var ="im" value ="#{loginControlBean.employeeTrainingToday}"  paginator="true" rows="5" emptyMessage="No Employee Training Today" >
-                                <p:column headerText="Employee Name">
+                                <p:column headerText="Employee Name"  filterBy="#{im.get(0)}" >
                                     <p:outputLabel value = "#{im.get(0)}"/>
                                 </p:column>
                                 <p:column headerText="Employee Pass Number">
@@ -135,7 +136,7 @@
                     <p:accordionPanel multiple="true">
                         <p:tab title ="Leave">
                             <p:dataTable var ="im" value ="#{loginControlBean.employeeLeave7Days}"  paginator="true" rows="5" emptyMessage="No Approved Leaves For the Next 7 Days" >
-                                <p:column headerText="Employee Name">
+                                <p:column headerText="Employee Name"  filterBy="#{im.employee.employee_name}" >
                                     <p:outputLabel value ="#{im.employee.employee_name}"/>
                                 </p:column>
                                 <p:column headerText="Leave Start Date">
@@ -148,7 +149,7 @@
                         </p:tab>
                         <p:tab title ="Training">
                             <p:dataTable var ="im" value ="#{loginControlBean.employeeTraining7Days}"  paginator="true" rows="5" emptyMessage="No Employee under Training For the Next 7 Days" >
-                                <p:column headerText="Employee Name">
+                                <p:column headerText="Employee Name"  filterBy="#{im.get(0)}" >
                                     <p:outputLabel value = "#{im.get(0)}"/>
                                 </p:column>
                                 <p:column headerText="Employee Pass Number">
@@ -174,7 +175,7 @@
                     <p:accordionPanel multiple="true">
                         <p:tab title ="Leave">
                             <p:dataTable var ="im" value ="#{loginControlBean.employeeLeaveMonth}"  paginator="true" rows="5" emptyMessage="No Approved Leaves For the Month" >
-                                <p:column headerText="Employee Name">
+                                <p:column headerText="Employee Name"  filterBy="#{im.employee.employee_name}" >
                                     <p:outputLabel value ="#{im.employee.employee_name}"/>
                                 </p:column>
                                 <p:column headerText="Leave Start Date">
@@ -187,7 +188,7 @@
                         </p:tab>
                         <p:tab title ="Training">
                             <p:dataTable var ="im" value ="#{loginControlBean.employeeTrainingMonth}"  paginator="true" rows="5" emptyMessage="No Employee under Training For the Month" >
-                                <p:column headerText="Employee Name">
+                                <p:column headerText="Employee Name"  filterBy="#{im.get(0)}" >
                                     <p:outputLabel value = "#{im.get(0)}"/>
                                 </p:column>
                                 <p:column headerText="Employee Pass Number">

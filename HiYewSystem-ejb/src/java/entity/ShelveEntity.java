@@ -19,18 +19,19 @@ import javax.persistence.OneToMany;
  */
 @Entity
 public class ShelveEntity implements Serializable {
+
     private static final long serialVersionUID = 1L;
     @Id
     private String shelveID;
-    
+
     private double shelveLength;
     private double width;
     private double height;
     private String status;
-    
+
     @ManyToOne
     private RackEntity rack = new RackEntity();
-    
+
     @OneToMany(mappedBy = "shelve")
     private Set<StorageInfoEntity> storageInfos = new HashSet<StorageInfoEntity>();
 
@@ -53,10 +54,6 @@ public class ShelveEntity implements Serializable {
         this.status = status;
         this.rack = rack;
     }
-    
-    
-
-  
 
     @Override
     public int hashCode() {
@@ -181,6 +178,4 @@ public class ShelveEntity implements Serializable {
         this.storageInfos = storageInfos;
     }
 
-
-    
 }

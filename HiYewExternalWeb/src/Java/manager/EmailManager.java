@@ -18,9 +18,9 @@ public class EmailManager {
 
     String emailServerName = "mailauth.comp.nus.edu.sg";
     // Replace with your real name and unix email address
-    String emailFromAddress = "Koh Yi Wen<yiwenkoh@comp.nus.edu.sg>";
+    String emailFromAddress = "HiYew Team<hiyewmetalwelding@gmail.com>";
     // Replace with your real name and NUSNET email address
-    String toEmailAddress = "Mabel<yiwenkoh@nus.edu.sg>";
+    String toEmailAddress = "";
     String mailer = "JavaMailer";
 
     public EmailManager() {
@@ -29,7 +29,7 @@ public class EmailManager {
     public EmailManager(String name, String newPassword, String email) {
         this.emailPassword(name, newPassword, email);
     }
-    
+
     public EmailManager(String name, String username, String password, String email) {
         this.emailSuccessfulRegistration(name, username, password, email);
     }
@@ -38,7 +38,7 @@ public class EmailManager {
     public static void main(String args[]) throws Exception {
         // EmailManager emailManager = new EmailManager("your_name", "your_new_password");
     }
-    
+
     public void emailSuccessfulRegistration(String name, String username, String password, String email) {
         try {
             Properties props = new Properties();
@@ -61,15 +61,12 @@ public class EmailManager {
                 BodyPart htmlPart = new MimeBodyPart();
 
                 String message = "<div class=\"text\">";
-                message = message + "<font face=\"'Open Sans', Arial\">";
-                message = message + "<font color=\"#333\">";
-                message = message + "Dear <b>" + name + "</b>,</font><br /><br />";
-                message = message + "<font color=\"#333\">";
-                message = message + "Your username: <b>" + username + "</b></font>" + "<br />";
-                message = message + "Your password: <b>" + password + "</b></font>" + "<br /><br />";
-                message = message + "<font color=\"#333\">";
-                message = message + "Sincerely,<br />";
-                message = message + "HiYew Team</font>";
+                message = message + "<font face=\"'Open Sans', Arial; color=\"#333\">";
+                message = message + "Dear <b>" + name + "</b>,<br /><br />";
+                message = message + "Your username:  <b>" + username + "</b><br/>"; 
+                message = message + "Your password: <b>" + password + "</b><br /><br />";
+                message = message + "Best Regards,<br />";
+                message = message + "HiYew Team";
                 message = message + "</font></div>";
                 message = "<html><style type=\"text/css\"></style><body>" + message + "</body></html>";
 
@@ -109,14 +106,11 @@ public class EmailManager {
                 BodyPart htmlPart = new MimeBodyPart();
 
                 String message = "<div class=\"text\">";
-                message = message + "<font face=\"'Open Sans', Arial\">";
-                message = message + "<font color=\"#333\">";
-                message = message + "Dear <b>" + name + "</b>,</font><br /><br />";
-                message = message + "<font color=\"#333\">";
-                message = message + "Your new password: <b>" + newPassword + "</b></font>" + "<br /><br />";
-                message = message + "<font color=\"#333\">";
-                message = message + "Sincerely,<br />";
-                message = message + "HiYew Team</font>";
+                message = message + "<font face=\"'Open Sans', Arial; color=\"#333\">";
+                message = message + "Dear <b>" + name + "</b>,<br /><br />";
+                message = message + "Your new password: <b>" + newPassword + "</b><br /><br />";
+                message = message + "Best Regards,<br />";
+                message = message + "HiYew Team";
                 message = message + "</font></div>";
                 message = "<html><style type=\"text/css\"></style><body>" + message + "</body></html>";
 

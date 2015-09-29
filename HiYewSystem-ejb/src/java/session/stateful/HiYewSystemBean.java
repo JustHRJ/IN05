@@ -1250,7 +1250,7 @@ public class HiYewSystemBean implements HiYewSystemBeanLocal {
                         im.add(t.getTrainingStartDate());
                         im.add(t.getTrainingEndDate());
                         result.add(im);
-             
+
                     }
                 }
             }

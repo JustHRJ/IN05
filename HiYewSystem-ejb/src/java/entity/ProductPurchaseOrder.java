@@ -21,6 +21,7 @@ public class ProductPurchaseOrder implements Serializable {
     private String mailingAddr1;
     private String mailingAddr2;
     private Double totalPrice;
+    private String status; // Relayed, Processed, Pending, Accepted, Rejected
 
     @OneToOne
     private ProductQuotation productQuotation;
@@ -177,6 +178,20 @@ public class ProductPurchaseOrder implements Serializable {
      */
     public void setCustomer(Customer customer) {
         this.customer = customer;
+    }
+
+    /**
+     * @return the status
+     */
+    public String getStatus() {
+        return status;
+    }
+
+    /**
+     * @param status the status to set
+     */
+    public void setStatus(String status) {
+        this.status = status;
     }
 
 }

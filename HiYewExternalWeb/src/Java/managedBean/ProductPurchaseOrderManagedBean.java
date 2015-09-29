@@ -41,6 +41,8 @@ public class ProductPurchaseOrderManagedBean implements Serializable {
     private String orderDate = "";
     private String deliveryDate = "";
     private String totalPrice = "";
+    private String mailingAddr1 = "";
+    private String mailingAddr2 = "";
 
     private String description;
     private Double total = 0.0;
@@ -72,9 +74,9 @@ public class ProductPurchaseOrderManagedBean implements Serializable {
 
         receivedProductPurchaseOrderList = new ArrayList<>(productPurchaseOrderSessionBean.receivedProductPurchaseOrder(getUsername()));
 
-        FacesContext.getCurrentInstance().addMessage("qMsg", new FacesMessage(FacesMessage.SEVERITY_INFO, "Current list of purchase order(s) are up to date.", ""));
+        FacesContext.getCurrentInstance().addMessage("poMsg", new FacesMessage(FacesMessage.SEVERITY_INFO, "Current list of purchase order(s) are up to date.", ""));
     }
-    
+
     public void retrieveProductQuotationDescriptionList(String purchaseOrderNo) {
         System.out.println("ProductPurchaseOrderManagedBean.java retrieveProductQuotationDescriptionList() purchaseOrderNo ===== " + purchaseOrderNo);
 
@@ -90,7 +92,11 @@ public class ProductPurchaseOrderManagedBean implements Serializable {
         newPurchaseOrder.setTotalPrice(getTotal());
         newPurchaseOrder.setCustomer(productQuotation.getCustomer());
         newPurchaseOrder.setProductQuotation(productQuotation);
+        newPurchaseOrder.setStatus("Pending");
 
+        System.out.println("newPurchaseOrder.getMailingAddr1() ===== " + newPurchaseOrder.getMailingAddr1());
+        System.out.println("newPurchaseOrder.getMailingAddr2() ===== " + newPurchaseOrder.getMailingAddr2());
+        
         // persist
         productPurchaseOrderSessionBean.createProductPurchaseOrder(newPurchaseOrder);
 
@@ -305,9 +311,38 @@ public class ProductPurchaseOrderManagedBean implements Serializable {
     }
 
     /**
-     * @param displayProductQuotationDescriptionList the displayProductQuotationDescriptionList to set
+     * @param displayProductQuotationDescriptionList the
+     * displayProductQuotationDescriptionList to set
      */
     public void setDisplayProductQuotationDescriptionList(ArrayList<ProductQuotationDescription> displayProductQuotationDescriptionList) {
         this.displayProductQuotationDescriptionList = displayProductQuotationDescriptionList;
+    }
+
+    /**
+     * @return the mailingAddr1
+     */
+    public String getMailingAddr1() {
+        return mailingAddr1;
+    }
+
+    /**
+     * @param mailingAddr1 the mailingAddr1 to set
+     */
+    public void setMailingAddr1(String mailingAddr1) {
+        this.mailingAddr1 = mailingAddr1;
+    }
+
+    /**
+     * @return the mailingAddr2
+     */
+    public String getMailingAddr2() {
+        return mailingAddr2;
+    }
+
+    /**
+     * @param mailingAddr2 the mailingAddr2 to set
+     */
+    public void setMailingAddr2(String mailingAddr2) {
+        this.mailingAddr2 = mailingAddr2;
     }
 }

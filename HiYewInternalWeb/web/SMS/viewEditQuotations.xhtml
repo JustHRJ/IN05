@@ -63,9 +63,12 @@
                 </p:submenu>
                 <p:submenu label ="Sales Management System" icon ="ui-icon-check" style ="font-weight: bold">
                     <p:column>
-                        <p:submenu label ="Quotation">
-                            <p:menuitem value ="View Customer Services RFQ" url ="viewEditQuotations.xhtml"/>
-                            <p:menuitem value ="View Customer Products RFQ" url ="viewEditProductQuotations.xhtml" />
+                       <p:submenu label ="Products">
+                            <p:menuitem value ="View RFQ" url ="/SMS/viewEditProductQuotations.xhtml" />
+                            <p:menuitem value ="View Purchase Order" url ="/SMS/viewEditProductPurchaseOrders.xhtml"/>
+                        </p:submenu>
+                        <p:submenu label ="Services">
+                            <p:menuitem value ="View Customer Services RFQ" url ="/SMS/viewEditQuotations.xhtml"/>
                         </p:submenu>
                     </p:column>
                 </p:submenu>
@@ -129,11 +132,9 @@
                     <p:overlayPanel for="quoteDescBtn" showEffect="fade" hideEffect="fade" dismissable="false" showCloseIcon="true" style="width:1200px">
                         
                         <p:outputPanel id="quotationDetailPanel" style="text-align:center;" >
-                            <p:messages id="panelMsg" showDetail="false" />
-                            <p:commandButton value="Update Quotation Details" action="#{adminQuotationManagedBean.updateQuotationPricesAndSample()}" icon="ui-icon-check"/>
-                            <p:commandButton value="Forward to Customer" action="#{adminQuotationManagedBean.updateQuotationStatus()}" update=":innerForm:msgs rcvQuote"  icon="ui-icon-check"/>
-                            
-                            
+                            <p:commandButton value="Update Quotation Details" action="#{adminQuotationManagedBean.updateQuotationPricesAndSample()}" update=":innerForm:msgs " disabled="#{loginControlBean.checkValid()}"  icon="ui-icon-check"/>
+                            <p:commandButton value="Forward to Customer" action="#{adminQuotationManagedBean.updateQuotationStatus()}" update=":innerForm:msgs rcvQuote" icon="ui-icon-check" disabled="#{loginControlBean.checkValid()}" />
+
                             <p:dataTable var="quoteDescItem" value="#{adminQuotationManagedBean.displayQuotationDescriptions}" rows="5" paginator="true">
                                 <p:column headerText="ID" width="5%">
                                     <h:outputText value="#{quoteDescItem.quotationDescNo}" />
@@ -149,12 +150,13 @@
 
                                 <p:column headerText="Quoted Price (SGD)" width="12%">
                                     <h:inputText value="#{quoteDescItem.price}" style="width: 60%"
-                                                 maxlength="7" converterMessage="Price must be a decimal number. It must be above 0.00 ">
+                                                 maxlength="7" converterMessage="Quantity must be a number consisting of one or more digits." disabled="#{loginControlBean.checkValid()}">
                                         <f:validateLongRange minimum="1" />
                                     </h:inputText>
                                 </p:column>
                                 <p:column headerText="Req for Sample" width="12%">
-                                    <p:selectOneMenu value="#{quoteDescItem.requestForMetalSample}" style="width:80px">
+
+                                    <p:selectOneMenu value="#{quoteDescItem.requestForMetalSample}" style="width:80px" disabled="#{loginControlBean.checkValid()}" >
                                         <f:selectItem itemValue="No" itemLabel="No" />
                                         <f:selectItem itemValue="Yes" itemLabel="Yes" />
                                     </p:selectOneMenu>
