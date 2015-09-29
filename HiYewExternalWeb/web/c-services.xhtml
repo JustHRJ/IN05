@@ -15,7 +15,7 @@
             <h:outputText value="#{popupMessage}" style="font-family: 'Open Sans'; font-weight: bold; color: red;" />
         </div>
         <!-- End page header -->
-
+ #{LoginManagedBean.checkLoginRedirect()}
         <h:form id="mainForm">
             <p:growl id="msgs" showDetail="false" />
             <!--<f:ajax render=":content">-->
