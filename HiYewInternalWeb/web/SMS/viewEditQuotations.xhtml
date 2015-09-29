@@ -104,7 +104,7 @@
                     <f:selectItems value="#{adminQuotationManagedBean.statuses}" />
                 </p:selectOneMenu>
             </h:panelGrid>
-            <p:messages id="msgs"  showDetail="false" />
+            <p:messages id="msgs" globalOnly="true" showDetail="false" />
 
             <p:commandButton value="Refresh" actionListener="#{adminQuotationManagedBean.filterByYearAndStatus()}" update="msgs rcvQuote" icon="ui-icon-check"/>
             <p:dataTable value="#{adminQuotationManagedBean.receivedCustomerNewQuotations}" var="item" rows="5" id="rcvQuote" paginator="true" editable="true">
@@ -127,11 +127,13 @@
                     <p:commandButton id="quoteDescBtn" icon="ui-icon-search" title="View" update="quotationDetailPanel" action="#{adminQuotationManagedBean.selectQuotation(item)}"/>
                     <!--<p:dialog  widgetVar="dlg" modal="true" resizable="false" header="Values" showEffect="fade" >-->
                     <p:overlayPanel for="quoteDescBtn" showEffect="fade" hideEffect="fade" dismissable="false" showCloseIcon="true" style="width:1200px">
-
+                        
                         <p:outputPanel id="quotationDetailPanel" style="text-align:center;" >
-                            <p:commandButton value="Update Quotation Details" action="#{adminQuotationManagedBean.updateQuotationPricesAndSample()}" update=":innerForm:msgs " icon="ui-icon-check"/>
-                            <p:commandButton value="Forward to Customer" action="#{adminQuotationManagedBean.updateQuotationStatus()}" update=":innerForm:msgs rcvQuote" icon="ui-icon-check"/>
-
+                            <p:messages id="panelMsg" showDetail="false" />
+                            <p:commandButton value="Update Quotation Details" action="#{adminQuotationManagedBean.updateQuotationPricesAndSample()}" icon="ui-icon-check"/>
+                            <p:commandButton value="Forward to Customer" action="#{adminQuotationManagedBean.updateQuotationStatus()}" update=":innerForm:msgs rcvQuote"  icon="ui-icon-check"/>
+                            
+                            
                             <p:dataTable var="quoteDescItem" value="#{adminQuotationManagedBean.displayQuotationDescriptions}" rows="5" paginator="true">
                                 <p:column headerText="ID" width="5%">
                                     <h:outputText value="#{quoteDescItem.quotationDescNo}" />
@@ -145,14 +147,13 @@
                                     <h:outputText value="#{quoteDescItem.qty}" />
                                 </p:column>
 
-                                <p:column headerText="Quoted Price" width="12%">
+                                <p:column headerText="Quoted Price (SGD)" width="12%">
                                     <h:inputText value="#{quoteDescItem.price}" style="width: 60%"
-                                                 maxlength="7" converterMessage="Quantity must be a number consisting of one or more digits.">
+                                                 maxlength="7" converterMessage="Price must be a decimal number. It must be above 0.00 ">
                                         <f:validateLongRange minimum="1" />
                                     </h:inputText>
                                 </p:column>
                                 <p:column headerText="Req for Sample" width="12%">
-
                                     <p:selectOneMenu value="#{quoteDescItem.requestForMetalSample}" style="width:80px">
                                         <f:selectItem itemValue="No" itemLabel="No" />
                                         <f:selectItem itemValue="Yes" itemLabel="Yes" />

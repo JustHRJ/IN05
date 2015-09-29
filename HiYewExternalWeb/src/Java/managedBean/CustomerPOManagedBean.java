@@ -87,6 +87,12 @@ public class CustomerPOManagedBean implements Serializable {
         newPurOrder.setExpectedStartDate(expectedStartDate);
         newPurOrder.setExpectedEndDate(expectedEndDate);
         newPurOrder.setTotalPrice(total);
+        
+        if(newPurOrder.getMailingAddr1().equals("") && newPurOrder.getMailingAddr2().equals("")){
+            newPurOrder.setMailingAddr1(q.getCustomer().getAddress1());
+            newPurOrder.setMailingAddr2(q.getCustomer().getAddress2());
+        }
+        
         newPurOrder.setCustomer(q.getCustomer());
         newPurOrder.setQuotation(q);
         customerPOSessionBean.createPO(newPurOrder);//persist
@@ -133,7 +139,10 @@ public class CustomerPOManagedBean implements Serializable {
     public String formatDate(Timestamp t) {
 
         SimpleDateFormat sd = new SimpleDateFormat("dd/MM/yyyy");
-        return sd.format(t.getTime());
+        if(t != null){
+            return sd.format(t.getTime());
+        }
+        return "";
     }
 
     public void showDialog() {

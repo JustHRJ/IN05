@@ -29,79 +29,97 @@ import session.stateless.QuotationSessionBeanLocal;
  */
 @Named(value = "adminQuotationManagedBean")
 @ViewScoped
-public class AdminQuotationManagedBean implements Serializable{
+public class AdminQuotationManagedBean implements Serializable {
+
     @EJB
     private QuotationSessionBeanLocal quotationSessionBean;
-    
-    
+
     private String status = "Pending";
     private Integer year = Calendar.getInstance().get(Calendar.YEAR); //by default, get current year quotations
     private ArrayList<Quotation> receivedCustomerNewQuotations;
     private ArrayList<QuotationDescription> displayQuotationDescriptions;
-    
-    
-    private Map<String,String> statuses;
-    private Map<String,String> years;
-    
+
+    private Map<String, String> statuses;
+    private Map<String, String> years;
+
     private Quotation selectedQuotation;
 
     /**
      * Creates a new instance of AdminQuotationManagedBean
      */
     public AdminQuotationManagedBean() {
-        
+
         receivedCustomerNewQuotations = new ArrayList<>();
         displayQuotationDescriptions = new ArrayList<>();
-        
+
         statuses = new HashMap<>();
         years = new HashMap<>();
         selectedQuotation = new Quotation();
     }
-    
+
     @PostConstruct
     public void init() {
-        
+
         receivedCustomerNewQuotations = new ArrayList<>(quotationSessionBean.receivedCustomerNewQuotations(status, year));
-        
+
         statuses.put("Pending", "Pending");
         statuses.put("Processed", "Processed");
         years.put("2014", "2014");
         years.put("2015", "2015");
     }
-    
-    public void filterByYearAndStatus(){
-       
+
+    public void filterByYearAndStatus() {
+
         receivedCustomerNewQuotations = new ArrayList<>(quotationSessionBean.receivedCustomerNewQuotations(status, year));
         System.out.println(year);
         System.out.println("value change");
     }
-    
+
     public String formatDate(Timestamp t) {
         SimpleDateFormat sd = new SimpleDateFormat("dd/MM/yyyy");
         return sd.format(t.getTime());
     }
 
-    public void selectQuotation(Quotation q){
-        
+    public void selectQuotation(Quotation q) {
+
         System.out.println(q.getQuotationNo());
         displayQuotationDescriptions = new ArrayList<>(q.getQuotationDescriptions());
         selectedQuotation = q;
         //System.out.println("quotation descriptions size is " + q.getQuotationDescriptions().size());
     }
-    
-    public void updateQuotationPricesAndSample(){
-        
+
+    public void updateQuotationPricesAndSample() {
+       
         quotationSessionBean.updateQuotationPrices(displayQuotationDescriptions);
-        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO,"Quotations updated successfully", ""));
+        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Quotations updated successfully", ""));
+
+    }
+
+    //Only if req for metal is yes, then price can be null 
+
+    public boolean check() {
+        boolean option = true;
+        for (int i = 0; i < displayQuotationDescriptions.size(); i++) {
+            QuotationDescription qd = displayQuotationDescriptions.get(i);
+            if (qd.getPrice() == null) {
+                if (!qd.getRequestForMetalSample().equals("Yes")) {
+                    option = false;
+                }
+            }
+        }
+        return option;
+    }
+    
+    public void updateQuotationStatus() {
+        if (check() == true) {
+            quotationSessionBean.updateQuotationStatus(selectedQuotation);
+            selectedQuotation = new Quotation();
+        }else{
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Prices must be quoted if we are not requesting for metal sample", ""));
+        }
         
     }
-    
-    
-    public void updateQuotationStatus(){
-        quotationSessionBean.updateQuotationStatus(selectedQuotation);
-        selectedQuotation = new Quotation();
-    }
-    
+
     /**
      * @return the status
      */
@@ -138,38 +156,38 @@ public class AdminQuotationManagedBean implements Serializable{
     }
 
     /**
-     * @param receivedCustomerNewQuotations the receivedCustomerNewQuotations to set
+     * @param receivedCustomerNewQuotations the receivedCustomerNewQuotations to
+     * set
      */
     public void setReceivedCustomerNewQuotations(ArrayList<Quotation> receivedCustomerNewQuotations) {
         this.receivedCustomerNewQuotations = receivedCustomerNewQuotations;
     }
 
-    
     /**
      * @return the statuses
      */
-    public Map<String,String> getStatuses() {
+    public Map<String, String> getStatuses() {
         return statuses;
     }
 
     /**
      * @param statuses the statuses to set
      */
-    public void setStatuses(Map<String,String> statuses) {
+    public void setStatuses(Map<String, String> statuses) {
         this.statuses = statuses;
     }
 
     /**
      * @return the years
      */
-    public Map<String,String> getYears() {
+    public Map<String, String> getYears() {
         return years;
     }
 
     /**
      * @param years the years to set
      */
-    public void setYears(Map<String,String> years) {
+    public void setYears(Map<String, String> years) {
         this.years = years;
     }
 
@@ -181,11 +199,11 @@ public class AdminQuotationManagedBean implements Serializable{
     }
 
     /**
-     * @param displayQuotationDescriptions the displayQuotationDescriptions to set
+     * @param displayQuotationDescriptions the displayQuotationDescriptions to
+     * set
      */
     public void setDisplayQuotationDescriptions(ArrayList<QuotationDescription> displayQuotationDescriptions) {
         this.displayQuotationDescriptions = displayQuotationDescriptions;
     }
-    
 
 }

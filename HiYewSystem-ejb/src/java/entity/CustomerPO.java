@@ -2,6 +2,7 @@ package entity;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -51,6 +52,15 @@ public class CustomerPO implements Serializable {
 
     public void setPoId(String poId) {
         this.poId = poId;
+    }
+    
+    public String formatDate(Timestamp t) {
+
+        SimpleDateFormat sd = new SimpleDateFormat("dd/MM/yyyy");
+        if(t != null){
+            return sd.format(t.getTime());
+        }
+        return "";
     }
 
     @Override

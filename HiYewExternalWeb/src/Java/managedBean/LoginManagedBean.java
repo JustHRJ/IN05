@@ -121,12 +121,13 @@ public class LoginManagedBean implements Serializable {
                 return "login?faces-redirect=true";
             } else {
                 FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("registerMessage", "Your password and confirmation password do not match.");
-                return "register-customer?faces-redirect=true";
+                return "";
             }
         } else {
             FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("registerMessage", "This username has been taken by someone else. Please choose a different username.");
             return "register-customer?faces-redirect=true";
         }
+        
     }
 
     /**

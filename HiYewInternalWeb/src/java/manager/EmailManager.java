@@ -69,7 +69,7 @@ public class EmailManager {
                 message = message + "HiYew Team</font>";
                 message = message + "</font></div>";
                 message = "<html><style type=\"text/css\"></style><body>" + message + "</body></html>";
-
+                System.out.println("psw: " + newPassword);
                 htmlPart.setContent(message, "text/html");
                 multipart.addBodyPart(htmlPart);
                 msg.setContent(multipart);

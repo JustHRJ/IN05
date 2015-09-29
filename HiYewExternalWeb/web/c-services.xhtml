@@ -57,8 +57,9 @@
                                 <br />
                                 <h:outputLabel style="font-weight: bold" for="Quantity" value="Quantity: " />
                                 <br />
-                                <p:inputText style="font-weight: normal" id="Quantity" value="#{quotationManagedBean.newQuotationDesc.qty}" maxlength="5" converterMessage="Quantity must be a number consisting of one or more digits.">
+                                <p:inputText style="font-weight: normal" id="Quantity" value="#{quotationManagedBean.newQuotationDesc.qty}" maxlength="5" converterMessage="Quantity must contains only numbers." validatorMessage="Quantity must have a value of more than one.">
                                     <f:validateLongRange minimum="1" />
+                                    
                                 </p:inputText>
                                 <br /><br /><br /><br /><br /><br /><br /><br /><br />
                             </p:column>
@@ -80,7 +81,11 @@
                         <p:column headerText="Quantity" width="15%">
                             <p:cellEditor>
                                 <f:facet name="output"><h:outputText value="#{item.qty}"/></f:facet>
-                                <f:facet name="input"><p:inputText value="#{item.qty}"/></f:facet>
+                                <f:facet name="input"><p:inputText value="#{item.qty}" converterMessage="Quantity must contains only numbers." validatorMessage="Quantity must have a value of more than one.">
+                                         <f:validateLongRange minimum="1" />
+                                         <p:ajax update=":mainForm:msgs" />
+                                    </p:inputText>
+                                </f:facet>
                             </p:cellEditor>
                         </p:column>
                         <p:column headerText="Edit" width="10%">
