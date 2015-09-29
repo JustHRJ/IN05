@@ -195,6 +195,8 @@
                     </p:dataTable>
                 </p:tab>
                 <p:tab title="Purchase Orders">
+                     <p:commandButton value="Refresh" actionListener="#{pOManagedBean.receivedCustomerPO}" update="rcvPO" icon="" style="padding-top: 5px; padding-bottom: 5px; padding-left: 22px; padding-right: 22px" />
+                    <br /><br />
                     <p:dataTable value="#{pOManagedBean.receivedCustomerPO}" var="poItem" id="rcvPO" editable="true">
                         <p:column headerText="PO No" width="15%">
                             <p:outputLabel value="#{poItem.poId}"/>
