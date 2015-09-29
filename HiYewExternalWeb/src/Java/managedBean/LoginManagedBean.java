@@ -53,11 +53,7 @@ public class LoginManagedBean implements Serializable {
 
     }
 
-    public void checkLoginRedirect() throws IOException {
-        if (FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("username") == null) {
-            FacesContext.getCurrentInstance().getExternalContext().redirect("/HiYewExternalWeb/login.xhtml");
-        }
-    }
+  
 
     public void checkLogoutRedirect() throws IOException {
         if (FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("username") != null) {

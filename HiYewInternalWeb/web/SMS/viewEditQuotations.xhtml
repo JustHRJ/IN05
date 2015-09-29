@@ -129,8 +129,8 @@
                     <p:overlayPanel for="quoteDescBtn" showEffect="fade" hideEffect="fade" dismissable="false" showCloseIcon="true" style="width:1200px">
 
                         <p:outputPanel id="quotationDetailPanel" style="text-align:center;" >
-                            <p:commandButton value="Update Quotation Details" action="#{adminQuotationManagedBean.updateQuotationPricesAndSample()}" update=":innerForm:msgs " icon="ui-icon-check"/>
-                            <p:commandButton value="Forward to Customer" action="#{adminQuotationManagedBean.updateQuotationStatus()}" update=":innerForm:msgs rcvQuote" icon="ui-icon-check"/>
+                            <p:commandButton value="Update Quotation Details" action="#{adminQuotationManagedBean.updateQuotationPricesAndSample()}" update=":innerForm:msgs " disabled="#{loginControlBean.checkValid()}"  icon="ui-icon-check"/>
+                            <p:commandButton value="Forward to Customer" action="#{adminQuotationManagedBean.updateQuotationStatus()}" update=":innerForm:msgs rcvQuote" icon="ui-icon-check" disabled="#{loginControlBean.checkValid()}" />
 
                             <p:dataTable var="quoteDescItem" value="#{adminQuotationManagedBean.displayQuotationDescriptions}" rows="5" paginator="true">
                                 <p:column headerText="ID" width="5%">
@@ -147,13 +147,13 @@
 
                                 <p:column headerText="Quoted Price" width="12%">
                                     <h:inputText value="#{quoteDescItem.price}" style="width: 60%"
-                                                 maxlength="7" converterMessage="Quantity must be a number consisting of one or more digits.">
+                                                 maxlength="7" converterMessage="Quantity must be a number consisting of one or more digits." disabled="#{loginControlBean.checkValid()}">
                                         <f:validateLongRange minimum="1" />
                                     </h:inputText>
                                 </p:column>
                                 <p:column headerText="Req for Sample" width="12%">
 
-                                    <p:selectOneMenu value="#{quoteDescItem.requestForMetalSample}" style="width:80px">
+                                    <p:selectOneMenu value="#{quoteDescItem.requestForMetalSample}" style="width:80px" disabled="#{loginControlBean.checkValid()}" >
                                         <f:selectItem itemValue="No" itemLabel="No" />
                                         <f:selectItem itemValue="Yes" itemLabel="Yes" />
                                     </p:selectOneMenu>

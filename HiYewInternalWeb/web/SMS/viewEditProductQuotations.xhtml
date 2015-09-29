@@ -118,9 +118,9 @@
                     <p:overlayPanel for="quoteDescBtn" showEffect="fade" hideEffect="fade" dismissable="false" showCloseIcon="true" style="width:1200px">
                         <p:outputPanel id="quotationDetailPanel">
                             <br />
-                            <p:commandButton value="Update Quotation Details" action="#{adminProductsManagedBean.updateQuotationPrices()}" update=":innerForm:msgs " icon="ui-icon-check"/>
+                            <p:commandButton value="Update Quotation Details" action="#{adminProductsManagedBean.updateQuotationPrices()}" update=":innerForm:msgs " icon="ui-icon-check" disabled="#{loginControlBean.checkValid()}"/>
                             <br /><br />
-                            <p:commandButton value="Send Notification to Customer" action="#{adminProductsManagedBean.updateQuotationStatus()}" update=":innerForm:msgs rcvQuote" icon="ui-icon-check"/>
+                            <p:commandButton value="Send Notification to Customer" action="#{adminProductsManagedBean.updateQuotationStatus()}" update=":innerForm:msgs rcvQuote" icon="ui-icon-check" disabled="#{loginControlBean.checkValid()}" />
                             <br /><br />
                             <p:dataTable var="quoteDescItem" value="#{adminProductsManagedBean.displayProductQuotationDescriptionList}" rows="5" paginator="true">
                                 <p:column headerText="ID" width="3%">
