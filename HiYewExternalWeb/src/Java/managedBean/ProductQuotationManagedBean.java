@@ -59,14 +59,14 @@ public class ProductQuotationManagedBean implements Serializable {
 
         receivedProductQuotationList = new ArrayList<>(productQuotationSessionBean.receivedProductQuotationList(username));
     }
-    
+
     public void reset() {
         System.out.println("ProductQuotationManagedBean.java ProductQuotationManagedBean()");
         newProductQuotation = new ProductQuotation();
         newProductQuotationDescription = new ProductQuotationDescription();
         receivedProductQuotationList = new ArrayList<>();
         displayProductQuotationDescriptionList = new ArrayList<>();
-        
+
         count = 1;
         if (FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("username") != null) {
             username = FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("username").toString();
@@ -77,14 +77,14 @@ public class ProductQuotationManagedBean implements Serializable {
 
     public void receivedProductQuotations() {
         System.out.println("ProductQuotationManagedBean.java receivedProductQuotations() ===== " + username);
-        
+
         if (!username.equals(FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("username").toString())) {
             System.out.println("ProductQuotationManagedBean.java receivedProductQuotations() ===== call method reset()");
             reset();
         }
-        
+
         receivedProductQuotationList = new ArrayList<>(productQuotationSessionBean.receivedProductQuotationList(username));
-        
+
         FacesContext.getCurrentInstance().addMessage("qMsg", new FacesMessage(FacesMessage.SEVERITY_INFO, "Current list of quotations are up to date.", ""));
     }
 
@@ -169,9 +169,10 @@ public class ProductQuotationManagedBean implements Serializable {
     }
 
     public boolean viewVisibility(ProductQuotation productQuotation) {
-        if (productQuotation == null)
+        if (productQuotation == null) {
             return false;
-        
+        }
+
         if (productQuotation.getStatus().equals("Pending") || productQuotation.getStatus().equals("Accepted") || productQuotation.getStatus().equals("Rejected")) {
             return false;
         }

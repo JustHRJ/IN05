@@ -19,8 +19,9 @@ import javax.persistence.ManyToOne;
  */
 @Entity
 public class LeaveEntity implements Serializable {
+
     private static final long serialVersionUID = 1L;
-    
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
@@ -33,15 +34,16 @@ public class LeaveEntity implements Serializable {
     private Timestamp endDate;
     private EmployeeEntity employee = new EmployeeEntity();
     private String type;
-    
+
     @ManyToOne
-    public EmployeeEntity getEmployee(){
+    public EmployeeEntity getEmployee() {
         return employee;
     }
-    public void setEmployee(EmployeeEntity employee){
+
+    public void setEmployee(EmployeeEntity employee) {
         this.employee = employee;
     }
-    
+
     public LeaveEntity() {
 
     }

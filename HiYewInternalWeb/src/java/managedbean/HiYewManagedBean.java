@@ -29,6 +29,7 @@ import javax.faces.context.FacesContext;
 import manager.EmailManager;
 import org.primefaces.event.RowEditEvent;
 import session.stateful.HiYewSystemBeanLocal;
+import session.stateless.HiYewSystemTimer;
 
 /**
  *
@@ -39,7 +40,11 @@ import session.stateful.HiYewSystemBeanLocal;
 public class HiYewManagedBean {
 
     @EJB
+    private HiYewSystemTimer hiYewSystemTimer;
+
+    @EJB
     private HiYewSystemBeanLocal hiYewSystemBean;
+
     private boolean bonus;
     private String employeeName = "";
     private String address_postal = "";
@@ -114,6 +119,12 @@ public class HiYewManagedBean {
         Date date = new Date();
         SimpleDateFormat format = new SimpleDateFormat("MMM,yyyy");
         return format.format(date);
+    }
+
+    public void addPay() throws IOException, InterruptedException {
+        hiYewSystemTimer.runEveryMonth();
+        Thread.sleep(6000);
+        FacesContext.getCurrentInstance().getExternalContext().redirect("/HiYewInternalWeb/HRMS/createPayroll.xhtml");
     }
 
     public String formatCurrency(double amount) {
@@ -239,8 +250,8 @@ public class HiYewManagedBean {
 
     public void addNewAdmin() throws IOException {
         Calendar c = Calendar.getInstance();
-       
-        hiYewSystemBean.addNewAdmin("Justin", "G1234X", "Ghim Moh Link", 14, "admin", "admin", null, "82236015", "271022", "22", "22-214", 2400, new Timestamp(c.getTime().getTime()), "hurulez@gmail.com", "password" );
+
+        hiYewSystemBean.addNewAdmin("Justin", "G1234X", "Ghim Moh Link", 14, "admin", "admin", null, "82236015", "271022", "22", "22-214", 2400, new Timestamp(c.getTime().getTime()), "hurulez@gmail.com", "password");
         FacesContext facesCtx = FacesContext.getCurrentInstance();
         ExternalContext externalContext = facesCtx.getExternalContext();
         externalContext.redirect("/HiYewInternalWeb/login.xhtml");
@@ -397,7 +408,10 @@ public class HiYewManagedBean {
     }
 
     public void approveLeave() {
+        System.out.println(objectId1);
+        System.out.println(objectId);
         hiYewSystemBean.approveLeaveID((Long.valueOf(objectId1).longValue()), objectId);
+        System.out.println("here");
     }
 
     public void rejectLeave() {

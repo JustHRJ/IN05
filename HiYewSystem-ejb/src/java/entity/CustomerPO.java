@@ -10,20 +10,21 @@ import javax.persistence.OneToOne;
 
 @Entity
 public class CustomerPO implements Serializable {
+
     private static long serialVersionUID = 1L;
 
     @Id
     private String poId; //follows quotation no
-    
+
     private Timestamp poDate;
     private Timestamp expectedStartDate;
     private Timestamp expectedEndDate;
-    
+
     //Assumptions: Not possible for customer to self-collect
     private String mailingAddr1; //street name
     private String mailingAddr2; //unit no
-    private Double totalPrice; 
-    
+    private Double totalPrice;
+
     @OneToOne
     private Quotation quotation; //One-to-One Uni-Directional Relationship (page 201)
     @ManyToOne
@@ -189,5 +190,5 @@ public class CustomerPO implements Serializable {
     public void setCustomer(Customer customer) {
         this.customer = customer;
     }
-    
+
 }

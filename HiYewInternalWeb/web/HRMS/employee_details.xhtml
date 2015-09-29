@@ -17,7 +17,10 @@
     <h:body>
         <h:form id = "formMain">
             #{loginControlBean.checkLoginRedirect()}
-            <a href ="/HiYewInternalWeb/index.xhtml"><img src = "../image/hiyew.gif"/> </a>   <h1>Employees Details</h1>
+            <a href ="/HiYewInternalWeb/index.xhtml"><img src = "../image/hiyew.gif"/> </a>  
+            <h1>Employees Details</h1>
+            <h3>logged in as: #{loginControlBean.employeeNameLog} </h3>
+
             <p:megaMenu orientation="horizontal"  styleClass="menu">
                 <p:submenu label ="Human Resource Management System" icon ="ui-icon-check" style ="font-weight: bold">
                     <p:column>
@@ -29,9 +32,7 @@
                             <p:menuitem value ="Assign Payroll" url ="createPayroll.xhtml" disabled = "#{loginControlBean.checkValid()}"/>
                             <p:menuitem value ="Release Payroll" url ="releasePayroll.xhtml" disabled="#{loginControlBean.checkValid()}"/>
                             <p:menuitem value ="View Released Payroll" url ="viewPayroll.xhtml"/>
-
                         </p:submenu>
-
                     </p:column>
                     <p:column>
                         <p:submenu label="Training and Expiry">
@@ -45,11 +46,8 @@
                             <p:menuitem value ="Approve Leave" url ="approveLeave.xhtml" disabled="#{loginControlBean.checkValid()}"/>
                             <p:menuitem value ="Check Leave Status" url ="leaveStatus.xhtml" />
                         </p:submenu>
-
                     </p:column>
-
                 </p:submenu>
-
                 <p:submenu label="Inventory Control System" icon="ui-icon-check" style="font-weight:bold">
                     <p:column>
                         <p:submenu label="Items Management">
@@ -57,19 +55,24 @@
                             <p:menuitem value="Add New Item" url="/ICS/addNewItem.xhtml" />
                         </p:submenu>
                         <p:submenu label="Storage Management">
-                            <p:menuitem value="View Storage" url="#" />
-                            <p:menuitem value="Storage Allocation" url="#" />
-                            <p:menuitem value="Create Storage" url="#" />
+                            <p:menuitem value="View Storage" url="/ICS/viewRacks.xhtml" />
+                            <p:menuitem value="Create Storage" url="/ICS/createStorage.xhtml" />
                         </p:submenu>
                     </p:column>
                 </p:submenu>
-
+                <p:submenu label ="Sales Management System" icon ="ui-icon-check" style ="font-weight: bold">
+                    <p:column>
+                        <p:submenu label ="Quotation">
+                            <p:menuitem value ="View Customer Services RFQ" url ="/SMS/viewEditQuotations.xhtml"/>
+                            <p:menuitem value ="View Customer Products RFQ" url ="/SMS/viewEditProductQuotations.xhtml" />
+                        </p:submenu>
+                    </p:column>
+                </p:submenu>
                 <p:submenu label ="Machine Management System" icon ="ui-icon-check" style ="font-weight: bold">
                     <p:column>
                         <p:submenu label = "Machine Management" >
                             <p:menuitem value ="Add Machinery" url ="/MMS/addMachine.xhtml" />
                             <p:menuitem value ="View Machinery" url ="/MMS/viewMachine.xhtml" />
-
                         </p:submenu>
                         <p:submenu label ="Machine Maintenance">
                             <p:menuitem value ="#{hiYewManagedBean.getMAlert()}" url ="/MMS/alertMachine.xhtml" />
@@ -78,15 +81,7 @@
                         </p:submenu>
                     </p:column>
                 </p:submenu>
-                <p:submenu label ="Sales Management System" icon ="ui-icon-check" style ="font-weight: bold">
-                    <p:column>
-                        <p:submenu label ="Quotation">
-                            <p:menuitem value ="View Customer RFQ" url ="/SMS/viewEditQuotations.xhtml"/>
-                        </p:submenu>
-                    </p:column>
-                </p:submenu>
-            </p:megaMenu>
-            <br/>
+            </p:megaMenu> <br/>
 
             <p:growl id = "msgs" showDetail="false"/>
             <p:dataTable id ="data1" var="im" value="#{loginControlBean.employees}" editable = "true" paginator="true" rows="5" emptyMessage="No employees">
@@ -162,6 +157,9 @@
                         <f:facet name ="output"> <p:outputLabel value ="#{hiYewManagedBean.formatCurrency(im.employee_basic)}"/></f:facet>
                         <f:facet name ="input"><p:inputText value = "#{hiYewManagedBean.employeePay}" maxlength="5" validator ="#{registrationValidator.validatePayE}" validatorMessage="Pay should not be less than 500.00" disabled="#{loginControlBean.checkValid()}"></p:inputText></f:facet>
                     </p:cellEditor>
+                </p:column>
+                <p:column headerText="Employed Date">
+                    <p:outputLabel value ="#{hiYewManagedBean.formatDate(im.employee_employedDate)}"/>
                 </p:column>
                 <p:column style="width:32px">
                     <p:rowEditor />

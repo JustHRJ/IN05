@@ -196,7 +196,6 @@ public class registrationValidator implements Validator {
         }
 
     }
-    
 
     public void validateU(FacesContext context, UIComponent component, Object submittedAndConvertedValue) throws ValidatorException {
         String username = (String) submittedAndConvertedValue;
@@ -210,7 +209,7 @@ public class registrationValidator implements Validator {
         }
     }
 
-     public void validateMachineName(FacesContext context, UIComponent component, Object submittedAndConvertedValue) throws ValidatorException {
+    public void validateMachineName(FacesContext context, UIComponent component, Object submittedAndConvertedValue) throws ValidatorException {
         String username = (String) submittedAndConvertedValue;
 
         if (username == null || username.isEmpty()) {
@@ -222,8 +221,6 @@ public class registrationValidator implements Validator {
         }
     }
 
-    
-    
     public void validateExpiredName(FacesContext context, UIComponent component, Object submittedAndConvertedValue) throws ValidatorException {
         String name = (String) submittedAndConvertedValue;
 

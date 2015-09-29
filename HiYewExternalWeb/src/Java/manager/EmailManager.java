@@ -29,7 +29,7 @@ public class EmailManager {
     public EmailManager(String name, String newPassword, String email) {
         this.emailPassword(name, newPassword, email);
     }
-    
+
     public EmailManager(String name, String username, String password, String email) {
         this.emailSuccessfulRegistration(name, username, password, email);
     }
@@ -38,7 +38,7 @@ public class EmailManager {
     public static void main(String args[]) throws Exception {
         // EmailManager emailManager = new EmailManager("your_name", "your_new_password");
     }
-    
+
     public void emailSuccessfulRegistration(String name, String username, String password, String email) {
         try {
             Properties props = new Properties();

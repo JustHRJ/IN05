@@ -32,7 +32,7 @@ public class CustomerPOManagedBean implements Serializable {
     private CustomerSessionBeanLocal customerSessionBean;
 
     private CustomerPO newPurOrder;
-    private Quotation quotation;
+    //private Quotation quotation;
 
     private String username = "";
 
@@ -88,6 +88,7 @@ public class CustomerPOManagedBean implements Serializable {
         newPurOrder.setExpectedEndDate(expectedEndDate);
         newPurOrder.setTotalPrice(total);
         newPurOrder.setCustomer(q.getCustomer());
+        newPurOrder.setQuotation(q);
         customerPOSessionBean.createPO(newPurOrder);//persist
         //add into customer purchase order collection in persistence context
         customerSessionBean.addPurchaseOrder(q.getCustomer().getUserName(), newPurOrder);
@@ -153,20 +154,6 @@ public class CustomerPOManagedBean implements Serializable {
      */
     public void setNewPurOrder(CustomerPO newPurOrder) {
         this.newPurOrder = newPurOrder;
-    }
-
-    /**
-     * @return the quotation
-     */
-    public Quotation getQuotation() {
-        return quotation;
-    }
-
-    /**
-     * @param quotation the quotation to set
-     */
-    public void setQuotation(Quotation quotation) {
-        this.quotation = quotation;
     }
 
     /**
@@ -322,7 +309,6 @@ public class CustomerPOManagedBean implements Serializable {
     public void setTotal(Double total) {
         this.total = total;
     }
-
 
     /**
      * @return the username

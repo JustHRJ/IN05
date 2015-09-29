@@ -10,6 +10,7 @@ package util.enumeration;
  * @author User
  */
 public enum CustomerStatusEnum {
+
     ACTIVE,
     INACTIVE,
     DELETED

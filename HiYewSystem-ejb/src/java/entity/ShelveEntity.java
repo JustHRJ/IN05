@@ -6,9 +6,8 @@
 package entity;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Collection;
-import javax.persistence.CascadeType;
+import java.util.HashSet;
+import java.util.Set;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
@@ -20,20 +19,21 @@ import javax.persistence.OneToMany;
  */
 @Entity
 public class ShelveEntity implements Serializable {
+
     private static final long serialVersionUID = 1L;
     @Id
     private String shelveID;
-    
+
     private double shelveLength;
     private double width;
     private double height;
     private String status;
-    
+
     @ManyToOne
     private RackEntity rack = new RackEntity();
-    
-    @OneToMany(cascade={CascadeType.PERSIST},mappedBy="shelve")
-    private Collection<BinEntity> bins = new ArrayList<BinEntity>();
+
+    @OneToMany(mappedBy = "shelve")
+    private Set<StorageInfoEntity> storageInfos = new HashSet<StorageInfoEntity>();
 
     public ShelveEntity() {
     }
@@ -54,10 +54,6 @@ public class ShelveEntity implements Serializable {
         this.status = status;
         this.rack = rack;
     }
-    
-    
-
-  
 
     @Override
     public int hashCode() {
@@ -169,21 +165,17 @@ public class ShelveEntity implements Serializable {
     }
 
     /**
-     * @return the bins
+     * @return the storageInfos
      */
-    public Collection<BinEntity> getBins() {
-        return bins;
+    public Set<StorageInfoEntity> getStorageInfos() {
+        return storageInfos;
     }
 
     /**
-     * @param bins the bins to set
+     * @param storageInfos the storageInfos to set
      */
-    public void setBins(Collection<BinEntity> bins) {
-        this.bins = bins;
+    public void setStorageInfos(Set<StorageInfoEntity> storageInfos) {
+        this.storageInfos = storageInfos;
     }
-    
-     public void addBinToShelve(BinEntity bin){
-        bins.add(bin);
-    }
-    
+
 }

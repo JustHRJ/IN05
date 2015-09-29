@@ -45,6 +45,7 @@ public class LoginManagedBean implements Serializable {
         users.add("Supplier");
     }
 
+
     public String login() {
         String path = "";
         if (this.user.equals("Customer")) {

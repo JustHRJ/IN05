@@ -34,7 +34,6 @@ public class ViewInventoryManagedBean implements Serializable {
     /**
      * Creates a new instance of ViewInventoryManagedBean
      */
-
     public ViewInventoryManagedBean() {
         itemList = new ArrayList<>();
         selectedItem = new ItemEntity();
@@ -90,10 +89,9 @@ public class ViewInventoryManagedBean implements Serializable {
     public String passSelectedItemToNext() {
         System.out.println(this.selectedItem.getItemCode());
         FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("SelectedItem", this.selectedItem);
-      //  FacesContext.getCurrentInstance().getExternalContext().getFlash().put("SelectedItem", this.selectedItem);
+        //  FacesContext.getCurrentInstance().getExternalContext().getFlash().put("SelectedItem", this.selectedItem);
         System.out.println("here2");
         return "itemDetails?faces-redirect=true";
     }
-    
-    
+
 }

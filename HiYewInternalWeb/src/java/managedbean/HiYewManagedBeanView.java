@@ -68,14 +68,14 @@ public class HiYewManagedBeanView implements Serializable {
     public void deleteTrainingEmployee() {
         System.out.println(selectedTraining.getTrainingName());
         System.out.println(employeeName);
-  
+
 // cannot get employee details
         boolean check = hiYewSystemBean.deleteTrainingEmployee(selectedTraining, employeeName);
-        if(check){
-              FacesMessage msg = new FacesMessage("Deleted");
+        if (check) {
+            FacesMessage msg = new FacesMessage("Deleted");
             FacesContext.getCurrentInstance().addMessage(null, msg);
         }
-    
+
     }
 
     /**
@@ -91,9 +91,9 @@ public class HiYewManagedBeanView implements Serializable {
 
     public List<String> getEmployeeTrainingName() {
         return hiYewSystemBean.employeeTrainingName(selectedTraining);
-     
+
     }
-    
+
     /**
      * @return the employeeName
      */

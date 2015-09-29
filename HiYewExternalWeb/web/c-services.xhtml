@@ -15,7 +15,7 @@
             <h:outputText value="#{popupMessage}" style="font-family: 'Open Sans'; font-weight: bold; color: red;" />
         </div>
         <!-- End page header -->
-        
+
         <h:form id="mainForm">
             <p:growl id="msgs" showDetail="false" />
             <!--<f:ajax render=":content">-->
@@ -91,7 +91,7 @@
                         </p:column>
                     </p:dataTable>
                     <br />
-                    <p:commandButton value="Submit Request" actionListener="#{quotationManagedBean.createQuotation}" update="rfqMsg mydata weldPanel" icon="" style="padding-top: 5px; padding-bottom: 5px; padding-left: 22px; padding-right: 22px">
+                    <p:commandButton value="Submit Request" actionListener="#{quotationManagedBean.createQuotation}" update="rfqMsg mydata weldPanel rcvQuote" icon="" style="padding-top: 5px; padding-bottom: 5px; padding-left: 22px; padding-right: 22px">
                     </p:commandButton>
                 </p:tab>
                 <p:tab title="View Quotations">
@@ -140,7 +140,7 @@
                         <p:column headerText="" width="11%" >
                             <p:panel id="approvalPanel"  visible="#{quotationManagedBean.setVisibility(item)}" style="border:0px;background: none;">
                                 <p:commandLink value="Accept" style="color: green; font-weight: bold; font-family: 'Open Sans'; font-size: 14px;" action="#{pOManagedBean.generatePurchaseOrder(item)}" update="myDialogID" /> &nbsp;|&nbsp;
-                                <p:commandLink value="Reject" style="color: red; font-weight: bold; font-family: 'Open Sans'; font-size: 14px;" action="#{quotationManagedBean.setRejectionStatus(item)}"/>
+                                <p:commandLink value="Reject" style="color: red; font-weight: bold; font-family: 'Open Sans'; font-size: 14px;" action="#{quotationManagedBean.setRejectionStatus(item)}" update="rcvQuote"/>
                             </p:panel>
                             <p:dialog styleClass="rfq" id="myDialogID" widgetVar="myDialogVar" modal="true" resizable="false" header="Purchase Order" showEffect="fade" width="500px">
                                 <p:panelGrid id="display" columns="2" columnClasses="label,value">
@@ -190,24 +190,24 @@
                     </p:dataTable>
                 </p:tab>
                 <p:tab title="Purchase Orders">
-                    <p:dataTable value="" var="poItem" id="rcvPO" editable="true">
+                    <p:dataTable value="#{pOManagedBean.receivedCustomerPO}" var="poItem" id="rcvPO" editable="true">
                         <p:column headerText="PO No" width="15%">
-                            <p:outputLabel value=""/>
+                            <p:outputLabel value="#{poItem.poId}"/>
                         </p:column>
                         <p:column headerText="PO Date (dd/mm/yyyy)" width="11%">
-                            <h:outputText value=""/>
+                            <h:outputText value="#{pOManagedBean.formatDate(poItem.poDate)}"/>
                         </p:column>
                         <p:column headerText="Expected Start (dd/mm/yyyy)" width="11%">
-                            <h:outputText value=""/>
+                            <h:outputText value="#{pOManagedBean.formatDate(poItem.expectedStartDate)}"/>
                         </p:column>
                         <p:column headerText="Expected End (dd/mm/yyyy)" width="11%">
-                            <h:outputText value=""/>
+                            <h:outputText value="#{pOManagedBean.formatDate(poItem.expectedEndDate)}"/>
                         </p:column>
                         <p:column headerText="Total Price" width="8%">
-                            <h:outputText value=""/>
+                            <h:outputText value="#{poItem.totalPrice}"/>
                         </p:column>
                         <p:column headerText="Mailing Address" width="17%">
-                            <h:outputText value=""/>
+                            <h:outputText value="#{poItem.mailingAddr1} #{poItem.mailingAddr2}"/>
                         </p:column>
                     </p:dataTable>
                 </p:tab>

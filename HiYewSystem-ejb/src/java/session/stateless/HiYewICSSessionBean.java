@@ -5,10 +5,10 @@
  */
 package session.stateless;
 
-import entity.BinEntity;
 import entity.ItemEntity;
 import entity.RackEntity;
 import entity.ShelveEntity;
+import entity.StorageInfoEntity;
 import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.Stateless;
@@ -35,6 +35,12 @@ public class HiYewICSSessionBean implements HiYewICSSessionBeanLocal {
     @Override
     public List<ItemEntity> getAllItems() {
         Query q = em.createQuery("SELECT i FROM ItemEntity i");
+        return q.getResultList();
+    }
+
+    @Override
+    public List<ItemEntity> getAllLowStockItems() {
+        Query q = em.createQuery("SELECT i FROM ItemEntity i WHERE i.quantity<=i.reorderPoint");
         return q.getResultList();
     }
 
@@ -82,47 +88,37 @@ public class HiYewICSSessionBean implements HiYewICSSessionBeanLocal {
         Query query = em.createQuery("DELETE FROM ItemEntity i WHERE i.itemCode = :itemCode");
         query.setParameter("itemCode", item.getItemCode()).executeUpdate();
     }
+
     @Override
-    public void updateCost(ItemEntity item, double newCost){
+    public void updateCost(ItemEntity item, double newCost) {
         ItemEntity i = em.find(ItemEntity.class, item.getItemCode());
         i.setCost(newCost);
         System.out.println("StatelessBean: updateCost");
     }
-    
+
     @Override
-    public void createRack(RackEntity rack){
+    public void createRack(RackEntity rack) {
         em.persist(rack);
     }
-    
+
     @Override
-    public void createShelve(ShelveEntity shelve){
+    public void createShelve(ShelveEntity shelve) {
         em.persist(shelve);
     }
-    
+
     @Override
-    public void createBin(ShelveEntity shelve){
+    public void createBin(ShelveEntity shelve) {
         em.persist(shelve);
-        
+
     }
-    
+
     @Override
-    public void addShelveToRack(RackEntity rack, ShelveEntity shelve){
+    public void addShelveToRack(RackEntity rack, ShelveEntity shelve) {
         rack.addShelveToRack(shelve);
     }
-    
+
     @Override
-    public void addBinToShelve(ShelveEntity shelve, BinEntity bin){
-        shelve.addBinToShelve(bin);
-        
-    }
-    
-//    @Override
-//    public void addItemToBin(ItemEntity item, BinEntity bin){
-//        bin.addItemToBin(item);
-//    }
-    
-    @Override
-   public RackEntity getExistingRack(String rackID) {
+    public RackEntity getExistingRack(String rackID) {
         try {
             Query q = em.createQuery("Select r FROM RackEntity r WHERE r.rackID=:rackID");
             q.setParameter("rackID", rackID);
@@ -131,9 +127,9 @@ public class HiYewICSSessionBean implements HiYewICSSessionBeanLocal {
             return null;
         }
     }
-   
+
     @Override
-   public ShelveEntity getExistingShelve(String shelveID) {
+    public ShelveEntity getExistingShelve(String shelveID) {
         try {
             Query q = em.createQuery("Select s FROM ShelveEntity s WHERE s.shelveID=:shelveID");
             q.setParameter("shelveID", shelveID);
@@ -142,106 +138,183 @@ public class HiYewICSSessionBean implements HiYewICSSessionBeanLocal {
             return null;
         }
     }
-   
+
     @Override
-   public BinEntity getExistingBin(String binID) {
-        try {
-            Query q = em.createQuery("Select b FROM BinEntity b WHERE b.binID=:binID");
-            q.setParameter("shelveID", binID);
-            return (BinEntity) q.getSingleResult();
-        } catch (NoResultException e) {
-            return null;
+    public ArrayList<ShelveEntity> getShelvesInRack(String rackID) {
+        ArrayList<ShelveEntity> shelves = new ArrayList<ShelveEntity>();
+        if (getExistingRack(rackID) != null) {
+            RackEntity selectedRack = getExistingRack(rackID);
+            shelves.addAll(selectedRack.getShelves());
+            return shelves;
+        } else {
+            return shelves;
         }
     }
-   
+
     @Override
-  public ArrayList<ShelveEntity> getShelvesInRack(String rackID){
-      ArrayList<ShelveEntity> shelves = new ArrayList<ShelveEntity>();
-      if(getExistingRack(rackID)!=null){
-          RackEntity selectedRack = getExistingRack(rackID);
-          shelves.addAll(selectedRack.getShelves());
-          return shelves;
-      }else{
-          return shelves;
-      }
-  }
-  
-   @Override
-  public ArrayList<BinEntity> getBinsInShelve(String shelveID){
-      ArrayList<BinEntity> bins = new ArrayList<BinEntity>();
-      if(getExistingShelve(shelveID)!=null){
-          ShelveEntity selectedShelve = getExistingShelve(shelveID);
-          bins.addAll(selectedShelve.getBins());
-          return bins;
-      }else{
-          return bins;
-      }
-  }
-  
-//  @Override
-//  public ArrayList<ItemEntity> getItemInBins(String binID){
-//      ArrayList<ItemEntity> items = new ArrayList<ItemEntity>();
-//      if(getExistingBin(binID)!=null){
-//          BinEntity selectedBin = getExistingBin(binID);
-//          items.addAll(selectedBin.getItems());
-//          return items;
-//      }else{
-//          return items;
-//      }
-//  }
-  
+    public String getNextIDForRack() {
+        Query q = em.createQuery("SELECT r FROM RackEntity r");
+        if (q.getResultList().isEmpty()) {
+            return "A";
+        } else {
+            System.out.println("Got Existing Racks in DB");
+            Query q2 = em.createQuery("SELECT max(r.rackID) FROM RackEntity r");
+            String biggestCharID = q2.getSingleResult().toString();
+            char charBiggestChar = biggestCharID.charAt(0);
+            System.out.println("Current biggest char = " + charBiggestChar);
+            charBiggestChar++;
+            System.out.println("Next bigger char = " + charBiggestChar);
+            return charBiggestChar + "";
+        }
+    }
+
     @Override
-  public String getNextIDForRack(){
-       Query q = em.createQuery("SELECT r FROM RackEntity r");
-       if(q.getResultList().isEmpty()){
-           return "A";
-       }else{
-           System.out.println("Got Existing Racks in DB");
-           Query q2 = em.createQuery("SELECT max(r.rackID) FROM RackEntity r");
-           String biggestCharID = q2.getSingleResult().toString();
-           char charBiggestChar = biggestCharID.charAt(0);
-           System.out.println("Current biggest char = " + charBiggestChar);         
-           charBiggestChar++;
-           System.out.println("Next bigger char = " + charBiggestChar);
-           return charBiggestChar + "";
-       }
-  }
-  
-    @Override
-  public String getNextIDForShelve(String rackID){
-      System.out.println("Inside ejb, getNextIDForShelve, rackID: "+ rackID);
-       Query q = em.createQuery("SELECT s FROM ShelveEntity s WHERE s.shelveID LIKE :code");
-       q.setParameter("code", rackID + "%");
-       if(q.getResultList().isEmpty()){
-           System.out.println("Inside ejb, getNextIDForShelve, No Shelve For This Rack Yet");
-           return rackID+"1";
-       }else{
-           System.out.println("Inside ejb, getNextIDForShelve, Got Shelve For This Rack Liao");
+    public String getNextIDForShelve(String rackID) {
+        System.out.println("Inside ejb, getNextIDForShelve, rackID: " + rackID);
+        Query q = em.createQuery("SELECT s FROM ShelveEntity s WHERE s.shelveID LIKE :code");
+        q.setParameter("code", rackID + "%");
+        if (q.getResultList().isEmpty()) {
+            System.out.println("Inside ejb, getNextIDForShelve, No Shelve For This Rack Yet");
+            return rackID + "1";
+        } else {
+            System.out.println("Inside ejb, getNextIDForShelve, Got Shelve For This Rack Liao");
             Query q2 = em.createQuery("SELECT s.shelveID FROM ShelveEntity s WHERE s.shelveID LIKE :code");
             q2.setParameter("code", rackID + "%");
-           ArrayList<String> shelveIDList = new ArrayList<>();
-           shelveIDList.addAll(q2.getResultList());
-           int maxInt = 0;
-           for(int i = 0;i<shelveIDList.size();i++){
-               System.out.println("shelve of this rack: " + shelveIDList.get(i));
-               String shelveIdInList = shelveIDList.get(i);
-               int intID = Integer.parseInt(shelveIdInList.substring(1, shelveIdInList.length()));
-               if (intID>maxInt){
-                   maxInt = intID;
-               }
-           }
-           
-           
-           maxInt++;
-           int nextInt = maxInt;
-           System.out.println("Next biggest int: "+nextInt);
-           System.out.println("Next ID: "+rackID +""+ nextInt);
-           return rackID +""+ nextInt ;
-       }
-  }
+            ArrayList<String> shelveIDList = new ArrayList<>();
+            shelveIDList.addAll(q2.getResultList());
+            int maxInt = 0;
+            for (int i = 0; i < shelveIDList.size(); i++) {
+                System.out.println("shelve of this rack: " + shelveIDList.get(i));
+                String shelveIdInList = shelveIDList.get(i);
+                int intID = Integer.parseInt(shelveIdInList.substring(1, shelveIdInList.length()));
+                if (intID > maxInt) {
+                    maxInt = intID;
+                }
+            }
 
-//  public BinEntity getBinOfItem(ItemEntity item){
-//      
-//  }
-    
+            maxInt++;
+            int nextInt = maxInt;
+            System.out.println("Next biggest int: " + nextInt);
+            System.out.println("Next ID: " + rackID + "" + nextInt);
+            return rackID + "" + nextInt;
+        }
+    }
+
+    @Override
+    public List<RackEntity> getAllRacks() {
+        Query q = em.createQuery("SELECT r FROM RackEntity r");
+        return q.getResultList();
+    }
+
+    @Override
+    public void addStorageInfo(ItemEntity item, ShelveEntity shelve, int storedQty) {
+        if (checkIfItemInShelve(item, shelve)) {
+            System.out.println(".................sessionBean:addStorageInfo:1");
+            Query q = em.createQuery("SELECT si FROM StorageInfoEntity si WHERE si.item=:item AND si.shelve=:shelve");
+            q.setParameter("item", item);
+            q.setParameter("shelve", shelve);
+            StorageInfoEntity storageInfo = (StorageInfoEntity) q.getSingleResult();
+            storageInfo.setStoredQty(storageInfo.getStoredQty() + storedQty);
+            System.out.println("StatelessBean: addStorageInfo");
+        } else {
+            System.out.println(".................sessionBean:addStorageInfo:2");
+            StorageInfoEntity storageInfo = new StorageInfoEntity(item, shelve, storedQty);
+            em.persist(storageInfo);
+        }
+    }
+
+    public boolean checkIfItemInShelve(ItemEntity item, ShelveEntity shelve) {
+
+        try {
+            System.out.println(".................sessionBean:checkIfItemInShelve:1");
+            Query q = em.createQuery("SELECT si FROM StorageInfoEntity si WHERE si.item=:item AND si.shelve=:shelve");
+            q.setParameter("item", item);
+            q.setParameter("shelve", shelve);
+            if (q.getSingleResult() != null) {
+                System.out.println(".................sessionBean:checkIfItemInShelve:1.1");
+                return true;
+            } else {
+                System.out.println(".................sessionBean:checkIfItemInShelve:1.2");
+                return false;
+            }
+
+        } catch (NoResultException e) {
+            System.out.println(".................sessionBean:checkIfItemInShelve:2");
+            return false;
+        }
+
+    }
+
+    @Override
+    public Long getUnallocatedQty(ItemEntity item) {
+        Long qty = 0L;
+        Long sum = 0L;
+        try {
+            System.out.println(".................sessionBean:getUnallocatedQty:1");
+            Query q = em.createQuery("SELECT SUM(si.storedQty) FROM StorageInfoEntity si WHERE si.item=:item");
+            q.setParameter("item", item);
+            if (q.getSingleResult() != null) {
+                sum = (Long) q.getSingleResult();
+                System.out.println(".................sessionBean:getUnallocatedQty:allocated= " + sum);
+                System.out.println(".................sessionBean:getUnallocatedQty:totalQty= " + item.getQuantity());
+                return item.getQuantity() - sum;
+            } else {
+                return new Long(item.getQuantity());
+            }
+
+        } catch (NoResultException e) {
+            System.out.println(".................sessionBean:getUnallocatedQty:2 " + new Long(item.getQuantity()));
+            return new Long(item.getQuantity());
+        }
+    }
+
+    @Override
+    public List<StorageInfoEntity> getAllStorageInfoOfShelve(ShelveEntity shelve) {
+        Query q = em.createQuery("SELECT si FROM StorageInfoEntity si WHERE si.shelve = :shelve");
+        q.setParameter("shelve", shelve);
+        return q.getResultList();
+    }
+
+    @Override
+    public List<StorageInfoEntity> getAllStorageInfoOfItem(ItemEntity item) {
+        Query q = em.createQuery("SELECT si FROM StorageInfoEntity si WHERE si.item = :item");
+        q.setParameter("item", item);
+        return q.getResultList();
+    }
+
+    @Override
+    public StorageInfoEntity getStorageInfo(ItemEntity item, ShelveEntity shelve) {
+        Query q = em.createQuery("SELECT si FROM StorageInfoEntity si WHERE si.item = :item AND si.shelve = :shelve");
+        q.setParameter("item", item);
+        q.setParameter("shelve", shelve);
+        return (StorageInfoEntity) q.getSingleResult();
+    }
+
+    @Override
+    public void reduceStorageQty(ItemEntity item, ShelveEntity shelve, int reduceAmt) {
+
+        StorageInfoEntity si = getStorageInfo(item, shelve);
+        if (reduceAmt < si.getStoredQty()) {
+            si.setStoredQty(si.getStoredQty() - reduceAmt);
+        } else if (reduceAmt == si.getStoredQty()) {
+            deleteStorageInfo(item, shelve);
+        }
+        System.out.println("StatelessBean: reduceStorageQty");
+    }
+
+    @Override
+    public void deleteStorageInfo(ItemEntity item, ShelveEntity shelve) {
+        System.out.println("Deleting StorageInfo: " + item.getItemCode() + " " + shelve.getShelveID());
+        Query query = em.createQuery("DELETE FROM StorageInfoEntity si WHERE si.item = :item AND si.shelve = :shelve");
+        query.setParameter("item", item);
+        query.setParameter("shelve", shelve);
+        query.executeUpdate();
+    }
+
+    @Override
+    public void updateRackStatus(RackEntity rack, String status) {
+        RackEntity r = em.find(RackEntity.class, rack.getRackID());
+        r.setStatus(status);
+    }
+
 }

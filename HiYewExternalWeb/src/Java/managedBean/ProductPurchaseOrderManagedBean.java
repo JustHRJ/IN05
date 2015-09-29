@@ -76,7 +76,7 @@ public class ProductPurchaseOrderManagedBean implements Serializable {
 
         FacesContext.getCurrentInstance().addMessage("poMsg", new FacesMessage(FacesMessage.SEVERITY_INFO, "Current list of purchase order(s) are up to date.", ""));
     }
-    
+
     public void retrieveProductQuotationDescriptionList(String purchaseOrderNo) {
         System.out.println("ProductPurchaseOrderManagedBean.java retrieveProductQuotationDescriptionList() purchaseOrderNo ===== " + purchaseOrderNo);
 
@@ -311,7 +311,8 @@ public class ProductPurchaseOrderManagedBean implements Serializable {
     }
 
     /**
-     * @param displayProductQuotationDescriptionList the displayProductQuotationDescriptionList to set
+     * @param displayProductQuotationDescriptionList the
+     * displayProductQuotationDescriptionList to set
      */
     public void setDisplayProductQuotationDescriptionList(ArrayList<ProductQuotationDescription> displayProductQuotationDescriptionList) {
         this.displayProductQuotationDescriptionList = displayProductQuotationDescriptionList;

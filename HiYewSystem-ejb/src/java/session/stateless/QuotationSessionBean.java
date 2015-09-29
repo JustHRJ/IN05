@@ -68,7 +68,7 @@ public class QuotationSessionBean implements QuotationSessionBeanLocal {
     public List<Quotation> receivedQuotations(String username) {
 
         System.out.println("QuotationSessionBean.java receivedQuotations(String username) username ===== " + username);
-        
+
         Query query = em.createQuery("Select q FROM Quotation AS q where q.date >= :thirtyDaysAgo AND q.customer.userName=:username ");
 
         Date now = addDays(new Date(), -30);
