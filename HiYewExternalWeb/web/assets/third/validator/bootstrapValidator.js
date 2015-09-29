@@ -8,9 +8,9 @@
  * @license     MIT
  */
 
-(function($) {
-    var BootstrapValidator = function(form, options) {
-        this.$form   = $(form);
+(function ($) {
+    var BootstrapValidator = function (form, options) {
+        this.$form = $(form);
         this.options = $.extend({}, BootstrapValidator.DEFAULT_OPTIONS, options);
 
         if ('disabled' == this.options.live) {
@@ -18,10 +18,10 @@
             this.options.submitButtons = null;
         }
 
-        this.invalidFields       = {};
-        this.xhrRequests         = {};
-        this.numPendingRequests  = null;
-        this.formSubmited        = false;
+        this.invalidFields = {};
+        this.xhrRequests = {};
+        this.numPendingRequests = null;
+        this.formSubmited = false;
         this.submitHandlerCalled = false;
 
         this._init();
@@ -31,14 +31,11 @@
     BootstrapValidator.DEFAULT_OPTIONS = {
         // The form CSS class
         elementClass: 'bootstrap-validator-form',
-
         // Default invalid message
         message: 'This value is not valid',
-
         // The submit buttons selector
         // These buttons will be disabled when the form input are invalid
         submitButtons: 'button[type="submit"]',
-
         // The custom submit handler
         // It will prevent the form from the default submitting
         //
@@ -47,70 +44,67 @@
         //      - form is the jQuery object present the current form
         //  }
         submitHandler: null,
-
         // Live validating. Can be one of 3 values:
         // - enabled: The plugin validates fields as soon as they are changed
         // - disabled: Disable the live validating. The error messages are only shown after the form is submitted
         // - submitted: The live validating is enabled after the form is submitted
         live: 'enabled',
-
         // Map the field name with validator rules
         fields: null
     };
 
     BootstrapValidator.prototype = {
         constructor: BootstrapValidator,
-
         /**
          * Init form
          */
-        _init: function() {
+        _init: function () {
             if (this.options.fields == null) {
                 return;
             }
 
             var that = this;
             this.$form
-                // Disable client side validation in HTML 5
-                .attr('novalidate', 'novalidate')
-                .addClass(this.options.elementClass)
-                .on('submit', function(e) {
-                    that.formSubmited = true;
-                    if (that.options.fields) {
-                        for (var field in that.options.fields) {
-                            if (that.numPendingRequests > 0 || that.numPendingRequests == null) {
-                                // Check if the field is valid
-                                var $field = that.getFieldElement(field);
-                                if ($field && $field.data('bootstrapValidator.isValid') !== true) {
-                                    that.validateField(field);
+                    // Disable client side validation in HTML 5
+                    .attr('novalidate', 'novalidate')
+                    .addClass(this.options.elementClass)
+                    .on('submit', function (e) {
+                        that.formSubmited = true;
+                        if (that.options.fields) {
+                            for (var field in that.options.fields) {
+                                if (that.numPendingRequests > 0 || that.numPendingRequests == null) {
+                                    // Check if the field is valid
+                                    var $field = that.getFieldElement(field);
+                                    if ($field && $field.data('bootstrapValidator.isValid') !== true) {
+                                        that.validateField(field);
+                                    }
+                                }
+                            }
+                            if (!that.isValid()) {
+                                that.$form.find(that.options.submitButtons).attr('disabled', 'disabled');
+                                if ('submitted' == that.options.live) {
+                                    that.options.live = 'enabled';
+                                    that._setLiveValidating();
+                                }
+
+                                // Focus to the first invalid field
+                                for (var i in that.invalidFields) {
+                                    that.getFieldElement(i).focus();
+                                    break;
+                                }
+
+                                e.preventDefault();
+                            } else {
+                                if (!that.submitHandlerCalled && that.options.submitHandler && 'function' == typeof that.options.submitHandler) {
+                                    // Avoid calling submitHandler recursively
+                                    // in the case user call form.submit() right inside the submitHandler()
+                                    that.submitHandlerCalled = true;
+                                    that.options.submitHandler.call(that, that, that.$form);
+                                    return false;
                                 }
                             }
                         }
-                        if (!that.isValid()) {
-                            that.$form.find(that.options.submitButtons).attr('disabled', 'disabled');
-                            if ('submitted' == that.options.live) {
-                                that.options.live = 'enabled';
-                                that._setLiveValidating();
-                            }
-
-                            // Focus to the first invalid field
-                            for (var i in that.invalidFields) {
-                                that.getFieldElement(i).focus();
-                                break;
-                            }
-
-                            e.preventDefault();
-                        } else {
-                            if (!that.submitHandlerCalled && that.options.submitHandler && 'function' == typeof that.options.submitHandler) {
-                                // Avoid calling submitHandler recursively
-                                // in the case user call form.submit() right inside the submitHandler()
-                                that.submitHandlerCalled = true;
-                                that.options.submitHandler.call(that, that, that.$form);
-                                return false;
-                            }
-                        }
-                    }
-                });
+                    });
 
             for (var field in this.options.fields) {
                 this._initField(field);
@@ -118,23 +112,22 @@
 
             this._setLiveValidating();
         },
-
         /**
          * Enable live validating
          */
-        _setLiveValidating: function() {
+        _setLiveValidating: function () {
             if ('enabled' == this.options.live) {
                 var that = this;
                 // Since this should be called once, I have to disable the live validating mode
                 this.options.live = 'disabled';
 
                 for (var field in this.options.fields) {
-                    (function(field) {
+                    (function (field) {
                         var $field = that.getFieldElement(field);
                         if ($field) {
-                            var type  = $field.attr('type'),
-                                event = ('checkbox' == type || 'radio' == type || 'SELECT' == $field.get(0).tagName) ? 'change' : 'keyup';
-                            $field.on(event, function() {
+                            var type = $field.attr('type'),
+                                    event = ('checkbox' == type || 'radio' == type || 'SELECT' == $field.get(0).tagName) ? 'change' : 'keyup';
+                            $field.on(event, function () {
                                 that.formSubmited = false;
                                 that.validateField(field);
                             });
@@ -143,13 +136,12 @@
                 }
             }
         },
-
         /**
          * Init field
          *
          * @param {String} field The field name
          */
-        _initField: function(field) {
+        _initField: function (field) {
             if (this.options.fields[field] == null || this.options.fields[field].validators == null) {
                 return;
             }
@@ -160,8 +152,8 @@
             }
 
             // Create a help block element for showing the error
-            var $parent   = $field.parents('.form-group'),
-                helpBlock = $parent.find('.help-block');
+            var $parent = $field.parents('.form-group'),
+                    helpBlock = $parent.find('.help-block');
 
             if (helpBlock.length == 0) {
                 var $small = $('<small/>').addClass('help-block').css('display', 'none').appendTo($parent);
@@ -177,7 +169,7 @@
                         for (var i = 0; i < cssClasses.length; i++) {
                             if (/^col-(xs|sm|md|lg)-\d+$/.test(cssClasses[i])) {
                                 offset = cssClasses[i].substr(7);
-                                size   = cssClasses[i].substr(4, 2);
+                                size = cssClasses[i].substr(4, 2);
                                 break;
                             }
                         }
@@ -187,44 +179,42 @@
                     for (var i = 0; i < cssClasses.length; i++) {
                         if (/^col-(xs|sm|md|lg)-offset-\d+$/.test(cssClasses[i])) {
                             offset = cssClasses[i].substr(14);
-                            size   = cssClasses[i].substr(4, 2);
+                            size = cssClasses[i].substr(4, 2);
                             break;
                         }
                     }
                 }
                 if (size && offset) {
                     $small.addClass(['col-', size, '-offset-', offset].join(''))
-                          .addClass(['col-', size, '-', 12 - offset].join(''));
+                            .addClass(['col-', size, '-', 12 - offset].join(''));
                 }
             } else {
                 $field.data('bootstrapValidator.error', helpBlock.eq(0));
             }
         },
-
         /**
          * Get field element
          *
          * @param {String} field The field name
          * @returns {jQuery}
          */
-        getFieldElement: function(field) {
+        getFieldElement: function (field) {
             var fields = this.$form.find('[name="' + field + '"]');
             return (fields.length == 0) ? null : $(fields[0]);
         },
-
         /**
          * Validate given field
          *
          * @param {String} field The field name
          */
-        validateField: function(field) {
+        validateField: function (field) {
             var $field = this.getFieldElement(field);
             if (null == $field) {
                 // Return if cannot find the field with given name
                 return;
             }
-            var that       = this,
-                validators = that.options.fields[field].validators;
+            var that = this,
+                    validators = that.options.fields[field].validators;
             for (var validatorName in validators) {
                 if (!$.fn.bootstrapValidator.validators[validatorName]) {
                     continue;
@@ -238,18 +228,17 @@
                 }
             }
         },
-
         /**
          * Show field error
          *
          * @param {jQuery} $field The field element
          * @param {String} validatorName
          */
-        showError: function($field, validatorName) {
-            var field     = $field.attr('name'),
-                validator = this.options.fields[field].validators[validatorName],
-                message   = validator.message || this.options.message,
-                $parent   = $field.parents('.form-group');
+        showError: function ($field, validatorName) {
+            var field = $field.attr('name'),
+                    validator = this.options.fields[field].validators[validatorName],
+                    message = validator.message || this.options.message,
+                    $parent = $field.parents('.form-group');
 
             this.invalidFields[field] = true;
 
@@ -260,19 +249,17 @@
 
             this.$form.find(this.options.submitButtons).attr('disabled', 'disabled');
         },
-
         /**
          * Remove error from given field
          *
          * @param {jQuery} $field The field element
          */
-        removeError: function($field) {
+        removeError: function ($field) {
             delete this.invalidFields[$field.attr('name')];
             $field.parents('.form-group').removeClass('has-error').addClass('has-success');
             $field.data('bootstrapValidator.error').hide();
             this.$form.find(this.options.submitButtons).removeAttr('disabled');
         },
-
         /**
          * Start remote checking
          *
@@ -280,13 +267,13 @@
          * @param {String} validatorName
          * @param {XMLHttpRequest} xhr
          */
-        startRequest: function($field, validatorName, xhr) {
+        startRequest: function ($field, validatorName, xhr) {
             var field = $field.attr('name');
 
             $field.data('bootstrapValidator.isValid', false);
             this.$form.find(this.options.submitButtons).attr('disabled', 'disabled');
 
-            if(this.numPendingRequests == null){
+            if (this.numPendingRequests == null) {
                 this.numPendingRequests = 0;
             }
             this.numPendingRequests++;
@@ -301,7 +288,6 @@
             }
             this.xhrRequests[field][validatorName] = xhr;
         },
-
         /**
          * Complete remote checking
          *
@@ -309,7 +295,7 @@
          * @param {String} validatorName
          * @param {Boolean} isValid
          */
-        completeRequest: function($field, validatorName, isValid) {
+        completeRequest: function ($field, validatorName, isValid) {
             if (isValid === false) {
                 this.showError($field, validatorName);
             } else if (isValid === true) {
@@ -334,13 +320,12 @@
                 }
             }
         },
-
         /**
          * Check the form validity
          *
          * @returns {Boolean}
          */
-        isValid: function() {
+        isValid: function () {
             if (this.numPendingRequests > 0) {
                 return false;
             }
@@ -354,8 +339,8 @@
     };
 
     // Plugin definition
-    $.fn.bootstrapValidator = function(options) {
-        return this.each(function() {
+    $.fn.bootstrapValidator = function (options) {
+        return this.each(function () {
             var $this = $(this), data = $this.data('bootstrapValidator');
             if (!data) {
                 $this.data('bootstrapValidator', (data = new BootstrapValidator(this, options)));
@@ -368,7 +353,8 @@
 
     $.fn.bootstrapValidator.Constructor = BootstrapValidator;
 }(window.jQuery));
-;(function($) {
+;
+(function ($) {
     $.fn.bootstrapValidator.validators.between = {
         /**
          * Return true if the input value is between (strictly or not) two given numbers
@@ -382,15 +368,16 @@
          * - message: The invalid message
          * @returns {Boolean}
          */
-        validate: function(validator, $field, options) {
+        validate: function (validator, $field, options) {
             var value = parseFloat($field.val());
             return (options.inclusive === true)
-                        ? (value > options.min && value < options.max)
-                        : (value >= options.min && value <= options.max);
+                    ? (value > options.min && value < options.max)
+                    : (value >= options.min && value <= options.max);
         }
     };
 }(window.jQuery));
-;(function($) {
+;
+(function ($) {
     $.fn.bootstrapValidator.validators.callback = {
         /**
          * Return result from the callback method
@@ -406,7 +393,7 @@
          * - message: The invalid message
          * @returns {Boolean}
          */
-        validate: function(validator, $field, options) {
+        validate: function (validator, $field, options) {
             var value = $field.val();
             if (options.callback && 'function' == typeof options.callback) {
                 return options.callback.call(this, value, this);
@@ -415,7 +402,8 @@
         }
     };
 }(window.jQuery));
-;(function($) {
+;
+(function ($) {
     $.fn.bootstrapValidator.validators.creditCard = {
         /**
          * Return true if the input value is valid credit card number
@@ -427,7 +415,7 @@
          * - message: The invalid message
          * @returns {Boolean}
          */
-        validate: function(validator, $field, options) {
+        validate: function (validator, $field, options) {
             var value = $field.val();
 
             // Accept only digits, dashes or spaces
@@ -457,7 +445,8 @@
         }
     };
 }(window.jQuery));
-;(function($) {
+;
+(function ($) {
     $.fn.bootstrapValidator.validators.different = {
         /**
          * Return true if the input value is different with given field's value
@@ -468,9 +457,9 @@
          * - field: The name of field that will be used to compare with current one
          * @returns {Boolean}
          */
-        validate: function(validator, $field, options) {
-            var value        = $field.val(),
-                $compareWith = validator.getFieldElement(options.field);
+        validate: function (validator, $field, options) {
+            var value = $field.val(),
+                    $compareWith = validator.getFieldElement(options.field);
             if ($compareWith && value != $compareWith.val()) {
                 validator.removeError($compareWith);
                 return true;
@@ -480,7 +469,8 @@
         }
     };
 }(window.jQuery));
-;(function($) {
+;
+(function ($) {
     $.fn.bootstrapValidator.validators.digits = {
         /**
          * Return true if the input value contains digits only
@@ -490,12 +480,13 @@
          * @param {Object} options
          * @returns {Boolean}
          */
-        validate: function(validator, $field, options) {
+        validate: function (validator, $field, options) {
             return /^\d+$/.test($field.val());
         }
     }
 }(window.jQuery));
-;(function($) {
+;
+(function ($) {
     $.fn.bootstrapValidator.validators.emailAddress = {
         /**
          * Return true if and only if the input value is a valid email address
@@ -505,16 +496,17 @@
          * @param {Object} options
          * @returns {Boolean}
          */
-        validate: function(validator, $field, options) {
+        validate: function (validator, $field, options) {
             var value = $field.val(),
-                // Email address regular expression
-                // http://stackoverflow.com/questions/46155/validate-email-address-in-javascript
-                emailRegExp = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+                    // Email address regular expression
+                    // http://stackoverflow.com/questions/46155/validate-email-address-in-javascript
+                    emailRegExp = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
             return emailRegExp.test(value);
         }
     }
 }(window.jQuery));
-;(function($) {
+;
+(function ($) {
     $.fn.bootstrapValidator.validators.greaterThan = {
         /**
          * Return true if the input value is greater than or equals to given number
@@ -527,13 +519,14 @@
          * - message: The invalid message
          * @returns {Boolean}
          */
-        validate: function(validator, $field, options) {
+        validate: function (validator, $field, options) {
             var value = parseFloat($field.val());
             return (options.inclusive === true) ? (value > options.value) : (value >= options.value);
         }
     }
 }(window.jQuery));
-;(function($) {
+;
+(function ($) {
     $.fn.bootstrapValidator.validators.hexColor = {
         /**
          * Return true if the input value is a valid hex color
@@ -544,13 +537,14 @@
          * - message: The invalid message
          * @returns {Boolean}
          */
-        validate: function(validator, $field, options) {
+        validate: function (validator, $field, options) {
             var value = $field.val();
             return /(^#[0-9A-F]{6}$)|(^#[0-9A-F]{3}$)/i.test(value);
         }
     };
 }(window.jQuery));
-;(function($) {
+;
+(function ($) {
     $.fn.bootstrapValidator.validators.identical = {
         /**
          * Check if input value equals to value of particular one
@@ -561,9 +555,9 @@
          * - field: The name of field that will be used to compare with current one
          * @returns {Boolean}
          */
-        validate: function(validator, $field, options) {
-            var value        = $field.val(),
-                $compareWith = validator.getFieldElement(options.field);
+        validate: function (validator, $field, options) {
+            var value = $field.val(),
+                    $compareWith = validator.getFieldElement(options.field);
             if ($compareWith && value == $compareWith.val()) {
                 validator.removeError($compareWith);
                 return true;
@@ -573,7 +567,8 @@
         }
     };
 }(window.jQuery));
-;(function($) {
+;
+(function ($) {
     $.fn.bootstrapValidator.validators.lessThan = {
         /**
          * Return true if the input value is less than or equal to given number
@@ -586,13 +581,14 @@
          * - message: The invalid message
          * @returns {Boolean}
          */
-        validate: function(validator, $field, options) {
+        validate: function (validator, $field, options) {
             var value = parseFloat($field.val());
             return (options.inclusive === true) ? (value < options.value) : (value <= options.value);
         }
     };
 }(window.jQuery));
-;(function($) {
+;
+(function ($) {
     $.fn.bootstrapValidator.validators.notEmpty = {
         /**
          * Check if input value is empty or not
@@ -602,13 +598,14 @@
          * @param {Object} options
          * @returns {Boolean}
          */
-        validate: function(validator, $field, options) {
+        validate: function (validator, $field, options) {
             var type = $field.attr('type');
             return ('checkbox' == type || 'radio' == type) ? $field.is(':checked') : ($.trim($field.val()) != '');
         }
     };
 }(window.jQuery));
-;(function($) {
+;
+(function ($) {
     $.fn.bootstrapValidator.validators.regexp = {
         /**
          * Check if the element value matches given regular expression
@@ -619,13 +616,14 @@
          * - regexp: The regular expression you need to check
          * @returns {Boolean}
          */
-        validate: function(validator, $field, options) {
+        validate: function (validator, $field, options) {
             var value = $field.val();
             return options.regexp.test(value);
         }
     };
 }(window.jQuery));
-;(function($) {
+;
+(function ($) {
     $.fn.bootstrapValidator.validators.remote = {
         /**
          * Request a remote server to check the input value
@@ -641,7 +639,7 @@
          * - message: The invalid message
          * @returns {String}
          */
-        validate: function(validator, $field, options) {
+        validate: function (validator, $field, options) {
             var value = $field.val(), name = $field.attr('name'), data = options.data;
             if (data == null) {
                 data = {};
@@ -652,8 +650,8 @@
                 url: options.url,
                 dataType: 'json',
                 data: data
-            }).success(function(response) {
-                var isValid =  response.valid === true || response.valid === 'true';
+            }).success(function (response) {
+                var isValid = response.valid === true || response.valid === 'true';
                 validator.completeRequest($field, 'remote', isValid);
             });
             validator.startRequest($field, 'remote', xhr);
@@ -662,7 +660,8 @@
         }
     };
 }(window.jQuery));
-;(function($) {
+;
+(function ($) {
     $.fn.bootstrapValidator.validators.stringLength = {
         /**
          * Check if the length of element value is less or more than given number
@@ -675,7 +674,7 @@
          * At least one of two keys is required
          * @returns {Boolean}
          */
-        validate: function(validator, $field, options) {
+        validate: function (validator, $field, options) {
             var value = $.trim($field.val()), length = value.length;
             if ((options.min && length < options.min) || (options.max && length > options.max)) {
                 return false;
@@ -685,7 +684,8 @@
         }
     };
 }(window.jQuery));
-;(function($) {
+;
+(function ($) {
     $.fn.bootstrapValidator.validators.uri = {
         /**
          * Return true if the input value is a valid URL
@@ -695,7 +695,7 @@
          * @param {Object} options
          * @returns {Boolean}
          */
-        validate: function(validator, $field, options) {
+        validate: function (validator, $field, options) {
             // Credit to https://gist.github.com/dperini/729294
             //
             // Regular Expression for URL validation
@@ -734,46 +734,47 @@
             //
             // _^(?:(?:https?|ftp)://)(?:\S+(?::\S*)?@)?(?:(?!10(?:\.\d{1,3}){3})(?!127(?:\.\d{1,3}){3})(?!169\.254(?:\.\d{1,3}){2})(?!192\.168(?:\.\d{1,3}){2})(?!172\.(?:1[6-9]|2\d|3[0-1])(?:\.\d{1,3}){2})(?:[1-9]\d?|1\d\d|2[01]\d|22[0-3])(?:\.(?:1?\d{1,2}|2[0-4]\d|25[0-5])){2}(?:\.(?:[1-9]\d?|1\d\d|2[0-4]\d|25[0-4]))|(?:(?:[a-z\x{00a1}-\x{ffff}0-9]+-?)*[a-z\x{00a1}-\x{ffff}0-9]+)(?:\.(?:[a-z\x{00a1}-\x{ffff}0-9]+-?)*[a-z\x{00a1}-\x{ffff}0-9]+)*(?:\.(?:[a-z\x{00a1}-\x{ffff}]{2,})))(?::\d{2,5})?(?:/[^\s]*)?$_iuS
             var urlExp = new RegExp(
-                "^" +
-                // protocol identifier
-                "(?:(?:https?|ftp)://)" +
-                // user:pass authentication
-                "(?:\\S+(?::\\S*)?@)?" +
-                "(?:" +
-                // IP address exclusion
-                // private & local networks
-                "(?!10(?:\\.\\d{1,3}){3})" +
-                "(?!127(?:\\.\\d{1,3}){3})" +
-                "(?!169\\.254(?:\\.\\d{1,3}){2})" +
-                "(?!192\\.168(?:\\.\\d{1,3}){2})" +
-                "(?!172\\.(?:1[6-9]|2\\d|3[0-1])(?:\\.\\d{1,3}){2})" +
-                // IP address dotted notation octets
-                // excludes loopback network 0.0.0.0
-                // excludes reserved space >= 224.0.0.0
-                // excludes network & broacast addresses
-                // (first & last IP address of each class)
-                "(?:[1-9]\\d?|1\\d\\d|2[01]\\d|22[0-3])" +
-                "(?:\\.(?:1?\\d{1,2}|2[0-4]\\d|25[0-5])){2}" +
-                "(?:\\.(?:[1-9]\\d?|1\\d\\d|2[0-4]\\d|25[0-4]))" +
-                "|" +
-                // host name
-                "(?:(?:[a-z\\u00a1-\\uffff0-9]+-?)*[a-z\\u00a1-\\uffff0-9]+)" +
-                // domain name
-                "(?:\\.(?:[a-z\\u00a1-\\uffff0-9]+-?)*[a-z\\u00a1-\\uffff0-9]+)*" +
-                // TLD identifier
-                "(?:\\.(?:[a-z\\u00a1-\\uffff]{2,}))" +
-                ")" +
-                // port number
-                "(?::\\d{2,5})?" +
-                // resource path
-                "(?:/[^\\s]*)?" +
-                "$", "i"
-            );
+                    "^" +
+                    // protocol identifier
+                    "(?:(?:https?|ftp)://)" +
+                    // user:pass authentication
+                    "(?:\\S+(?::\\S*)?@)?" +
+                    "(?:" +
+                    // IP address exclusion
+                    // private & local networks
+                    "(?!10(?:\\.\\d{1,3}){3})" +
+                    "(?!127(?:\\.\\d{1,3}){3})" +
+                    "(?!169\\.254(?:\\.\\d{1,3}){2})" +
+                    "(?!192\\.168(?:\\.\\d{1,3}){2})" +
+                    "(?!172\\.(?:1[6-9]|2\\d|3[0-1])(?:\\.\\d{1,3}){2})" +
+                    // IP address dotted notation octets
+                    // excludes loopback network 0.0.0.0
+                    // excludes reserved space >= 224.0.0.0
+                    // excludes network & broacast addresses
+                    // (first & last IP address of each class)
+                    "(?:[1-9]\\d?|1\\d\\d|2[01]\\d|22[0-3])" +
+                    "(?:\\.(?:1?\\d{1,2}|2[0-4]\\d|25[0-5])){2}" +
+                    "(?:\\.(?:[1-9]\\d?|1\\d\\d|2[0-4]\\d|25[0-4]))" +
+                    "|" +
+                    // host name
+                    "(?:(?:[a-z\\u00a1-\\uffff0-9]+-?)*[a-z\\u00a1-\\uffff0-9]+)" +
+                    // domain name
+                    "(?:\\.(?:[a-z\\u00a1-\\uffff0-9]+-?)*[a-z\\u00a1-\\uffff0-9]+)*" +
+                    // TLD identifier
+                    "(?:\\.(?:[a-z\\u00a1-\\uffff]{2,}))" +
+                    ")" +
+                    // port number
+                    "(?::\\d{2,5})?" +
+                    // resource path
+                    "(?:/[^\\s]*)?" +
+                    "$", "i"
+                    );
             return urlExp.test($field.val());
         }
     };
 }(window.jQuery));
-;(function($) {
+;
+(function ($) {
     $.fn.bootstrapValidator.validators.usZipCode = {
         /**
          * Return true if and only if the input value is a valid US zip code
@@ -783,7 +784,7 @@
          * @param {Object} options
          * @returns {Boolean}
          */
-        validate: function(validateInstance, $field, options) {
+        validate: function (validateInstance, $field, options) {
             var value = $field.val();
             return /^\d{5}([\-]\d{4})?$/.test(value);
         }

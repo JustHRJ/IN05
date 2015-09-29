@@ -28,10 +28,10 @@ public class ProductPurchaseOrderSessionBean implements ProductPurchaseOrderSess
         Customer customer = em.find(Customer.class, username);
         return customer.getProductPurchaseOrderList();
     }
-    
+
     public List<ProductQuotationDescription> retrieveProductQuotationDescriptionList(String purchaseOrderNo) {
         System.out.println("ProductPurchaseOrderSessionBean.java receivedProductQuotationList() purchaseOrderNo ===== " + purchaseOrderNo);
-        
+
         Query query = em.createQuery("SELECT qd FROM ProductQuotationDescription AS qd WHERE qd.productQuotation.productQuotationNo=:productQuotationDescNo");
 
         query.setParameter("productQuotationDescNo", purchaseOrderNo);

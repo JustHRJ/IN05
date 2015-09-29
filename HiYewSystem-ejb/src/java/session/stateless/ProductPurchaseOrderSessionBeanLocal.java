@@ -13,6 +13,6 @@ public interface ProductPurchaseOrderSessionBeanLocal {
     public void conductMerge(ProductPurchaseOrder productPurchaseOrder);
 
     public List<ProductPurchaseOrder> receivedProductPurchaseOrder(String username);
-    
+
     public List<ProductQuotationDescription> retrieveProductQuotationDescriptionList(String purchaseOrderNo);
 }

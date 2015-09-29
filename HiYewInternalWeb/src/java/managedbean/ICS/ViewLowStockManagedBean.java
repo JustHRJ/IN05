@@ -22,25 +22,25 @@ import session.stateless.HiYewICSSessionBeanLocal;
  */
 @Named(value = "viewLowStockManagedBean")
 @ViewScoped
-public class ViewLowStockManagedBean implements Serializable{
+public class ViewLowStockManagedBean implements Serializable {
+
     @EJB
     private HiYewICSSessionBeanLocal hiYewICSSessionBean;
-    
+
     private List<ItemEntity> lowStockItems;
     private List<ItemEntity> filteredLowStockItems;
     private int numOfLowStockItems;
     private ItemEntity selectedItem;
 
-    
     /**
      * Creates a new instance of ViewLowStockManagedBean
      */
     public ViewLowStockManagedBean() {
         lowStockItems = new ArrayList<>();
     }
-    
+
     @PostConstruct
-    public void init(){
+    public void init() {
         lowStockItems = hiYewICSSessionBean.getAllLowStockItems();
         numOfLowStockItems = lowStockItems.size();
     }
@@ -100,13 +100,13 @@ public class ViewLowStockManagedBean implements Serializable{
     public void setSelectedItem(ItemEntity selectedItem) {
         this.selectedItem = selectedItem;
     }
-    
-     public String passSelectedItemToNext() {
+
+    public String passSelectedItemToNext() {
         System.out.println(this.selectedItem.getItemCode());
         FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("SelectedItem", this.selectedItem);
-      //  FacesContext.getCurrentInstance().getExternalContext().getFlash().put("SelectedItem", this.selectedItem);
+        //  FacesContext.getCurrentInstance().getExternalContext().getFlash().put("SelectedItem", this.selectedItem);
         System.out.println("here2");
         return "itemDetails?faces-redirect=true";
     }
-    
+
 }

@@ -296,7 +296,7 @@ public class HiYewICSSessionBean implements HiYewICSSessionBeanLocal {
         StorageInfoEntity si = getStorageInfo(item, shelve);
         if (reduceAmt < si.getStoredQty()) {
             si.setStoredQty(si.getStoredQty() - reduceAmt);
-        } else if (reduceAmt==si.getStoredQty()){
+        } else if (reduceAmt == si.getStoredQty()) {
             deleteStorageInfo(item, shelve);
         }
         System.out.println("StatelessBean: reduceStorageQty");
@@ -310,9 +310,9 @@ public class HiYewICSSessionBean implements HiYewICSSessionBeanLocal {
         query.setParameter("shelve", shelve);
         query.executeUpdate();
     }
-    
+
     @Override
-    public void updateRackStatus(RackEntity rack, String status){
+    public void updateRackStatus(RackEntity rack, String status) {
         RackEntity r = em.find(RackEntity.class, rack.getRackID());
         r.setStatus(status);
     }

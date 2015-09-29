@@ -57,13 +57,13 @@ public class QuotationManagedBean implements Serializable {
 
         receivedQuotations = new ArrayList<>(quotationSessionBean.receivedQuotations(username));
     }
-    
+
     public void reset() {
         newQuotation = new Quotation();
         newQuotationDesc = new QuotationDescription();
         receivedQuotations = new ArrayList<>();
         displayQuotationDescriptions = new ArrayList<>();
-        
+
         count = 1;
         if (FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("username") != null) {
             username = FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("username").toString();
@@ -74,12 +74,12 @@ public class QuotationManagedBean implements Serializable {
 
     public void receivedQuotations() {
         System.out.println("QuotationManagedBean.java receivedQuotations() ===== " + username);
-        
+
         if (!username.equals(FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("username").toString())) {
             System.out.println("QuotationManagedBean.java receivedQuotations() ===== call method reset()");
             reset();
         }
-        
+
         receivedQuotations = new ArrayList<>(quotationSessionBean.receivedQuotations(username));
         FacesContext.getCurrentInstance().addMessage("qMsg", new FacesMessage(FacesMessage.SEVERITY_INFO, "Current quotations are up to date.", ""));
     }

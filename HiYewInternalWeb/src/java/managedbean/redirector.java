@@ -24,11 +24,11 @@ public class redirector {
     public redirector() {
     }
 
-    public void forgetPassword() throws IOException{
-          FacesContext.getCurrentInstance().getExternalContext().redirect("/HiYewInternalWeb/forgetPassword.xhtml");
+    public void forgetPassword() throws IOException {
+        FacesContext.getCurrentInstance().getExternalContext().redirect("/HiYewInternalWeb/forgetPassword.xhtml");
     }
-    
-    public void employeeTraining() throws IOException{
-          FacesContext.getCurrentInstance().getExternalContext().redirect("/HiYewInternalWeb/HRMS/addTrainingSchedule.xhtml");
+
+    public void employeeTraining() throws IOException {
+        FacesContext.getCurrentInstance().getExternalContext().redirect("/HiYewInternalWeb/HRMS/addTrainingSchedule.xhtml");
     }
 }

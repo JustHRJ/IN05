@@ -1,6 +1,7 @@
 package managedBean;
 
 import entity.Customer;
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -31,7 +32,7 @@ public class LoginManagedBean implements Serializable {
      * Creates a new instance of LoginManagedBean
      */
     public LoginManagedBean() {
-        FacesContext.getCurrentInstance().getExternalContext().getSessionMap().remove("username");
+
         FacesContext.getCurrentInstance().getExternalContext().getSessionMap().remove("userRole");
         FacesContext.getCurrentInstance().getExternalContext().getSessionMap().remove("loginMessage");
         FacesContext.getCurrentInstance().getExternalContext().getSessionMap().remove("forgotMessage");
@@ -50,6 +51,19 @@ public class LoginManagedBean implements Serializable {
 
     public void register() {
 
+    }
+
+    public void checkLoginRedirect() throws IOException {
+        if (FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("username") == null) {
+            FacesContext.getCurrentInstance().getExternalContext().redirect("/HiYewExternalWeb/login.xhtml");
+        }
+    }
+
+    public void checkLogoutRedirect() throws IOException {
+        if (FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("username") != null) {
+            FacesContext.getCurrentInstance().getExternalContext().getSessionMap().remove("username");
+            FacesContext.getCurrentInstance().getExternalContext().redirect("/HiYewExternalWeb/login.xhtml");
+        }
     }
 
     public String login() {

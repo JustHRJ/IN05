@@ -27,7 +27,7 @@
                     <f:selectItems value="#{adminQuotationManagedBean.years}" />
                 </p:selectOneMenu>
                 <p:outputLabel for="QuotationStatus" value="Quotation Status: " />
-                
+
                 <p:selectOneMenu id="QuotationStatus" value="#{adminQuotationManagedBean.status}"  style="width:230px">
                     <p:ajax listener="#{adminQuotationManagedBean.filterByYearAndStatus()}" update="rcvQuote" /> 
                     <f:selectItem itemLabel="Select Quotation Status" itemValue="" noSelectionOption="true" />
@@ -35,7 +35,7 @@
                 </p:selectOneMenu>
             </h:panelGrid>
             <p:messages id="msgs"  showDetail="false" />
-            
+
             <p:commandButton value="Refresh" actionListener="#{adminQuotationManagedBean.filterByYearAndStatus()}" update="msgs rcvQuote" icon="ui-icon-check"/>
             <p:dataTable value="#{adminQuotationManagedBean.receivedCustomerNewQuotations}" var="item" rows="5" id="rcvQuote" paginator="true" editable="true">
 
@@ -56,12 +56,12 @@
                 <p:column style="width:32px;text-align: center">
                     <p:commandButton id="quoteDescBtn" icon="ui-icon-search" title="View" update="quotationDetailPanel" action="#{adminQuotationManagedBean.selectQuotation(item)}"/>
                     <!--<p:dialog  widgetVar="dlg" modal="true" resizable="false" header="Values" showEffect="fade" >-->
-                        <p:overlayPanel for="quoteDescBtn" showEffect="fade" hideEffect="fade" dismissable="false" showCloseIcon="true" style="width:1200px">
+                    <p:overlayPanel for="quoteDescBtn" showEffect="fade" hideEffect="fade" dismissable="false" showCloseIcon="true" style="width:1200px">
 
                         <p:outputPanel id="quotationDetailPanel" style="text-align:center;" >
                             <p:commandButton value="Update Quotation Details" action="#{adminQuotationManagedBean.updateQuotationPricesAndSample()}" update=":innerForm:msgs " icon="ui-icon-check"/>
                             <p:commandButton value="Forward to Customer" action="#{adminQuotationManagedBean.updateQuotationStatus()}" update=":innerForm:msgs rcvQuote" icon="ui-icon-check"/>
-                            
+
                             <p:dataTable var="quoteDescItem" value="#{adminQuotationManagedBean.displayQuotationDescriptions}" rows="5" paginator="true">
                                 <p:column headerText="ID" width="5%">
                                     <h:outputText value="#{quoteDescItem.quotationDescNo}" />
@@ -88,12 +88,12 @@
                                         <f:selectItem itemValue="Yes" itemLabel="Yes" />
                                     </p:selectOneMenu>
                                 </p:column>
-                                
+
                             </p:dataTable>
-                           
+
                         </p:outputPanel>
-                            
-                        </p:overlayPanel>
+
+                    </p:overlayPanel>
                     <!--</p:dialog>-->
                 </p:column>
 

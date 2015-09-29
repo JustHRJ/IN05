@@ -310,7 +310,6 @@ public class CustomerPOManagedBean implements Serializable {
         this.total = total;
     }
 
-
     /**
      * @return the username
      */

@@ -42,6 +42,20 @@ public class loginControlBean implements Serializable {
     public loginControlBean() {
     }
 
+    public void checkLogoutRedirect() throws IOException {
+        if (logined) {
+            loginPosition = "";
+            username = "";
+            password = "";
+            logined = false;
+            employeeName = "";
+            FacesContext.getCurrentInstance().getExternalContext().redirect("/HiYewInternalWeb/login.xhtml");
+
+        } else {
+
+        }
+    }
+
     public String getEAlert() {
         if (loginPosition.equals("admin")) {
             int noOfAlert = hiYewSystemBean.getENoAlert();
@@ -92,12 +106,12 @@ public class loginControlBean implements Serializable {
             return hiYewSystemBean.employeeTrainingMonthUser(username);
         }
     }
-    
-    public void returnPage() throws IOException{
-        if(logined){
-             FacesContext.getCurrentInstance().getExternalContext().redirect("/HiYewInternalWeb/index.xhtml");
-        } else{
-             FacesContext.getCurrentInstance().getExternalContext().redirect("/HiYewInternalWeb/login.xhtml");
+
+    public void returnPage() throws IOException {
+        if (logined) {
+            FacesContext.getCurrentInstance().getExternalContext().redirect("/HiYewInternalWeb/index.xhtml");
+        } else {
+            FacesContext.getCurrentInstance().getExternalContext().redirect("/HiYewInternalWeb/login.xhtml");
         }
     }
 

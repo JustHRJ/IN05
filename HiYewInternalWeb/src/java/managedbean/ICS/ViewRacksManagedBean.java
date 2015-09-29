@@ -25,11 +25,11 @@ import session.stateless.HiYewICSSessionBeanLocal;
  */
 @Named(value = "viewRacksManagedBean")
 @ViewScoped
-public class ViewRacksManagedBean implements Serializable{
-    
+public class ViewRacksManagedBean implements Serializable {
+
     @EJB
     private HiYewICSSessionBeanLocal hiYewICSSessionBean;
-    
+
     private List<RackEntity> racks;
     private List<RackEntity> filteredRacks;
     private RackEntity selectedRack;
@@ -37,7 +37,8 @@ public class ViewRacksManagedBean implements Serializable{
     private List<RackEntity> filteredShelves;
     private ShelveEntity selectedShelve;
 
-     private boolean openShelvePanel;
+    private boolean openShelvePanel;
+
     /**
      * Creates a new instance of ViewRacksManagedBean
      */
@@ -45,9 +46,9 @@ public class ViewRacksManagedBean implements Serializable{
         racks = new ArrayList<RackEntity>();
         shelvesInsideSelectRack = new ArrayList<ShelveEntity>();
     }
-    
+
     @PostConstruct
-    public void init(){
+    public void init() {
         racks.addAll(hiYewICSSessionBean.getAllRacks());
         openShelvePanel = true;
     }
@@ -80,7 +81,6 @@ public class ViewRacksManagedBean implements Serializable{
         this.filteredRacks = filteredRacks;
     }
 
-
     /**
      * @return the selectedRack
      */
@@ -94,17 +94,17 @@ public class ViewRacksManagedBean implements Serializable{
     public void setSelectedRack(RackEntity selectedRack) {
         this.selectedRack = selectedRack;
     }
-    
+
     public void passSelectedRackToNext() {
         System.out.println(this.selectedRack.getRackID());
         openShelvePanel = false;
         getShelvesInsideSelectRack().clear();
         getShelvesInsideSelectRack().addAll(hiYewICSSessionBean.getShelvesInRack(this.selectedRack.getRackID()));
-        
+
         FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("SelectedRack", this.selectedRack);
-      //  FacesContext.getCurrentInstance().getExternalContext().getFlash().put("SelectedItem", this.selectedItem);
+        //  FacesContext.getCurrentInstance().getExternalContext().getFlash().put("SelectedItem", this.selectedItem);
         System.out.println("here at view racks managed bean");
- //       return "rackDetails?faces-redirect=true";
+        //       return "rackDetails?faces-redirect=true";
     }
 
     /**
@@ -148,11 +148,11 @@ public class ViewRacksManagedBean implements Serializable{
     public void setOpenShelvePanel(boolean openShelvePanel) {
         this.openShelvePanel = openShelvePanel;
     }
-  
+
     public String passSelectedShelveToNext() {
         System.out.println(selectedShelve.getShelveID());
         FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("SelectedShelve", this.selectedShelve);
-      //  FacesContext.getCurrentInstance().getExternalContext().getFlash().put("SelectedItem", this.selectedItem);
+        //  FacesContext.getCurrentInstance().getExternalContext().getFlash().put("SelectedItem", this.selectedItem);
         System.out.println("here at passSelectedShelveToNext()");
         return "allocateStorage?faces-redirect=true";
     }
@@ -170,15 +170,16 @@ public class ViewRacksManagedBean implements Serializable{
     public void setSelectedShelve(ShelveEntity selectedShelve) {
         this.selectedShelve = selectedShelve;
     }
-     public void onRowEdit(RowEditEvent event) {
-         hiYewICSSessionBean.updateRackStatus(((RackEntity) event.getObject()), ((RackEntity) event.getObject()).getStatus());
-        FacesMessage msg = new FacesMessage("Rack" + ((RackEntity) event.getObject()).getRackID()+" Edited","" );
+
+    public void onRowEdit(RowEditEvent event) {
+        hiYewICSSessionBean.updateRackStatus(((RackEntity) event.getObject()), ((RackEntity) event.getObject()).getStatus());
+        FacesMessage msg = new FacesMessage("Rack" + ((RackEntity) event.getObject()).getRackID() + " Edited", "");
         FacesContext.getCurrentInstance().addMessage(null, msg);
     }
-     
+
     public void onRowCancel(RowEditEvent event) {
-        FacesMessage msg = new FacesMessage("Rack" + ((RackEntity) event.getObject()).getRackID()+" Cancelled","");
+        FacesMessage msg = new FacesMessage("Rack" + ((RackEntity) event.getObject()).getRackID() + " Cancelled", "");
         FacesContext.getCurrentInstance().addMessage(null, msg);
     }
-    
+
 }

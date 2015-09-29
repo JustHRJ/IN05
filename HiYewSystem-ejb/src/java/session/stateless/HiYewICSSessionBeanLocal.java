@@ -5,7 +5,6 @@
  */
 package session.stateless;
 
-
 import entity.ItemEntity;
 import entity.RackEntity;
 import entity.ShelveEntity;
@@ -75,6 +74,4 @@ public interface HiYewICSSessionBeanLocal {
 
     public void updateRackStatus(RackEntity rack, String status);
 
-
-   
 }

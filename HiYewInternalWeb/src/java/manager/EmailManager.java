@@ -26,7 +26,7 @@ public class EmailManager {
     public EmailManager() {
     }
 
-    public EmailManager(String name,String username, String newPassword, String email) {
+    public EmailManager(String name, String username, String newPassword, String email) {
         this.emailPassword(name, newPassword, newPassword, email);
     }
 
@@ -56,13 +56,12 @@ public class EmailManager {
                 Multipart multipart = new MimeMultipart("related");
                 BodyPart htmlPart = new MimeBodyPart();
 
-            
                 String message = "<div class=\"text\">";
                 message = message + "<font face=\"'Open Sans', Arial\">";
                 message = message + "<font color=\"#333\">";
                 message = message + "Dear <b>" + name + "</b>,</font><br /><br />";
                 message = message + "<font color=\"#333\">";
-                message = message + "Your username:  <b>" + username + "</b></font>" + "<br/><br/>"; 
+                message = message + "Your username:  <b>" + username + "</b></font>" + "<br/><br/>";
                 message = message + "Your new password: <b>" + newPassword + "</b></font>" + "<br /><br />";
                 message = message + "<font color=\"#333\">";
                 message = message + "Sincerely,<br />";
