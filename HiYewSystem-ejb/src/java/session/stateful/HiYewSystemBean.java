@@ -1091,33 +1091,37 @@ public class HiYewSystemBean implements HiYewSystemBeanLocal {
 
     public boolean updateEmployee(EmployeeEntity employee, String employeeA, String employeeUnit, String employeeOptional, String address_postal, String contact, Date pass, String position, double pay, int leave, String email) {
         boolean check = false;
-        if (!(employeeA.isEmpty())) {
+        if (!(employeeA.isEmpty()) && !(employeeA.equals(employee.getEmployee_address()))) {
             employee.setEmployee_address(employeeA);
+            check = true;
         }
-        System.out.println(employee.getEmployee_account_status());
-        if (!(employeeUnit.isEmpty())) {
+        if (!(employeeUnit.isEmpty()) && !(employeeUnit.equals(employee.getUnit()))) {
             employee.setUnit(employeeUnit);
+            check = true;
         }
-        if (!(employeeOptional.isEmpty())) {
+        if (!(employeeOptional.isEmpty()) && !(employeeOptional.equals(employee.getOptional()))) {
             employee.setOptional(employeeOptional);
+            check = true;
         }
-        if (!(address_postal.isEmpty())) {
+        if (!(address_postal.isEmpty()) && !(address_postal.equals(employee.getAddressPostal()))) {
             employee.setAddressPostal(address_postal);
+            check = true;
         }
-        if (!(email.isEmpty())) {
+        if (!(email.isEmpty()) && !(email.equals(employee.getEmailAddress()))) {
             employee.setEmailAddress(email);
             check = true;
         }
 
-        if (!(contact.isEmpty())) {
+        if (!(contact.isEmpty()) && !(contact.equals(employee.getEmployee_contact()))) {
             employee.setEmployee_contact(contact);
+            check = true;
         }
-        if (!(pass == null)) {
+        if (!(pass == null) && !(new Timestamp(pass.getTime()).equals(employee.getEmployee_passExpiry()))) {
             employee.setEmployee_passExpiry(new Timestamp(pass.getTime()));
-
+            check = true;
         }
 
-        if (!(position.isEmpty())) {
+        if (!(position.isEmpty()) && !(position.equals("none")) && !(position.equals(employee.getEmployee_account_status()))) {
             if (!(employee.getEmployee_account_status().equals(position))) {
                 if (position.equals("disabled")) {
                     disableEmployee(employee.getEmployee_name());
@@ -1144,7 +1148,7 @@ public class HiYewSystemBean implements HiYewSystemBeanLocal {
             }
         }
 
-        if ((!(pass == null)) || (!(contact.isEmpty())) || (!(employeeA.isEmpty())) || check || !(employeeOptional.isEmpty()) || !(address_postal.isEmpty()) || !(employeeUnit.isEmpty())) {
+        if (check) {
             em.merge(employee);
             return true;
         }
