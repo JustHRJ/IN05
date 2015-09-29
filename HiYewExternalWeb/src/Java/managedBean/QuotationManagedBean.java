@@ -58,6 +58,14 @@ public class QuotationManagedBean implements Serializable {
         receivedQuotations = new ArrayList<>(quotationSessionBean.receivedQuotations(username));
     }
     
+    public void checkToReset(){
+        if(FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("username").toString() == null){
+            
+        }else if(!username.equals(FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("username").toString())){
+            reset();
+        }
+    }
+    
     public void reset() {
         newQuotation = new Quotation();
         newQuotationDesc = new QuotationDescription();
