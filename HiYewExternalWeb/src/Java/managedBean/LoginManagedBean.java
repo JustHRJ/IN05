@@ -1,6 +1,7 @@
 package managedBean;
 
 import entity.Customer;
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -12,13 +13,12 @@ import javax.faces.view.ViewScoped;
 import session.stateless.CustomerSessionBeanLocal;
 import manager.EmailManager;
 
-@Named(value = "LoginManagedBean")
+@Named(value = "loginManagedBean")
 @ViewScoped
 public class LoginManagedBean implements Serializable {
 
     @EJB
     private CustomerSessionBeanLocal customerSessionBean;
-    private QuotationManagedBean quotationManagedBean;
     private List<String> users;
     private String user = "";
     private Customer customer;
@@ -31,15 +31,12 @@ public class LoginManagedBean implements Serializable {
      * Creates a new instance of LoginManagedBean
      */
     public LoginManagedBean() {
-        FacesContext.getCurrentInstance().getExternalContext().getSessionMap().remove("username");
-        FacesContext.getCurrentInstance().getExternalContext().getSessionMap().remove("userRole");
         FacesContext.getCurrentInstance().getExternalContext().getSessionMap().remove("loginMessage");
         FacesContext.getCurrentInstance().getExternalContext().getSessionMap().remove("forgotMessage");
         FacesContext.getCurrentInstance().getExternalContext().getSessionMap().remove("registerMessage");
         customer = new Customer();
         newCustomer = new Customer();
         users = new ArrayList<>();
-
     }
 
     @PostConstruct
@@ -48,17 +45,12 @@ public class LoginManagedBean implements Serializable {
         users.add("Supplier");
     }
 
-    public void register() {
-
-    }
-
     public String login() {
         String path = "";
         if (this.user.equals("Customer")) {
             setCustomer(customerSessionBean.getCustomerByUsername(this.username));
             try {
                 if (customerSessionBean.encryptPassword(this.password).equals(getCustomer().getPw())) {
-                    FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("userRole", "Customer");
                     FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("username", this.username);
                     System.out.println("Login Success");
                     path = "c-user-profile?faces-redirect=true"; //navigation
@@ -79,11 +71,31 @@ public class LoginManagedBean implements Serializable {
         return path;
     }
 
-    public String logout() {
-        FacesContext.getCurrentInstance().getExternalContext().getSessionMap().remove("username");
-        FacesContext.getCurrentInstance().getViewRoot().getViewMap().remove("quotationManagedBean");
-        System.out.println("Logout Success");
-        return "login?faces-redirect=true"; // navigation
+    public void checkLoginRedirect() throws IOException {
+        if (FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("username") == null) {
+            FacesContext.getCurrentInstance().getExternalContext().redirect("/HiYewExternalWeb/login.xhtml");
+        }
+    }
+    
+    public void checkAfterLoginRedirect() throws IOException {
+        if (FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("username") != null) {
+            FacesContext.getCurrentInstance().getExternalContext().invalidateSession();
+            username = "";
+            password = "";
+            FacesContext.getCurrentInstance().getExternalContext().redirect("/HiYewExternalWeb/login.xhtml");
+            System.out.println("");
+        }
+    }
+
+    public void logout() throws IOException {
+        if (FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("username") != null) {
+            FacesContext.getCurrentInstance().getExternalContext().invalidateSession();
+            username = "";
+            password = "";
+            FacesContext.getCurrentInstance().getExternalContext().redirect("/HiYewExternalWeb/login.xhtml");
+
+            System.out.println("Logout Success");
+        }
     }
 
     public String sendPassword() {
@@ -112,7 +124,7 @@ public class LoginManagedBean implements Serializable {
             if (newCustomer.getPw().equals(rePassword)) {
                 // encrypt password
                 newCustomer.setPw(customerSessionBean.encryptPassword(newCustomer.getPw()));
-                newCustomer.setSubscribeEmail("true");
+                newCustomer.setSubscribeEmail(true);
                 customerSessionBean.createCustomer(newCustomer);
                 EmailManager emailManager = new EmailManager();
                 emailManager.emailSuccessfulRegistration(newCustomer.getName(), newCustomer.getUserName(), rePassword, newCustomer.getEmail());

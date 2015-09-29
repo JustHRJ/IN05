@@ -2,6 +2,7 @@ package managedBean;
 
 import entity.ProductQuotation;
 import entity.ProductQuotationDescription;
+import java.io.IOException;
 import java.io.Serializable;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
@@ -127,7 +128,8 @@ public class ProductQuotationManagedBean implements Serializable {
         setCount((Integer) getCacheList().size() + 1);
     }
 
-    public void createProductQuotation(ActionEvent event) {
+    public void createProductQuotation(ActionEvent event) throws IOException  {
+        System.out.println("getUsername() ==== " + getUsername());
         // generate product quotation number
         setProductQuotationNo(getProductQuotationSessionBean().getProductQuotationNo(getUsername()));
         // assign product quotation number
@@ -155,14 +157,15 @@ public class ProductQuotationManagedBean implements Serializable {
         setNewProductQuotationDescription(new ProductQuotationDescription());
         // set quotation tab to be selected
         System.out.println("Your request for product price quotation has been sent successfully!");
-        FacesContext.getCurrentInstance().addMessage("msg", new FacesMessage("Your request for product price quotation has been sent successfully!", ""));
+        FacesContext.getCurrentInstance().getExternalContext().redirect("/HiYewExternalWeb/c-products.xhtml");
+        FacesContext.getCurrentInstance().addMessage("rfqMsg", new FacesMessage("Your request for product price quotation has been sent successfully!", ""));
     }
 
     public void setRejectionStatus(ProductQuotation productQuotation) {
         System.out.println("Customer rejected projuct quotation!");
         productQuotation.setStatus("Rejected");
         getProductQuotationSessionBean().conductMerge(productQuotation);
-        FacesContext.getCurrentInstance().addMessage("msg", new FacesMessage(FacesMessage.SEVERITY_INFO, "You have rejected Product Quotation No. " + productQuotation.getProductQuotationNo(), ""));
+        FacesContext.getCurrentInstance().addMessage("qMsg", new FacesMessage(FacesMessage.SEVERITY_INFO, "You have rejected Product Quotation No. " + productQuotation.getProductQuotationNo(), ""));
     }
 
     public boolean viewVisibility(ProductQuotation productQuotation) {

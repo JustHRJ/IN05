@@ -17,7 +17,7 @@ public class ProductQuotation implements Serializable {
     @Id
     private String productQuotationNo;
     private Timestamp date;
-    private String status; // Processed, Pending, Accepted, Rejected
+    private String status; // Relayed, Processed, Pending, Accepted, Rejected
 
     @OneToMany(mappedBy = "productQuotation")
     private List<ProductQuotationDescription> productQuotationDescriptionList = new ArrayList<>();

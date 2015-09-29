@@ -22,7 +22,7 @@ public class Customer implements Serializable {
     private String phone;
     private String email;
     private String postalCode;
-    private String subscribeEmail;
+    private boolean subscribeEmail;
 
     // private Integer active; // set 1 for existing customer;
     // @Enumerated(EnumType.STRING)
@@ -61,14 +61,14 @@ public class Customer implements Serializable {
     /**
      * @return the subscribeEmail
      */
-    public String getSubscribeEmail() {
+    public boolean getSubscribeEmail() {
         return subscribeEmail;
     }
 
     /**
      * @param subscribeEmail the subscribeEmail to set
      */
-    public void setSubscribeEmail(String subscribeEmail) {
+    public void setSubscribeEmail(boolean subscribeEmail) {
         this.subscribeEmail = subscribeEmail;
     }
 
