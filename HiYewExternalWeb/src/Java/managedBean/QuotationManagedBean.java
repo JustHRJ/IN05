@@ -58,6 +58,15 @@ public class QuotationManagedBean implements Serializable {
         receivedQuotations = new ArrayList<>(quotationSessionBean.receivedQuotations(username));
     }
 
+    public void checkToReset() {
+        if (FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("username").toString() == null) {
+
+        } else if (!username.equals(FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("username").toString())) {
+            System.out.println("QuotationManagedBean.java receivedQuotations() ===== call method reset()");
+            reset();
+        }
+    }
+
     public void reset() {
         newQuotation = new Quotation();
         newQuotationDesc = new QuotationDescription();
@@ -135,6 +144,9 @@ public class QuotationManagedBean implements Serializable {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "RFQ creation must have at least one item job!", ""));
         } else {
             //generate quotatioNo
+//            username = FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("username").toString();
+//            System.out.println("QuotationManagedBean.java createQuotation ==== " + username);
+
             quotationNo = quotationSessionBean.getQuotationNo(username);
             //assign quotation
             newQuotation.setQuotationNo(quotationNo);

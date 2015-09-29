@@ -60,6 +60,15 @@ public class ProductQuotationManagedBean implements Serializable {
         receivedProductQuotationList = new ArrayList<>(productQuotationSessionBean.receivedProductQuotationList(username));
     }
 
+    public void checkToReset() {
+        if (FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("username").toString() == null) {
+
+        } else if (!username.equals(FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("username").toString())) {
+            System.out.println("ProductQuotationManagedBean.java receivedProductQuotations() ===== call method reset()");
+            reset();
+        }
+    }
+
     public void reset() {
         System.out.println("ProductQuotationManagedBean.java ProductQuotationManagedBean()");
         newProductQuotation = new ProductQuotation();
@@ -128,7 +137,7 @@ public class ProductQuotationManagedBean implements Serializable {
         setCount((Integer) getCacheList().size() + 1);
     }
 
-    public void createProductQuotation(ActionEvent event) throws IOException  {
+    public void createProductQuotation(ActionEvent event) throws IOException {
         System.out.println("getUsername() ==== " + getUsername());
         // generate product quotation number
         setProductQuotationNo(getProductQuotationSessionBean().getProductQuotationNo(getUsername()));

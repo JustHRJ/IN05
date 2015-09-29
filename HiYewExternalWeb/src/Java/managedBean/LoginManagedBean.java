@@ -45,7 +45,6 @@ public class LoginManagedBean implements Serializable {
         users.add("Supplier");
     }
 
-
     public String login() {
         String path = "";
         if (this.user.equals("Customer")) {
@@ -77,8 +76,11 @@ public class LoginManagedBean implements Serializable {
             FacesContext.getCurrentInstance().getExternalContext().redirect("/HiYewExternalWeb/login.xhtml");
         }
     }
-    
+
     public void checkAfterLoginRedirect() throws IOException {
+        if (FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("username") != null) {
+            System.out.println(FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("username"));
+        }
         if (FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("username") != null) {
             FacesContext.getCurrentInstance().getExternalContext().invalidateSession();
             username = "";

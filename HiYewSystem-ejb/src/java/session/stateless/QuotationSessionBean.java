@@ -22,6 +22,7 @@ public class QuotationSessionBean implements QuotationSessionBeanLocal {
 
     @Override
     public String getQuotationNo(String username) {
+        System.out.println("QuotationSessionBean.java getQuotationNo ==== " + username);
         Customer c = em.find(Customer.class, username);
         return generateQuotationNo(c);
     }
