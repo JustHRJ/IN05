@@ -86,7 +86,9 @@ public class CreateStorageManagedBean implements Serializable {
        
 
         setNewRack(new RackEntity()); //To reinitialise and create new rack
+        nextRackID = hiYewICSSessionBean.getNextIDForRack();
         FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("New Rack created successfully!"));
+        
 
     }
 

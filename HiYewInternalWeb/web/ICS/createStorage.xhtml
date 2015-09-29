@@ -85,9 +85,9 @@
         </p:megaMenu>
 
         <br/>
-        <h:form>
+        <h:form id="formMain">
             <p:panel header="Create Storage">
-                <p:messages autoUpdate="true"/>
+                <p:messages globalOnly="true" autoUpdate="false"/>
                 <h:panelGrid id="grid" columns="3" cellpadding="5">
 
                     <p:outputLabel for="locationLevel" value="Rack's Location Level:" style="font-weight:bold"/>
@@ -107,26 +107,26 @@
                     <p:message for="rackZone" />
 
                     <h:outputLabel for="rackLength" value="Length of Rack(cm): *" style="font-weight:bold"/>                   
-                    <p:inputText id="rackLength" value="#{createStorageManagedBean.newRack.length}" maxlength="11" label="rackLength" required="true" requiredMessage="Please enter the length this new rack!">
+                    <p:inputText id="rackLength" value="#{createStorageManagedBean.newRack.length}" maxlength="11" label="rackLength" required="true" requiredMessage="Please enter the length this new rack!" converterMessage="Invalid Input! Please enter a positive number up to 2 decimal for Length. Example: 53.0 or 42.53">
                         <f:validateDoubleRange minimum="10.0" />
                     </p:inputText>
                     <p:message for="rackLength" />
 
 
                     <h:outputLabel for="rackWidth" value="Width of Rack(cm): *" style="font-weight:bold"/>                   
-                    <p:inputText id="rackWidth" value="#{createStorageManagedBean.newRack.width}" maxlength="11" label="rackWidth" required="true" requiredMessage="Please select the width of this new rack!">
+                    <p:inputText id="rackWidth" value="#{createStorageManagedBean.newRack.width}" maxlength="11" label="rackWidth" required="true" requiredMessage="Please select the width of this new rack!" converterMessage="Invalid Input! Please enter a positive number up to 2 decimal for Width. Example: 53.0 or 42.53">
                         <f:validateDoubleRange minimum="1.0" />
                     </p:inputText>
                     <p:message for="rackWidth" />
 
                     <h:outputLabel for="rackHeight" value="Height of Rack(cm): *" style="font-weight:bold"/>                   
-                    <p:inputText id="rackHeight" value="#{createStorageManagedBean.newRack.height}" maxlength="11" label="rackHeight" required="true" requiredMessage="Please select the height of this new rack!">
+                    <p:inputText id="rackHeight" value="#{createStorageManagedBean.newRack.height}" maxlength="11" label="rackHeight" required="true" requiredMessage="Please select the height of this new rack!" converterMessage="Invalid Input! Please enter a positive number up to 2 decimal for Height. Example: 53.0 or 42.53">
                         <f:validateDoubleRange minimum="1.0" />
                     </p:inputText>
                     <p:message for="rackHeight" />
 
                     <p:outputLabel for="numOfShelve" value="Number of Shelves in Rack:" style="font-weight:bold"/>
-                    <p:selectOneMenu id="numOfShelve" value="#{createStorageManagedBean.numOfShelvesForRack}" style="width:125px" required="true" requiredMessage="Please select the zone location of this new rack!">
+                    <p:selectOneMenu id="numOfShelve" value="#{createStorageManagedBean.numOfShelvesForRack}" style="width:125px" required="true" requiredMessage="Please select the number of shelves of this new rack!">
                         <f:selectItem itemLabel="Select One" itemValue="" />
                         <f:selectItem itemLabel="1" itemValue="1" />
                         <f:selectItem itemLabel="2" itemValue="2" />
@@ -141,7 +141,7 @@
                     <p:message for="numOfShelve" />
 
                 </h:panelGrid>
-                <p:commandButton value="Create Storage Rack" update="grid" actionListener="#{createStorageManagedBean.createRack}" icon="ui-icon-check" validateClient="true" style="margin-right:10px"/>
+                <p:commandButton value="Create Storage Rack" update="formMain" actionListener="#{createStorageManagedBean.createRack}" icon="ui-icon-check" validateClient="true" style="margin-right:10px"/>
             </p:panel>
         </h:form>
 
