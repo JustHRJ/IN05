@@ -46,7 +46,11 @@ public class AddItemManagedBean implements Serializable {
         if ((hiYewICSSessionBean.getExistingItem(newItem.getItemCode()))!= null){
             FacesContext.getCurrentInstance().addMessage("formMain:itemCode", new FacesMessage(FacesMessage.SEVERITY_ERROR,"Unable to add item! Existing Item Code", "Unable to add item! Existing Item Code"));
             return "";
-        }else{
+        }else if ((hiYewICSSessionBean.getExistingItemByName(newItem.getItemName()))!= null){
+            FacesContext.getCurrentInstance().addMessage("formMain:itemName", new FacesMessage(FacesMessage.SEVERITY_ERROR,"Unable to add item! Existing Item Name", "Unable to add item! Existing Item Name"));
+            return "";
+        }
+        else{
           hiYewICSSessionBean.createItem(newItem);
           newItem = new ItemEntity(); //To reinitialise and create new customer
            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Item added to inventory successfully!"));

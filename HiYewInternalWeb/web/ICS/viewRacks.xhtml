@@ -38,13 +38,12 @@
             <p:growl id="msgs" showDetail="true" />
 
 
-            <p:dataTable editable="true" var="rack" value="#{viewRacksManagedBean.racks}" widgetVar="racksTable" 
+            <p:dataTable id="rackDataTable" editable="true" var="rack" value="#{viewRacksManagedBean.racks}" widgetVar="racksTable" 
                          emptyMessage="No racks found with given criteria" filteredValue="#{viewRacksManagedBean.filteredRacks}" rows="10"
                          paginator="true"
                          paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
                          rowsPerPageTemplate="5,10,15">
-                <p:ajax event="rowEdit" listener="#{viewRacksManagedBean.onRowEdit}" update=":form:msgs" />
-                <p:ajax event="rowEditCancel" listener="#{viewRacksManagedBean.onRowCancel}" update=":form:msgs" />
+
                 <f:facet name="header">
                     Hi-Yew's Storage Racks
                 </f:facet>
@@ -62,7 +61,7 @@
                 </p:column>
 
 
-<!--                <p:column filterBy="#{rack.status}" headerText="Status" footerText="equals" filterMatchMode="equals" style="text-align:center">
+                <p:column filterBy="#{rack.status}" headerText="Status" footerText="equals" filterMatchMode="equals" style="text-align:center">
                     <f:facet name="filter">
                         <p:selectOneButton onchange="PF('racksTable').filter()">
                             <f:selectItem itemLabel="All" itemValue="" />
@@ -71,45 +70,36 @@
                         </p:selectOneButton>
                     </f:facet>
                     <h:outputText value="#{rack.status}" />
-                </p:column>-->
+                </p:column>
 
-                <p:column  filterBy="#{rack.status}" headerText="Status" footerText="equals" filterMatchMode="equals" style="text-align:center">
-                    <f:facet name="filter">
-                        <p:selectOneButton onchange="PF('racksTable').filter()">
-                            <f:selectItem itemLabel="All" itemValue="" />
-                            <f:selectItem itemLabel="Not Full" itemValue="Not Full" />
-                            <f:selectItem itemLabel="Full" itemValue="Full" />
-                        </p:selectOneButton>
-                    </f:facet>
-                    <p:cellEditor>
-                        <f:facet name="output"><h:outputText value="#{rack.status}" /></f:facet>
-                        <f:facet name="input">
-                            <h:selectOneMenu value="#{rack.status}" style="width:100%">
-                                
-                                <f:selectItem itemLabel="Not Full" itemValue="Not Full" />
-                                <f:selectItem itemLabel="Full" itemValue="Full" />
-                            </h:selectOneMenu>
-                        </f:facet>
-                    </p:cellEditor>
-                </p:column>
-                
-                <p:column style="width:32px">
-                    <p:rowEditor />
-                </p:column>
-                
+
                 <p:column style="width:32px;text-align: center">
-                    <p:commandButton  action="#{viewRacksManagedBean.passSelectedRackToNext()}" icon="ui-icon-search" update=":form:shelvesOfRackPanel" title="View Rack Details">
+                    <p:commandButton  action="#{viewRacksManagedBean.passSelectedRackToNext()}" icon="ui-icon-search" update="form:shelvesOfRackPanel :form:msgs" title="View Rack Details">
                         <f:setPropertyActionListener value="#{rack}" target="#{viewRacksManagedBean.selectedRack}" />
                     </p:commandButton>
                 </p:column>
 
+                <p:column style="width:32px;text-align: center">
+                    <p:commandButton  action="#{viewRacksManagedBean.deletingRack()}" icon="ui-icon-trash"  update="form:msgs" title="Remove Rack">
+                        <f:setPropertyActionListener value="#{rack}" target="#{viewRacksManagedBean.selectedRack}" />
+                        <p:confirm header="Deletion Confirmation" message="Are you sure you want to delete Rack #{viewRacksManagedBean.selectedRack.rackID}?" icon="ui-icon-alert" />
+                    </p:commandButton>
+                </p:column>
+
+
+
             </p:dataTable>
             <br/>
+            <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+                <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+                <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+            </p:confirmDialog>
 
             <p:panel id="shelvesOfRackPanel" header="Rack #{viewRacksManagedBean.selectedRack.rackID}'s Shelves Details" toggleable="true" toggleSpeed="500" closeSpeed="500" style="margin-bottom:20px"  collapsed="#{viewRacksManagedBean.openShelvePanel}">
-                <p:dataTable var="shelve" value="#{viewRacksManagedBean.shelvesInsideSelectRack}" widgetVar="shelvesTable" 
+                <p:dataTable id="shelveDataTable" editable="true" var="shelve" value="#{viewRacksManagedBean.shelvesInsideSelectRack}" widgetVar="shelvesTable" 
                              emptyMessage="No shelves found with given criteria" filteredValue="#{viewRacksManagedBean.filteredShelves}" >
-
+                    <p:ajax event="rowEdit" listener="#{viewRacksManagedBean.onRowEdit}" update=":form:msgs" />
+                    <p:ajax event="rowEditCancel" listener="#{viewRacksManagedBean.onRowCancel}" update=":form:msgs" />
                     <p:column sortBy="#{shelve.shelveID}" headerText="ShelveID" style="text-align:center" >
                         <h:outputText value="#{shelve.shelveID}" />
                     </p:column>
@@ -120,7 +110,7 @@
                     </p:column>
 
 
-                    <p:column filterBy="#{shelve.status}" headerText="Status" footerText="equals" filterMatchMode="equals" style="text-align:center">
+<!--                    <p:column filterBy="#{shelve.status}" headerText="Status" footerText="equals" filterMatchMode="equals" style="text-align:center">
                         <f:facet name="filter">
                             <p:selectOneButton onchange="PF('racksTable').filter()">
                                 <f:selectItem itemLabel="All" itemValue="" />
@@ -129,10 +119,34 @@
                             </p:selectOneButton>
                         </f:facet>
                         <h:outputText value="#{shelve.status}" />
+                    </p:column>-->
+
+                    <p:column  filterBy="#{shelve.status}" headerText="Status" footerText="equals" filterMatchMode="equals" style="text-align:center">
+                        <f:facet name="filter">
+                            <p:selectOneButton onchange="PF('shelvesTable').filter()">
+                                <f:selectItem itemLabel="All" itemValue="" />
+                                <f:selectItem itemLabel="Not Full" itemValue="Not Full" />
+                                <f:selectItem itemLabel="Full" itemValue="Full" />
+                            </p:selectOneButton>
+                        </f:facet>
+                        <p:cellEditor>
+                            <f:facet name="output"><h:outputText value="#{shelve.status}" /></f:facet>
+                            <f:facet name="input">
+                                <h:selectOneMenu value="#{shelve.status}" style="width:100%">
+
+                                    <f:selectItem itemLabel="Not Full" itemValue="Not Full" />
+                                    <f:selectItem itemLabel="Full" itemValue="Full" />
+                                </h:selectOneMenu>
+                            </f:facet>
+                        </p:cellEditor>
+                    </p:column>
+
+                    <p:column style="width:32px">
+                        <p:rowEditor/>
                     </p:column>
 
                     <p:column style="width:32px;text-align: center">
-                        <p:commandButton action="#{viewRacksManagedBean.passSelectedShelveToNext()}" icon="ui-icon-plus"  title="Add Item">
+                        <p:commandButton action="#{viewRacksManagedBean.passSelectedShelveToNext()}" icon="ui-icon-plus"  title="Manage Shelve">
                             <f:setPropertyActionListener value="#{shelve}" target="#{viewRacksManagedBean.selectedShelve}" />
                         </p:commandButton>
                     </p:column>

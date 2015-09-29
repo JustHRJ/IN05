@@ -124,7 +124,7 @@
                     <h:outputLabel for="quantity1" value="Quantity:" style="font-weight:bold"/>
                     <p:inplace id="quantity" editor="true">
                         <p:ajax  event="save" update="itemDetailsPanel"/>
-                        <p:inputText id="quantity1" value="#{itemDetailsManagedBean.selectedItem.quantity}"  label="text" validatorMessage="Invalid Input! Please enter a positive integer for quantity(max of up to 6 digits)" converterMessage="Invalid Input! Please enter a positive integer for Quantity(max of up to 6 digits)">
+                        <p:inputText id="quantity1" value="#{itemDetailsManagedBean.selectedItem.quantity}" maxlength="6"  label="text" validatorMessage="Invalid Input! Please enter a positive integer for quantity(max of up to 6 digits)" converterMessage="Invalid Input! Please enter a positive integer for Quantity(max of up to 6 digits)">
                             <f:validateLongRange minimum="0" maximum="999999" /> 
                         </p:inputText>
                     </p:inplace>
@@ -134,7 +134,7 @@
                     <h:outputLabel for="cost1" value="Cost(SGD): " style="font-weight:bold"/>
                     <p:inplace id="cost" editor="true">
                         <p:ajax  event="save" update="itemDetailsPanel"/>
-                        <p:inputText id="cost1" value="#{itemDetailsManagedBean.selectedItem.cost}"  label="text" converterMessage="Invalid Input! Please enter a positive number up to 2 decimal for Cost. Example: 53.0 or 42.53">
+                        <p:inputText id="cost1" value="#{itemDetailsManagedBean.selectedItem.cost}"  maxlength="11" label="text" converterMessage="Invalid Input! Please enter a positive number up to 2 decimal for Cost. Example: 53.0 or 42.53">
                             <f:validateDoubleRange minimum="0.0"  />
                         </p:inputText>
                     </p:inplace>
@@ -144,7 +144,7 @@
                     <h:outputLabel for="sellingPrice1" value="Selling price(SGD): " style="font-weight:bold"/>
                     <p:inplace id="sellingPrice" editor="true">
                         <p:ajax  event="save" update="itemDetailsPanel"/>
-                        <p:inputText id="sellingPrice1" value="#{itemDetailsManagedBean.selectedItem.sellingPrice}"  label="text" converterMessage="Invalid Input! Please enter a positive number up to 2 decimal for Selling Price. Example: 53.0 or 42.53">
+                        <p:inputText id="sellingPrice1" value="#{itemDetailsManagedBean.selectedItem.sellingPrice}" maxlength="11" label="text" converterMessage="Invalid Input! Please enter a positive number up to 2 decimal for Selling Price. Example: 53.0 or 42.53">
                             <f:validateDoubleRange minimum="0.0"  />
                         </p:inputText>
                     </p:inplace>
@@ -154,7 +154,7 @@
                     <h:outputLabel for="reorderPoint1" value="Reorder Point: " style="font-weight:bold"/>
                     <p:inplace id="reorderPoint" editor="true" >
                         <p:ajax  event="save" update="itemDetailsPanel"/>
-                        <p:inputText id="reorderPoint1" value="#{itemDetailsManagedBean.selectedItem.reorderPoint}"  label="text" validatorMessage="Invalid Input! Please enter a positive integer for Reorder Point(max of up to 6 digits)" converterMessage="Invalid Input! Please enter a positive integer for Reorder Point(max of up to 6 digits)">
+                        <p:inputText id="reorderPoint1" value="#{itemDetailsManagedBean.selectedItem.reorderPoint}" maxlength="6"  label="text" validatorMessage="Invalid Input! Please enter a positive integer for Reorder Point(max of up to 6 digits)" converterMessage="Invalid Input! Please enter a positive integer for Reorder Point(max of up to 6 digits)">
                             <f:validateLongRange minimum="0" maximum="999999" /> 
                         </p:inputText>
                     </p:inplace>
@@ -164,7 +164,7 @@
                     <h:outputLabel for="averageWeight1" value="Average Weight(grams): " style="font-weight:bold"/>
                     <p:inplace id="averageWeight" editor="true">
                         <p:ajax event="save" update="itemDetailsPanel"/>
-                        <p:inputText id="averageWeight1" value="#{itemDetailsManagedBean.selectedItem.averageWeight}"  label="text" converterMessage="Invalid Input! Please enter a positive number up to 2 decimal for Average weight. Example: 53.0 or 42.53">
+                        <p:inputText id="averageWeight1" value="#{itemDetailsManagedBean.selectedItem.averageWeight}"  maxlength="11" label="text" converterMessage="Invalid Input! Please enter a positive number up to 2 decimal for Average weight. Example: 53.0 or 42.53">
                             <f:validateDoubleRange minimum="0.0"  />
                         </p:inputText>
                     </p:inplace>

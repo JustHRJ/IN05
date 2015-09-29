@@ -50,7 +50,7 @@
 
 
                     <h:outputLabel for="quantity" value="Allocation Quantity:" style="font-weight:bold"/>                    
-                    <p:inputText id="quantity" value="#{allocateStorageManagedBean.allocationQty}" label="Quantity" validatorMessage="Invalid Input! Please enter a positive integer for quantity(max of up to 6 digits)" converterMessage="Invalid Input! Please enter a positive integer for Quantity(max of up to 6 digits)"> 
+                    <p:inputText id="quantity" value="#{allocateStorageManagedBean.allocationQty}" maxlength="6" label="Quantity" validatorMessage="Invalid Input! Please enter a positive integer for quantity(max of up to 6 digits)" converterMessage="Invalid Input! Please enter a positive integer for Quantity(max of up to 6 digits)"> 
                         <f:validateLongRange minimum="0" maximum="999999" />   
                     </p:inputText>
                         <p:message for="quantity" />
@@ -93,7 +93,7 @@
                 <p:outputPanel id="removalDetail" style="text-align:center;">
                     <p:panelGrid  columns="3" >
                         <h:outputLabel for="rQty" value="Removal Quantity:" style="font-weight:bold"/>                    
-                        <p:inputText id="rQty" value="#{allocateStorageManagedBean.removalQty}" label="RQuantity" validatorMessage="Invalid Input! Please enter a positive integer for removal quantity(max of up to 6 digits)" converterMessage="Invalid Input! Please enter a positive integer for Removal Quantity(max of up to 6 digits)"> 
+                        <p:inputText id="rQty" value="#{allocateStorageManagedBean.removalQty}" maxlength="6" label="RQuantity" validatorMessage="Invalid Input! Please enter a positive integer for removal quantity(max of up to 6 digits)" converterMessage="Invalid Input! Please enter a positive integer for Removal Quantity(max of up to 6 digits)"> 
                             <f:validateLongRange minimum="0" maximum="999999" />   
                         </p:inputText>
                         <p:message for="rQty" />           

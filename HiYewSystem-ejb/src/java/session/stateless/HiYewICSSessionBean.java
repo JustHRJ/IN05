@@ -56,6 +56,19 @@ public class HiYewICSSessionBean implements HiYewICSSessionBeanLocal {
     }
 
     @Override
+    public ItemEntity getExistingItemByName(String itemName) {
+        try {
+            System.out.println("getExistingItemByName1 name =" + itemName);
+            Query q = em.createQuery("Select i FROM ItemEntity i WHERE i.itemName=:itemName");
+            q.setParameter("itemName", itemName);
+            return (ItemEntity) q.getSingleResult();
+        } catch (NoResultException e) {
+            System.out.println("getExistingItemByName2");
+            return null;
+        }
+    }
+
+    @Override
     public void updateItemDetails(ItemEntity item) {
         System.out.println("Update item: " + item.getItemCode());
         ItemEntity i = em.find(ItemEntity.class, item.getItemCode());
@@ -142,9 +155,13 @@ public class HiYewICSSessionBean implements HiYewICSSessionBeanLocal {
     @Override
     public ArrayList<ShelveEntity> getShelvesInRack(String rackID) {
         ArrayList<ShelveEntity> shelves = new ArrayList<ShelveEntity>();
+        System.out.println("here at getShelvesInRack.........rack id = " + rackID);
         if (getExistingRack(rackID) != null) {
-            RackEntity selectedRack = getExistingRack(rackID);
-            shelves.addAll(selectedRack.getShelves());
+            Query q = em.createQuery("Select s FROM ShelveEntity s WHERE s.shelveID LIKE :shelveID");
+            q.setParameter("shelveID", rackID + '%');
+//            RackEntity selectedRack = getExistingRack(rackID);
+            shelves.addAll(q.getResultList());
+            System.out.println("here at getShelvesInRack.........selectedRack.getShelves() = " + shelves.size());
             return shelves;
         } else {
             return shelves;
@@ -296,7 +313,7 @@ public class HiYewICSSessionBean implements HiYewICSSessionBeanLocal {
         StorageInfoEntity si = getStorageInfo(item, shelve);
         if (reduceAmt < si.getStoredQty()) {
             si.setStoredQty(si.getStoredQty() - reduceAmt);
-        } else if (reduceAmt==si.getStoredQty()){
+        } else if (reduceAmt == si.getStoredQty()) {
             deleteStorageInfo(item, shelve);
         }
         System.out.println("StatelessBean: reduceStorageQty");
@@ -310,11 +327,74 @@ public class HiYewICSSessionBean implements HiYewICSSessionBeanLocal {
         query.setParameter("shelve", shelve);
         query.executeUpdate();
     }
-    
+
     @Override
-    public void updateRackStatus(RackEntity rack, String status){
+    public void updateRackStatus(RackEntity rack, String status) {
         RackEntity r = em.find(RackEntity.class, rack.getRackID());
         r.setStatus(status);
+    }
+
+    @Override
+    public void updateShelveStatus(ShelveEntity shelve, String status) {
+        ShelveEntity s = em.find(ShelveEntity.class, shelve.getShelveID());
+        s.setStatus(status);
+    }
+
+    @Override
+    public void checkAllShelvesInRackStatus(RackEntity rack) {
+        ArrayList<ShelveEntity> shelves = new ArrayList<ShelveEntity>();
+        shelves.addAll(getShelvesInRack(rack.getRackID()));
+        int fullCounter = 0;
+        for (int i = 0; i < shelves.size(); i++) {
+            ShelveEntity shelve = shelves.get(i);
+            if (shelve.getStatus().equals("Full")) {
+                fullCounter++;
+            }
+        }
+        if (fullCounter == shelves.size()) {
+            updateRackStatus(rack, "Full");
+        } else {
+            updateRackStatus(rack, "Not Full");
+        }
+
+    }
+
+    @Override
+    public boolean checkIfGotItemsInRack(RackEntity rack) {
+        ArrayList<ShelveEntity> shelves = new ArrayList<ShelveEntity>();
+        ArrayList<StorageInfoEntity> siList = new ArrayList<StorageInfoEntity>();
+        shelves.addAll(getShelvesInRack(rack.getRackID()));
+        boolean gotItem = false;
+        for (int i = 0; i < shelves.size(); i++) {
+            ShelveEntity shelve = shelves.get(i);
+            siList.addAll(getAllStorageInfoOfShelve(shelve));
+            if (siList.size() > 0) {
+                gotItem = true;
+                return gotItem;
+            }
+            siList.clear();
+        }
+        return gotItem;
+    }
+    
+     @Override
+    public void deleteRack(RackEntity rack) {
+        System.out.println("Deleting rack: " + rack.getRackID());
+        ArrayList<ShelveEntity> shelves = new ArrayList<ShelveEntity>();
+        shelves.addAll(getShelvesInRack(rack.getRackID()));
+         for (int i = 0; i < shelves.size(); i++) {
+            ShelveEntity shelve = shelves.get(i);
+             deleteShelve(shelve);
+        }
+        Query query = em.createQuery("DELETE FROM RackEntity r WHERE r.rackID = :rackID");
+        query.setParameter("rackID", rack.getRackID()).executeUpdate();
+    }
+    
+    @Override
+    public void deleteShelve(ShelveEntity shelve) {
+        System.out.println("Deleting shelve: " + shelve.getShelveID());
+        Query query = em.createQuery("DELETE FROM ShelveEntity s WHERE s.shelveID = :shelveID");
+        query.setParameter("shelveID", shelve.getShelveID()).executeUpdate();
     }
 
 }
