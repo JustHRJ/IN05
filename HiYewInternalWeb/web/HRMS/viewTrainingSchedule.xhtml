@@ -61,10 +61,12 @@
                 </p:submenu>
                 <p:submenu label ="Sales Management System" icon ="ui-icon-check" style ="font-weight: bold">
                     <p:column>
-                        <p:submenu label ="Quotation">
+                       <p:submenu label ="Products">
+                            <p:menuitem value ="View RFQ" url ="/SMS/viewEditProductQuotations.xhtml" />
+                            <p:menuitem value ="View Purchase Order" url ="/SMS/viewEditProductPurchaseOrders.xhtml"/>
+                        </p:submenu>
+                        <p:submenu label ="Services">
                             <p:menuitem value ="View Customer Services RFQ" url ="/SMS/viewEditQuotations.xhtml"/>
-                            <p:menuitem value ="View Customer Products RFQ" url ="/SMS/viewEditProductQuotations.xhtml" />
-                            <p:menuitem value ="View Customer Product Purchase Order" url ="/SMS/viewEditProductPurchaseOrders.xhtml"/>
                         </p:submenu>
                     </p:column>
                 </p:submenu>
