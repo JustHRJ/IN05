@@ -2,6 +2,7 @@ package managedBean;
 
 import entity.ProductQuotation;
 import entity.ProductQuotationDescription;
+import java.io.IOException;
 import java.io.Serializable;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
@@ -58,14 +59,23 @@ public class ProductQuotationManagedBean implements Serializable {
 
         receivedProductQuotationList = new ArrayList<>(productQuotationSessionBean.receivedProductQuotationList(username));
     }
-    
+
+    public void checkToReset() {
+        if (FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("username").toString() == null) {
+
+        } else if (!username.equals(FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("username").toString())) {
+            System.out.println("ProductQuotationManagedBean.java receivedProductQuotations() ===== call method reset()");
+            reset();
+        }
+    }
+
     public void reset() {
         System.out.println("ProductQuotationManagedBean.java ProductQuotationManagedBean()");
         newProductQuotation = new ProductQuotation();
         newProductQuotationDescription = new ProductQuotationDescription();
         receivedProductQuotationList = new ArrayList<>();
         displayProductQuotationDescriptionList = new ArrayList<>();
-        
+
         count = 1;
         if (FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("username") != null) {
             username = FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("username").toString();
@@ -76,14 +86,14 @@ public class ProductQuotationManagedBean implements Serializable {
 
     public void receivedProductQuotations() {
         System.out.println("ProductQuotationManagedBean.java receivedProductQuotations() ===== " + username);
-        
+
         if (!username.equals(FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("username").toString())) {
             System.out.println("ProductQuotationManagedBean.java receivedProductQuotations() ===== call method reset()");
             reset();
         }
-        
+
         receivedProductQuotationList = new ArrayList<>(productQuotationSessionBean.receivedProductQuotationList(username));
-        
+
         FacesContext.getCurrentInstance().addMessage("qMsg", new FacesMessage(FacesMessage.SEVERITY_INFO, "Current list of quotations are up to date.", ""));
     }
 
@@ -127,7 +137,8 @@ public class ProductQuotationManagedBean implements Serializable {
         setCount((Integer) getCacheList().size() + 1);
     }
 
-    public void createProductQuotation(ActionEvent event) {
+    public void createProductQuotation(ActionEvent event) throws IOException {
+        System.out.println("getUsername() ==== " + getUsername());
         // generate product quotation number
         setProductQuotationNo(getProductQuotationSessionBean().getProductQuotationNo(getUsername()));
         // assign product quotation number
@@ -155,20 +166,22 @@ public class ProductQuotationManagedBean implements Serializable {
         setNewProductQuotationDescription(new ProductQuotationDescription());
         // set quotation tab to be selected
         System.out.println("Your request for product price quotation has been sent successfully!");
-        FacesContext.getCurrentInstance().addMessage("msg", new FacesMessage("Your request for product price quotation has been sent successfully!", ""));
+        FacesContext.getCurrentInstance().getExternalContext().redirect("/HiYewExternalWeb/c-products.xhtml");
+        FacesContext.getCurrentInstance().addMessage("rfqMsg", new FacesMessage("Your request for product price quotation has been sent successfully!", ""));
     }
 
     public void setRejectionStatus(ProductQuotation productQuotation) {
         System.out.println("Customer rejected projuct quotation!");
         productQuotation.setStatus("Rejected");
         getProductQuotationSessionBean().conductMerge(productQuotation);
-        FacesContext.getCurrentInstance().addMessage("msg", new FacesMessage(FacesMessage.SEVERITY_INFO, "You have rejected Product Quotation No. " + productQuotation.getProductQuotationNo(), ""));
+        FacesContext.getCurrentInstance().addMessage("qMsg", new FacesMessage(FacesMessage.SEVERITY_INFO, "You have rejected Product Quotation No. " + productQuotation.getProductQuotationNo(), ""));
     }
 
     public boolean viewVisibility(ProductQuotation productQuotation) {
-        if (productQuotation == null)
+        if (productQuotation == null) {
             return false;
-        
+        }
+
         if (productQuotation.getStatus().equals("Pending") || productQuotation.getStatus().equals("Accepted") || productQuotation.getStatus().equals("Rejected")) {
             return false;
         }

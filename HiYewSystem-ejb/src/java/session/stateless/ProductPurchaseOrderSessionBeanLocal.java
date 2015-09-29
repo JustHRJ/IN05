@@ -13,6 +13,14 @@ public interface ProductPurchaseOrderSessionBeanLocal {
     public void conductMerge(ProductPurchaseOrder productPurchaseOrder);
 
     public List<ProductPurchaseOrder> receivedProductPurchaseOrder(String username);
-    
+
     public List<ProductQuotationDescription> retrieveProductQuotationDescriptionList(String purchaseOrderNo);
+    
+    public List<ProductPurchaseOrder> receivedCustomerNewProductPOList(String status);
+    
+    public void updateProductPORelayedStatus(ProductPurchaseOrder inProductPurchaseOrder);
+    
+    public void updateProductPOStatus(ProductPurchaseOrder inProductPurchaseOrder);
+    
+    public void updatePODeliveryDate(ProductPurchaseOrder inProductPurchaseOrder);
 }

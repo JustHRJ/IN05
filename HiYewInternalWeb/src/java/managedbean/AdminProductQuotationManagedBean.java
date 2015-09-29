@@ -1,5 +1,6 @@
 package managedbean;
 
+import entity.Customer;
 import entity.ProductQuotation;
 import entity.ProductQuotationDescription;
 import java.io.Serializable;
@@ -15,14 +16,18 @@ import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.inject.Named;
 import javax.faces.view.ViewScoped;
+import manager.EmailManager;
+import session.stateless.CustomerSessionBeanLocal;
 import session.stateless.ProductQuotationSessionBeanLocal;
 
-@Named(value = "adminProductsManagedBean")
+@Named(value = "adminProductQuotationManagedBean")
 @ViewScoped
-public class AdminProductsManagedBean implements Serializable {
+public class AdminProductQuotationManagedBean implements Serializable {
 
     @EJB
     private ProductQuotationSessionBeanLocal productQuotationSessionBean;
+    @EJB
+    private CustomerSessionBeanLocal customerSessionBean;
 
     private String status = "Pending";
     // get current year quotations by default
@@ -35,7 +40,7 @@ public class AdminProductsManagedBean implements Serializable {
 
     private ProductQuotation selectedProductQuotation;
 
-    public AdminProductsManagedBean() {
+    public AdminProductQuotationManagedBean() {
         receivedNewProductQuotationList = new ArrayList<>();
         displayProductQuotationDescriptionList = new ArrayList<>();
 
@@ -49,12 +54,18 @@ public class AdminProductsManagedBean implements Serializable {
         setReceivedNewProductQuotationList(new ArrayList<>(productQuotationSessionBean.receivedCustomerNewProductQuotationList(getStatus())));
         getStatuses().put("Pending", "Pending");
         getStatuses().put("Processed", "Processed");
+        getStatuses().put("Relayed", "Relayed");
         getYears().put("2015", "2015");
     }
 
-    public void filterByYearAndStatus() {
-        setReceivedNewProductQuotationList(new ArrayList<>(productQuotationSessionBean.receivedCustomerNewProductQuotationList(getStatus())));
-        System.out.println("filterByYearAndStatus() year ====== " + getYear());
+    public void filterByStatusNoMsg() {
+        receivedNewProductQuotationList = new ArrayList<>(productQuotationSessionBean.receivedCustomerNewProductQuotationList(status));
+    }
+
+    public void filterByStatus() {
+        System.out.println("status ==== " + status);
+        receivedNewProductQuotationList = new ArrayList<>(productQuotationSessionBean.receivedCustomerNewProductQuotationList(status));
+        FacesContext.getCurrentInstance().addMessage("msgs", new FacesMessage(FacesMessage.SEVERITY_INFO, "Current list of \"" + status + "\" purchase order(s) are up to date.", ""));
     }
 
     public String formatDate(Timestamp Ttmestamp) {
@@ -71,12 +82,24 @@ public class AdminProductsManagedBean implements Serializable {
 
     public void updateQuotationPrices() {
         productQuotationSessionBean.updateProductQuotationPrices(getDisplayProductQuotationDescriptionList());
-        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Product quotations have been updated successfully!", ""));
+        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Product quotation has been updated successfully!", ""));
     }
 
-    public void updateQuotationStatus() {
-        productQuotationSessionBean.updateProductQuotationStatus(getSelectedProductQuotation());
-        setSelectedProductQuotation(new ProductQuotation());
+    public void updateQuotationRelayedStatus() {
+        productQuotationSessionBean.updateProductQuotationRelayedStatus(selectedProductQuotation);
+        selectedProductQuotation = new ProductQuotation();
+        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Product quotation has been sent to supplier!", ""));
+    }
+
+    public void updateQuotationStatus(String username) {
+        productQuotationSessionBean.updateProductQuotationStatus(selectedProductQuotation);
+
+        Customer customer = customerSessionBean.getCustomerByUsername(username);
+        if (customer.getSubscribeEmail()) {
+            EmailManager emailManager = new EmailManager();
+            emailManager.emailProductQuotationPriceUpdate(customer.getName(), customer.getEmail(), selectedProductQuotation.getProductQuotationNo());
+        }
+        selectedProductQuotation = new ProductQuotation();
     }
 
     /**

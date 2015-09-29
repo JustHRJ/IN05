@@ -39,17 +39,14 @@ public interface HiYewSystemBeanLocal {
     public String applyLeave(String employee, int days, String remarks, Date start, Date end, String type);
 
     //view all pending leaves
-
     public List<Vector> viewAllLeave();
 
     // approve by leave id, employeeName
-
     public void approveLeaveID(Long id, String name);
 
     public List<EmployeeEntity> viewEmployee(String employeeName);
 
     // view by employeename
-
     public List<LeaveEntity> viewEmployeeLeave(String employeeName);
 
     public List<EmployeeEntity> viewAllEmployee();
@@ -187,6 +184,5 @@ public interface HiYewSystemBeanLocal {
     public List<Vector> employeeTrainingMonthUser(String username);
 
     public void addNewAdmin(String employee, String employee_passNumber, String employee_address, int number_of_leave, String position, String username, Timestamp expiry, String contact, String addressPostal, String unit, String optional, double employeePay, Date employedDate, String email, String password);
-
 
 }

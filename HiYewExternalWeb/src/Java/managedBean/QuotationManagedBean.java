@@ -57,13 +57,22 @@ public class QuotationManagedBean implements Serializable {
 
         receivedQuotations = new ArrayList<>(quotationSessionBean.receivedQuotations(username));
     }
-    
+
+    public void checkToReset() {
+        if (FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("username").toString() == null) {
+
+        } else if (!username.equals(FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("username").toString())) {
+            System.out.println("QuotationManagedBean.java receivedQuotations() ===== call method reset()");
+            reset();
+        }
+    }
+
     public void reset() {
         newQuotation = new Quotation();
         newQuotationDesc = new QuotationDescription();
         receivedQuotations = new ArrayList<>();
         displayQuotationDescriptions = new ArrayList<>();
-        
+
         count = 1;
         if (FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("username") != null) {
             username = FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("username").toString();
@@ -74,12 +83,12 @@ public class QuotationManagedBean implements Serializable {
 
     public void receivedQuotations() {
         System.out.println("QuotationManagedBean.java receivedQuotations() ===== " + username);
-        
+
         if (!username.equals(FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("username").toString())) {
             System.out.println("QuotationManagedBean.java receivedQuotations() ===== call method reset()");
             reset();
         }
-        
+
         receivedQuotations = new ArrayList<>(quotationSessionBean.receivedQuotations(username));
         FacesContext.getCurrentInstance().addMessage("qMsg", new FacesMessage(FacesMessage.SEVERITY_INFO, "Current quotations are up to date.", ""));
     }
@@ -135,6 +144,9 @@ public class QuotationManagedBean implements Serializable {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "RFQ creation must have at least one item job!", ""));
         } else {
             //generate quotatioNo
+//            username = FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("username").toString();
+//            System.out.println("QuotationManagedBean.java createQuotation ==== " + username);
+
             quotationNo = quotationSessionBean.getQuotationNo(username);
             //assign quotation
             newQuotation.setQuotationNo(quotationNo);

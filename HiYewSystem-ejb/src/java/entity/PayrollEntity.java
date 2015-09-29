@@ -19,6 +19,7 @@ import javax.persistence.ManyToOne;
  */
 @Entity
 public class PayrollEntity implements Serializable {
+
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -31,16 +32,17 @@ public class PayrollEntity implements Serializable {
     private EmployeeEntity employee;
     private double salary;
     private double otherAmount;
-    
+
     public Long getId() {
         return id;
     }
-    
+
     @ManyToOne
-    public EmployeeEntity getEmployee(){
+    public EmployeeEntity getEmployee() {
         return employee;
     }
-    public void setEmployee(EmployeeEntity employee){
+
+    public void setEmployee(EmployeeEntity employee) {
         this.employee = employee;
     }
 
@@ -170,5 +172,5 @@ public class PayrollEntity implements Serializable {
     public void setOtherAmount(double otherAmount) {
         this.otherAmount = otherAmount;
     }
-    
+
 }

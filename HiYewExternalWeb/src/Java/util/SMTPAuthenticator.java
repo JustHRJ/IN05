@@ -3,6 +3,7 @@ package util;
 import javax.mail.*;
 
 public class SMTPAuthenticator extends javax.mail.Authenticator {
+
     // Replace with your actual unix id
     private static final String SMTP_AUTH_USER = "yiwenkoh";
     // Replace with your actual unix password

@@ -5,7 +5,6 @@
  */
 package session.stateless;
 
-
 import entity.ItemEntity;
 import entity.RackEntity;
 import entity.ShelveEntity;

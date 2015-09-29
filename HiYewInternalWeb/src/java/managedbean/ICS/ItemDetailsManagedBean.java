@@ -36,23 +36,22 @@ public class ItemDetailsManagedBean implements Serializable {
     private String activityChoice;
     private int quantityIn;
     private int quantityOut;
-    
+
     private boolean showInPanel;
     private boolean showOutPanel;
     private boolean showInOuttPanel;
     private double inCost;
     private double totalWeight;
-    
+
     private List<StorageInfoEntity> infoList;
     private List<StorageInfoEntity> filteredInfoList;
-    
 
     /**
      * Creates a new instance of ItemDetailsManagedBean
      */
     public ItemDetailsManagedBean() {
         infoList = new ArrayList<>();
-        showInOuttPanel =true;
+        showInOuttPanel = true;
         if (FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("SelectedItem") != null) {
             selectedItem = (ItemEntity) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("SelectedItem");
         } else {
@@ -60,11 +59,11 @@ public class ItemDetailsManagedBean implements Serializable {
         }
 
     }
-    
+
     @PostConstruct
-    public void init(){
-        if(selectedItem!=null){
-           infoList = hiYewICSSessionBean.getAllStorageInfoOfItem(selectedItem);
+    public void init() {
+        if (selectedItem != null) {
+            infoList = hiYewICSSessionBean.getAllStorageInfoOfItem(selectedItem);
         }
     }
 
@@ -85,7 +84,7 @@ public class ItemDetailsManagedBean implements Serializable {
     public void updateItemDetails() {
         if (selectedItem.getItemCode() != null) {
             hiYewICSSessionBean.updateItemDetails(selectedItem);
-            FacesContext.getCurrentInstance().addMessage("upperMessages", new FacesMessage("Item " +selectedItem.getItemCode() +"'s details updated successfully!"));
+            FacesContext.getCurrentInstance().addMessage("upperMessages", new FacesMessage("Item " + selectedItem.getItemCode() + "'s details updated successfully!"));
             System.out.println("here4");
         }
     }
@@ -107,65 +106,66 @@ public class ItemDetailsManagedBean implements Serializable {
     /**
      * @return the quantityInOut
      */
-
     private static double round(double value, int places) {
-    if (places < 0) throw new IllegalArgumentException();
+        if (places < 0) {
+            throw new IllegalArgumentException();
+        }
 
-    BigDecimal bd = new BigDecimal(value);
-    bd = bd.setScale(places, RoundingMode.HALF_UP);
-    return bd.doubleValue();
-}
-    
-    public void updateStock(){
+        BigDecimal bd = new BigDecimal(value);
+        bd = bd.setScale(places, RoundingMode.HALF_UP);
+        return bd.doubleValue();
+    }
+
+    public void updateStock() {
         System.out.println("here4444444444444444444444444");
         System.out.println("Selected Item Code: " + selectedItem.getItemCode());
         System.out.println("Activity Choice: " + activityChoice);
-      
-        if(activityChoice.equalsIgnoreCase("stockIn")){
-           System.out.println("Qty in: " + quantityIn);
-           double totalNewCost = ((selectedItem.getCost()*selectedItem.getQuantity())+(round(inCost,2)*quantityIn));
-           System.out.println("Total New Cost: " + totalNewCost);
-           int totalNewQty = selectedItem.getQuantity() + quantityIn;
-           double newAvgCost = round((totalNewCost/totalNewQty),2);
-           selectedItem.setQuantity(totalNewQty);
-           selectedItem.setCost(newAvgCost);
-           System.out.println("New Total Qty: " +totalNewQty);
-           System.out.println("New Avg Cost: " +newAvgCost);
-           hiYewICSSessionBean.stockUp(selectedItem, quantityIn);
-           System.out.println("Stock up here");
-           hiYewICSSessionBean.updateCost(selectedItem, newAvgCost);
-           System.out.println("Update Cost here");
-           FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Item " +selectedItem.getItemCode() +"'s quantity updated successfully!"));
-             
-        }else if (activityChoice.equalsIgnoreCase("stockOut")){
-            if(quantityOut<=selectedItem.getQuantity()){
-            System.out.println("Qty out: " + quantityOut);
-            double totalWeight = quantityOut * selectedItem.getAverageWeight();
-            selectedItem.setQuantity(selectedItem.getQuantity() - quantityOut);
-            hiYewICSSessionBean.stockDown(selectedItem, quantityOut);
-            showMessage(totalWeight);
-            }else{
-        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Invalid Input", "Insufficient Stock!"));
+
+        if (activityChoice.equalsIgnoreCase("stockIn")) {
+            System.out.println("Qty in: " + quantityIn);
+            double totalNewCost = ((selectedItem.getCost() * selectedItem.getQuantity()) + (round(inCost, 2) * quantityIn));
+            System.out.println("Total New Cost: " + totalNewCost);
+            int totalNewQty = selectedItem.getQuantity() + quantityIn;
+            double newAvgCost = round((totalNewCost / totalNewQty), 2);
+            selectedItem.setQuantity(totalNewQty);
+            selectedItem.setCost(newAvgCost);
+            System.out.println("New Total Qty: " + totalNewQty);
+            System.out.println("New Avg Cost: " + newAvgCost);
+            hiYewICSSessionBean.stockUp(selectedItem, quantityIn);
+            System.out.println("Stock up here");
+            hiYewICSSessionBean.updateCost(selectedItem, newAvgCost);
+            System.out.println("Update Cost here");
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Item " + selectedItem.getItemCode() + "'s quantity updated successfully!"));
+
+        } else if (activityChoice.equalsIgnoreCase("stockOut")) {
+            if (quantityOut <= selectedItem.getQuantity()) {
+                System.out.println("Qty out: " + quantityOut);
+                double totalWeight = quantityOut * selectedItem.getAverageWeight();
+                selectedItem.setQuantity(selectedItem.getQuantity() - quantityOut);
+                hiYewICSSessionBean.stockDown(selectedItem, quantityOut);
+                showMessage(totalWeight);
+            } else {
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Invalid Input", "Insufficient Stock!"));
             }
         }
-         
+
     }
-    
+
     public void showMessage(double totalWeight) {
-        FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Additional Info", "The total weight for " + quantityOut + " of ItemCode:" + selectedItem.getItemCode() +" is " + totalWeight + " grams.");
+        FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Additional Info", "The total weight for " + quantityOut + " of ItemCode:" + selectedItem.getItemCode() + " is " + totalWeight + " grams.");
         RequestContext.getCurrentInstance().showMessageInDialog(message);
     }
-    
-    public String deleteItem(){
-         System.out.println("here555555555555555");
+
+    public String deleteItem() {
+        System.out.println("here555555555555555");
         System.out.println("Selected Item Code: " + selectedItem.getItemCode());
-        if(selectedItem.getItemCode().length()>0){
-        hiYewICSSessionBean.deleteItem(selectedItem);
-         FacesContext.getCurrentInstance().addMessage("upperMessages", new FacesMessage("Item " +selectedItem.getItemCode() +"'s quantity deleted successfully!"));
-         return "viewInventory?faces-redirect=true"; 
-        }else{
-             FacesContext.getCurrentInstance().addMessage("upperMessages", new FacesMessage("Unable to delete!"));
-             return "";
+        if (selectedItem.getItemCode().length() > 0) {
+            hiYewICSSessionBean.deleteItem(selectedItem);
+            FacesContext.getCurrentInstance().addMessage("upperMessages", new FacesMessage("Item " + selectedItem.getItemCode() + "'s quantity deleted successfully!"));
+            return "viewInventory?faces-redirect=true";
+        } else {
+            FacesContext.getCurrentInstance().addMessage("upperMessages", new FacesMessage("Unable to delete!"));
+            return "";
         }
     }
 
@@ -224,15 +224,14 @@ public class ItemDetailsManagedBean implements Serializable {
     public void setTotalWeight(double totalWeight) {
         this.totalWeight = totalWeight;
     }
-    
-    public void clickEventHandler(){
-        showInOuttPanel =false;
-        if(activityChoice.equalsIgnoreCase("stockIn")){
+
+    public void clickEventHandler() {
+        showInOuttPanel = false;
+        if (activityChoice.equalsIgnoreCase("stockIn")) {
             showInPanel = true;
             showOutPanel = false;
-            
-             
-        }else if (activityChoice.equalsIgnoreCase("stockOut")){
+
+        } else if (activityChoice.equalsIgnoreCase("stockOut")) {
             showInPanel = false;
             showOutPanel = true;
         }

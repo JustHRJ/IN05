@@ -23,6 +23,8 @@ public interface ProductQuotationSessionBeanLocal {
 
     public void updateProductQuotationPrices(ArrayList<ProductQuotationDescription> list);
 
+    public void updateProductQuotationRelayedStatus(ProductQuotation productQuotation);
+    
     public void updateProductQuotationStatus(ProductQuotation productQuotation);
 
 }

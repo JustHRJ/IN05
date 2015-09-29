@@ -18,13 +18,41 @@
 
     <h:body>
         <h1>Hi-Yew Internal System</h1>
+        #{loginControlBean.checkLoginRedirect()}
+        <h3>logged in as: #{loginControlBean.employeeNameLog} </h3>
+
         <p:megaMenu orientation="horizontal"  styleClass="menu">
+            <p:submenu label ="Human Resource Management System" icon ="ui-icon-check" style ="font-weight: bold">
+                <p:column>
+                    <p:submenu label ="Employee Management">
+                        <p:menuitem value ="Register employee" url ="/HRMS/employeeRegistration.xhtml" disabled="#{loginControlBean.checkValid()}"/>
+                        <p:menuitem value ="View Employee" url = "/HRMS/employee_details.xhtml" />
+                    </p:submenu>
+                    <p:submenu label="Payroll Management">
+                        <p:menuitem value ="Assign Payroll" url ="/HRMS/createPayroll.xhtml" disabled = "#{loginControlBean.checkValid()}"/>
+                        <p:menuitem value ="Release Payroll" url ="/HRMS/releasePayroll.xhtml" disabled="#{loginControlBean.checkValid()}"/>
+                        <p:menuitem value ="View Released Payroll" url ="/HRMS/viewPayroll.xhtml"/>
+                    </p:submenu>
+                </p:column>
+                <p:column>
+                    <p:submenu label="Training and Expiry">
+                        <p:menuitem value ="#{loginControlBean.getEAlert()}" url ="/HRMS/alertEmployee.xhtml" />
+                        <p:menuitem value ="Add Training Schedule" url ="/HRMS/addTrainingSchedule.xhtml" disabled="#{loginControlBean.checkValid()}" />
+                        <p:menuitem value ="Add Employee Training" url ="/HRMS/addEmployeeTraining.xhtml" disabled="#{loginControlBean.checkValid()}" />
+                        <p:menuitem value ="view Upcoming training" url ="/HRMS/viewTrainingSchedule.xhtml"/>
+                    </p:submenu>
+                    <p:submenu label ="Leave Management">
+                        <p:menuitem value ="Apply for Leave" url ="/HRMS/leaveApplication.xhtml" />
+                        <p:menuitem value ="Approve Leave" url ="/HRMS/approveLeave.xhtml" disabled="#{loginControlBean.checkValid()}"/>
+                        <p:menuitem value ="Check Leave Status" url ="/HRMS/leaveStatus.xhtml" />
+                    </p:submenu>
+                </p:column>
+            </p:submenu>
             <p:submenu label="Inventory Control System" icon="ui-icon-check" style="font-weight:bold">
                 <p:column>
                     <p:submenu label="Items Management">
                         <p:menuitem value="View Inventory" url="viewInventory.xhtml" />
                         <p:menuitem value="Add New Item" url="addNewItem.xhtml" />
-                        <p:menuitem value="Low Stock Level Alert (#{viewLowStockManagedBean.numOfLowStockItems})" url="viewLowStock.xhtml" />
                     </p:submenu>
                     <p:submenu label="Storage Management">
                         <p:menuitem value="View Storage" url="viewRacks.xhtml" />
@@ -32,7 +60,30 @@
                     </p:submenu>
                 </p:column>
             </p:submenu>
+            <p:submenu label ="Sales Management System" icon ="ui-icon-check" style ="font-weight: bold">
+                <p:column>
+                    <p:submenu label ="Quotation">
+                        <p:menuitem value ="View Customer Services RFQ" url ="/SMS/viewEditQuotations.xhtml"/>
+                        <p:menuitem value ="View Customer Products RFQ" url ="/SMS/viewEditProductQuotations.xhtml" />
+                          <p:menuitem value ="View Customer Product Purchase Order" url ="/SMS/viewEditProductPurchaseOrders.xhtml"/>
+                    </p:submenu>
+                </p:column>
+            </p:submenu>
+            <p:submenu label ="Machine Management System" icon ="ui-icon-check" style ="font-weight: bold">
+                <p:column>
+                    <p:submenu label = "Machine Management" >
+                        <p:menuitem value ="Add Machinery" url ="/MMS/addMachine.xhtml" />
+                        <p:menuitem value ="View Machinery" url ="/MMS/viewMachine.xhtml" />
+                    </p:submenu>
+                    <p:submenu label ="Machine Maintenance">
+                        <p:menuitem value ="#{hiYewManagedBean.getMAlert()}" url ="/MMS/alertMachine.xhtml" />
+                        <p:menuitem value ="Add Maintenance Schedule" url ="/MMS/addMaintainenceSchedule.xhtml"/>
+                        <p:menuitem value ="View Maintenance Schedule" url ="/MMS/viewMaintainenceSchedule.xhtml" />
+                    </p:submenu>
+                </p:column>
+            </p:submenu>
         </p:megaMenu>
+        <br/>
         <h:form id="formMain">
             <p:messages id ="msg" autoUpdate="false" globalOnly="true"/>
             <p:panel id="allocationPanel" header="Storage Allocation Details" style="margin-bottom:10px;">
@@ -53,15 +104,15 @@
                     <p:inputText id="quantity" value="#{allocateStorageManagedBean.allocationQty}" maxlength="6" label="Quantity" validatorMessage="Invalid Input! Please enter a positive integer for quantity(max of up to 6 digits)" converterMessage="Invalid Input! Please enter a positive integer for Quantity(max of up to 6 digits)"> 
                         <f:validateLongRange minimum="0" maximum="999999" />   
                     </p:inputText>
-                        <p:message for="quantity" />
+                    <p:message for="quantity" />
 
                     <!--                    <p:separator />-->
 
                     <p:commandButton value="Add Item to Shelve"  update="formMain:allocationPanel msg dataForm:shelveInfoDataTable " actionListener="#{allocateStorageManagedBean.addItemToShelve}" icon="ui-icon-check" validateClient="true" style="margin-right:10px"/>
                 </h:panelGrid>
             </p:panel>
-            </h:form>
-            
+        </h:form>
+
         <h:form id="dataForm">
             <p:panel id="itemsOfShelvesPanel"  header="Shelve #{allocateStorageManagedBean.selectedShelve.shelveID}'s Storage Details" toggleable="true" toggleSpeed="500" closeSpeed="500" style="margin-bottom:20px"  collapsed="false">
 
@@ -85,8 +136,8 @@
                 </p:dataTable>
             </p:panel>       
         </h:form>
-            
-        
+
+
 
         <p:dialog header="Removal Details" widgetVar="removalDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false">
             <h:form id="dialogForm">

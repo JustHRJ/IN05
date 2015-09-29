@@ -196,7 +196,7 @@ public class ViewRacksManagedBean implements Serializable {
         //  openShelvePanel = false;
         if (hiYewICSSessionBean.checkIfGotItemsInRack(selectedRack)) {
             System.out.println("Unable to delete rack as there are item in shelves!");
-            FacesMessage msg = new FacesMessage("Unable to delete rack as there are item in shelves!","");
+            FacesMessage msg = new FacesMessage("Unable to delete rack as there are item in shelves!", "");
             FacesContext.getCurrentInstance().addMessage(null, msg);
         } else {
             hiYewICSSessionBean.deleteRack(selectedRack);
