@@ -104,6 +104,7 @@ public class QuotationManagedBean implements Serializable {
         if (newQuotationDesc.getItemDesc().equals("") || newQuotationDesc.getQty() == null) {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Descriptions and quantity must not be left unfilled!", ""));
         } else {
+            
             newQuotationDesc.setQuotationDescNo(count);
             count += 1;
             cacheList.add(newQuotationDesc);
@@ -111,7 +112,6 @@ public class QuotationManagedBean implements Serializable {
             //reinitialise quotation description
             newQuotationDesc = new QuotationDescription();
             //set textbox to blank again
-
         }
     }
 
@@ -163,7 +163,6 @@ public class QuotationManagedBean implements Serializable {
             System.out.println("Your RFQ has been submitted successfully!");
             FacesContext.getCurrentInstance().addMessage("msg", new FacesMessage("Your RFQ has been submitted successfully!", ""));
         }
-
     }
 
     public void setRejectionStatus(Quotation q) {
