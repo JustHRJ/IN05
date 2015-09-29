@@ -33,9 +33,7 @@
                         <p:menuitem value ="Assign Payroll" url ="/HRMS/createPayroll.xhtml" disabled = "#{loginControlBean.checkValid()}"/>
                         <p:menuitem value ="Release Payroll" url ="/HRMS/releasePayroll.xhtml" disabled="#{loginControlBean.checkValid()}"/>
                         <p:menuitem value ="View Released Payroll" url ="/HRMS/viewPayroll.xhtml"/>
-
                     </p:submenu>
-
                 </p:column>
                 <p:column>
                     <p:submenu label="Training and Expiry">
@@ -71,6 +69,7 @@
                     <p:submenu label ="Quotation">
                         <p:menuitem value ="View Customer Services RFQ" url ="viewEditQuotations.xhtml"/>
                         <p:menuitem value ="View Customer Products RFQ" url ="viewEditProductQuotations.xhtml" />
+                        <p:menuitem value ="View Customer Product Purchase Order" url ="viewEditProductPurchaseOrders.xhtml"/>
                     </p:submenu>
                 </p:column>
             </p:submenu>
@@ -89,8 +88,6 @@
                 </p:column>
             </p:submenu>
         </p:megaMenu>
-
-
 
 
         <h:form id="innerForm">

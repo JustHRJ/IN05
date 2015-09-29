@@ -17,7 +17,7 @@
     </h:head>
 
     <h:body>
-        <h1>Hi-Yew Internal System</h1>
+   
         #{loginControlBean.checkLoginRedirect()}
 
         <a href ="/HiYewInternalWeb/index.xhtml"><img src = "../image/hiyew.gif" /></a> <h1>Hi-Yew Internal System</h1>
@@ -68,6 +68,7 @@
                     <p:submenu label ="Quotation">
                         <p:menuitem value ="View Customer Services RFQ" url ="/SMS/viewEditQuotations.xhtml"/>
                         <p:menuitem value ="View Customer Products RFQ" url ="/SMS/viewEditProductQuotations.xhtml" />
+                          <p:menuitem value ="View Customer Product Purchase Order" url ="/SMS/viewEditProductPurchaseOrders.xhtml"/>
                     </p:submenu>
                 </p:column>
             </p:submenu>
