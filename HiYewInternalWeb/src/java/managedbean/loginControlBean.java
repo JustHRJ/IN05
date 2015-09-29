@@ -92,6 +92,14 @@ public class loginControlBean implements Serializable {
             return hiYewSystemBean.employeeTrainingMonthUser(username);
         }
     }
+    
+    public void returnPage() throws IOException{
+        if(logined){
+             FacesContext.getCurrentInstance().getExternalContext().redirect("/HiYewInternalWeb/index.xhtml");
+        } else{
+             FacesContext.getCurrentInstance().getExternalContext().redirect("/HiYewInternalWeb/login.xhtml");
+        }
+    }
 
     public List<LeaveEntity> getEmployeeLeaveMonth() {
 

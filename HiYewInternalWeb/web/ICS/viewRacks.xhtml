@@ -88,8 +88,6 @@
 
         <h:form id="form">
             <p:growl id="msgs" showDetail="true" />
-
-
             <p:dataTable editable="true" var="rack" value="#{viewRacksManagedBean.racks}" widgetVar="racksTable" 
                          emptyMessage="No racks found with given criteria" filteredValue="#{viewRacksManagedBean.filteredRacks}" rows="10"
                          paginator="true"
@@ -190,7 +188,6 @@
                     </p:column>
                 </p:dataTable>
             </p:panel>
-
         </h:form>
     </h:body>
 </html>
