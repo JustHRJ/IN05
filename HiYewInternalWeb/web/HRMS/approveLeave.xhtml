@@ -61,7 +61,7 @@
                 </p:submenu>
                 <p:submenu label ="Sales Management System" icon ="ui-icon-check" style ="font-weight: bold">
                     <p:column>
- <p:submenu label ="Products">
+                        <p:submenu label ="Products">
                             <p:menuitem value ="View RFQ" url ="/SMS/viewEditProductQuotations.xhtml" />
                             <p:menuitem value ="View Purchase Order" url ="/SMS/viewEditProductPurchaseOrders.xhtml"/>
                         </p:submenu>
@@ -139,6 +139,7 @@
                 </p:commandButton>
             </p:panel>
             <br/><br/>
+            
             <p:panel header ="View All Leave">
                 <p:dataTable var="im" value="#{hiYewDataTableBean.leaves}" paginator="true" rows="5" emptyMessage="No pending leaves">
                     <p:column headerText ="Employee Name">

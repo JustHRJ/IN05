@@ -124,7 +124,7 @@
 
             <p:dataTable id ="table" var ="im" value ="#{hiYewDataTableBean.payRecords}"  paginator="true" rows="5" emptyMessage="No outstanding pay">
                 <f:facet name="header">
-                    Billable Employees For the Month of #{hiYewManagedBean.getMonth2()} 
+                    Billable Employees For the Month of #{hiYewManagedBean.getMonth()} 
                 </f:facet>
                 <p:column headerText ="Employee Name" filterBy="#{im.employee.employee_name}" sortBy="#{im.employee.employee_name}">
                     <h:outputText value ="#{im.employee.employee_name}" />

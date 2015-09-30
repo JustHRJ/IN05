@@ -1,0 +1,85 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+    <h:head>
+        <title>Procurement System</title>
+    </h:head>
+    <h:body>
+        #{loginControlBean.checkLoginRedirect()}
+        <a href ="/HiYewInternalWeb/index.xhtml"><img src = "../image/hiyew.gif" /></a>
+        <h:form id = "formMain">
+            <h1>View Purchase Orders</h1>
+            <p:menubar>
+                <p:menuitem value ="Home" url ="/index.xhtml" />
+                <p:menuitem value ="Create Purchase Order" url ="createPO.xhtml" />
+                <p:menuitem value ="View Purchase Order" url ="viewPO.xhtml" />
+            </p:menubar>
+            <br/>
+            <p:growl id = "msgs" showDetail="true"/>
+            <p:dataTable id="checkboxDT" var="im" value="#{hiYewDataTableBean.purcOrders}" selection="#{hiYewManagedBean.selectedList}" rowKey="#{im.supPONo}" editable = "true"  rows="5"
+                         paginator="true"
+                         paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                         rowsPerPageTemplate="5,10,15">
+                <f:facet name="header">
+                    View Purchase Orders
+                </f:facet>
+                <p:column selectionMode="multiple" style="width:16px;text-align:center"/>
+                <p:ajax event="rowEdit" listener="#{hiYewManagedBean.updatePO}" update =":formMain:msgs" />
+
+                <p:column headerText="Purchase Order ID" style = "width: 20%">
+                    <h:outputText value="#{im.supPONo}" />
+                </p:column>
+
+                <p:column headerText="Purchase Order Date">
+                    <h:outputText value="#{hiYewManagedBean.formatDate(im.date)}" />
+                </p:column>
+
+                <p:column headerText="Terms of Payment">
+                    <p:cellEditor>
+                        <f:facet name ="output"><h:outputText value="#{im.termsOfPayment}" style="text-align: center" /></f:facet>
+                        <f:facet name ="input">
+                            <p:selectOneMenu id="termsOfPayment" value="#{hiYewManagedBean.termsOfPayment}" style="width:200px"> 
+                                <f:selectItem itemValue="30" itemLabel="30"/>
+                                <f:selectItem itemValue="60" itemLabel="60"/>
+                                <f:selectItem itemValue="90" itemLabel="90"/>
+                            </p:selectOneMenu></f:facet>
+                                <!--<p:inputText id = "termsOfPayment"  value ="#{hiYewManagedBean.termsOfPayment}"  />-->
+                    </p:cellEditor>
+                </p:column>
+
+                <p:column headerText = "Wire's Description">
+                    <p:cellEditor>
+                        <f:facet name ="output"><h:outputText value="#{im.description}" style="text-align: center" /></f:facet>
+                        <f:facet name ="input"><p:inputText id = "description"  value ="#{hiYewManagedBean.description}"  /></f:facet>
+                    </p:cellEditor>
+                </p:column>
+
+                <p:column headerText="Supplier's Company">
+                    <h:outputText value="#{im.supCompanyName}" />
+                </p:column>
+
+                <p:column headerText="Wires' Quantity">
+                    <p:cellEditor>
+                        <f:facet name ="output"><h:outputText value="#{im.quantity}" style="text-align: center" /></f:facet>
+                        <f:facet name ="input"><p:inputText id = "quantity"  value ="#{hiYewManagedBean.quantity}"  /></f:facet>
+                    </p:cellEditor>
+                </p:column>
+
+                <p:column headerText="PO's Status">
+                    <h:outputText value="#{im.supPoStatus}" />
+                </p:column>
+                <p:column style = "width: 32px">
+                    <p:rowEditor rendered = "#{im.supPoStatus eq 'Pending'}" /> 
+                </p:column>
+                <f:facet name="footer">  
+                    <p:commandButton process="checkboxDT" action="#{hiYewManagedBean.sendPO}"  update =":formMain:msgs checkboxDT"   icon="ui-icon-search" value="Send Purchase Order(s)"/>
+                </f:facet>
+            </p:dataTable>
+        </h:form>
+    </h:body>
+</html>
+
+
