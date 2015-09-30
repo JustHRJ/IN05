@@ -526,7 +526,7 @@ public class HiYewSystemBean implements HiYewSystemBeanLocal {
                 PayrollEntity p = (PayrollEntity) o;
                 if (p.getStatus().equals("unset")) {
                     p.setStatus("unissued");
-                    if (late < 3 && sick < 2) {
+                    if (late < 3 && sick < 2 && p.getSalary() > (e.getEmployee_basic() / (double) 4 * (double) 3)  ) {
                         p.setBonus(100.00);
                     } else {
                         p.setBonus(0.00);

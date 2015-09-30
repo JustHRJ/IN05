@@ -49,7 +49,7 @@ public class HiYewSystemTimer {
             if (!(e.getAccount_status().equals("disabled"))) {
                 PayrollEntity p = new PayrollEntity();
                 Calendar c = Calendar.getInstance();
-                c.add(Calendar.MONTH, -1);
+                c.add(Calendar.DATE, -1);
                 SimpleDateFormat format = new SimpleDateFormat("MMM,yyyy");
                 p.setStatus("unset");
                 p.setMonth(format.format(c.getTime()));
@@ -95,9 +95,13 @@ public class HiYewSystemTimer {
         d.set(Calendar.MINUTE, 0);
         d.set(Calendar.HOUR, 0);
 
-        int diffInDays = (int) (c.getTime().getTime() - employedDate.getTime())
-                / (1000 * 60 * 60 * 24);
+        System.out.println(c.getTime().getTime());
+        System.out.println(employedDate.getTime());
+      int diffInDays = (int) ((c.getTime().getTime() - employedDate.getTime())
+                / (1000 * 60 * 60 * 24));
 
+               System.out.println(diffInDays + "here");
+        
         if (diffInDays > 0) {
             diffInDays += 1;
         } else {

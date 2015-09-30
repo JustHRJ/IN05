@@ -116,9 +116,10 @@ public class HiYewManagedBean {
     }
 
     public String getMonth() {
-        Date date = new Date();
+        Calendar c = Calendar.getInstance();
+        c.add(Calendar.DATE, -1);
         SimpleDateFormat format = new SimpleDateFormat("MMM,yyyy");
-        return format.format(date);
+        return format.format(c.getTime());
     }
 
     public void addPay() throws IOException, InterruptedException {
