@@ -15,7 +15,7 @@ import javax.faces.validator.Validator;
 import javax.faces.validator.ValidatorException;
 import javax.mail.internet.InternetAddress;
 import session.stateful.HiYewSystemBeanLocal;
-
+import java.util.regex.*;
 /**
  *
  * @author JustHRJ
@@ -49,15 +49,16 @@ public class registrationValidator implements Validator {
     public void validateEmail(FacesContext context, UIComponent component, Object submittedAndConvertedValue) throws ValidatorException {
 
         String email = (String) submittedAndConvertedValue;
-
-        try {
+         String emailregex = "^[_A-Za-z0-9-]+(\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\\.[A-Za-z0-9-]+)*(\\.[A-Za-z]{2,})$";
+        
             if (!(email.isEmpty())) {
-                InternetAddress emailAddr = new InternetAddress(email);
-                emailAddr.validate();
+                if(email.matches(emailregex)){
+                    
+                }else{
+                    throw new ValidatorException(new FacesMessage("Employee Name already in use, choose another"));
+                }
             }
-        } catch (Exception ex) {
-            throw new ValidatorException(new FacesMessage("Email is invalid"));
-        }
+   
 
     }
 
@@ -196,7 +197,6 @@ public class registrationValidator implements Validator {
         }
 
     }
-    
 
     public void validateU(FacesContext context, UIComponent component, Object submittedAndConvertedValue) throws ValidatorException {
         String username = (String) submittedAndConvertedValue;
@@ -210,7 +210,7 @@ public class registrationValidator implements Validator {
         }
     }
 
-     public void validateMachineName(FacesContext context, UIComponent component, Object submittedAndConvertedValue) throws ValidatorException {
+    public void validateMachineName(FacesContext context, UIComponent component, Object submittedAndConvertedValue) throws ValidatorException {
         String username = (String) submittedAndConvertedValue;
 
         if (username == null || username.isEmpty()) {
@@ -222,8 +222,6 @@ public class registrationValidator implements Validator {
         }
     }
 
-    
-    
     public void validateExpiredName(FacesContext context, UIComponent component, Object submittedAndConvertedValue) throws ValidatorException {
         String name = (String) submittedAndConvertedValue;
 

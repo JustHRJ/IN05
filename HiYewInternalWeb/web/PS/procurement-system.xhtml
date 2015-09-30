@@ -1,0 +1,105 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <h:head>
+        <title>View/Edit Quotations</title>
+    </h:head>
+    <h:body>
+        <h:form id="form">
+            <p:menubar>
+                <p:menuitem value ="Home" url ="/index.xhtml" />
+                <p:menuitem value ="View/Edit Quotation" url ="SMS/viewEditQuotations.xhtml" />
+
+            </p:menubar>
+        </h:form>
+
+        <h:form id="innerForm">
+            <h:panelGrid columns="2" cellpadding="5">
+                <p:outputLabel for="year" value="Year: " />
+                <p:selectOneMenu id="year" value="#{adminQuotationManagedBean.year}" style="width:150px">
+                    <p:ajax listener="#{adminQuotationManagedBean.filterByYearAndStatus()}" update="rcvQuote" />         
+
+                    <f:selectItem itemLabel="Select year" itemValue="" noSelectionOption="true" />
+                    <f:selectItems value="#{adminQuotationManagedBean.years}" />
+                </p:selectOneMenu>
+                <p:outputLabel for="QuotationStatus" value="Quotation Status: " />
+
+                <p:selectOneMenu id="QuotationStatus" value="#{adminQuotationManagedBean.status}"  style="width:230px">
+                    <p:ajax listener="#{adminQuotationManagedBean.filterByYearAndStatus()}" update="rcvQuote" /> 
+                    <f:selectItem itemLabel="Select Quotation Status" itemValue="" noSelectionOption="true" />
+                    <f:selectItems value="#{adminQuotationManagedBean.statuses}" />
+                </p:selectOneMenu>
+            </h:panelGrid>
+            <p:messages id="msgs"  showDetail="false" />
+
+            <p:commandButton value="Refresh" actionListener="#{adminQuotationManagedBean.filterByYearAndStatus()}" update="msgs rcvQuote" icon="ui-icon-check"/>
+            <p:dataTable value="#{adminQuotationManagedBean.receivedCustomerNewQuotations}" var="item" rows="5" id="rcvQuote" paginator="true" editable="true">
+
+                <p:column headerText="Quotation No" width="10%">
+
+                    <p:outputLabel value="#{item.quotationNo}"/>
+
+                </p:column>
+                <p:column headerText="Date (dd/mm/yyyy)" width="15%">
+                    <h:outputText value="#{adminQuotationManagedBean.formatDate(item.date)}"/>
+                </p:column>
+                <p:column headerText="Status" width="15%">
+                    <h:outputText value="#{item.status}"/>
+                </p:column>
+                <p:column headerText="Payment Terms" width="10%">
+                    <h:outputText value="#{item.termsOfPayment}"/>
+                </p:column>
+                <p:column style="width:32px;text-align: center">
+                    <p:commandButton id="quoteDescBtn" icon="ui-icon-search" title="View" update="quotationDetailPanel" action="#{adminQuotationManagedBean.selectQuotation(item)}"/>
+                    <!--<p:dialog  widgetVar="dlg" modal="true" resizable="false" header="Values" showEffect="fade" >-->
+                    <p:overlayPanel for="quoteDescBtn" showEffect="fade" hideEffect="fade" dismissable="false" showCloseIcon="true" style="width:1200px">
+
+                        <p:outputPanel id="quotationDetailPanel" style="text-align:center;" >
+                            <p:commandButton value="Update Quotation Details" action="#{adminQuotationManagedBean.updateQuotationPricesAndSample()}" update=":innerForm:msgs " icon="ui-icon-check"/>
+                            <p:commandButton value="Forward to Customer" action="#{adminQuotationManagedBean.updateQuotationStatus()}" update=":innerForm:msgs rcvQuote" icon="ui-icon-check"/>
+
+                            <p:dataTable var="quoteDescItem" value="#{adminQuotationManagedBean.displayQuotationDescriptions}" rows="5" paginator="true">
+                                <p:column headerText="ID" width="5%">
+                                    <h:outputText value="#{quoteDescItem.quotationDescNo}" />
+                                </p:column>
+
+                                <p:column headerText="Item Descriptions" width="60%">
+                                    <h:outputText value="#{quoteDescItem.itemDesc}" />
+                                </p:column>
+
+                                <p:column headerText="Qty" width="10%">
+                                    <h:outputText value="#{quoteDescItem.qty}" />
+                                </p:column>
+
+                                <p:column headerText="Quoted Price" width="12%">
+                                    <h:inputText value="#{quoteDescItem.price}" style="width: 60%"
+                                                 maxlength="7" converterMessage="Quantity must be a number consisting of one or more digits.">
+                                        <f:validateLongRange minimum="1" />
+                                    </h:inputText>
+                                </p:column>
+                                <p:column headerText="Req for Sample" width="12%">
+
+                                    <p:selectOneMenu value="#{quoteDescItem.requestForMetalSample}" style="width:80px">
+                                        <f:selectItem itemValue="No" itemLabel="No" />
+                                        <f:selectItem itemValue="Yes" itemLabel="Yes" />
+                                    </p:selectOneMenu>
+                                </p:column>
+
+                            </p:dataTable>
+
+                        </p:outputPanel>
+
+                    </p:overlayPanel>
+                    <!--</p:dialog>-->
+                </p:column>
+
+            </p:dataTable>
+
+        </h:form>
+    </h:body>
+</html>
+

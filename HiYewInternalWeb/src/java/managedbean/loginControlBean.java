@@ -42,6 +42,20 @@ public class loginControlBean implements Serializable {
     public loginControlBean() {
     }
 
+    public void checkLogoutRedirect() throws IOException {
+        if (logined) {
+            loginPosition = "";
+            username = "";
+            password = "";
+            logined = false;
+            employeeName = "";
+            FacesContext.getCurrentInstance().getExternalContext().redirect("/HiYewInternalWeb/login.xhtml");
+
+        } else {
+
+        }
+    }
+
     public String getEAlert() {
         if (loginPosition.equals("admin")) {
             int noOfAlert = hiYewSystemBean.getENoAlert();
@@ -90,6 +104,14 @@ public class loginControlBean implements Serializable {
             return hiYewSystemBean.employeeTrainingMonth();
         } else {
             return hiYewSystemBean.employeeTrainingMonthUser(username);
+        }
+    }
+
+    public void returnPage() throws IOException {
+        if (logined) {
+            FacesContext.getCurrentInstance().getExternalContext().redirect("/HiYewInternalWeb/index.xhtml");
+        } else {
+            FacesContext.getCurrentInstance().getExternalContext().redirect("/HiYewInternalWeb/login.xhtml");
         }
     }
 
@@ -176,6 +198,7 @@ public class loginControlBean implements Serializable {
 
     public void checkLogin() throws IOException {
         String result = hiYewSystemBean.login(username, password);
+        FacesContext.getCurrentInstance().getExternalContext().getSessionMap().remove("loginMessage");
         if (result.equals("disabled")) {
             FacesMessage msg = new FacesMessage("Failed to login", "Account has been locked");
             FacesContext.getCurrentInstance().addMessage(null, msg);

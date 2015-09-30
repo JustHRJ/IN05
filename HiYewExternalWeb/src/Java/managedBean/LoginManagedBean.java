@@ -15,7 +15,7 @@ import session.stateless.CustomerSessionBeanLocal;
 import session.stateless.SupplierSessionBeanLocal;
 import manager.EmailManager;
 
-@Named(value = "LoginManagedBean")
+@Named(value = "loginManagedBean")
 @ViewScoped
 public class LoginManagedBean implements Serializable {
 
@@ -37,8 +37,6 @@ public class LoginManagedBean implements Serializable {
      * Creates a new instance of LoginManagedBean
      */
     public LoginManagedBean() {
-        FacesContext.getCurrentInstance().getExternalContext().getSessionMap().remove("username");
-        FacesContext.getCurrentInstance().getExternalContext().getSessionMap().remove("userRole");
         FacesContext.getCurrentInstance().getExternalContext().getSessionMap().remove("loginMessage");
         FacesContext.getCurrentInstance().getExternalContext().getSessionMap().remove("forgotMessage");
         FacesContext.getCurrentInstance().getExternalContext().getSessionMap().remove("registerMessage");
@@ -55,20 +53,15 @@ public class LoginManagedBean implements Serializable {
         users.add("Supplier");
     }
 
-    public void register() {
-
-    }
-
     public String login() {
         String path = "";
         if (this.user.equals("Customer")) {
             setCustomer(customerSessionBean.getCustomerByUsername(this.username));
             try {
                 if (customerSessionBean.encryptPassword(this.password).equals(getCustomer().getPw())) {
-                    FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("userRole", "Customer");
                     FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("username", this.username);
                     System.out.println("Login Success");
-                    path = "user-profile?faces-redirect=true"; //navigation
+                    path = "c-user-profile?faces-redirect=true"; //navigation
                 } else {
                     FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("loginMessage", "Invalid Username or password! Please try again.");
                     //FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Invalid Username or password!"));
@@ -109,10 +102,34 @@ public class LoginManagedBean implements Serializable {
         return path;
     }
 
-    public String logout() {
-        FacesContext.getCurrentInstance().getExternalContext().getSessionMap().remove("user");
-        System.out.println("Logout Success");
-        return "login?faces-redirect=true"; // navigation
+    public void checkLoginRedirect() throws IOException {
+        if (FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("username") == null) {
+            FacesContext.getCurrentInstance().getExternalContext().redirect("/HiYewExternalWeb/login.xhtml");
+        }
+    }
+
+    public void checkAfterLoginRedirect() throws IOException {
+        if (FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("username") != null) {
+            System.out.println(FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("username"));
+        }
+        if (FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("username") != null) {
+            FacesContext.getCurrentInstance().getExternalContext().invalidateSession();
+            username = "";
+            password = "";
+            FacesContext.getCurrentInstance().getExternalContext().redirect("/HiYewExternalWeb/login.xhtml");
+            System.out.println("");
+        }
+    }
+
+    public void logout() throws IOException {
+        if (FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("username") != null) {
+            FacesContext.getCurrentInstance().getExternalContext().invalidateSession();
+            username = "";
+            password = "";
+            FacesContext.getCurrentInstance().getExternalContext().redirect("/HiYewExternalWeb/login.xhtml");
+
+            System.out.println("Logout Success");
+        }
     }
 
     public String sendPassword() {
@@ -141,7 +158,7 @@ public class LoginManagedBean implements Serializable {
             if (newCustomer.getPw().equals(rePassword)) {
                 // encrypt password
                 newCustomer.setPw(customerSessionBean.encryptPassword(newCustomer.getPw()));
-                newCustomer.setSubscribeEmail("true");
+                newCustomer.setSubscribeEmail(true);
                 customerSessionBean.createCustomer(newCustomer);
                 EmailManager emailManager = new EmailManager();
                 emailManager.emailSuccessfulRegistration(newCustomer.getName(), newCustomer.getUserName(), rePassword, newCustomer.getEmail());
@@ -150,7 +167,7 @@ public class LoginManagedBean implements Serializable {
                 return "login?faces-redirect=true";
             } else {
                 FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("registerMessage", "Your password and confirmation password do not match.");
-                return "register-customer?faces-redirect=true";
+                return "";
             }
         } else {
             FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("registerMessage", "This username has been taken by someone else. Please choose a different username.");
@@ -179,6 +196,7 @@ public class LoginManagedBean implements Serializable {
             FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("registerMessage", "This username has been taken by someone else. Please choose a different username.");
             return "register-supplier?faces-redirect=true";
         }
+        
     }
 
     /**

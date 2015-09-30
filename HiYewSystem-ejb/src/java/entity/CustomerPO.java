@@ -1,38 +1,31 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package entity;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 
-/**
- *
- * @author: jitcheong
- */
 @Entity
 public class CustomerPO implements Serializable {
+
     private static long serialVersionUID = 1L;
 
     @Id
     private String poId; //follows quotation no
-    
+
     private Timestamp poDate;
     private Timestamp expectedStartDate;
     private Timestamp expectedEndDate;
-    
+
     //Assumptions: Not possible for customer to self-collect
     private String mailingAddr1; //street name
     private String mailingAddr2; //unit no
-    private Double totalPrice; 
-    
+    private Double totalPrice;
+
     @OneToOne
     private Quotation quotation; //One-to-One Uni-Directional Relationship (page 201)
     @ManyToOne
@@ -60,6 +53,15 @@ public class CustomerPO implements Serializable {
 
     public void setPoId(String poId) {
         this.poId = poId;
+    }
+    
+    public String formatDate(Timestamp t) {
+
+        SimpleDateFormat sd = new SimpleDateFormat("dd/MM/yyyy");
+        if(t != null){
+            return sd.format(t.getTime());
+        }
+        return "";
     }
 
     @Override
@@ -198,5 +200,5 @@ public class CustomerPO implements Serializable {
     public void setCustomer(Customer customer) {
         this.customer = customer;
     }
-    
+
 }

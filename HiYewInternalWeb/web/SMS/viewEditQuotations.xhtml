@@ -12,13 +12,13 @@
                 margin-top:20px;
                 margin-bottom:30px;
                 background-color: lightblue;
-            }    
-
+            }
         </style>
-
     </h:head>
     <h:body>
-        <a href ="/HiYewInternalWeb/index.xhtml"><img src = "../image/hiyew.gif" /></a>  <h1>View/Edit Quotations</h1>
+        <a href ="/HiYewInternalWeb/index.xhtml"><img src = "../image/hiyew.gif" /></a>  <h1>View/Edit Service Quotation</h1>
+        #{loginControlBean.checkLoginRedirect()}
+        <h3>logged in as: #{loginControlBean.employeeNameLog} </h3>
         <h:form id="form">
             <p:megaMenu orientation="horizontal"  styleClass="menu">
                 <p:submenu label ="Human Resource Management System" icon ="ui-icon-check" style ="font-weight: bold">
@@ -31,9 +31,7 @@
                             <p:menuitem value ="Assign Payroll" url ="/HRMS/createPayroll.xhtml" disabled = "#{loginControlBean.checkValid()}"/>
                             <p:menuitem value ="Release Payroll" url ="/HRMS/releasePayroll.xhtml" disabled="#{loginControlBean.checkValid()}"/>
                             <p:menuitem value ="View Released Payroll" url ="/HRMS/viewPayroll.xhtml"/>
-
                         </p:submenu>
-
                     </p:column>
                     <p:column>
                         <p:submenu label="Training and Expiry">
@@ -47,11 +45,8 @@
                             <p:menuitem value ="Approve Leave" url ="/HRMS/approveLeave.xhtml" disabled="#{loginControlBean.checkValid()}"/>
                             <p:menuitem value ="Check Leave Status" url ="/HRMS/leaveStatus.xhtml" />
                         </p:submenu>
-
                     </p:column>
-
                 </p:submenu>
-
                 <p:submenu label="Inventory Control System" icon="ui-icon-check" style="font-weight:bold">
                     <p:column>
                         <p:submenu label="Items Management">
@@ -59,13 +54,22 @@
                             <p:menuitem value="Add New Item" url="/ICS/addNewItem.xhtml" />
                         </p:submenu>
                         <p:submenu label="Storage Management">
-                            <p:menuitem value="View Storage" url="#" />
-                            <p:menuitem value="Storage Allocation" url="#" />
-                            <p:menuitem value="Create Storage" url="#" />
+                            <p:menuitem value="View Storage" url="/ICS/viewRacks.xhtml" />
+                            <p:menuitem value="Create Storage" url="/ICS/createStorage.xhtml" />
                         </p:submenu>
                     </p:column>
                 </p:submenu>
-
+                <p:submenu label ="Sales Management System" icon ="ui-icon-check" style ="font-weight: bold">
+                    <p:column>
+                       <p:submenu label ="Products">
+                            <p:menuitem value ="View RFQ" url ="/SMS/viewEditProductQuotations.xhtml" />
+                            <p:menuitem value ="View Purchase Order" url ="/SMS/viewEditProductPurchaseOrders.xhtml"/>
+                        </p:submenu>
+                        <p:submenu label ="Services">
+                            <p:menuitem value ="View Customer Services RFQ" url ="/SMS/viewEditQuotations.xhtml"/>
+                        </p:submenu>
+                    </p:column>
+                </p:submenu>
                 <p:submenu label ="Machine Management System" icon ="ui-icon-check" style ="font-weight: bold">
                     <p:column>
                         <p:submenu label = "Machine Management" >
@@ -80,14 +84,8 @@
                         </p:submenu>
                     </p:column>
                 </p:submenu>
-                <p:submenu label ="Sales Management System" icon ="ui-icon-check" style ="font-weight: bold">
-                    <p:column>
-                        <p:submenu label ="Quotation">
-                            <p:menuitem value ="View Customer RFQ" url ="viewEditQuotations.xhtml"/>
-                        </p:submenu>
-                    </p:column>
-                </p:submenu>
             </p:megaMenu>
+
         </h:form>
 
         <h:form id="innerForm">
@@ -107,7 +105,7 @@
                     <f:selectItems value="#{adminQuotationManagedBean.statuses}" />
                 </p:selectOneMenu>
             </h:panelGrid>
-            <p:messages id="msgs"  showDetail="false" />
+            <p:messages id="msgs" globalOnly="true" showDetail="false" />
 
             <p:commandButton value="Refresh" actionListener="#{adminQuotationManagedBean.filterByYearAndStatus()}" update="msgs rcvQuote" icon="ui-icon-check"/>
             <p:dataTable value="#{adminQuotationManagedBean.receivedCustomerNewQuotations}" var="item" rows="5" id="rcvQuote" paginator="true" editable="true">
@@ -130,10 +128,10 @@
                     <p:commandButton id="quoteDescBtn" icon="ui-icon-search" title="View" update="quotationDetailPanel" action="#{adminQuotationManagedBean.selectQuotation(item)}"/>
                     <!--<p:dialog  widgetVar="dlg" modal="true" resizable="false" header="Values" showEffect="fade" >-->
                     <p:overlayPanel for="quoteDescBtn" showEffect="fade" hideEffect="fade" dismissable="false" showCloseIcon="true" style="width:1200px">
-
+                        
                         <p:outputPanel id="quotationDetailPanel" style="text-align:center;" >
-                            <p:commandButton value="Update Quotation Details" action="#{adminQuotationManagedBean.updateQuotationPricesAndSample()}" update=":innerForm:msgs " icon="ui-icon-check"/>
-                            <p:commandButton value="Forward to Customer" action="#{adminQuotationManagedBean.updateQuotationStatus()}" update=":innerForm:msgs rcvQuote" icon="ui-icon-check"/>
+                            <p:commandButton value="Update Quotation Details" action="#{adminQuotationManagedBean.updateQuotationPricesAndSample()}" update=":innerForm:msgs " disabled="#{loginControlBean.checkValid()}"  icon="ui-icon-check"/>
+                            <p:commandButton value="Forward to Customer" action="#{adminQuotationManagedBean.updateQuotationStatus()}" update=":innerForm:msgs rcvQuote" icon="ui-icon-check" disabled="#{loginControlBean.checkValid()}" />
 
                             <p:dataTable var="quoteDescItem" value="#{adminQuotationManagedBean.displayQuotationDescriptions}" rows="5" paginator="true">
                                 <p:column headerText="ID" width="5%">
@@ -148,15 +146,15 @@
                                     <h:outputText value="#{quoteDescItem.qty}" />
                                 </p:column>
 
-                                <p:column headerText="Quoted Price" width="12%">
+                                <p:column headerText="Quoted Price (SGD)" width="12%">
                                     <h:inputText value="#{quoteDescItem.price}" style="width: 60%"
-                                                 maxlength="7" converterMessage="Quantity must be a number consisting of one or more digits.">
+                                                 maxlength="7" converterMessage="Quantity must be a number consisting of one or more digits." disabled="#{loginControlBean.checkValid()}">
                                         <f:validateLongRange minimum="1" />
                                     </h:inputText>
                                 </p:column>
                                 <p:column headerText="Req for Sample" width="12%">
 
-                                    <p:selectOneMenu value="#{quoteDescItem.requestForMetalSample}" style="width:80px">
+                                    <p:selectOneMenu value="#{quoteDescItem.requestForMetalSample}" style="width:80px" disabled="#{loginControlBean.checkValid()}" >
                                         <f:selectItem itemValue="No" itemLabel="No" />
                                         <f:selectItem itemValue="Yes" itemLabel="Yes" />
                                     </p:selectOneMenu>

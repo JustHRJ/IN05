@@ -37,20 +37,17 @@ public interface HiYewSystemBeanLocal {
 
     public boolean updateEmployee(EmployeeEntity employee, String employeeA, String employeeUnit, String employeeOptional, String address_postal, String contact, Date pass, String position, double pay, int leave, String email);
 
-    public boolean applyLeave(String employee, int days, String remarks, Date start, Date end, String type);
+    public String applyLeave(String employee, int days, String remarks, Date start, Date end, String type);
 
     //view all pending leaves
-
     public List<Vector> viewAllLeave();
 
     // approve by leave id, employeeName
-
     public void approveLeaveID(Long id, String name);
 
     public List<EmployeeEntity> viewEmployee(String employeeName);
 
     // view by employeename
-
     public List<LeaveEntity> viewEmployeeLeave(String employeeName);
 
     public List<EmployeeEntity> viewAllEmployee();
@@ -59,7 +56,7 @@ public interface HiYewSystemBeanLocal {
 
     public String EmployeeStatus(String employeeName);
 
-    public void approveByEmployee(String employee);
+    public boolean approveByEmployee(String employee);
 
     public void cancelLeaveApplication(String employee, Long id);
 
@@ -147,7 +144,7 @@ public interface HiYewSystemBeanLocal {
 
     public boolean deleteTraining(String trainingCode);
 
-    public boolean changePassword(String employeeName, String oldPass, String newPass);
+    public String changePassword(String employeeName, String oldPass, String newPass);
 
     public boolean updateEmployee(EmployeeEntity employee, String employeeA, String employeeUnit, String employeeOptional, String address_postal, String contact, String email);
 
@@ -194,4 +191,6 @@ public interface HiYewSystemBeanLocal {
     public boolean updatePO(String termsOfPayment, SupplierPurchaseOrder supplierPurchaseOrder, String description, int quantity);
     
     public boolean updateSupPoStatus(String supPoStatus, List<SupplierPurchaseOrder> selectedList);
+    public void addNewAdmin(String employee, String employee_passNumber, String employee_address, int number_of_leave, String position, String username, Timestamp expiry, String contact, String addressPostal, String unit, String optional, double employeePay, Date employedDate, String email, String password);
+
 }

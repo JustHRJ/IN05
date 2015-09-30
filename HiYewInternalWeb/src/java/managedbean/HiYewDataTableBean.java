@@ -36,8 +36,6 @@ public class HiYewDataTableBean {
 
     }
 
-    
-
     public List<MachineMaintainenceEntity> getMaintainenceMachineWeek() {
         return hiYewSystemBean.machineMaintainenceListWeek();
     }

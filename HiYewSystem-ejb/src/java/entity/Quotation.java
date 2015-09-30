@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package entity;
 
 import java.io.Serializable;
@@ -15,12 +10,9 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
-/**
- *
- * @author Jit Cheong
- */
 @Entity
 public class Quotation implements Serializable {
+
     private static final long serialVersionUID = 1L;
     @Id
     private String quotationNo;
@@ -28,7 +20,7 @@ public class Quotation implements Serializable {
     private String termsOfPayment = "30"; //30, 60, 90 days
     private String status; //Processed, Pending, Accepted, Rejected
     //private QuotationDescription quotationDescription;
-    
+
     @OneToMany(mappedBy = "quotation")
     private List<QuotationDescription> quotationDescriptions = new ArrayList<>();
     @ManyToOne
@@ -37,12 +29,12 @@ public class Quotation implements Serializable {
     public Quotation() {
         //customer = new Customer();
         //quotationDescription = new QuotationDescription();
-        status = "Pending"; 
+        status = "Pending";
         date = new Timestamp(Calendar.getInstance().getTime().getTime());
     }
-    
+
     public Quotation(String termsOfPayment, String quotationNo, Customer customer, QuotationDescription qd, String status) {
-        
+
         this.date = new Timestamp(Calendar.getInstance().getTime().getTime());
         this.termsOfPayment = termsOfPayment;
         this.quotationNo = quotationNo;
@@ -50,7 +42,7 @@ public class Quotation implements Serializable {
         this.status = status;
         //this.quotationDescription = qd;
     }
-    
+
     /**
      * @return the quotationNo
      */
@@ -106,7 +98,7 @@ public class Quotation implements Serializable {
     public void setQuotationDescriptions(List<QuotationDescription> quotationDescriptions) {
         this.quotationDescriptions = quotationDescriptions;
     }
-    
+
     public void addQuotationDescriptions(QuotationDescription qd) {
         this.quotationDescriptions.add(qd);
     }
@@ -124,7 +116,7 @@ public class Quotation implements Serializable {
     public void setCustomer(Customer customer) {
         this.customer = customer;
     }
-    
+
     @Override
     public int hashCode() {
         int hash = 0;
@@ -164,5 +156,4 @@ public class Quotation implements Serializable {
         this.status = status;
     }
 
-    
 }

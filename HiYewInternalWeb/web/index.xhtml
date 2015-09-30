@@ -31,66 +31,63 @@
                 <p:submenu label ="Human Resource Management System" icon ="ui-icon-check" style ="font-weight: bold">
                     <p:column>
                         <p:submenu label ="Employee Management">
-                            <p:menuitem value ="Register employee" url ="HRMS/employeeRegistration.xhtml" disabled="#{loginControlBean.checkValid()}"/>
-                            <p:menuitem value ="View Employee" url ="HRMS/employee_details.xhtml" />
+                            <p:menuitem value ="Register employee" url ="/HRMS/employeeRegistration.xhtml" disabled="#{loginControlBean.checkValid()}"/>
+                            <p:menuitem value ="View Employee" url = "/HRMS/employee_details.xhtml" />
                         </p:submenu>
                         <p:submenu label="Payroll Management">
-                            <p:menuitem value ="Assign Payroll" url ="HRMS/createPayroll.xhtml" disabled = "#{loginControlBean.checkValid()}"/>
-                            <p:menuitem value ="Release Payroll" url ="HRMS/releasePayroll.xhtml" disabled="#{loginControlBean.checkValid()}"/>
-                            <p:menuitem value ="View Released Payroll" url ="HRMS/viewPayroll.xhtml"/>
-
+                            <p:menuitem value ="Assign Payroll" url ="/HRMS/createPayroll.xhtml" disabled = "#{loginControlBean.checkValid()}"/>
+                            <p:menuitem value ="Release Payroll" url ="/HRMS/releasePayroll.xhtml" disabled="#{loginControlBean.checkValid()}"/>
+                            <p:menuitem value ="View Released Payroll" url ="/HRMS/viewPayroll.xhtml"/>
                         </p:submenu>
-
                     </p:column>
                     <p:column>
-                        <p:submenu label="Training and Expiry" >
-                            <p:menuitem value ="#{loginControlBean.getEAlert()}" url ="HRMS/alertEmployee.xhtml" />
-                            <p:menuitem value ="Add Training Schedule" url ="HRMS/addTrainingSchedule.xhtml" disabled="#{loginControlBean.checkValid()}" />
-                            <p:menuitem value ="Add Employee Training" url ="HRMS/addEmployeeTraining.xhtml" disabled="#{loginControlBean.checkValid()}" />
-                            <p:menuitem value ="view Upcoming training" url ="HRMS/viewTrainingSchedule.xhtml"/>
+                        <p:submenu label="Training and Expiry">
+                            <p:menuitem value ="#{loginControlBean.getEAlert()}" url ="/HRMS/alertEmployee.xhtml" />
+                            <p:menuitem value ="Add Training Schedule" url ="/HRMS/addTrainingSchedule.xhtml" disabled="#{loginControlBean.checkValid()}" />
+                            <p:menuitem value ="Add Employee Training" url ="/HRMS/addEmployeeTraining.xhtml" disabled="#{loginControlBean.checkValid()}" />
+                            <p:menuitem value ="view Upcoming training" url ="/HRMS/viewTrainingSchedule.xhtml"/>
                         </p:submenu>
                         <p:submenu label ="Leave Management">
-                            <p:menuitem value ="Apply for Leave" url ="HRMS/leaveApplication.xhtml" />
-                            <p:menuitem value ="Approve Leave" url ="HRMS/approveLeave.xhtml" disabled="#{loginControlBean.checkValid()}"/>
-                            <p:menuitem value ="Check Leave Status" url ="HRMS/leaveStatus.xhtml" />
+                            <p:menuitem value ="Apply for Leave" url ="/HRMS/leaveApplication.xhtml" />
+                            <p:menuitem value ="Approve Leave" url ="/HRMS/approveLeave.xhtml" disabled="#{loginControlBean.checkValid()}"/>
+                            <p:menuitem value ="Check Leave Status" url ="/HRMS/leaveStatus.xhtml" />
                         </p:submenu>
-
                     </p:column>
-
                 </p:submenu>
-
                 <p:submenu label="Inventory Control System" icon="ui-icon-check" style="font-weight:bold">
                     <p:column>
                         <p:submenu label="Items Management">
-                            <p:menuitem value="View Inventory" url="ICS/viewInventory.xhtml" />
-                            <p:menuitem value="Add New Item" url="ICS/addNewItem.xhtml" />
+                            <p:menuitem value="View Inventory" url="/ICS/viewInventory.xhtml" />
+                            <p:menuitem value="Add New Item" url="/ICS/addNewItem.xhtml" />
                         </p:submenu>
                         <p:submenu label="Storage Management">
-                            <p:menuitem value="View Storage" url="#" />
-                            <p:menuitem value="Storage Allocation" url="#" />
-                            <p:menuitem value="Create Storage" url="#" />
-                        </p:submenu>
-                    </p:column>
-                </p:submenu>
-
-                <p:submenu label ="Machine Management System" icon ="ui-icon-check" style ="font-weight: bold">
-                    <p:column>
-                        <p:submenu label = "Machine Management" >
-                            <p:menuitem value ="Add Machinery" url ="MMS/addMachine.xhtml" />
-                            <p:menuitem value ="View Machinery" url ="MMS/viewMachine.xhtml" />
-
-                        </p:submenu>
-                        <p:submenu label ="Machine Maintenance">
-                            <p:menuitem value ="#{hiYewManagedBean.getMAlert()}" url ="MMS/alertMachine.xhtml" />
-                          <p:menuitem value ="Add Maintenance Schedule" url ="/MMS/addMaintainenceSchedule.xhtml"/>
-                            <p:menuitem value ="View WMaintenance Schedule" url ="/MMS/viewMaintainenceSchedule.xhtml" />
+                            <p:menuitem value="View Storage" url="/ICS/viewRacks.xhtml" />
+                            <p:menuitem value="Create Storage" url="/ICS/createStorage.xhtml" />
                         </p:submenu>
                     </p:column>
                 </p:submenu>
                 <p:submenu label ="Sales Management System" icon ="ui-icon-check" style ="font-weight: bold">
                     <p:column>
-                        <p:submenu label ="Quotation">
-                            <p:menuitem value ="View Customer RFQ" url ="/SMS/viewEditQuotations.xhtml"/>
+                        <p:submenu label ="Products">
+                            <p:menuitem value ="View RFQ" url ="/SMS/viewEditProductQuotations.xhtml" />
+                            <p:menuitem value ="View Purchase Order" url ="/SMS/viewEditProductPurchaseOrders.xhtml"/>
+                        </p:submenu>
+                        <p:submenu label ="Services">
+                            <p:menuitem value ="View Customer Services RFQ" url ="/SMS/viewEditQuotations.xhtml"/>
+                        </p:submenu>
+                    </p:column>
+                </p:submenu>
+                <p:submenu label ="Machine Management System" icon ="ui-icon-check" style ="font-weight: bold">
+                    <p:column>
+                        <p:submenu label = "Machine Management" >
+                            <p:menuitem value ="Add Machinery" url ="/MMS/addMachine.xhtml" />
+                            <p:menuitem value ="View Machinery" url ="/MMS/viewMachine.xhtml" />
+
+                        </p:submenu>
+                        <p:submenu label ="Machine Maintenance">
+                            <p:menuitem value ="#{hiYewManagedBean.getMAlert()}" url ="/MMS/alertMachine.xhtml" />
+                            <p:menuitem value ="Add Maintenance Schedule" url ="/MMS/addMaintainenceSchedule.xhtml"/>
+                            <p:menuitem value ="View Maintenance Schedule" url ="/MMS/viewMaintainenceSchedule.xhtml" />
                         </p:submenu>
                     </p:column>
                 </p:submenu>
@@ -106,13 +103,12 @@
             </p:megaMenu>
 
 
-
             <p:accordionPanel>
                 <p:tab title="Today">
                     <p:accordionPanel multiple="true">
                         <p:tab title ="Leave" >
                             <p:dataTable var ="im" value ="#{loginControlBean.employeeLeaveToday}"  paginator="true" rows="5" emptyMessage="No Approved Leave Today" >
-                                <p:column headerText="Employee Name">
+                                <p:column headerText="Employee Name"  filterBy="#{im.employee.employee_name}" >
                                     <p:outputLabel value ="#{im.employee.employee_name}"/>
                                 </p:column>
                                 <p:column headerText="Leave Start Date">
@@ -125,7 +121,7 @@
                         </p:tab>
                         <p:tab title ="Training">
                             <p:dataTable var ="im" value ="#{loginControlBean.employeeTrainingToday}"  paginator="true" rows="5" emptyMessage="No Employee Training Today" >
-                                <p:column headerText="Employee Name">
+                                <p:column headerText="Employee Name"  filterBy="#{im.get(0)}" >
                                     <p:outputLabel value = "#{im.get(0)}"/>
                                 </p:column>
                                 <p:column headerText="Employee Pass Number">
@@ -151,7 +147,7 @@
                     <p:accordionPanel multiple="true">
                         <p:tab title ="Leave">
                             <p:dataTable var ="im" value ="#{loginControlBean.employeeLeave7Days}"  paginator="true" rows="5" emptyMessage="No Approved Leaves For the Next 7 Days" >
-                                <p:column headerText="Employee Name">
+                                <p:column headerText="Employee Name"  filterBy="#{im.employee.employee_name}" >
                                     <p:outputLabel value ="#{im.employee.employee_name}"/>
                                 </p:column>
                                 <p:column headerText="Leave Start Date">
@@ -164,7 +160,7 @@
                         </p:tab>
                         <p:tab title ="Training">
                             <p:dataTable var ="im" value ="#{loginControlBean.employeeTraining7Days}"  paginator="true" rows="5" emptyMessage="No Employee under Training For the Next 7 Days" >
-                                <p:column headerText="Employee Name">
+                                <p:column headerText="Employee Name"  filterBy="#{im.get(0)}" >
                                     <p:outputLabel value = "#{im.get(0)}"/>
                                 </p:column>
                                 <p:column headerText="Employee Pass Number">
@@ -190,7 +186,7 @@
                     <p:accordionPanel multiple="true">
                         <p:tab title ="Leave">
                             <p:dataTable var ="im" value ="#{loginControlBean.employeeLeaveMonth}"  paginator="true" rows="5" emptyMessage="No Approved Leaves For the Month" >
-                                <p:column headerText="Employee Name">
+                                <p:column headerText="Employee Name"  filterBy="#{im.employee.employee_name}" >
                                     <p:outputLabel value ="#{im.employee.employee_name}"/>
                                 </p:column>
                                 <p:column headerText="Leave Start Date">
@@ -203,7 +199,7 @@
                         </p:tab>
                         <p:tab title ="Training">
                             <p:dataTable var ="im" value ="#{loginControlBean.employeeTrainingMonth}"  paginator="true" rows="5" emptyMessage="No Employee under Training For the Month" >
-                                <p:column headerText="Employee Name">
+                                <p:column headerText="Employee Name"  filterBy="#{im.get(0)}" >
                                     <p:outputLabel value = "#{im.get(0)}"/>
                                 </p:column>
                                 <p:column headerText="Employee Pass Number">

@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package managedBean;
 
 import entity.CustomerPO;
@@ -25,10 +20,6 @@ import session.stateless.CustomerPOSessionBeanLocal;
 import session.stateless.CustomerSessionBeanLocal;
 import session.stateless.QuotationSessionBeanLocal;
 
-/**
- *
- * @author: jitcheong
- */
 @Named(value = "pOManagedBean")
 @ViewScoped
 public class CustomerPOManagedBean implements Serializable {
@@ -41,7 +32,7 @@ public class CustomerPOManagedBean implements Serializable {
     private CustomerSessionBeanLocal customerSessionBean;
 
     private CustomerPO newPurOrder;
-    private Quotation quotation;
+    //private Quotation quotation;
 
     private String username = "";
 
@@ -96,7 +87,14 @@ public class CustomerPOManagedBean implements Serializable {
         newPurOrder.setExpectedStartDate(expectedStartDate);
         newPurOrder.setExpectedEndDate(expectedEndDate);
         newPurOrder.setTotalPrice(total);
+        
+        if(newPurOrder.getMailingAddr1().equals("") && newPurOrder.getMailingAddr2().equals("")){
+            newPurOrder.setMailingAddr1(q.getCustomer().getAddress1());
+            newPurOrder.setMailingAddr2(q.getCustomer().getAddress2());
+        }
+        
         newPurOrder.setCustomer(q.getCustomer());
+        newPurOrder.setQuotation(q);
         customerPOSessionBean.createPO(newPurOrder);//persist
         //add into customer purchase order collection in persistence context
         customerSessionBean.addPurchaseOrder(q.getCustomer().getUserName(), newPurOrder);
@@ -141,7 +139,10 @@ public class CustomerPOManagedBean implements Serializable {
     public String formatDate(Timestamp t) {
 
         SimpleDateFormat sd = new SimpleDateFormat("dd/MM/yyyy");
-        return sd.format(t.getTime());
+        if(t != null){
+            return sd.format(t.getTime());
+        }
+        return "";
     }
 
     public void showDialog() {
@@ -162,20 +163,6 @@ public class CustomerPOManagedBean implements Serializable {
      */
     public void setNewPurOrder(CustomerPO newPurOrder) {
         this.newPurOrder = newPurOrder;
-    }
-
-    /**
-     * @return the quotation
-     */
-    public Quotation getQuotation() {
-        return quotation;
-    }
-
-    /**
-     * @param quotation the quotation to set
-     */
-    public void setQuotation(Quotation quotation) {
-        this.quotation = quotation;
     }
 
     /**
@@ -331,7 +318,6 @@ public class CustomerPOManagedBean implements Serializable {
     public void setTotal(Double total) {
         this.total = total;
     }
-
 
     /**
      * @return the username

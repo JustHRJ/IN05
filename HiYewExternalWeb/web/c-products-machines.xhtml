@@ -1,0 +1,128 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                template="./c-template.xhtml">
+
+    <ui:define name="content">
+        <!-- Page header -->
+        <div class="page-heading animated fadeInDownBig">
+            <h1>Products - Laser Welding Machines<small></small></h1>
+            <p style="margin-bottom: 1%"></p>
+            <h:outputText value="" style="font-family: 'Open Sans'; font-weight: bold; color: red;" />
+        </div>
+        <!-- End page header -->
+        <h:form id="mainForm">
+            <p:messages id="msg"  showDetail="false" />
+            <p:messages id="warnMsg"  showDetail="false" />
+            <!-- Begin thumbnail box -->
+            <div class="row">
+                <div class="col-sm-3 col-xs-6">
+                    <div class="box-info full">
+                        <div class="img-wrap">
+                            <img src="images/products/sct_500_366-500x366.jpg" alt="" />
+                        </div>
+                        <div class="des-thumbnail">
+                            <h3>LWI Small Chamber Type</h3>
+                            <h4 style="color: #428bca">The compact manual work station.</h4>
+                            <p style="text-align: justify; padding-top: 15px">
+                                As an enclosed laser workstation in laser class 1 or as an open model for greater flexibility
+                                <br /><br />
+                                No matter which model you choose, the lasers will meet all your design, technology and performance requirements.
+                                <br /><br />
+                                Design and ergonomics were a key focus of development as these lasers are often part of advanced modern laboratory facilities.
+                                <br /><br />
+                                The 3-dimensional milled Corian panel with an integrated display and large laser safety window reflects our strict functionality and design standards.
+                                <br /><br />
+                                In technical terms, this laser is based on series V components, which are the product of over 20 years of experience.
+                                <br /><br />
+                                All components are developed and manufactured by Vision. This is the only way to guarantee the long-term availability of all spare parts.
+                                <br /><br />
+                                With a wide range of optional accessories, this laser can be optimised to suit your specific applications.
+                                <br /><br />
+                                We have already modified lasers to meet the special demands of specific sectors for a number of applications. For other customised solutions, simply talk to our sales engineers.
+                            </p>
+                            <div class="user-profile-inner">
+                                <!-- User button -->
+                                <div class="user-button">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <p:commandButton update="msg" style="border: none; font-weight: normal; font-family: 'Open Sans'; padding-top: 6px; padding-bottom: 7px; padding-left: 22px; padding-right: 22px" styleClass="btn btn-primary buttonOverride" value="Add to Request for Quotation list" action="#{productQuotationManagedBean.addToCacheList('Machine','LWI Small Chamber Type',1)}" icon="" />
+                                        </div>
+                                    </div>
+                                </div><!-- End div .user-button -->
+                            </div><!-- End div .user-profile-inner -->
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-3 col-xs-6">
+                    <div class="box-info full">
+                        <div class="img-wrap">
+                            <img src="images/products/LIFE_Vision_01-550x366.jpg" alt="" />
+                        </div>
+                        <div class="des-thumbnail">
+                            <h3>LWI V T-BaseV3</h3>
+                            <h4 style="color: #428bca;">Your benefit: increased productivity and replicable welding quality!</h4>
+                            <p style="text-align: justify; padding-top: 15px">
+                                The Workstation T-Base V3 expands your FLEXX, turning it into a compact, open welding station with a digitally-controlled three-axis work table and a separate height-adjustable laser head.
+                                <br /><br />
+                                With a unique control concept, you can extend manual welding via a precise motion control with sophisticated automatic and program functions.
+                            </p>
+                            <div class="user-profile-inner">
+                                <!-- User button -->
+                                <div class="user-button">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <p:commandButton update="msg" style="border: none; font-weight: normal; font-family: 'Open Sans'; padding-top: 6px; padding-bottom: 7px; padding-left: 22px; padding-right: 22px" styleClass="btn btn-primary buttonOverride" value="Add to Request for Quotation list" action="#{productQuotationManagedBean.addToCacheList('Machine','LWI V T-BaseV3',1)}" icon="" />
+                                        </div>
+                                    </div>
+                                </div><!-- End div .user-button -->
+                            </div><!-- End div .user-profile-inner -->
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-3 col-xs-6">
+                    <div class="box-info full">
+                        <div class="img-wrap">
+                            <img src="images/products/tn_Unixx-3-LWI-5-A-382x366.jpg" alt="" />
+                        </div>
+                        <div class="des-thumbnail">
+                            <h3>LWI V Unixx III</h3>
+                            <h4 style="color: #428bca">When working on very big pieces...</h4>
+                            <p style="text-align: justify; padding-top: 15px">
+                                This unit has been developed for areas where the laser work shop needs to be prepared for any type of job. Regardless of whether thousands of small pipes need to be welded or cut today and a three ton mould delivery  tomorrow, the UNIxX III will fulfils any task with the highest precision.
+                                <br /><br />
+                                The many software tools provided will ensure speedy and high precision processing.
+                                <br /><br />
+                                The range of 700mm in the x axis and 400mm in the y axis enable you to process big components without the necessity of them being repositioned.
+                                <br /><br />
+                                Small pieces with the weight up to 300kg can be processed on the working table aforementioned in UNIXX and the working position pivoted accordingly.
+                                <br /><br />
+                                The positioning and height of the working table has been designed to level with a normal office chair to allow one to sit and work ergonomically, and provides enough legroom. The sturdy table tipped at a well positioned angle ensures that there are no obstacles in your way.
+                                <br /><br />
+                                When working on very big pieces, the working table can simple be swivelled to the side to allow the component to be placed under the laser by forklift. The extended range length enables you to reach the area to be repaired quickly.
+                                <br /><br />
+                                The head is equipped with a bracket allowing for rotation of the laser head and enables you to weld on edges and angles.
+                            </p>
+                            <div class="user-profile-inner">
+                                <!-- User button -->
+                                <div class="user-button">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <p:commandButton update="msg" style="border: none; font-weight: normal; font-family: 'Open Sans'; padding-top: 6px; padding-bottom: 7px; padding-left: 22px; padding-right: 22px" styleClass="btn btn-primary buttonOverride" value="Add to Request for Quotation list" action="#{productQuotationManagedBean.addToCacheList('Machine','LWI V Unixx III',1)}" icon="" />
+                                        </div>
+                                    </div>
+                                </div><!-- End div .user-button -->
+                            </div><!-- End div .user-profile-inner -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- End thumbnail box -->
+        </h:form>
+    </ui:define>
+
+</ui:composition>

@@ -34,7 +34,7 @@ public class CustomerManagedBean implements Serializable {
             this.username = FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("username").toString();
 
             customer = customerSessionBean.getCustomerByUsername(this.username);
-            System.out.println("@Customer: Username is " + username);
+            System.out.println("CustomerManagedBean.java init() ===== Username is " + username);
         }
     }
 
@@ -42,13 +42,14 @@ public class CustomerManagedBean implements Serializable {
     public void handleSave() throws IOException {
         customerSessionBean.updateCustomer(customer);
         FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("popupMessage", "Profile has been updated successfully!");
-        FacesContext.getCurrentInstance().getExternalContext().redirect("/HiYewExternalWeb/user-profile.xhtml");
+        FacesContext.getCurrentInstance().getExternalContext().redirect("/HiYewExternalWeb/c-user-profile.xhtml");
     }
 
     public void changeSubscribeEmail() throws IOException {
         System.out.println("this.subscribeEmail = " + customer.getSubscribeEmail());
         FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("popupMessage", "Subcription has been updated successfully!");
         customerSessionBean.updateCustomer(customer);
+        FacesContext.getCurrentInstance().getExternalContext().redirect("/HiYewExternalWeb/c-user-profile.xhtml");
     }
 
     public void changePassword() throws IOException {
@@ -66,7 +67,7 @@ public class CustomerManagedBean implements Serializable {
                         handleSave();
                         //FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Password has been changed successfully!", ""));
                         FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("popupMessage", "Password has been changed successfully!");
-                        FacesContext.getCurrentInstance().getExternalContext().redirect("/HiYewExternalWeb/user-profile.xhtml");
+                        FacesContext.getCurrentInstance().getExternalContext().redirect("/HiYewExternalWeb/c-user-profile.xhtml");
                     } else {
                         FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Password mismatch!", ""));
                     }

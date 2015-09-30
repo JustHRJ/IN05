@@ -1,0 +1,169 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:c="http://java.sun.com/jsp/jstl/core"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+
+    <h:head>
+        <title>View/Edit Product Quotations</title>
+        <style>
+            .menu{
+                margin-top:20px;
+                margin-bottom:30px;
+                background-color: lightblue;
+            }
+        </style>
+    </h:head>
+    <h:body>
+
+        <a href ="/HiYewInternalWeb/index.xhtml"><img src = "../image/hiyew.gif" /></a>  <h1>View/Edit Product Quotation</h1>
+        #{loginControlBean.checkLoginRedirect()}
+        <h3>logged in as: #{loginControlBean.employeeNameLog} </h3>
+
+        <p:megaMenu orientation="horizontal"  styleClass="menu">
+            <p:submenu label ="Human Resource Management System" icon ="ui-icon-check" style ="font-weight: bold">
+                <p:column>
+                    <p:submenu label ="Employee Management">
+                        <p:menuitem value ="Register employee" url ="/HRMS/employeeRegistration.xhtml" disabled="#{loginControlBean.checkValid()}"/>
+                        <p:menuitem value ="View Employee" url = "/HRMS/employee_details.xhtml" />
+                    </p:submenu>
+                    <p:submenu label="Payroll Management">
+                        <p:menuitem value ="Assign Payroll" url ="/HRMS/createPayroll.xhtml" disabled = "#{loginControlBean.checkValid()}"/>
+                        <p:menuitem value ="Release Payroll" url ="/HRMS/releasePayroll.xhtml" disabled="#{loginControlBean.checkValid()}"/>
+                        <p:menuitem value ="View Released Payroll" url ="/HRMS/viewPayroll.xhtml"/>
+                    </p:submenu>
+                </p:column>
+                <p:column>
+                    <p:submenu label="Training and Expiry">
+                        <p:menuitem value ="#{loginControlBean.getEAlert()}" url ="/HRMS/alertEmployee.xhtml" />
+                        <p:menuitem value ="Add Training Schedule" url ="/HRMS/addTrainingSchedule.xhtml" disabled="#{loginControlBean.checkValid()}" />
+                        <p:menuitem value ="Add Employee Training" url ="/HRMS/addEmployeeTraining.xhtml" disabled="#{loginControlBean.checkValid()}" />
+                        <p:menuitem value ="view Upcoming training" url ="/HRMS/viewTrainingSchedule.xhtml"/>
+                    </p:submenu>
+                    <p:submenu label ="Leave Management">
+                        <p:menuitem value ="Apply for Leave" url ="/HRMS/leaveApplication.xhtml" />
+                        <p:menuitem value ="Approve Leave" url ="/HRMS/approveLeave.xhtml" disabled="#{loginControlBean.checkValid()}"/>
+                        <p:menuitem value ="Check Leave Status" url ="/HRMS/leaveStatus.xhtml" />
+                    </p:submenu>
+
+                </p:column>
+
+            </p:submenu>
+
+            <p:submenu label="Inventory Control System" icon="ui-icon-check" style="font-weight:bold">
+                <p:column>
+                    <p:submenu label="Items Management">
+                        <p:menuitem value="View Inventory" url="/ICS/viewInventory.xhtml" />
+                        <p:menuitem value="Add New Item" url="/ICS/addNewItem.xhtml" />
+                    </p:submenu>
+                    <p:submenu label="Storage Management">
+                        <p:menuitem value="View Storage" url="/ICS/viewRacks.xhtml" />
+                        <p:menuitem value="Create Storage" url="/ICS/createStorage.xhtml" />
+                    </p:submenu>
+                </p:column>
+            </p:submenu>
+            <p:submenu label ="Sales Management System" icon ="ui-icon-check" style ="font-weight: bold">
+                <p:column>
+                    <p:submenu label ="Products">
+                        <p:menuitem value ="View RFQ" url ="/SMS/viewEditProductQuotations.xhtml" />
+                        <p:menuitem value ="View Purchase Order" url ="/SMS/viewEditProductPurchaseOrders.xhtml"/>
+                    </p:submenu>
+                    <p:submenu label ="Services">
+                        <p:menuitem value ="View Customer Services RFQ" url ="/SMS/viewEditQuotations.xhtml"/>
+                    </p:submenu>
+                </p:column>
+            </p:submenu>
+            <p:submenu label ="Machine Management System" icon ="ui-icon-check" style ="font-weight: bold">
+                <p:column>
+                    <p:submenu label = "Machine Management" >
+                        <p:menuitem value ="Add Machinery" url ="/MMS/addMachine.xhtml" />
+                        <p:menuitem value ="View Machinery" url ="/MMS/viewMachine.xhtml" />
+
+                    </p:submenu>
+                    <p:submenu label ="Machine Maintenance">
+                        <p:menuitem value ="#{hiYewManagedBean.getMAlert()}" url ="/MMS/alertMachine.xhtml" />
+                        <p:menuitem value ="Add Maintenance Schedule" url ="/MMS/addMaintainenceSchedule.xhtml"/>
+                        <p:menuitem value ="View Maintenance Schedule" url ="/MMS/viewMaintainenceSchedule.xhtml" />
+                    </p:submenu>
+                </p:column>
+            </p:submenu>
+        </p:megaMenu>
+
+
+        <h:form id="innerForm">
+            <h:panelGrid columns="2" cellpadding="5">
+                <p:outputLabel for="QuotationStatus" value="Product Quotation Status: " />
+                <p:selectOneMenu id="QuotationStatus" value="#{adminProductQuotationManagedBean.status}"  style="width:150px">
+                    <p:ajax listener="#{adminProductQuotationManagedBean.filterByStatusNoMsg()}" update="msgs rcvQuote" /> 
+                    <f:selectItems value="#{adminProductQuotationManagedBean.statuses}" />
+                </p:selectOneMenu>
+            </h:panelGrid>
+            <p:messages id="msgs" showDetail="false" />
+            <p:commandButton value="Refresh" actionListener="#{adminProductQuotationManagedBean.filterByStatus()}" update="msgs rcvQuote" icon="ui-icon-check"/>
+            <br /><br />
+            <p:dataTable value="#{adminProductQuotationManagedBean.receivedNewProductQuotationList}" var="item" rows="5" id="rcvQuote" paginator="true" editable="true">
+                <p:column headerText="Quotation No." width="70%">
+                    <p:outputLabel value="#{item.productQuotationNo}"/>
+                </p:column>
+                <p:column headerText="Date" width="10%">
+                    <h:outputText value="#{adminProductQuotationManagedBean.formatDate(item.date)}"/>
+                </p:column>
+                <p:column headerText="Status" width="10%">
+                    <h:outputText value="#{item.status}"/>
+                </p:column>
+                <p:column width="10%">
+                    <p:commandButton id="quoteDescBtn" icon="ui-icon-search" title="View" update="quotationDetailPanel" action="#{adminProductQuotationManagedBean.selectQuotation(item)}"/>
+                    <p:overlayPanel for="quoteDescBtn" showEffect="fade" hideEffect="fade" dismissable="false" showCloseIcon="true" style="width:1200px">
+                        <p:outputPanel id="quotationDetailPanel">
+                            <br />
+                            <p:commandButton rendered="#{item.status eq 'Pending'}" value="Relay Product RFQ" action="#{adminProductQuotationManagedBean.updateQuotationRelayedStatus(item.customer.userName)}" update=":innerForm:msgs rcvQuote" icon="ui-icon-check"/>
+
+                            <p:commandButton rendered="#{item.status eq 'Relayed'}" value="Update Quotation Details" action="#{adminProductQuotationManagedBean.updateQuotationPrices()}" update="inner-msgs" icon="ui-icon-check"/>
+
+                            <p:commandButton rendered="#{item.status eq 'Relayed'}" value="Send Notification to Customer" action="#{adminProductQuotationManagedBean.updateQuotationStatus(item.customer.userName)}" update=":innerForm:msgs rcvQuote" icon="ui-icon-check"/>
+                            <br /><br />
+
+                            <p:messages id="inner-msgs" showDetail="false" />
+                            <p:dataTable var="quoteDescItem" value="#{adminProductQuotationManagedBean.displayProductQuotationDescriptionList}" rows="5" paginator="true">
+                                <p:column headerText="ID" width="3%">
+                                    <h:outputText value="#{quoteDescItem.productQuotationDescNo}" />
+                                </p:column>
+
+                                <p:column headerText="Item Type" width="7%">
+                                    <h:outputText value="#{quoteDescItem.productType}" />
+                                </p:column>
+
+                                <p:column headerText="Item Name" width="30%">
+                                    <h:outputText value="#{quoteDescItem.itemName}" />
+                                </p:column>
+
+                                <p:column headerText="Quantity" width="6%">
+                                    <h:outputText value="#{quoteDescItem.quantity}" />
+                                </p:column>
+
+                                <p:column headerText="Remarks" width="14%">
+                                    <h:outputText value="#{quoteDescItem.remarks}" />
+                                </p:column>
+
+                                <p:column rendered="#{item.status != 'Relayed'}" headerText="Quoted Unit Price (SGD)" width="15%">
+                                    <h:outputText value="#{item.status eq 'Pending' ? 'N.A' : quoteDescItem.unitPrice}" />
+                                </p:column>
+
+                                <p:column rendered="#{item.status eq 'Relayed'}" headerText="Quoted Unit Price (SGD)" width="15%">
+                                    $&nbsp;<h:inputText value="#{quoteDescItem.unitPrice}" style="width: 60%" maxlength="7" converterMessage="The price(s) that you have entered are invalid!">
+                                        <!--<f:validateLongRange minimum="1" />-->
+                                    </h:inputText>
+                                </p:column>
+                            </p:dataTable>
+                            <br />
+                        </p:outputPanel>
+                    </p:overlayPanel>
+                </p:column>
+            </p:dataTable>
+        </h:form>
+    </h:body>
+</html>
+
