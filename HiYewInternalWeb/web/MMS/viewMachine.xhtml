@@ -81,6 +81,14 @@
                         </p:submenu>
                     </p:column>
                 </p:submenu>
+                   <p:submenu label="Procurement System" icon="ui-icon-check" style="font-weight:bold">
+                    <p:column>
+                        <p:submenu label="Purchase Order Preparation Module">
+                            <p:menuitem value="Create Purchase Order" url="PS/createPO.xhtml" />                   
+                            <p:menuitem value="View Purchase Order" url="PS/viewPO.xhtml" />
+                        </p:submenu>
+                    </p:column>
+                </p:submenu>
             </p:megaMenu>
             <br/>
             <p:growl id = "msgs" showDetail="true"/>

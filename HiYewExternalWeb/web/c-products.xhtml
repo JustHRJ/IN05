@@ -92,7 +92,7 @@
                                         </p:column>
                                         <p:column headerText="Quoted Unit Price (SGD)" width="20%">
                                             <ui:param name="quotedUnitPrice" value="$#{productQuotationManagedBean.formatPrice(quoteDescItem.unitPrice)}" />
-                                            <h:outputText value="#{item.status eq 'Relayed' ? 'N.A' : quotedUnitPrice}" />
+                                            <h:outputText value="#{item.status eq 'Processed' ? quotedUnitPrice : 'N.A'}" />
                                         </p:column>
                                     </p:dataTable>
                                 </p:outputPanel>

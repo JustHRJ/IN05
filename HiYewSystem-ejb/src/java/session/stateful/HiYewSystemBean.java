@@ -63,7 +63,7 @@ public class HiYewSystemBean implements HiYewSystemBeanLocal {
         }
 
     }
-    
+
     public boolean createPO(String supPONo, Timestamp date, String termsOfPayment, String description, String supCompanyName, int quantity) {
         SupplierPurchaseOrder supPO = new SupplierPurchaseOrder();
         try {
@@ -85,7 +85,7 @@ public class HiYewSystemBean implements HiYewSystemBeanLocal {
 
     }
 
-    public List<SupplierPurchaseOrder> getAllPO(){
+    public List<SupplierPurchaseOrder> getAllPO() {
         Query q = em.createQuery("Select c from SupplierPurchaseOrder c");
         List<SupplierPurchaseOrder> poRecords = new ArrayList<SupplierPurchaseOrder>();
         for (Object o : q.getResultList()) {
@@ -560,7 +560,7 @@ public class HiYewSystemBean implements HiYewSystemBeanLocal {
                 PayrollEntity p = (PayrollEntity) o;
                 if (p.getStatus().equals("unset")) {
                     p.setStatus("unissued");
-                    if (late < 3 && sick < 2 && p.getSalary() > (e.getEmployee_basic() / (double) 4 * (double) 3)  ) {
+                    if (late < 3 && sick < 2 && p.getSalary() > (e.getEmployee_basic() / (double) 4 * (double) 3)) {
                         p.setBonus(100.00);
                     } else {
                         p.setBonus(0.00);
@@ -808,10 +808,10 @@ public class HiYewSystemBean implements HiYewSystemBeanLocal {
 
         return null;
     }
-    
-    public boolean updateSupPoStatus(String supPoStatus, List<SupplierPurchaseOrder> selectedList){
+
+    public boolean updateSupPoStatus(String supPoStatus, List<SupplierPurchaseOrder> selectedList) {
         try {
-            for(Object o:selectedList){
+            for (Object o : selectedList) {
                 SupplierPurchaseOrder e = (SupplierPurchaseOrder) o;
                 e.setSupPoStatus(supPoStatus);
                 em.merge(e);
@@ -821,7 +821,7 @@ public class HiYewSystemBean implements HiYewSystemBeanLocal {
             return false;
         }
     }
-    
+
     public boolean updateMachine(String machineName, MachineEntity machine, String status, Date machineMaint) {
         try {
             boolean check = false;
@@ -854,41 +854,41 @@ public class HiYewSystemBean implements HiYewSystemBeanLocal {
             return false;
         }
     }
-    
+
     public boolean updatePO(String termsOfPayment, SupplierPurchaseOrder supplierPurchaseOrder, String description, int quantity) {
-            boolean check = false;
-            boolean check2 = false;
-            System.out.println(termsOfPayment);
-            if (!(termsOfPayment.isEmpty()) && !(termsOfPayment.equals(supplierPurchaseOrder.getTermsOfPayment()))) {
-                supplierPurchaseOrder.setTermsOfPayment(termsOfPayment);
-                check = true;
-            }
-            
-            if (!(description.isEmpty())) {
-                 supplierPurchaseOrder.setDescription(description);
+        boolean check = false;
+        boolean check2 = false;
+        System.out.println(termsOfPayment);
+        if (!(termsOfPayment.isEmpty()) && !(termsOfPayment.equals(supplierPurchaseOrder.getTermsOfPayment()))) {
+            supplierPurchaseOrder.setTermsOfPayment(termsOfPayment);
+            check = true;
+        }
+
+        if (!(description.isEmpty())) {
+            supplierPurchaseOrder.setDescription(description);
                  //check = true;
-                 //System.out.println(description);
-            }
+            //System.out.println(description);
+        }
             //if (!(supCompanyName.isEmpty()) && !(supCompanyName.equals(supplierPurchaseOrder.getSupCompanyName()))) {
-            //     supplierPurchaseOrder.setSupCompanyName(supCompanyName);
-            //     check = true;
-            //}
-            
-            if ((quantity != 0) && (quantity != supplierPurchaseOrder.getQuantity()) ) {
-                 supplierPurchaseOrder.setQuantity(quantity);
-                 check2 = true;
-            } 
-            
-            if (check || !(description.isEmpty()) ||  check2) {
-               em.merge(supplierPurchaseOrder);
-               return true;
-            }
+        //     supplierPurchaseOrder.setSupCompanyName(supCompanyName);
+        //     check = true;
+        //}
+
+        if ((quantity != 0) && (quantity != supplierPurchaseOrder.getQuantity())) {
+            supplierPurchaseOrder.setQuantity(quantity);
+            check2 = true;
+        }
+
+        if (check || !(description.isEmpty()) || check2) {
+            em.merge(supplierPurchaseOrder);
+            return true;
+        }
             //if(check == true){
-             //   em.merge(supplierPurchaseOrder);
-            //    return true;   
-            //}
-            return false;
-      
+        //   em.merge(supplierPurchaseOrder);
+        //    return true;   
+        //}
+        return false;
+
     }
 
 // still having trouble comparing due to calendar comparison issues. to try different approach
@@ -958,8 +958,12 @@ public class HiYewSystemBean implements HiYewSystemBeanLocal {
                 xin.setEmailAddress(email);
                 xin.setAccount_status("firstTime");
                 xin.setEmployee_basic(employeePay);
-                Timestamp time = new Timestamp(employedDate.getTime());
-                xin.setEmployee_employedDate(time);
+                Calendar c = Calendar.getInstance();
+                c.set(Calendar.MILLISECOND, 0);
+                c.set(Calendar.SECOND, 0);
+                c.set(Calendar.MINUTE, 0);
+                c.set(Calendar.HOUR, 0);
+                xin.setEmployee_employedDate(new Timestamp(c.getTime().getTime()));
                 //xin.setEmployee_employedDate(ts);
                 em.persist(xin);
 
