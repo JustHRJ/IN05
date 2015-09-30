@@ -5,6 +5,7 @@
  */
 package managedbean;
 
+import entity.SupplierPurchaseOrder;
 import entity.LeaveEntity;
 import entity.MachineEntity;
 import entity.MachineMaintainenceEntity;
@@ -81,6 +82,10 @@ public class HiYewDataTableBean {
 
     public List<TrainingScheduleEntity> getTrainingSchedule() {
         return hiYewSystemBean.trainingSchedueList();
+    }
+    
+    public List<SupplierPurchaseOrder> getPurcOrders() {
+        return hiYewSystemBean.getAllPO();
     }
 
 }

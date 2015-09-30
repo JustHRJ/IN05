@@ -67,13 +67,13 @@
             </p:submenu>
             <p:submenu label ="Sales Management System" icon ="ui-icon-check" style ="font-weight: bold">
                 <p:column>
-               <p:submenu label ="Products">
-                            <p:menuitem value ="View RFQ" url ="/SMS/viewEditProductQuotations.xhtml" />
-                            <p:menuitem value ="View Purchase Order" url ="/SMS/viewEditProductPurchaseOrders.xhtml"/>
-                        </p:submenu>
-                        <p:submenu label ="Services">
-                            <p:menuitem value ="View Customer Services RFQ" url ="/SMS/viewEditQuotations.xhtml"/>
-                        </p:submenu>
+                    <p:submenu label ="Products">
+                        <p:menuitem value ="View RFQ" url ="/SMS/viewEditProductQuotations.xhtml" />
+                        <p:menuitem value ="View Purchase Order" url ="/SMS/viewEditProductPurchaseOrders.xhtml"/>
+                    </p:submenu>
+                    <p:submenu label ="Services">
+                        <p:menuitem value ="View Customer Services RFQ" url ="/SMS/viewEditQuotations.xhtml"/>
+                    </p:submenu>
                 </p:column>
             </p:submenu>
             <p:submenu label ="Machine Management System" icon ="ui-icon-check" style ="font-weight: bold">
@@ -90,8 +90,15 @@
                     </p:submenu>
                 </p:column>
             </p:submenu>
+               <p:submenu label="Procurement System" icon="ui-icon-check" style="font-weight:bold">
+                    <p:column>
+                        <p:submenu label="Purchase Order Preparation Module">
+                            <p:menuitem value="Create Purchase Order" url="PS/createPO.xhtml" />                   
+                            <p:menuitem value="View Purchase Order" url="PS/viewPO.xhtml" />
+                        </p:submenu>
+                    </p:column>
+                </p:submenu>
         </p:megaMenu>
-
 
         <h:form id="innerForm">
             <h:panelGrid columns="2" cellpadding="5">
@@ -104,7 +111,7 @@
             <p:messages id="msgs"  showDetail="false" />
             <p:commandButton value="Refresh" actionListener="#{adminProductPOManagedBean.filterByStatus()}" update="msgs rcvQuote" icon="ui-icon-check"/>
             <br /><br />
-            <p:dataTable value="#{adminProductPOManagedBean.receivedNewProductPOList}" var="item" rows="5" id="rcvQuote" paginator="true" editable="true">
+            <p:dataTable sortBy="#{adminProductPOManagedBean.formatDate(item.productPurchaseOrderDate)}" value="#{adminProductPOManagedBean.receivedNewProductPOList}" var="item" rows="5" id="rcvQuote" paginator="true" editable="true">
                 <p:column headerText="PO No.">
                     <p:outputLabel value="#{item.productPurchaseOrderID}"/>
                 </p:column>
@@ -117,8 +124,8 @@
                 <p:column headerText="Mailing Address">
                     <h:outputText value="#{item.mailingAddr1}, #{item.mailingAddr2}"/>
                 </p:column>
-                <p:column headerText="Total Price">
-                    <h:outputText value="#{item.totalPrice}"/>
+                <p:column headerText="Total Price (SGD)">
+                    <h:outputText value="$#{adminProductPOManagedBean.formatPrice(item.totalPrice)}"/>
                 </p:column>
                 <p:column headerText="Status">
                     <h:outputText value="#{item.status}"/>
@@ -129,7 +136,7 @@
                     <p:overlayPanel for="quoteDescBtn" showEffect="fade" hideEffect="fade" dismissable="false" showCloseIcon="true" style="width:1200px">
                         <p:outputPanel id="quotationDetailPanel">
                             <br />
-                            <p:commandButton rendered="#{item.status eq 'Pending'}" value="Relay Product PO" action="#{adminProductPOManagedBean.updatePORelayedStatus()}" update=":innerForm:msgs rcvQuote" icon="ui-icon-check"/>
+                            <p:commandButton rendered="#{item.status eq 'Pending'}" value="Relay Product PO" action="#{adminProductPOManagedBean.updatePORelayedStatus(item.customer.userName)}" update=":innerForm:msgs rcvQuote" icon="ui-icon-check"/>
 
                             <p:commandButton rendered="#{item.status eq 'Relayed'}" value="Update PO Details" action="#{adminProductPOManagedBean.updatePODeliveryDate()}" update=":innerForm:msgs rcvQuote" icon="ui-icon-check"/>
 
@@ -149,7 +156,7 @@
 
                             <p:panel rendered="" style="border: none" ></p:panel>
 
-                            <p:dataTable var="quoteDescItem" value="#{adminProductPOManagedBean.displayProductQuotationDescriptionList}" rows="5" paginator="true">
+                            <p:dataTable sortBy="#{quoteDescItem.productQuotationDescNo}" var="quoteDescItem" value="#{adminProductPOManagedBean.displayProductQuotationDescriptionList}" rows="5" paginator="true">
                                 <p:column headerText="ID">
                                     <h:outputText value="#{quoteDescItem.productQuotationDescNo}" />
                                 </p:column>
@@ -170,20 +177,14 @@
                                     <h:outputText value="#{quoteDescItem.remarks}" />
                                 </p:column>
 
-                                <p:column headerText="Quoted Unit Price">
-                                    <h:outputText value="#{quoteDescItem.unitPrice}" />
+                                <p:column headerText="Quoted Unit Price (SGD)">
+                                    <h:outputText value="$#{adminProductPOManagedBean.formatPrice(quoteDescItem.unitPrice)}" />
                                 </p:column>
-                            </p:dataTable>		
-
-
+                            </p:dataTable>	
                             <br />
                         </p:outputPanel>
                     </p:overlayPanel>
                 </p:column>
-
-
-
-
             </p:dataTable>
         </h:form>
     </h:body>

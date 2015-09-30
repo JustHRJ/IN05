@@ -12,6 +12,8 @@ import javax.ejb.Local;
 public interface CustomerSessionBeanLocal {
 
     public void createCustomer(Customer cust);
+    
+    public Customer findCustomer(String username);
 
     public List<Customer> getAllCustomer();
 

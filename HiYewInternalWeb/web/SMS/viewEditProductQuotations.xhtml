@@ -4,7 +4,8 @@
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:f="http://xmlns.jcp.org/jsf/core"
       xmlns:c="http://java.sun.com/jsp/jstl/core"
-      xmlns:p="http://primefaces.org/ui">
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
 
     <h:head>
         <title>View/Edit Product Quotations</title>
@@ -66,13 +67,13 @@
             </p:submenu>
             <p:submenu label ="Sales Management System" icon ="ui-icon-check" style ="font-weight: bold">
                 <p:column>
-                  <p:submenu label ="Products">
-                            <p:menuitem value ="View RFQ" url ="/SMS/viewEditProductQuotations.xhtml" />
-                            <p:menuitem value ="View Purchase Order" url ="/SMS/viewEditProductPurchaseOrders.xhtml"/>
-                        </p:submenu>
-                        <p:submenu label ="Services">
-                            <p:menuitem value ="View Customer Services RFQ" url ="/SMS/viewEditQuotations.xhtml"/>
-                        </p:submenu>
+                    <p:submenu label ="Products">
+                        <p:menuitem value ="View RFQ" url ="/SMS/viewEditProductQuotations.xhtml" />
+                        <p:menuitem value ="View Purchase Order" url ="/SMS/viewEditProductPurchaseOrders.xhtml"/>
+                    </p:submenu>
+                    <p:submenu label ="Services">
+                        <p:menuitem value ="View Customer Services RFQ" url ="/SMS/viewEditQuotations.xhtml"/>
+                    </p:submenu>
                 </p:column>
             </p:submenu>
             <p:submenu label ="Machine Management System" icon ="ui-icon-check" style ="font-weight: bold">
@@ -89,6 +90,14 @@
                     </p:submenu>
                 </p:column>
             </p:submenu>
+               <p:submenu label="Procurement System" icon="ui-icon-check" style="font-weight:bold">
+                    <p:column>
+                        <p:submenu label="Purchase Order Preparation Module">
+                            <p:menuitem value="Create Purchase Order" url="PS/createPO.xhtml" />                   
+                            <p:menuitem value="View Purchase Order" url="PS/viewPO.xhtml" />
+                        </p:submenu>
+                    </p:column>
+                </p:submenu>
         </p:megaMenu>
 
 
@@ -103,7 +112,7 @@
             <p:messages id="msgs" showDetail="false" />
             <p:commandButton value="Refresh" actionListener="#{adminProductQuotationManagedBean.filterByStatus()}" update="msgs rcvQuote" icon="ui-icon-check"/>
             <br /><br />
-            <p:dataTable value="#{adminProductQuotationManagedBean.receivedNewProductQuotationList}" var="item" rows="5" id="rcvQuote" paginator="true" editable="true">
+            <p:dataTable sortBy="#{adminProductQuotationManagedBean.formatDate(item.date)}" value="#{adminProductQuotationManagedBean.receivedNewProductQuotationList}" var="item" rows="5" id="rcvQuote" paginator="true" editable="true">
                 <p:column headerText="Quotation No." width="70%">
                     <p:outputLabel value="#{item.productQuotationNo}"/>
                 </p:column>
@@ -118,13 +127,15 @@
                     <p:overlayPanel for="quoteDescBtn" showEffect="fade" hideEffect="fade" dismissable="false" showCloseIcon="true" style="width:1200px">
                         <p:outputPanel id="quotationDetailPanel">
                             <br />
-                            <p:commandButton rendered="#{item.status eq 'Pending'}" value="Relay Product RFQ" action="#{adminProductQuotationManagedBean.updateQuotationRelayedStatus()}" update=":innerForm:msgs rcvQuote" icon="ui-icon-check"/>
+                            <p:commandButton rendered="#{item.status eq 'Pending'}" value="Relay Product RFQ" action="#{adminProductQuotationManagedBean.updateQuotationRelayedStatus(item.customer.userName)}" update=":innerForm:msgs rcvQuote" icon="ui-icon-check"/>
 
-                            <p:commandButton rendered="#{item.status eq 'Relayed'}" value="Update Quotation Details" action="#{adminProductQuotationManagedBean.updateQuotationPrices()}" update=":innerForm:msgs" icon="ui-icon-check"/>
+                            <p:commandButton rendered="#{item.status eq 'Relayed'}" value="Update Quotation Details" action="#{adminProductQuotationManagedBean.updateQuotationPrices()}" update="inner-msgs" icon="ui-icon-check"/>
 
                             <p:commandButton rendered="#{item.status eq 'Relayed'}" value="Send Notification to Customer" action="#{adminProductQuotationManagedBean.updateQuotationStatus(item.customer.userName)}" update=":innerForm:msgs rcvQuote" icon="ui-icon-check"/>
                             <br /><br />
-                            <p:dataTable var="quoteDescItem" value="#{adminProductQuotationManagedBean.displayProductQuotationDescriptionList}" rows="5" paginator="true">
+
+                            <p:messages id="inner-msgs" showDetail="false" />
+                            <p:dataTable sortBy="#{quoteDescItem.productQuotationDescNo}" var="quoteDescItem" value="#{adminProductQuotationManagedBean.displayProductQuotationDescriptionList}" rows="5" paginator="true">
                                 <p:column headerText="ID" width="3%">
                                     <h:outputText value="#{quoteDescItem.productQuotationDescNo}" />
                                 </p:column>
@@ -133,7 +144,7 @@
                                     <h:outputText value="#{quoteDescItem.productType}" />
                                 </p:column>
 
-                                <p:column headerText="Item Name" width="34%">
+                                <p:column headerText="Item Name" width="30%">
                                     <h:outputText value="#{quoteDescItem.itemName}" />
                                 </p:column>
 
@@ -145,10 +156,13 @@
                                     <h:outputText value="#{quoteDescItem.remarks}" />
                                 </p:column>
 
-                                <p:column rendered="#{item.status eq 'Relayed'}" headerText="Quoted Unit Price" width="12%">
-                                    <h:inputText value="#{quoteDescItem.unitPrice}" style="width: 60%"
-                                                 maxlength="7" converterMessage="Quantity must be a number consisting of one or more digits.">
-                                        <f:validateLongRange minimum="1" />
+                                <p:column rendered="#{item.status != 'Relayed'}" headerText="Quoted Unit Price (SGD)" width="15%">
+                                    <h:outputText value="#{item.status eq 'Pending' ? 'N.A' : quoteDescItem.unitPrice}" />
+                                </p:column>
+
+                                <p:column rendered="#{item.status eq 'Relayed'}" headerText="Quoted Unit Price (SGD)" width="15%">
+                                    $&nbsp;<h:inputText value="#{quoteDescItem.unitPrice}" style="width: 60%" maxlength="7" converterMessage="The price(s) that you have entered are invalid!">
+                                        <!--<f:validateLongRange minimum="1" />-->
                                     </h:inputText>
                                 </p:column>
                             </p:dataTable>

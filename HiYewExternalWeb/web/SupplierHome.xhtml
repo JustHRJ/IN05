@@ -5,15 +5,14 @@
                 xmlns:h="http://xmlns.jcp.org/jsf/html"
                 xmlns:f="http://xmlns.jcp.org/jsf/core"
                 xmlns:p="http://primefaces.org/ui"
-                template="./c-template.xhtml">
+                template="./template.xhtml">
 
     <ui:define name="content">
         <!-- Page header -->
         <div class="page-heading animated fadeInDownBig">
-            <h1 style="font-weight: bold">Customer profile <small></small></h1>
+            <h1>Supplier Profile <small></small></h1>
             <p style="margin-bottom: 1%"></p>
             <h:outputText value="#{popupMessage}" style="font-family: 'Open Sans'; font-weight: bold; color: red;" />
-
         </div>
         <!-- End page header -->
 
@@ -38,25 +37,29 @@
                                     <div class="col-sm-6">
                                         <address>
                                             <strong>Name</strong><br />
-                                            <abbr style="cursor: default" title="Name"><h:outputText value="#{customerManagedBean.customer.name}" /></abbr>
+                                            <abbr style="cursor: default" title="Name"><h:outputText value="#{supplierManagedBean.supplier.name}" /></abbr>
+                                        </address>
+                                        <address>
+                                            <strong>Company Name</strong><br />
+                                            <abbr style="cursor: default" title="Company Name"><h:outputText value="#{supplierManagedBean.supplier.companyName}" /></abbr>
                                         </address>
                                         <address>
                                             <strong>Address</strong><br />
-                                            <abbr style="cursor: default" title="Address"><h:outputText value="#{customerManagedBean.customer.address1}" /></abbr>
+                                            <abbr style="cursor: default" title="Address"><h:outputText value="#{supplierManagedBean.supplier.address1}" /></abbr>
                                             <br />
-                                            <abbr style="cursor: default" title="Postal Code"><h:outputText value="#{customerManagedBean.customer.address2}" /></abbr>
+                                            <abbr style="cursor: default" title="Postal Code"><h:outputText value="#{supplierManagedBean.supplier.address2}" /></abbr>
                                         </address>
                                         <address>
                                             <strong>Postal Code</strong><br />
-                                            <abbr style="cursor: default" title="Postal Code"><h:outputText value="#{customerManagedBean.customer.postalCode}" /></abbr>
+                                            <abbr style="cursor: default" title="Postal Code"><h:outputText value="#{supplierManagedBean.supplier.postalCode}" /></abbr>
                                         </address>
                                         <address>
                                             <strong>Phone</strong><br />
-                                            <abbr style="cursor: default" title="Phone"><h:outputText value="#{customerManagedBean.customer.phone}" /></abbr>
+                                            <abbr style="cursor: default" title="Phone"><h:outputText value="#{supplierManagedBean.supplier.phone}" /></abbr>
                                         </address>
                                         <address>
                                             <strong>Email</strong><br />
-                                            <abbr style="cursor: default" title="Email"><h:outputText value="#{customerManagedBean.customer.email}" /></abbr>
+                                            <abbr style="cursor: default" title="Email"><h:outputText value="#{supplierManagedBean.supplier.email}" /></abbr>
                                         </address>
                                     </div>
                                 </div><!-- End div .row -->
@@ -71,34 +74,38 @@
                                     <p:growl id="msgs" showDetail="false" />
                                     <div class="form-group">
                                         <label for="">Name</label>
-                                        <p:inputText class="form-control text-input" value="#{customerManagedBean.customer.name}" required="true" requiredMessage="Name is required." />
+                                        <p:inputText class="form-control text-input" value="#{supplierManagedBean.supplier.name}" required="true" requiredMessage="Name is required." />
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="">Company Name</label>
+                                        <p:inputText class="form-control text-input" value="#{supplierManagedBean.supplier.companyName}" required="true" requiredMessage="Company Name is required." />
                                     </div>
                                     <div class="form-group">
                                         <label for="">Address</label>
-                                        <p:inputText class="form-control text-input" value="#{customerManagedBean.customer.address1}" required="true" requiredMessage="Sreet name is required." />
+                                        <p:inputText class="form-control text-input" value="#{supplierManagedBean.supplier.address1}" required="true" requiredMessage="Sreet name is required." />
                                     </div>
                                     <div class="form-group">
-                                        <p:inputText class="form-control text-input" value="#{customerManagedBean.customer.address2}" required="true" requiredMessage="Unit number is required." />
+                                        <p:inputText class="form-control text-input" value="#{supplierManagedBean.supplier.address2}" required="true" requiredMessage="Unit number is required." />
                                     </div>
                                     <div class="form-group">
                                         <label for="">Postal Code</label>
-                                        <p:inputText class="form-control text-input" value="#{customerManagedBean.customer.postalCode}" maxlength="6" required="true" requiredMessage="Postal Code is required." validatorMessage="Please enter only 6 digits.">
+                                        <p:inputText class="form-control text-input" value="#{supplierManagedBean.supplier.postalCode}" maxlength="6" required="true" requiredMessage="Postal Code is required." validatorMessage="Please enter only 6 digits.">
                                             <f:validateRegex pattern="(^[0-9]{6}$)"/>
                                         </p:inputText>
                                     </div>
                                     <div class="form-group">
                                         <label for="">Phone</label>
-                                        <p:inputText class="form-control text-input" value="#{customerManagedBean.customer.phone}" maxlength="8" required="true" requiredMessage="Phone is required." validatorMessage="[Phone] Please enter only 8 digits starting with 6, 8 and 9.">
-                                            <f:validateRegex pattern="(^[6,8,9]{1}[0-9]{7}$)"/>
+                                        <p:inputText class="form-control text-input" value="#{supplierManagedBean.supplier.phone}" maxlength="8" required="true" requiredMessage="Phone is required." validatorMessage="Please enter only 8 digits.">
+                                            <f:validateRegex pattern="(^[0-9]{8}$)"/>
                                         </p:inputText>
                                     </div>
                                     <div class="form-group">
                                         <label for="">Email</label>
-                                        <p:inputText class="form-control text-input" value="#{customerManagedBean.customer.email}" required="true" requiredMessage="Email is required." validatorMessage="Invalid email format. Example: your_email@gmail.com">
+                                        <p:inputText class="form-control text-input" value="#{supplierManagedBean.supplier.email}" required="true" requiredMessage="Email is required." validatorMessage="Invalid email format. Example: your_email@gmail.com">
                                             <f:validateRegex pattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$" />
                                         </p:inputText>
                                     </div>
-                                    <p:commandButton style="border: none; font-weight: normal; font-family: 'Open Sans'; padding-top: 6px; padding-bottom: 7px; padding-left: 22px; padding-right: 22px" styleClass="btn btn-primary" value="Update" action="#{customerManagedBean.handleSave()}" update=":changePasswordForm:msgs " icon=""/>
+                                    <p:commandButton style="border: none; font-family: 'Open Sans'; padding-right: 17px" styleClass="btn btn-primary" value="Update" action="#{supplierManagedBean.handleSave()}" update=":changePasswordForm:msgs " icon="ui-icon-check"/>
                                 </h:form>
                             </div><!-- End div .user-profile-content -->
                         </div><!-- End div .tab-pane -->
@@ -111,17 +118,17 @@
                                     <p:growl id="msgs" showDetail="false" />
                                     <div class="form-group">
                                         <label for="">Current Password</label>
-                                        <p:password style="font-family: 'Open Sans';" styleClass="form-control" placeholder="At least 8 alphanumeric characters." value="#{customerManagedBean.changePasswordInput}" inline="true" requiredMessage="Password is required." id="curPassword"  />
+                                        <p:password style="font-family: 'Open Sans';" styleClass="form-control" placeholder="At least 8 alphanumeric characters." value="#{supplierManagedBean.changePasswordInput}" inline="true" requiredMessage="Password is required." id="curPassword"  />
                                     </div>
                                     <div class="form-group">
                                         <label for="">New Password</label>
-                                        <p:password style="font-family: 'Open Sans';" styleClass="form-control" placeholder="At least 8 alphanumeric characters." value="#{customerManagedBean.newPassword}" feedback="true" inline="true" requiredMessage="Password is required." id="newPassword"  />
+                                        <p:password style="font-family: 'Open Sans';" styleClass="form-control" placeholder="At least 8 alphanumeric characters." value="#{supplierManagedBean.newPassword}" feedback="true" inline="true" requiredMessage="Password is required." id="newPassword"  />
                                     </div>
                                     <div class="form-group">
                                         <label for="">Re-Password</label>
-                                        <p:password style="font-family: 'Open Sans';" styleClass="form-control" placeholder="At least 8 alphanumeric characters." value="#{customerManagedBean.rePassword}"  inline="true" requiredMessage="Password is required." id="Re-Password"  />
+                                        <p:password style="font-family: 'Open Sans';" styleClass="form-control" placeholder="At least 8 alphanumeric characters." value="#{supplierManagedBean.rePassword}"  inline="true" requiredMessage="Password is required." id="Re-Password"  />
                                     </div>
-                                    <p:commandButton style="border: none; font-weight: normal; font-family: 'Open Sans'; padding-top: 6px; padding-bottom: 7px; padding-left: 22px; padding-right: 22px" styleClass="btn btn-primary" value="Update" action="#{customerManagedBean.changePassword()}" update=":changePasswordForm:msgs " icon=""/>
+                                    <p:commandButton style="border: none; font-family: 'Open Sans'; padding-right: 17px" styleClass="btn btn-primary" value="Update" action="#{supplierManagedBean.changePassword()}" update=":changePasswordForm:msgs " icon="ui-icon-check"/>
                                 </h:form>
                             </div><!-- End div .scroll-user-widget -->
                         </div><!-- End div .tab-pane -->
@@ -132,7 +139,6 @@
                             <div class="user-profile-content">
                                 <h:form id="changeSubscriptionForm">
                                     <p:growl id="msgs" showDetail="false" />
-                                    <p:messages id="emailMsg"  showDetail="false" />
                                     Subscribe to receive notifications on any changes on updates. 
                                     If you do not wish to receive any notifications, please unsubscribe from the tools.
                                     <br />
@@ -140,10 +146,10 @@
                                     <h:outputText style="font-weight: bold;" value="Email" />
                                     <br />
                                     <div style="height: 8px"></div>
-                                    <p:selectBooleanCheckbox style="vertical-align: middle" styleClass="subscribe" value="#{customerManagedBean.customer.subscribeEmail}" />
+                                    <p:selectBooleanCheckbox style="vertical-align: middle" styleClass="subscribe" value="#{supplierManagedBean.supplier.subscribeEmail}" />
                                     An email will be sent if there are updates.
                                     <br /><br />
-                                    <p:commandButton style="border: none; font-weight: normal; font-family: 'Open Sans'; padding-top: 6px; padding-bottom: 7px; padding-left: 22px; padding-right: 22px" styleClass="btn btn-primary buttonOverride" value="Update" update="emailMsg" action="#{customerManagedBean.changeSubscribeEmail()}" icon=""/>
+                                    <p:commandButton style="border: none; font-family: 'Open Sans'; padding-right: 17px" styleClass="btn btn-primary" value="Update" action="#{supplierManagedBean.changeSubscribeEmail()}" icon="ui-icon-check"/>
                                 </h:form>
                             </div><!-- End div .scroll-user-widget -->
                         </div><!-- End div .tab-pane -->

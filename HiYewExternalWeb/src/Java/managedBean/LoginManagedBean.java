@@ -1,16 +1,19 @@
 package managedBean;
 
 import entity.Customer;
+import entity.SupplierEntity;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
+import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.inject.Named;
 import javax.faces.view.ViewScoped;
 import session.stateless.CustomerSessionBeanLocal;
+import session.stateless.SupplierSessionBeanLocal;
 import manager.EmailManager;
 
 @Named(value = "loginManagedBean")
@@ -19,10 +22,14 @@ public class LoginManagedBean implements Serializable {
 
     @EJB
     private CustomerSessionBeanLocal customerSessionBean;
+    @EJB
+    private SupplierSessionBeanLocal supplierSessionBean;
     private List<String> users;
     private String user = "";
     private Customer customer;
     private Customer newCustomer;
+    private SupplierEntity supplier;
+    private SupplierEntity newSupplier;
     private String username = "";
     private String password = "";
     private String rePassword = "";
@@ -35,7 +42,9 @@ public class LoginManagedBean implements Serializable {
         FacesContext.getCurrentInstance().getExternalContext().getSessionMap().remove("forgotMessage");
         FacesContext.getCurrentInstance().getExternalContext().getSessionMap().remove("registerMessage");
         customer = new Customer();
+        supplier = new SupplierEntity();
         newCustomer = new Customer();
+        newSupplier = new SupplierEntity();
         users = new ArrayList<>();
     }
 
@@ -67,6 +76,29 @@ public class LoginManagedBean implements Serializable {
                 path = ""; //navigation
             }
         } else { //if user is supplier
+            System.out.println(this.username);
+            
+            // NULLPOINTEREXCEPTION 
+            setSupplier(supplierSessionBean.getSupplierByUsername(this.username));
+            
+            try {
+                if (supplierSessionBean.encryptPassword(this.password).equals(getSupplier().getPw())) {
+
+                    FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("username", this.username);
+
+                    System.out.println("Login Success");
+                    path = "SupplierHome?faces-redirect=true"; //navigation
+
+                } else {
+                    FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Invalid Username or password!"));
+                    System.out.println("Login Fail");
+
+                }
+            } catch (NullPointerException e) {
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Invalid Username or password!"));
+                System.out.println("Login Fail");
+
+            }
         }
         return path;
     }
@@ -229,6 +261,28 @@ public class LoginManagedBean implements Serializable {
         this.newCustomer = newCustomer;
     }
 
+    public SupplierEntity getSupplier() {
+        return supplier;
+    }
+
+    /**
+     * @param supplier the supplier to set
+     */
+    public void setSupplier(SupplierEntity supplier) {
+        this.supplier = supplier;
+    }
+    
+     public SupplierEntity getNewSupplier() {
+        return newSupplier;
+    }
+
+    /**
+     * @param newSupplier the newCustomer to set
+     */
+    public void setNewSupplier(SupplierEntity newSupplier) {
+        this.newSupplier = newSupplier;
+    }
+    
     /**
      * @return the user
      */

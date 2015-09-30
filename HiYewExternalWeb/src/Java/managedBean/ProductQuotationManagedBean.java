@@ -5,9 +5,11 @@ import entity.ProductQuotationDescription;
 import java.io.IOException;
 import java.io.Serializable;
 import java.sql.Timestamp;
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Iterator;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.enterprise.context.SessionScoped;
@@ -58,6 +60,12 @@ public class ProductQuotationManagedBean implements Serializable {
         date = new SimpleDateFormat("dd/MM/yyyy").format(Calendar.getInstance().getTime());
 
         receivedProductQuotationList = new ArrayList<>(productQuotationSessionBean.receivedProductQuotationList(username));
+    }
+
+    public String formatPrice(Double input) {
+        DecimalFormat df = new DecimalFormat("0.00");
+        System.out.println("formatPrice() ===== " + df.format(input));
+        return df.format(input);
     }
 
     public void checkToReset() {
@@ -112,15 +120,56 @@ public class ProductQuotationManagedBean implements Serializable {
     }
 
     public void addToCacheList(String productType, String itemName, Integer quantity) {
-        newProductQuotationDescription.setProductQuotationDescNo(count);
-        newProductQuotationDescription.setProductType(productType);
-        newProductQuotationDescription.setItemName(itemName);
-        newProductQuotationDescription.setQuantity(quantity);
+        Boolean noSuchItem = true;
+        System.out.println("cacheList.size() === " + cacheList.size());
+        System.out.println("count === " + count);
+        if (cacheList.size() > 0) {
+            System.out.println("inside for loop");
 
-        cacheList.add(newProductQuotationDescription);
+            Iterator<ProductQuotationDescription> it = cacheList.iterator();
 
-        count += 1;
-        newProductQuotationDescription = new ProductQuotationDescription();
+            while (it.hasNext()) {
+                ProductQuotationDescription pqd = it.next();
+                if (pqd.getItemName().equals(itemName)) {
+                    // same item
+                    noSuchItem = false;
+                    System.out.println("pqd.getItemName() === " + pqd.getItemName());
+                    System.out.println("itemName === " + itemName);
+                    System.out.println("inside for loop cacheList.size() === " + cacheList.size());
+                    FacesContext.getCurrentInstance().addMessage("warnMsg", new FacesMessage(FacesMessage.SEVERITY_WARN, "Item has been added to RFQ list!", ""));
+                } else {
+                    // no such item
+
+                }
+            }
+
+            if (noSuchItem) {
+                newProductQuotationDescription.setProductQuotationDescNo(count);
+                newProductQuotationDescription.setProductType(productType);
+                newProductQuotationDescription.setItemName(itemName);
+                newProductQuotationDescription.setQuantity(quantity);
+
+                cacheList.add(newProductQuotationDescription);
+
+                count += 1;
+                newProductQuotationDescription = new ProductQuotationDescription();
+
+                FacesContext.getCurrentInstance().addMessage("msg", new FacesMessage("Item is added to RFQ list!", ""));
+            }
+
+        } else {
+            newProductQuotationDescription.setProductQuotationDescNo(count);
+            newProductQuotationDescription.setProductType(productType);
+            newProductQuotationDescription.setItemName(itemName);
+            newProductQuotationDescription.setQuantity(quantity);
+
+            cacheList.add(newProductQuotationDescription);
+
+            count += 1;
+            newProductQuotationDescription = new ProductQuotationDescription();
+
+            FacesContext.getCurrentInstance().addMessage("msg", new FacesMessage("Item is added to RFQ list!", ""));
+        }
     }
 
     public void deleteProductQuotationDescription(ProductQuotationDescription productQuotationDescription) {
@@ -166,8 +215,8 @@ public class ProductQuotationManagedBean implements Serializable {
         setNewProductQuotationDescription(new ProductQuotationDescription());
         // set quotation tab to be selected
         System.out.println("Your request for product price quotation has been sent successfully!");
-        FacesContext.getCurrentInstance().getExternalContext().redirect("/HiYewExternalWeb/c-products.xhtml");
-        FacesContext.getCurrentInstance().addMessage("rfqMsg", new FacesMessage("Your request for product price quotation has been sent successfully!", ""));
+        //FacesContext.getCurrentInstance().getExternalContext().redirect("/HiYewExternalWeb/c-products.xhtml");
+        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("An RFQ has been sent successfully!", ""));
     }
 
     public void setRejectionStatus(ProductQuotation productQuotation) {

@@ -1,6 +1,6 @@
 package managedBean;
 
-import entity.Customer;
+import entity.SupplierEntity;
 import java.io.IOException;
 import java.io.Serializable;
 import javax.annotation.PostConstruct;
@@ -9,22 +9,22 @@ import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
 import javax.inject.Named;
-import session.stateless.CustomerSessionBeanLocal;
+import session.stateless.SupplierSessionBeanLocal;
 
-@Named(value = "customerManagedBean")
+@Named(value = "supplierManagedBean")
 @ViewScoped
-public class CustomerManagedBean implements Serializable {
+public class SupplierManagedBean implements Serializable {
 
     @EJB
-    private CustomerSessionBeanLocal customerSessionBean;
-    private Customer customer;
+    private SupplierSessionBeanLocal supplierSessionBean;
+    private SupplierEntity supplier;
     private String username = ""; // when log on taken from session
     private String rePassword = "";
     private String changePasswordInput = "";
     private String newPassword = "";
     private String subscribeEmail = "";
 
-    public CustomerManagedBean() {
+    public SupplierManagedBean() {
         FacesContext.getCurrentInstance().getExternalContext().getSessionMap().remove("popupMessage");
     }
 
@@ -33,24 +33,22 @@ public class CustomerManagedBean implements Serializable {
         if (FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("username") != null) {
             this.username = FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("username").toString();
 
-            customer = customerSessionBean.getCustomerByUsername(this.username);
-            System.out.println("CustomerManagedBean.java init() ===== Username is " + username);
+            supplier = supplierSessionBean.getSupplierByUsername(this.username);
+            System.out.println("@Supplier: Username is " + username);
         }
     }
 
-    // update customer
+    // update supplier
     public void handleSave() throws IOException {
-        customerSessionBean.updateCustomer(customer);
+        supplierSessionBean.updateSupplier(supplier);
         FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("popupMessage", "Profile has been updated successfully!");
-        FacesContext.getCurrentInstance().getExternalContext().redirect("/HiYewExternalWeb/c-user-profile.xhtml");
+        FacesContext.getCurrentInstance().getExternalContext().redirect("/HiYewExternalWeb/SupplierHome.xhtml");
     }
 
     public void changeSubscribeEmail() throws IOException {
-        System.out.println("this.subscribeEmail = " + customer.getSubscribeEmail());
-        //FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("popupMessage", "Subcription has been updated successfully!");
-        customerSessionBean.updateCustomer(customer);
-        FacesContext.getCurrentInstance().addMessage("emailMsg", new FacesMessage(FacesMessage.SEVERITY_INFO, "Subcription has been updated successfully!", ""));
-        // FacesContext.getCurrentInstance().getExternalContext().redirect("/HiYewExternalWeb/c-user-profile.xhtml");
+        System.out.println("this.subscribeEmail = " + supplier.getSubscribeEmail());
+        FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("popupMessage", "Subcription has been updated successfully!");
+        supplierSessionBean.updateSupplier(supplier);
     }
 
     public void changePassword() throws IOException {
@@ -58,17 +56,17 @@ public class CustomerManagedBean implements Serializable {
         if (changePasswordInput.equals("") || newPassword.equals("") || rePassword.equals("")) {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Changing password requires all password fields to be filled!", ""));
         } else {
-            String encryptedPassword = customer.getPw();
-            if (encryptedPassword.equals(customerSessionBean.encryptPassword(changePasswordInput))) {
-                if (customerSessionBean.encryptPassword(newPassword).equals(encryptedPassword)) {
+            String encryptedPassword = supplier.getPw();
+            if (encryptedPassword.equals(supplierSessionBean.encryptPassword(changePasswordInput))) {
+                if (supplierSessionBean.encryptPassword(newPassword).equals(encryptedPassword)) {
                     FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "New Password and current password should not be same.", ""));
                 } else {
                     if (newPassword.equals(rePassword)) {
-                        customer.setPw(customerSessionBean.encryptPassword(newPassword));
+                        supplier.setPw(supplierSessionBean.encryptPassword(newPassword));
                         handleSave();
                         //FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Password has been changed successfully!", ""));
                         FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("popupMessage", "Password has been changed successfully!");
-                        FacesContext.getCurrentInstance().getExternalContext().redirect("/HiYewExternalWeb/c-user-profile.xhtml");
+                        FacesContext.getCurrentInstance().getExternalContext().redirect("/HiYewExternalWeb/user-profile.xhtml");
                     } else {
                         FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Password mismatch!", ""));
                     }
@@ -108,20 +106,20 @@ public class CustomerManagedBean implements Serializable {
     }
 
     /**
-     * @return the customers
+     * @return the supplier
      */
-    public Customer getCustomer() {
+    public SupplierEntity getSupplier() {
 
-        return customer;
+        return supplier;
     }
 
     /**
-     * @param customer the customer to set
+     * @param supplier the supplier to set
      */
-    public void setCustomer(Customer customer) {
-        this.customer = customer;
+    public void setSupplier(SupplierEntity supplier) {
+        this.supplier = supplier;
     }
-
+    
     /**
      * @return the rePassword
      */
@@ -163,4 +161,5 @@ public class CustomerManagedBean implements Serializable {
     public void setNewPassword(String newPassword) {
         this.newPassword = newPassword;
     }
+
 }
