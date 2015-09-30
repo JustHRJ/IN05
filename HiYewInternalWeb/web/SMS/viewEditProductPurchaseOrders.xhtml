@@ -103,7 +103,7 @@
             <p:messages id="msgs"  showDetail="false" />
             <p:commandButton value="Refresh" actionListener="#{adminProductPOManagedBean.filterByStatus()}" update="msgs rcvQuote" icon="ui-icon-check"/>
             <br /><br />
-            <p:dataTable value="#{adminProductPOManagedBean.receivedNewProductPOList}" var="item" rows="5" id="rcvQuote" paginator="true" editable="true">
+            <p:dataTable sortBy="#{adminProductPOManagedBean.formatDate(item.productPurchaseOrderDate)}" value="#{adminProductPOManagedBean.receivedNewProductPOList}" var="item" rows="5" id="rcvQuote" paginator="true" editable="true">
                 <p:column headerText="PO No.">
                     <p:outputLabel value="#{item.productPurchaseOrderID}"/>
                 </p:column>
@@ -148,7 +148,7 @@
 
                             <p:panel rendered="" style="border: none" ></p:panel>
 
-                            <p:dataTable var="quoteDescItem" value="#{adminProductPOManagedBean.displayProductQuotationDescriptionList}" rows="5" paginator="true">
+                            <p:dataTable sortBy="#{quoteDescItem.productQuotationDescNo}" var="quoteDescItem" value="#{adminProductPOManagedBean.displayProductQuotationDescriptionList}" rows="5" paginator="true">
                                 <p:column headerText="ID">
                                     <h:outputText value="#{quoteDescItem.productQuotationDescNo}" />
                                 </p:column>

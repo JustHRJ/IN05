@@ -44,7 +44,7 @@
                                 </f:facet>
                             </p:cellEditor>
                         </p:column>
-                        <p:column  styleClass="rfq" headerText="Your Remarks" width="22%">
+                        <p:column styleClass="rfq" headerText="Your Remarks" width="22%">
                             <p:cellEditor>
                                 <f:facet name="output"><h:outputText style="text-align: left" value="#{item.remarks}"/></f:facet>
                                 <f:facet name="input">
@@ -67,14 +67,14 @@
                     <p:messages id="qMsg"  showDetail="false" />
                     <p:commandButton value="Refresh" actionListener="#{productQuotationManagedBean.receivedProductQuotations()}" update="qMsg rcvQuote" icon="" style="padding-top: 5px; padding-bottom: 5px; padding-left: 22px; padding-right: 22px" />
                     <br /><br />
-                    <p:dataTable value="#{productQuotationManagedBean.receivedProductQuotationList}" var="item" rows="8" id="rcvQuote" paginator="true" editable="true">
+                    <p:dataTable sortBy="#{productQuotationManagedBean.formatDate(item.date)}" value="#{productQuotationManagedBean.receivedProductQuotationList}" var="item" rows="8" id="rcvQuote" paginator="true" editable="true">
                         <p:column headerText="View" width="5%" >
                             <p:panel visible="true" style="border:0px; background: none;">
                                 <p:commandButton id="quoteDescBtn" icon="ui-icon-search" title="View" update="quotationDetailPanel" action="#{productQuotationManagedBean.selectProductQuotation(item)}" style="padding-top: 5px; padding-bottom: 5px; padding-left: 20px; padding-right: 20px"/>
                             </p:panel>
                             <p:overlayPanel for="quoteDescBtn" showEffect="fade" hideEffect="fade" dismissable="false" showCloseIcon="true" style="width:1050px">
                                 <p:outputPanel id="quotationDetailPanel" style="text-align:center;" >
-                                    <p:dataTable var="quoteDescItem" value="#{productQuotationManagedBean.displayProductQuotationDescriptionList}" rows="6" paginator="true">
+                                    <p:dataTable sortBy="#{quoteDescItem.productQuotationDescNo}" var="quoteDescItem" value="#{productQuotationManagedBean.displayProductQuotationDescriptionList}" rows="6" paginator="true">
                                         <p:column headerText="ID" width="4%">
                                             <h:outputText value="#{quoteDescItem.productQuotationDescNo}" />
                                         </p:column>
@@ -156,14 +156,14 @@
                     <p:messages id="poMsg"  showDetail="false" />
                     <p:commandButton value="Refresh" actionListener="#{productPurchaseOrderManagedBean.receivedProductPurchaseOrderList()}" update="poMsg poQuote" icon="" style="padding-top: 5px; padding-bottom: 5px; padding-left: 22px; padding-right: 22px" />
                     <br /><br />
-                    <p:dataTable value="#{productPurchaseOrderManagedBean.receivedProductPurchaseOrderList}" var="item" rows="7" id="poQuote" paginator="true" editable="true">
+                    <p:dataTable sortBy="#{productQuotationManagedBean.formatDate(item.productPurchaseOrderDate)}" value="#{productPurchaseOrderManagedBean.receivedProductPurchaseOrderList}" var="item" rows="7" id="poQuote" paginator="true" editable="true">
                         <p:column headerText="View" width="4%">
                             <p:panel visible="true" style="border:0px; background: none;">
                                 <p:commandButton id="quoteDescBtn" icon="ui-icon-search" title="View" update="quotationDetailPanel" action="#{productPurchaseOrderManagedBean.retrieveProductQuotationDescriptionList(item.productPurchaseOrderID)}" style="padding-top: 5px; padding-bottom: 5px; padding-left: 20px; padding-right: 20px"/>
                             </p:panel>
                             <p:overlayPanel for="quoteDescBtn" showEffect="fade" hideEffect="fade" dismissable="false" showCloseIcon="true" style="width:1050px">
                                 <p:outputPanel id="quotationDetailPanel" style="text-align:center;" >
-                                    <p:dataTable var="quoteDescItem" value="#{productPurchaseOrderManagedBean.displayProductQuotationDescriptionList}" rows="6" paginator="true">
+                                    <p:dataTable sortBy="#{quoteDescItem.productQuotationDescNo}" var="quoteDescItem" value="#{productPurchaseOrderManagedBean.displayProductQuotationDescriptionList}" rows="6" paginator="true">
                                         <p:column headerText="ID" width="4%">
                                             <h:outputText value="#{quoteDescItem.productQuotationDescNo}" />
                                         </p:column>

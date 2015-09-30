@@ -9,6 +9,7 @@ import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Iterator;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.enterprise.context.SessionScoped;
@@ -119,30 +120,43 @@ public class ProductQuotationManagedBean implements Serializable {
     }
 
     public void addToCacheList(String productType, String itemName, Integer quantity) {
-
+        Boolean noSuchItem = true;
         System.out.println("cacheList.size() === " + cacheList.size());
         System.out.println("count === " + count);
         if (cacheList.size() > 0) {
             System.out.println("inside for loop");
-            for (ProductQuotationDescription pqd : cacheList) {
+
+            Iterator<ProductQuotationDescription> it = cacheList.iterator();
+
+            while (it.hasNext()) {
+                ProductQuotationDescription pqd = it.next();
                 if (pqd.getItemName().equals(itemName)) {
+                    // same item
+                    noSuchItem = false;
                     System.out.println("pqd.getItemName() === " + pqd.getItemName());
                     System.out.println("itemName === " + itemName);
-                    FacesContext.getCurrentInstance().addMessage("warnMsg", new FacesMessage(FacesMessage.SEVERITY_WARN, "Item has been added to cart!", ""));
+                    System.out.println("inside for loop cacheList.size() === " + cacheList.size());
+                    FacesContext.getCurrentInstance().addMessage("warnMsg", new FacesMessage(FacesMessage.SEVERITY_WARN, "Item has been added to RFQ list!", ""));
                 } else {
-                    newProductQuotationDescription.setProductQuotationDescNo(count);
-                    newProductQuotationDescription.setProductType(productType);
-                    newProductQuotationDescription.setItemName(itemName);
-                    newProductQuotationDescription.setQuantity(quantity);
+                    // no such item
 
-                    cacheList.add(newProductQuotationDescription);
-
-                    count += 1;
-                    newProductQuotationDescription = new ProductQuotationDescription();
-
-                    FacesContext.getCurrentInstance().addMessage("msg", new FacesMessage("Item is added to RFQ list!", ""));
                 }
             }
+
+            if (noSuchItem) {
+                newProductQuotationDescription.setProductQuotationDescNo(count);
+                newProductQuotationDescription.setProductType(productType);
+                newProductQuotationDescription.setItemName(itemName);
+                newProductQuotationDescription.setQuantity(quantity);
+
+                cacheList.add(newProductQuotationDescription);
+
+                count += 1;
+                newProductQuotationDescription = new ProductQuotationDescription();
+
+                FacesContext.getCurrentInstance().addMessage("msg", new FacesMessage("Item is added to RFQ list!", ""));
+            }
+
         } else {
             newProductQuotationDescription.setProductQuotationDescNo(count);
             newProductQuotationDescription.setProductType(productType);

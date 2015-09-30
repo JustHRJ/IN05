@@ -47,9 +47,10 @@ public class CustomerManagedBean implements Serializable {
 
     public void changeSubscribeEmail() throws IOException {
         System.out.println("this.subscribeEmail = " + customer.getSubscribeEmail());
-        FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("popupMessage", "Subcription has been updated successfully!");
+        //FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("popupMessage", "Subcription has been updated successfully!");
         customerSessionBean.updateCustomer(customer);
-        FacesContext.getCurrentInstance().getExternalContext().redirect("/HiYewExternalWeb/c-user-profile.xhtml");
+        FacesContext.getCurrentInstance().addMessage("emailMsg", new FacesMessage(FacesMessage.SEVERITY_INFO, "Subcription has been updated successfully!", ""));
+        // FacesContext.getCurrentInstance().getExternalContext().redirect("/HiYewExternalWeb/c-user-profile.xhtml");
     }
 
     public void changePassword() throws IOException {

@@ -13,7 +13,7 @@
             <h1 style="font-weight: bold">Customer profile <small></small></h1>
             <p style="margin-bottom: 1%"></p>
             <h:outputText value="#{popupMessage}" style="font-family: 'Open Sans'; font-weight: bold; color: red;" />
- 
+
         </div>
         <!-- End page header -->
 
@@ -132,6 +132,7 @@
                             <div class="user-profile-content">
                                 <h:form id="changeSubscriptionForm">
                                     <p:growl id="msgs" showDetail="false" />
+                                    <p:messages id="emailMsg"  showDetail="false" />
                                     Subscribe to receive notifications on any changes on updates. 
                                     If you do not wish to receive any notifications, please unsubscribe from the tools.
                                     <br />
@@ -142,7 +143,7 @@
                                     <p:selectBooleanCheckbox style="vertical-align: middle" styleClass="subscribe" value="#{customerManagedBean.customer.subscribeEmail}" />
                                     An email will be sent if there are updates.
                                     <br /><br />
-                                    <p:commandButton style="border: none; font-weight: normal; font-family: 'Open Sans'; padding-top: 6px; padding-bottom: 7px; padding-left: 22px; padding-right: 22px" styleClass="btn btn-primary buttonOverride" value="Update" action="#{customerManagedBean.changeSubscribeEmail()}" icon=""/>
+                                    <p:commandButton style="border: none; font-weight: normal; font-family: 'Open Sans'; padding-top: 6px; padding-bottom: 7px; padding-left: 22px; padding-right: 22px" styleClass="btn btn-primary buttonOverride" value="Update" update="emailMsg" action="#{customerManagedBean.changeSubscribeEmail()}" icon=""/>
                                 </h:form>
                             </div><!-- End div .scroll-user-widget -->
                         </div><!-- End div .tab-pane -->
