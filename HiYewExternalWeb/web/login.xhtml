@@ -47,7 +47,7 @@
                         <h2 class="text-center"><strong>Login</strong> form</h2>
                         <h:form id="mainForm">
                             <p:growl id="msgs" showDetail="false" />
-                            <h:outputText value="#{loginMessage}" style="font-weight: bold; color: red; margin-bottom: 100%" />
+                            <h:outputText value="#{loginMessage}" id="loginOutputId" style="font-weight: bold; color: red; margin-bottom: 100%" />
                             #{LoginManagedBean.checkLogoutRedirect()}
                             <p style="margin-bottom: 5%"></p>
                             <div class="form-group">
@@ -71,7 +71,7 @@
                                                         </div>-->
                             <div class="row">
                                 <div class="col-sm-6">
-                                    <p:commandButton style="border: none; font-family: 'Open Sans';" styleClass="btn btn-success btn-block" value="Login" action="#{loginManagedBean.login()}" update="msgs" />
+                                    <p:commandButton style="border: none; font-family: 'Open Sans';" styleClass="btn btn-success btn-block" value="Login" action="#{loginManagedBean.login()}" update="msgs loginOutputId" />
                                 </div>
                                 <div class="col-sm-6">
                                     <a class="md-trigger" data-modal="logout-modal" style="color: #333; text-decoration: none;"><p style="padding-top: 7px; font-family: 'Open Sans'; height: 35px" class="btn btn-default btn-block" >Register</p></a>

@@ -58,13 +58,13 @@ public class LoginManagedBean implements Serializable {
                     FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("loginMessage", "Invalid Username or password! Please try again.");
                     //FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Invalid Username or password!"));
                     System.out.println("Login Fail");
-                    path = "login?faces-redirect=true"; //navigation
+                    path = ""; //navigation
                 }
             } catch (NullPointerException e) {
                 FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("loginMessage", "Invalid Username or password! Please try again.");
                 //FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Invalid Username or password!"));
                 System.out.println("Login Fail");
-                path = "login?faces-redirect=true"; //navigation
+                path = ""; //navigation
             }
         } else { //if user is supplier
         }
@@ -136,13 +136,13 @@ public class LoginManagedBean implements Serializable {
                 return "login?faces-redirect=true";
             } else {
                 FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("registerMessage", "Your password and confirmation password do not match.");
-                return "";
+                
             }
         } else {
             FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("registerMessage", "This username has been taken by someone else. Please choose a different username.");
-            return "register-customer?faces-redirect=true";
+            
         }
-        
+        return "";
     }
 
     /**
