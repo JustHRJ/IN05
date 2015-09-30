@@ -5,6 +5,7 @@
  */
 package session.stateful;
 
+import entity.SupplierPurchaseOrder;
 import javax.ejb.Stateful;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -25,8 +26,6 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
-import java.util.Timer;
-import java.util.TimerTask;
 import java.util.Vector;
 import javax.persistence.Query;
 
@@ -65,6 +64,41 @@ public class HiYewSystemBean implements HiYewSystemBeanLocal {
             return true;
         }
 
+    }
+    
+    public boolean createPO(String supPONo, Timestamp date, String termsOfPayment, String description, String supCompanyName, int quantity) {
+        SupplierPurchaseOrder supPO = new SupplierPurchaseOrder();
+        try {
+            Query q = em.createQuery("Select supPO from SupplierPurchaseOrder supPO where supPO.supPONo = :supPONo");
+            q.setParameter("supPONo", supPONo);
+            supPO = (SupplierPurchaseOrder) q.getSingleResult();
+            return false;
+        } catch (Exception ex) {
+            supPO.setSupPONo(supPONo);
+            supPO.setTermsOfPayment(termsOfPayment);
+            supPO.setDescription(description);
+            supPO.setDate(date);
+            supPO.setSupCompanyName(supCompanyName);
+            supPO.setSupPoStatus("Pending");
+            supPO.setQuantity(quantity);
+            em.persist(supPO);
+            return true;
+        }
+
+    }
+
+    public List<SupplierPurchaseOrder> getAllPO(){
+        Query q = em.createQuery("Select c from SupplierPurchaseOrder c");
+        List<SupplierPurchaseOrder> poRecords = new ArrayList<SupplierPurchaseOrder>();
+        for (Object o : q.getResultList()) {
+            SupplierPurchaseOrder PO = (SupplierPurchaseOrder) o;
+            poRecords.add(PO);
+        }
+        if (poRecords.isEmpty()) {
+            return null;
+        } else {
+            return poRecords;
+        }
     }
 
     public boolean existMachineName(String name) {
@@ -776,7 +810,20 @@ public class HiYewSystemBean implements HiYewSystemBeanLocal {
 
         return null;
     }
-
+    
+    public boolean updateSupPoStatus(String supPoStatus, List<SupplierPurchaseOrder> selectedList){
+        try {
+            for(Object o:selectedList){
+                SupplierPurchaseOrder e = (SupplierPurchaseOrder) o;
+                e.setSupPoStatus(supPoStatus);
+                em.merge(e);
+            }
+            return true;
+        } catch (Exception ex) {
+            return false;
+        }
+    }
+    
     public boolean updateMachine(String machineName, MachineEntity machine, String status, Date machineMaint) {
         try {
             boolean check = false;
@@ -808,6 +855,42 @@ public class HiYewSystemBean implements HiYewSystemBeanLocal {
         } catch (Exception ex) {
             return false;
         }
+    }
+    
+    public boolean updatePO(String termsOfPayment, SupplierPurchaseOrder supplierPurchaseOrder, String description, int quantity) {
+            boolean check = false;
+            boolean check2 = false;
+            System.out.println(termsOfPayment);
+            if (!(termsOfPayment.isEmpty()) && !(termsOfPayment.equals(supplierPurchaseOrder.getTermsOfPayment()))) {
+                supplierPurchaseOrder.setTermsOfPayment(termsOfPayment);
+                check = true;
+            }
+            
+            if (!(description.isEmpty())) {
+                 supplierPurchaseOrder.setDescription(description);
+                 //check = true;
+                 //System.out.println(description);
+            }
+            //if (!(supCompanyName.isEmpty()) && !(supCompanyName.equals(supplierPurchaseOrder.getSupCompanyName()))) {
+            //     supplierPurchaseOrder.setSupCompanyName(supCompanyName);
+            //     check = true;
+            //}
+            
+            if ((quantity != 0) && (quantity != supplierPurchaseOrder.getQuantity()) ) {
+                 supplierPurchaseOrder.setQuantity(quantity);
+                 check2 = true;
+            } 
+            
+            if (check || !(description.isEmpty()) ||  check2) {
+               em.merge(supplierPurchaseOrder);
+               return true;
+            }
+            //if(check == true){
+             //   em.merge(supplierPurchaseOrder);
+            //    return true;   
+            //}
+            return false;
+      
     }
 
 // still having trouble comparing due to calendar comparison issues. to try different approach

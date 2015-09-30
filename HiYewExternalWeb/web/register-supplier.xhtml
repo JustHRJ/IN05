@@ -51,38 +51,42 @@
                             <p:growl id="msgs" showDetail="false" />
                             <div class="form-group login-input">
                                 <i class="fa fa-user overlay"></i>
-                                <p:inputText class="form-control text-input" placeholder="Your name" value="#{LoginManagedBean.newCustomer.name}" required="true" requiredMessage="Name is required." id="customerName"  />
+                                <p:inputText class="form-control text-input" placeholder="Your name" value="#{LoginManagedBean.newSupplier.name}" required="true" requiredMessage="Name is required." id="supplierName"  />
+                            </div>
+                            <div class="form-group login-input">
+                                <i class="fa fa-user overlay"></i>
+                                <p:inputText class="form-control text-input" placeholder="Company name" value="#{LoginManagedBean.newSupplier.companyName}" required="true" requiredMessage="Name is required." id="supplierCompanyName"  />
                             </div>
                             <div class="form-group login-input">
                                 <i class="fa fa-phone-square overlay"></i>
-                                <p:inputText class="form-control text-input" placeholder="Your phone" value="#{LoginManagedBean.newCustomer.phone}" required="true" requiredMessage="Phone is required." maxlength="8"  id="Phone" validatorMessage="[Phone] Please enter only 8 digits starting with 6, 8 and 9.">
+                                <p:inputText class="form-control text-input" placeholder="Your phone" value="#{LoginManagedBean.newSupplier.phone}" required="true" maxlength="8"  requiredMessage="Phone is required." id="Phone" validatorMessage="[Phone] Please enter only 8 digits starting with 6, 8 and 9.">
                                     <f:validateRegex pattern="(^[6,8,9]{1}[0-9]{7}$)"/>
                                 </p:inputText>
                             </div>
                             <div class="form-group login-input">
                                 <i class="fa fa-envelope overlay"></i>
-                                <p:inputText class="form-control text-input" placeholder="Your email (e.g. your_email@gmail.com)" value="#{LoginManagedBean.newCustomer.email}" required="true" requiredMessage="Email is required." id="Email" validatorMessage="[Email] Invalid email format. e.g. your_email@gmail.com" >
+                                <p:inputText class="form-control text-input" placeholder="Your email (e.g. your_email@gmail.com)" value="#{LoginManagedBean.newSupplier.email}" required="true" requiredMessage="Email is required." id="Email" validatorMessage="[Email] Invalid email format. e.g. your_email@gmail.com" >
                                     <f:validateRegex pattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$" />
                                 </p:inputText>
                             </div>
                             <div class="form-group login-input">
                                 <i class="fa fa-building-o overlay"></i>
-                                <p:inputText class="form-control text-input" placeholder="Your street name (e.g. Beach Road)" value="#{LoginManagedBean.newCustomer.address1}" required="true" requiredMessage="Street name is required." id="Address1"  />
-                                <p:inputText style="margin-top: -1px" class="form-control text-input" placeholder="Your unit number (e.g. 12, #01-02)" value="#{LoginManagedBean.newCustomer.address2}" id="Address2"  />
+                                <p:inputText class="form-control text-input" placeholder="Your street name (e.g. Beach Road)" value="#{LoginManagedBean.newSupplier.address1}" required="true" requiredMessage="Street name is required." id="Address1"  />
+                                <p:inputText style="margin-top: -1px" class="form-control text-input" placeholder="Your unit number (e.g. 12, #01-02)" value="#{LoginManagedBean.newSupplier.address2}" id="Address2"  />
                             </div>
                             <div class="form-group login-input">
                                 <i class="fa fa-compass overlay"></i>
-                                <p:inputText class="form-control text-input" placeholder="Your postal code" value="#{LoginManagedBean.newCustomer.postalCode}" required="true" maxlength="6"  requiredMessage="Postal code is required." id="Postal" validatorMessage="[Postal Code] Please enter only 6 digits.">
+                                <p:inputText class="form-control text-input" placeholder="Your postal code" value="#{LoginManagedBean.newSupplier.postalCode}" required="true" maxlength="6"  requiredMessage="Postal code is required." id="Postal" validatorMessage="[Postal Code] Please enter only 6 digits.">
                                     <f:validateRegex pattern="(^[0-9]{6}$)"/>
                                 </p:inputText>
                             </div>
                             <div class="form-group login-input">
                                 <i class="fa fa-sign-in overlay"></i>
-                                <p:inputText class="form-control text-input" placeholder="Username" value="#{LoginManagedBean.newCustomer.userName}" required="true" requiredMessage="Username is required." id="Username"  />
+                                <p:inputText class="form-control text-input" placeholder="Username" value="#{LoginManagedBean.newSupplier.userName}" required="true" requiredMessage="Username is required." id="Username"  />
                             </div>
                             <div class="form-group login-input">
                                 <i class="fa fa-key overlay"></i>
-                                <p:password class="form-control text-input" placeholder="Password" value="#{LoginManagedBean.newCustomer.pw}" required="true" feedback="true" inline="true" promptLabel=" " requiredMessage="Password is required." id="Password" validatorMessage="[Password] Your password should be of at least 8 alphanumeric characters.">
+                                <p:password class="form-control text-input" placeholder="Password" value="#{LoginManagedBean.newSupplier.pw}" required="true" feedback="true" inline="true" promptLabel=" " requiredMessage="Password is required." id="Password" validatorMessage="[Password] Your password should be of at least 8 alphanumeric characters.">
                                     <f:validateRegex pattern="(^[0-9a-zA-Z]{8,}$)"/>
                                 </p:password>
                             </div>
@@ -92,7 +96,7 @@
                                     <f:validateRegex pattern="(^[0-9a-zA-Z]{8,}$)"/>
                                 </p:password>
                             </div>
-                            <p:commandButton style="border: none;" class=" btn btn-success btn-block" action="#{LoginManagedBean.createCustomer()}" value="Register" update="msgs"></p:commandButton>
+                            <p:commandButton style="border: none;" class=" btn btn-success btn-block" action="#{LoginManagedBean.createSupplier()}" value="Register" update="msgs"></p:commandButton>
                         </h:form>
                     </div>
                     <p class="text-center"><a href="login.xhtml"><i class="fa fa-sign-in"> </i>Back to login</a></p>

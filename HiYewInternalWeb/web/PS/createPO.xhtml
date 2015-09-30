@@ -1,0 +1,92 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:head>
+        <title>Procurement System</title>
+    </h:head>
+    <h:body>
+         #{loginControlBean.checkLoginRedirect()}
+        <a href ="/HiYewInternalWeb/index.xhtml"><img src = "../image/hiyew.gif" /></a>
+        <h:form id ="formMain">
+            <h1>Create Purchase Order</h1>
+            <p:menubar>
+                <p:menuitem value ="Home" url ="/index.xhtml" />           
+                <p:menuitem value ="Create Purchase Order" url ="createPO.xhtml" />
+                <p:menuitem value ="View Purchase Order" url ="viewPO.xhtml" />
+            </p:menubar>
+            <p:panel id ="panel" header="Create new Purchase Order">
+                <p:growl id ="msgs" showDetail="false"/>
+                <p:panelGrid id = "grid">
+                   <!-- <p:row>
+                        <p:column>
+                            <p:outputLabel for ="supPONo" style ="font-weight: bold" value ="Purchase Order No.:  "/>
+                        </p:column>
+                        <p:column>
+                            <p:inputText label ="Purchase_Order_No" id ="supPONo" value ="#{hiYewManagedBean.supPONo}" required="true"  readonly="true" requiredMessage="Please enter a Purchase Order No."> </p:inputText>
+                               
+                        </p:column>
+                      
+                    </p:row> -->
+                    <p:row>   
+                        <p:column>
+                            <p:outputLabel for ="supCompanyName" style ="font-weight: bold" value ="Supplier's Company:  "/>
+                        </p:column>
+                        <p:column>
+                            <p:inputText label ="supCompanyName" id ="supCompanyName" value ="#{hiYewManagedBean.supCompanyName}" required="true" requiredMessage="Please enter Supplier's Company."></p:inputText>
+                        </p:column>
+                    </p:row>
+                    <p:row>   
+                        <p:column>
+                            <p:outputLabel for ="date" style ="font-weight: bold" value ="Order Date:  "/>
+                        </p:column>
+                        <p:column>
+                             <p:calendar id = "date" value = "#{hiYewManagedBean.date}" mindate="#{hiYewManagedBean.getToday()}" pattern ="dd/MM/yyyy" required = "true" requiredMessage="Please enter PO date"/>
+                        </p:column>
+                    </p:row>
+                    
+                    <p:row>   
+                        <p:column>
+                            <p:outputLabel for ="termsOfPayment" style ="font-weight: bold" value ="Terms of Payment (Days):  "/>
+                        </p:column>
+                        <p:column>
+                            
+                             
+                            <p:selectOneMenu id="termsOfPayment" value="#{hiYewManagedBean.termsOfPayment}" style="width:200px"> 
+                            <f:selectItem itemValue="30" itemLabel="30"/>
+                            <f:selectItem itemValue="60" itemLabel="60"/>
+                            <f:selectItem itemValue="90" itemLabel="90"/>
+                            </p:selectOneMenu>
+                        </p:column>
+                    </p:row>
+                    <p:row>   
+                        <p:column>
+                            <p:outputLabel for ="description" style ="font-weight: bold" value ="Wire:  "/>
+                        </p:column>
+                        <p:column>
+                            <p:inputText label ="PO_Description" id ="description" placeholder="Include wire" value ="#{hiYewManagedBean.description}" required="true"></p:inputText>
+                        </p:column>
+                    </p:row>
+                    
+                     <p:row>   
+                        <p:column>
+                            <p:outputLabel for ="quantity" style ="font-weight: bold" value ="Quantity"/>
+                        </p:column>
+                        <p:column>
+                            <p:inputText label ="quantity" id ="quantity" value ="#{hiYewManagedBean.quantity}" required="true" requiredMessage="Please enter quantity of wires">
+                            <f:validateLongRange minimum="1"/>
+                            </p:inputText>
+                        </p:column>
+                    </p:row>
+                </p:panelGrid>
+                <p:commandButton id="btn" value="Create new PO"  action="#{hiYewManagedBean.createPO}"  update =":formMain:msgs" />
+            </p:panel>
+
+        </h:form>
+
+    </h:body>
+</html>
+
+

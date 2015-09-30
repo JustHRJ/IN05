@@ -5,6 +5,7 @@
  */
 package session.stateful;
 
+import entity.SupplierPurchaseOrder;
 import entity.EmployeeEntity;
 import entity.LeaveEntity;
 import entity.MachineEntity;
@@ -186,5 +187,11 @@ public interface HiYewSystemBeanLocal {
 
     public List<Vector> employeeTrainingMonthUser(String username);
 
-
+    public boolean createPO(String supPONo, Timestamp date, String termsOfPayment, String description, String supCompanyName, int quantity);
+    
+    public List<SupplierPurchaseOrder> getAllPO();
+    
+    public boolean updatePO(String termsOfPayment, SupplierPurchaseOrder supplierPurchaseOrder, String description, int quantity);
+    
+    public boolean updateSupPoStatus(String supPoStatus, List<SupplierPurchaseOrder> selectedList);
 }
