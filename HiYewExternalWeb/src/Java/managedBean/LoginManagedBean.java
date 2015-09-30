@@ -90,12 +90,12 @@ public class LoginManagedBean implements Serializable {
                     path = "SupplierHome?faces-redirect=true"; //navigation
 
                 } else {
-                    FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Invalid Username or password!"));
+                    FacesContext.getCurrentInstance().addMessage("loginMessage", new FacesMessage("Invalid Username or password!"));
                     System.out.println("Login Fail");
 
                 }
             } catch (NullPointerException e) {
-                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Invalid Username or password!"));
+                FacesContext.getCurrentInstance().addMessage("loginMessage", new FacesMessage("Invalid Username or password!"));
                 System.out.println("Login Fail");
 
             }
@@ -176,6 +176,32 @@ public class LoginManagedBean implements Serializable {
         }
         return "";
     }
+    
+    
+    public String createSupplier() {
+        supplier = supplierSessionBean.getSupplierByUsername(newSupplier.getUserName());
+        if (supplier == null) {
+            if (newSupplier.getPw().equals(rePassword)) {
+                // encrypt password
+                newSupplier.setPw(customerSessionBean.encryptPassword(newSupplier.getPw()));
+                newSupplier.setSubscribeEmail("true");
+                supplierSessionBean.createSupplier(newSupplier);
+                EmailManager emailManager = new EmailManager();
+                emailManager.emailSuccessfulRegistration(newSupplier.getName(), newSupplier.getUserName(), rePassword, newSupplier.getEmail());
+                newSupplier = new SupplierEntity(); // To reinitialise and create new customer
+                FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("loginMessage", "Your account registration has been successful.");
+                return "SupplierHome?faces-redirect=true";
+            } else {
+                FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("registerMessage", "Your password and confirmation password do not match.");
+                
+            }
+        } else {
+            FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("registerMessage", "This username has been taken by someone else. Please choose a different username.");
+            
+        }
+        return "";
+    }
+    
 
     /**
      * @return the username

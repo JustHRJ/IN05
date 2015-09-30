@@ -5,7 +5,7 @@
                 xmlns:h="http://xmlns.jcp.org/jsf/html"
                 xmlns:f="http://xmlns.jcp.org/jsf/core"
                 xmlns:p="http://primefaces.org/ui"
-                template="./template.xhtml">
+                template="./s-template.xhtml">
 
     <ui:define name="content">
         <!-- Page header -->
@@ -24,7 +24,6 @@
                         <li class="active"><a href="#about" data-toggle="tab"><i class="fa fa-user"></i>&nbsp;&nbsp;About</a></li>
                         <li><a href="#edit-profile" data-toggle="tab"><i class="fa fa-pencil"></i>&nbsp;&nbsp;Edit Profile</a></li>
                         <li><a href="#change-password" data-toggle="tab"><i class="fa fa-floppy-o"></i>&nbsp;&nbsp;Change Password</a></li>
-                        <li><a href="#subscription" data-toggle="tab"><i class="fa fa-rss"></i>&nbsp;&nbsp;Subscription</a></li>
                     </ul>
                     <!-- End nav tab -->
 
@@ -134,25 +133,7 @@
                         </div><!-- End div .tab-pane -->
                         <!-- End Tab Change password -->
 
-                        <!-- Tab Settings -->
-                        <div class="tab-pane animated fadeInRight" id="subscription">
-                            <div class="user-profile-content">
-                                <h:form id="changeSubscriptionForm">
-                                    <p:growl id="msgs" showDetail="false" />
-                                    Subscribe to receive notifications on any changes on updates. 
-                                    If you do not wish to receive any notifications, please unsubscribe from the tools.
-                                    <br />
-                                    <br />
-                                    <h:outputText style="font-weight: bold;" value="Email" />
-                                    <br />
-                                    <div style="height: 8px"></div>
-                                    <p:selectBooleanCheckbox style="vertical-align: middle" styleClass="subscribe" value="#{supplierManagedBean.supplier.subscribeEmail}" />
-                                    An email will be sent if there are updates.
-                                    <br /><br />
-                                    <p:commandButton style="border: none; font-family: 'Open Sans'; padding-right: 17px" styleClass="btn btn-primary" value="Update" action="#{supplierManagedBean.changeSubscribeEmail()}" icon="ui-icon-check"/>
-                                </h:form>
-                            </div><!-- End div .scroll-user-widget -->
-                        </div><!-- End div .tab-pane -->
+                        
                         <!-- End Tab Settings -->
 
                     </div><!-- End div .tab-content -->
