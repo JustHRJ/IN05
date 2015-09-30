@@ -411,7 +411,7 @@ public class HiYewManagedBean {
         System.out.println(objectId1);
         System.out.println(objectId);
         hiYewSystemBean.approveLeaveID((Long.valueOf(objectId1).longValue()), objectId);
-        System.out.println("here");
+
     }
 
     public void rejectLeave() {
@@ -419,7 +419,14 @@ public class HiYewManagedBean {
     }
 
     public void approveLeaveEs() {
-        hiYewSystemBean.approveByEmployee(employeeName);
+        boolean check = hiYewSystemBean.approveByEmployee(employeeName);
+        if (check) {
+            FacesMessage msg = new FacesMessage("All Employee Leave has been approved");
+            FacesContext.getCurrentInstance().addMessage(null, msg);
+        } else{
+            FacesMessage msg = new FacesMessage("Not Enough Leave to approve all.");
+            FacesContext.getCurrentInstance().addMessage(null, msg);
+        }
     }
 
     public List<LeaveEntity> getLeaveE() {

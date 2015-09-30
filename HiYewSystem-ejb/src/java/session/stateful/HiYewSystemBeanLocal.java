@@ -55,7 +55,7 @@ public interface HiYewSystemBeanLocal {
 
     public String EmployeeStatus(String employeeName);
 
-    public void approveByEmployee(String employee);
+    public boolean approveByEmployee(String employee);
 
     public void cancelLeaveApplication(String employee, Long id);
 

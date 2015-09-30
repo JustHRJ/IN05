@@ -1699,22 +1699,42 @@ public class HiYewSystemBean implements HiYewSystemBeanLocal {
                 if (lao.getEmployee_account_status().equals("disabled")) {
                     return "Employee account is disabled";
                 }
+                if (new Timestamp(start.getTime()).before(lao.getEmployee_employedDate()) || new Timestamp(end.getTime()).before(lao.getEmployee_employedDate())) {
+                    return "Cannot apply leave before employed Date";
+                }
+                System.out.println("here");
                 LeaveEntity application = new LeaveEntity();
+                System.out.println("here1");
                 application.setRemarks(remarks);
+                System.out.println("here2");
                 application.setNumber_of_leave(days);
+                System.out.println("here3");
                 java.util.Date date = new java.util.Date();
+                System.out.println("here4");
                 Timestamp time_applied = new Timestamp(date.getTime());
+                System.out.println("here5");
                 Timestamp sd = new Timestamp(start.getTime());
+                System.out.println("here6");
                 Timestamp ed = new Timestamp(end.getTime());
+                System.out.println("here7");
                 application.setAppliedTime(time_applied);
+                System.out.println("here8");
                 application.setEndDate(ed);
+                System.out.println("here9");
                 application.setStartDate(sd);
+                System.out.println("here10");
                 application.setStatus("pending");
+                System.out.println("here11");
                 application.setType(type);
+                System.out.println("here12");
                 application.setEmployee(lao);
+                System.out.println("here13");
                 em.persist(application);
+                System.out.println("here14");
                 lao.getLeaveRecords().add(application);
+                System.out.println("here15");
                 em.merge(lao);
+                System.out.println("here16");
                 return "applied";
             }
 
@@ -1811,12 +1831,12 @@ public class HiYewSystemBean implements HiYewSystemBeanLocal {
             Query q = em.createQuery("select employee from EmployeeEntity employee where employee.employee_name =:id");
             q.setParameter("id", employee1);
             employee = (EmployeeEntity) q.getSingleResult();
-            System.out.println("here");
+
             Collection<LeaveEntity> leaveRecords = employee.getLeaveRecords();
             for (Object o : leaveRecords) {
                 leave = (LeaveEntity) o;
                 if (leave.getId() == id) {
-                    if (employee.getNumber_of_leaves() >= leave.getNumber_of_leave()) {
+                    if (employee.getNumber_of_leaves() >= leave.getNumber_of_leave() && leave.getType().equals("paid")) {
                         leave.setStatus("approved");
                         java.util.Date date = new java.util.Date();
                         Timestamp time = new Timestamp(date.getTime());
@@ -1824,10 +1844,15 @@ public class HiYewSystemBean implements HiYewSystemBeanLocal {
                         em.merge(leave);
                         employee.setNumber_of_leaves(employee.getNumber_of_leaves() - leave.getNumber_of_leave());
                         em.merge(employee);
+                    } else {
+                        leave.setStatus("approved");
+                        java.util.Date date = new java.util.Date();
+                        Timestamp time = new Timestamp(date.getTime());
+                        leave.setApprovedTime(time);
+                        em.merge(leave);
                     }
                 }
             }
-
         } catch (Exception ex) {
             System.out.println("here");
         }
@@ -1970,7 +1995,7 @@ public class HiYewSystemBean implements HiYewSystemBeanLocal {
         }
     }
 
-    public void approveByEmployee(String employee) {
+    public boolean approveByEmployee(String employee) {
         EmployeeEntity e = new EmployeeEntity();
         try {
             Query q = em.createQuery("Select e from EmployeeEntity e where e.employee_name = :id");
@@ -1982,7 +2007,7 @@ public class HiYewSystemBean implements HiYewSystemBeanLocal {
             if (allRight <= e.getNumber_of_leaves()) {
                 for (Object o : leaveRecords) {
                     LeaveEntity l = (LeaveEntity) o;
-                    if (l.getStatus().equals("pending")) {
+                    if (l.getStatus().equals("pending") && l.getType().equals("paid")) {
                         l.setStatus("approved");
                         java.util.Date date = new java.util.Date();
                         Timestamp approveTime = new Timestamp(date.getTime());
@@ -1990,14 +2015,21 @@ public class HiYewSystemBean implements HiYewSystemBeanLocal {
                         e.setNumber_of_leaves(e.getNumber_of_leaves() - l.getNumber_of_leave());
                         em.merge(l);
                         em.merge(e);
+                    } else {
+                        l.setStatus("approved");
+                        java.util.Date date = new java.util.Date();
+                        Timestamp approveTime = new Timestamp(date.getTime());
+                        l.setApprovedTime(approveTime);
+                        em.merge(l);
+
                     }
                 }
+                return true;
+            } else {
+                return false;
             }
         } catch (Exception ex) {
-            LeaveEntity leave = new LeaveEntity();
-            leave.setRemarks("hihi");
-            leave.setNumber_of_leave(2);
-            em.persist(leave);
+            return false;
         }
     }
 

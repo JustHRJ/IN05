@@ -81,11 +81,37 @@ public class HiYewSystemTimer {
     private double calculateSalary(EmployeeEntity e, Timestamp currentDate, Timestamp employedDate) {
         double currentSalary = e.getEmployee_basic();
         Calendar c = Calendar.getInstance();
-        c.add(Calendar.DATE, - 1);
-        Timestamp currentTime = new Timestamp(c.getTime().getTime());
-        int diffInDays = (int) ((currentTime.getTime() - employedDate.getTime())
-                / (1000 * 60 * 60 * 24)) + 1;
+        c.add(Calendar.DATE, -1);
+        c.set(Calendar.MILLISECOND, 0);
+        c.set(Calendar.SECOND, 0);
+        c.set(Calendar.MINUTE, 0);
+        c.set(Calendar.HOUR, 0);
 
+        Calendar d = Calendar.getInstance();
+        d.setTime(c.getTime());
+        d.add(Calendar.MONTH, -1);
+        d.set(Calendar.MILLISECOND, 0);
+        d.set(Calendar.SECOND, 0);
+        d.set(Calendar.MINUTE, 0);
+        d.set(Calendar.HOUR, 0);
+
+        int diffInDays = (int) (c.getTime().getTime() - employedDate.getTime())
+                / (1000 * 60 * 60 * 24);
+
+        if (diffInDays > 0) {
+            diffInDays += 1;
+        } else {
+            if (employedDate.after(c.getTime())) {
+                diffInDays = 0;
+            }
+            if (employedDate.before(c.getTime())) {
+                diffInDays = 1;
+            }
+            if (new Timestamp(c.getTime().getTime()).equals(employedDate)) {
+                diffInDays = 1;
+            }
+        }
+        System.out.println("diff in Days " + diffInDays);
         int numberOfDays = c.getActualMaximum(Calendar.DAY_OF_MONTH);
 
         Collection<LeaveEntity> leaveRecords = e.getLeaveRecords();
@@ -101,13 +127,39 @@ public class HiYewSystemTimer {
                 Date date1 = new Date(month.getTime());
                 Calendar cal = Calendar.getInstance();
                 cal.setTime(date1);
-                if (cal.get(Calendar.MONTH) == c.get(Calendar.MONTH) || cal2.get(Calendar.MONTH) == c.get(Calendar.MONTH)) {
-                    if (cal2.get(Calendar.MONTH) == cal.get(Calendar.MONTH)) {
-                        diffInDays -= cal2.get(Calendar.DATE) - cal.get(Calendar.DATE) + 1;
-                    } else if (cal.get(Calendar.MONTH) == c.get(Calendar.MONTH)) {
-                        diffInDays -= numberOfDays - cal.get(Calendar.DATE) + 1;
-                    } else if (cal2.get(Calendar.MONTH) == c.get(Calendar.MONTH)) {
-                        diffInDays -= numberOfDays - cal2.get(Calendar.DATE) + 1;
+                if (cal.after(d) && cal2.before(c)) {
+                    diffInDays -= calculateDays(cal, cal2);
+                    System.out.println("here");
+                } else if (cal.after(d) && cal2.after(c) && cal.before(c)) {
+                    diffInDays -= calculateDays(cal, c);
+                    System.out.println("here1");
+                } else if (d.after(cal) && c.after(cal2) && cal2.after(d)) {
+                    diffInDays -= calculateDays(d, cal2);
+                    System.out.println("here2");
+                } else if (d.after(cal) && cal2.after(c)) {
+                    diffInDays = 0;
+                    System.out.println("here3");
+                } else if (cal.equals(d)) {
+                    if (c.after(cal2)) {
+                        diffInDays -= calculateDays(cal, cal2);
+                        System.out.println("here4");
+                    } else {
+                        diffInDays = 0;
+                        System.out.println("here5");
+                    }
+                } else if (cal2.equals(d)) {
+                    diffInDays -= 1;
+                    System.out.println("here6");
+                } else if (cal.equals(c)) {
+                    diffInDays -= 1;
+                    System.out.println("here7");
+                } else if (cal2.equals(c)) {
+                    if (cal.after(d)) {
+                        diffInDays -= calculateDays(cal, cal2);
+                        System.out.println("here8");
+                    } else {
+                        diffInDays = 0;
+                        System.out.println("here9");
                     }
                 }
             }
@@ -122,6 +174,22 @@ public class HiYewSystemTimer {
         double currentSalary = e.getEmployee_basic();
         Calendar c = Calendar.getInstance();
         c.add(Calendar.DATE, -1);
+        c.set(Calendar.MILLISECOND, 0);
+        c.set(Calendar.SECOND, 0);
+        c.set(Calendar.MINUTE, 0);
+        c.set(Calendar.HOUR, 0);
+
+        Calendar d = Calendar.getInstance();
+        d.setTime(c.getTime());
+        d.add(Calendar.MONTH, -1);
+        d.set(Calendar.MILLISECOND, 0);
+        d.set(Calendar.SECOND, 0);
+        d.set(Calendar.MINUTE, 0);
+        d.set(Calendar.HOUR, 0);
+
+        System.out.println(c.getTime());
+        System.out.println(d.getTime());
+        SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
 
         int numberOfDays = c.getActualMaximum(Calendar.DAY_OF_MONTH);
         int diffInDays = numberOfDays;
@@ -138,19 +206,56 @@ public class HiYewSystemTimer {
                 Date date1 = new Date(month.getTime());
                 Calendar cal = Calendar.getInstance();
                 cal.setTime(date1);
-                if (cal.get(Calendar.MONTH) == c.get(Calendar.MONTH) || cal2.get(Calendar.MONTH) == c.get(Calendar.MONTH)) {
-                    if (cal2.get(Calendar.MONTH) == cal.get(Calendar.MONTH)) {
-                        diffInDays -= cal2.get(Calendar.DATE) - cal.get(Calendar.DATE) + 1;
-                    } else if (cal.get(Calendar.MONTH) == c.get(Calendar.MONTH)) {
-                        diffInDays -= numberOfDays - cal.get(Calendar.DATE) + 1;
-                    } else if (cal2.get(Calendar.MONTH) == c.get(Calendar.MONTH)) {
-                        diffInDays -= numberOfDays - cal2.get(Calendar.DATE) + 1;
+                if (cal.after(d) && cal2.before(c)) {
+                    diffInDays -= calculateDays(cal, cal2);
+                    System.out.println("here");
+                } else if (cal.after(d) && cal2.after(c) && cal.before(c)) {
+                    diffInDays -= calculateDays(cal, c);
+                    System.out.println("here1");
+                } else if (d.after(cal) && c.after(cal2) && cal2.after(d)) {
+                    diffInDays -= calculateDays(d, cal2);
+                    System.out.println("here2");
+                } else if (d.after(cal) && cal2.after(c)) {
+                    diffInDays = 0;
+                    System.out.println("here3");
+                } else if (cal.equals(d)) {
+                    if (c.after(cal2)) {
+                        diffInDays -= calculateDays(cal, cal2);
+                        System.out.println("here4");
+                    } else {
+                        diffInDays = 0;
+                        System.out.println("here5");
+                    }
+                } else if (cal2.equals(d)) {
+                    diffInDays -= 1;
+                    System.out.println("here6");
+                } else if (cal.equals(c)) {
+                    diffInDays -= 1;
+                    System.out.println("here7");
+                } else if (cal2.equals(c)) {
+                    if (cal.after(d)) {
+                        diffInDays -= calculateDays(cal, cal2);
+                        System.out.println("here8");
+                    } else {
+                        diffInDays = 0;
+                        System.out.println("here9");
                     }
                 }
+
             }
         }
         currentSalary = diffInDays / (double) numberOfDays * currentSalary;
         currentSalary = Math.round(currentSalary * 100.0) / 100.0;
         return currentSalary;
+    }
+
+    private int calculateDays(Calendar c, Calendar d) {
+        Timestamp td = new Timestamp(d.getTime().getTime());
+        Timestamp tc = new Timestamp(c.getTime().getTime());
+
+        int diffInDays = (int) ((td.getTime() - tc.getTime())
+                / (1000 * 60 * 60 * 24));
+        System.out.println(diffInDays);
+        return diffInDays + 1;
     }
 }
