@@ -866,10 +866,10 @@ public class HiYewSystemBean implements HiYewSystemBeanLocal {
 
         if (!(description.isEmpty())) {
             supplierPurchaseOrder.setDescription(description);
-                 //check = true;
+            //check = true;
             //System.out.println(description);
         }
-            //if (!(supCompanyName.isEmpty()) && !(supCompanyName.equals(supplierPurchaseOrder.getSupCompanyName()))) {
+        //if (!(supCompanyName.isEmpty()) && !(supCompanyName.equals(supplierPurchaseOrder.getSupCompanyName()))) {
         //     supplierPurchaseOrder.setSupCompanyName(supCompanyName);
         //     check = true;
         //}
@@ -883,7 +883,7 @@ public class HiYewSystemBean implements HiYewSystemBeanLocal {
             em.merge(supplierPurchaseOrder);
             return true;
         }
-            //if(check == true){
+        //if(check == true){
         //   em.merge(supplierPurchaseOrder);
         //    return true;   
         //}
@@ -2094,7 +2094,7 @@ public class HiYewSystemBean implements HiYewSystemBeanLocal {
             if (allRight <= e.getNumber_of_leaves()) {
                 for (Object o : leaveRecords) {
                     LeaveEntity l = (LeaveEntity) o;
-                    if (l.getStatus().equals("pending") && l.getType().equals("paid")) {
+                    if (l.getStatus().equals("pending")) {
                         l.setStatus("approved");
                         java.util.Date date = new java.util.Date();
                         Timestamp approveTime = new Timestamp(date.getTime());
@@ -2102,13 +2102,6 @@ public class HiYewSystemBean implements HiYewSystemBeanLocal {
                         e.setNumber_of_leaves(e.getNumber_of_leaves() - l.getNumber_of_leave());
                         em.merge(l);
                         em.merge(e);
-                    } else {
-                        l.setStatus("approved");
-                        java.util.Date date = new java.util.Date();
-                        Timestamp approveTime = new Timestamp(date.getTime());
-                        l.setApprovedTime(approveTime);
-                        em.merge(l);
-
                     }
                 }
                 return true;
@@ -2149,7 +2142,7 @@ public class HiYewSystemBean implements HiYewSystemBeanLocal {
         int sum = 0;
         for (Object o : leaveRecords) {
             LeaveEntity leave = (LeaveEntity) o;
-            if (leave.getStatus().equals("pending")) {
+            if (leave.getStatus().equals("pending") && leave.getType().equals("paid")) {
                 sum += leave.getNumber_of_leave();
             }
         }

@@ -64,8 +64,12 @@ public class ProductQuotationManagedBean implements Serializable {
 
     public String formatPrice(Double input) {
         DecimalFormat df = new DecimalFormat("0.00");
-        System.out.println("formatPrice() ===== " + df.format(input));
-        return df.format(input);
+        // System.out.println("formatPrice() ===== " + df.format(input));
+        try {
+            return df.format(input);
+        } catch (Exception ex) {
+            return "";
+        }
     }
 
     public void checkToReset() {

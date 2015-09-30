@@ -155,7 +155,7 @@ public class EmailManager {
                     message = message + "(" + pdq.getProductQuotationDescNo() + ")<br />";
                     message = message + "Item Type: <b>" + pdq.getProductType() + "</b><br />";
                     message = message + "Item Name: <b>" + pdq.getItemName() + "</b><br />";
-                    message = message + "Quantity: <b>" + pdq.getQuantity() + "</b)<br /><br />";
+                    message = message + "Quantity: <b>" + pdq.getQuantity() + "</b><br /><br />";
                 }
 
                 message = message + "Thank you!<br /><br />";
