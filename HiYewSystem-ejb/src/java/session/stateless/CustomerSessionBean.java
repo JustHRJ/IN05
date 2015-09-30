@@ -24,6 +24,17 @@ public class CustomerSessionBean implements CustomerSessionBeanLocal {
     public void createCustomer(Customer customer) {
         em.persist(customer);
     }
+    
+    @Override
+    public Customer findCustomer(String username) {
+        Customer c = em.find(Customer.class, username);
+        if (c == null) {
+            System.out.println("Customer is null");
+            return null;
+        } else {
+            return c;
+        }
+    }
 
     @Override
     public String encryptPassword(String password) {

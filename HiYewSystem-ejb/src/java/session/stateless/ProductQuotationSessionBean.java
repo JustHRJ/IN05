@@ -72,6 +72,17 @@ public class ProductQuotationSessionBean implements ProductQuotationSessionBeanL
         System.out.println("productQuotationList.size() ===== " + productQuotationList.size());
         return productQuotationList;
     }
+    
+    public List<ProductQuotationDescription> retrieveProductQuotationDescriptionList(String quotationNo) {
+        System.out.println("ProductPurchaseOrderSessionBean.java receivedProductQuotationList() quotationNo ===== " + quotationNo);
+
+        Query query = em.createQuery("SELECT qd FROM ProductQuotationDescription AS qd WHERE qd.productQuotation.productQuotationNo=:quotationNo");
+
+        query.setParameter("quotationNo", quotationNo);
+
+        List<ProductQuotationDescription> productQuotationDescriptionList = query.getResultList();
+        return productQuotationDescriptionList;
+    }
 
     public void conductMerge(ProductQuotation productQuotation) {
         em.merge(productQuotation);

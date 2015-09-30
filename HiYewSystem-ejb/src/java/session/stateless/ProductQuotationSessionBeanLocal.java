@@ -18,6 +18,8 @@ public interface ProductQuotationSessionBeanLocal {
     public List<ProductQuotation> receivedProductQuotationList(String username);
 
     public List<ProductQuotation> receivedCustomerNewProductQuotationList(String status);
+    
+    public List<ProductQuotationDescription> retrieveProductQuotationDescriptionList(String purchaseOrderNo);
 
     public void conductMerge(ProductQuotation productQuotation);
 

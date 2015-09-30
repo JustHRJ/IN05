@@ -5,6 +5,7 @@ import entity.ProductPurchaseOrder;
 import entity.ProductQuotationDescription;
 import java.io.Serializable;
 import java.sql.Timestamp;
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -57,6 +58,12 @@ public class AdminProductPOManagedBean implements Serializable {
         getStatuses().put("Relayed", "Relayed");
     }
 
+    public String formatPrice(Double input) {
+        DecimalFormat df = new DecimalFormat("0.00");
+        System.out.println("formatPrice() ===== " + df.format(input));
+        return df.format(input);
+    }
+
     public Date getToday() {
         System.out.println("getToday() ===== ");
         Calendar c = Calendar.getInstance();
@@ -90,13 +97,13 @@ public class AdminProductPOManagedBean implements Serializable {
         }
 
     }
-    
-        public Date formatDate1(Timestamp timestamp) {
+
+    public Date formatDate1(Timestamp timestamp) {
         System.out.println("Ttmestamp ===== " + timestamp);
         if (timestamp != null) {
             System.out.println("inside if ===== ");
             Date date = new Date(timestamp.getTime());
-       
+
             return date;
         } else {
             System.out.println("else ===== ");
@@ -118,10 +125,22 @@ public class AdminProductPOManagedBean implements Serializable {
         FacesContext.getCurrentInstance().addMessage("msgs", new FacesMessage(FacesMessage.SEVERITY_INFO, "Product PO delivery date has been updated successfully!", ""));
     }
 
-    public void updatePORelayedStatus() {
+    public void updatePORelayedStatus(String username) {
         productPurchaseOrderSessionBean.updateProductPORelayedStatus(selectedProductPO);
+
+        Customer customer = customerSessionBean.getCustomerByUsername(username);
+        if (customer.getSubscribeEmail()) {
+            EmailManager emailManager = new EmailManager();
+            // Email Germany supplier for purchasing products
+            emailManager.emailGermanySupplierToPurchase(selectedProductPO.getProductPurchaseOrderID(), this.retrieveEmailProductQuotationDescriptionList(selectedProductPO.getProductPurchaseOrderID()));
+        }
+
         selectedProductPO = new ProductPurchaseOrder();
         FacesContext.getCurrentInstance().addMessage("msgs", new FacesMessage(FacesMessage.SEVERITY_INFO, "Product PO has been sent to supplier!", ""));
+    }
+
+    public ArrayList<ProductQuotationDescription> retrieveEmailProductQuotationDescriptionList(String purchaseOrderNo) {
+        return new ArrayList<>(productPurchaseOrderSessionBean.retrieveProductQuotationDescriptionList(purchaseOrderNo));
     }
 
     public void updateProductPOStatus(String username) {
@@ -130,9 +149,10 @@ public class AdminProductPOManagedBean implements Serializable {
         Customer customer = customerSessionBean.getCustomerByUsername(username);
         if (customer.getSubscribeEmail()) {
             EmailManager emailManager = new EmailManager();
-            emailManager.emailProductQuotationPriceUpdate(customer.getName(), customer.getEmail(), selectedProductPO.getProductPurchaseOrderID());
+            // Email customer for delivery date update
+            emailManager.emailProductPODeliveryDateUpdate(customer.getName(), customer.getEmail(), selectedProductPO.getProductPurchaseOrderID());
         }
-        
+
         selectedProductPO = new ProductPurchaseOrder();
         FacesContext.getCurrentInstance().addMessage("msgs", new FacesMessage(FacesMessage.SEVERITY_INFO, "Product PO has been updated successfully!", ""));
     }

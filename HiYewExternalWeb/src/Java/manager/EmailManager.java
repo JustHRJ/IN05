@@ -61,14 +61,13 @@ public class EmailManager {
                 BodyPart htmlPart = new MimeBodyPart();
 
                 String message = "<div class=\"text\">";
-                message = message + "<font face=\"'Open Sans', Arial; color=\"#333\">";
                 message = message + "Dear <b>" + name + "</b>,<br /><br />";
-                message = message + "Your username:  <b>" + username + "</b><br/>"; 
+                message = message + "Your username:  <b>" + username + "</b><br/>";
                 message = message + "Your password: <b>" + password + "</b><br /><br />";
                 message = message + "Best Regards,<br />";
                 message = message + "HiYew Team";
-                message = message + "</font></div>";
-                message = "<html><style type=\"text/css\"></style><body>" + message + "</body></html>";
+                message = message + "</div>";
+                message = "<html><body>" + message + "</body></html>";
 
                 htmlPart.setContent(message, "text/html");
                 multipart.addBodyPart(htmlPart);
@@ -106,13 +105,12 @@ public class EmailManager {
                 BodyPart htmlPart = new MimeBodyPart();
 
                 String message = "<div class=\"text\">";
-                message = message + "<font face=\"'Open Sans', Arial; color=\"#333\">";
                 message = message + "Dear <b>" + name + "</b>,<br /><br />";
                 message = message + "Your new password: <b>" + newPassword + "</b><br /><br />";
                 message = message + "Best Regards,<br />";
                 message = message + "HiYew Team";
-                message = message + "</font></div>";
-                message = "<html><style type=\"text/css\"></style><body>" + message + "</body></html>";
+                message = message + "</div>";
+                message = "<html><body>" + message + "</body></html>";
 
                 htmlPart.setContent(message, "text/html");
                 multipart.addBodyPart(htmlPart);

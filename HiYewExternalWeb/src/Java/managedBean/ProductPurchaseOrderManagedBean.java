@@ -1,10 +1,12 @@
 package managedBean;
 
+import entity.Customer;
 import entity.ProductPurchaseOrder;
 import entity.ProductQuotation;
 import entity.ProductQuotationDescription;
 import java.io.Serializable;
 import java.sql.Timestamp;
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -69,6 +71,12 @@ public class ProductPurchaseOrderManagedBean implements Serializable {
         System.out.println("receivedProductPurchaseOrderList.size() ==== " + getReceivedProductPurchaseOrderList().size());
     }
 
+    public String formatPrice(Double input) {
+        DecimalFormat df = new DecimalFormat("0.00");
+        System.out.println("formatPrice() ===== " + df.format(input));
+        return df.format(input);
+    }
+
     public void receivedProductPurchaseOrderList() {
         System.out.println("ProductPurchaseOrderManagedBean.java receivedProductPurchaseOrderList() ===== " + username);
 
@@ -94,9 +102,26 @@ public class ProductPurchaseOrderManagedBean implements Serializable {
         newPurchaseOrder.setProductQuotation(productQuotation);
         newPurchaseOrder.setStatus("Pending");
 
-        System.out.println("newPurchaseOrder.getMailingAddr1() ===== " + newPurchaseOrder.getMailingAddr1());
-        System.out.println("newPurchaseOrder.getMailingAddr2() ===== " + newPurchaseOrder.getMailingAddr2());
-        
+        System.out.println("before newPurchaseOrder.getMailingAddr1() ===== " + newPurchaseOrder.getMailingAddr1());
+        System.out.println("before newPurchaseOrder.getMailingAddr2() ===== " + newPurchaseOrder.getMailingAddr2());
+
+        System.out.println("before username ===== " + username);
+
+        if ((newPurchaseOrder.getMailingAddr1() == null && newPurchaseOrder.getMailingAddr2() == null) || (newPurchaseOrder.getMailingAddr1().equals("") && newPurchaseOrder.getMailingAddr2().equals(""))) {
+            Customer c = customerSessionBean.findCustomer(username);
+            if (c != null) {
+                newPurchaseOrder.setMailingAddr1(c.getAddress1());
+                newPurchaseOrder.setMailingAddr2(c.getAddress2());
+
+                System.out.println("insde  ===== " + c.getAddress1());
+                System.out.println("inside  ===== " + c.getAddress2());
+
+            }
+        }
+
+        System.out.println("after newPurchaseOrder.getMailingAddr1() ===== " + newPurchaseOrder.getMailingAddr1());
+        System.out.println("after newPurchaseOrder.getMailingAddr2() ===== " + newPurchaseOrder.getMailingAddr2());
+
         // persist
         productPurchaseOrderSessionBean.createProductPurchaseOrder(newPurchaseOrder);
 
