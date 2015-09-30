@@ -136,6 +136,7 @@ public class LoginManagedBean implements Serializable {
     public String sendPassword() {
         if (this.user.equals("Customer")) {
             customer = customerSessionBean.getCustomerByUsername(username);
+            System.out.println("username ==== " + username);
             if (this.customer != null) {
                 FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("loginMessage", "Your password has been reset successfully! Please check your email.");
                 System.out.println("User's email: " + customer.getEmail());
@@ -146,7 +147,7 @@ public class LoginManagedBean implements Serializable {
                 return "login?faces-redirect=true";
             } else {
                 FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("forgotMessage", "Username does not exist!");
-                return "forgot-password?faces-redirect=true";
+                return "";
             }
         } else { // if user is supplier
             return "login?faces-redirect=true";
