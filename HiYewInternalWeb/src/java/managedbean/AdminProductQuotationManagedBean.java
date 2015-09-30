@@ -30,6 +30,7 @@ public class AdminProductQuotationManagedBean implements Serializable {
     private CustomerSessionBeanLocal customerSessionBean;
 
     private String status = "Pending";
+    
     // get current year quotations by default
     private Integer year = Calendar.getInstance().get(Calendar.YEAR);
     private ArrayList<ProductQuotation> receivedNewProductQuotationList;
@@ -82,24 +83,59 @@ public class AdminProductQuotationManagedBean implements Serializable {
 
     public void updateQuotationPrices() {
         productQuotationSessionBean.updateProductQuotationPrices(getDisplayProductQuotationDescriptionList());
-        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Product quotation has been updated successfully!", ""));
+        FacesContext.getCurrentInstance().addMessage("inner-msgs", new FacesMessage(FacesMessage.SEVERITY_INFO, "Product quotation has been updated successfully!", ""));
     }
 
-    public void updateQuotationRelayedStatus() {
+    public void updateQuotationRelayedStatus(String username) {
         productQuotationSessionBean.updateProductQuotationRelayedStatus(selectedProductQuotation);
-        selectedProductQuotation = new ProductQuotation();
-        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Product quotation has been sent to supplier!", ""));
-    }
-
-    public void updateQuotationStatus(String username) {
-        productQuotationSessionBean.updateProductQuotationStatus(selectedProductQuotation);
 
         Customer customer = customerSessionBean.getCustomerByUsername(username);
         if (customer.getSubscribeEmail()) {
             EmailManager emailManager = new EmailManager();
-            emailManager.emailProductQuotationPriceUpdate(customer.getName(), customer.getEmail(), selectedProductQuotation.getProductQuotationNo());
+            // Email Germany supplier for purchasing products
+            emailManager.emailGermanySupplierToRFQ(selectedProductQuotation.getProductQuotationNo(), this.retrieveEmailProductQuotationDescriptionList(selectedProductQuotation.getProductQuotationNo()));
         }
+
         selectedProductQuotation = new ProductQuotation();
+        FacesContext.getCurrentInstance().addMessage("msgs", new FacesMessage(FacesMessage.SEVERITY_INFO, "Product quotation has been sent to supplier!", ""));
+    }
+
+    public ArrayList<ProductQuotationDescription> retrieveEmailProductQuotationDescriptionList(String quotationNo) {
+        return new ArrayList<>(productQuotationSessionBean.retrieveProductQuotationDescriptionList(quotationNo));
+    }
+
+    public boolean check() {
+        boolean option = true;
+        for (int i = 0; i < displayProductQuotationDescriptionList.size(); i++) {
+            ProductQuotationDescription qd = displayProductQuotationDescriptionList.get(i);
+            if (qd.getUnitPrice() == null) {
+                option = false;
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Price(s) must be quoted!", ""));
+            } else if (qd.getUnitPrice() != null) {
+                if (qd.getUnitPrice() < 0) {
+                    qd.setUnitPrice(null);
+                    option = false;
+                    FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Price(s) must be more than zero!", ""));
+                }
+            }
+        }
+        System.out.println("option === " + option);
+        return option;
+    }
+
+    public void updateQuotationStatus(String username) {
+        if (check() == true) {
+            productQuotationSessionBean.updateProductQuotationStatus(selectedProductQuotation);
+
+            Customer customer = customerSessionBean.getCustomerByUsername(username);
+            if (customer.getSubscribeEmail()) {
+                EmailManager emailManager = new EmailManager();
+                emailManager.emailProductQuotationPriceUpdate(customer.getName(), customer.getEmail(), selectedProductQuotation.getProductQuotationNo());
+            }
+            selectedProductQuotation = new ProductQuotation();
+        } else {
+
+        }
     }
 
     /**

@@ -92,7 +92,6 @@
             </p:submenu>
         </p:megaMenu>
 
-
         <h:form id="innerForm">
             <h:panelGrid columns="2" cellpadding="5">
                 <p:outputLabel for="QuotationStatus" value="Product Purchase Order Status: " />
@@ -117,8 +116,8 @@
                 <p:column headerText="Mailing Address">
                     <h:outputText value="#{item.mailingAddr1}, #{item.mailingAddr2}"/>
                 </p:column>
-                <p:column headerText="Total Price">
-                    <h:outputText value="#{item.totalPrice}"/>
+                <p:column headerText="Total Price (SGD)">
+                    <h:outputText value="$#{adminProductPOManagedBean.formatPrice(item.totalPrice)}"/>
                 </p:column>
                 <p:column headerText="Status">
                     <h:outputText value="#{item.status}"/>
@@ -129,7 +128,7 @@
                     <p:overlayPanel for="quoteDescBtn" showEffect="fade" hideEffect="fade" dismissable="false" showCloseIcon="true" style="width:1200px">
                         <p:outputPanel id="quotationDetailPanel">
                             <br />
-                            <p:commandButton rendered="#{item.status eq 'Pending'}" value="Relay Product PO" action="#{adminProductPOManagedBean.updatePORelayedStatus()}" update=":innerForm:msgs rcvQuote" icon="ui-icon-check"/>
+                            <p:commandButton rendered="#{item.status eq 'Pending'}" value="Relay Product PO" action="#{adminProductPOManagedBean.updatePORelayedStatus(item.customer.userName)}" update=":innerForm:msgs rcvQuote" icon="ui-icon-check"/>
 
                             <p:commandButton rendered="#{item.status eq 'Relayed'}" value="Update PO Details" action="#{adminProductPOManagedBean.updatePODeliveryDate()}" update=":innerForm:msgs rcvQuote" icon="ui-icon-check"/>
 
@@ -170,20 +169,14 @@
                                     <h:outputText value="#{quoteDescItem.remarks}" />
                                 </p:column>
 
-                                <p:column headerText="Quoted Unit Price">
-                                    <h:outputText value="#{quoteDescItem.unitPrice}" />
+                                <p:column headerText="Quoted Unit Price (SGD)">
+                                    <h:outputText value="$#{adminProductPOManagedBean.formatPrice(quoteDescItem.unitPrice)}" />
                                 </p:column>
-                            </p:dataTable>		
-
-
+                            </p:dataTable>	
                             <br />
                         </p:outputPanel>
                     </p:overlayPanel>
                 </p:column>
-
-
-
-
             </p:dataTable>
         </h:form>
     </h:body>

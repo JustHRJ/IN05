@@ -5,6 +5,7 @@ import entity.ProductQuotationDescription;
 import java.io.IOException;
 import java.io.Serializable;
 import java.sql.Timestamp;
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -60,6 +61,12 @@ public class ProductQuotationManagedBean implements Serializable {
         receivedProductQuotationList = new ArrayList<>(productQuotationSessionBean.receivedProductQuotationList(username));
     }
 
+    public String formatPrice(Double input) {
+        DecimalFormat df = new DecimalFormat("0.00");
+        System.out.println("formatPrice() ===== " + df.format(input));
+        return df.format(input);
+    }
+
     public void checkToReset() {
         if (FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("username").toString() == null) {
 
@@ -112,15 +119,43 @@ public class ProductQuotationManagedBean implements Serializable {
     }
 
     public void addToCacheList(String productType, String itemName, Integer quantity) {
-        newProductQuotationDescription.setProductQuotationDescNo(count);
-        newProductQuotationDescription.setProductType(productType);
-        newProductQuotationDescription.setItemName(itemName);
-        newProductQuotationDescription.setQuantity(quantity);
 
-        cacheList.add(newProductQuotationDescription);
+        System.out.println("cacheList.size() === " + cacheList.size());
+        System.out.println("count === " + count);
+        if (cacheList.size() > 0) {
+            System.out.println("inside for loop");
+            for (ProductQuotationDescription pqd : cacheList) {
+                if (pqd.getItemName().equals(itemName)) {
+                    System.out.println("pqd.getItemName() === " + pqd.getItemName());
+                    System.out.println("itemName === " + itemName);
+                    FacesContext.getCurrentInstance().addMessage("warnMsg", new FacesMessage(FacesMessage.SEVERITY_WARN, "Item has been added to cart!", ""));
+                } else {
+                    newProductQuotationDescription.setProductQuotationDescNo(count);
+                    newProductQuotationDescription.setProductType(productType);
+                    newProductQuotationDescription.setItemName(itemName);
+                    newProductQuotationDescription.setQuantity(quantity);
 
-        count += 1;
-        newProductQuotationDescription = new ProductQuotationDescription();
+                    cacheList.add(newProductQuotationDescription);
+
+                    count += 1;
+                    newProductQuotationDescription = new ProductQuotationDescription();
+
+                    FacesContext.getCurrentInstance().addMessage("msg", new FacesMessage("Item is added to RFQ list!", ""));
+                }
+            }
+        } else {
+            newProductQuotationDescription.setProductQuotationDescNo(count);
+            newProductQuotationDescription.setProductType(productType);
+            newProductQuotationDescription.setItemName(itemName);
+            newProductQuotationDescription.setQuantity(quantity);
+
+            cacheList.add(newProductQuotationDescription);
+
+            count += 1;
+            newProductQuotationDescription = new ProductQuotationDescription();
+
+            FacesContext.getCurrentInstance().addMessage("msg", new FacesMessage("Item is added to RFQ list!", ""));
+        }
     }
 
     public void deleteProductQuotationDescription(ProductQuotationDescription productQuotationDescription) {
@@ -166,8 +201,8 @@ public class ProductQuotationManagedBean implements Serializable {
         setNewProductQuotationDescription(new ProductQuotationDescription());
         // set quotation tab to be selected
         System.out.println("Your request for product price quotation has been sent successfully!");
-        FacesContext.getCurrentInstance().getExternalContext().redirect("/HiYewExternalWeb/c-products.xhtml");
-        FacesContext.getCurrentInstance().addMessage("rfqMsg", new FacesMessage("Your request for product price quotation has been sent successfully!", ""));
+        //FacesContext.getCurrentInstance().getExternalContext().redirect("/HiYewExternalWeb/c-products.xhtml");
+        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("An RFQ has been sent successfully!", ""));
     }
 
     public void setRejectionStatus(ProductQuotation productQuotation) {
