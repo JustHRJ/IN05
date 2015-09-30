@@ -2,6 +2,7 @@ package managedBean;
 
 import entity.Customer;
 import entity.SupplierEntity;
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
