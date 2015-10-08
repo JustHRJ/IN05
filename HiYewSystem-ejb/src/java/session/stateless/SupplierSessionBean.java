@@ -75,7 +75,7 @@ public class SupplierSessionBean implements SupplierSessionBeanLocal {
     @Override
     public void updateSupplier(SupplierEntity s1) {
         SupplierEntity s = em.find(SupplierEntity.class, s1.getUserName());
-        s.setName(s1.getName());
+        //s.setName(s1.getName());
         s.setAddress1(s1.getAddress1());
         s.setPhone(s1.getPhone());
         s.setPw(s1.getPw());

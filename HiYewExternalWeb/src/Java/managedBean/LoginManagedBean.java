@@ -77,10 +77,10 @@ public class LoginManagedBean implements Serializable {
             }
         } else { //if user is supplier
             System.out.println(this.username);
-            
+
             // NULLPOINTEREXCEPTION 
             setSupplier(supplierSessionBean.getSupplierByUsername(this.username));
-            
+
             try {
                 if (supplierSessionBean.encryptPassword(this.password).equals(getSupplier().getPw())) {
 
@@ -123,11 +123,17 @@ public class LoginManagedBean implements Serializable {
     }
 
     public void logout() throws IOException {
+
+        //String serverName = FacesContext.getCurrentInstance().getExternalContext().getRequestServerName();
+        //String serverPort = "8080";
+        
+
         if (FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("username") != null) {
             FacesContext.getCurrentInstance().getExternalContext().invalidateSession();
             username = "";
             password = "";
-            FacesContext.getCurrentInstance().getExternalContext().redirect("/HiYewExternalWeb/login.xhtml");
+            
+            //FacesContext.getCurrentInstance().getExternalContext().redirect("/HiYewExternalWeb/login.xhtml");
 
             System.out.println("Logout Success");
         }
@@ -154,7 +160,35 @@ public class LoginManagedBean implements Serializable {
         }
     }
 
-    public String createCustomer() {
+    public String createDualUser() {
+        //create customer
+        String path = createCustomer();
+        if (!path.equals("")) {
+            //create supplier
+            //map values from customer acct to supplier acct for same user
+            newSupplier.setAddress1(newCustomer.getAddress1());
+            newSupplier.setAddress2(newCustomer.getAddress2());
+            newSupplier.setCompanyName(newCustomer.getName());
+            newSupplier.setEmail(newCustomer.getEmail());
+            newSupplier.setPhone(newCustomer.getPhone());
+            newSupplier.setPostalCode(newCustomer.getPostalCode());
+            newSupplier.setPw(newCustomer.getPw());
+            newSupplier.setSubscribeEmail(newCustomer.getSubscribeEmail());
+            newSupplier.setUserName(newCustomer.getUserName());
+
+            supplierSessionBean.createSupplier(newSupplier);
+            // To reinitialise and create new supplier and customer obj
+            newCustomer = new Customer();
+            newSupplier = new SupplierEntity();
+            FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("loginMessage", "Your account registration has been successful.");
+
+            EmailManager emailManager = new EmailManager();
+            emailManager.emailSuccessfulRegistration(newCustomer.getName(), newCustomer.getUserName(), rePassword, newCustomer.getEmail());
+        }
+        return path;
+    }
+
+    private String createCustomer() {
         customer = customerSessionBean.getCustomerByUsername(newCustomer.getUserName());
         if (customer == null) {
             if (newCustomer.getPw().equals(rePassword)) {
@@ -162,48 +196,52 @@ public class LoginManagedBean implements Serializable {
                 newCustomer.setPw(customerSessionBean.encryptPassword(newCustomer.getPw()));
                 newCustomer.setSubscribeEmail(true);
                 customerSessionBean.createCustomer(newCustomer);
-                EmailManager emailManager = new EmailManager();
-                emailManager.emailSuccessfulRegistration(newCustomer.getName(), newCustomer.getUserName(), rePassword, newCustomer.getEmail());
-                newCustomer = new Customer(); // To reinitialise and create new customer
-                FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("loginMessage", "Your account registration has been successful.");
+                //newCustomer = new Customer();
+
+                //EmailManager emailManager = new EmailManager();
+                //emailManager.emailSuccessfulRegistration(newCustomer.getName(), newCustomer.getUserName(), rePassword, newCustomer.getEmail());
+                // To reinitialise and create new customer
+                //FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("loginMessage", "Your account registration has been successful.");
                 return "login?faces-redirect=true";
             } else {
                 FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("registerMessage", "Your password and confirmation password do not match.");
-                
-            }
-        } else {
-            FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("registerMessage", "This username has been taken by someone else. Please choose a different username.");
-            
-        }
-        return "";
-    }
-    
-    
-    public String createSupplier() {
-        supplier = supplierSessionBean.getSupplierByUsername(newSupplier.getUserName());
-        if (supplier == null) {
-            if (newSupplier.getPw().equals(rePassword)) {
-                // encrypt password
-                newSupplier.setPw(customerSessionBean.encryptPassword(newSupplier.getPw()));
-                newSupplier.setSubscribeEmail("true");
-                supplierSessionBean.createSupplier(newSupplier);
-                EmailManager emailManager = new EmailManager();
-                emailManager.emailSuccessfulRegistration(newSupplier.getName(), newSupplier.getUserName(), rePassword, newSupplier.getEmail());
-                newSupplier = new SupplierEntity(); // To reinitialise and create new customer
-                FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("loginMessage", "Your account registration has been successful.");
-                return "SupplierHome?faces-redirect=true";
-            } else {
-                FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("registerMessage", "Your password and confirmation password do not match.");
-                
-            }
-        } else {
-            FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("registerMessage", "This username has been taken by someone else. Please choose a different username.");
-            
-        }
-        return "";
-    }
-    
 
+            }
+        } else {
+            FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("registerMessage", "This username has been taken by someone else. Please choose a different username.");
+
+        }
+        return "";
+    }
+
+    /**
+     * public String createSupplier() { supplier =
+     * supplierSessionBean.getSupplierByUsername(newSupplier.getUserName()); if
+     * (supplier == null) { if (newSupplier.getPw().equals(rePassword)) { //
+     * encrypt password
+     * newSupplier.setPw(customerSessionBean.encryptPassword(newSupplier.getPw()));
+     * newSupplier.setSubscribeEmail("true");
+     * supplierSessionBean.createSupplier(newSupplier); EmailManager
+     * emailManager = new EmailManager();
+     * emailManager.emailSuccessfulRegistration(newSupplier.getName(),
+     * newSupplier.getUserName(), rePassword, newSupplier.getEmail());
+     * newSupplier = new SupplierEntity(); // To reinitialise and create new
+     * customer
+     * FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("loginMessage",
+     * "Your account registration has been successful."); return
+     * "SupplierHome?faces-redirect=true"; } else {
+     * FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("registerMessage",
+     * "Your password and confirmation password do not match.");
+     *
+     * }
+     * } else {
+     * FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("registerMessage",
+     * "This username has been taken by someone else. Please choose a different
+     * username.");
+     *
+     * }
+     * return ""; }
+     */
     /**
      * @return the username
      */
@@ -298,8 +336,8 @@ public class LoginManagedBean implements Serializable {
     public void setSupplier(SupplierEntity supplier) {
         this.supplier = supplier;
     }
-    
-     public SupplierEntity getNewSupplier() {
+
+    public SupplierEntity getNewSupplier() {
         return newSupplier;
     }
 
@@ -309,7 +347,7 @@ public class LoginManagedBean implements Serializable {
     public void setNewSupplier(SupplierEntity newSupplier) {
         this.newSupplier = newSupplier;
     }
-    
+
     /**
      * @return the user
      */
