@@ -7,12 +7,9 @@ package entity;
 
 //import util.enumeration.SupplierStatusEnum;
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import util.enumeration.SupplierStatusEnum;
 //import javax.persistence.OneToMany;
 
 /**
@@ -27,36 +24,37 @@ public class SupplierEntity implements Serializable {
     @Id
     private String userName;
     private String pw;
-    private String name;
+    //private String name;
     private String address1;
     private String address2;
     private String phone;
     private String email;
     private String postalCode;
     private String companyName;
-    private String subscribeEmail;
+    private boolean subscribeEmail;
 
-    
     //private Integer active; // set 1 for existing supplier;
     //@Enumerated(EnumType.STRING)
-    //private SupplierStatusEnum supplierStatusEnum;
+    private SupplierStatusEnum supplierStatusEnum;
     
     //@OneToMany(mappedBy = "supplier")
     //private List<SupplierPurchaseOrder> purcOrder = new ArrayList<>();
     
     public SupplierEntity() {
-        
+        supplierStatusEnum = SupplierStatusEnum.ACTIVE;
     }
     
-    public SupplierEntity(String userName, String pw, String name, String address1, String address2, String phone, String companyName) /*, List<SupplierPurchaseOrder> purcOrder)*/ {
+    public SupplierEntity(String userName, String pw, String address1, String address2, String phone, String email, String postalCode, SupplierStatusEnum supplierStatusEnum, String companyName) /*, List<SupplierPurchaseOrder> purcOrder)*/ {
         this.userName = userName;
         this.pw = pw;
-        this.name = name;
+        //this.name = name;
         this.address1 = address1;
         this.address2 = address2;
         this.phone = phone;
+        this.email = email;
+        this.postalCode = postalCode;
         this.companyName = companyName;
-        //this.supplierStatusEnum = supplierStatusEnum;
+        this.supplierStatusEnum = supplierStatusEnum;
         //this.purcOrder = purcOrder;
     }
    
@@ -125,20 +123,6 @@ public class SupplierEntity implements Serializable {
      */
     public void setPw(String pw) {
         this.pw = pw;
-    }
-
-    /**
-     * @return the name
-     */
-    public String getName() {
-        return name;
-    }
-
-    /**
-     * @param name the name to set
-     */
-    public void setName(String name) {
-        this.name = name;
     }
 
     /**
@@ -225,15 +209,29 @@ public class SupplierEntity implements Serializable {
         this.companyName = companyName;
     }
 
-    public String getSubscribeEmail() {
+    public boolean getSubscribeEmail() {
         return subscribeEmail;
     }
 
     /**
      * @param subscribeEmail the subscribeEmail to set
      */
-    public void setSubscribeEmail(String subscribeEmail) {
+    public void setSubscribeEmail(boolean subscribeEmail) {
         this.subscribeEmail = subscribeEmail;
+    }
+
+    /**
+     * @return the supplierStatusEnum
+     */
+    public SupplierStatusEnum getSupplierStatusEnum() {
+        return supplierStatusEnum;
+    }
+
+    /**
+     * @param supplierStatusEnum the supplierStatusEnum to set
+     */
+    public void setSupplierStatusEnum(SupplierStatusEnum supplierStatusEnum) {
+        this.supplierStatusEnum = supplierStatusEnum;
     }
     /**
      * @return the purcOrder
