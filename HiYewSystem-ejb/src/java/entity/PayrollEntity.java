@@ -32,7 +32,11 @@ public class PayrollEntity implements Serializable {
     private EmployeeEntity employee;
     private double salary;
     private double otherAmount;
+    private double taxiClaim;
+    private double overtime;
 
+    
+    
     public Long getId() {
         return id;
     }
@@ -171,6 +175,34 @@ public class PayrollEntity implements Serializable {
      */
     public void setOtherAmount(double otherAmount) {
         this.otherAmount = otherAmount;
+    }
+
+    /**
+     * @return the taxiClaim
+     */
+    public double getTaxiClaim() {
+        return taxiClaim;
+    }
+
+    /**
+     * @param taxiClaim the taxiClaim to set
+     */
+    public void setTaxiClaim(double taxiClaim) {
+        this.taxiClaim = taxiClaim;
+    }
+
+    /**
+     * @return the overtime
+     */
+    public double getOvertime() {
+        return overtime;
+    }
+
+    /**
+     * @param overtime the overtime to set
+     */
+    public void setOvertime(double overtime) {
+        this.overtime = overtime;
     }
 
 }

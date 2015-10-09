@@ -124,6 +124,14 @@
                             </p:inputText>
                         </p:column>
                     </p:row>
+                    <p:row>
+                        <p:column>
+                            <p:outputLabel value ="Hours overTime"/>
+                        </p:column>
+                        <p:column>
+                            <p:inputText value ="#{hiYewManagedBean.overtime}" />
+                        </p:column>
+                    </p:row>
                     <p:commandButton value ="Submit" action ="#{hiYewManagedBean.createPayroll()}" update = ":formMain:msgs table" />               
                 </p:panelGrid>
             </p:overlayPanel>
@@ -143,8 +151,8 @@
                 <p:column headerText = "Bonus">
                     <h:outputText value ="unconfirm" />
                 </p:column>
-                <p:column headerText="Other Amounts">
-                    <p:outputLabel value ="#{hiYewManagedBean.formatCurrency(im.otherAmount)}"/>
+                <p:column headerText="Taxi Claims">
+                    <p:outputLabel value ="#{hiYewManagedBean.formatCurrency(im.taxiClaim)}"/>
                 </p:column>
                 <p:column headerText="Total Salary">
                     <h:outputText value ="unconfirm"/>

@@ -89,7 +89,7 @@ public interface HiYewSystemBeanLocal {
 
     public List<PayrollEntity> payRecords();
 
-    public boolean createPayroll(String employeeName, int late, int sick);
+    public boolean createPayroll(String employeeName, int late, int sick, double overtime);
 
     public List<EmployeeEntity> expiredEmployees(String username);
 

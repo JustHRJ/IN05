@@ -61,6 +61,7 @@ public class HiYewManagedBean {
     private String employeeContact = "";
     private String leaveRemarks = "";
     private String fireOrDisabled;
+    private double overtime = 0.00;
     private String machine_status = "";
     private String username = "";
     private String password = "";
@@ -255,8 +256,8 @@ public class HiYewManagedBean {
         }
     }
 
-    public double calculateTotal(double basic, double bonus, double others) {
-        return basic + bonus + others;
+    public double calculateTotal(double overtime,double basic, double bonus, double others, double taxi) {
+        return basic + bonus + others + taxi + overtime;
     }
 
     public void updatePay(RowEditEvent event) {
@@ -323,7 +324,7 @@ public class HiYewManagedBean {
     }
 
     public void createPayroll() {
-        boolean check = hiYewSystemBean.createPayroll(employeeName, lateArrival, absentee);
+        boolean check = hiYewSystemBean.createPayroll(employeeName, lateArrival, absentee, overtime);
         if (check) {
             FacesMessage msg = new FacesMessage("Payroll created", null);
             FacesContext.getCurrentInstance().addMessage(null, msg);
@@ -1340,7 +1341,7 @@ public class HiYewManagedBean {
      */
     public String getMonth() {
         Calendar c = Calendar.getInstance();
-        c.add(Calendar.DATE, -1);
+        c.add(Calendar.MONTH, -1);
         SimpleDateFormat format = new SimpleDateFormat("MMM,yyyy");
         return format.format(c.getTime());
     }
@@ -1402,6 +1403,20 @@ public class HiYewManagedBean {
             FacesMessage msg = new FacesMessage("Not Enough Leave to approve all.");
             FacesContext.getCurrentInstance().addMessage(null, msg);
         }
+    }
+
+    /**
+     * @return the overtime
+     */
+    public double getOvertime() {
+        return overtime;
+    }
+
+    /**
+     * @param overtime the overtime to set
+     */
+    public void setOvertime(double overtime) {
+        this.overtime = overtime;
     }
 
 }
