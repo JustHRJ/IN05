@@ -124,8 +124,8 @@ public class LoginManagedBean implements Serializable {
 
     public void logout() throws IOException {
 
-        //String serverName = FacesContext.getCurrentInstance().getExternalContext().getRequestServerName();
-        //String serverPort = "8080";
+        String serverName = FacesContext.getCurrentInstance().getExternalContext().getRequestServerName();
+        String serverPort = "8080";
         
 
         if (FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("username") != null) {
@@ -133,7 +133,7 @@ public class LoginManagedBean implements Serializable {
             username = "";
             password = "";
             
-            //FacesContext.getCurrentInstance().getExternalContext().redirect("/HiYewExternalWeb/login.xhtml");
+            FacesContext.getCurrentInstance().getExternalContext().redirect("/HiYewExternalWeb/login.xhtml");
 
             System.out.println("Logout Success");
         }
