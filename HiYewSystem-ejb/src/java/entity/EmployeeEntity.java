@@ -47,9 +47,20 @@ public class EmployeeEntity implements Serializable {
     private String optional;
     private String account_status;
     private String emailAddress;
-
+    private Collection<EmployeeClaimEntity> claimRecords = new ArrayList<EmployeeClaimEntity>();
+    
     public EmployeeEntity() {
 
+    }
+    
+    
+    @OneToMany(cascade ={CascadeType.ALL}, mappedBy ="employee")
+    public Collection<EmployeeClaimEntity> getEmployeeClaims(){
+        return claimRecords;
+    }
+    
+    public void setEmployeeClaims(Collection<EmployeeClaimEntity> claimRecords){
+        this.claimRecords = claimRecords;
     }
 
     @OneToMany(cascade = {CascadeType.ALL}, mappedBy = "employee")

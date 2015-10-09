@@ -5,6 +5,7 @@
  */
 package session.stateful;
 
+import entity.EmployeeClaimEntity;
 import entity.SupplierPurchaseOrder;
 import javax.ejb.Stateful;
 import javax.persistence.EntityManager;
@@ -42,6 +43,23 @@ public class HiYewSystemBean implements HiYewSystemBeanLocal {
     private EntityManager em;
 
     //all this is for machines
+    public List<EmployeeClaimEntity> pendingClaimRecords() {
+        Query q = em.createQuery("select c from EmployeeClaimEntity c");
+        List<EmployeeClaimEntity> claimRecords = new ArrayList<EmployeeClaimEntity>();
+        for (Object o : q.getResultList()) {
+            EmployeeClaimEntity c = (EmployeeClaimEntity) o;
+            if (c.getStatus().equals("pending")) {
+                claimRecords.add(c);
+            }
+        }
+
+        if (claimRecords.isEmpty()) {
+            return null;
+        } else {
+            return claimRecords;
+        }
+    }
+
     public boolean addMachine(String machineName, String machineIdentity, Timestamp machineExpiry, String description, int extension) {
         MachineEntity machine = new MachineEntity();
         try {
@@ -83,6 +101,108 @@ public class HiYewSystemBean implements HiYewSystemBeanLocal {
             return true;
         }
 
+    }
+
+    private double checkExceedLimit(EmployeeEntity e, EmployeeClaimEntity cd) {
+        double sum = 0.0;
+        SimpleDateFormat format = new SimpleDateFormat("MMM");
+        Calendar c = Calendar.getInstance();
+        String month = format.format(c.getTime());
+        for (Object o : e.getEmployeeClaims()) {
+            EmployeeClaimEntity claim = (EmployeeClaimEntity) o;
+            Date date = new Date(claim.getClaimDate().getTime());
+            String claimMonth = format.format(date);
+            if (month.equals(claimMonth) && claim.getStatus().equals("approved")) {
+                sum += claim.getAmount();
+            }
+        }
+        double remainder = 100 - sum;
+        if (remainder <= 0) {
+            return 0;
+        } else {
+            if (remainder < cd.getAmount()) {
+                return cd.getAmount() - remainder;
+            } else {
+                return cd.getAmount();
+            }
+        }
+    }
+
+    // for all approved Claim
+
+    public List<EmployeeClaimEntity> approvedClaimRecords(String employeeName) {
+        Query q = em.createQuery("select c from EmployeeClaimEntity c");
+        List<EmployeeClaimEntity> claimRecords = new ArrayList<EmployeeClaimEntity>();
+        for (Object o : q.getResultList()) {
+            EmployeeClaimEntity c = (EmployeeClaimEntity) o;
+            if (c.getStatus().equals("approved") && c.getEmployee().getEmployee_name().equals(employeeName)) {
+                claimRecords.add(c);
+            }
+        }
+
+        if (claimRecords.isEmpty()) {
+            return null;
+        } else {
+            return claimRecords;
+        }
+    }
+
+        public List<EmployeeClaimEntity> approvedClaimRecordsA(String employeeName, String months) {
+        Query q = em.createQuery("select c from EmployeeClaimEntity c");
+        SimpleDateFormat format = new SimpleDateFormat("MMM");
+        List<EmployeeClaimEntity> claimRecords = new ArrayList<EmployeeClaimEntity>();
+        for (Object o : q.getResultList()) {
+            EmployeeClaimEntity c = (EmployeeClaimEntity) o;
+            if (c.getStatus().equals("approved") && c.getEmployee().getEmployee_name().equals(employeeName) && format.format(c.getApprovedDate()).equals(months)) {
+                claimRecords.add(c);
+            }
+        }
+        if (claimRecords.isEmpty()) {
+            return null;
+        } else {
+            return claimRecords;
+        }
+    }
+    
+    
+    public List<EmployeeClaimEntity> approvedClaimRecordsM(String months) {
+        Query q = em.createQuery("select c from EmployeeClaimEntity c");
+        SimpleDateFormat format = new SimpleDateFormat("MMM");
+        List<EmployeeClaimEntity> claimRecords = new ArrayList<EmployeeClaimEntity>();
+        for (Object o : q.getResultList()) {
+            EmployeeClaimEntity c = (EmployeeClaimEntity) o;
+            if (c.getStatus().equals("approved") && format.format(c.getApprovedDate()).equals(months)) {
+                claimRecords.add(c);
+            }
+        }
+
+        if (claimRecords.isEmpty()) {
+            return null;
+        } else {
+            return claimRecords;
+        }
+    }
+
+    public boolean applyClaim(String employeeName, EmployeeClaimEntity claim) {
+        EmployeeEntity employee = new EmployeeEntity();
+        try {
+            Query q = em.createQuery("Select employee from EmployeeEntity employee where employee.employee_name = :id");
+            q.setParameter("id", employeeName);
+            employee = (EmployeeEntity) q.getSingleResult();
+            double check = checkExceedLimit(employee, claim);
+            if (check == 0) {
+                return false;
+            }
+            claim.setClaimAmt(check);
+            claim.setEmployee(employee);
+            claim.setStatus("pending");
+            em.persist(claim);
+            employee.getEmployeeClaims().add(claim);
+            em.merge(employee);
+            return true;
+        } catch (Exception ex) {
+            return false;
+        }
     }
 
     public List<SupplierPurchaseOrder> getAllPO() {
@@ -958,6 +1078,8 @@ public class HiYewSystemBean implements HiYewSystemBeanLocal {
                 xin.setEmailAddress(email);
                 xin.setAccount_status("firstTime");
                 xin.setEmployee_basic(employeePay);
+                Collection<EmployeeClaimEntity> claims = new ArrayList<EmployeeClaimEntity>();
+                xin.setEmployeeClaims(claims);
                 Calendar c = Calendar.getInstance();
                 c.set(Calendar.MILLISECOND, 0);
                 c.set(Calendar.SECOND, 0);
@@ -971,6 +1093,19 @@ public class HiYewSystemBean implements HiYewSystemBeanLocal {
 
             }
         }
+    }
+
+    public void approveClaim(EmployeeClaimEntity claim) {
+        Calendar cal = Calendar.getInstance();
+        Timestamp time = new Timestamp(cal.getTime().getTime());
+        claim.setApprovedDate(time);
+        claim.setStatus("approved");
+        em.merge(claim);
+    }
+
+    public void attachDocument(EmployeeClaimEntity claim, String destination) {
+        claim.setFileDestination(destination);
+        em.merge(claim);
     }
 
     public Vector addEmployee(String employee, String employee_passNumber, String employee_address, int number_of_leave, String position, String username, Timestamp expiry, String contact, String addressPostal, String unit, String optional, double employeePay, Date employedDate, String email) {
@@ -1010,7 +1145,8 @@ public class HiYewSystemBean implements HiYewSystemBeanLocal {
                 xin.setEmployee_basic(employeePay);
                 Timestamp time = new Timestamp(employedDate.getTime());
                 xin.setEmployee_employedDate(time);
-                //xin.setEmployee_employedDate(ts);
+                Collection<EmployeeClaimEntity> claims = new ArrayList<EmployeeClaimEntity>();
+                xin.setEmployeeClaims(claims);                //xin.setEmployee_employedDate(ts);
                 em.persist(xin);
                 Vector im = new Vector();
                 im.add(xin.getEmployee_name());
