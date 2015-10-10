@@ -54,7 +54,7 @@ public class EmployeeEntity implements Serializable {
     }
     
     
-    @OneToMany(cascade ={CascadeType.ALL}, mappedBy ="employee")
+    @OneToMany(cascade ={CascadeType.ALL}, mappedBy ="employee", orphanRemoval=true)
     public Collection<EmployeeClaimEntity> getEmployeeClaims(){
         return claimRecords;
     }

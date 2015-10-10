@@ -56,11 +56,13 @@
             </p:commandButton>
             <br/><br/><br/><br/><br/>
 
-            <p:dataTable id="basicDT" var="im" value="#{employeeClaimBean.approvedClaimRecords}" rendered="true" selection="#{employeeClaimBean.selectedClaim}" rowKey="#{im.id}">
+
+
+            <p:dataTable id="basicDT" var="im" value="#{employeeClaimBean.approvedClaimRecords}" selection="#{employeeClaimBean.selectedClaim}" rowKey="#{im.id}">
                 <f:facet name="header">
                     Approved Claims
                 </f:facet>
-            
+                <p:column selectionMode="single" style="width:16px;text-align:center"/>
                 <p:column headerText="Employee">
                     <p:outputLabel value ="#{im.employee.employee_name}"/>
                 </p:column>
@@ -86,21 +88,27 @@
                     <p:commandButton update=":formMain:claimDetail" oncomplete="PF('claimDialog').show()" icon="ui-icon-search" title="View" rendered="#{not empty im.fileDestination}">
                         <f:setPropertyActionListener value="#{im}" target="#{employeeClaimBean.selectedClaim}" />
                     </p:commandButton>
-                </p:column>
+                </p:column> 
             </p:dataTable>
 
-                             
-                             
-            <p:dialog header="Claim Receipt" widgetVar="claimDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="true">
+            <p:commandButton value ="Delete Claim" action="#{employeeClaimBean.removeClaim()}" update ="basicDT" />
+
+
+            <p:dialog header="Claim Info" widgetVar="claimDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="true">
                 <p:outputPanel id="claimDetail" style="text-align:center;">
                     <p:panelGrid  columns="2" rendered="#{not empty employeeClaimBean.selectedClaim}" columnClasses="label,value">
                         <f:facet name="header">
-                            <img src = "#{employeeClaimBean.selectedClaim.fileDestination}"/> 
+                            <img src = "#{employeeClaimBean.selectedClaim.fileDestination}"  /> 
                         </f:facet>
                     </p:panelGrid>
                 </p:outputPanel>
             </p:dialog>
 
+
+
+            
+    
+           
         </h:form>
     </h:body>
 </html>

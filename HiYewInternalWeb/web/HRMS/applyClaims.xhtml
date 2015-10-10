@@ -84,9 +84,6 @@
                     </p:column>
                 </p:submenu>
             </p:megaMenu>
-
-
-
             <p:panel>
                 <p:panelGrid>
                     <p:row>
@@ -114,6 +111,9 @@
                         </p:column>
                     </p:row>
                 </p:panelGrid>
+
+                <p:fileUpload fileUploadListener="#{employeeClaimBean.upload}" />
+
 
                 <p:commandButton value ="Apply Claim" action ="#{employeeClaimBean.applyForClaim()}"/>
             </p:panel>

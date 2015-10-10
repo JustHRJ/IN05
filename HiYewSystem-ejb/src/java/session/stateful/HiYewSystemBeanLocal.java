@@ -195,7 +195,7 @@ public interface HiYewSystemBeanLocal {
     
     public void addNewAdmin(String employee, String employee_passNumber, String employee_address, int number_of_leave, String position, String username, Timestamp expiry, String contact, String addressPostal, String unit, String optional, double employeePay, Date employedDate, String email, String password);
 
-    public boolean applyClaim(String employeeName, EmployeeClaimEntity claim);
+    public boolean applyClaim(String employeeName, EmployeeClaimEntity claim, String destination);
 
     public void attachDocument(EmployeeClaimEntity claim, String destination);
 
@@ -216,5 +216,7 @@ public interface HiYewSystemBeanLocal {
     public List<TrainingScheduleEntity> trainingScheduleListAvailable();
 
     public List<TrainingScheduleEntity> pastEmployeeTraining(EmployeeEntity employee);
+
+    public void removeClaim(EmployeeClaimEntity claim);
 
 }
