@@ -209,4 +209,12 @@ public interface HiYewSystemBeanLocal {
 
     public List<EmployeeClaimEntity> approvedClaimRecordsM(String months);
 
+    public void rejectClaim(EmployeeClaimEntity c);
+
+    public String getEmployeeEs(String username);
+
+    public List<TrainingScheduleEntity> trainingScheduleListAvailable();
+
+    public List<TrainingScheduleEntity> pastEmployeeTraining(EmployeeEntity employee);
+
 }

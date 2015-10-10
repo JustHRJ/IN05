@@ -91,7 +91,7 @@ public class HiYewSystemTimer {
         c.set(Calendar.MILLISECOND, 0);
         c.set(Calendar.SECOND, 0);
         c.set(Calendar.MINUTE, 0);
-        c.set(Calendar.HOUR, 0);
+        c.set(Calendar.HOUR_OF_DAY, 0);
         int numberOfDays = c.getActualMaximum(Calendar.DAY_OF_MONTH);
         c.set(Calendar.DATE, numberOfDays);
         Calendar d = Calendar.getInstance();
@@ -100,7 +100,7 @@ public class HiYewSystemTimer {
         d.set(Calendar.MILLISECOND, 0);
         d.set(Calendar.SECOND, 0);
         d.set(Calendar.MINUTE, 0);
-        d.set(Calendar.HOUR, 0);
+        d.set(Calendar.HOUR_OF_DAY, 0);
         d.set(Calendar.DATE, 1);
 
         System.out.println(c.getTime().getTime());
@@ -188,7 +188,7 @@ public class HiYewSystemTimer {
         c.set(Calendar.MILLISECOND, 0);
         c.set(Calendar.SECOND, 0);
         c.set(Calendar.MINUTE, 0);
-        c.set(Calendar.HOUR, 0);
+        c.set(Calendar.HOUR_OF_DAY, 0);
 
         Calendar d = Calendar.getInstance();
         d.setTime(c.getTime());
@@ -196,7 +196,7 @@ public class HiYewSystemTimer {
         d.set(Calendar.MILLISECOND, 0);
         d.set(Calendar.SECOND, 0);
         d.set(Calendar.MINUTE, 0);
-        d.set(Calendar.HOUR, 0);
+        d.set(Calendar.HOUR_OF_DAY, 0);
 
         System.out.println(c.getTime());
         System.out.println(d.getTime());

@@ -86,8 +86,6 @@ public class EmployeeClaimBean {
     public void setEmployeeClaim(EmployeeClaimEntity employeeClaim) {
         this.employeeClaim = employeeClaim;
     }
-    
-
 
     public void applyForClaim() throws IOException {
         Timestamp time = new Timestamp(claimTime.getTime());
@@ -95,19 +93,26 @@ public class EmployeeClaimBean {
         boolean check = hiYewSystemBean.applyClaim(employee.getEmployee_name(), employeeClaim);
         FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("employeeName", employee.getEmployee_name());
         FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("employeeClaim", employeeClaim);
-        if(check)
-        FacesContext.getCurrentInstance().getExternalContext().redirect("/HiYewInternalWeb/HRMS/uploadReceipt.xhtml");
+        if (check) {
+            FacesContext.getCurrentInstance().getExternalContext().redirect("/HiYewInternalWeb/HRMS/uploadReceipt.xhtml");
+        }
     }
 
     public void upload(FileUploadEvent event) {
         try {
             copyFile(event.getFile().getFileName(), event.getFile().getInputstream());
-            hiYewSystemBean.attachDocument((EmployeeClaimEntity)FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("employeeClaim"), "../image/receipts/" + event.getFile().getFileName());
+            hiYewSystemBean.attachDocument((EmployeeClaimEntity) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("employeeClaim"), "../image/receipts/" + event.getFile().getFileName());
+            FacesContext.getCurrentInstance().getExternalContext().redirect("/HiYewInternalWeb/HRMS/viewApprovedClaim.xhtml");
         } catch (IOException e) {
             e.printStackTrace();
         }
-        
-    }public void approveClaim(){
+    }
+
+    public void rejectClaim() {
+        hiYewSystemBean.rejectClaim(selectedClaim);
+    }
+
+    public void approveClaim() {
         hiYewSystemBean.approveClaim(selectedClaim);
     }
 
@@ -160,24 +165,22 @@ public class EmployeeClaimBean {
     public void setFile(UploadedFile file) {
         this.file = file;
     }
-    
-    
-    public List<EmployeeClaimEntity> getPendingClaimRecords(){
+
+    public List<EmployeeClaimEntity> getPendingClaimRecords() {
         return hiYewSystemBean.pendingClaimRecords();
-        
-   
+
     }
 
-    public List<EmployeeClaimEntity> getApprovedClaimRecords(){
-        if(("select").equals(months) && !("select").equals(employeeName)){
-           return hiYewSystemBean.approvedClaimRecords(employeeName);
-        } else if("select".equals(employeeName) && !("select".equals(months))){
+    public List<EmployeeClaimEntity> getApprovedClaimRecords() {
+        if (("select").equals(months) && !("select").equals(employeeName)) {
+            return hiYewSystemBean.approvedClaimRecords(employeeName);
+        } else if ("select".equals(employeeName) && !("select".equals(months))) {
             return hiYewSystemBean.approvedClaimRecordsM(months);
-        } else{
+        } else {
             return hiYewSystemBean.approvedClaimRecordsA(employeeName, months);
         }
     }
-    
+
     /**
      * @return the selectedClaim
      */

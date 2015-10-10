@@ -56,10 +56,11 @@
             </p:commandButton>
             <br/><br/><br/><br/><br/>
 
-            <p:dataTable id="basicDT" var="im" value="#{employeeClaimBean.approvedClaimRecords}" rendered="true">
+            <p:dataTable id="basicDT" var="im" value="#{employeeClaimBean.approvedClaimRecords}" rendered="true" selection="#{employeeClaimBean.selectedClaim}" rowKey="#{im.id}">
                 <f:facet name="header">
                     Approved Claims
                 </f:facet>
+            
                 <p:column headerText="Employee">
                     <p:outputLabel value ="#{im.employee.employee_name}"/>
                 </p:column>
@@ -75,6 +76,9 @@
                 <p:column headerText="Approved Claim Amount">
                     <p:outputLabel value ="#{hiYewManagedBean.formatCurrency(im.claimAmt)}"/>
                 </p:column>
+                <p:column headerText="Claim status">
+                    <p:outputLabel value ="#{im.status}"/>
+                </p:column>
                 <p:column headerText="Approved Date">
                     <p:outputLabel value ="#{hiYewManagedBean.formatDate(im.approvedDate)}"/>
                 </p:column>
@@ -85,7 +89,8 @@
                 </p:column>
             </p:dataTable>
 
-
+                             
+                             
             <p:dialog header="Claim Receipt" widgetVar="claimDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="true">
                 <p:outputPanel id="claimDetail" style="text-align:center;">
                     <p:panelGrid  columns="2" rendered="#{not empty employeeClaimBean.selectedClaim}" columnClasses="label,value">

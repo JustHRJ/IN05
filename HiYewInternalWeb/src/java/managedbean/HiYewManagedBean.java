@@ -39,6 +39,7 @@ import session.stateless.HiYewSystemTimer;
 @ManagedBean
 @RequestScoped
 public class HiYewManagedBean {
+
     @EJB
     private HiYewSystemTimer hiYewSystemTimer;
 
@@ -61,6 +62,7 @@ public class HiYewManagedBean {
     private String employeeContact = "";
     private String leaveRemarks = "";
     private String fireOrDisabled;
+    private String machineType;
     private double overtime = 0.00;
     private String machine_status = "";
     private String username = "";
@@ -92,7 +94,7 @@ public class HiYewManagedBean {
     private String trainingName = "";
     private String trainingCode = "";
     private String leaveType = "";
-
+    private EmployeeEntity selectedEmployeeTraining;
     private String supPONo = "";
     private Date date;
     private String termsOfPayment; //30, 60, 90 days
@@ -128,6 +130,14 @@ public class HiYewManagedBean {
         }
     }
 
+    public List<TrainingScheduleEntity> getEmployeePastTraining() {
+        if (selectedEmployeeTraining != null) {
+            return hiYewSystemBean.pastEmployeeTraining(selectedEmployeeTraining);
+        } else {
+            return null;
+        }
+    }
+
     public void sendPO() {
         boolean check = hiYewSystemBean.updateSupPoStatus("Sent", selectedList);
         if (check) {
@@ -147,6 +157,13 @@ public class HiYewManagedBean {
 
     public String addMachine() {
         Timestamp machineTime = new Timestamp(machineNxtMaint.getTime());
+        if (machineType.equals("A")) {
+            machineSubMaint = 2;
+        } else if (machineType.equals("B")) {
+            machineSubMaint = 4;
+        } else {
+            machineSubMaint = 6;
+        }
         boolean check = hiYewSystemBean.addMachine(machineName, machineId, machineTime, machineDescript, machineSubMaint);
         if (check) {
             return "viewMachine";
@@ -256,7 +273,7 @@ public class HiYewManagedBean {
         }
     }
 
-    public double calculateTotal(double overtime,double basic, double bonus, double others, double taxi) {
+    public double calculateTotal(double overtime, double basic, double bonus, double others, double taxi) {
         return basic + bonus + others + taxi + overtime;
     }
 
@@ -341,8 +358,6 @@ public class HiYewManagedBean {
         return format.format(c.getTime());
     }
 
-   
-
     public void addEmployee() throws IOException {
         Timestamp expiry = null;
         if (employeePassExpiry == null) {
@@ -414,12 +429,9 @@ public class HiYewManagedBean {
         return machineMaintainenceIDList;
     }
 
-
-
     public void rejectLeave() {
         hiYewSystemBean.rejectLeaveID((Long.valueOf(objectId1).longValue()), objectId);
     }
-
 
     public List<LeaveEntity> getLeaveE() {
         return hiYewSystemBean.viewEmployeeLeavePending(employeeName);
@@ -1352,9 +1364,6 @@ public class HiYewManagedBean {
         FacesContext.getCurrentInstance().getExternalContext().redirect("/HiYewInternalWeb/HRMS/createPayroll.xhtml");
     }
 
-
-  
-
     public void addNewAdmin() throws IOException {
         Calendar c = Calendar.getInstance();
 
@@ -1366,7 +1375,7 @@ public class HiYewManagedBean {
     }
 
     public void changePassword() throws IOException {
-        System.out.println(employeeName);
+        employeeName = FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("employeeNameP").toString();
         String check = hiYewSystemBean.changePassword(employeeName, oldPassword, password);
         if ("changed".equals(check)) {
             FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("loginMessage", "Password has been Changed.");
@@ -1379,20 +1388,12 @@ public class HiYewManagedBean {
         }
     }
 
-
-
-
-
-
-
     public void approveLeave() {
         System.out.println(objectId1);
         System.out.println(objectId);
         hiYewSystemBean.approveLeaveID((Long.valueOf(objectId1).longValue()), objectId);
 
     }
-
-
 
     public void approveLeaveEs() {
         boolean check = hiYewSystemBean.approveByEmployee(employeeName);
@@ -1417,6 +1418,34 @@ public class HiYewManagedBean {
      */
     public void setOvertime(double overtime) {
         this.overtime = overtime;
+    }
+
+    /**
+     * @return the machineType
+     */
+    public String getMachineType() {
+        return machineType;
+    }
+
+    /**
+     * @param machineType the machineType to set
+     */
+    public void setMachineType(String machineType) {
+        this.machineType = machineType;
+    }
+
+    /**
+     * @return the selectedEmployeeTraining
+     */
+    public EmployeeEntity getSelectedEmployeeTraining() {
+        return selectedEmployeeTraining;
+    }
+
+    /**
+     * @param selectedEmployeeTraining the selectedEmployeeTraining to set
+     */
+    public void setSelectedEmployeeTraining(EmployeeEntity selectedEmployeeTraining) {
+        this.selectedEmployeeTraining = selectedEmployeeTraining;
     }
 
 }

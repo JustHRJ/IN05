@@ -115,7 +115,7 @@
                         <p:outputLabel value ="Start Date of training"/>    
                     </p:column>
                     <p:column>
-                        <p:calendar id = "cal" value = "#{hiYewManagedBean.trainingStartDate}" mindate="#{hiYewManagedBean.getToday()}" pattern ="dd/MM/yyyy"  required ="true" requiredMessage="Please input startDate"/>
+                        <p:calendar id = "cal" value = "#{hiYewManagedBean.trainingStartDate}"  pattern ="dd/MM/yyyy"  required ="true" requiredMessage="Please input startDate"/>
                     </p:column>
                 </p:row>
                 <p:row>
@@ -123,7 +123,7 @@
                         <p:outputLabel value ="End Date of Training"/>
                     </p:column>
                     <p:column>
-                        <p:calendar id = "cal1" value = "#{hiYewManagedBean.trainingEndDate}" mindate="#{hiYewManagedBean.getToday()}" pattern ="dd/MM/yyyy"  required ="true" requiredMessage="Please input endDate" />
+                        <p:calendar id = "cal1" value = "#{hiYewManagedBean.trainingEndDate}"  pattern ="dd/MM/yyyy"  required ="true" requiredMessage="Please input endDate" />
                     </p:column>
                 </p:row>
                 <p:row>

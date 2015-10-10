@@ -218,8 +218,9 @@ public class loginControlBean implements Serializable {
         }
     }
 
-    public List<String> getEmployeeNameP() {
-        return hiYewSystemBean.getEmployeeE(username);
+    public String getEmployeeNameP() {
+        FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("employeeNameP", hiYewSystemBean.getEmployeeEs(username));
+        return hiYewSystemBean.getEmployeeEs(username);
     }
 
     /**
