@@ -159,7 +159,7 @@ public interface HiYewSystemBeanLocal {
 
     public boolean updateTraining(TrainingScheduleEntity training, Date start, Date end, int size);
 
-    public Vector resetPassword(String username);
+    public Vector resetPassword(String username, String secretQuestion, String secretAnswer);
 
     public List<LeaveEntity> employeeLeaveToday();
 
@@ -218,5 +218,7 @@ public interface HiYewSystemBeanLocal {
     public List<TrainingScheduleEntity> pastEmployeeTraining(EmployeeEntity employee);
 
     public void removeClaim(EmployeeClaimEntity claim);
+
+    public String changePasswordF(String employeeName, String oldPass, String newPass, String secretQuestion, String secretAnswer);
 
 }

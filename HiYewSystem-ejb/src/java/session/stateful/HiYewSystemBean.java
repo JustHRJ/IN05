@@ -1260,7 +1260,7 @@ public class HiYewSystemBean implements HiYewSystemBeanLocal {
         }
     }
 
-    public Vector resetPassword(String username) {
+    public Vector resetPassword(String username, String secretQuestion, String secretAnswer) {
         EmployeeEntity e = new EmployeeEntity();
         try {
             Query q = em.createQuery("select e from EmployeeEntity e where e.username =:id");
@@ -1269,19 +1269,25 @@ public class HiYewSystemBean implements HiYewSystemBeanLocal {
             if (e.getEmployee_account_status().equals("disabled")) {
                 return null;
             }
+            if (e.getSecretQuestion().equals(secretQuestion)) {
+                if (e.getSecretAnswer().equals(secretAnswer)) {
+                    String password = createRandomPass();
+                    e.setPassword(hashingPassword(password));
+                    e.setAccount_status("reset");
+                    em.merge(e);
+                    Vector im = new Vector();
+                    im.add(e.getEmployee_name());
+                    im.add(username);
+                    im.add(password);
+                    im.add(e.getEmailAddress());
 
-            String password = createRandomPass();
-            e.setPassword(hashingPassword(password));
-            e.setAccount_status("firstTime");
-            em.merge(e);
-            Vector im = new Vector();
-            im.add(e.getEmployee_name());
-            im.add(username);
-            im.add(password);
-            im.add(e.getEmailAddress());
-
-            return im;
-
+                    return im;
+                } else {
+                    return null;
+                }
+            } else {
+                return null;
+            }
         } catch (Exception ex) {
             return null;
         }
@@ -2409,6 +2415,32 @@ public class HiYewSystemBean implements HiYewSystemBeanLocal {
         }
     }
 
+    public String changePasswordF(String employeeName, String oldPass, String newPass, String secretQuestion, String secretAnswer) {
+        EmployeeEntity e = new EmployeeEntity();
+        try {
+            Query q = em.createQuery("select e from EmployeeEntity e where e.employee_name = :id");
+            q.setParameter("id", employeeName);
+            e = (EmployeeEntity) q.getSingleResult();
+            String oldPassE = hashingPassword(oldPass);
+            if (e.getPassword().equals(oldPassE)) {
+                String newPassE = hashingPassword(newPass);
+                if (oldPassE.equals(newPassE)) {
+                    return "Password same as old password";
+                }
+                e.setPassword(newPassE);
+                e.setAccount_status("normal");
+                e.setSecretAnswer(secretAnswer);
+                e.setSecretQuestion(secretQuestion);
+                em.merge(e);
+                return "changed";
+            } else {
+                return "Old password is incorrect";
+            }
+        } catch (Exception ex) {
+            return "no such user";
+        }
+    }
+
     public String login(String username, String password) {
         EmployeeEntity e = new EmployeeEntity();
         try {
@@ -2422,7 +2454,7 @@ public class HiYewSystemBean implements HiYewSystemBeanLocal {
                 } else if (e.getAccount_status().equals("firstTime")) {
                     return "firstTime";
                 } else {
-                    return e.getEmployee_account_status();
+                    return e.getAccount_status();
                 }
             } else {
                 return "fail";

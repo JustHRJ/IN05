@@ -44,6 +44,8 @@ public class EmployeeEntity implements Serializable {
     private Timestamp employee_employedDate;
     private String addressPostal;
     private String unit;
+    private String secretQuestion;
+    private String secretAnswer;
     private String optional;
     private String account_status;
     private String emailAddress;
@@ -350,6 +352,34 @@ public class EmployeeEntity implements Serializable {
      */
     public void setEmailAddress(String emailAddress) {
         this.emailAddress = emailAddress;
+    }
+
+    /**
+     * @return the secretQuestion
+     */
+    public String getSecretQuestion() {
+        return secretQuestion;
+    }
+
+    /**
+     * @param secretQuestion the secretQuestion to set
+     */
+    public void setSecretQuestion(String secretQuestion) {
+        this.secretQuestion = secretQuestion;
+    }
+
+    /**
+     * @return the secretAnswer
+     */
+    public String getSecretAnswer() {
+        return secretAnswer;
+    }
+
+    /**
+     * @param secretAnswer the secretAnswer to set
+     */
+    public void setSecretAnswer(String secretAnswer) {
+        this.secretAnswer = secretAnswer;
     }
 
 }

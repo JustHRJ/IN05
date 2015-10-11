@@ -73,6 +73,8 @@ public class HiYewManagedBean {
     private String machineId = "";
     private String machineDescript = "";
     private Date machineNxtMaint = null;
+    private String secretQuestion = "";
+    private String secretAnswer = "";
     private int machineSubMaint = 0;
     private Date startDate = null;
     private Date employedDate = null;
@@ -382,11 +384,12 @@ public class HiYewManagedBean {
     }
 
     public void resetPassword() throws IOException, InterruptedException {
-        Vector result = hiYewSystemBean.resetPassword(username);
+        Vector result = hiYewSystemBean.resetPassword(username, secretQuestion, secretAnswer);
         if (result == null || result.size() == 0) {
             FacesMessage msg = new FacesMessage("Failed to Reset Password", "Account is disabled");
             FacesContext.getCurrentInstance().addMessage(null, msg);
         } else {
+            FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("loginMessage", "Password has been reset. Check Email");
             EmailManager emailManager = new EmailManager();
             emailManager.emailPassword(result.get(0).toString(), result.get(1).toString(), result.get(2).toString(), result.get(3).toString());
             FacesContext facesCtx = FacesContext.getCurrentInstance();
@@ -1388,6 +1391,20 @@ public class HiYewManagedBean {
         }
     }
 
+    public void changePasswordF() throws IOException {
+        employeeName = FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("employeeNameP").toString();
+        String check = hiYewSystemBean.changePasswordF(employeeName, oldPassword, password, getSecretQuestion(), getSecretAnswer());
+        if ("changed".equals(check)) {
+            FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("loginMessage", "Password has been Changed.");
+            FacesContext facesCtx = FacesContext.getCurrentInstance();
+            ExternalContext externalContext = facesCtx.getExternalContext();
+            externalContext.redirect("/HiYewInternalWeb/login.xhtml");
+        } else {
+            FacesMessage msg = new FacesMessage("Failed to change", check);
+            FacesContext.getCurrentInstance().addMessage(null, msg);
+        }
+    }
+
     public void approveLeave() {
         System.out.println(objectId1);
         System.out.println(objectId);
@@ -1446,6 +1463,34 @@ public class HiYewManagedBean {
      */
     public void setSelectedEmployeeTraining(EmployeeEntity selectedEmployeeTraining) {
         this.selectedEmployeeTraining = selectedEmployeeTraining;
+    }
+
+    /**
+     * @return the secretQuestion
+     */
+    public String getSecretQuestion() {
+        return secretQuestion;
+    }
+
+    /**
+     * @param secretQuestion the secretQuestion to set
+     */
+    public void setSecretQuestion(String secretQuestion) {
+        this.secretQuestion = secretQuestion;
+    }
+
+    /**
+     * @return the secretAnswer
+     */
+    public String getSecretAnswer() {
+        return secretAnswer;
+    }
+
+    /**
+     * @param secretAnswer the secretAnswer to set
+     */
+    public void setSecretAnswer(String secretAnswer) {
+        this.secretAnswer = secretAnswer;
     }
 
 }
