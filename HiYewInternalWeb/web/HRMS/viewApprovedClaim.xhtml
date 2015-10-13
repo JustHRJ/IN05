@@ -52,11 +52,11 @@
                 </p:row>
             </p:panelGrid>
 
-            <p:commandButton value="Search for Pay Slips" id = "btn" update =":formMain:lll" >
-                <f:ajax execute ="lll" render="basicDT"/>
+            <p:commandButton value="Search for Pay Slips" id = "btn" update ="basicDT" actionListener="#{employeeClaimBean.search}" >
+               
             </p:commandButton>
             <br/><br/><br/><br/><br/>
-            <p:dataTable id="basicDT" var="im" value="#{employeeClaimBean.approvedClaimRecords}" selection="#{employeeClaimBean.selectedClaim}" rowKey="#{im.id}">
+            <p:dataTable id="basicDT" var="im" value="#{employeeClaimBean.approvedClaimRecords}" editable="true" selection="#{employeeClaimBean.selectedClaim}" rowKey="#{im.id}">
                 <f:facet name="header">
                     Approved Claims
                 </f:facet>
