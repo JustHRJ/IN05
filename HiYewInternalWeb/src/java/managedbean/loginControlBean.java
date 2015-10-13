@@ -156,6 +156,18 @@ public class loginControlBean implements Serializable {
         }
     }
 
+    public void checkLoginRedirectE() throws IOException {
+        if (logined) {
+            if (loginPosition.equals("admin")) {
+
+            } else {
+                FacesContext.getCurrentInstance().getExternalContext().redirect("/HiYewInternalWeb/index.xhtml");
+            }
+        } else {
+            FacesContext.getCurrentInstance().getExternalContext().redirect("/HiYewInternalWeb/login.xhtml");
+        }
+    }
+
     public String getEmployeeNameLog() {
         if (username == "") {
             return "";
@@ -175,6 +187,10 @@ public class loginControlBean implements Serializable {
 
     public boolean checkValid() {
         return !loginPosition.equals("admin");
+    }
+
+    public boolean checkValid1() {    
+        return loginPosition.equals("admin");
     }
 
     public String logged() {

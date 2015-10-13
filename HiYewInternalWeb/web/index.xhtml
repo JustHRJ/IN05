@@ -31,25 +31,25 @@
                 <p:submenu label ="Human Resource Management System" icon ="ui-icon-check" style ="font-weight: bold">
                     <p:column>
                         <p:submenu label ="Employee Management">
-                            <p:menuitem value ="Register employee" url ="/HRMS/employeeRegistration.xhtml" disabled="#{loginControlBean.checkValid()}"/>
+                            <p:menuitem value ="Register employee" url ="/HRMS/employeeRegistration.xhtml" rendered ="#{loginControlBean.checkValid1()}"/>
                             <p:menuitem value ="View Employee" url = "/HRMS/employee_details.xhtml" />
                         </p:submenu>
                         <p:submenu label="Payroll Management">
-                            <p:menuitem value ="Assign Payroll" url ="/HRMS/createPayroll.xhtml" disabled = "#{loginControlBean.checkValid()}"/>
-                            <p:menuitem value ="Release Payroll" url ="/HRMS/releasePayroll.xhtml" disabled="#{loginControlBean.checkValid()}"/>
+                            <p:menuitem value ="Assign Payroll" url ="/HRMS/createPayroll.xhtml" rendered = "#{loginControlBean.checkValid1()}"/>
+                            <p:menuitem value ="Release Payroll" url ="/HRMS/releasePayroll.xhtml" rendered="#{loginControlBean.checkValid1()}"/>
                             <p:menuitem value ="View Released Payroll" url ="/HRMS/viewPayroll.xhtml"/>
                         </p:submenu>
                     </p:column>
                     <p:column>
                         <p:submenu label="Training and Expiry">
                             <p:menuitem value ="#{loginControlBean.getEAlert()}" url ="/HRMS/alertEmployee.xhtml" />
-                            <p:menuitem value ="Add Training Schedule" url ="/HRMS/addTrainingSchedule.xhtml" disabled="#{loginControlBean.checkValid()}" />
-                            <p:menuitem value ="Add Employee Training" url ="/HRMS/addEmployeeTraining.xhtml" disabled="#{loginControlBean.checkValid()}" />
+                            <p:menuitem value ="Add Training Schedule" url ="/HRMS/addTrainingSchedule.xhtml" rendered="#{loginControlBean.checkValid1()}" />
+                            <p:menuitem value ="Add Employee Training" url ="/HRMS/addEmployeeTraining.xhtml" rendered="#{loginControlBean.checkValid1()}" />
                             <p:menuitem value ="view Upcoming training" url ="/HRMS/viewTrainingSchedule.xhtml"/>
                         </p:submenu>
                         <p:submenu label ="Leave Management">
                             <p:menuitem value ="Apply for Leave" url ="/HRMS/leaveApplication.xhtml" />
-                            <p:menuitem value ="Approve Leave" url ="/HRMS/approveLeave.xhtml" disabled="#{loginControlBean.checkValid()}"/>
+                            <p:menuitem value ="Approve Leave" url ="/HRMS/approveLeave.xhtml" rendered ="#{loginControlBean.checkValid1()}"/>
                             <p:menuitem value ="Check Leave Status" url ="/HRMS/leaveStatus.xhtml" />
                         </p:submenu>
                     </p:column>

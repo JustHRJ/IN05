@@ -221,4 +221,6 @@ public interface HiYewSystemBeanLocal {
 
     public String changePasswordF(String employeeName, String oldPass, String newPass, String secretQuestion, String secretAnswer);
 
+    public boolean updateClaim(EmployeeClaimEntity claim, double amount, Date date);
+
 }

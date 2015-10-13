@@ -107,6 +107,30 @@ public class HiYewSystemBean implements HiYewSystemBeanLocal {
         }
 
     }
+    
+    public boolean updateClaim(EmployeeClaimEntity claim, double amount, Date date){
+        boolean check = false;
+        
+        if(amount > 0 && amount != claim.getAmount()){
+            check = true;
+            claim.setAmount(amount);
+        }
+        if(date != null){
+            Timestamp time = new Timestamp(date.getTime());
+            if(time.equals(claim.getClaimDate())){
+                
+            }else{
+                claim.setClaimDate(time);
+                check = true;
+            }
+        }
+        if(check){
+            em.merge(claim);
+            return true;
+        } else{
+            return false;
+        }
+    }
 
     public boolean createPO(String supPONo, Timestamp date, String termsOfPayment, String description, String supCompanyName, int quantity) {
         SupplierPurchaseOrder supPO = new SupplierPurchaseOrder();
@@ -2453,8 +2477,10 @@ public class HiYewSystemBean implements HiYewSystemBeanLocal {
                     return "disabled";
                 } else if (e.getAccount_status().equals("firstTime")) {
                     return "firstTime";
+                }else if(e.getAccount_status().equals("reset")){
+                    return "reset";
                 } else {
-                    return e.getAccount_status();
+                    return e.getEmployee_account_status();
                 }
             } else {
                 return "fail";

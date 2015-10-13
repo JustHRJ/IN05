@@ -23,6 +23,7 @@ import javax.inject.Named;
 import javax.enterprise.context.RequestScoped;
 import javax.faces.context.FacesContext;
 import org.primefaces.event.FileUploadEvent;
+import org.primefaces.event.RowEditEvent;
 import org.primefaces.model.UploadedFile;
 import session.stateful.HiYewSystemBeanLocal;
 import sun.misc.IOUtils;
@@ -39,7 +40,8 @@ public class EmployeeClaimBean {
     private HiYewSystemBeanLocal hiYewSystemBean;
     private EmployeeEntity employee;
     private EmployeeClaimEntity employeeClaim;
-    private Date claimTime;
+    private Date claimTime = null;
+    private double amount = 0.00;
     private UploadedFile file;
     private String destination = "C:\\Users\\JustHRJ\\Desktop\\IN05\\HiYewInternalWeb\\web\\image\\receipts\\";
     private EmployeeClaimEntity selectedClaim;
@@ -97,6 +99,17 @@ public class EmployeeClaimBean {
         }
     }
 
+    public void updateClaim(RowEditEvent event){
+        System.out.println("here");
+        boolean check = hiYewSystemBean.updateClaim((EmployeeClaimEntity) event.getObject(), amount, claimTime);
+        if(check){
+            
+        } else{
+            
+        }
+    }
+    
+    
     public void applyForClaim() throws IOException {
         Timestamp time = new Timestamp(claimTime.getTime());
         employeeClaim.setClaimDate(time);
@@ -190,7 +203,8 @@ public class EmployeeClaimBean {
     }
 
     public List<EmployeeClaimEntity> getApprovedClaimRecords() {
-
+   
+        
         if (("select").equals(months) && !("select").equals(employeeName)) {
             return hiYewSystemBean.approvedClaimRecords(employeeName);
         } else if ("select".equals(employeeName) && !("select".equals(months))) {
@@ -254,6 +268,20 @@ public class EmployeeClaimBean {
      */
     public void setFilename(String filename) {
         this.filename = filename;
+    }
+
+    /**
+     * @return the amount
+     */
+    public double getAmount() {
+        return amount;
+    }
+
+    /**
+     * @param amount the amount to set
+     */
+    public void setAmount(double amount) {
+        this.amount = amount;
     }
 
     /**
