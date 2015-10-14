@@ -5,6 +5,7 @@
  */
 package session.stateful;
 
+import entity.ActivationCode;
 import entity.EmployeeClaimEntity;
 import entity.SupplierPurchaseOrder;
 import javax.ejb.Stateful;
@@ -107,27 +108,32 @@ public class HiYewSystemBean implements HiYewSystemBeanLocal {
         }
 
     }
-    
-    public boolean updateClaim(EmployeeClaimEntity claim, double amount, Date date){
+
+    public boolean updateClaim(EmployeeClaimEntity claim, double amount, Date date) {
         boolean check = false;
-        
-        if(amount > 0 && amount != claim.getAmount()){
+        EmployeeEntity employee = claim.getEmployee();
+        if (amount > 0 && amount != claim.getAmount()) {
+            double check1 = checkExceedLimit(employee, amount);
+            if (check1 == 0) {
+                return false;
+            }
             check = true;
             claim.setAmount(amount);
+            claim.setClaimAmt(check1);
         }
-        if(date != null){
+        if (date != null) {
             Timestamp time = new Timestamp(date.getTime());
-            if(time.equals(claim.getClaimDate())){
-                
-            }else{
+            if (time.equals(claim.getClaimDate())) {
+
+            } else {
                 claim.setClaimDate(time);
                 check = true;
             }
         }
-        if(check){
+        if (check) {
             em.merge(claim);
             return true;
-        } else{
+        } else {
             return false;
         }
     }
@@ -153,6 +159,31 @@ public class HiYewSystemBean implements HiYewSystemBeanLocal {
 
     }
 
+    private double checkExceedLimit(EmployeeEntity e, double cd) {
+        double sum = 0.0;
+        SimpleDateFormat format = new SimpleDateFormat("MMM");
+        Calendar c = Calendar.getInstance();
+        String month = format.format(c.getTime());
+        for (Object o : e.getEmployeeClaims()) {
+            EmployeeClaimEntity claim = (EmployeeClaimEntity) o;
+            Date date = new Date(claim.getClaimDate().getTime());
+            String claimMonth = format.format(date);
+            if (month.equals(claimMonth) && (claim.getStatus().equals("approved") || claim.getStatus().equals(("pending")))) {
+                sum += claim.getAmount();
+            }
+        }
+        double remainder = 100 - sum;
+        if (remainder <= 0) {
+            return 0;
+        } else {
+            if (remainder < cd) {
+                return remainder;
+            } else {
+                return cd;
+            }
+        }
+    }
+
     private double checkExceedLimit(EmployeeEntity e, EmployeeClaimEntity cd) {
         double sum = 0.0;
         SimpleDateFormat format = new SimpleDateFormat("MMM");
@@ -162,7 +193,7 @@ public class HiYewSystemBean implements HiYewSystemBeanLocal {
             EmployeeClaimEntity claim = (EmployeeClaimEntity) o;
             Date date = new Date(claim.getClaimDate().getTime());
             String claimMonth = format.format(date);
-            if (month.equals(claimMonth) && claim.getStatus().equals("approved")) {
+            if (month.equals(claimMonth) && (claim.getStatus().equals("approved") || claim.getStatus().equals(("pending")))) {
                 sum += claim.getAmount();
             }
         }
@@ -171,7 +202,7 @@ public class HiYewSystemBean implements HiYewSystemBeanLocal {
             return 0;
         } else {
             if (remainder < cd.getAmount()) {
-                return cd.getAmount() - remainder;
+                return remainder;
             } else {
                 return cd.getAmount();
             }
@@ -2477,7 +2508,7 @@ public class HiYewSystemBean implements HiYewSystemBeanLocal {
                     return "disabled";
                 } else if (e.getAccount_status().equals("firstTime")) {
                     return "firstTime";
-                }else if(e.getAccount_status().equals("reset")){
+                } else if (e.getAccount_status().equals("reset")) {
                     return "reset";
                 } else {
                     return e.getEmployee_account_status();
@@ -2597,5 +2628,21 @@ public class HiYewSystemBean implements HiYewSystemBeanLocal {
         System.out.println(newPassword);
         return newPassword;
 
+    }
+    
+    
+    public String sendActivationCode(String email){
+        ActivationCode code = new ActivationCode();
+        Calendar c = Calendar.getInstance();
+        c.add(Calendar.DATE, 1);
+    
+        
+        Timestamp time = new Timestamp(c.getTime().getTime());
+        String pass = createRandomPass();
+        code.setCode(pass);
+        code.setExpiry(time);
+        em.persist(code);
+        return pass;    
+        
     }
 }

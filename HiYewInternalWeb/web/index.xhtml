@@ -20,7 +20,7 @@
         <h:form>
 
             #{loginControlBean.checkLoginRedirect()}
-
+            #{employeeClaimBean.readFile()}
             <p:commandButton value ="#{loginControlBean.logged()}" action ="#{loginControlBean.userAction()}"/>
 
             <p:commandLink value ="Change Password" action ="#{hiYewManagedBean.redirectP}"/> 

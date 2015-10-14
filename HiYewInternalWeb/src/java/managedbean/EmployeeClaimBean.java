@@ -27,13 +27,37 @@ import org.primefaces.event.RowEditEvent;
 import org.primefaces.model.UploadedFile;
 import session.stateful.HiYewSystemBeanLocal;
 
+import java.io.File;
+import java.io.IOException;
+import java.util.Locale;
+
+import jxl.CellView;
+import jxl.Workbook;
+import jxl.WorkbookSettings;
+import jxl.format.UnderlineStyle;
+import jxl.write.Formula;
+import jxl.write.Label;
+import jxl.write.Number;
+import jxl.write.WritableCellFormat;
+import jxl.write.WritableFont;
+import jxl.write.WritableSheet;
+import jxl.write.WritableWorkbook;
+import jxl.write.WriteException;
+import jxl.write.biff.RowsExceededException;
+
+import jxl.Cell;
+import jxl.CellType;
+import jxl.Sheet;
+import jxl.Workbook;
+import jxl.read.biff.BiffException;
+
 /**
  *
  * @author JustHRJ
  */
 @Named(value = "employeeClaimBean")
 @ViewScoped
-public class EmployeeClaimBean implements Serializable{
+public class EmployeeClaimBean implements Serializable {
 
     @EJB
     private HiYewSystemBeanLocal hiYewSystemBean;
@@ -47,7 +71,8 @@ public class EmployeeClaimBean implements Serializable{
     private String months = "";
     private String employeeName = "";
     private String filename = "";
-    
+    private String inputFile;
+
     private List<EmployeeClaimEntity> employeeClaimEntities;
 
     /**
@@ -56,6 +81,10 @@ public class EmployeeClaimBean implements Serializable{
     public EmployeeClaimBean() {
         employee = new EmployeeEntity();
         employeeClaim = new EmployeeClaimEntity();
+    }
+
+    public void setInputFile(String inputFile) {
+        this.inputFile = inputFile;
     }
 
     @PostConstruct
@@ -92,7 +121,7 @@ public class EmployeeClaimBean implements Serializable{
     }
 
     public void removeClaim() {
-        
+
         if (selectedClaim == null) {
             System.out.println("hello");
         } else {
@@ -101,21 +130,20 @@ public class EmployeeClaimBean implements Serializable{
         }
     }
 
-    public void updateClaim(RowEditEvent event){
+    public void updateClaim(RowEditEvent event) {
         System.out.println("here");
         boolean check = hiYewSystemBean.updateClaim((EmployeeClaimEntity) event.getObject(), amount, claimTime);
-        if(check){
-            
-        } else{
-            
+        if (check) {
+
+        } else {
+
         }
     }
-    
-    
+
     public void applyForClaim() throws IOException {
         Timestamp time = new Timestamp(claimTime.getTime());
         employeeClaim.setClaimDate(time);
-        String destination = "../image/receipts/";
+        String destinations = "../image/receipts/";
 
         if (FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("filename") == null) {
             destination = "";
@@ -123,7 +151,7 @@ public class EmployeeClaimBean implements Serializable{
             destination += FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("filename").toString();
         }
 
-        boolean check = hiYewSystemBean.applyClaim(employee.getEmployee_name(), employeeClaim, destination);
+        boolean check = hiYewSystemBean.applyClaim(employee.getEmployee_name(), employeeClaim, destinations);
         FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("employeeName", employee.getEmployee_name());
         FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("employeeClaim", employeeClaim);
         if (check) {
@@ -205,19 +233,17 @@ public class EmployeeClaimBean implements Serializable{
     }
 
     public List<EmployeeClaimEntity> getApprovedClaimRecords() {
-   
-        
+
         return employeeClaimEntities;
     }
-    
-    public void search(ActionEvent event)
-    {
+
+    public void search(ActionEvent event) {
         if (("select").equals(months) && !("select").equals(employeeName)) {
             employeeClaimEntities = hiYewSystemBean.approvedClaimRecords(employeeName);
         } else if ("select".equals(employeeName) && !("select".equals(months))) {
             employeeClaimEntities = hiYewSystemBean.approvedClaimRecordsM(months);
         } else {
-            employeeClaimEntities =  hiYewSystemBean.approvedClaimRecordsA(employeeName, months);
+            employeeClaimEntities = hiYewSystemBean.approvedClaimRecordsA(employeeName, months);
         }
     }
 
@@ -294,4 +320,40 @@ public class EmployeeClaimBean implements Serializable{
     /**
      * @return the employeeName
      */
+    private void read() throws IOException {
+        File inputWorkbook = new File(inputFile);
+        Workbook w;
+        try {
+            w = Workbook.getWorkbook(inputWorkbook);
+            // Get the first sheet
+            Sheet sheet = w.getSheet(0);
+            // Loop over first 10 column and lines
+
+            for (int j = 0; j < sheet.getColumns(); j++) {
+                for (int i = 0; i < sheet.getRows(); i++) {
+                    Cell cell = sheet.getCell(j, i);
+                    CellType type = cell.getType();
+                    if (type == CellType.LABEL) {
+                        System.out.println("I got a label "
+                                + cell.getContents());
+                    }
+
+                    if (type == CellType.NUMBER) {
+                        System.out.println("I got a number "
+                                + cell.getContents());
+                    }
+
+                }
+            }
+        } catch (BiffException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void readFile() throws IOException {
+        EmployeeClaimBean test = new EmployeeClaimBean();
+        test.setInputFile("C:\\Users\\JustHRJ\\Desktop\\Book1.xls");
+        test.read();
+    }
+
 }

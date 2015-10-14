@@ -223,4 +223,6 @@ public interface HiYewSystemBeanLocal {
 
     public boolean updateClaim(EmployeeClaimEntity claim, double amount, Date date);
 
+    public String sendActivationCode(String email);
+
 }
