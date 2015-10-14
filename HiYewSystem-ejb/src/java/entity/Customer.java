@@ -23,6 +23,8 @@ public class Customer implements Serializable {
     private String email;
     private String postalCode;
     private boolean subscribeEmail;
+    private String secretQuestion;
+    private String secretAnswer;
 
     // private Integer active; // set 1 for existing customer;
     // @Enumerated(EnumType.STRING)
@@ -294,6 +296,34 @@ public class Customer implements Serializable {
 
     public void addProductPurchaseOrderList(ProductPurchaseOrder productPurchaseOrder) {
         this.productPurchaseOrderList.add(productPurchaseOrder);
+    }
+
+    /**
+     * @return the secretQuestion
+     */
+    public String getSecretQuestion() {
+        return secretQuestion;
+    }
+
+    /**
+     * @param secretQuestion the secretQuestion to set
+     */
+    public void setSecretQuestion(String secretQuestion) {
+        this.secretQuestion = secretQuestion;
+    }
+
+    /**
+     * @return the secretAnswer
+     */
+    public String getSecretAnswer() {
+        return secretAnswer;
+    }
+
+    /**
+     * @param secretAnswer the secretAnswer to set
+     */
+    public void setSecretAnswer(String secretAnswer) {
+        this.secretAnswer = secretAnswer;
     }
 
 }

@@ -36,7 +36,7 @@
     </h:head>
     <h:body class="tooltips full-content">
         #{loginManagedBean.checkAfterLoginRedirect()}
-        
+
         <!-- BEGIN PAGE -->
         <div class="container">
             <!-- Begin Register Page -->
@@ -48,9 +48,21 @@
                         <h:form id="mainForm">
                             <h:outputText value="#{registerMessage}" id="outputID" style="font-weight: bold; color: red; margin-bottom: 100%" />
                             <p style="margin-bottom: 5%"></p>
-                        
-                        
+
+
                             <p:growl id="msgs" showDetail="false" />
+
+                            <div class="form-group login-input">
+                                <p:selectOneMenu style="width: 315px; display: inline-block; padding-top: -10px" styleClass="form-control selectpicker" value="#{loginManagedBean.user}" >
+                                    <p:ajax listener="#{loginManagedBean.display()}" update="mainForm"/> 
+                                    <f:selectItems class="form-control selectpicker" value="#{loginManagedBean.users}" />
+                                </p:selectOneMenu>
+                            </div>
+                            <div class="form-group login-input" id="supplierCodeWord">
+                                <i class="fa fa-user overlay"></i>
+                                <p:inputText class="form-control text-input" placeholder="Supplier's Codeword" value="#{loginManagedBean.supplierCodeWord}" required="true" rendered="#{loginManagedBean.visibility}" requiredMessage="A Supplier Codeword is required" id="supplierCodeWord"  />
+
+                            </div>
                             <div class="form-group login-input">
                                 <i class="fa fa-user overlay"></i>
                                 <p:inputText class="form-control text-input" placeholder="Your name" value="#{loginManagedBean.newCustomer.name}" required="true" requiredMessage="Name is required." id="customerName"  />
@@ -78,6 +90,7 @@
                                     <f:validateRegex pattern="(^[0-9]{6}$)"/>
                                 </p:inputText>
                             </div>
+
                             <div class="form-group login-input">
                                 <i class="fa fa-sign-in overlay"></i>
                                 <p:inputText class="form-control text-input" placeholder="Username" value="#{loginManagedBean.newCustomer.userName}" required="true" requiredMessage="Username is required." id="Username"  />
@@ -94,7 +107,22 @@
                                     <f:validateRegex pattern="(^[0-9a-z-A-Z]{8,}$)"/>
                                 </p:password>
                             </div>
-                            <p:commandButton style="border: none; font-size: 14px; font-family: 'Open Sans'" class=" btn btn-success btn-block" action="#{loginManagedBean.createDualUser()}" value="Register" update="outputID msgs"></p:commandButton>
+                            <div class="form-group login-input">
+                                <i class="fa fa-sign-in overlay"></i>
+                                <p:selectOneMenu id = "secretQn"  value ="#{loginManagedBean.newCustomer.secretQuestion}" required = "true" requiredMessage="Please select Secret Question">
+                                    <f:selectItem itemValue ="" itemLabel ="Select your question below" noSelectionOption="true"/>
+                                    <f:selectItem itemValue ="What is the name of your favourite teacher?" itemLabel ="What is the name of your favourite teacher?"/>
+                                    <f:selectItem itemValue ="Where did you spend your honeymoon?" itemLabel ="Where did you spend your honeymoon?"/>
+                                    <f:selectItem itemValue ="What is the name of your favourite pet?" itemLabel ="What is the name of your favourite pet?"/>
+                                    <f:selectItem itemValue ="Which hospital were you born in?" itemLabel ="Which hospital were you born in?"/>
+                                    <f:selectItem itemValue ="What is the first name of your favourite uncle?" itemLabel ="What is the first name of your favourite uncle?"/>
+                                </p:selectOneMenu>
+                            </div>
+                            <div class="form-group login-input">
+                                <i class="fa fa-sign-in overlay"></i>
+                                <p:inputText class="form-control text-input" placeholder="Secret Answer" value="#{loginManagedBean.newCustomer.secretAnswer}" required="true" requiredMessage="Secret Answer is required." id="SecretAns"  />
+                            </div>
+                            <p:commandButton style="border: none; font-size: 14px; font-family: 'Open Sans'" class=" btn btn-success btn-block" action="#{loginManagedBean.createUser()}" value="Register" update="outputID msgs"></p:commandButton>
                         </h:form>
                     </div>
                     <p class="text-center"><a href="login.xhtml"><i class="fa fa-sign-in"> </i>Back to login</a></p>
