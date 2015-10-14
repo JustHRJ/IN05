@@ -2658,7 +2658,8 @@ public class HiYewSystemBean implements HiYewSystemBeanLocal {
     
     @Override
     public void deleteActivationCode(String code){
-        Query q = em.createQuery("Delete a from ActivationCode a where a.code = :code");
+        Query q = em.createQuery("Delete from ActivationCode a where a.code = :code");
+        q.setParameter("code", code);
         q.executeUpdate();
     }
 }

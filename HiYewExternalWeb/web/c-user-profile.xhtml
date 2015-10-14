@@ -148,10 +148,9 @@
                                 
                                 <h:form id="supplierApplicationForm">
                                     <div class="form-group">
-                                        <label for="">Supplier's Application (Please enter the codeword)</label>
-                                        <p:inputText class="form-control text-input" value="#{loginManagedBean.supplierCodeWord}" required="true" requiredMessage="A supplier's codeword is required." >
-                                            
-                                        </p:inputText>
+                                        <label for="">Application for a joint Supplier Account</label>
+                                        <p:inputText class="form-control text-input"  placeholder="Your Supplier's code" value="#{loginManagedBean.supplierCodeWord}" required="true" requiredMessage="A supplier's codeword is required." >
+                                         </p:inputText>
                                     </div>
                                     <p:commandButton style="border: none; font-weight: normal; font-family: 'Open Sans'; padding-top: 6px; padding-bottom: 7px; padding-left: 22px; padding-right: 22px" styleClass="btn btn-primary" value="Submit" action="#{loginManagedBean.createSupplierFromExistingCustomerAcct(customerManagedBean.customer.userName)}" update=":changePasswordForm:msgs " icon=""/>
                                

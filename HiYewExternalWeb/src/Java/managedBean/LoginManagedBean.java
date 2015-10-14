@@ -150,22 +150,26 @@ public class LoginManagedBean implements Serializable {
     public String sendPassword() {
         if (this.user.equals("Customer")) {
             customer = customerSessionBean.getCustomerByUsername(username);
-            System.out.println("username ==== " + username);
+            //System.out.println("username ==== " + username);
             if (this.customer != null) {
-                FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("loginMessage", "Your password has been reset successfully! Please check your email.");
-                System.out.println("User's email: " + customer.getEmail());
-                String output[] = customerSessionBean.resetCustomerPassword(customer.getUserName()).split(":");
-                System.out.println("User's new password: " + output[0]);
-                EmailManager emailManager = new EmailManager();
-                emailManager.emailPassword(output[0], output[1], output[2]);
-                return "login?faces-redirect=true";
+                if (customer.getSecretQuestion().equals(secretQn) && customer.getSecretAnswer().equals(secretAns)) {
+                    FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("loginMessage", "Your password has been reset successfully! Please check your email.");
+                    //System.out.println("User's email: " + customer.getEmail());
+                    String output[] = customerSessionBean.resetCustomerPassword(customer.getUserName()).split(":");
+                    //System.out.println("User's new password: " + output[0]);
+                    EmailManager emailManager = new EmailManager();
+                    emailManager.emailPassword(output[0], output[1], output[2]);
+                    return "login?faces-redirect=true";
+                }else{
+                    FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("forgotMessage", "Invalid Secret Question or Answer!");
+                }
             } else {
                 FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("forgotMessage", "Username does not exist!");
-                return "";
             }
         } else { // if user is supplier
             return "login?faces-redirect=true";
         }
+        return "";
     }
 
     public void createSupplierFromExistingCustomerAcct(String user) {
@@ -190,32 +194,48 @@ public class LoginManagedBean implements Serializable {
             EmailManager emailManager = new EmailManager();
             emailManager.emailSuccessfulRegistration(newSupplier.getCompanyName(), newSupplier.getUserName(), newSupplier.getPw(), newSupplier.getEmail());
             FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("popupMessage", "Supplier account has been created succesfully!");
-            
+
             hiYewSystemBean.deleteActivationCode(supplierCodeWord);
-        }else{
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "The Supplier's codeword provided is invalid!", ""));
+        } else {
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "The Supplier's code provided is invalid!", ""));
         }
     }
 
     public String createUser() {
-        customer = customerSessionBean.getCustomerByUsername(newCustomer.getUserName());
-        if (customer == null) {
-            if (newCustomer.getPw().equals(rePassword)) {
-                // encrypt password
-                newCustomer.setPw(customerSessionBean.encryptPassword(newCustomer.getPw()));
-                newCustomer.setSubscribeEmail(true);
+        if (user.equals("Customer")) {
+            customer = customerSessionBean.getCustomerByUsername(newCustomer.getUserName());
+            if (customer == null) {
+                if (newCustomer.getPw().equals(rePassword)) {
+                    // encrypt password
+                    newCustomer.setPw(customerSessionBean.encryptPassword(newCustomer.getPw()));
+                    newCustomer.setSubscribeEmail(true);
 
-                if (user.equals("Customer")) {
                     customerSessionBean.createCustomer(newCustomer);
-                    newCustomer = new Customer();
-
                     EmailManager emailManager = new EmailManager();
                     emailManager.emailSuccessfulRegistration(newCustomer.getName(), newCustomer.getUserName(), rePassword, newCustomer.getEmail());
 
+                    newCustomer = new Customer();
+
+                    FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("loginMessage", "Your account registration has been successful.");
+                    return "login?faces-redirect=true";
                 } else {
-                    //create supplier
-                    //validate if passcode is similar
-                    if (hiYewSystemBean.checkActivationCode(supplierCodeWord) == true) {
+                    FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("registerMessage", "Your password and confirmation password do not match.");
+                }
+            } else {
+                FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("registerMessage", "This username has been taken by someone else. Please choose a different username.");
+            }
+        } else { //create supplier
+            //validate if passcode is similar
+            if (hiYewSystemBean.checkActivationCode(supplierCodeWord) == true) {
+
+                supplier = supplierSessionBean.getSupplierByUsername(newCustomer.getUserName());
+                if (supplier == null) {
+                    if (newCustomer.getPw().equals(rePassword)) {
+
+                        // encrypt password
+                        newCustomer.setPw(customerSessionBean.encryptPassword(newCustomer.getPw()));
+                        newCustomer.setSubscribeEmail(true);
+
                         //map values from customer acct to supplier acct for same user
                         newSupplier.setAddress1(newCustomer.getAddress1());
                         newSupplier.setAddress2(newCustomer.getAddress2());
@@ -230,26 +250,26 @@ public class LoginManagedBean implements Serializable {
                         newSupplier.setSecretAnswer(newCustomer.getSecretAnswer());
 
                         supplierSessionBean.createSupplier(newSupplier);
-                        newSupplier = new SupplierEntity();
-                        newCustomer = new Customer();
+
                         EmailManager emailManager = new EmailManager();
                         emailManager.emailSuccessfulRegistration(newSupplier.getCompanyName(), newSupplier.getUserName(), rePassword, newSupplier.getEmail());
-                        
+
+                        newSupplier = new SupplierEntity();
+                        newCustomer = new Customer();
+
                         hiYewSystemBean.deleteActivationCode(supplierCodeWord);
+
+                        FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("loginMessage", "Your account registration has been successful.");
+                        return "login?faces-redirect=true";
                     } else {
-                        FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("registerMessage", "The Supplier's codeword provided is invalid!");
+                        FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("registerMessage", "Your password and confirmation password do not match.");
                     }
+                } else {
+                    FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("registerMessage", "This username has been taken by someone else. Please choose a different username.");
                 }
-
-                FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("loginMessage", "Your account registration has been successful.");
-                return "login?faces-redirect=true";
             } else {
-                FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("registerMessage", "Your password and confirmation password do not match.");
-
+                FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("registerMessage", "The Supplier's code provided is invalid!");
             }
-        } else {
-            FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("registerMessage", "This username has been taken by someone else. Please choose a different username.");
-
         }
         return "";
     }
