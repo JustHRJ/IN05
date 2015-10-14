@@ -61,7 +61,7 @@
                     Approved Claims
                 </f:facet>
                 <p:ajax event="rowEdit" listener="#{employeeClaimBean.updateClaim}" />
-                <p:column selectionMode="single" style="width:16px;text-align:center"   disabledSelection="#{im.status eq 'approved'}" />
+                <p:column selectionMode="single" style="width:16px;text-align:center" disabledSelection="#{im.status eq 'pending'}" />
 
                 <p:column headerText="Employee">
                     <p:outputLabel value ="#{im.employee.employee_name}"/>
