@@ -2629,20 +2629,36 @@ public class HiYewSystemBean implements HiYewSystemBeanLocal {
         return newPassword;
 
     }
-    
-    
-    public String sendActivationCode(String email){
+
+    public String sendActivationCode(String email) {
         ActivationCode code = new ActivationCode();
         Calendar c = Calendar.getInstance();
         c.add(Calendar.DATE, 1);
-    
-        
+
         Timestamp time = new Timestamp(c.getTime().getTime());
         String pass = createRandomPass();
         code.setCode(pass);
         code.setExpiry(time);
         em.persist(code);
-        return pass;    
-        
+        return pass;
+
+    }
+
+    @Override
+    public boolean checkActivationCode(String code) {
+        boolean available = false;
+
+        Query q = em.createQuery("Select a from ActivationCode a where a.code = :code");
+        q.setParameter("code", code);
+        if (q.getResultList().size() >= 1) {
+            available = true;
+        }
+        return available;
+    }
+    
+    @Override
+    public void deleteActivationCode(String code){
+        Query q = em.createQuery("Delete a from ActivationCode a where a.code = :code");
+        q.executeUpdate();
     }
 }

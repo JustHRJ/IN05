@@ -15,15 +15,20 @@ import javax.faces.view.ViewScoped;
 import session.stateless.CustomerSessionBeanLocal;
 import session.stateless.SupplierSessionBeanLocal;
 import manager.EmailManager;
+import session.stateful.HiYewSystemBeanLocal;
 
 @Named(value = "loginManagedBean")
 @ViewScoped
 public class LoginManagedBean implements Serializable {
 
     @EJB
+    private HiYewSystemBeanLocal hiYewSystemBean;
+
+    @EJB
     private CustomerSessionBeanLocal customerSessionBean;
     @EJB
     private SupplierSessionBeanLocal supplierSessionBean;
+
     private List<String> users;
     private String user = "";
     private Customer customer;
@@ -163,6 +168,35 @@ public class LoginManagedBean implements Serializable {
         }
     }
 
+    public void createSupplierFromExistingCustomerAcct(String user) {
+        if (hiYewSystemBean.checkActivationCode(supplierCodeWord) == true) {
+            Customer c = customerSessionBean.getCustomerByUsername(user);
+            //map values from customer acct to supplier acct for same user
+            newSupplier.setAddress1(c.getAddress1());
+            newSupplier.setAddress2(c.getAddress2());
+            newSupplier.setCompanyName(c.getName());
+            newSupplier.setEmail(c.getEmail());
+            newSupplier.setPhone(c.getPhone());
+            newSupplier.setPostalCode(c.getPostalCode());
+            newSupplier.setPw(c.getPw());
+            newSupplier.setSubscribeEmail(c.getSubscribeEmail());
+            newSupplier.setUserName(c.getUserName());
+            newSupplier.setSecretQuestion(c.getSecretQuestion());
+            newSupplier.setSecretAnswer(c.getSecretAnswer());
+
+            supplierSessionBean.createSupplier(newSupplier);
+            newSupplier = new SupplierEntity();
+
+            EmailManager emailManager = new EmailManager();
+            emailManager.emailSuccessfulRegistration(newSupplier.getCompanyName(), newSupplier.getUserName(), newSupplier.getPw(), newSupplier.getEmail());
+            FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("popupMessage", "Supplier account has been created succesfully!");
+            
+            hiYewSystemBean.deleteActivationCode(supplierCodeWord);
+        }else{
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "The Supplier's codeword provided is invalid!", ""));
+        }
+    }
+
     public String createUser() {
         customer = customerSessionBean.getCustomerByUsername(newCustomer.getUserName());
         if (customer == null) {
@@ -174,35 +208,39 @@ public class LoginManagedBean implements Serializable {
                 if (user.equals("Customer")) {
                     customerSessionBean.createCustomer(newCustomer);
                     newCustomer = new Customer();
-                    
+
                     EmailManager emailManager = new EmailManager();
                     emailManager.emailSuccessfulRegistration(newCustomer.getName(), newCustomer.getUserName(), rePassword, newCustomer.getEmail());
-                
+
                 } else {
                     //create supplier
                     //validate if passcode is similar
-                    
-                    //map values from customer acct to supplier acct for same user
-                    newSupplier.setAddress1(newCustomer.getAddress1());
-                    newSupplier.setAddress2(newCustomer.getAddress2());
-                    newSupplier.setCompanyName(newCustomer.getName());
-                    newSupplier.setEmail(newCustomer.getEmail());
-                    newSupplier.setPhone(newCustomer.getPhone());
-                    newSupplier.setPostalCode(newCustomer.getPostalCode());
-                    newSupplier.setPw(newCustomer.getPw());
-                    newSupplier.setSubscribeEmail(newCustomer.getSubscribeEmail());
-                    newSupplier.setUserName(newCustomer.getUserName());
-                    newSupplier.setSecretQuestion(newCustomer.getSecretQuestion());
-                    newSupplier.setSecretAnswer(newCustomer.getSecretAnswer());
+                    if (hiYewSystemBean.checkActivationCode(supplierCodeWord) == true) {
+                        //map values from customer acct to supplier acct for same user
+                        newSupplier.setAddress1(newCustomer.getAddress1());
+                        newSupplier.setAddress2(newCustomer.getAddress2());
+                        newSupplier.setCompanyName(newCustomer.getName());
+                        newSupplier.setEmail(newCustomer.getEmail());
+                        newSupplier.setPhone(newCustomer.getPhone());
+                        newSupplier.setPostalCode(newCustomer.getPostalCode());
+                        newSupplier.setPw(newCustomer.getPw());
+                        newSupplier.setSubscribeEmail(newCustomer.getSubscribeEmail());
+                        newSupplier.setUserName(newCustomer.getUserName());
+                        newSupplier.setSecretQuestion(newCustomer.getSecretQuestion());
+                        newSupplier.setSecretAnswer(newCustomer.getSecretAnswer());
 
-                    supplierSessionBean.createSupplier(newSupplier);
-                    newSupplier = new SupplierEntity();
-                    newCustomer = new Customer();
-                    EmailManager emailManager = new EmailManager();
-                    emailManager.emailSuccessfulRegistration(newSupplier.getCompanyName(), newSupplier.getUserName(), rePassword, newSupplier.getEmail());
-                
+                        supplierSessionBean.createSupplier(newSupplier);
+                        newSupplier = new SupplierEntity();
+                        newCustomer = new Customer();
+                        EmailManager emailManager = new EmailManager();
+                        emailManager.emailSuccessfulRegistration(newSupplier.getCompanyName(), newSupplier.getUserName(), rePassword, newSupplier.getEmail());
+                        
+                        hiYewSystemBean.deleteActivationCode(supplierCodeWord);
+                    } else {
+                        FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("registerMessage", "The Supplier's codeword provided is invalid!");
+                    }
                 }
-                
+
                 FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("loginMessage", "Your account registration has been successful.");
                 return "login?faces-redirect=true";
             } else {
@@ -215,8 +253,8 @@ public class LoginManagedBean implements Serializable {
         }
         return "";
     }
-    
-    public void display(){
+
+    public void display() {
         visibility = user.equals("Supplier");
     }
 

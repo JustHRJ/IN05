@@ -225,4 +225,9 @@ public interface HiYewSystemBeanLocal {
 
     public String sendActivationCode(String email);
 
+    public boolean checkActivationCode(String code);
+
+    public void deleteActivationCode(String code);
+
+
 }

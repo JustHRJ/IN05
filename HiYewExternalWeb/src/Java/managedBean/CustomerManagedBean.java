@@ -37,6 +37,8 @@ public class CustomerManagedBean implements Serializable {
             System.out.println("CustomerManagedBean.java init() ===== Username is " + username);
         }
     }
+    
+    
 
     // update customer
     public void handleSave() throws IOException {
