@@ -5,6 +5,7 @@
  */
 package session.stateful;
 
+import entity.EmployeeClaimEntity;
 import entity.SupplierPurchaseOrder;
 import entity.EmployeeEntity;
 import entity.LeaveEntity;
@@ -88,7 +89,7 @@ public interface HiYewSystemBeanLocal {
 
     public List<PayrollEntity> payRecords();
 
-    public boolean createPayroll(String employeeName, int late, int sick);
+    public boolean createPayroll(String employeeName, int late, int sick, double overtime);
 
     public List<EmployeeEntity> expiredEmployees(String username);
 
@@ -158,7 +159,7 @@ public interface HiYewSystemBeanLocal {
 
     public boolean updateTraining(TrainingScheduleEntity training, Date start, Date end, int size);
 
-    public Vector resetPassword(String username);
+    public Vector resetPassword(String username, String secretQuestion, String secretAnswer);
 
     public List<LeaveEntity> employeeLeaveToday();
 
@@ -191,6 +192,35 @@ public interface HiYewSystemBeanLocal {
     public boolean updatePO(String termsOfPayment, SupplierPurchaseOrder supplierPurchaseOrder, String description, int quantity);
     
     public boolean updateSupPoStatus(String supPoStatus, List<SupplierPurchaseOrder> selectedList);
+    
     public void addNewAdmin(String employee, String employee_passNumber, String employee_address, int number_of_leave, String position, String username, Timestamp expiry, String contact, String addressPostal, String unit, String optional, double employeePay, Date employedDate, String email, String password);
+
+    public boolean applyClaim(String employeeName, EmployeeClaimEntity claim, String destination);
+
+    public void attachDocument(EmployeeClaimEntity claim, String destination);
+
+    public List<EmployeeClaimEntity> pendingClaimRecords();
+
+    public void approveClaim(EmployeeClaimEntity claim);
+
+    public List<EmployeeClaimEntity> approvedClaimRecords(String employeeName);
+
+    public List<EmployeeClaimEntity> approvedClaimRecordsA(String employeeName, String months);
+
+    public List<EmployeeClaimEntity> approvedClaimRecordsM(String months);
+
+    public void rejectClaim(EmployeeClaimEntity c);
+
+    public String getEmployeeEs(String username);
+
+    public List<TrainingScheduleEntity> trainingScheduleListAvailable();
+
+    public List<TrainingScheduleEntity> pastEmployeeTraining(EmployeeEntity employee);
+
+    public void removeClaim(EmployeeClaimEntity claim);
+
+    public String changePasswordF(String employeeName, String oldPass, String newPass, String secretQuestion, String secretAnswer);
+
+    public boolean updateClaim(EmployeeClaimEntity claim, double amount, Date date);
 
 }

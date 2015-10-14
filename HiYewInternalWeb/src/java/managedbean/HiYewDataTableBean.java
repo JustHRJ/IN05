@@ -81,7 +81,7 @@ public class HiYewDataTableBean {
     }
 
     public List<TrainingScheduleEntity> getTrainingSchedule() {
-        return hiYewSystemBean.trainingSchedueList();
+        return hiYewSystemBean.trainingScheduleListAvailable();
     }
     
     public List<SupplierPurchaseOrder> getPurcOrders() {

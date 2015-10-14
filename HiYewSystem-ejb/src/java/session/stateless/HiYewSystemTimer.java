@@ -5,6 +5,7 @@
  */
 package session.stateless;
 
+import entity.EmployeeClaimEntity;
 import entity.EmployeeEntity;
 import entity.LeaveEntity;
 import entity.PayrollEntity;
@@ -49,7 +50,9 @@ public class HiYewSystemTimer {
             if (!(e.getAccount_status().equals("disabled"))) {
                 PayrollEntity p = new PayrollEntity();
                 Calendar c = Calendar.getInstance();
-                c.add(Calendar.DATE, -1);
+                c.add(Calendar.MONTH, -1);
+                int numberOfDays = c.getActualMaximum(Calendar.DAY_OF_MONTH);
+                c.set(Calendar.DATE, numberOfDays);
                 SimpleDateFormat format = new SimpleDateFormat("MMM,yyyy");
                 p.setStatus("unset");
                 p.setMonth(format.format(c.getTime()));
@@ -57,6 +60,7 @@ public class HiYewSystemTimer {
 
                 Calendar cd = Calendar.getInstance();
                 cd.add(Calendar.MONTH, -1);
+                cd.set(Calendar.DATE, 1);
                 Timestamp time = new Timestamp(cd.getTime().getTime());
                 Timestamp time1 = e.getEmployee_employedDate();
                 if (time1.after(time)) {
@@ -64,6 +68,8 @@ public class HiYewSystemTimer {
                 } else {
                     salary = calculateSalaryFull(e);
                 }
+                double taxiClaim = calculateTaxiClaim(e, c);
+                p.setTaxiClaim(taxiClaim);
                 p.setSalary(salary);
                 em.persist(p);
                 e.getPayRecords().add(p);
@@ -81,27 +87,29 @@ public class HiYewSystemTimer {
     private double calculateSalary(EmployeeEntity e, Timestamp currentDate, Timestamp employedDate) {
         double currentSalary = e.getEmployee_basic();
         Calendar c = Calendar.getInstance();
-        c.add(Calendar.DATE, -1);
+        c.add(Calendar.MONTH, -1);
         c.set(Calendar.MILLISECOND, 0);
         c.set(Calendar.SECOND, 0);
         c.set(Calendar.MINUTE, 0);
-        c.set(Calendar.HOUR, 0);
-
+        c.set(Calendar.HOUR_OF_DAY, 0);
+        int numberOfDays = c.getActualMaximum(Calendar.DAY_OF_MONTH);
+        c.set(Calendar.DATE, numberOfDays);
         Calendar d = Calendar.getInstance();
         d.setTime(c.getTime());
         d.add(Calendar.MONTH, -1);
         d.set(Calendar.MILLISECOND, 0);
         d.set(Calendar.SECOND, 0);
         d.set(Calendar.MINUTE, 0);
-        d.set(Calendar.HOUR, 0);
+        d.set(Calendar.HOUR_OF_DAY, 0);
+        d.set(Calendar.DATE, 1);
 
         System.out.println(c.getTime().getTime());
         System.out.println(employedDate.getTime());
-      int diffInDays = (int) ((c.getTime().getTime() - employedDate.getTime())
+        int diffInDays = (int) ((c.getTime().getTime() - employedDate.getTime())
                 / (1000 * 60 * 60 * 24));
 
-               System.out.println(diffInDays + "here");
-        
+        System.out.println(diffInDays + "here");
+
         if (diffInDays > 0) {
             diffInDays += 1;
         } else {
@@ -116,7 +124,6 @@ public class HiYewSystemTimer {
             }
         }
         System.out.println("diff in Days " + diffInDays);
-        int numberOfDays = c.getActualMaximum(Calendar.DAY_OF_MONTH);
 
         Collection<LeaveEntity> leaveRecords = e.getLeaveRecords();
 
@@ -177,11 +184,11 @@ public class HiYewSystemTimer {
     private double calculateSalaryFull(EmployeeEntity e) {
         double currentSalary = e.getEmployee_basic();
         Calendar c = Calendar.getInstance();
-        c.add(Calendar.DATE, -1);
+        c.add(Calendar.MONTH, -1);
         c.set(Calendar.MILLISECOND, 0);
         c.set(Calendar.SECOND, 0);
         c.set(Calendar.MINUTE, 0);
-        c.set(Calendar.HOUR, 0);
+        c.set(Calendar.HOUR_OF_DAY, 0);
 
         Calendar d = Calendar.getInstance();
         d.setTime(c.getTime());
@@ -189,7 +196,7 @@ public class HiYewSystemTimer {
         d.set(Calendar.MILLISECOND, 0);
         d.set(Calendar.SECOND, 0);
         d.set(Calendar.MINUTE, 0);
-        d.set(Calendar.HOUR, 0);
+        d.set(Calendar.HOUR_OF_DAY, 0);
 
         System.out.println(c.getTime());
         System.out.println(d.getTime());
@@ -198,7 +205,8 @@ public class HiYewSystemTimer {
         int numberOfDays = c.getActualMaximum(Calendar.DAY_OF_MONTH);
         int diffInDays = numberOfDays;
         Collection<LeaveEntity> leaveRecords = e.getLeaveRecords();
-
+        c.set(Calendar.DATE, numberOfDays);
+        d.set(Calendar.DATE, 1);
         for (Object o : leaveRecords) {
             LeaveEntity l = (LeaveEntity) o;
             if (l.getStatus().equals("approved") && l.getType().equals("unpaid")) {
@@ -261,5 +269,25 @@ public class HiYewSystemTimer {
                 / (1000 * 60 * 60 * 24));
         System.out.println(diffInDays);
         return diffInDays + 1;
+    }
+
+    private double calculateTaxiClaim(EmployeeEntity e, Calendar c) {
+        SimpleDateFormat format = new SimpleDateFormat("MMM");
+        c.add(Calendar.MONTH, 1);
+        String payMonth = format.format(c.getTime());
+        double total = 0.00;
+
+        for (Object o : e.getEmployeeClaims()) {
+            EmployeeClaimEntity ec = (EmployeeClaimEntity) o;
+            if (ec.getApprovedDate() == null) {
+
+            } else {
+                String claimMonth = format.format(new Date(ec.getApprovedDate().getTime()));
+                if (claimMonth.equals(payMonth) && ec.getStatus().equals("approved")) {
+                    total += ec.getClaimAmt();
+                }
+            }
+        }
+        return total;
     }
 }

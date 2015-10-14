@@ -156,6 +156,18 @@ public class loginControlBean implements Serializable {
         }
     }
 
+    public void checkLoginRedirectE() throws IOException {
+        if (logined) {
+            if (loginPosition.equals("admin")) {
+
+            } else {
+                FacesContext.getCurrentInstance().getExternalContext().redirect("/HiYewInternalWeb/index.xhtml");
+            }
+        } else {
+            FacesContext.getCurrentInstance().getExternalContext().redirect("/HiYewInternalWeb/login.xhtml");
+        }
+    }
+
     public String getEmployeeNameLog() {
         if (username == "") {
             return "";
@@ -175,6 +187,10 @@ public class loginControlBean implements Serializable {
 
     public boolean checkValid() {
         return !loginPosition.equals("admin");
+    }
+
+    public boolean checkValid1() {    
+        return loginPosition.equals("admin");
     }
 
     public String logged() {
@@ -203,9 +219,13 @@ public class loginControlBean implements Serializable {
             FacesMessage msg = new FacesMessage("Failed to login", "Account has been locked");
             FacesContext.getCurrentInstance().addMessage(null, msg);
 
-        } else if (result.equals("firstTime")) {
+        } else if (result.equals("reset")) {
             password = "";
             FacesContext.getCurrentInstance().getExternalContext().redirect("/HiYewInternalWeb/changePassword.xhtml");
+
+        } else if (result.equals("firstTime")) {
+            password = "";
+            FacesContext.getCurrentInstance().getExternalContext().redirect("/HiYewInternalWeb/firstChangePassword.xhtml");
 
         } else if (result.equals("fail")) {
             FacesMessage msg = new FacesMessage("Failed to login", "Wrong username or password");
@@ -218,8 +238,9 @@ public class loginControlBean implements Serializable {
         }
     }
 
-    public List<String> getEmployeeNameP() {
-        return hiYewSystemBean.getEmployeeE(username);
+    public String getEmployeeNameP() {
+        FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("employeeNameP", hiYewSystemBean.getEmployeeEs(username));
+        return hiYewSystemBean.getEmployeeEs(username);
     }
 
     /**

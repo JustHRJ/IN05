@@ -39,6 +39,7 @@ import session.stateless.HiYewSystemTimer;
 @ManagedBean
 @RequestScoped
 public class HiYewManagedBean {
+
     @EJB
     private HiYewSystemTimer hiYewSystemTimer;
 
@@ -61,6 +62,8 @@ public class HiYewManagedBean {
     private String employeeContact = "";
     private String leaveRemarks = "";
     private String fireOrDisabled;
+    private String machineType;
+    private double overtime = 0.00;
     private String machine_status = "";
     private String username = "";
     private String password = "";
@@ -70,6 +73,8 @@ public class HiYewManagedBean {
     private String machineId = "";
     private String machineDescript = "";
     private Date machineNxtMaint = null;
+    private String secretQuestion = "";
+    private String secretAnswer = "";
     private int machineSubMaint = 0;
     private Date startDate = null;
     private Date employedDate = null;
@@ -91,7 +96,7 @@ public class HiYewManagedBean {
     private String trainingName = "";
     private String trainingCode = "";
     private String leaveType = "";
-
+    private EmployeeEntity selectedEmployeeTraining;
     private String supPONo = "";
     private Date date;
     private String termsOfPayment; //30, 60, 90 days
@@ -127,6 +132,14 @@ public class HiYewManagedBean {
         }
     }
 
+    public List<TrainingScheduleEntity> getEmployeePastTraining() {
+        if (selectedEmployeeTraining != null) {
+            return hiYewSystemBean.pastEmployeeTraining(selectedEmployeeTraining);
+        } else {
+            return null;
+        }
+    }
+
     public void sendPO() {
         boolean check = hiYewSystemBean.updateSupPoStatus("Sent", selectedList);
         if (check) {
@@ -146,6 +159,13 @@ public class HiYewManagedBean {
 
     public String addMachine() {
         Timestamp machineTime = new Timestamp(machineNxtMaint.getTime());
+        if (machineType.equals("A")) {
+            machineSubMaint = 2;
+        } else if (machineType.equals("B")) {
+            machineSubMaint = 4;
+        } else {
+            machineSubMaint = 6;
+        }
         boolean check = hiYewSystemBean.addMachine(machineName, machineId, machineTime, machineDescript, machineSubMaint);
         if (check) {
             return "viewMachine";
@@ -255,8 +275,8 @@ public class HiYewManagedBean {
         }
     }
 
-    public double calculateTotal(double basic, double bonus, double others) {
-        return basic + bonus + others;
+    public double calculateTotal(double overtime, double basic, double bonus, double others, double taxi) {
+        return basic + bonus + others + taxi + overtime;
     }
 
     public void updatePay(RowEditEvent event) {
@@ -323,7 +343,7 @@ public class HiYewManagedBean {
     }
 
     public void createPayroll() {
-        boolean check = hiYewSystemBean.createPayroll(employeeName, lateArrival, absentee);
+        boolean check = hiYewSystemBean.createPayroll(employeeName, lateArrival, absentee, overtime);
         if (check) {
             FacesMessage msg = new FacesMessage("Payroll created", null);
             FacesContext.getCurrentInstance().addMessage(null, msg);
@@ -339,8 +359,6 @@ public class HiYewManagedBean {
         SimpleDateFormat format = new SimpleDateFormat("MMM,yyyy");
         return format.format(c.getTime());
     }
-
-   
 
     public void addEmployee() throws IOException {
         Timestamp expiry = null;
@@ -366,11 +384,12 @@ public class HiYewManagedBean {
     }
 
     public void resetPassword() throws IOException, InterruptedException {
-        Vector result = hiYewSystemBean.resetPassword(username);
+        Vector result = hiYewSystemBean.resetPassword(username, secretQuestion, secretAnswer);
         if (result == null || result.size() == 0) {
             FacesMessage msg = new FacesMessage("Failed to Reset Password", "Account is disabled");
             FacesContext.getCurrentInstance().addMessage(null, msg);
         } else {
+            FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("loginMessage", "Password has been reset. Check Email");
             EmailManager emailManager = new EmailManager();
             emailManager.emailPassword(result.get(0).toString(), result.get(1).toString(), result.get(2).toString(), result.get(3).toString());
             FacesContext facesCtx = FacesContext.getCurrentInstance();
@@ -413,12 +432,9 @@ public class HiYewManagedBean {
         return machineMaintainenceIDList;
     }
 
-
-
     public void rejectLeave() {
         hiYewSystemBean.rejectLeaveID((Long.valueOf(objectId1).longValue()), objectId);
     }
-
 
     public List<LeaveEntity> getLeaveE() {
         return hiYewSystemBean.viewEmployeeLeavePending(employeeName);
@@ -1340,7 +1356,7 @@ public class HiYewManagedBean {
      */
     public String getMonth() {
         Calendar c = Calendar.getInstance();
-        c.add(Calendar.DATE, -1);
+        c.add(Calendar.MONTH, -1);
         SimpleDateFormat format = new SimpleDateFormat("MMM,yyyy");
         return format.format(c.getTime());
     }
@@ -1350,9 +1366,6 @@ public class HiYewManagedBean {
         Thread.sleep(6000);
         FacesContext.getCurrentInstance().getExternalContext().redirect("/HiYewInternalWeb/HRMS/createPayroll.xhtml");
     }
-
-
-  
 
     public void addNewAdmin() throws IOException {
         Calendar c = Calendar.getInstance();
@@ -1365,7 +1378,7 @@ public class HiYewManagedBean {
     }
 
     public void changePassword() throws IOException {
-        System.out.println(employeeName);
+        employeeName = FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("employeeNameP").toString();
         String check = hiYewSystemBean.changePassword(employeeName, oldPassword, password);
         if ("changed".equals(check)) {
             FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("loginMessage", "Password has been Changed.");
@@ -1378,11 +1391,19 @@ public class HiYewManagedBean {
         }
     }
 
-
-
-
-
-
+    public void changePasswordF() throws IOException {
+        employeeName = FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("employeeNameP").toString();
+        String check = hiYewSystemBean.changePasswordF(employeeName, oldPassword, password, getSecretQuestion(), getSecretAnswer());
+        if ("changed".equals(check)) {
+            FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("loginMessage", "Password has been Changed.");
+            FacesContext facesCtx = FacesContext.getCurrentInstance();
+            ExternalContext externalContext = facesCtx.getExternalContext();
+            externalContext.redirect("/HiYewInternalWeb/login.xhtml");
+        } else {
+            FacesMessage msg = new FacesMessage("Failed to change", check);
+            FacesContext.getCurrentInstance().addMessage(null, msg);
+        }
+    }
 
     public void approveLeave() {
         System.out.println(objectId1);
@@ -1390,8 +1411,6 @@ public class HiYewManagedBean {
         hiYewSystemBean.approveLeaveID((Long.valueOf(objectId1).longValue()), objectId);
 
     }
-
-
 
     public void approveLeaveEs() {
         boolean check = hiYewSystemBean.approveByEmployee(employeeName);
@@ -1402,6 +1421,76 @@ public class HiYewManagedBean {
             FacesMessage msg = new FacesMessage("Not Enough Leave to approve all.");
             FacesContext.getCurrentInstance().addMessage(null, msg);
         }
+    }
+
+    /**
+     * @return the overtime
+     */
+    public double getOvertime() {
+        return overtime;
+    }
+
+    /**
+     * @param overtime the overtime to set
+     */
+    public void setOvertime(double overtime) {
+        this.overtime = overtime;
+    }
+
+    /**
+     * @return the machineType
+     */
+    public String getMachineType() {
+        return machineType;
+    }
+
+    /**
+     * @param machineType the machineType to set
+     */
+    public void setMachineType(String machineType) {
+        this.machineType = machineType;
+    }
+
+    /**
+     * @return the selectedEmployeeTraining
+     */
+    public EmployeeEntity getSelectedEmployeeTraining() {
+        return selectedEmployeeTraining;
+    }
+
+    /**
+     * @param selectedEmployeeTraining the selectedEmployeeTraining to set
+     */
+    public void setSelectedEmployeeTraining(EmployeeEntity selectedEmployeeTraining) {
+        this.selectedEmployeeTraining = selectedEmployeeTraining;
+    }
+
+    /**
+     * @return the secretQuestion
+     */
+    public String getSecretQuestion() {
+        return secretQuestion;
+    }
+
+    /**
+     * @param secretQuestion the secretQuestion to set
+     */
+    public void setSecretQuestion(String secretQuestion) {
+        this.secretQuestion = secretQuestion;
+    }
+
+    /**
+     * @return the secretAnswer
+     */
+    public String getSecretAnswer() {
+        return secretAnswer;
+    }
+
+    /**
+     * @param secretAnswer the secretAnswer to set
+     */
+    public void setSecretAnswer(String secretAnswer) {
+        this.secretAnswer = secretAnswer;
     }
 
 }

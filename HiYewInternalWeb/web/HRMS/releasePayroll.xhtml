@@ -16,7 +16,7 @@
     </h:head>
     <h:body>
         <a href ="/HiYewInternalWeb/index.xhtml"><img src = "../image/hiyew.gif" /></a>  <h1>Edit and Release Payroll</h1>
-        #{loginControlBean.checkLoginRedirect()}
+        #{loginControlBean.checkLoginRedirectE()}
         <h3>logged in as: #{loginControlBean.employeeNameLog} </h3>
 
         <p:megaMenu orientation="horizontal"  styleClass="menu">
@@ -105,7 +105,7 @@
                 <p:column headerText="Pay Month">
                     <p:outputLabel value ="#{im.month}"/>
                 </p:column>
-                <p:column headerText="Basic Salary">
+                <p:column headerText="Basic Salary Claimable">
                     <p:outputLabel value ="#{hiYewManagedBean.formatCurrency(im.salary)}"/>
                 </p:column>
                 <p:column headerText="Bonus">
@@ -117,6 +117,12 @@
                         </f:facet>
                     </p:cellEditor>
                 </p:column>
+                <p:column headerText="taxi claim">
+                    <p:outputLabel value ="#{hiYewManagedBean.formatCurrency(im.taxiClaim)}"/>
+                </p:column>
+                <p:column headerText="overTime Pay">
+                    <p:outputLabel value ="#{hiYewManagedBean.formatCurrency(im.overtime)}"/>
+                </p:column>
                 <p:column headerText="Other Amounts">
                     <p:cellEditor>
                         <f:facet name="output"><p:outputLabel value ="#{hiYewManagedBean.formatCurrency(im.otherAmount)}"/></f:facet>
@@ -124,7 +130,7 @@
                     </p:cellEditor>
                 </p:column>
                 <p:column headerText="Total Salary">
-                    <p:outputLabel value ="#{hiYewManagedBean.formatCurrency(hiYewManagedBean.calculateTotal(im.salary, im.bonus,im.otherAmount))}"/>
+                    <p:outputLabel value ="#{hiYewManagedBean.formatCurrency(hiYewManagedBean.calculateTotal(im.overtime,im.salary, im.bonus,im.otherAmount, im.taxiClaim))}"/>
                 </p:column>
                 <p:column headerText="Pay status">
                     <p:outputLabel value ="#{im.status}"/>

@@ -5,21 +5,13 @@
       xmlns:p="http://primefaces.org/ui"
       xmlns:f="http://xmlns.jcp.org/jsf/core">
     <h:head>
-        <title>Human Resource Management System</title>
-        <style>
-            .menu{
-                margin-top:20px;
-                margin-bottom:30px;
-                background-color: lightblue;
-            }
-        </style>
+        <title>Facelet Title</title>
     </h:head>
     <h:body>
-        <h:form id ="formMain">
-            <a href ="/HiYewInternalWeb/index.xhtml"><img src = "../image/hiyew.gif"/> </a>     <h1>Assigning of Payroll</h1>
-            #{loginControlBean.checkLoginRedirectE()}
+        <h:form  enctype="multipart/form-data">
+            #{loginControlBean.checkLoginRedirect()}
+            <a href ="/HiYewInternalWeb/index.xhtml"><img src = "../image/hiyew.gif" /></a>       <h1>Apply Claims</h1>
             <h3>logged in as: #{loginControlBean.employeeNameLog} </h3>
-
             <p:megaMenu orientation="horizontal"  styleClass="menu">
                 <p:submenu label ="Human Resource Management System" icon ="ui-icon-check" style ="font-weight: bold">
                     <p:column>
@@ -92,72 +84,40 @@
                     </p:column>
                 </p:submenu>
             </p:megaMenu>
-            <br/>
-            <p:commandButton value ="Create month payment" action="#{hiYewManagedBean.addPay()}"/>
-
-            <br/><br/>
-            <p:growl id ="msgs" showDetail="true"/>
-            <h:selectOneMenu value="#{hiYewManagedBean.employeeName}" style="width:20%">
-                <f:selectItems value="#{loginControlBean.validateLeaveName()}"  />
-            </h:selectOneMenu> 
-            <p:commandButton id="btn" value="Create Payroll" type="button" update = "table"  />
-            <p:overlayPanel id="moviePanel" for="btn" hideEffect="fade" dynamic="true" >
+            <p:panel>
                 <p:panelGrid>
                     <p:row>
                         <p:column>
-                            <p:outputLabel value = "Number of Late Arrival" />
-                        </p:column>
-                        <p:column>
-                            <p:inputText value = "#{hiYewManagedBean.lateArrival}" maxlength="2" validatorMessage="Please input range of 0 - 31">
-                                <f:validateDoubleRange minimum="0" maximum="31"/>
-                            </p:inputText>
-
+                            <p:selectOneMenu value ="#{employeeClaimBean.employee.employee_name}" style="width: 100%">
+                                <f:selectItems value ="#{hiYewDataTableBean.employeeNames}"/>
+                            </p:selectOneMenu>
                         </p:column>
                     </p:row>
                     <p:row>
                         <p:column>
-                            <p:outputLabel value ="Number of Absentee from Work" /> 
-                        </p:column>
-                        <p:column>
-                            <p:inputText value ="#{hiYewManagedBean.absentee}" validatorMessage="Please input ramge from 0 - 31" >
-                                <f:validateDoubleRange minimum="0" maximum="31"/>
-                            </p:inputText>
+                            <p:selectOneMenu value ="#{employeeClaimBean.employeeClaim.type}" style="width: 100%" >
+                                <f:selectItem itemValue ="taxi" itemLabel ="taxi"/>
+                            </p:selectOneMenu>
                         </p:column>
                     </p:row>
                     <p:row>
                         <p:column>
-                            <p:outputLabel value ="Hours overTime"/>
-                        </p:column>
-                        <p:column>
-                            <p:inputText value ="#{hiYewManagedBean.overtime}" />
+                            <p:inputText value ="#{employeeClaimBean.employeeClaim.amount}"/>
                         </p:column>
                     </p:row>
-                    <p:commandButton value ="Submit" action ="#{hiYewManagedBean.createPayroll()}" update = ":formMain:msgs table" />               
+                    <p:row>
+                        <p:column>
+                            <p:calendar value ="#{employeeClaimBean.claimTime}" pattern = "dd/MM/yyyy"/>
+                        </p:column>
+                    </p:row>
                 </p:panelGrid>
-            </p:overlayPanel>
-            <br/>
-            <br/>
 
-            <p:dataTable id ="table" var ="im" value ="#{hiYewDataTableBean.payRecords}"  paginator="true" rows="5" emptyMessage="No outstanding pay">
-                <f:facet name="header">
-                    Billable Employees For the Month of #{hiYewManagedBean.getMonth()} 
-                </f:facet>
-                <p:column headerText ="Employee Name" filterBy="#{im.employee.employee_name}" sortBy="#{im.employee.employee_name}">
-                    <h:outputText value ="#{im.employee.employee_name}" />
-                </p:column>
-                <p:column headerText="Basic Salary">
-                    <h:outputText value ="#{hiYewManagedBean.formatCurrency(im.salary)}" />
-                </p:column>
-                <p:column headerText = "Bonus">
-                    <h:outputText value ="unconfirm" />
-                </p:column>
-                <p:column headerText="Taxi Claims">
-                    <p:outputLabel value ="#{hiYewManagedBean.formatCurrency(im.taxiClaim)}"/>
-                </p:column>
-                <p:column headerText="Total Salary">
-                    <h:outputText value ="unconfirm"/>
-                </p:column>
-            </p:dataTable>
+                <p:fileUpload fileUploadListener="#{employeeClaimBean.upload}" />
+
+
+                <p:commandButton value ="Apply Claim" action ="#{employeeClaimBean.applyForClaim()}"/>
+            </p:panel>
         </h:form>
     </h:body>
 </html>
+

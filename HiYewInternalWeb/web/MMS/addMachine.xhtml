@@ -135,9 +135,12 @@
                             <p:outputLabel for ="machine_subMaint" style ="font-weight: bold" value ="Set Periodic Maintainence Schedule (in Months):  "/>
                         </p:column>
                         <p:column>
-                            <p:inputText label ="Machine_SubMaint" id ="machine_subMaint" value ="#{hiYewManagedBean.machineSubMaint}" required = "true" validatorMessage="Please enter more than 1 month of next subsequent maintainence date"> 
-                                <f:validateDoubleRange minimum="1" />
-                            </p:inputText>
+                            <p:selectOneMenu id = "machine_subMaint" value ="#{hiYewManagedBean.machineType}" required="true" requiredMessage="Please Select Machine Type">
+                                <f:selectItem itemLabel ="Select One" itemValue ="" noSelectionOption="true"/>
+                                <f:selectItem itemLabel ="A" itemValue ="A"/>
+                                <f:selectItem itemLabel ="B" itemValue ="B"/>
+                                <f:selectItem itemLabel ="C" itemValue ="C"/>
+                            </p:selectOneMenu>
                         </p:column>
 
                     </p:row>
