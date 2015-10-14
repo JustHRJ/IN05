@@ -5,6 +5,7 @@
  */
 package session.stateful;
 
+import entity.ActivationCode;
 import entity.EmployeeClaimEntity;
 import entity.SupplierPurchaseOrder;
 import javax.ejb.Stateful;
@@ -2627,5 +2628,21 @@ public class HiYewSystemBean implements HiYewSystemBeanLocal {
         System.out.println(newPassword);
         return newPassword;
 
+    }
+    
+    
+    public String sendActivationCode(String email){
+        ActivationCode code = new ActivationCode();
+        Calendar c = Calendar.getInstance();
+        c.add(Calendar.DATE, 1);
+    
+        
+        Timestamp time = new Timestamp(c.getTime().getTime());
+        String pass = createRandomPass();
+        code.setCode(pass);
+        code.setExpiry(time);
+        em.persist(code);
+        return pass;    
+        
     }
 }

@@ -5,6 +5,7 @@
  */
 package session.stateless;
 
+import entity.ActivationCode;
 import entity.EmployeeClaimEntity;
 import entity.EmployeeEntity;
 import entity.LeaveEntity;
@@ -82,6 +83,21 @@ public class HiYewSystemTimer {
     public void runEveryMinute() {
         log.log(Level.INFO,
                 "running every minute .. now it's: " + new Date().toString());
+    }
+
+    @Schedule(hour = "*")
+    public void runEveryHour() {
+        Query q = em.createQuery("Select c ActivationCode c");
+        Calendar c = Calendar.getInstance();
+        Timestamp time = new Timestamp(c.getTime().getTime());
+        for (Object o : q.getResultList()) {
+            ActivationCode code = (ActivationCode) o;
+            if (code.getExpiry().before(time)) {
+                em.remove(code);
+            }
+        }
+          log.log(Level.INFO,
+                "running every hour.. now it's: " + new Date().toString());
     }
 
     private double calculateSalary(EmployeeEntity e, Timestamp currentDate, Timestamp employedDate) {
