@@ -45,6 +45,8 @@ public class CustomerPOManagedBean implements Serializable {
     private String expectedEnd = "";
     private String totalPrice = "";
 
+    private String metalName = "";
+    private String weldingType = "";
     private String descriptions;
     private Double total = 0.0;
     private Timestamp expectedStartDate;
@@ -119,7 +121,9 @@ public class CustomerPOManagedBean implements Serializable {
         expectedEnd = formatDate(thirtyDaysLater);
 
         for (QuotationDescription qd : q.getQuotationDescriptions()) {
-            descriptions += qd.getQuotationDescNo().toString() + ". " + qd.getItemDesc() + " - SGD "
+            descriptions += qd.getQuotationDescNo().toString() + ". " + qd.getMetalName() + "\r\n   " 
+                    + "Welding Type: " + qd.getWeldingType() + "\r\n   " +
+                    "Instn: " + qd.getItemDesc() + "\r\n   "  + "Price: SGD "
                     + String.format("%.2f", qd.getPrice()) + "\r\n";
             //compute total price
             total += qd.getPrice();
@@ -345,6 +349,34 @@ public class CustomerPOManagedBean implements Serializable {
      */
     public void setReceivedCustomerPO(ArrayList<CustomerPO> receivedCustomerPO) {
         this.receivedCustomerPO = receivedCustomerPO;
+    }
+
+    /**
+     * @return the metalName
+     */
+    public String getMetalName() {
+        return metalName;
+    }
+
+    /**
+     * @param metalName the metalName to set
+     */
+    public void setMetalName(String metalName) {
+        this.metalName = metalName;
+    }
+
+    /**
+     * @return the weldingType
+     */
+    public String getWeldingType() {
+        return weldingType;
+    }
+
+    /**
+     * @param weldingType the weldingType to set
+     */
+    public void setWeldingType(String weldingType) {
+        this.weldingType = weldingType;
     }
 
 }

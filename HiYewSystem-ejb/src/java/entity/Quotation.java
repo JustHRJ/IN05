@@ -19,10 +19,13 @@ public class Quotation implements Serializable {
     private Timestamp date;
     private String termsOfPayment = "30"; //30, 60, 90 days
     private String status; //Processed, Pending, Accepted, Rejected
-    //private QuotationDescription quotationDescription;
+    
+    
+    
 
     @OneToMany(mappedBy = "quotation")
     private List<QuotationDescription> quotationDescriptions = new ArrayList<>();
+    
     @ManyToOne
     private Customer customer = new Customer();
 

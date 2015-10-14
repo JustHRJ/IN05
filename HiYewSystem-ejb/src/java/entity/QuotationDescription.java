@@ -1,10 +1,13 @@
 package entity;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.IdClass;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 
 @IdClass(CompositeQuotationDescKey.class)
 @Entity
@@ -18,6 +21,9 @@ public class QuotationDescription implements Serializable {
     private Integer qty;
     private Double price;
     private String requestForMetalSample;
+    private String weldingType;
+    private String metalName;
+    
 
     @ManyToOne
     private Quotation quotation;
@@ -28,13 +34,15 @@ public class QuotationDescription implements Serializable {
         //requestForMetalSample = "No";
     }
 
-    public QuotationDescription(Integer quotationDescNo, String jobDesc, Integer qty, Double price, Quotation quotation, String requestForMetalSample) {
+    public QuotationDescription(Integer quotationDescNo, String jobDesc, Integer qty, Double price, Quotation quotation, String requestForMetalSample, String weldingType, String metalName) {
         this.quotationDescNo = quotationDescNo;
         this.itemDesc = jobDesc;
         this.qty = qty;
         this.price = price;
         this.quotation = quotation;
         this.requestForMetalSample = requestForMetalSample;
+        this.weldingType = weldingType;
+        this.metalName = metalName;
     }
 
     /**
@@ -158,6 +166,34 @@ public class QuotationDescription implements Serializable {
      */
     public void setRequestForMetalSample(String requestForMetalSample) {
         this.requestForMetalSample = requestForMetalSample;
+    }
+
+    /**
+     * @return the weldingType
+     */
+    public String getWeldingType() {
+        return weldingType;
+    }
+
+    /**
+     * @param weldingType the weldingType to set
+     */
+    public void setWeldingType(String weldingType) {
+        this.weldingType = weldingType;
+    }
+
+    /**
+     * @return the metalName
+     */
+    public String getMetalName() {
+        return metalName;
+    }
+
+    /**
+     * @param metalName the metalName to set
+     */
+    public void setMetalName(String metalName) {
+        this.metalName = metalName;
     }
 
 }
