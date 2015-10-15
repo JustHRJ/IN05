@@ -13,6 +13,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import entity.MachineEntity;
 import entity.EmployeeEntity;
+import entity.FillerEntity;
 import entity.LeaveEntity;
 import entity.MachineMaintainenceEntity;
 import entity.PayrollEntity;
@@ -2629,20 +2630,72 @@ public class HiYewSystemBean implements HiYewSystemBeanLocal {
         return newPassword;
 
     }
-    
-    
-    public String sendActivationCode(String email){
+
+    public String sendActivationCode(String email) {
         ActivationCode code = new ActivationCode();
         Calendar c = Calendar.getInstance();
         c.add(Calendar.DATE, 1);
-    
-        
+
         Timestamp time = new Timestamp(c.getTime().getTime());
         String pass = createRandomPass();
         code.setCode(pass);
         code.setExpiry(time);
         em.persist(code);
-        return pass;    
-        
+        return pass;
+
+    }
+
+    public void addFillers(List<Vector> fillers) {
+        Query q = em.createQuery("select c from FillerEntity c");
+        for (Object o : q.getResultList()) {
+            FillerEntity f = (FillerEntity) o;
+            em.remove(f);
+        }
+
+        for (Object o : fillers) {
+            Vector im = (Vector) o;
+            FillerEntity f = new FillerEntity();
+            f.setAlluminium(Integer.parseInt(im.get(0).toString()));
+            f.setBronze(Integer.parseInt(im.get(1).toString()));
+            f.setCopper(Integer.parseInt(im.get(2).toString()));
+            f.setGold(Integer.parseInt(im.get(3).toString()));
+            f.setIron(Integer.parseInt(im.get(4).toString()));
+            f.setPlastic(Integer.parseInt(im.get(5).toString()));
+            f.setSilver(Integer.parseInt(im.get(6).toString()));
+            f.setTitanium(Integer.parseInt(im.get(7).toString()));
+            f.setPlatinium(Integer.parseInt(im.get(8).toString()));
+            f.setTopaz(Integer.parseInt(im.get(9).toString()));
+            em.persist(f);
+        }
+        System.out.println("ompleted");
+    }
+
+    public List<Vector> transferFillerInfo() {
+        List<Vector> results = new ArrayList<Vector>();
+        Query q = em.createQuery("select c from FillerEntity c");
+        System.out.println("shit");
+        for (Object o : q.getResultList()) {
+            FillerEntity f = (FillerEntity) o;
+            Vector im = new Vector();
+            im.add(f.getAlluminium());
+            im.add(f.getBronze());
+            im.add(f.getCopper());
+            im.add(f.getIron());
+            im.add(f.getPlastic());
+            im.add(f.getTitanium());
+            im.add(f.getPlatinium());
+            im.add(f.getSilver());
+            im.add(f.getTopaz());
+            im.add(f.getGold());
+
+            results.add(im);
+        }
+        if(results.isEmpty()){
+            System.out.println("here");
+            return null;
+        }
+        System.out.println("collected");
+        System.out.println(results.size());
+        return results;
     }
 }

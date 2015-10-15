@@ -225,4 +225,8 @@ public interface HiYewSystemBeanLocal {
 
     public String sendActivationCode(String email);
 
+    public void addFillers(List<Vector> fillers);
+
+    public List<Vector> transferFillerInfo();
+
 }

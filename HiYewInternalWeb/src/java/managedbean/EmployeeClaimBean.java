@@ -27,30 +27,6 @@ import org.primefaces.event.RowEditEvent;
 import org.primefaces.model.UploadedFile;
 import session.stateful.HiYewSystemBeanLocal;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.Locale;
-
-import jxl.CellView;
-import jxl.Workbook;
-import jxl.WorkbookSettings;
-import jxl.format.UnderlineStyle;
-import jxl.write.Formula;
-import jxl.write.Label;
-import jxl.write.Number;
-import jxl.write.WritableCellFormat;
-import jxl.write.WritableFont;
-import jxl.write.WritableSheet;
-import jxl.write.WritableWorkbook;
-import jxl.write.WriteException;
-import jxl.write.biff.RowsExceededException;
-
-import jxl.Cell;
-import jxl.CellType;
-import jxl.Sheet;
-import jxl.Workbook;
-import jxl.read.biff.BiffException;
-
 /**
  *
  * @author JustHRJ
@@ -71,7 +47,6 @@ public class EmployeeClaimBean implements Serializable {
     private String months = "";
     private String employeeName = "";
     private String filename = "";
-    private String inputFile;
 
     private List<EmployeeClaimEntity> employeeClaimEntities;
 
@@ -83,9 +58,6 @@ public class EmployeeClaimBean implements Serializable {
         employeeClaim = new EmployeeClaimEntity();
     }
 
-    public void setInputFile(String inputFile) {
-        this.inputFile = inputFile;
-    }
 
     @PostConstruct
     public void init() {
@@ -320,40 +292,5 @@ public class EmployeeClaimBean implements Serializable {
     /**
      * @return the employeeName
      */
-    private void read() throws IOException {
-        File inputWorkbook = new File(inputFile);
-        Workbook w;
-        try {
-            w = Workbook.getWorkbook(inputWorkbook);
-            // Get the first sheet
-            Sheet sheet = w.getSheet(0);
-            // Loop over first 10 column and lines
-
-            for (int j = 0; j < sheet.getColumns(); j++) {
-                for (int i = 0; i < sheet.getRows(); i++) {
-                    Cell cell = sheet.getCell(j, i);
-                    CellType type = cell.getType();
-                    if (type == CellType.LABEL) {
-                        System.out.println("I got a label "
-                                + cell.getContents());
-                    }
-
-                    if (type == CellType.NUMBER) {
-                        System.out.println("I got a number "
-                                + cell.getContents());
-                    }
-
-                }
-            }
-        } catch (BiffException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void readFile() throws IOException {
-        EmployeeClaimBean test = new EmployeeClaimBean();
-        test.setInputFile("C:\\Users\\JustHRJ\\Desktop\\Book1.xls");
-        test.read();
-    }
-
+ 
 }
