@@ -2656,35 +2656,39 @@ public class HiYewSystemBean implements HiYewSystemBeanLocal {
         }
         return available;
     }
-    
+
     @Override
-    public void deleteActivationCode(String code){
+    public void deleteActivationCode(String code) {
         Query q = em.createQuery("Delete from ActivationCode a where a.code = :code");
         q.setParameter("code", code);
         q.executeUpdate();
+
+    }
+
     public void addFillers(List<Vector> fillers) {
         Query q = em.createQuery("select c from FillerEntity c");
         for (Object o : q.getResultList()) {
             FillerEntity f = (FillerEntity) o;
             em.remove(f);
         }
-
-        for (Object o : fillers) {
-            Vector im = (Vector) o;
-            FillerEntity f = new FillerEntity();
-            f.setAlluminium(Integer.parseInt(im.get(0).toString()));
-            f.setBronze(Integer.parseInt(im.get(1).toString()));
-            f.setCopper(Integer.parseInt(im.get(2).toString()));
-            f.setGold(Integer.parseInt(im.get(3).toString()));
-            f.setIron(Integer.parseInt(im.get(4).toString()));
-            f.setPlastic(Integer.parseInt(im.get(5).toString()));
-            f.setSilver(Integer.parseInt(im.get(6).toString()));
-            f.setTitanium(Integer.parseInt(im.get(7).toString()));
-            f.setPlatinium(Integer.parseInt(im.get(8).toString()));
-            f.setTopaz(Integer.parseInt(im.get(9).toString()));
-            em.persist(f);
+        if (fillers != null) {
+            for (Object o : fillers) {
+                Vector im = (Vector) o;
+                FillerEntity f = new FillerEntity();
+                f.setAlluminium(Integer.parseInt(im.get(0).toString()));
+                f.setBronze(Integer.parseInt(im.get(1).toString()));
+                f.setCopper(Integer.parseInt(im.get(2).toString()));
+                f.setGold(Integer.parseInt(im.get(3).toString()));
+                f.setIron(Integer.parseInt(im.get(4).toString()));
+                f.setPlastic(Integer.parseInt(im.get(5).toString()));
+                f.setSilver(Integer.parseInt(im.get(6).toString()));
+                f.setTitanium(Integer.parseInt(im.get(7).toString()));
+                f.setPlatinium(Integer.parseInt(im.get(8).toString()));
+                f.setTopaz(Integer.parseInt(im.get(9).toString()));
+                em.persist(f);
+            }
+            System.out.println("ompleted");
         }
-        System.out.println("ompleted");
     }
 
     public List<Vector> transferFillerInfo() {
@@ -2707,7 +2711,7 @@ public class HiYewSystemBean implements HiYewSystemBeanLocal {
 
             results.add(im);
         }
-        if(results.isEmpty()){
+        if (results.isEmpty()) {
             System.out.println("here");
             return null;
         }

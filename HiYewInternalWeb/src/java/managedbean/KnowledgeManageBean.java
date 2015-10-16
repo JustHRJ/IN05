@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
 import javax.ejb.EJB;
+import javax.enterprise.context.RequestScoped;
 import javax.inject.Named;
 import javax.faces.view.ViewScoped;
 import jxl.Cell;
@@ -29,8 +30,8 @@ import session.stateful.HiYewSystemBeanLocal;
  * @author JustHRJ
  */
 @Named(value = "knowledgeManageBean")
-@ViewScoped
-public class KnowledgeManageBean implements Serializable{
+@RequestScoped
+public class KnowledgeManageBean implements Serializable {
 
     @EJB
     private HiYewSystemBeanLocal hiYewSystemBean;
@@ -45,7 +46,7 @@ public class KnowledgeManageBean implements Serializable{
 
     public void fillerList() {
         results = hiYewSystemBean.transferFillerInfo();
-        System.out.println("results" + results.size());
+
     }
 
     public void setInputFile(String inputFile) {
@@ -92,7 +93,7 @@ public class KnowledgeManageBean implements Serializable{
     }
 
     public void readFile() throws IOException {
-    
+
         KnowledgeManageBean test = new KnowledgeManageBean();
 
         test.setInputFile("C:\\Users\\JustHRJ\\Desktop\\Book1.xls");
@@ -111,9 +112,16 @@ public class KnowledgeManageBean implements Serializable{
         WritableWorkbook copy = Workbook.createWorkbook(new File(inputFile), workbook);
         WritableSheet sheet1 = copy.getSheet(0);
         int rows = sheet1.getRows();
-        for (int i = 0; i < sheet1.getColumns(); i++) {
-            jxl.write.Number number = new jxl.write.Number(i, rows, 2);
-            sheet1.addCell(number);
+        if (rows == 0) {
+            for (int i = 0; i < 10; i++) {
+                jxl.write.Number number = new jxl.write.Number(i, rows, 2);
+                sheet1.addCell(number);
+            }
+        } else {
+            for (int i = 0; i < sheet1.getColumns(); i++) {
+                jxl.write.Number number = new jxl.write.Number(i, rows, 2);
+                sheet1.addCell(number);
+            }
         }
         System.out.println("done");
         copy.write();
@@ -121,20 +129,19 @@ public class KnowledgeManageBean implements Serializable{
     }
 
     public void writeFile2() throws IOException, WriteException, BiffException {
-        KnowledgeManageBean test = new KnowledgeManageBean();
-        test.setInputFile("C:\\Users\\JustHRJ\\Desktop\\Book1.xls");
+        setInputFile("C:\\Users\\JustHRJ\\Desktop\\Book1.xls");
         fillerList();
-        test.write2();
+        write2();
     }
 
     public void write2() throws IOException, WriteException, BiffException {
 
-        if (results != null || !results.isEmpty()) {
+        if (results != null) {
             Workbook workbook = Workbook.getWorkbook(new File(inputFile));
             WritableWorkbook copy = Workbook.createWorkbook(new File(inputFile), workbook);
             WritableSheet sheet1 = copy.createSheet("FillerInformation", 0);
             System.out.println("here");
-            
+
             // size is 0.. why?
             int rows = results.size();
             for (int i = 0; i < rows; i++) {
@@ -142,7 +149,7 @@ public class KnowledgeManageBean implements Serializable{
                 int cols = im.size();
                 System.out.println(cols);
                 for (int j = 0; j < cols; j++) {
-                    jxl.write.Number number = new jxl.write.Number(j, i, 3);
+                    jxl.write.Number number = new jxl.write.Number(j, i, Integer.parseInt(im.get(j).toString()));
                     sheet1.addCell(number);
                 }
 
@@ -154,4 +161,5 @@ public class KnowledgeManageBean implements Serializable{
             copy.close();
         }
     }
+
 }
