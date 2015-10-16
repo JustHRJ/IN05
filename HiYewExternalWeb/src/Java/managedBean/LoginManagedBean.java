@@ -197,7 +197,7 @@ public class LoginManagedBean implements Serializable {
 
             hiYewSystemBean.deleteActivationCode(supplierCodeWord);
         } else {
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "The Supplier's code provided is invalid!", ""));
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "The supplier's code provided is invalid!", ""));
         }
     }
 
