@@ -38,6 +38,7 @@ public class CustomerPOManagedBean implements Serializable {
 
     //Attributes binded to view
     private String purOrderNo = "";
+    
     private String attn = "";
     private String paymentTerms = "";
     private String orderDate = "";
@@ -84,7 +85,7 @@ public class CustomerPOManagedBean implements Serializable {
     public void createPurchaseOrder(Quotation q) {
         q.setStatus("Accepted");
         quotationSessionBean.conductMerge(q);
-
+        
         newPurOrder.setPoId(q.getQuotationNo());
         newPurOrder.setExpectedStartDate(expectedStartDate);
         newPurOrder.setExpectedEndDate(expectedEndDate);
@@ -107,7 +108,7 @@ public class CustomerPOManagedBean implements Serializable {
 
     public void generatePurchaseOrder(Quotation q) {
         System.out.println("Customer sent purchase order!");
-        purOrderNo = q.getQuotationNo();
+        //purOrderNo = q.getQuotationNo();
         attn = q.getCustomer().getName();
         paymentTerms = q.getTermsOfPayment();
         //Will update again when DSS is up. For now, we assume work starts 3 days later and ends in 1 month(30 days)
@@ -124,7 +125,7 @@ public class CustomerPOManagedBean implements Serializable {
             descriptions += qd.getQuotationDescNo().toString() + ". " + qd.getMetalName() + "\r\n   " 
                     + "Welding Type: " + qd.getWeldingType() + "\r\n   " +
                     "Instn: " + qd.getItemDesc() + "\r\n   "  + "Price: SGD "
-                    + String.format("%.2f", qd.getPrice()) + "\r\n";
+                    + String.format("%.2f", qd.getPrice() * qd.getQty()) + "\r\n";
             //compute total price
             total += qd.getPrice();
         }
@@ -378,5 +379,7 @@ public class CustomerPOManagedBean implements Serializable {
     public void setWeldingType(String weldingType) {
         this.weldingType = weldingType;
     }
+
+   
 
 }

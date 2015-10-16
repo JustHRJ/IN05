@@ -148,7 +148,7 @@
                                 <p:column headerText="Metal" width="15%">
                                     <h:outputText value="#{quoteDescItem.metalName}" />
                                 </p:column>
-                                <p:column headerText="Instructions" width="55%">
+                                <p:column headerText="Instructions" width="40%">
                                     <h:outputText value="#{quoteDescItem.itemDesc}" />
                                 </p:column>
 
@@ -158,7 +158,7 @@
                                 <p:column headerText="Welding Type" width="13%">
                                     <h:outputText value="#{quoteDescItem.weldingType}" />
                                 </p:column>
-                                <p:column headerText="Quoted Price (SGD)" width="15%">
+                                <p:column headerText="Quoted Price Per Piece (SGD)" width="15%">
                                     <h:inputText value="#{quoteDescItem.price}" style="width: 60%"
                                                  maxlength="7" converterMessage="Quantity must be a number consisting of one or more digits." disabled="#{loginControlBean.checkValid()}">
                                         <f:validateLongRange minimum="1" />
@@ -171,6 +171,9 @@
                                         <f:selectItem itemValue="Yes" itemLabel="Yes" />
                                     </p:selectOneMenu>
                                 </p:column>
+                                <p:column headerText="Remarks" width="15%">
+                                    <h:inputText value="#{quoteDescItem.remarksToCustomer}" style="width: 95%"/>
+                                        </p:column>
 
                             </p:dataTable>
 
