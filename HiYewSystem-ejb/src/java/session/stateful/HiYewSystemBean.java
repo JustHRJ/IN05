@@ -2645,6 +2645,23 @@ public class HiYewSystemBean implements HiYewSystemBeanLocal {
 
     }
 
+    @Override
+    public boolean checkActivationCode(String code) {
+        boolean available = false;
+
+        Query q = em.createQuery("Select a from ActivationCode a where a.code = :code");
+        q.setParameter("code", code);
+        if (q.getResultList().size() >= 1) {
+            available = true;
+        }
+        return available;
+    }
+    
+    @Override
+    public void deleteActivationCode(String code){
+        Query q = em.createQuery("Delete from ActivationCode a where a.code = :code");
+        q.setParameter("code", code);
+        q.executeUpdate();
     public void addFillers(List<Vector> fillers) {
         Query q = em.createQuery("select c from FillerEntity c");
         for (Object o : q.getResultList()) {

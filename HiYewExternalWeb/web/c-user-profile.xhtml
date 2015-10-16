@@ -25,7 +25,7 @@
                         <li class="active"><a href="#about" data-toggle="tab"><i class="fa fa-user"></i>&nbsp;&nbsp;About</a></li>
                         <li><a href="#edit-profile" data-toggle="tab"><i class="fa fa-pencil"></i>&nbsp;&nbsp;Edit Profile</a></li>
                         <li><a href="#change-password" data-toggle="tab"><i class="fa fa-floppy-o"></i>&nbsp;&nbsp;Change Password</a></li>
-                        <li><a href="#subscription" data-toggle="tab"><i class="fa fa-rss"></i>&nbsp;&nbsp;Subscription</a></li>
+                        <li><a href="#subscription" data-toggle="tab"><i class="fa fa-rss"></i>&nbsp;&nbsp;Settings</a></li>
                     </ul>
                     <!-- End nav tab -->
 
@@ -144,6 +144,16 @@
                                     An email will be sent if there are updates.
                                     <br /><br />
                                     <p:commandButton style="border: none; font-weight: normal; font-family: 'Open Sans'; padding-top: 6px; padding-bottom: 7px; padding-left: 22px; padding-right: 22px" styleClass="btn btn-primary buttonOverride" value="Update" update="emailMsg" action="#{customerManagedBean.changeSubscribeEmail()}" icon=""/>
+                                </h:form>
+                                
+                                <h:form id="supplierApplicationForm">
+                                    <div class="form-group">
+                                        <label for="">Application for a joint Supplier Account</label>
+                                        <p:inputText class="form-control text-input"  placeholder="Your Supplier's code" value="#{loginManagedBean.supplierCodeWord}" required="true" requiredMessage="A supplier's codeword is required." >
+                                         </p:inputText>
+                                    </div>
+                                    <p:commandButton style="border: none; font-weight: normal; font-family: 'Open Sans'; padding-top: 6px; padding-bottom: 7px; padding-left: 22px; padding-right: 22px" styleClass="btn btn-primary" value="Submit" action="#{loginManagedBean.createSupplierFromExistingCustomerAcct(customerManagedBean.customer.userName)}" update=":changePasswordForm:msgs " icon=""/>
+                               
                                 </h:form>
                             </div><!-- End div .scroll-user-widget -->
                         </div><!-- End div .tab-pane -->
