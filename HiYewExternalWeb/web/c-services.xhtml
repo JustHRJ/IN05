@@ -170,7 +170,7 @@
                                             <h:outputText value="#{quoteDescItem.metalName}" />
                                         </p:column>
                                         
-                                        <p:column headerText="Instructions" width="40%">
+                                        <p:column headerText="Instructions" width="35%">
                                             <h:outputText value="#{quoteDescItem.itemDesc}" />
                                         </p:column>
                                         <p:column headerText="Qty" width="9%">
@@ -179,11 +179,14 @@
                                         <p:column headerText="Welding Type" width="14%">
                                             <h:outputText value="#{quoteDescItem.weldingType}" />
                                         </p:column>
-                                        <p:column headerText="Quoted Price" width="12%">
+                                        <p:column headerText="Quoted Price Per Piece" width="12%">
                                             <h:outputText value="#{quoteDescItem.price}" />
                                         </p:column>
                                         <p:column headerText="Req for Sample" width="12%">
                                             <h:outputText value="#{quoteDescItem.requestForMetalSample}" />
+                                        </p:column>
+                                        <p:column headerText="Remarks" width="17%">
+                                            <h:outputText value="#{quoteDescItem.remarksToCustomer}" />
                                         </p:column>
                                     </p:dataTable>
                                 </p:outputPanel>
@@ -197,7 +200,9 @@
                             <p:dialog styleClass="rfq" id="myDialogID" widgetVar="myDialogVar" modal="true" resizable="false" header="Purchase Order" showEffect="fade" width="500px">
                                 <p:panelGrid id="display" columns="2" columnClasses="label,value">
                                     <h:outputText value="Purchase No.: " style="width: 10%; font-weight: bolder; vertical-align: middle"/>
-                                    <h:outputText id="poId" value="#{pOManagedBean.purOrderNo}" />
+                                    
+                                    <p:inputText style="width: 210px; margin-top: 1px;font-weight: normal; font-size: 14px; font-family: 'Open Sans';"  value="#{pOManagedBean.newPurOrder.customerRefPoNumber}" id="customerRefPoId"  />
+                                        
 
                                     <h:outputText value="Attention: " style="width: 10%; font-weight: bolder; vertical-align: middle"/>
                                     <h:outputText id="attnId" value="#{pOManagedBean.attn}" />
@@ -247,7 +252,7 @@
                     <br /><br />
                     <p:dataTable value="#{pOManagedBean.receivedCustomerPO}" var="poItem" id="rcvPO" editable="true">
                         <p:column headerText="PO No" width="15%">
-                            <p:outputLabel value="#{poItem.poId}"/>
+                            <p:outputLabel value="#{poItem.customerRefPoNumber}"/>
                         </p:column>
                         <p:column headerText="PO Date (dd/mm/yyyy)" width="11%">
                             <h:outputText value="#{pOManagedBean.formatDate(poItem.poDate)}"/>

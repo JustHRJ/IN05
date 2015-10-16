@@ -23,6 +23,7 @@ public class QuotationDescription implements Serializable {
     private String requestForMetalSample;
     private String weldingType;
     private String metalName;
+    private String remarksToCustomer;
     
 
     @ManyToOne
@@ -34,7 +35,7 @@ public class QuotationDescription implements Serializable {
         //requestForMetalSample = "No";
     }
 
-    public QuotationDescription(Integer quotationDescNo, String jobDesc, Integer qty, Double price, Quotation quotation, String requestForMetalSample, String weldingType, String metalName) {
+    public QuotationDescription(Integer quotationDescNo, String jobDesc, Integer qty, Double price, Quotation quotation, String requestForMetalSample, String weldingType, String metalName, String remarks) {
         this.quotationDescNo = quotationDescNo;
         this.itemDesc = jobDesc;
         this.qty = qty;
@@ -43,6 +44,7 @@ public class QuotationDescription implements Serializable {
         this.requestForMetalSample = requestForMetalSample;
         this.weldingType = weldingType;
         this.metalName = metalName;
+        this.remarksToCustomer = remarks;
     }
 
     /**
@@ -194,6 +196,20 @@ public class QuotationDescription implements Serializable {
      */
     public void setMetalName(String metalName) {
         this.metalName = metalName;
+    }
+
+    /**
+     * @return the remarksToCustomer
+     */
+    public String getRemarksToCustomer() {
+        return remarksToCustomer;
+    }
+
+    /**
+     * @param remarksToCustomer the remarksToCustomer to set
+     */
+    public void setRemarksToCustomer(String remarksToCustomer) {
+        this.remarksToCustomer = remarksToCustomer;
     }
 
 }
