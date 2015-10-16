@@ -53,6 +53,7 @@
                             <p:growl id="msgs" showDetail="false" />
 
                             <div class="form-group login-input">
+                                I am a:&nbsp;&nbsp;
                                 <p:selectOneMenu style="width: 315px; display: inline-block; padding-top: -10px" styleClass="form-control selectpicker" value="#{loginManagedBean.user}" >
                                     <p:ajax listener="#{loginManagedBean.display()}" update="mainForm"/> 
                                     <f:selectItems class="form-control selectpicker" value="#{loginManagedBean.users}" />
@@ -108,8 +109,8 @@
                                 </p:password>
                             </div>
                             <div class="form-group login-input">
-                                <p:selectOneMenu id = "secretQn"  value ="#{loginManagedBean.newCustomer.secretQuestion}" required = "true" requiredMessage="Please select Secret Question">
-                                    <f:selectItem itemValue ="" itemLabel ="Select your Secret question" noSelectionOption="true"/>
+                                <p:selectOneMenu style="width: 370px" styleClass="form-control selectpicker"  id = "secretQn"  value ="#{loginManagedBean.newCustomer.secretQuestion}" required = "true" requiredMessage="Please select Secret Question">
+                                    <f:selectItem itemValue ="" itemLabel ="Please select your secret question" noSelectionOption="true"/>
                                     <f:selectItem itemValue ="What is the name of your favourite teacher?" itemLabel ="What is the name of your favourite teacher?"/>
                                     <f:selectItem itemValue ="Where did you spend your honeymoon?" itemLabel ="Where did you spend your honeymoon?"/>
                                     <f:selectItem itemValue ="What is the name of your favourite pet?" itemLabel ="What is the name of your favourite pet?"/>
@@ -118,8 +119,8 @@
                                 </p:selectOneMenu>
                             </div>
                             <div class="form-group login-input">
-                                <i class="fa fa-sign-in overlay"></i>
-                                <p:inputText class="form-control text-input" placeholder="Secret Answer" value="#{loginManagedBean.newCustomer.secretAnswer}" required="true" requiredMessage="Secret Answer is required." id="SecretAns"  />
+                                <i class="fa fa-lock overlay"></i>
+                                <p:inputText class="form-control text-input" placeholder="Your secret answer" value="#{loginManagedBean.newCustomer.secretAnswer}" required="true" requiredMessage="Secret Answer is required." id="SecretAns"  />
                             </div>
                             <p:commandButton style="border: none; font-size: 14px; font-family: 'Open Sans'" class=" btn btn-success btn-block" action="#{loginManagedBean.createUser()}" value="Register" update="outputID msgs"></p:commandButton>
                         </h:form>
