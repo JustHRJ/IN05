@@ -129,7 +129,7 @@ public class KnowledgeManageBean implements Serializable {
     }
 
     public void writeFile2() throws IOException, WriteException, BiffException {
-        setInputFile("C:\\Users\\JustHRJ\\Desktop\\Book1.xls");
+        setInputFile("C:\\Users\\QiWen\\Desktop\\Book1.xls");
         fillerList();
         write2();
     }
