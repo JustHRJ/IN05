@@ -9,6 +9,49 @@ body{
     font-family: 'Open Sans', Arial;
 }
 
+//////////////////////////////////////////////////////////////////////
+
+.ab{
+    
+}
+
+
+.ui-selectonemenu label.ui-selectonemenu-label:hover {
+    cursor: pointer;
+    background-color: #ebebeb!important;
+}
+
+.ui-inputfield {
+    background: white;
+    -moz-box-shadow: inset 0 2px 2px #8f8f8f;
+    -webkit-box-shadow: none; //inset 0 2px 2px #8f8f8f
+    box-shadow: none; //inset 0 2px 2px #8f8f8f 
+    border-color: #ddd;
+    color: #313131;
+}
+
+.ui-selectonemenu .ui-selectonemenu-trigger .ui-icon {
+    display: none;
+    /*    margin-top: 8px;
+        margin-left: 3px;*/
+}
+
+.ui-selectonemenu .ui-selectonemenu-trigger {
+    display: none;
+    /* border-right: none; */
+    /* border-top: none; */
+    /* border-bottom: none; */
+    /*    cursor: pointer;
+        width: 0px;
+        height: 100%;
+        position: absolute;
+        right: 0;
+        top: 0;
+        padding: 0 3px;*/
+}
+
+//////////////////////////////////////////////////////////////////////
+
 .ui-widget .ui-widget {
     font-size: 14px;
     font-family: 'Open Sans';
@@ -51,11 +94,11 @@ body{
 .ui-state-highlight, .ui-widget-content .ui-state-highlight, .ui-widget-header .ui-state-highlight {
     border: 1px solid #666666;
     /* background: #aaaaaa; */
-    background: #aaaaaa -webkit-gradient(linear, left top, left bottom, from(rgba(0,0,0,0.25)), to(rgba(0,0,0,0)));
+    background: none; // DDL
     /* background: #aaaaaa -webkit-gradient(linear, left top, left bottom, from(rgba(0,0,0,0.25)), to(rgba(0,0,0,0))); */
     /*background: white; */
     color: #ffffff;
-    text-shadow: 1px 1px 1px #333333;
+    text-shadow: none; // DDL
     font-size: 14px;
     font-family: 'Open Sans';
 }
@@ -1139,9 +1182,10 @@ FORM SELECTOR
     padding: 10px 10px 10px 7px;
     text-align: left;
     white-space: nowrap;
-    font-size: 90%;
+    font-size: 13px;
     color: #555;
     background-color: white;
+    font-family: 'Open Sans';
 }
 
 .ui-selectonemenu-panel:hover .ui-selectonemenu-list-item:hover {
@@ -1150,7 +1194,7 @@ FORM SELECTOR
     padding: 10px 10px 10px 7px;
     text-align: left;
     white-space: nowrap;
-    font-size: 90%;
+    font-size: 13px;
     color: #555;
     background-color: #ebebeb!important;
 }
@@ -1167,6 +1211,7 @@ FORM SELECTOR
     padding: 0px;
     font-weight: normal;
     font-size: 13px;
+    font-family: 'Open Sans';
 }
 
 .selectpicker{
