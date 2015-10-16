@@ -42,7 +42,7 @@ public class SupplierManagedBean implements Serializable {
     public void handleSave() throws IOException {
         supplierSessionBean.updateSupplier(supplier);
         FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("popupMessage", "Profile has been updated successfully!");
-        FacesContext.getCurrentInstance().getExternalContext().redirect("/HiYewExternalWeb/SupplierHome.xhtml");
+        FacesContext.getCurrentInstance().getExternalContext().redirect("/HiYewExternalWeb/s-home.xhtml");
     }
 
     public void changeSubscribeEmail() throws IOException {

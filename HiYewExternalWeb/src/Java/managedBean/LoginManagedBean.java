@@ -96,7 +96,7 @@ public class LoginManagedBean implements Serializable {
                     FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("username", this.username);
 
                     System.out.println("Login Success");
-                    path = "SupplierHome?faces-redirect=true"; //navigation
+                    path = "s-home?faces-redirect=true"; //navigation
 
                 } else {
                     FacesContext.getCurrentInstance().addMessage("loginMessage", new FacesMessage("Invalid Username or password!"));
@@ -197,7 +197,7 @@ public class LoginManagedBean implements Serializable {
 
             hiYewSystemBean.deleteActivationCode(supplierCodeWord);
         } else {
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "The Supplier's code provided is invalid!", ""));
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "The supplier's code provided is invalid!", ""));
         }
     }
 
@@ -293,7 +293,7 @@ public class LoginManagedBean implements Serializable {
      * customer
      * FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("loginMessage",
      * "Your account registration has been successful."); return
-     * "SupplierHome?faces-redirect=true"; } else {
+     * "s-home?faces-redirect=true"; } else {
      * FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("registerMessage",
      * "Your password and confirmation password do not match.");
      *

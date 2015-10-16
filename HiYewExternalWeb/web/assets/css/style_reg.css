@@ -90,6 +90,10 @@ body{
     text-shadow: none; 
 }
 
+.ui-state-highlight {
+    width: 200px; // for password pop up
+}
+
 .ui-state-highlight, .ui-widget-content .ui-state-highlight, .ui-widget-header .ui-state-highlight {
     border: 1px solid #666666;
     /* background: #aaaaaa; */
