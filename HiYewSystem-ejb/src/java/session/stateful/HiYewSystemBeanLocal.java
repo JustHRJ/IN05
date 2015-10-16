@@ -8,6 +8,7 @@ package session.stateful;
 import entity.EmployeeClaimEntity;
 import entity.SupplierPurchaseOrder;
 import entity.EmployeeEntity;
+import entity.FillerEntity;
 import entity.LeaveEntity;
 import entity.MachineEntity;
 import entity.MachineMaintainenceEntity;
@@ -232,5 +233,9 @@ public interface HiYewSystemBeanLocal {
     public void addFillers(List<Vector> fillers);
 
     public List<Vector> transferFillerInfo();
+
+    public List<FillerEntity> fillerRecords();
+
+    public void editFiller(FillerEntity filler);
 
 }

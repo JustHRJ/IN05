@@ -2675,16 +2675,17 @@ public class HiYewSystemBean implements HiYewSystemBeanLocal {
             for (Object o : fillers) {
                 Vector im = (Vector) o;
                 FillerEntity f = new FillerEntity();
-                f.setAlluminium(Integer.parseInt(im.get(0).toString()));
-                f.setBronze(Integer.parseInt(im.get(1).toString()));
-                f.setCopper(Integer.parseInt(im.get(2).toString()));
-                f.setGold(Integer.parseInt(im.get(3).toString()));
-                f.setIron(Integer.parseInt(im.get(4).toString()));
-                f.setPlastic(Integer.parseInt(im.get(5).toString()));
-                f.setSilver(Integer.parseInt(im.get(6).toString()));
-                f.setTitanium(Integer.parseInt(im.get(7).toString()));
-                f.setPlatinium(Integer.parseInt(im.get(8).toString()));
-                f.setTopaz(Integer.parseInt(im.get(9).toString()));
+                f.setName((String) im.get(1));
+                f.setAlluminium(Integer.parseInt(im.get(2).toString()));
+                f.setBronze(Integer.parseInt(im.get(3).toString()));
+                f.setCopper(Integer.parseInt(im.get(4).toString()));
+                f.setGold(Integer.parseInt(im.get(5).toString()));
+                f.setIron(Integer.parseInt(im.get(6).toString()));
+                f.setPlastic(Integer.parseInt(im.get(7).toString()));
+                f.setSilver(Integer.parseInt(im.get(8).toString()));
+                f.setTitanium(Integer.parseInt(im.get(9).toString()));
+                f.setPlatinium(Integer.parseInt(im.get(10).toString()));
+                f.setTopaz(Integer.parseInt(im.get(11).toString()));
                 em.persist(f);
             }
             System.out.println("ompleted");
@@ -2698,6 +2699,8 @@ public class HiYewSystemBean implements HiYewSystemBeanLocal {
         for (Object o : q.getResultList()) {
             FillerEntity f = (FillerEntity) o;
             Vector im = new Vector();
+            im.add(f.getId());
+            im.add(f.getName());
             im.add(f.getAlluminium());
             im.add(f.getBronze());
             im.add(f.getCopper());
@@ -2718,5 +2721,34 @@ public class HiYewSystemBean implements HiYewSystemBeanLocal {
         System.out.println("collected");
         System.out.println(results.size());
         return results;
+    }
+
+    public List<FillerEntity> fillerRecords() {
+
+        List<FillerEntity> results = new ArrayList<FillerEntity>();
+        Query q = em.createQuery("select c from FillerEntity c");
+
+        for (Object o : q.getResultList()) {
+            FillerEntity f = (FillerEntity) o;
+
+            results.add(f);
+        }
+        if (results.isEmpty()) {
+            System.out.println("here");
+            return null;
+        }
+
+        return results;
+
+    }
+
+    public void editFiller(FillerEntity filler) {
+        if (filler == null) {
+            System.out.println("here2");
+        } else {
+            System.out.println("here3");
+           
+            em.merge(filler);
+        }
     }
 }
