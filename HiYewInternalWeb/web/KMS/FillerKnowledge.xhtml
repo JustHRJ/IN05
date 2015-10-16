@@ -9,10 +9,11 @@
     </h:head>
     <h:body>
         <h:form id = "formMain">
-            <p:dataTable  id ="table" var="im" value="#{knowledgeManageBean.allFillers}" widgetVar="fillerTable"   editable = "true" scrollable="true" scrollWidth="90%"  emptyMessage="No Fillers found with given criteria" filteredValue="#{knowledgeManageBean.filteredFillers}">
 
-                <p:ajax event="rowEdit" listener="#{knowledgeManageBean.updateFiller}" update ="table" />
 
+
+
+            <p:dataTable  id ="table" var="im" value="#{knowledgeManageBean.allFillers}" widgetVar="fillerTable"  scrollable="true" scrollWidth="95%"  emptyMessage="No Fillers found with given criteria" filteredValue="#{knowledgeManageBean.filteredFillers}">
                 <f:facet name="header" >
                     <p:outputPanel >
                         <h:outputText value="Search all fields:" />
@@ -129,11 +130,83 @@
                     </f:facet>
                     <h:outputText value="#{im.topaz}" />
                 </p:column>
-                <p:column style="width:32px">
-                    <p:rowEditor  />
-                </p:column>
 
+
+                <p:column style="width:32px;text-align: center">
+                    <p:commandButton update=":formMain:claimDetail" oncomplete="PF('claimDialog').show()" icon="ui-icon-search" title="View">
+                        <f:setPropertyActionListener value="#{im}" target="#{knowledgeManageBean.selectedFiller}" />
+                    </p:commandButton>
+                </p:column>
             </p:dataTable>
+
+
+
+            <p:dialog header="Filler Edit" widgetVar="claimDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="true">
+                <p:outputPanel id="claimDetail" style="text-align:center;">
+                    <p:dataTable var ="im" value ="#{knowledgeManageBean.retrieveFiller}" paginator="true" rows="5" emptyMessage="No Filler to Show" scrollable="true" scrollWidth="95%" >
+                        <p:column  headerText="Id" width ="100"  >
+                            <h:outputText value="#{knowledgeManageBean.selectedFiller.id}" />
+                        </p:column>
+
+                        <p:column  headerText="Name"  width ="100">
+                            <h:outputText value="#{knowledgeManageBean.selectedFiller.name}" />
+                        </p:column>
+
+
+
+                        <p:column  headerText="Copper" width ="100">
+                            <h:inputText value="#{knowledgeManageBean.selectedFiller.copper}" />
+                        </p:column>
+
+                        <p:column  headerText="Iron" width ="100">
+                            <h:inputText value="#{knowledgeManageBean.selectedFiller.iron}" />
+                        </p:column>
+
+
+                        <p:column  headerText="Aluminum" width ="100">
+                            <h:inputText value="#{knowledgeManageBean.selectedFiller.alluminium}" />
+                        </p:column>
+
+
+                        <p:column  headerText="Gold" width ="100">
+                            <h:inputText value="#{knowledgeManageBean.selectedFiller.gold}" />
+                        </p:column>
+
+
+
+                        <p:column  headerText="Bronze" width ="100">
+                            <h:inputText value="#{knowledgeManageBean.selectedFiller.bronze}" />
+                        </p:column>
+
+
+                        <p:column  headerText="Silver" width ="100">
+                            <h:inputText value="#{knowledgeManageBean.selectedFiller.silver}" />
+                        </p:column>
+
+                        <p:column headerText="Plastic" width ="100">
+                            <h:inputText value="#{knowledgeManageBean.selectedFiller.plastic}" />
+                        </p:column>
+
+
+                        <p:column  headerText="Platinum" width ="100">
+                            <h:inputText value="#{knowledgeManageBean.selectedFiller.platinium}" />
+                        </p:column>
+
+                        <p:column  headerText="Titanium" width ="100">
+                            <h:inputText value="#{knowledgeManageBean.selectedFiller.titanium}" />
+                        </p:column>
+
+
+                        <p:column  headerText="Topaz" width ="100" >
+                            <h:inputText value="#{knowledgeManageBean.selectedFiller.topaz}" />
+                        </p:column>
+                    </p:dataTable>
+                    <p:commandButton value="Edit" action ="#{knowledgeManageBean.updateFiller()}" update ="formMain" />
+                    <p:commandButton value ="Delete" action ="#{knowledgeManageBean.deleteFiller()}" update ="formMain" >
+                       
+                    </p:commandButton>
+                </p:outputPanel>
+            </p:dialog>
         </h:form>
     </h:body>
 </html>

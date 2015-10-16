@@ -238,4 +238,6 @@ public interface HiYewSystemBeanLocal {
 
     public void editFiller(FillerEntity filler);
 
+    public void deleteFiller(FillerEntity filler);
+
 }

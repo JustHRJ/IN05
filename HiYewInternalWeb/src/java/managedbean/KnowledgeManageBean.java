@@ -33,8 +33,8 @@ import session.stateful.HiYewSystemBeanLocal;
  * @author JustHRJ
  */
 @Named(value = "knowledgeManageBean")
-@RequestScoped
-public class KnowledgeManageBean {
+@ViewScoped
+public class KnowledgeManageBean implements Serializable{
 
     @EJB
     private HiYewSystemBeanLocal hiYewSystemBean;
@@ -44,15 +44,13 @@ public class KnowledgeManageBean {
     private List<FillerEntity> filteredFillers;
     private FillerEntity selectedFiller;
     private int copper;
+
     /**
      * Creates a new instance of KnowledgeManageBean
      */
     public KnowledgeManageBean() {
     }
 
-    
-  
-    
     public void fillerList() {
         results = hiYewSystemBean.transferFillerInfo();
 
@@ -71,6 +69,11 @@ public class KnowledgeManageBean {
         this.inputFile = inputFile;
     }
 
+    
+    public void deleteFiller(){
+        hiYewSystemBean.deleteFiller(selectedFiller);
+    }
+    
     private List<Vector> read() throws IOException {
         File inputWorkbook = new File(inputFile);
         List<Vector> results = new ArrayList<Vector>();
@@ -103,6 +106,10 @@ public class KnowledgeManageBean {
             e.printStackTrace();
             return null;
         }
+    }
+
+    public FillerEntity getRetrieveFiller() {
+        return selectedFiller;
     }
 
     public void readFile() throws IOException {
@@ -147,6 +154,7 @@ public class KnowledgeManageBean {
     public void write2() throws IOException, WriteException, BiffException {
 
         if (results != null) {
+            System.out.println(results.size());
             Workbook workbook = Workbook.getWorkbook(new File(inputFile));
             WritableWorkbook copy = Workbook.createWorkbook(new File(inputFile), workbook);
             WritableSheet sheet1 = copy.createSheet("FillerInformation", 0);
@@ -188,8 +196,8 @@ public class KnowledgeManageBean {
             sheet1.addCell(number3);
 
             int rows = results.size();
-            for (int i = 1; i < rows; i++) {
-                Vector im = results.get(i);
+            for (int i = 1; i <= rows; i++) {
+                Vector im = results.get(i-1);
                 int cols = im.size();
                 System.out.println(cols);
                 jxl.write.Label number1 = new jxl.write.Label(0, i, im.get(0).toString());
@@ -253,10 +261,10 @@ public class KnowledgeManageBean {
         this.selectedFiller = selectedFiller;
     }
 
-    public void updateFiller(RowEditEvent event) {
+    public void updateFiller() {
         System.out.println("here");
-        System.out.println(((FillerEntity)event.getObject()).getCopper());
-        hiYewSystemBean.editFiller((FillerEntity) event.getObject());
+   
+        hiYewSystemBean.editFiller(selectedFiller);
     }
 
     /**

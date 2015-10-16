@@ -2751,4 +2751,16 @@ public class HiYewSystemBean implements HiYewSystemBeanLocal {
             em.merge(filler);
         }
     }
+    
+    public void deleteFiller(FillerEntity filler){
+        if(filler != null){
+            Long id = filler.getId();
+            FillerEntity f = em.find(FillerEntity.class, id);
+            if(f == null){
+                System.out.println("shucks");
+            }else{
+                em.remove(f);
+            }
+        }
+    }
 }
