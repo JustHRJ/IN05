@@ -41,7 +41,7 @@
 
     <h:body class="tooltips">
         #{loginManagedBean.checkLoginRedirect()}
-        
+
         <!-- BEGIN PAGE -->
         <div class="container">
             <!-- Your logo goes here -->
@@ -67,18 +67,19 @@
                             <div class="media-body">
                                 Welcome back,
                                 <h4 class="media-heading"><strong><h:outputText value="#{username}" style=""/></strong></h4>
-                                
+
+                                <a href="s-user-profile.xhtml">Edit</a>
                                 <a class="md-trigger" data-modal="logout-modal-alt">Logout</a>
                             </div><!-- End div .media-body -->
                         </div><!-- End div .media -->
 
                         <!-- Sidebar menu -->				
                         <div id="sidebar-menu">
-                            <ul>
-                                <!--<li><a href="c-index.xhtml"><i class="fa fa-home"></i> Home</a></li>-->
-                                <li><a href="s-home.xhtml"><i class="fa fa-th-large"></i><i class="fa fa-angle-double-down i-right"></i> Services</a>
-                                </li>
-                            </ul>
+                            <!--                            <ul>
+                                                            <li><a href="c-index.xhtml"><i class="fa fa-home"></i> Home</a></li>
+                                                            <li><a href="s-user-profile.xhtml"><i class="fa fa-th-large"></i><i class="fa fa-angle-double-down i-right"></i> Services</a>
+                                                            </li>
+                                                        </ul>-->
                             <div class="clear"></div>
                         </div><!-- End div #sidebar-menu -->
                     </div><!-- End div .sidebar-inner .slimscroller -->
@@ -148,10 +149,13 @@
 
                                     <!-- Dropdown User session -->
                                     <li class="dropdown">
-                                        <a href="" class="dropdown-toggle" data-toggle="dropdown">Hi, <strong><h:outputText value="#{username}" style=""/></strong> <i class="fa fa-chevron-down i-xs"></i></a>
-                                        <ul class="dropdown-menu animated half flipInX">
-                                            <li><a class="md-trigger" data-modal="logout-modal">Logout</a></li>
-                                        </ul>
+                                        <a href="" class="dropdown-toggle" data-toggle="dropdown">
+                                            Hi supplier, <strong><h:outputText value="#{supplierManagedBean.supplier.companyName}" style=""/></strong> 
+                                            <!--<i class="fa fa-chevron-down i-xs"></i>-->
+                                        </a>
+                                        <!--                                        <ul class="dropdown-menu animated half flipInX">
+                                                                                    <li><a class="md-trigger" data-modal="logout-modal">Logout</a></li>
+                                                                                </ul>-->
                                     </li>
                                     <!-- End Dropdown User session -->
                                 </ul>
@@ -199,7 +203,7 @@
                             <p class="text-center">
                                 <button style="padding-top: 3px; padding-left: 24px; padding-right: 24px; font-family: 'Open Sans'; height: 30px" class="btn btn-danger md-close">Nope!</button>
                                 &nbsp;&nbsp;
-                                <p:commandButton  style="padding-top: 0px; padding-left: 24px; padding-right: 24px; font-family: 'Open Sans'; height: 30px" value="Yeah, I'm sure" styleClass="btn btn-success md-close" action="#{loginManagedBean.logout()}" />
+                                <p:commandButton style="padding-top: 1px; padding-left: 24px; padding-right: 24px; font-family: 'Open Sans'; height: 30px" value="Yeah, I'm sure" styleClass="btn btn-success md-close" action="#{loginManagedBean.logout()}" />
                             </p>
                         </h:form>
                     </div>
@@ -216,7 +220,7 @@
                             <p class="text-center">
                                 <button style="padding-top: 3px; padding-left: 24px; padding-right: 24px; font-family: 'Open Sans'; height: 30px" class="btn btn-danger md-close">Nope!</button>
                                 &nbsp;&nbsp;
-                                <p:commandButton  style="padding-top: 0px; padding-left: 24px; padding-right: 24px; font-family: 'Open Sans'; height: 30px" value="Yeah, I'm sure" styleClass="btn btn-success md-close" action="#{loginManagedBean.logout()}" />
+                                <p:commandButton  style="padding-top: 1px; padding-left: 24px; padding-right: 24px; font-family: 'Open Sans'; height: 30px" value="Yeah, I'm sure" styleClass="btn btn-success md-close" action="#{loginManagedBean.logout()}" />
                             </p>
                         </h:form>
                     </div>

@@ -96,7 +96,7 @@ public class LoginManagedBean implements Serializable {
                     FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("username", this.username);
 
                     System.out.println("Login Success");
-                    path = "s-home?faces-redirect=true"; //navigation
+                    path = "s-user-profile?faces-redirect=true"; //navigation
 
                 } else {
                     FacesContext.getCurrentInstance().addMessage("loginMessage", new FacesMessage("Invalid Username or password!"));
