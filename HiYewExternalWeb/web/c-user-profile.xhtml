@@ -151,18 +151,18 @@
                                         <tbody>
                                             <tr>
                                                 <td width="450px">Quotation Price Updates</td>
-                                                <td><p:selectBooleanCheckbox style="vertical-align: middle" styleClass="subscribe" value="#{customerManagedBean.customer.subscribeEmail}" /></td>
-                                                <td><p:selectBooleanCheckbox style="vertical-align: middle" styleClass="subscribe" value="#{customerManagedBean.customer.subscribeEmail}" /></td>
+                                                <td><p:selectBooleanCheckbox style="vertical-align: middle" styleClass="subscribe" value="#{customerManagedBean.customer.subscribeEmail_qPriceUpdates}" /></td>
+                                                <td><p:selectBooleanCheckbox style="vertical-align: middle" styleClass="subscribe" value="#{customerManagedBean.customer.subscribeSMS_qPriceUpdates}" /></td>
                                             </tr>
                                             <tr>
                                                 <td width="450px">Purchase Order Delivery Date Updates</td>
-                                                <td><p:selectBooleanCheckbox style="vertical-align: middle" styleClass="subscribe" value="#{customerManagedBean.customer.subscribeEmail}" /></td>
-                                                <td><p:selectBooleanCheckbox style="vertical-align: middle" styleClass="subscribe" value="#{customerManagedBean.customer.subscribeEmail}" /></td>
+                                                <td><p:selectBooleanCheckbox style="vertical-align: middle" styleClass="subscribe" value="#{customerManagedBean.customer.subscribeEmail_poDeliveryUpdates}" /></td>
+                                                <td><p:selectBooleanCheckbox style="vertical-align: middle" styleClass="subscribe" value="#{customerManagedBean.customer.subscribeSMS_poDeliveryUpdates}" /></td>
                                             </tr>
                                         </tbody>
                                     </table>
                                     <!-- End sales report --><br />
-                                    <p:commandButton style="border: none; font-weight: normal; font-family: 'Open Sans'; padding-top: 6px; padding-bottom: 7px; padding-left: 22px; padding-right: 22px" styleClass="btn btn-primary buttonOverride" value="Update" update="emailMsg" action="#{customerManagedBean.changeSubscribeEmail()}" icon=""/>
+                                    <p:commandButton style="border: none; font-weight: normal; font-family: 'Open Sans'; padding-top: 6px; padding-bottom: 7px; padding-left: 22px; padding-right: 22px" styleClass="btn btn-primary buttonOverride" value="Update" update="emailMsg" action="#{customerManagedBean.changeSubscription()}" icon=""/>
                                 </h:form>
 
                                 <h:form id="supplierApplicationForm">
