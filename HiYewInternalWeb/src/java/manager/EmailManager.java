@@ -274,10 +274,8 @@ public class EmailManager {
             throw new EJBException(e.getMessage());
         }
     }
-    
-    
-    
-        public void emailActivation(String code, String email) {
+
+    public void emailActivation(String code, String email) {
         try {
             Properties props = new Properties();
             props.put("mail.transport.protocol", "smtp");
@@ -307,7 +305,7 @@ public class EmailManager {
                 message = message + "HiYew Team";
                 message = message + "</div>";
                 message = "<html><body>" + message + "</body></html>";
-     
+
                 htmlPart.setContent(message, "text/html");
                 multipart.addBodyPart(htmlPart);
                 msg.setContent(multipart);
