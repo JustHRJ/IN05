@@ -73,13 +73,13 @@ public class LoginManagedBean implements Serializable {
                     System.out.println("Login Success");
                     path = "c-user-profile?faces-redirect=true"; //navigation
                 } else {
-                    FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("loginMessage", "Invalid Username or password! Please try again.");
+                    FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("loginMessage", "Invalid username or password! Please try again.");
                     //FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Invalid Username or password!"));
                     System.out.println("Login Fail");
                     path = ""; //navigation
                 }
             } catch (NullPointerException e) {
-                FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("loginMessage", "Invalid Username or password! Please try again.");
+                FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("loginMessage", "Invalid username or password! Please try again.");
                 //FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Invalid Username or password!"));
                 System.out.println("Login Fail");
                 path = ""; //navigation
@@ -161,7 +161,7 @@ public class LoginManagedBean implements Serializable {
                     emailManager.emailPassword(output[0], output[1], output[2]);
                     return "login?faces-redirect=true";
                 }else{
-                    FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("forgotMessage", "Invalid Secret Question or Answer!");
+                    FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("forgotMessage", "Invalid secret question or answer!");
                 }
             } else {
                 FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("forgotMessage", "Username does not exist!");
@@ -268,7 +268,7 @@ public class LoginManagedBean implements Serializable {
                     FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("registerMessage", "This username has been taken by someone else. Please choose a different username.");
                 }
             } else {
-                FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("registerMessage", "The Supplier's code provided is invalid!");
+                FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("registerMessage", "The supplier's code provided is invalid!");
             }
         }
         return "";
