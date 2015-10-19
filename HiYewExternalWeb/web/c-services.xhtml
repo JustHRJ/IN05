@@ -44,14 +44,14 @@
                         <p:row>
                             <p:column width="30px">
 
-                                <h:outputLabel style="font-weight: bold" for="metalType" value="Metal Type: " />
+                                <h:outputLabel style="font-weight: bold;" for="metalType" value="Metal Type: " />
                                 <br />
-                                
-                                <p:autoComplete id="metalType" value="#{quotationManagedBean.newQuotationDesc.metalName}" completeMethod="#{quotationManagedBean.completeText}" />
+
+                                <p:autoComplete style="font-weight: normal; width:190px" id="metalType" value="#{quotationManagedBean.newQuotationDesc.metalName}" completeMethod="#{quotationManagedBean.completeText}" />
                                 <br /><br />
                                 <h:outputLabel style="font-weight: bold" for="Quantity" value="Quantity: " />
                                 <br />
-                                <p:inputText style="font-weight: normal" id="Quantity" value="#{quotationManagedBean.newQuotationDesc.qty}" maxlength="5" converterMessage="Quantity must contains only numbers." validatorMessage="Quantity must have a value of more than one.">
+                                <p:inputText style="font-weight: normal; width:190px" id="Quantity" value="#{quotationManagedBean.newQuotationDesc.qty}" maxlength="5" converterMessage="Quantity must contains only numbers." validatorMessage="Quantity must have a value of more than one.">
                                     <f:validateLongRange minimum="1" />
 
                                 </p:inputText>
@@ -59,15 +59,13 @@
                                 <h:outputLabel style="font-weight: bold" for="WeldingType" value="Welding Type: " />
                                 <br />
                                 <div class="form-group">
-                                <p:selectOneMenu value="#{quotationManagedBean.newQuotationDesc.weldingType}" style="width:180px" >
+                                    <p:selectOneMenu value="#{quotationManagedBean.newQuotationDesc.weldingType}" style="width:190px" >
                                         <f:selectItem itemValue="T.I.G" itemLabel="T.I.G" />
                                         <f:selectItem itemValue="Laser" itemLabel="Laser" />
                                     </p:selectOneMenu>
-                            </div>
-                                <br />
+                                </div>
                                 <p:commandButton value="Add" actionListener="#{quotationManagedBean.addToCacheList}" update=":mainForm:msgs mydata weldPanel" icon="" style="padding-top: 5px; padding-bottom: 5px; padding-left: 22px; padding-right: 22px">
                                 </p:commandButton>
-
                             </p:column>
                         </p:row>
 
@@ -78,14 +76,14 @@
                                 <br />
                                 <p:inputTextarea style="font-weight: normal" id="Description" autoResize="false" placeholder="Include metal code/name and welding instructions" value="#{quotationManagedBean.newQuotationDesc.itemDesc}" rows="5" cols="60" />
                                 <br /><br />
-                                
+
                                 <br /><br /><br /><br /><br /><br />
                             </p:column>
                         </p:row>
-                        
+
 
                     </p:panelGrid>
-                    <br /><br />
+                    <br />
                     <p:dataTable value="#{quotationManagedBean.cacheList}" var="item" id="mydata" editable="true">
                         <p:column headerText="ID" width="5%">
                             <h:outputText value="#{item.quotationDescNo}"/>
@@ -95,7 +93,7 @@
                                 <f:facet name="output"><h:outputText style="text-align: left" value="#{item.metalName}"/></f:facet>
                                 <f:facet name="input">
                                     <p:autoComplete id="metalType" value="#{item.metalName}" completeMethod="#{quotationManagedBean.completeText}" />
-                                
+
                                 </f:facet>
                             </p:cellEditor>
                         </p:column>
@@ -169,7 +167,7 @@
                                         <p:column headerText="Metal" width="10%">
                                             <h:outputText value="#{quoteDescItem.metalName}" />
                                         </p:column>
-                                        
+
                                         <p:column headerText="Instructions" width="35%">
                                             <h:outputText value="#{quoteDescItem.itemDesc}" />
                                         </p:column>
@@ -200,9 +198,9 @@
                             <p:dialog styleClass="rfq" id="myDialogID" widgetVar="myDialogVar" modal="true" resizable="false" header="Purchase Order" showEffect="fade" width="500px">
                                 <p:panelGrid id="display" columns="2" columnClasses="label,value">
                                     <h:outputText value="Purchase No.: " style="width: 10%; font-weight: bolder; vertical-align: middle"/>
-                                    
+
                                     <p:inputText style="width: 210px; margin-top: 1px;font-weight: normal; font-size: 14px; font-family: 'Open Sans';"  value="#{pOManagedBean.newPurOrder.customerRefPoNumber}" id="customerRefPoId"  />
-                                        
+
 
                                     <h:outputText value="Attention: " style="width: 10%; font-weight: bolder; vertical-align: middle"/>
                                     <h:outputText id="attnId" value="#{pOManagedBean.attn}" />
@@ -218,10 +216,10 @@
 
                                     <h:outputText value="Expected End Date: " style="width: 10%; font-weight: bolder"/>
                                     <h:outputText id="expectEndDateId" value="#{pOManagedBean.expectedEnd}" /> 
-                                    
+
                                     <h:outputText value="Item Jobs: " style="width: 15%; font-weight: bolder"/>
                                     <h:outputText id="descId" value="#{pOManagedBean.descriptions}" style="white-space: pre-wrap" escape="false"/>
-                                    
+
                                     <h:outputText value="Total Price (SGD): " style="width: 10%; font-weight: bolder"/>
                                     <h:outputText id="totalPriceId" value="#{pOManagedBean.totalPrice}" />
 
