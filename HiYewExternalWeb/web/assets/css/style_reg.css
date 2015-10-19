@@ -15,6 +15,10 @@ body{
     
 }
 
+.ui-state-hover {
+    box-shadow: none;
+}
+
 .ui-selectonemenu label.ui-selectonemenu-label:hover {
     cursor: pointer;
     background-color: #ebebeb!important;
