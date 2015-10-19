@@ -78,6 +78,7 @@ body{
 
 .ui-button-text-icon-left .ui-button-text {
     padding: 0em; 
+    font-weight: bold;
 }
 
 .ui-draggable .ui-dialog-titlebar {
@@ -97,8 +98,8 @@ body{
 .ui-state-highlight, .ui-widget-content .ui-state-highlight, .ui-widget-header .ui-state-highlight {
     border: 1px solid #666666;
     /* background: #aaaaaa; */
-    background: grey; // DDL
-    /* background: #aaaaaa -webkit-gradient(linear, left top, left bottom, from(rgba(0,0,0,0.25)), to(rgba(0,0,0,0))); */
+    /*background: none; // DDL? But now is row edit section*/
+     background: #aaaaaa -webkit-gradient(linear, left top, left bottom, from(rgba(255,255,255,0.8)), to(rgba(234,234,234,0))); 
     /*background: white; */
     color: black;
     text-shadow: none; // DDL
@@ -183,6 +184,15 @@ body{
     font-family: 'Open Sans';
     font-size: 14px;
 }
+
+.ui-widget-content .ui-state-default {
+    font-weight: normal;
+}
+
+.ui-widget-header .ui-state-default {
+    font-weight: bold;
+}
+
 .subscribe .ui-widget {
     /*font-family: Arial,sans-serif;*/
     font-size: 1.1em;
