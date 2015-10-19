@@ -160,7 +160,7 @@ public class LoginManagedBean implements Serializable {
                     EmailManager emailManager = new EmailManager();
                     emailManager.emailPassword(output[0], output[1], output[2]);
                     return "login?faces-redirect=true";
-                }else{
+                } else {
                     FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("forgotMessage", "Invalid secret question or answer!");
                 }
             } else {
@@ -183,7 +183,10 @@ public class LoginManagedBean implements Serializable {
             newSupplier.setPhone(c.getPhone());
             newSupplier.setPostalCode(c.getPostalCode());
             newSupplier.setPw(c.getPw());
-            newSupplier.setSubscribeEmail(c.getSubscribeEmail());
+            newSupplier.setSubscribeEmail_qPriceUpdates(c.isSubscribeEmail_qPriceUpdates());
+            newSupplier.setSubscribeSMS_qPriceUpdates(c.isSubscribeSMS_qPriceUpdates());
+            newSupplier.setSubscribeEmail_poDeliveryUpdates(c.isSubscribeEmail_poDeliveryUpdates());
+            newSupplier.setSubscribeSMS_poDeliveryUpdates(c.isSubscribeSMS_poDeliveryUpdates());
             newSupplier.setUserName(c.getUserName());
             newSupplier.setSecretQuestion(c.getSecretQuestion());
             newSupplier.setSecretAnswer(c.getSecretAnswer());
@@ -208,7 +211,10 @@ public class LoginManagedBean implements Serializable {
                 if (newCustomer.getPw().equals(rePassword)) {
                     // encrypt password
                     newCustomer.setPw(customerSessionBean.encryptPassword(newCustomer.getPw()));
-                    newCustomer.setSubscribeEmail(true);
+                    newCustomer.setSubscribeEmail_qPriceUpdates(true);
+                    newCustomer.setSubscribeSMS_qPriceUpdates(true);
+                    newCustomer.setSubscribeEmail_poDeliveryUpdates(true);
+                    newCustomer.setSubscribeSMS_poDeliveryUpdates(true);
 
                     customerSessionBean.createCustomer(newCustomer);
                     EmailManager emailManager = new EmailManager();
@@ -234,7 +240,10 @@ public class LoginManagedBean implements Serializable {
 
                         // encrypt password
                         newCustomer.setPw(customerSessionBean.encryptPassword(newCustomer.getPw()));
-                        newCustomer.setSubscribeEmail(true);
+                        newCustomer.setSubscribeEmail_qPriceUpdates(true);
+                        newCustomer.setSubscribeSMS_qPriceUpdates(true);
+                        newCustomer.setSubscribeEmail_poDeliveryUpdates(true);
+                        newCustomer.setSubscribeSMS_poDeliveryUpdates(true);
 
                         //map values from customer acct to supplier acct for same user
                         newSupplier.setAddress1(newCustomer.getAddress1());
@@ -244,7 +253,10 @@ public class LoginManagedBean implements Serializable {
                         newSupplier.setPhone(newCustomer.getPhone());
                         newSupplier.setPostalCode(newCustomer.getPostalCode());
                         newSupplier.setPw(newCustomer.getPw());
-                        newSupplier.setSubscribeEmail(newCustomer.getSubscribeEmail());
+                        newSupplier.setSubscribeEmail_qPriceUpdates(newCustomer.isSubscribeEmail_qPriceUpdates());
+                        newSupplier.setSubscribeSMS_qPriceUpdates(newCustomer.isSubscribeSMS_qPriceUpdates());
+                        newSupplier.setSubscribeEmail_poDeliveryUpdates(newCustomer.isSubscribeEmail_poDeliveryUpdates());
+                        newSupplier.setSubscribeSMS_poDeliveryUpdates(newCustomer.isSubscribeSMS_poDeliveryUpdates());
                         newSupplier.setUserName(newCustomer.getUserName());
                         newSupplier.setSecretQuestion(newCustomer.getSecretQuestion());
                         newSupplier.setSecretAnswer(newCustomer.getSecretAnswer());

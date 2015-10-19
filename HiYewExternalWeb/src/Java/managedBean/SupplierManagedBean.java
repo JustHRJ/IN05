@@ -46,7 +46,7 @@ public class SupplierManagedBean implements Serializable {
     }
 
     public void changeSubscribeEmail() throws IOException {
-        System.out.println("this.subscribeEmail = " + supplier.getSubscribeEmail());
+        //System.out.println("this.subscribeEmail = " + supplier.getSubscribeEmail());
         FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("popupMessage", "Subcription has been updated successfully!");
         supplierSessionBean.updateSupplier(supplier);
     }

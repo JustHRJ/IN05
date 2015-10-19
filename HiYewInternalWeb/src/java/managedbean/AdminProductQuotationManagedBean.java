@@ -30,7 +30,7 @@ public class AdminProductQuotationManagedBean implements Serializable {
     private CustomerSessionBeanLocal customerSessionBean;
 
     private String status = "Pending";
-    
+
     // get current year quotations by default
     private Integer year = Calendar.getInstance().get(Calendar.YEAR);
     private ArrayList<ProductQuotation> receivedNewProductQuotationList;
@@ -90,11 +90,10 @@ public class AdminProductQuotationManagedBean implements Serializable {
         productQuotationSessionBean.updateProductQuotationRelayedStatus(selectedProductQuotation);
 
         Customer customer = customerSessionBean.getCustomerByUsername(username);
-        if (customer.getSubscribeEmail()) {
-            EmailManager emailManager = new EmailManager();
-            // Email Germany supplier for purchasing products
-            emailManager.emailGermanySupplierToRFQ(selectedProductQuotation.getProductQuotationNo(), this.retrieveEmailProductQuotationDescriptionList(selectedProductQuotation.getProductQuotationNo()));
-        }
+
+        // Email Germany supplier for purchasing products
+        EmailManager emailManager = new EmailManager();
+        emailManager.emailGermanySupplierToRFQ(selectedProductQuotation.getProductQuotationNo(), this.retrieveEmailProductQuotationDescriptionList(selectedProductQuotation.getProductQuotationNo()));
 
         selectedProductQuotation = new ProductQuotation();
         FacesContext.getCurrentInstance().addMessage("msgs", new FacesMessage(FacesMessage.SEVERITY_INFO, "Product quotation has been sent to supplier!", ""));
@@ -128,9 +127,12 @@ public class AdminProductQuotationManagedBean implements Serializable {
             productQuotationSessionBean.updateProductQuotationStatus(selectedProductQuotation);
 
             Customer customer = customerSessionBean.getCustomerByUsername(username);
-            if (customer.getSubscribeEmail()) {
+            if (customer.isSubscribeEmail_qPriceUpdates()) {
                 EmailManager emailManager = new EmailManager();
                 emailManager.emailProductQuotationPriceUpdate(customer.getName(), customer.getEmail(), selectedProductQuotation.getProductQuotationNo());
+            }
+            if (customer.isSubscribeSMS_qPriceUpdates()) {
+                
             }
             selectedProductQuotation = new ProductQuotation();
         } else {
