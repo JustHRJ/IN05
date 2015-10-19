@@ -33,6 +33,8 @@ public class ProductQuotationManagedBean implements Serializable {
     private String date = "";
     private String productQuotationNo = "";
     private Integer count;
+    
+    private String selectedMachine = "";
 
     private ArrayList<ProductQuotationDescription> cacheList = new ArrayList<>();
     ;
@@ -396,5 +398,19 @@ public class ProductQuotationManagedBean implements Serializable {
      */
     public void setDisplayProductQuotationDescriptionList(ArrayList<ProductQuotationDescription> displayProductQuotationDescriptionList) {
         this.displayProductQuotationDescriptionList = displayProductQuotationDescriptionList;
+    }
+
+    /**
+     * @return the selectedMachine
+     */
+    public String getSelectedMachine() {
+        return selectedMachine;
+    }
+
+    /**
+     * @param selectedMachine the selectedMachine to set
+     */
+    public void setSelectedMachine(String selectedMachine) {
+        this.selectedMachine = selectedMachine;
     }
 }
