@@ -16,6 +16,8 @@ import entity.EmployeeEntity;
 import entity.FillerEntity;
 import entity.LeaveEntity;
 import entity.MachineMaintainenceEntity;
+import entity.MachineRepairEntity;
+import entity.Metal;
 import entity.PayrollEntity;
 import entity.TrainingScheduleEntity;
 import java.math.BigInteger;
@@ -104,6 +106,8 @@ public class HiYewSystemBean implements HiYewSystemBeanLocal {
             machine.setExtension(extension);
             Collection<MachineMaintainenceEntity> machineMaint = new ArrayList<MachineMaintainenceEntity>();
             machine.setMachineMaintainence(machineMaint);
+            Collection<MachineRepairEntity> repairs = new ArrayList<MachineRepairEntity>();
+            machine.setMachineRepair(repairs);
             em.persist(machine);
             return true;
         }
@@ -2723,6 +2727,37 @@ public class HiYewSystemBean implements HiYewSystemBeanLocal {
         return results;
     }
 
+    public List<Vector> transferMetalInfo() {
+        List<Vector> results = new ArrayList<Vector>();
+        Query q = em.createQuery("select c from Metal c");
+        System.out.println("shit");
+        for (Object o : q.getResultList()) {
+            Metal f = (Metal) o;
+            Vector im = new Vector();
+            im.add(f.getId());
+            im.add(f.getMetalName());
+            im.add(f.getAluminium());
+            im.add(f.getBronze());
+            im.add(f.getCopper());
+            im.add(f.getIron());
+            im.add(f.getPlastic());
+            im.add(f.getTitanium());
+            im.add(f.getPlatinium());
+            im.add(f.getSilver());
+            im.add(f.getTopaz());
+            im.add(f.getGold());
+
+            results.add(im);
+        }
+        if (results.isEmpty()) {
+            System.out.println("here");
+            return null;
+        }
+        System.out.println("collected");
+        System.out.println(results.size());
+        return results;
+    }
+
     public List<FillerEntity> fillerRecords() {
 
         List<FillerEntity> results = new ArrayList<FillerEntity>();
@@ -2744,23 +2779,244 @@ public class HiYewSystemBean implements HiYewSystemBeanLocal {
 
     public void editFiller(FillerEntity filler) {
         if (filler == null) {
-            System.out.println("here2");
+            System.out.println("filler info is missing");
         } else {
-            System.out.println("here3");
-           
             em.merge(filler);
         }
     }
-    
-    public void deleteFiller(FillerEntity filler){
-        if(filler != null){
+
+    public void deleteFiller(FillerEntity filler) {
+        if (filler != null) {
             Long id = filler.getId();
             FillerEntity f = em.find(FillerEntity.class, id);
-            if(f == null){
-                System.out.println("shucks");
-            }else{
+            if (f == null) {
+                System.out.println("no filler to delete");
+            } else {
                 em.remove(f);
             }
         }
+    }
+
+    public void createRepair(MachineRepairEntity machine, Date date, String machineName) {
+        Timestamp time = new Timestamp(date.getTime());
+        machine.setDate(time);
+
+        MachineEntity m = new MachineEntity();
+        try {
+            Query q = em.createQuery("select m from MachineEntity m where m.machine_name =:id");
+            q.setParameter("id", machineName);
+            m = (MachineEntity) q.getSingleResult();
+            machine.setMachine(m);
+            em.persist(machine);
+
+            m.getMachineRepair().add(machine);
+
+            em.merge(m);
+
+        } catch (Exception ex) {
+
+        }
+    }
+
+    public List<MachineRepairEntity> repairList(MachineEntity machine) {
+        Collection<MachineRepairEntity> records = machine.getMachineRepair();
+
+        List<MachineRepairEntity> results = new ArrayList<MachineRepairEntity>();
+
+        for (Object o : records) {
+            MachineRepairEntity m = (MachineRepairEntity) o;
+            results.add(m);
+        }
+        if (results.isEmpty()) {
+            return null;
+        } else {
+            return results;
+        }
+    }
+
+    public void addMetal(List<Vector> metals) {
+        Query q = em.createQuery("Select c from Metal c");
+        for (Object o : q.getResultList()) {
+            Metal m = (Metal) o;
+            em.remove(m);
+            em.flush();
+        }
+
+        if (metals != null) {
+            for (Object o : metals) {
+                Vector im = (Vector) o;
+                Metal f = new Metal();
+                f.setId(im.get(0).toString());
+                f.setMetalName(im.get(1).toString());
+                f.setAluminium(Integer.parseInt(im.get(2).toString()));
+                f.setBronze(Integer.parseInt(im.get(3).toString()));
+                f.setCopper(Integer.parseInt(im.get(4).toString()));
+                f.setGold(Integer.parseInt(im.get(5).toString()));
+                f.setIron(Integer.parseInt(im.get(6).toString()));
+                f.setPlastic(Integer.parseInt(im.get(7).toString()));
+                f.setSilver(Integer.parseInt(im.get(8).toString()));
+                f.setTitanium(Integer.parseInt(im.get(9).toString()));
+                f.setPlatinium(Integer.parseInt(im.get(10).toString()));
+                f.setTopaz(Integer.parseInt(im.get(11).toString()));
+                em.persist(f);
+            }
+        }
+        System.out.println("metal added");
+    }
+
+    public List<Metal> metalRecords() {
+        List<Metal> results = new ArrayList<Metal>();
+        Query q = em.createQuery("select c from Metal c");
+
+        for (Object o : q.getResultList()) {
+            Metal f = (Metal) o;
+
+            results.add(f);
+        }
+        if (results.isEmpty()) {
+            System.out.println("no metal records found");
+            return null;
+        }
+
+        return results;
+    }
+
+    public void editMetal(Metal metal) {
+        if (metal == null) {
+            System.out.println("no metal info present");
+        } else {
+            em.merge(metal);
+        }
+    }
+
+    public void deleteMetal(Metal metal) {
+        if (metal == null) {
+            System.out.println("no metal to delete");
+        } else {
+            String id = metal.getId();
+            Metal m = em.find(Metal.class, id);
+            if (m == null) {
+                System.out.println("entity failed to find id of metal");
+            } else {
+                em.remove(m);
+                em.flush();
+            }
+        }
+    }
+
+    public List<String> retrieveFillerNames() {
+        Query q = em.createQuery("select c from FillerEntity c");
+        List<String> results = new ArrayList<String>();
+        for (Object o : q.getResultList()) {
+            FillerEntity f = (FillerEntity) o;
+            results.add(f.getName());
+        }
+        if (results.isEmpty()) {
+            return null;
+        } else {
+            return results;
+        }
+    }
+
+    public List<String> metalNames() {
+        List<String> result = new ArrayList<String>();
+        Query q = em.createQuery("select c from Metal c");
+        for (Object o : q.getResultList()) {
+            Metal m = (Metal) o;
+            result.add(m.getMetalName());
+        }
+        if (result.isEmpty()) {
+            return null;
+        } else {
+            return result;
+        }
+    }
+
+    public void createPairings(String metal, List<String> fillerChosen) {
+        Metal m = new Metal();
+        Collection<FillerEntity> fillers = new ArrayList<FillerEntity>();
+        try {
+            Query q = em.createQuery("select m from Metal m where m.metalName = :id");
+            q.setParameter("id", metal);
+            m = (Metal) q.getSingleResult();
+
+            if (fillerChosen.isEmpty()) {
+                System.out.println("no fillerchosen");
+            }
+            System.out.println(fillerChosen.size());
+            for (Object o : fillerChosen) {
+                String fn = (String) o;
+                System.out.println(fn);
+                FillerEntity f = new FillerEntity();
+                q = em.createQuery("select f from FillerEntity f where f.name =:id");
+                q.setParameter("id", fn);
+                f = (FillerEntity) q.getSingleResult();
+                fillers.add(f);
+            }
+            System.out.println("error here3");
+            m.setFillers(fillers);
+            System.out.println("error here4");
+            em.merge(m);
+            System.out.println("Pairing created");
+        } catch (Exception ex) {
+            System.out.println("error occured");
+        }
+    }
+
+    public List<String> FillersNotAssociated(String metalName) {
+        Metal m = new Metal();
+        List<String> result = new ArrayList<String>();
+        try {
+            Query q = em.createQuery("select c from FillerEntity c");
+            Query z = em.createQuery("select m from Metal m where m.metalName = :id");
+            z.setParameter("id", metalName);
+            m = (Metal) z.getSingleResult();
+            for (Object o : q.getResultList()) {
+                FillerEntity f = (FillerEntity) o;
+                if (m.getFillers().contains(f)) {
+                    System.out.println("should not add: not associated");
+                } else {
+                    result.add(f.getName());
+                }
+            }
+            if (result.isEmpty()) {
+                return new ArrayList<String>();
+            } else {
+                return result;
+            }
+
+        } catch (Exception ex) {
+            return new ArrayList<String>();
+        }
+
+    }
+
+    public List<String> FillersAssociated(String metalName) {
+        Metal m = new Metal();
+        List<String> result = new ArrayList<String>();
+        try {
+            Query q = em.createQuery("select c from FillerEntity c");
+            Query z = em.createQuery("select m from Metal m where m.metalName = :id");
+            z.setParameter("id", metalName);
+            m = (Metal) z.getSingleResult();
+            for (Object o : q.getResultList()) {
+                FillerEntity f = (FillerEntity) o;
+                if (m.getFillers().contains(f)) {
+                    result.add(f.getName());
+                } else {
+                    System.out.println("should not add: associated");
+
+                }
+            }
+            if (result.isEmpty()) {
+                return new ArrayList<String>();
+            } else {
+                return result;
+            }
+
+        } catch (Exception ex) {
+            return new ArrayList<String>();
+        }
+
     }
 }

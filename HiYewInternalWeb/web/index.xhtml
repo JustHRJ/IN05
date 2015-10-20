@@ -22,7 +22,11 @@
             #{loginControlBean.checkLoginRedirect()}
             <p:commandButton value ="try" action ="#{knowledgeManageBean.readFile()}"/>
             <p:commandButton value ="try1" action ="#{knowledgeManageBean.writeFile()}"/> 
-             <p:commandButton value ="try2" action ="#{knowledgeManageBean.writeFile2()}"/> 
+            <p:commandButton value ="try2" action ="#{knowledgeManageBean.writeFile2()}"/> 
+            <p:commandButton value ="try3" action ="#{knowledgeManageBean.readFile2()}"/> 
+            <p:commandButton value ="try4" action ="#{knowledgeManageBean.writeFile3()}"/>
+
+
             <p:commandButton value ="#{loginControlBean.logged()}" action ="#{loginControlBean.userAction()}"/>
 
             <p:commandLink value ="Change Password" action ="#{hiYewManagedBean.redirectP}"/> 

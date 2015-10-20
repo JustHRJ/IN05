@@ -12,6 +12,8 @@ import entity.FillerEntity;
 import entity.LeaveEntity;
 import entity.MachineEntity;
 import entity.MachineMaintainenceEntity;
+import entity.MachineRepairEntity;
+import entity.Metal;
 import entity.PayrollEntity;
 import entity.TrainingScheduleEntity;
 import java.sql.Timestamp;
@@ -239,5 +241,29 @@ public interface HiYewSystemBeanLocal {
     public void editFiller(FillerEntity filler);
 
     public void deleteFiller(FillerEntity filler);
+
+    public void createRepair(MachineRepairEntity machine, Date date, String machineName);
+
+    public List<MachineRepairEntity> repairList(MachineEntity machine);
+
+    public void addMetal(List<Vector> metals);
+
+    public List<Vector> transferMetalInfo();
+
+    public List<Metal> metalRecords();
+
+    public void editMetal(Metal metal);
+
+    public void deleteMetal(Metal metal);
+
+    public List<String> retrieveFillerNames();
+
+    public List<String> metalNames();
+
+    public void createPairings(String metal, List<String> fillerChosen);
+
+    public List<String> FillersNotAssociated(String metalName);
+
+    public List<String> FillersAssociated(String metalName);
 
 }
