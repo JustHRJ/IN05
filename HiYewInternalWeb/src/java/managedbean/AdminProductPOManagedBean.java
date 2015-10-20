@@ -129,11 +129,10 @@ public class AdminProductPOManagedBean implements Serializable {
         productPurchaseOrderSessionBean.updateProductPORelayedStatus(selectedProductPO);
 
         Customer customer = customerSessionBean.getCustomerByUsername(username);
-        if (customer.getSubscribeEmail()) {
-            EmailManager emailManager = new EmailManager();
-            // Email Germany supplier for purchasing products
-            emailManager.emailGermanySupplierToPurchase(selectedProductPO.getProductPurchaseOrderID(), this.retrieveEmailProductQuotationDescriptionList(selectedProductPO.getProductPurchaseOrderID()));
-        }
+
+        // Email Germany supplier for purchasing products
+        EmailManager emailManager = new EmailManager();
+        emailManager.emailGermanySupplierToPurchase(selectedProductPO.getProductPurchaseOrderID(), this.retrieveEmailProductQuotationDescriptionList(selectedProductPO.getProductPurchaseOrderID()));
 
         selectedProductPO = new ProductPurchaseOrder();
         FacesContext.getCurrentInstance().addMessage("msgs", new FacesMessage(FacesMessage.SEVERITY_INFO, "Product PO has been sent to supplier!", ""));
@@ -147,10 +146,14 @@ public class AdminProductPOManagedBean implements Serializable {
         productPurchaseOrderSessionBean.updateProductPOStatus(selectedProductPO);
 
         Customer customer = customerSessionBean.getCustomerByUsername(username);
-        if (customer.getSubscribeEmail()) {
+        if (customer.isSubscribeEmail_poDeliveryUpdates()) {
             EmailManager emailManager = new EmailManager();
             // Email customer for delivery date update
             emailManager.emailProductPODeliveryDateUpdate(customer.getName(), customer.getEmail(), selectedProductPO.getProductPurchaseOrderID());
+        }
+        
+        if (customer.isSubscribeSMS_poDeliveryUpdates()) {
+            
         }
 
         selectedProductPO = new ProductPurchaseOrder();

@@ -15,6 +15,10 @@ body{
     
 }
 
+.ui-state-hover {
+    box-shadow: none;
+}
+
 .ui-selectonemenu label.ui-selectonemenu-label:hover {
     cursor: pointer;
     background-color: #ebebeb!important;
@@ -1180,6 +1184,7 @@ FORM SELECTOR
 }
 
 .ui-selectonemenu-panel .ui-selectonemenu-list-item {
+    width: 301px;
     border: 0px none;
     margin: 1px 0;
     padding: 10px 10px 10px 7px;

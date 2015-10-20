@@ -62,6 +62,7 @@ public class EmailManager {
 
                 String message = "<div class=\"text\">";
                 message = message + "Dear <b>" + name + "</b>,<br /><br />";
+                message = message + "This is to confirm that your account with HiYew is now active.<br /><br />";
                 message = message + "Your username:  <b>" + username + "</b><br/>";
                 message = message + "Your password: <b>" + password + "</b><br /><br />";
                 message = message + "Best Regards,<br />";

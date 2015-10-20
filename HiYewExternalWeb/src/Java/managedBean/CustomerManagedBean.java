@@ -22,7 +22,10 @@ public class CustomerManagedBean implements Serializable {
     private String rePassword = "";
     private String changePasswordInput = "";
     private String newPassword = "";
-    private String subscribeEmail = "";
+    private boolean subscribeEmail_qPriceUpdates;
+    private boolean subscribeSMS_qPriceUpdates;
+    private boolean subscribeEmail_poDeliveryUpdates;
+    private boolean subscribeSMS_poDeliveryUpdates;
 
     public CustomerManagedBean() {
         FacesContext.getCurrentInstance().getExternalContext().getSessionMap().remove("popupMessage");
@@ -47,8 +50,8 @@ public class CustomerManagedBean implements Serializable {
         FacesContext.getCurrentInstance().getExternalContext().redirect("/HiYewExternalWeb/c-user-profile.xhtml");
     }
 
-    public void changeSubscribeEmail() throws IOException {
-        System.out.println("this.subscribeEmail = " + customer.getSubscribeEmail());
+    public void changeSubscription() throws IOException {
+        //sSystem.out.println("this.subscribeEmail = " + customer.getSubscribeEmail());
         //FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("popupMessage", "Subcription has been updated successfully!");
         customerSessionBean.updateCustomer(customer);
         FacesContext.getCurrentInstance().addMessage("emailMsg", new FacesMessage(FacesMessage.SEVERITY_INFO, "Subcription has been updated successfully!", ""));
@@ -79,20 +82,6 @@ public class CustomerManagedBean implements Serializable {
                 FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Incorrect current password!", ""));
             }
         }
-    }
-
-    /**
-     * @return the subscribeEmail
-     */
-    public String getSubscribeEmail() {
-        return subscribeEmail;
-    }
-
-    /**
-     * @param subscribeEmail the subscribeEmail to set
-     */
-    public void setSubscribeEmail(String subscribeEmail) {
-        this.subscribeEmail = subscribeEmail;
     }
 
     /**
@@ -164,5 +153,61 @@ public class CustomerManagedBean implements Serializable {
      */
     public void setNewPassword(String newPassword) {
         this.newPassword = newPassword;
+    }
+
+    /**
+     * @return the subscribeEmail_qPriceUpdates
+     */
+    public boolean isSubscribeEmail_qPriceUpdates() {
+        return subscribeEmail_qPriceUpdates;
+    }
+
+    /**
+     * @param subscribeEmail_qPriceUpdates the subscribeEmail_qPriceUpdates to set
+     */
+    public void setSubscribeEmail_qPriceUpdates(boolean subscribeEmail_qPriceUpdates) {
+        this.subscribeEmail_qPriceUpdates = subscribeEmail_qPriceUpdates;
+    }
+
+    /**
+     * @return the subscribeSMS_qPriceUpdates
+     */
+    public boolean isSubscribeSMS_qPriceUpdates() {
+        return subscribeSMS_qPriceUpdates;
+    }
+
+    /**
+     * @param subscribeSMS_qPriceUpdates the subscribeSMS_qPriceUpdates to set
+     */
+    public void setSubscribeSMS_qPriceUpdates(boolean subscribeSMS_qPriceUpdates) {
+        this.subscribeSMS_qPriceUpdates = subscribeSMS_qPriceUpdates;
+    }
+
+    /**
+     * @return the subscribeEmail_poDeliveryUpdates
+     */
+    public boolean isSubscribeEmail_poDeliveryUpdates() {
+        return subscribeEmail_poDeliveryUpdates;
+    }
+
+    /**
+     * @param subscribeEmail_poDeliveryUpdates the subscribeEmail_poDeliveryUpdates to set
+     */
+    public void setSubscribeEmail_poDeliveryUpdates(boolean subscribeEmail_poDeliveryUpdates) {
+        this.subscribeEmail_poDeliveryUpdates = subscribeEmail_poDeliveryUpdates;
+    }
+
+    /**
+     * @return the subscribeSMS_poDeliveryUpdates
+     */
+    public boolean isSubscribeSMS_poDeliveryUpdates() {
+        return subscribeSMS_poDeliveryUpdates;
+    }
+
+    /**
+     * @param subscribeSMS_poDeliveryUpdates the subscribeSMS_poDeliveryUpdates to set
+     */
+    public void setSubscribeSMS_poDeliveryUpdates(boolean subscribeSMS_poDeliveryUpdates) {
+        this.subscribeSMS_poDeliveryUpdates = subscribeSMS_poDeliveryUpdates;
     }
 }

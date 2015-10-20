@@ -179,8 +179,8 @@ public class QuotationManagedBean implements Serializable {
             newQuotation = new Quotation();
             newQuotationDesc = new QuotationDescription();
             //set quotation tab to be selected
-            System.out.println("Your RFQ has been submitted successfully!");
-            FacesContext.getCurrentInstance().addMessage("msg", new FacesMessage("Your RFQ has been submitted successfully!", ""));
+            //System.out.println("Your RFQ has been sent successfully!");
+            FacesContext.getCurrentInstance().addMessage("msg", new FacesMessage("Your RFQ has been sent successfully!", ""));
         }
     }
 
