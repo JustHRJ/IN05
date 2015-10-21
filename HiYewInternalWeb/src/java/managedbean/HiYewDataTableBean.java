@@ -16,7 +16,7 @@ import java.util.Vector;
 import javax.ejb.EJB;
 import javax.inject.Named;
 import javax.enterprise.context.RequestScoped;
-import session.stateful.HiYewSystemBeanLocal;
+import session.stateless.HiYewSystemBeanLocal;
 
 /**
  *

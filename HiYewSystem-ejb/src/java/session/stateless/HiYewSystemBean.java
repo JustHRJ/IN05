@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package session.stateful;
+package session.stateless;
 
 import entity.ActivationCode;
 import entity.EmployeeClaimEntity;
@@ -32,13 +32,14 @@ import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 import java.util.Vector;
+import javax.ejb.Stateless;
 import javax.persistence.Query;
 
 /**
  *
  * @author JustHRJ
  */
-@Stateful
+@Stateless
 public class HiYewSystemBean implements HiYewSystemBeanLocal {
 
     // Add business logic below. (Right-click in editor and choose
@@ -2670,6 +2671,13 @@ public class HiYewSystemBean implements HiYewSystemBeanLocal {
     }
 
     public void addFillers(List<Vector> fillers) {
+        Query z = em.createQuery("select c from Metal c");
+        for(Object o: z.getResultList()){
+            Metal m = (Metal) o;
+            m.setFillers(null);
+            em.merge(m);
+        }
+    
         Query q = em.createQuery("select c from FillerEntity c");
         for (Object o : q.getResultList()) {
             FillerEntity f = (FillerEntity) o;
@@ -2838,6 +2846,8 @@ public class HiYewSystemBean implements HiYewSystemBeanLocal {
         Query q = em.createQuery("Select c from Metal c");
         for (Object o : q.getResultList()) {
             Metal m = (Metal) o;
+            m.setFillers(null);
+            em.merge(m);
             em.remove(m);
             em.flush();
         }

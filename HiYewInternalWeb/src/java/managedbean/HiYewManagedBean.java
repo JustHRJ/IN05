@@ -29,7 +29,7 @@ import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import manager.EmailManager;
 import org.primefaces.event.RowEditEvent;
-import session.stateful.HiYewSystemBeanLocal;
+import session.stateless.HiYewSystemBeanLocal;
 import session.stateless.HiYewSystemTimer;
 
 /**

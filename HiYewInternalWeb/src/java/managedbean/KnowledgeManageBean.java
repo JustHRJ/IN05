@@ -28,7 +28,7 @@ import jxl.write.WritableWorkbook;
 import jxl.write.WriteException;
 import org.primefaces.event.RowEditEvent;
 import org.primefaces.model.DualListModel;
-import session.stateful.HiYewSystemBeanLocal;
+import session.stateless.HiYewSystemBeanLocal;
 
 /**
  *
@@ -49,7 +49,7 @@ public class KnowledgeManageBean implements Serializable {
     private Metal selectedMetal;
     private int copper;
     private List<Vector> results2 = new ArrayList<Vector>();
-    private String metalName ="";
+    private String metalName = "";
     private List<String> fillerList = new ArrayList<String>();
     private List<String> fillerChosen = new ArrayList<String>();
     private DualListModel<String> fillerDisplay;
@@ -120,10 +120,12 @@ public class KnowledgeManageBean implements Serializable {
                 Vector im = new Vector();
                 for (int i = 0; i < sheet.getColumns(); i++) {
                     Cell cell = sheet.getCell(i, j);
-                    CellType type = cell.getType();
 
-                    im.add(cell.getContents());
-
+                    if (cell.getContents().isEmpty()) {
+                        im.add(0);
+                    } else {
+                        im.add(cell.getContents());
+                    }
                 }
                 results.add(im);
             }
@@ -174,10 +176,12 @@ public class KnowledgeManageBean implements Serializable {
                 Vector im = new Vector();
                 for (int i = 0; i < sheet.getColumns(); i++) {
                     Cell cell = sheet.getCell(i, j);
-                    CellType type = cell.getType();
 
-                    im.add(cell.getContents());
-
+                    if (cell.getContents().isEmpty()) {
+                        im.add(0);
+                    } else {
+                        im.add(cell.getContents());
+                    }
                 }
                 results.add(im);
             }
@@ -232,47 +236,46 @@ public class KnowledgeManageBean implements Serializable {
 
     public void write2() throws IOException, WriteException, BiffException {
 
+        Workbook workbook = Workbook.getWorkbook(new File(inputFile));
+        WritableWorkbook copy = Workbook.createWorkbook(new File(inputFile), workbook);
+        WritableSheet sheet1 = copy.createSheet("FillerInformation", 0);
+
+        jxl.write.Label number3 = new jxl.write.Label(0, 0, "ID");
+        sheet1.addCell(number3);
+
+        number3 = new jxl.write.Label(1, 0, "NAME");
+        sheet1.addCell(number3);
+
+        number3 = new jxl.write.Label(2, 0, "GOLD");
+        sheet1.addCell(number3);
+
+        number3 = new jxl.write.Label(3, 0, "SILVER");
+        sheet1.addCell(number3);
+
+        number3 = new jxl.write.Label(4, 0, "BRONZE");
+        sheet1.addCell(number3);
+
+        number3 = new jxl.write.Label(5, 0, "IRON");
+        sheet1.addCell(number3);
+
+        number3 = new jxl.write.Label(6, 0, "COPPER");
+        sheet1.addCell(number3);
+
+        number3 = new jxl.write.Label(7, 0, "TITANIUM");
+        sheet1.addCell(number3);
+
+        number3 = new jxl.write.Label(8, 0, "PLATINIUM");
+        sheet1.addCell(number3);
+
+        number3 = new jxl.write.Label(9, 0, "ALUMINIUM");
+        sheet1.addCell(number3);
+
+        number3 = new jxl.write.Label(10, 0, "TOPAZ");
+        sheet1.addCell(number3);
+
+        number3 = new jxl.write.Label(11, 0, "PLASTIC");
+        sheet1.addCell(number3);
         if (results != null) {
-            System.out.println(results.size());
-            Workbook workbook = Workbook.getWorkbook(new File(inputFile));
-            WritableWorkbook copy = Workbook.createWorkbook(new File(inputFile), workbook);
-            WritableSheet sheet1 = copy.createSheet("FillerInformation", 0);
-
-            jxl.write.Label number3 = new jxl.write.Label(0, 0, "ID");
-            sheet1.addCell(number3);
-
-            number3 = new jxl.write.Label(1, 0, "NAME");
-            sheet1.addCell(number3);
-
-            number3 = new jxl.write.Label(2, 0, "GOLD");
-            sheet1.addCell(number3);
-
-            number3 = new jxl.write.Label(3, 0, "SILVER");
-            sheet1.addCell(number3);
-
-            number3 = new jxl.write.Label(4, 0, "BRONZE");
-            sheet1.addCell(number3);
-
-            number3 = new jxl.write.Label(5, 0, "IRON");
-            sheet1.addCell(number3);
-
-            number3 = new jxl.write.Label(6, 0, "COPPER");
-            sheet1.addCell(number3);
-
-            number3 = new jxl.write.Label(7, 0, "TITANIUM");
-            sheet1.addCell(number3);
-
-            number3 = new jxl.write.Label(8, 0, "PLATINIUM");
-            sheet1.addCell(number3);
-
-            number3 = new jxl.write.Label(9, 0, "ALUMINIUM");
-            sheet1.addCell(number3);
-
-            number3 = new jxl.write.Label(10, 0, "TOPAZ");
-            sheet1.addCell(number3);
-
-            number3 = new jxl.write.Label(11, 0, "PLASTIC");
-            sheet1.addCell(number3);
 
             int rows = results.size();
             for (int i = 1; i <= rows; i++) {
@@ -290,57 +293,57 @@ public class KnowledgeManageBean implements Serializable {
                 }
 
             }
-            copy.removeSheet(1);
-            System.out.println("done1");
-            copy.write();
-
-            copy.close();
         }
+        copy.removeSheet(1);
+        System.out.println("done1");
+        copy.write();
+
+        copy.close();
+
     }
 
     public void write3() throws IOException, WriteException, BiffException {
 
+        Workbook workbook = Workbook.getWorkbook(new File(inputFile));
+        WritableWorkbook copy = Workbook.createWorkbook(new File(inputFile), workbook);
+        WritableSheet sheet1 = copy.createSheet("MetalInformation", 1);
+
+        jxl.write.Label number3 = new jxl.write.Label(0, 0, "ID");
+        sheet1.addCell(number3);
+
+        number3 = new jxl.write.Label(1, 0, "NAME");
+        sheet1.addCell(number3);
+
+        number3 = new jxl.write.Label(2, 0, "GOLD");
+        sheet1.addCell(number3);
+
+        number3 = new jxl.write.Label(3, 0, "SILVER");
+        sheet1.addCell(number3);
+
+        number3 = new jxl.write.Label(4, 0, "BRONZE");
+        sheet1.addCell(number3);
+
+        number3 = new jxl.write.Label(5, 0, "IRON");
+        sheet1.addCell(number3);
+
+        number3 = new jxl.write.Label(6, 0, "COPPER");
+        sheet1.addCell(number3);
+
+        number3 = new jxl.write.Label(7, 0, "TITANIUM");
+        sheet1.addCell(number3);
+
+        number3 = new jxl.write.Label(8, 0, "PLATINIUM");
+        sheet1.addCell(number3);
+
+        number3 = new jxl.write.Label(9, 0, "ALUMINIUM");
+        sheet1.addCell(number3);
+
+        number3 = new jxl.write.Label(10, 0, "TOPAZ");
+        sheet1.addCell(number3);
+
+        number3 = new jxl.write.Label(11, 0, "PLASTIC");
+        sheet1.addCell(number3);
         if (results2 != null) {
-            System.out.println(results2.size());
-            Workbook workbook = Workbook.getWorkbook(new File(inputFile));
-            WritableWorkbook copy = Workbook.createWorkbook(new File(inputFile), workbook);
-            WritableSheet sheet1 = copy.createSheet("MetalInformation", 1);
-
-            jxl.write.Label number3 = new jxl.write.Label(0, 0, "ID");
-            sheet1.addCell(number3);
-
-            number3 = new jxl.write.Label(1, 0, "NAME");
-            sheet1.addCell(number3);
-
-            number3 = new jxl.write.Label(2, 0, "GOLD");
-            sheet1.addCell(number3);
-
-            number3 = new jxl.write.Label(3, 0, "SILVER");
-            sheet1.addCell(number3);
-
-            number3 = new jxl.write.Label(4, 0, "BRONZE");
-            sheet1.addCell(number3);
-
-            number3 = new jxl.write.Label(5, 0, "IRON");
-            sheet1.addCell(number3);
-
-            number3 = new jxl.write.Label(6, 0, "COPPER");
-            sheet1.addCell(number3);
-
-            number3 = new jxl.write.Label(7, 0, "TITANIUM");
-            sheet1.addCell(number3);
-
-            number3 = new jxl.write.Label(8, 0, "PLATINIUM");
-            sheet1.addCell(number3);
-
-            number3 = new jxl.write.Label(9, 0, "ALUMINIUM");
-            sheet1.addCell(number3);
-
-            number3 = new jxl.write.Label(10, 0, "TOPAZ");
-            sheet1.addCell(number3);
-
-            number3 = new jxl.write.Label(11, 0, "PLASTIC");
-            sheet1.addCell(number3);
 
             int rows = results2.size();
             for (int i = 1; i <= rows; i++) {
@@ -358,12 +361,14 @@ public class KnowledgeManageBean implements Serializable {
                 }
 
             }
+        }
+        
             copy.removeSheet(2);
             System.out.println("done1");
             copy.write();
 
             copy.close();
-        }
+        
     }
 
     /**
