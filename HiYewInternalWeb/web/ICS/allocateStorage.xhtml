@@ -105,7 +105,7 @@
 
 
                     <h:outputLabel for="itemCode" value="Item Code*:" style="font-weight:bold"/>                    
-                    <p:autoComplete id="itemCode" value="#{allocateStorageManagedBean.itemCode}" completeMethod="#{allocateStorageManagedBean.completeText}" />
+                    <p:autoComplete id="itemCode" value="#{allocateStorageManagedBean.fillerCode}" completeMethod="#{allocateStorageManagedBean.completeText}" />
                     <p:message for="itemCode" />
 
 
@@ -128,8 +128,8 @@
                 <p:dataTable  id="shelveInfoDataTable" var="shelveItem" value="#{allocateStorageManagedBean.infoList}" widgetVar="infoListTable" 
                               emptyMessage="No items found with given criteria" filteredValue="#{allocateStorageManagedBean.filteredInfoList}" >
 
-                    <p:column filterBy="#{shelveItem.item.itemCode}" sortBy="#{shelveItem.item.itemCode}" headerText="Item Code" footerText="contains" filterMatchMode="contains">
-                        <h:outputText value="#{shelveItem.item.itemCode}" />
+                    <p:column filterBy="#{shelveItem.item.fillerCode}" sortBy="#{shelveItem.item.fillerCode}" headerText="Item Code" footerText="contains" filterMatchMode="contains">
+                        <h:outputText value="#{shelveItem.item.fillerCode}" />
                     </p:column>
 
                     <p:column sortBy="#{shelveItem.storedQty}" filterBy="#{shelveItem.storedQty}" headerText="Stored Quantity"  >

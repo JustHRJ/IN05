@@ -100,14 +100,14 @@
                 <h:panelGrid id="itemDetailsGrid" columns="3" columnClasses="column" cellpadding="5">
 
                     <h:outputLabel for="itemCode" value="WireCode:" style="font-weight:bold" />
-                    <h:outputText id="itemCode" value="#{itemDetailsManagedBean.selectedItem.itemCode}" />
+                    <h:outputText id="itemCode" value="#{itemDetailsManagedBean.selectedItem.fillerCode}" />
                     <p:message for="itemCode" />
 
 
                     <h:outputLabel for="itemName1" value="WireName:" style="font-weight:bold"/>
                     <p:inplace id="itemName" editor="true">
                         <p:ajax  event="save" update="itemDetailsPanel"/>
-                        <p:inputText id="itemName1" value="#{itemDetailsManagedBean.selectedItem.itemName}" required="true" requiredMessage="Item Name is required!" label="text" />
+                        <p:inputText id="itemName1" value="#{itemDetailsManagedBean.selectedItem.fillerName}" required="true" requiredMessage="Item Name is required!" label="text" />
                     </p:inplace>
                     <p:message for="itemName1" />
 
@@ -199,7 +199,7 @@
                     <p:commandButton value="Update Item Details" update="upperForm" icon="ui-icon-check" action="#{itemDetailsManagedBean.updateItemDetails}"/>
                     <p:commandButton  value="Procurement Request" action="#{itemDetailsManagedBean.passSelectedItemToNext()}" />    
                     <p:commandButton value="Delete Item" action="#{itemDetailsManagedBean.deleteItem}" update="message">
-                        <p:confirm header="Deletion Confirmation" message="Are you sure you want to delete item #{itemDetailsManagedBean.selectedItem.itemCode}?" icon="ui-icon-alert" />
+                        <p:confirm header="Deletion Confirmation" message="Are you sure you want to delete item #{itemDetailsManagedBean.selectedItem.fillerCode}?" icon="ui-icon-alert" />
                     </p:commandButton>
                 </h:panelGrid>
 

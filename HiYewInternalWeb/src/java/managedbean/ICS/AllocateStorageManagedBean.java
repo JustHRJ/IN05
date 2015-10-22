@@ -5,7 +5,7 @@
  */
 package managedbean.ICS;
 
-import entity.ItemEntity;
+import entity.FillerEntity;
 import entity.ShelveEntity;
 import entity.StorageInfoEntity;
 import java.io.Serializable;
@@ -32,7 +32,7 @@ public class AllocateStorageManagedBean implements Serializable {
     @EJB
     private HiYewICSSessionBeanLocal hiYewICSSessionBean;
 
-    private String itemCode;
+    private String fillerCode;
     private int allocationQty;
 
     private int removalQty;
@@ -41,7 +41,7 @@ public class AllocateStorageManagedBean implements Serializable {
     private List<StorageInfoEntity> infoList;
     private List<StorageInfoEntity> filteredInfoList;
 
-    private ItemEntity selectedItem;
+    private FillerEntity selectedItem;
     private StorageInfoEntity selectedSI;
 
     /**
@@ -65,17 +65,17 @@ public class AllocateStorageManagedBean implements Serializable {
     }
 
     /**
-     * @return the itemCode
+     * @return the fillerCode
      */
-    public String getItemCode() {
-        return itemCode;
+    public String getFillerCode() {
+        return fillerCode;
     }
 
     /**
-     * @param itemCode the itemCode to set
+     * @param fillerCode the fillerCode to set
      */
-    public void setItemCode(String itemCode) {
-        this.itemCode = itemCode;
+    public void setFillerCode(String fillerCode) {
+        this.fillerCode = fillerCode;
     }
 
     /**
@@ -108,12 +108,12 @@ public class AllocateStorageManagedBean implements Serializable {
 
     public void addItemToShelve() {
 
-        if (hiYewICSSessionBean.getExistingItem(itemCode) == null) {
+        if (hiYewICSSessionBean.getExistingItem(fillerCode) == null) {
             System.out.println("Non exist itemcode");
             FacesContext.getCurrentInstance().addMessage("formMain:itemCode", new FacesMessage(FacesMessage.SEVERITY_ERROR, "No Such Item", "No such item in inventory"));
         } else {
             System.out.println("Existing itemcode");
-            ItemEntity item = hiYewICSSessionBean.getExistingItem(itemCode);
+            FillerEntity item = hiYewICSSessionBean.getExistingItem(fillerCode);
             if (hiYewICSSessionBean.getShelveFreeSpace(selectedShelve) < (hiYewICSSessionBean.getWireVolume(item) * allocationQty)) {
                 FacesContext.getCurrentInstance().addMessage("formMain:quantity", new FacesMessage(FacesMessage.SEVERITY_ERROR, "Unable to allocate", "Insufficient space available!"));
             } else {
@@ -162,14 +162,14 @@ public class AllocateStorageManagedBean implements Serializable {
     /**
      * @return the selectedItem
      */
-    public ItemEntity getSelectedItem() {
+    public FillerEntity getSelectedItem() {
         return selectedItem;
     }
 
     /**
      * @param selectedItem the selectedItem to set
      */
-    public void setSelectedItem(ItemEntity selectedItem) {
+    public void setSelectedItem(FillerEntity selectedItem) {
         this.selectedItem = selectedItem;
     }
 
@@ -188,14 +188,14 @@ public class AllocateStorageManagedBean implements Serializable {
     }
 
     public void openDialog() {
-        System.out.println("here at openDialog" + selectedSI.getItem().getItemCode() + " " + selectedShelve.getShelveID());
+        System.out.println("here at openDialog" + selectedSI.getItem().getFillerCode() + " " + selectedShelve.getShelveID());
 
     }
 
     public String removeItemFromShelve() {
-        System.out.println("here at openDialog " + selectedSI.getItem().getItemCode() + " " + selectedShelve.getShelveID());
+        System.out.println("here at openDialog " + selectedSI.getItem().getFillerCode() + " " + selectedShelve.getShelveID());
         selectedItem = selectedSI.getItem();
-        System.out.println("here at removeItemFromShelve" + selectedItem.getItemCode() + " " + selectedShelve.getShelveID());
+        System.out.println("here at removeItemFromShelve" + selectedItem.getFillerCode() + " " + selectedShelve.getShelveID());
         StorageInfoEntity sie = hiYewICSSessionBean.getStorageInfo(selectedItem, selectedShelve);
         System.out.println("here at openDialog " + sie.getStoredQty());
         if (removalQty > sie.getStoredQty()) {
@@ -225,8 +225,7 @@ public class AllocateStorageManagedBean implements Serializable {
 
     public List<String> completeText(String query) {
         List<String> results = new ArrayList<String>();
-        results = hiYewICSSessionBean.getItemCodeAutoComplete(query);
+        results = hiYewICSSessionBean.getFillerCodeAutoComplete(query);
         return results;
     }
-
 }

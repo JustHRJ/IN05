@@ -5,7 +5,7 @@
  */
 package managedbean;
 
-import entity.FillerEntity;
+import entity.FillerComposition;
 import entity.Metal;
 import java.io.File;
 import java.io.IOException;
@@ -42,10 +42,10 @@ public class KnowledgeManageBean implements Serializable {
     private HiYewSystemBeanLocal hiYewSystemBean;
     private List<Vector> results = new ArrayList<Vector>();
     private String inputFile;
-    private List<FillerEntity> fillerRecords;
-    private List<FillerEntity> filteredFillers;
+    private List<FillerComposition> fillerRecords;
+    private List<FillerComposition> filteredFillers;
     private List<Metal> MetalRecords;
-    private FillerEntity selectedFiller;
+    private FillerComposition selectedFiller;
     private Metal selectedMetal;
     private int copper;
     private List<Vector> results2 = new ArrayList<Vector>();
@@ -78,7 +78,7 @@ public class KnowledgeManageBean implements Serializable {
         results2 = hiYewSystemBean.transferMetalInfo();
     }
 
-    public List<FillerEntity> getAllFillers() {
+    public List<FillerComposition> getAllFillers() {
         fillerRecords = hiYewSystemBean.fillerRecords();
         return fillerRecords;
     }
@@ -140,7 +140,7 @@ public class KnowledgeManageBean implements Serializable {
         }
     }
 
-    public FillerEntity getRetrieveFiller() {
+    public FillerComposition getRetrieveFiller() {
         return selectedFiller;
     }
 
@@ -374,42 +374,42 @@ public class KnowledgeManageBean implements Serializable {
     /**
      * @return the fillerRecords
      */
-    public List<FillerEntity> getFillerRecords() {
+    public List<FillerComposition> getFillerRecords() {
         return fillerRecords;
     }
 
     /**
      * @param fillerRecords the fillerRecords to set
      */
-    public void setFillerRecords(List<FillerEntity> fillerRecords) {
+    public void setFillerRecords(List<FillerComposition> fillerRecords) {
         this.fillerRecords = fillerRecords;
     }
 
     /**
      * @return the filteredFillers
      */
-    public List<FillerEntity> getFilteredFillers() {
+    public List<FillerComposition> getFilteredFillers() {
         return filteredFillers;
     }
 
     /**
      * @param filteredFillers the filteredFillers to set
      */
-    public void setFilteredFillers(List<FillerEntity> filteredFillers) {
+    public void setFilteredFillers(List<FillerComposition> filteredFillers) {
         this.filteredFillers = filteredFillers;
     }
 
     /**
      * @return the selectedFiller
      */
-    public FillerEntity getSelectedFiller() {
+    public FillerComposition getSelectedFiller() {
         return selectedFiller;
     }
 
     /**
      * @param selectedFiller the selectedFiller to set
      */
-    public void setSelectedFiller(FillerEntity selectedFiller) {
+    public void setSelectedFiller(FillerComposition selectedFiller) {
         this.selectedFiller = selectedFiller;
     }
 

@@ -5,7 +5,7 @@
  */
 package managedbean.ICS;
 
-import entity.ItemEntity;
+import entity.FillerEntity;
 import entity.StorageInfoEntity;
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -32,7 +32,7 @@ public class ItemDetailsManagedBean implements Serializable {
     @EJB
     private HiYewICSSessionBeanLocal hiYewICSSessionBean;
 
-    private ItemEntity selectedItem;
+    private FillerEntity selectedItem;
     private String activityChoice;
     private int quantityIn;
     private int quantityOut;
@@ -53,9 +53,9 @@ public class ItemDetailsManagedBean implements Serializable {
         infoList = new ArrayList<>();
         showInOuttPanel = true;
         if (FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("SelectedItem") != null) {
-            selectedItem = (ItemEntity) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("SelectedItem");
+            selectedItem = (FillerEntity) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("SelectedItem");
         } else {
-            selectedItem = new ItemEntity();
+            selectedItem = new FillerEntity();
         }
 
     }
@@ -70,21 +70,21 @@ public class ItemDetailsManagedBean implements Serializable {
     /**
      * @return the selectedItem
      */
-    public ItemEntity getSelectedItem() {
+    public FillerEntity getSelectedItem() {
         return selectedItem;
     }
 
     /**
      * @param selectedItem the selectedItem to set
      */
-    public void setSelectedItem(ItemEntity selectedItem) {
+    public void setSelectedItem(FillerEntity selectedItem) {
         this.selectedItem = selectedItem;
     }
 
     public void updateItemDetails() {
-        if (selectedItem.getItemCode() != null) {
+        if (selectedItem.getFillerCode() != null) {
             hiYewICSSessionBean.updateItemDetails(selectedItem);
-            FacesContext.getCurrentInstance().addMessage("upperMessages", new FacesMessage("Item " + selectedItem.getItemCode() + "'s details updated successfully!"));
+            FacesContext.getCurrentInstance().addMessage("upperMessages", new FacesMessage("Item " + selectedItem.getFillerCode() + "'s details updated successfully!"));
             System.out.println("here4");
         }
     }
@@ -118,7 +118,7 @@ public class ItemDetailsManagedBean implements Serializable {
 
     public void updateStock() {
         System.out.println("here4444444444444444444444444");
-        System.out.println("Selected Item Code: " + selectedItem.getItemCode());
+        System.out.println("Selected Item Code: " + selectedItem.getFillerCode());
         System.out.println("Activity Choice: " + activityChoice);
 
         if (activityChoice.equalsIgnoreCase("stockIn")) {
@@ -135,7 +135,7 @@ public class ItemDetailsManagedBean implements Serializable {
             System.out.println("Stock up here");
             hiYewICSSessionBean.updateCost(selectedItem, newAvgCost);
             System.out.println("Update Cost here");
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Item " + selectedItem.getItemCode() + "'s quantity updated successfully!"));
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Item " + selectedItem.getFillerCode() + "'s quantity updated successfully!"));
 
         } else if (activityChoice.equalsIgnoreCase("stockOut")) {
             if (quantityOut <= selectedItem.getQuantity()) {
@@ -152,19 +152,24 @@ public class ItemDetailsManagedBean implements Serializable {
     }
 
     public void showMessage(double totalWeight) {
-        FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Additional Info", "The total weight for " + quantityOut + " of ItemCode:" + selectedItem.getItemCode() + " is " + totalWeight + " grams.");
+        FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Additional Info", "The total weight for " + quantityOut + " of FillerCode:" + selectedItem.getFillerCode() + " is " + totalWeight + " grams.");
         RequestContext.getCurrentInstance().showMessageInDialog(message);
     }
 
     public String deleteItem() {
+        if(hiYewICSSessionBean.getAllStorageInfoOfItem(selectedItem).size()<1){
         System.out.println("here555555555555555");
-        System.out.println("Selected Item Code: " + selectedItem.getItemCode());
-        if (selectedItem.getItemCode().length() > 0) {
+        System.out.println("Selected Item Code: " + selectedItem.getFillerCode());
+        if (selectedItem.getFillerCode().length() > 0) {
             hiYewICSSessionBean.deleteItem(selectedItem);
-            FacesContext.getCurrentInstance().addMessage("upperMessages", new FacesMessage("Item " + selectedItem.getItemCode() + "'s quantity deleted successfully!"));
+            FacesContext.getCurrentInstance().addMessage("upperMessages", new FacesMessage("Item " + selectedItem.getFillerCode() + "'s quantity deleted successfully!"));
             return "viewInventory?faces-redirect=true";
         } else {
             FacesContext.getCurrentInstance().addMessage("upperMessages", new FacesMessage("Unable to delete!"));
+            return "";
+        }
+        }else{
+            FacesContext.getCurrentInstance().addMessage("upperMessages", new FacesMessage("Unable to delete, remove item from shelve before item deletion"));
             return "";
         }
     }
@@ -308,7 +313,7 @@ public class ItemDetailsManagedBean implements Serializable {
     }
     
     public String passSelectedItemToNext() {
-        System.out.println(this.selectedItem.getItemCode());
+        System.out.println(this.selectedItem.getFillerCode());
         FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("SelectedItem2", this.selectedItem);
         //  FacesContext.getCurrentInstance().getExternalContext().getFlash().put("SelectedItem", this.selectedItem);
         return "/PS/createProcurementBid?faces-redirect=true";

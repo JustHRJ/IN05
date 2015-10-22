@@ -8,7 +8,7 @@ package session.stateless;
 import entity.EmployeeClaimEntity;
 import entity.SupplierPurchaseOrder;
 import entity.EmployeeEntity;
-import entity.FillerEntity;
+import entity.FillerComposition;
 import entity.LeaveEntity;
 import entity.MachineEntity;
 import entity.MachineMaintainenceEntity;
@@ -236,11 +236,11 @@ public interface HiYewSystemBeanLocal {
 
     public List<Vector> transferFillerInfo();
 
-    public List<FillerEntity> fillerRecords();
+    public List<FillerComposition> fillerRecords();
 
-    public void editFiller(FillerEntity filler);
+    public void editFiller(FillerComposition filler);
 
-    public void deleteFiller(FillerEntity filler);
+    public void deleteFiller(FillerComposition filler);
 
     public void createRepair(MachineRepairEntity machine, Date date, String machineName);
 

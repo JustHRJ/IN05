@@ -5,7 +5,7 @@
  */
 package session.stateless;
 
-import entity.ItemEntity;
+import entity.FillerEntity;
 import entity.RackEntity;
 import entity.ShelveEntity;
 import entity.StorageInfoEntity;
@@ -33,49 +33,49 @@ public class HiYewICSSessionBean implements HiYewICSSessionBeanLocal {
     final double pi = 3.142;
 
     @Override
-    public void createItem(ItemEntity item) {
+    public void createItem(FillerEntity item) {
         em.persist(item);
     }
 
     @Override
-    public List<ItemEntity> getAllItems() {
-        Query q = em.createQuery("SELECT i FROM ItemEntity i");
+    public List<FillerEntity> getAllItems() {
+        Query q = em.createQuery("SELECT i FROM FillerEntity i");
         return q.getResultList();
     }
 
     @Override
-    public List<ItemEntity> getAllLowStockItems() {
-        Query q = em.createQuery("SELECT i FROM ItemEntity i WHERE i.quantity<=i.reorderPoint");
+    public List<FillerEntity> getAllLowStockItems() {
+        Query q = em.createQuery("SELECT i FROM FillerEntity i WHERE i.quantity<=i.reorderPoint");
         return q.getResultList();
     }
 
     @Override
-    public ItemEntity getExistingItem(String itemCode) {
+    public FillerEntity getExistingItem(String fillerCode) {
         try {
-            Query q = em.createQuery("Select i FROM ItemEntity i WHERE i.itemCode=:itemCode");
-            q.setParameter("itemCode", itemCode);
-            return (ItemEntity) q.getSingleResult();
+            Query q = em.createQuery("Select i FROM FillerEntity i WHERE i.fillerCode=:fillerCode");
+            q.setParameter("fillerCode", fillerCode);
+            return (FillerEntity) q.getSingleResult();
         } catch (NoResultException e) {
             return null;
         }
     }
     
      @Override
-    public List<String> getItemCodeAutoComplete(String input) {
-        ArrayList<String> itemCodes = new ArrayList<String>();
-        Query q = em.createQuery("SELECT i.itemCode FROM ItemEntity i WHERE i.itemCode LIKE :input");
+    public List<String> getFillerCodeAutoComplete(String input) {
+        ArrayList<String> fillerCodes = new ArrayList<String>();
+        Query q = em.createQuery("SELECT i.fillerCode FROM FillerEntity i WHERE i.fillerCode LIKE :input");
         q.setParameter("input", input+'%');
-        itemCodes.addAll(q.getResultList());
-        return itemCodes;
+        fillerCodes.addAll(q.getResultList());
+        return fillerCodes;
     }
 
     @Override
-    public ItemEntity getExistingItemByName(String itemName) {
+    public FillerEntity getExistingItemByName(String fillerName) {
         try {
-            System.out.println("getExistingItemByName1 name =" + itemName);
-            Query q = em.createQuery("Select i FROM ItemEntity i WHERE i.itemName=:itemName");
-            q.setParameter("itemName", itemName);
-            return (ItemEntity) q.getSingleResult();
+            System.out.println("getExistingItemByName1 name =" + fillerName);
+            Query q = em.createQuery("Select i FROM FillerEntity i WHERE i.fillerName=:fillerName");
+            q.setParameter("fillerName", fillerName);
+            return (FillerEntity) q.getSingleResult();
         } catch (NoResultException e) {
             System.out.println("getExistingItemByName2");
             return null;
@@ -83,10 +83,10 @@ public class HiYewICSSessionBean implements HiYewICSSessionBeanLocal {
     }
 
     @Override
-    public void updateItemDetails(ItemEntity item) {
-        System.out.println("Update item: " + item.getItemCode());
-        ItemEntity i = em.find(ItemEntity.class, item.getItemCode());
-        i.setItemName(item.getItemName());
+    public void updateItemDetails(FillerEntity item) {
+        System.out.println("Update item: " + item.getFillerCode());
+        FillerEntity i = em.find(FillerEntity.class, item.getFillerCode());
+        i.setFillerName(item.getFillerName());
         i.setWireGrade(item.getWireGrade());
         i.setQuantity(item.getQuantity());
         i.setCost(item.getCost());
@@ -98,29 +98,29 @@ public class HiYewICSSessionBean implements HiYewICSSessionBeanLocal {
     }
 
     @Override
-    public void stockUp(ItemEntity item, int inQty) {
-        ItemEntity i = em.find(ItemEntity.class, item.getItemCode());
+    public void stockUp(FillerEntity item, int inQty) {
+        FillerEntity i = em.find(FillerEntity.class, item.getFillerCode());
         i.setQuantity(i.getQuantity() + inQty);
         System.out.println("StatelessBean: stockUpOk");
     }
 
     @Override
-    public void stockDown(ItemEntity item, int outQty) {
-        ItemEntity i = em.find(ItemEntity.class, item.getItemCode());
+    public void stockDown(FillerEntity item, int outQty) {
+        FillerEntity i = em.find(FillerEntity.class, item.getFillerCode());
         i.setQuantity(i.getQuantity() - outQty);
         System.out.println("StatelessBean: stockDownOk");
     }
 
     @Override
-    public void deleteItem(ItemEntity item) {
-        System.out.println("Deleting item: " + item.getItemCode());
-        Query query = em.createQuery("DELETE FROM ItemEntity i WHERE i.itemCode = :itemCode");
-        query.setParameter("itemCode", item.getItemCode()).executeUpdate();
+    public void deleteItem(FillerEntity item) {
+        System.out.println("Deleting item: " + item.getFillerCode());
+        Query query = em.createQuery("DELETE FROM FillerEntity i WHERE i.fillerCode = :fillerCode");
+        query.setParameter("fillerCode", item.getFillerCode()).executeUpdate();
     }
 
     @Override
-    public void updateCost(ItemEntity item, double newCost) {
-        ItemEntity i = em.find(ItemEntity.class, item.getItemCode());
+    public void updateCost(FillerEntity item, double newCost) {
+        FillerEntity i = em.find(FillerEntity.class, item.getFillerCode());
         i.setCost(newCost);
         System.out.println("StatelessBean: updateCost");
     }
@@ -249,7 +249,7 @@ public class HiYewICSSessionBean implements HiYewICSSessionBeanLocal {
     
 
     @Override
-    public void addStorageInfo(ItemEntity item, ShelveEntity shelve, int storedQty) {
+    public void addStorageInfo(FillerEntity item, ShelveEntity shelve, int storedQty) {
         if (checkIfItemInShelve(item, shelve)) {
             System.out.println(".................sessionBean:addStorageInfo:1");
             Query q = em.createQuery("SELECT si FROM StorageInfoEntity si WHERE si.item=:item AND si.shelve=:shelve");
@@ -268,7 +268,7 @@ public class HiYewICSSessionBean implements HiYewICSSessionBeanLocal {
     }
 
     @Override
-    public void addShelveFillCapac(ShelveEntity shelve, ItemEntity item, int storedQty) {
+    public void addShelveFillCapac(ShelveEntity shelve, FillerEntity item, int storedQty) {
         Query q = em.createQuery("SELECT s FROM ShelveEntity s WHERE s.shelveID = :shelveID");
         q.setParameter("shelveID", shelve.getShelveID());
         ShelveEntity selectedShelve = (ShelveEntity) q.getSingleResult();
@@ -293,7 +293,7 @@ public class HiYewICSSessionBean implements HiYewICSSessionBeanLocal {
     }
 
     @Override
-    public boolean checkIfItemInShelve(ItemEntity item, ShelveEntity shelve) {
+    public boolean checkIfItemInShelve(FillerEntity item, ShelveEntity shelve) {
 
         try {
             System.out.println(".................sessionBean:checkIfItemInShelve:1");
@@ -316,7 +316,7 @@ public class HiYewICSSessionBean implements HiYewICSSessionBeanLocal {
     }
 
     @Override
-    public Long getUnallocatedQty(ItemEntity item) {
+    public Long getUnallocatedQty(FillerEntity item) {
         Long qty = 0L;
         Long sum = 0L;
         try {
@@ -346,7 +346,7 @@ public class HiYewICSSessionBean implements HiYewICSSessionBeanLocal {
     }
 
     @Override
-    public List<StorageInfoEntity> getAllStorageInfoOfItem(ItemEntity item) {
+    public List<StorageInfoEntity> getAllStorageInfoOfItem(FillerEntity item) {
         Query q = em.createQuery("SELECT si FROM StorageInfoEntity si WHERE si.item = :item");
         q.setParameter("item", item);
         return q.getResultList();
@@ -361,7 +361,7 @@ public class HiYewICSSessionBean implements HiYewICSSessionBeanLocal {
     }
 
     @Override
-    public StorageInfoEntity getStorageInfo(ItemEntity item, ShelveEntity shelve) {
+    public StorageInfoEntity getStorageInfo(FillerEntity item, ShelveEntity shelve) {
         Query q = em.createQuery("SELECT si FROM StorageInfoEntity si WHERE si.item = :item AND si.shelve = :shelve");
         q.setParameter("item", item);
         q.setParameter("shelve", shelve);
@@ -369,7 +369,7 @@ public class HiYewICSSessionBean implements HiYewICSSessionBeanLocal {
     }
 
     @Override
-    public void reduceStorageQty(ItemEntity item, ShelveEntity shelve, int reduceAmt) {
+    public void reduceStorageQty(FillerEntity item, ShelveEntity shelve, int reduceAmt) {
         StorageInfoEntity si = getStorageInfo(item, shelve);
         if (reduceAmt < si.getStoredQty()) {
             si.setStoredQty(si.getStoredQty() - reduceAmt);
@@ -382,7 +382,7 @@ public class HiYewICSSessionBean implements HiYewICSSessionBeanLocal {
     }
 
     @Override
-    public void reduceShelveFillCapac(ShelveEntity shelve, ItemEntity item, int reduceQty) {
+    public void reduceShelveFillCapac(ShelveEntity shelve, FillerEntity item, int reduceQty) {
         Query q = em.createQuery("SELECT s FROM ShelveEntity s WHERE s.shelveID = :shelveID");
         q.setParameter("shelveID", shelve.getShelveID());
         ShelveEntity selectedShelve = (ShelveEntity) q.getSingleResult();
@@ -397,8 +397,8 @@ public class HiYewICSSessionBean implements HiYewICSSessionBeanLocal {
     }
 
     @Override
-    public void deleteStorageInfo(ItemEntity item, ShelveEntity shelve) {
-        System.out.println("Deleting StorageInfo: " + item.getItemCode() + " " + shelve.getShelveID());
+    public void deleteStorageInfo(FillerEntity item, ShelveEntity shelve) {
+        System.out.println("Deleting StorageInfo: " + item.getFillerCode() + " " + shelve.getShelveID());
         Query query = em.createQuery("DELETE FROM StorageInfoEntity si WHERE si.item = :item AND si.shelve = :shelve");
         query.setParameter("item", item);
         query.setParameter("shelve", shelve);
@@ -478,7 +478,7 @@ public class HiYewICSSessionBean implements HiYewICSSessionBeanLocal {
     
 
     @Override
-    public double getWireVolume(ItemEntity item) {
+    public double getWireVolume(FillerEntity item) {
         double r = (item.getDiameter() / 10) / 2;
         double h = item.getWireLength() / 10;
         double volume = pi * (r * r) * h;

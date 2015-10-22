@@ -5,7 +5,7 @@
  */
 package managedbean.PS;
 
-import entity.ItemEntity;
+import entity.FillerEntity;
 import entity.ProcurementBidEntity;
 import java.io.Serializable;
 import java.sql.Timestamp;

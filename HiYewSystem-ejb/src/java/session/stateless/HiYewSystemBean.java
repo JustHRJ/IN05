@@ -13,7 +13,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import entity.MachineEntity;
 import entity.EmployeeEntity;
-import entity.FillerEntity;
+import entity.FillerComposition;
 import entity.LeaveEntity;
 import entity.MachineMaintainenceEntity;
 import entity.MachineRepairEntity;
@@ -349,8 +349,7 @@ public class HiYewSystemBean implements HiYewSystemBeanLocal {
 
     }
 
-    public
-            boolean deleteMachineMaintainence(String id) {
+    public boolean deleteMachineMaintainence(String id) {
         try {
             MachineMaintainenceEntity mm = em.find(MachineMaintainenceEntity.class, Long.parseLong(id));
             if (mm == null) {
@@ -2680,13 +2679,13 @@ public class HiYewSystemBean implements HiYewSystemBeanLocal {
     
         Query q = em.createQuery("select c from FillerEntity c");
         for (Object o : q.getResultList()) {
-            FillerEntity f = (FillerEntity) o;
+            FillerComposition f = (FillerComposition) o;
             em.remove(f);
         }
         if (fillers != null) {
             for (Object o : fillers) {
                 Vector im = (Vector) o;
-                FillerEntity f = new FillerEntity();
+                FillerComposition f = new FillerComposition();
                 f.setName((String) im.get(1));
                 f.setAlluminium(Integer.parseInt(im.get(2).toString()));
                 f.setBronze(Integer.parseInt(im.get(3).toString()));
@@ -2709,7 +2708,7 @@ public class HiYewSystemBean implements HiYewSystemBeanLocal {
         Query q = em.createQuery("select c from FillerEntity c");
         System.out.println("shit");
         for (Object o : q.getResultList()) {
-            FillerEntity f = (FillerEntity) o;
+            FillerComposition f = (FillerComposition) o;
             Vector im = new Vector();
             im.add(f.getId());
             im.add(f.getName());
@@ -2766,13 +2765,13 @@ public class HiYewSystemBean implements HiYewSystemBeanLocal {
         return results;
     }
 
-    public List<FillerEntity> fillerRecords() {
+    public List<FillerComposition> fillerRecords() {
 
-        List<FillerEntity> results = new ArrayList<FillerEntity>();
+        List<FillerComposition> results = new ArrayList<FillerComposition>();
         Query q = em.createQuery("select c from FillerEntity c");
 
         for (Object o : q.getResultList()) {
-            FillerEntity f = (FillerEntity) o;
+            FillerComposition f = (FillerComposition) o;
 
             results.add(f);
         }
@@ -2785,7 +2784,7 @@ public class HiYewSystemBean implements HiYewSystemBeanLocal {
 
     }
 
-    public void editFiller(FillerEntity filler) {
+    public void editFiller(FillerComposition filler) {
         if (filler == null) {
             System.out.println("filler info is missing");
         } else {
@@ -2793,10 +2792,10 @@ public class HiYewSystemBean implements HiYewSystemBeanLocal {
         }
     }
 
-    public void deleteFiller(FillerEntity filler) {
+    public void deleteFiller(FillerComposition filler) {
         if (filler != null) {
             Long id = filler.getId();
-            FillerEntity f = em.find(FillerEntity.class, id);
+            FillerComposition f = em.find(FillerComposition.class, id);
             if (f == null) {
                 System.out.println("no filler to delete");
             } else {
@@ -2918,7 +2917,7 @@ public class HiYewSystemBean implements HiYewSystemBeanLocal {
         Query q = em.createQuery("select c from FillerEntity c");
         List<String> results = new ArrayList<String>();
         for (Object o : q.getResultList()) {
-            FillerEntity f = (FillerEntity) o;
+            FillerComposition f = (FillerComposition) o;
             results.add(f.getName());
         }
         if (results.isEmpty()) {
@@ -2944,7 +2943,7 @@ public class HiYewSystemBean implements HiYewSystemBeanLocal {
 
     public void createPairings(String metal, List<String> fillerChosen) {
         Metal m = new Metal();
-        Collection<FillerEntity> fillers = new ArrayList<FillerEntity>();
+        Collection<FillerComposition> fillers = new ArrayList<FillerComposition>();
         try {
             Query q = em.createQuery("select m from Metal m where m.metalName = :id");
             q.setParameter("id", metal);
@@ -2957,10 +2956,10 @@ public class HiYewSystemBean implements HiYewSystemBeanLocal {
             for (Object o : fillerChosen) {
                 String fn = (String) o;
                 System.out.println(fn);
-                FillerEntity f = new FillerEntity();
+                FillerComposition f = new FillerComposition();
                 q = em.createQuery("select f from FillerEntity f where f.name =:id");
                 q.setParameter("id", fn);
-                f = (FillerEntity) q.getSingleResult();
+                f = (FillerComposition) q.getSingleResult();
                 fillers.add(f);
             }
             System.out.println("error here3");
@@ -2982,7 +2981,7 @@ public class HiYewSystemBean implements HiYewSystemBeanLocal {
             z.setParameter("id", metalName);
             m = (Metal) z.getSingleResult();
             for (Object o : q.getResultList()) {
-                FillerEntity f = (FillerEntity) o;
+                FillerComposition f = (FillerComposition) o;
                 if (m.getFillers().contains(f)) {
                     System.out.println("should not add: not associated");
                 } else {
@@ -3010,7 +3009,7 @@ public class HiYewSystemBean implements HiYewSystemBeanLocal {
             z.setParameter("id", metalName);
             m = (Metal) z.getSingleResult();
             for (Object o : q.getResultList()) {
-                FillerEntity f = (FillerEntity) o;
+                FillerComposition f = (FillerComposition) o;
                 if (m.getFillers().contains(f)) {
                     result.add(f.getName());
                 } else {

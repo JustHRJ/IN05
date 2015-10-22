@@ -91,18 +91,18 @@
                 </p:column>
             </p:submenu>
         </p:megaMenu>
-        <h2>Create Procurement Bidding for Wire #{createBiddingManagedBean.selectedItem.itemCode}</h2>
+        <h2>Create Procurement Bidding for Wire #{createBiddingManagedBean.selectedItem.fillerCode}</h2>
         <h:form id="formMain">
             <p:messages id="msg" autoUpdate="false" globalOnly="true"/>
             <p:panel header="Wire Details" style="margin-bottom:10px">
                 <h:panelGrid id="grid" columns="3" cellpadding="5">
 
                     <h:outputLabel for="wireCode" value="Wire Code:" style="font-weight:bold" />
-                    <h:outputText id="wireCode" value="#{createBiddingManagedBean.selectedItem.itemCode}" />
+                    <h:outputText id="wireCode" value="#{createBiddingManagedBean.selectedItem.fillerCode}" />
                     <p:message for="wireCode" />
 
                     <h:outputLabel for="wireName" value="Wire Name:" style="font-weight:bold" />
-                    <h:outputText id="wireName" value="#{createBiddingManagedBean.selectedItem.itemName}" />
+                    <h:outputText id="wireName" value="#{createBiddingManagedBean.selectedItem.fillerName}" />
                     <p:message for="wireName" />
 
                     <h:outputLabel for="wireGrade" value="Wire Grade:" style="font-weight:bold" />

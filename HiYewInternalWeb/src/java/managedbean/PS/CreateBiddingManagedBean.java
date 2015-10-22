@@ -5,7 +5,7 @@
  */
 package managedbean.PS;
 
-import entity.ItemEntity;
+import entity.FillerEntity;
 import entity.ProcurementBidEntity;
 import java.io.Serializable;
 import java.sql.Timestamp;
@@ -37,7 +37,7 @@ public class CreateBiddingManagedBean implements Serializable {
     private ProcurementSessionBeanLocal procurementSessionBean;
 
     private ProcurementBidEntity newPB;
-    private ItemEntity selectedItem;
+    private FillerEntity selectedItem;
     private List<String> supplierList;
     private List<String> selectedSuppliers;
     private Timestamp bidEndTimeStamp;
@@ -57,10 +57,10 @@ public class CreateBiddingManagedBean implements Serializable {
         bidEndTimeStamp = null;
         byWhenTimeStamp = null;
         if (FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("SelectedItem2") != null) {
-            selectedItem = (ItemEntity) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("SelectedItem2");
+            selectedItem = (FillerEntity) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("SelectedItem2");
             
         } else {
-            selectedItem = new ItemEntity();
+            selectedItem = new FillerEntity();
         }
     }
 
@@ -121,7 +121,7 @@ public class CreateBiddingManagedBean implements Serializable {
             newPB.setCompanyName(selectedSuppliers.get(i));
             newPB.setStatus("Open");
             newPB.setQuotedPrice(0.00);
-            newPB.setItemCode(selectedItem.getItemCode());
+            newPB.setItemCode(selectedItem.getFillerCode());
             newPB.setDiameter(selectedItem.getDiameter());
             newPB.setGrade(selectedItem.getWireGrade());
             newPB.setWireLength(selectedItem.getWireLength());
@@ -153,14 +153,14 @@ public class CreateBiddingManagedBean implements Serializable {
     /**
      * @return the selectedItem
      */
-    public ItemEntity getSelectedItem() {
+    public FillerEntity getSelectedItem() {
         return selectedItem;
     }
 
     /**
      * @param selectedItem the selectedItem to set
      */
-    public void setSelectedItem(ItemEntity selectedItem) {
+    public void setSelectedItem(FillerEntity selectedItem) {
         this.selectedItem = selectedItem;
     }
 

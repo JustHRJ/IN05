@@ -5,7 +5,7 @@
  */
 package session.stateless;
 
-import entity.ItemEntity;
+import entity.FillerEntity;
 import entity.RackEntity;
 import entity.ShelveEntity;
 import entity.StorageInfoEntity;
@@ -50,7 +50,7 @@ public class HiYewICSSessionBeanTest {
     @Test
     public void testCreateItem() throws Exception {
         System.out.println("createItem");
-        ItemEntity item = null;
+        FillerEntity item = null;
         EJBContainer container = javax.ejb.embeddable.EJBContainer.createEJBContainer();
         HiYewICSSessionBeanLocal instance = (HiYewICSSessionBeanLocal)container.getContext().lookup("java:global/classes/HiYewICSSessionBean");
         instance.createItem(item);
@@ -67,8 +67,8 @@ public class HiYewICSSessionBeanTest {
         System.out.println("getAllItems");
         EJBContainer container = javax.ejb.embeddable.EJBContainer.createEJBContainer();
         HiYewICSSessionBeanLocal instance = (HiYewICSSessionBeanLocal)container.getContext().lookup("java:global/classes/HiYewICSSessionBean");
-        List<ItemEntity> expResult = null;
-        List<ItemEntity> result = instance.getAllItems();
+        List<FillerEntity> expResult = null;
+        List<FillerEntity> result = instance.getAllItems();
         assertEquals(expResult, result);
         container.close();
         // TODO review the generated test code and remove the default call to fail.
@@ -83,8 +83,8 @@ public class HiYewICSSessionBeanTest {
         System.out.println("getAllLowStockItems");
         EJBContainer container = javax.ejb.embeddable.EJBContainer.createEJBContainer();
         HiYewICSSessionBeanLocal instance = (HiYewICSSessionBeanLocal)container.getContext().lookup("java:global/classes/HiYewICSSessionBean");
-        List<ItemEntity> expResult = null;
-        List<ItemEntity> result = instance.getAllLowStockItems();
+        List<FillerEntity> expResult = null;
+        List<FillerEntity> result = instance.getAllLowStockItems();
         assertEquals(expResult, result);
         container.close();
         // TODO review the generated test code and remove the default call to fail.
@@ -100,8 +100,8 @@ public class HiYewICSSessionBeanTest {
         String itemCode = "";
         EJBContainer container = javax.ejb.embeddable.EJBContainer.createEJBContainer();
         HiYewICSSessionBeanLocal instance = (HiYewICSSessionBeanLocal)container.getContext().lookup("java:global/classes/HiYewICSSessionBean");
-        ItemEntity expResult = null;
-        ItemEntity result = instance.getExistingItem(itemCode);
+        FillerEntity expResult = null;
+        FillerEntity result = instance.getExistingItem(itemCode);
         assertEquals(expResult, result);
         container.close();
         // TODO review the generated test code and remove the default call to fail.
@@ -109,16 +109,16 @@ public class HiYewICSSessionBeanTest {
     }
 
     /**
-     * Test of getItemCodeAutoComplete method, of class HiYewICSSessionBean.
+     * Test of getFillerCodeAutoComplete method, of class HiYewICSSessionBean.
      */
     @Test
-    public void testGetItemCodeAutoComplete() throws Exception {
-        System.out.println("getItemCodeAutoComplete");
+    public void testGetFillerCodeAutoComplete() throws Exception {
+        System.out.println("getFillerCodeAutoComplete");
         String input = "";
         EJBContainer container = javax.ejb.embeddable.EJBContainer.createEJBContainer();
         HiYewICSSessionBeanLocal instance = (HiYewICSSessionBeanLocal)container.getContext().lookup("java:global/classes/HiYewICSSessionBean");
         List<String> expResult = null;
-        List<String> result = instance.getItemCodeAutoComplete(input);
+        List<String> result = instance.getFillerCodeAutoComplete(input);
         assertEquals(expResult, result);
         container.close();
         // TODO review the generated test code and remove the default call to fail.
@@ -134,8 +134,8 @@ public class HiYewICSSessionBeanTest {
         String itemName = "";
         EJBContainer container = javax.ejb.embeddable.EJBContainer.createEJBContainer();
         HiYewICSSessionBeanLocal instance = (HiYewICSSessionBeanLocal)container.getContext().lookup("java:global/classes/HiYewICSSessionBean");
-        ItemEntity expResult = null;
-        ItemEntity result = instance.getExistingItemByName(itemName);
+        FillerEntity expResult = null;
+        FillerEntity result = instance.getExistingItemByName(itemName);
         assertEquals(expResult, result);
         container.close();
         // TODO review the generated test code and remove the default call to fail.
@@ -148,7 +148,7 @@ public class HiYewICSSessionBeanTest {
     @Test
     public void testUpdateItemDetails() throws Exception {
         System.out.println("updateItemDetails");
-        ItemEntity item = null;
+        FillerEntity item = null;
         EJBContainer container = javax.ejb.embeddable.EJBContainer.createEJBContainer();
         HiYewICSSessionBeanLocal instance = (HiYewICSSessionBeanLocal)container.getContext().lookup("java:global/classes/HiYewICSSessionBean");
         instance.updateItemDetails(item);
@@ -163,7 +163,7 @@ public class HiYewICSSessionBeanTest {
     @Test
     public void testStockUp() throws Exception {
         System.out.println("stockUp");
-        ItemEntity item = null;
+        FillerEntity item = null;
         int inQty = 0;
         EJBContainer container = javax.ejb.embeddable.EJBContainer.createEJBContainer();
         HiYewICSSessionBeanLocal instance = (HiYewICSSessionBeanLocal)container.getContext().lookup("java:global/classes/HiYewICSSessionBean");
@@ -179,7 +179,7 @@ public class HiYewICSSessionBeanTest {
     @Test
     public void testStockDown() throws Exception {
         System.out.println("stockDown");
-        ItemEntity item = null;
+        FillerEntity item = null;
         int outQty = 0;
         EJBContainer container = javax.ejb.embeddable.EJBContainer.createEJBContainer();
         HiYewICSSessionBeanLocal instance = (HiYewICSSessionBeanLocal)container.getContext().lookup("java:global/classes/HiYewICSSessionBean");
@@ -195,7 +195,7 @@ public class HiYewICSSessionBeanTest {
     @Test
     public void testDeleteItem() throws Exception {
         System.out.println("deleteItem");
-        ItemEntity item = null;
+        FillerEntity item = null;
         EJBContainer container = javax.ejb.embeddable.EJBContainer.createEJBContainer();
         HiYewICSSessionBeanLocal instance = (HiYewICSSessionBeanLocal)container.getContext().lookup("java:global/classes/HiYewICSSessionBean");
         instance.deleteItem(item);
@@ -210,7 +210,7 @@ public class HiYewICSSessionBeanTest {
     @Test
     public void testUpdateCost() throws Exception {
         System.out.println("updateCost");
-        ItemEntity item = null;
+        FillerEntity item = null;
         double newCost = 0.0;
         EJBContainer container = javax.ejb.embeddable.EJBContainer.createEJBContainer();
         HiYewICSSessionBeanLocal instance = (HiYewICSSessionBeanLocal)container.getContext().lookup("java:global/classes/HiYewICSSessionBean");
@@ -387,7 +387,7 @@ public class HiYewICSSessionBeanTest {
     @Test
     public void testAddStorageInfo() throws Exception {
         System.out.println("addStorageInfo");
-        ItemEntity item = null;
+        FillerEntity item = null;
         ShelveEntity shelve = null;
         int storedQty = 0;
         EJBContainer container = javax.ejb.embeddable.EJBContainer.createEJBContainer();
@@ -405,7 +405,7 @@ public class HiYewICSSessionBeanTest {
     public void testAddShelveFillCapac() throws Exception {
         System.out.println("addShelveFillCapac");
         ShelveEntity shelve = null;
-        ItemEntity item = null;
+        FillerEntity item = null;
         int storedQty = 0;
         EJBContainer container = javax.ejb.embeddable.EJBContainer.createEJBContainer();
         HiYewICSSessionBeanLocal instance = (HiYewICSSessionBeanLocal)container.getContext().lookup("java:global/classes/HiYewICSSessionBean");
@@ -438,7 +438,7 @@ public class HiYewICSSessionBeanTest {
     @Test
     public void testCheckIfItemInShelve() throws Exception {
         System.out.println("checkIfItemInShelve");
-        ItemEntity item = null;
+        FillerEntity item = null;
         ShelveEntity shelve = null;
         EJBContainer container = javax.ejb.embeddable.EJBContainer.createEJBContainer();
         HiYewICSSessionBeanLocal instance = (HiYewICSSessionBeanLocal)container.getContext().lookup("java:global/classes/HiYewICSSessionBean");
@@ -456,7 +456,7 @@ public class HiYewICSSessionBeanTest {
     @Test
     public void testGetUnallocatedQty() throws Exception {
         System.out.println("getUnallocatedQty");
-        ItemEntity item = null;
+        FillerEntity item = null;
         EJBContainer container = javax.ejb.embeddable.EJBContainer.createEJBContainer();
         HiYewICSSessionBeanLocal instance = (HiYewICSSessionBeanLocal)container.getContext().lookup("java:global/classes/HiYewICSSessionBean");
         Long expResult = null;
@@ -490,7 +490,7 @@ public class HiYewICSSessionBeanTest {
     @Test
     public void testGetAllStorageInfoOfItem() throws Exception {
         System.out.println("getAllStorageInfoOfItem");
-        ItemEntity item = null;
+        FillerEntity item = null;
         EJBContainer container = javax.ejb.embeddable.EJBContainer.createEJBContainer();
         HiYewICSSessionBeanLocal instance = (HiYewICSSessionBeanLocal)container.getContext().lookup("java:global/classes/HiYewICSSessionBean");
         List<StorageInfoEntity> expResult = null;
@@ -524,7 +524,7 @@ public class HiYewICSSessionBeanTest {
     @Test
     public void testGetStorageInfo() throws Exception {
         System.out.println("getStorageInfo");
-        ItemEntity item = null;
+        FillerEntity item = null;
         ShelveEntity shelve = null;
         EJBContainer container = javax.ejb.embeddable.EJBContainer.createEJBContainer();
         HiYewICSSessionBeanLocal instance = (HiYewICSSessionBeanLocal)container.getContext().lookup("java:global/classes/HiYewICSSessionBean");
@@ -542,7 +542,7 @@ public class HiYewICSSessionBeanTest {
     @Test
     public void testReduceStorageQty() throws Exception {
         System.out.println("reduceStorageQty");
-        ItemEntity item = null;
+        FillerEntity item = null;
         ShelveEntity shelve = null;
         int reduceAmt = 0;
         EJBContainer container = javax.ejb.embeddable.EJBContainer.createEJBContainer();
@@ -560,7 +560,7 @@ public class HiYewICSSessionBeanTest {
     public void testReduceShelveFillCapac() throws Exception {
         System.out.println("reduceShelveFillCapac");
         ShelveEntity shelve = null;
-        ItemEntity item = null;
+        FillerEntity item = null;
         int reduceQty = 0;
         EJBContainer container = javax.ejb.embeddable.EJBContainer.createEJBContainer();
         HiYewICSSessionBeanLocal instance = (HiYewICSSessionBeanLocal)container.getContext().lookup("java:global/classes/HiYewICSSessionBean");
@@ -576,7 +576,7 @@ public class HiYewICSSessionBeanTest {
     @Test
     public void testDeleteStorageInfo() throws Exception {
         System.out.println("deleteStorageInfo");
-        ItemEntity item = null;
+        FillerEntity item = null;
         ShelveEntity shelve = null;
         EJBContainer container = javax.ejb.embeddable.EJBContainer.createEJBContainer();
         HiYewICSSessionBeanLocal instance = (HiYewICSSessionBeanLocal)container.getContext().lookup("java:global/classes/HiYewICSSessionBean");
@@ -686,7 +686,7 @@ public class HiYewICSSessionBeanTest {
     @Test
     public void testGetWireVolume() throws Exception {
         System.out.println("getWireVolume");
-        ItemEntity item = null;
+        FillerEntity item = null;
         EJBContainer container = javax.ejb.embeddable.EJBContainer.createEJBContainer();
         HiYewICSSessionBeanLocal instance = (HiYewICSSessionBeanLocal)container.getContext().lookup("java:global/classes/HiYewICSSessionBean");
         double expResult = 0.0;

@@ -116,12 +116,12 @@
                         <p:inputText id="globalFilter" onkeyup="PF('itemsTable').filter()" style="width:150px" placeholder="Enter keyword"/>
                     </p:outputPanel>
                 </f:facet>
-                <p:column filterBy="#{item.itemCode}" sortBy="#{item.itemCode}" headerText="WireCode" footerText="contains" filterMatchMode="contains">
-                    <h:outputText value="#{item.itemCode}" />
+                <p:column filterBy="#{item.fillerCode}" sortBy="#{item.fillerCode}" headerText="WireCode" footerText="contains" filterMatchMode="contains">
+                    <h:outputText value="#{item.fillerCode}" />
                 </p:column>
 
-                <p:column filterBy="#{item.itemName}" sortBy="#{item.itemName}" headerText="Name" footerText="contains" filterMatchMode="contains">
-                    <h:outputText value="#{item.itemName}" />
+                <p:column filterBy="#{item.fillerName}" sortBy="#{item.fillerName}" headerText="Name" footerText="contains" filterMatchMode="contains">
+                    <h:outputText value="#{item.fillerName}" />
                 </p:column>
 
                 <p:column filterBy="#{item.wireGrade}" headerText="Grade" footerText="equals" filterMatchMode="equals">

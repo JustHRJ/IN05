@@ -94,21 +94,21 @@
         </p:megaMenu>
         <br/>
         <h:form id="formMain">
-            <p:panel header="Add New Wire">
+            <p:panel header="Add New Filler">
                 <p:messages id="msg" autoUpdate="false" globalOnly="true"/>
                 <h:panelGrid id="grid" columns="3" cellpadding="5">
-                    <h:outputLabel for="itemCode" value="Item Code*:" style="font-weight:bold"/>                    
-                    <p:inputText id="itemCode" value="#{addItemManagedBean.newItem.itemCode}" required="true" requiredMessage="Item Code is required" label="Item Code" />
+                    <h:outputLabel for="itemCode" value="Filler Code*:" style="font-weight:bold"/>                    
+                    <p:inputText id="itemCode" value="#{addItemManagedBean.newItem.fillerCode}" required="true" requiredMessage="Filler Code is required" label="Item Code" />
                     <p:message for="itemCode" />
 
 
-                    <h:outputLabel for="itemName" value="Item Name*:" style="font-weight:bold"/>                    
-                    <p:inputText id="itemName" value="#{addItemManagedBean.newItem.itemName}" required="true" requiredMessage="Item Name is required" label="Item Name" />
+                    <h:outputLabel for="itemName" value="Filler Name*:" style="font-weight:bold"/>                    
+                    <p:inputText id="itemName" value="#{addItemManagedBean.newItem.fillerName}" required="true" requiredMessage="Filler Name is required" label="Item Name" />
                     <p:message for="itemName" />
 
 
-                    <h:outputLabel for="wireGrade" value="Wire Grade*:" style="font-weight:bold"/>                    
-                    <p:selectOneMenu id="wireGrade" value="#{addItemManagedBean.newItem.wireGrade}" required="true" requiredMessage="Wire Grade is required, please select one." style="width:125px">
+                    <h:outputLabel for="wireGrade" value="Filler Grade*:" style="font-weight:bold"/>                    
+                    <p:selectOneMenu id="wireGrade" value="#{addItemManagedBean.newItem.wireGrade}" required="true" requiredMessage="Filler Grade is required, please select one." style="width:125px">
                         <f:selectItem itemLabel="Select One" itemValue="" />
                         <f:selectItem itemLabel="A" itemValue="A" />
                         <f:selectItem itemLabel="B" itemValue="B" />
@@ -153,21 +153,21 @@
                     </p:inputText>
                     <p:message for="averageWeight" />
                     
-                    <h:outputLabel for="wireLength" value="Wire Length(mm)*" style="font-weight:bold"/>                    
-                    <p:inputText id="wireLength" maxlength="11" value="#{addItemManagedBean.newItem.wireLength}" label="Wire Length"  required="true" requiredMessage="Wire Length is required" converterMessage="Invalid Input! Please enter a positive number up to 2 decimal for Wire Length. Example: 53.0 or 42.53">
+                    <h:outputLabel for="fillerLength" value="Filler Length(mm)*" style="font-weight:bold"/>                    
+                    <p:inputText id="fillerLength" maxlength="11" value="#{addItemManagedBean.newItem.wireLength}" label="Filler Length"  required="true" requiredMessage="Filler Length is required" converterMessage="Invalid Input! Please enter a positive number up to 2 decimal for Filler Length. Example: 53.0 or 42.53">
                         <f:validateDoubleRange minimum="0.1" />                       
                     </p:inputText>
-                    <p:message for="wireLength" />
+                    <p:message for="fillerLength" />
                     
-                    <h:outputLabel for="diameter" value="Wire Diameter(mm)*" style="font-weight:bold"/>                    
-                    <p:inputText id="diameter" maxlength="11" value="#{addItemManagedBean.newItem.diameter}" label="Diameter" required="true" requiredMessage="Diameter is required" converterMessage="Invalid Input! Please enter a positive number up to 2 decimal for Wire Diameter. Example: 53.0 or 42.53">
+                    <h:outputLabel for="diameter" value="Filler Diameter(mm)*" style="font-weight:bold"/>                    
+                    <p:inputText id="diameter" maxlength="11" value="#{addItemManagedBean.newItem.diameter}" label="Diameter" required="true" requiredMessage="Diameter is required" converterMessage="Invalid Input! Please enter a positive number up to 2 decimal for Filler Diameter. Example: 53.0 or 42.53">
                         <f:validateDoubleRange minimum="0.1" />                       
                     </p:inputText>
                     <p:message for="diameter" />
                     
                     
                 </h:panelGrid>            
-                <p:commandButton value="Add New Wire" update="grid msg" actionListener="#{addItemManagedBean.createItem}" icon="ui-icon-check" validateClient="true" style="margin-right:10px"/>
+                <p:commandButton value="Add New Filler" update="grid msg" actionListener="#{addItemManagedBean.createItem}" icon="ui-icon-check" validateClient="true" style="margin-right:10px"/>
             </p:panel>
 
         </h:form>

@@ -5,7 +5,7 @@
  */
 package managedbean.ICS;
 
-import entity.ItemEntity;
+import entity.FillerEntity;
 import java.io.Serializable;
 import javax.ejb.EJB;
 import javax.inject.Named;
@@ -28,28 +28,28 @@ public class AddItemManagedBean implements Serializable {
     @EJB
     private HiYewICSSessionBeanLocal hiYewICSSessionBean;
 
-    private ItemEntity newItem;
+    private FillerEntity newItem;
 
     /**
      * Creates a new instance of AddItemManagedBean
      */
     public AddItemManagedBean() {
-        newItem = new ItemEntity();
+        newItem = new FillerEntity();
 
     }
 
     public String createItem(ActionEvent event) {
         System.out.println("Here");
-        if ((hiYewICSSessionBean.getExistingItem(newItem.getItemCode())) != null) {
+        if ((hiYewICSSessionBean.getExistingItem(newItem.getFillerCode())) != null) {
             FacesContext.getCurrentInstance().addMessage("formMain:itemCode", new FacesMessage(FacesMessage.SEVERITY_ERROR, "Unable to add item! Existing Item Code", "Unable to add item! Existing Item Code"));
             return "";
-        }else if ((hiYewICSSessionBean.getExistingItemByName(newItem.getItemName()))!= null){
+        }else if ((hiYewICSSessionBean.getExistingItemByName(newItem.getFillerName()))!= null){
             FacesContext.getCurrentInstance().addMessage("formMain:itemName", new FacesMessage(FacesMessage.SEVERITY_ERROR,"Unable to add item! Existing Item Name", "Unable to add item! Existing Item Name"));
             return "";
         }
         else{
           hiYewICSSessionBean.createItem(newItem);
-          newItem = new ItemEntity(); //To reinitialise and create new customer
+          newItem = new FillerEntity(); //To reinitialise and create new customer
            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Item added to inventory successfully!"));
              return "viewInventory?faces-redirect=true";
         }
@@ -58,14 +58,14 @@ public class AddItemManagedBean implements Serializable {
     /**
      * @return the newItem
      */
-    public ItemEntity getNewItem() {
+    public FillerEntity getNewItem() {
         return newItem;
     }
 
     /**
      * @param newItem the newItem to set
      */
-    public void setNewItem(ItemEntity newItem) {
+    public void setNewItem(FillerEntity newItem) {
         this.newItem = newItem;
     }
 
