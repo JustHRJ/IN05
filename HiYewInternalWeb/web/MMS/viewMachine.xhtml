@@ -75,7 +75,7 @@
                             <p:menuitem value ="View Machinery" url ="viewMachine.xhtml" />
                         </p:submenu>
                         <p:submenu label ="Machine Maintenance">
-                            <p:menuitem value ="#{hiYewManagedBean.getMAlert()}" url ="alertMachine.xhtml" />
+                            <p:menuitem value ="#{machineManageBean.getMAlert()}" url ="alertMachine.xhtml" />
                             <p:menuitem value ="Add Maintenance Schedule" url ="addMaintainenceSchedule.xhtml"/>
                             <p:menuitem value ="View Maintenance Schedule" url ="viewMaintainenceSchedule.xhtml" />
                         </p:submenu>
@@ -92,24 +92,24 @@
             </p:megaMenu>
             <br/>
             <p:growl id = "msgs" showDetail="true"/>
-            <p:dataTable var="im" value="#{hiYewDataTableBean.machines}" editable = "true">
+            <p:dataTable var="im" value="#{machineManageBean.machines}" editable = "true">
                 <f:facet name="header">
                     View Machines
                 </f:facet>
-                <p:ajax event="rowEdit" listener="#{hiYewManagedBean.updateMachinery}" update =":formMain:msgs" />
+                <p:ajax event="rowEdit" listener="#{machineManageBean.updateMachinery}" update =":formMain:msgs" />
                 <p:column headerText ="Machine ID" >
                     <h:outputText value="#{im.machine_number}" style="text-align: center" />
                 </p:column>                   
                 <p:column headerText ="Machine Name">
                     <p:cellEditor>
                         <f:facet name ="output"><h:outputText value="#{im.machine_name}" style="text-align: center" /></f:facet>
-                        <f:facet name ="input"><p:inputText id = "machineName" value ="#{hiYewManagedBean.machineName}"  /></f:facet>
+                        <f:facet name ="input"><p:inputText id = "machineName" value ="#{machineManageBean.machineName}"  /></f:facet>
                     </p:cellEditor>
                 </p:column>
                 <p:column headerText = "Machine Expiry">
                     <p:cellEditor>
-                        <f:facet name ="output"> <h:outputText value="#{hiYewManagedBean.formatDate(im.machine_expiry)}" style="text-align: center" /></f:facet>
-                        <f:facet name ="input"><p:calendar value = "#{hiYewManagedBean.machineNxtMaint}" pattern = "dd/MM/yyyy"  mindate="#{hiYewManagedBean.getToday()}" /> </f:facet>
+                        <f:facet name ="output"> <h:outputText value="#{machineManageBean.formatDate(im.machine_expiry)}" style="text-align: center" /></f:facet>
+                        <f:facet name ="input"><p:calendar value = "#{machineManageBean.machineNxtMaint}" pattern = "dd/MM/yyyy"  mindate="#{hiYewManagedBean.getToday()}" /> </f:facet>
                     </p:cellEditor>
 
                 </p:column>
@@ -120,7 +120,7 @@
                     <p:cellEditor>
                         <f:facet name = "output"> <h:outputText value="#{im.status}" style="text-align: center" /> </f:facet>
                         <f:facet name ="input">
-                            <h:selectOneMenu value ="#{hiYewManagedBean.machine_status}">
+                            <h:selectOneMenu value ="#{machineManageBean.machine_status}">
                                 <f:selectItem itemValue ="Available" />
                                 <f:selectItem itemValue="Disable" />
                                 <f:selectItem itemValue ="Maintainence" />
@@ -148,7 +148,7 @@
                             <p:outputLabel value ="#{im.id}"/>
                         </p:column>
                         <p:column headerText="Repair Date">
-                            <p:outputLabel value ="#{hiYewManagedBean.formatDate(im.date)}"/>
+                            <p:outputLabel value ="#{machineManageBean.formatDate(im.date)}"/>
                         </p:column>
                         <p:column headerText="Repair Solution">
                             <p:outputLabel value ="#{im.repairSolution}"/>

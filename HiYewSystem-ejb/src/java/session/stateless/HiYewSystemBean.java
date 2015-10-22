@@ -349,8 +349,7 @@ public class HiYewSystemBean implements HiYewSystemBeanLocal {
 
     }
 
-    public
-            boolean deleteMachineMaintainence(String id) {
+    public boolean deleteMachineMaintainence(String id) {
         try {
             MachineMaintainenceEntity mm = em.find(MachineMaintainenceEntity.class, Long.parseLong(id));
             if (mm == null) {

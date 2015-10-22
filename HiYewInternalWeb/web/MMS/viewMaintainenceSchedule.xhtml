@@ -76,7 +76,7 @@
                             <p:menuitem value ="View Machinery" url ="viewMachine.xhtml" />
                         </p:submenu>
                         <p:submenu label ="Machine Maintenance">
-                            <p:menuitem value ="#{hiYewManagedBean.getMAlert()}" url ="alertMachine.xhtml" />
+                            <p:menuitem value ="#{machineManageBean.getMAlert()}" url ="alertMachine.xhtml" />
                             <p:menuitem value ="Add Maintenance Schedule" url ="addMaintainenceSchedule.xhtml"/>
                             <p:menuitem value ="View Maintenance Schedule" url ="viewMaintainenceSchedule.xhtml" />
                         </p:submenu>
@@ -93,11 +93,11 @@
             </p:megaMenu>
             <br/>
             <p:growl id ="msgs" showDetail ="false"/>
-            <p:dataTable id ="data1" value ="#{hiYewDataTableBean.maintainenceMachineWeek}" var ="im" paginator="true" rows="5" emptyMessage="No machine maintainence" editable = "true">
+            <p:dataTable id ="data1" value ="#{machineManageBean.maintainenceMachineWeek}" var ="im" paginator="true" rows="5" emptyMessage="No machine maintainence" editable = "true">
                 <f:facet name="header">
                     View Upcoming week Maintainence
                 </f:facet>
-                <p:ajax event="rowEdit" listener="#{hiYewManagedBean.updateMachineSchedule}" update =":formMain:msgs" />
+                <p:ajax event="rowEdit" listener="#{machineManageBean.updateMachineSchedule}" update =":formMain:msgs" />
 
                 <p:column headerText="Maintainence ID">
                     <p:outputLabel value = "#{im.id}"/>
@@ -110,27 +110,27 @@
                 </p:column>
                 <p:column headerText="Schedule Date">
                     <p:cellEditor>
-                        <f:facet name ="output">   <p:outputLabel value ="#{hiYewManagedBean.formatDate(im.scheduleDate)}"/></f:facet>
-                        <f:facet name ="input"> <p:calendar value = "#{hiYewManagedBean.mScheduleDate}" mindate="#{hiYewManagedBean.getToday()}" pattern ="dd/MM/yyyy" converterMessage="Please Input Correct Date Format"/> </f:facet>
+                        <f:facet name ="output">   <p:outputLabel value ="#{machineManageBean.formatDate(im.scheduleDate)}"/></f:facet>
+                        <f:facet name ="input"> <p:calendar value = "#{machineManageBean.mScheduleDate}" mindate="#{hiYewManagedBean.getToday()}" pattern ="dd/MM/yyyy" converterMessage="Please Input Correct Date Format"/> </f:facet>
                     </p:cellEditor>
                 </p:column>
                 <p:column headerText="Schedule Time">
                     <p:cellEditor>
                         <f:facet name ="output"><p:outputLabel value ="#{im.scheduleTime}"/></f:facet>
-                        <f:facet name ="input"><p:inputText value = "#{hiYewManagedBean.mScheduleHour}" validator="#{registrationValidator.validateTime}" validatorMessage="Please input proper time    " /></f:facet>
+                        <f:facet name ="input"><p:inputText value = "#{machineManageBean.mScheduleHour}" validator="#{registrationValidator.validateTime}" validatorMessage="Please input proper time    " /></f:facet>
                     </p:cellEditor>
 
                 </p:column>
                 <p:column headerText="Service Provider">
                     <p:cellEditor>
                         <f:facet name ="output"><p:outputLabel value ="#{im.serviceProvider}"/></f:facet>
-                        <f:facet name = "input"> <p:inputText value = "#{hiYewManagedBean.mServiceProvider}"/></f:facet>
+                        <f:facet name = "input"> <p:inputText value = "#{machineManageBean.mServiceProvider}"/></f:facet>
                     </p:cellEditor>
                 </p:column>
                 <p:column headerText="Service Contact Number">
                     <p:cellEditor>
                         <f:facet name ="output">  <p:outputLabel value ="#{im.serviceContact}"/></f:facet>
-                        <f:facet name ="input"><p:inputText value = "#{hiYewManagedBean.mServiceContact}" maxlength ="8" validator="#{registrationValidator.validateNumeric}" validatorMessage="Please input correct Phone number" /> </f:facet>
+                        <f:facet name ="input"><p:inputText value = "#{machineManageBean.mServiceContact}" maxlength ="8" validator="#{registrationValidator.validateNumeric}" validatorMessage="Please input correct Phone number" /> </f:facet>
                     </p:cellEditor>              
                 </p:column>
                 <p:column style="width:32px">
@@ -138,11 +138,11 @@
                 </p:column>
             </p:dataTable>
             <br/><br/>
-            <p:dataTable id ="data2" value ="#{hiYewDataTableBean.maintainenceMachineExpired}" var ="im" paginator="true" rows="5" emptyMessage="No machine maintainence" editable = "true">
+            <p:dataTable id ="data2" value ="#{machineManageBean.maintainenceMachineExpired}" var ="im" paginator="true" rows="5" emptyMessage="No machine maintainence" editable = "true">
                 <f:facet name="header">
                     View Overdue Maintenance
                 </f:facet>
-                <p:ajax event="rowEdit" listener="#{hiYewManagedBean.updateMachineSchedule}" update =":formMain:msgs" />
+                <p:ajax event="rowEdit" listener="#{machineManageBean.updateMachineSchedule}" update =":formMain:msgs" />
                 <p:column headerText="Maintainence ID">
                     <p:outputLabel value = "#{im.id}"/>
                 </p:column>
@@ -154,26 +154,26 @@
                 </p:column>
                 <p:column headerText="Schedule Date">
                     <p:cellEditor>
-                        <f:facet name ="output">   <p:outputLabel value ="#{hiYewManagedBean.formatDate(im.scheduleDate)}"/></f:facet>
-                        <f:facet name ="input"> <p:calendar value = "#{hiYewManagedBean.mScheduleDate}" mindate="#{hiYewManagedBean.getToday()}" pattern ="dd/MM/yyyy" converterMessage="Please Input Correct Date Format"/> </f:facet>
+                        <f:facet name ="output">   <p:outputLabel value ="#{machineManageBean.formatDate(im.scheduleDate)}"/></f:facet>
+                        <f:facet name ="input"> <p:calendar value = "#{machineManageBean.mScheduleDate}" mindate="#{hiYewManagedBean.getToday()}" pattern ="dd/MM/yyyy" converterMessage="Please Input Correct Date Format"/> </f:facet>
                     </p:cellEditor>
                 </p:column>
                 <p:column headerText="Schedule Time">
                     <p:cellEditor>
                         <f:facet name ="output"><p:outputLabel value ="#{im.scheduleTime}"/></f:facet>
-                        <f:facet name ="input"><p:inputText value = "#{hiYewManagedBean.mScheduleHour}" validator="#{registrationValidator.validateTime}" validatorMessage="Please input proper time    " /></f:facet>
+                        <f:facet name ="input"><p:inputText value = "#{machineManageBean.mScheduleHour}" validator="#{registrationValidator.validateTime}" validatorMessage="Please input proper time    " /></f:facet>
                     </p:cellEditor>
                 </p:column>
                 <p:column headerText="Service Provider">
                     <p:cellEditor>
                         <f:facet name ="output"><p:outputLabel value ="#{im.serviceProvider}"/></f:facet>
-                        <f:facet name = "input"> <p:inputText value = "#{hiYewManagedBean.mServiceProvider}"/></f:facet>
+                        <f:facet name = "input"> <p:inputText value = "#{machineManageBean.mServiceProvider}"/></f:facet>
                     </p:cellEditor>
                 </p:column>
                 <p:column headerText="Service Contact Number">
                     <p:cellEditor>
                         <f:facet name ="output">  <p:outputLabel value ="#{im.serviceContact}"/></f:facet>
-                        <f:facet name ="input"><p:inputText value = "#{hiYewManagedBean.mServiceContact}" maxlength ="8" validator="#{registrationValidator.validateNumeric}" validatorMessage="Please input correct Phone number" /> </f:facet>
+                        <f:facet name ="input"><p:inputText value = "#{machineManageBean.mServiceContact}" maxlength ="8" validator="#{registrationValidator.validateNumeric}" validatorMessage="Please input correct Phone number" /> </f:facet>
                     </p:cellEditor>              
                 </p:column>
                 <p:column style="width:32px">
@@ -181,12 +181,12 @@
                 </p:column>
             </p:dataTable>
             <br/><br/>
-            <p:dataTable id ="data3" value ="#{hiYewDataTableBean.maintainenceMachine}" var ="im" paginator="true" rows="5" emptyMessage="No machine maintainence" editable = "true">
+            <p:dataTable id ="data3" value ="#{machineManageBean.maintainenceMachine}" var ="im" paginator="true" rows="5" emptyMessage="No machine maintainence" editable = "true">
                 <f:facet name="header">
                     View Other Scheduled Maintenance
                 </f:facet>
                 <p:growl id ="msgs" showDetail="false"/>
-                <p:ajax event="rowEdit" listener="#{hiYewManagedBean.updateMachineSchedule}" update =":formMain:msgs" />
+                <p:ajax event="rowEdit" listener="#{machineManageBean.updateMachineSchedule}" update =":formMain:msgs" />
                 <p:column headerText="Maintainence ID">
                     <p:outputLabel value = "#{im.id}"/>
                 </p:column>
@@ -198,26 +198,26 @@
                 </p:column>
                 <p:column headerText="Schedule Date">
                     <p:cellEditor>
-                        <f:facet name ="output">   <p:outputLabel value ="#{hiYewManagedBean.formatDate(im.scheduleDate)}"/></f:facet>
-                        <f:facet name ="input"> <p:calendar value = "#{hiYewManagedBean.mScheduleDate}" mindate="#{hiYewManagedBean.getToday()}" pattern ="dd/MM/yyyy" converterMessage="Please Input Correct Date Format"/> </f:facet>
+                        <f:facet name ="output">   <p:outputLabel value ="#{machineManageBean.formatDate(im.scheduleDate)}"/></f:facet>
+                        <f:facet name ="input"> <p:calendar value = "#{machineManageBean.mScheduleDate}" mindate="#{hiYewManagedBean.getToday()}" pattern ="dd/MM/yyyy" converterMessage="Please Input Correct Date Format"/> </f:facet>
                     </p:cellEditor>
                 </p:column>
                 <p:column headerText="Schedule Time">
                     <p:cellEditor>
                         <f:facet name ="output"><p:outputLabel value ="#{im.scheduleTime}"/></f:facet>
-                        <f:facet name ="input"><p:inputText value = "#{hiYewManagedBean.mScheduleHour}" validator="#{registrationValidator.validateTime}" validatorMessage="Please input proper time    " /></f:facet>
+                        <f:facet name ="input"><p:inputText value = "#{machineManageBean.mScheduleHour}" validator="#{registrationValidator.validateTime}" validatorMessage="Please input proper time    " /></f:facet>
                     </p:cellEditor>
                 </p:column>
                 <p:column headerText="Service Provider">
                     <p:cellEditor>
                         <f:facet name ="output"><p:outputLabel value ="#{im.serviceProvider}"/></f:facet>
-                        <f:facet name = "input"> <p:inputText value = "#{hiYewManagedBean.mServiceProvider}"/></f:facet>
+                        <f:facet name = "input"> <p:inputText value = "#{machineManageBean.mServiceProvider}"/></f:facet>
                     </p:cellEditor>
                 </p:column>
                 <p:column headerText="Service Contact Number">
                     <p:cellEditor>
                         <f:facet name ="output">  <p:outputLabel value ="#{im.serviceContact}"/></f:facet>
-                        <f:facet name ="input"><p:inputText value = "#{hiYewManagedBean.mServiceContact}" maxlength ="8" validator="#{registrationValidator.validateNumeric}" validatorMessage="Please input correct Phone number" /> </f:facet>
+                        <f:facet name ="input"><p:inputText value = "#{machineManageBean.mServiceContact}" maxlength ="8" validator="#{registrationValidator.validateNumeric}" validatorMessage="Please input correct Phone number" /> </f:facet>
                     </p:cellEditor>              
                 </p:column>
                 <p:column style="width:32px">
@@ -226,12 +226,12 @@
             </p:dataTable>
 
             <p:outputLabel value ="Delete by maintainence ID"/>
-            <p:inputText value ="#{hiYewManagedBean.machineMaintainenceID}"/>
-            <p:commandButton value ="Delete Maintainence" action ="#{hiYewManagedBean.deleteMachineMaintainence()}" update ="msgs" />
+            <p:inputText value ="#{machineManageBean.machineMaintainenceID}"/>
+            <p:commandButton value ="Delete Maintainence" action ="#{machineManageBean.deleteMachineMaintainence()}" update ="msgs" />
             <br/>
             <p:outputLabel value ="Complete maintainence by Machine ID"/>
-            <p:inputText value ="#{hiYewManagedBean.machineId}"/>
-            <p:commandButton value ="Update Machine" action ="#{hiYewManagedBean.extendMachine()}" update ="msgs" />
+            <p:inputText value ="#{machineManageBean.machineId}"/>
+            <p:commandButton value ="Update Machine" action ="#{machineManageBean.extendMachine()}" update ="msgs" />
 
         </h:form>
     </h:body>
