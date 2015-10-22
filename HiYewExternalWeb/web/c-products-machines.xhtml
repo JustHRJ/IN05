@@ -15,12 +15,513 @@
             <h:outputText value="" style="font-family: 'Open Sans'; font-weight: bold; color: red;" />
         </div>
         <!-- End page header -->
-        <p:selectOneMenu id="laserWeldingMachines" value="#{productQuotationManagedBean.selectedMachine}"  style="width:230px">
-            <!--<p:ajax listener="" />--> 
-            <f:selectItem itemValue="" itemLabel="- Select -" />
-            <f:selectItem itemValue="LWI Small Chamber Type" itemLabel="LWI Small Chamber Type" />
-            <f:selectItem itemValue="LWI V Flexx" itemLabel="LWI V Flexx" />
-        </p:selectOneMenu>
-    </ui:define>
+        <h:form id="mainForm">
+            <b><a href="c-product-machines-compare.xhtml"><i class="fa fa-search overlay"></i>&nbsp;&nbsp;Click here to select and compare two models for a more detailed comparison.</a></b>
+            <br />
+            <div style="height: 15px"></div>
+            <div>
+                <b>Select a laser welding machine and view full details: </b>&nbsp;
+                <p:selectOneMenu id="selectedMachine" value="#{productQuotationManagedBean.selectedMachine}" style="width:230px; display: inline-table">
+                    <p:ajax listener="#{productQuotationManagedBean.redirectToSelectedMachine()}" />
+                    <f:selectItem itemValue="" itemLabel="-" />
+                    <f:selectItem itemValue="LWI Small Chamber Type" itemLabel="LWI Small Chamber Type" />
+                    <f:selectItem itemValue="LWI V Flexx" itemLabel="LWI V Flexx" />
+                    <f:selectItem itemValue="LWI V ERGO" itemLabel="LWI V ERGO" />
+                    <f:selectItem itemValue="LWI V T-BaseV3" itemLabel="LWI V T-BaseV3" />
+                    <f:selectItem itemValue="LWI V MobileFlexx" itemLabel="LWI V MobileFlexx" />
+                    <f:selectItem itemValue="LWI V Unixx III" itemLabel="LWI V Unixx III" />
+                    <f:selectItem itemValue="LWI V UltraFlexx" itemLabel="LWI V UltraFlexx" />
+                </p:selectOneMenu>
+            </div>
+            <div style="height: 15px"></div>
+            <p:messages id="msg" showDetail="false" />
+            <p:messages id="warnMsg" showDetail="false" />
+            <!-- Begin thumbnail box -->
+            <div class="row">
+                <div class="col-sm-3 col-xs-6">
+                    <!-- Website statistic -->
+                    <div class="box-info full">
+                        <h2><strong>LWI Small Chamber Type</strong></h2>
+                        <!-- Additional buttons -->
+                        <div class="additional-btn">
+                            <a class="additional-icon" href="#" data-toggle="collapse" data-target="#website-statistic"><i class="fa fa-chevron-down"></i></a>
+                        </div><!-- End div .additional-button -->
+                        <!-- Statistic inner -->
+                        <div id="website-statistic" class="statistic-chart collapse in">
+                            <div class="img-wrap">
+                                <img src="images/products/sct_500_366-500x366.jpg" alt="" />
+                            </div>
+                            <div class="des-thumbnail">
+                                <h4 style="color: #428bca">The compact manual work station</h4>
+                                <p style="text-align: justify; padding-top: 0px">
+                                    As an enclosed laser workstation in laser class 1 or as an open model for greater flexibility... <i>(To read more, click View Details)</i>
+                                </p>
+                                <div style="height: 10px"></div>
+                                <table data-sortable="" class="table table-striped">
+                                    <tbody>
+                                        <tr>
+                                            <td width="450px"><i class="fa fa-check overlay"></i>&nbsp;&nbsp;Suitable for laboratories</td>
+                                        </tr>
+                                        <tr>
+                                            <td width="450px"><i class="fa fa-check overlay"></i>&nbsp;&nbsp;Large display with backlighting</td>
+                                        </tr>
+                                        <tr>
+                                            <td width="450px"><i class="fa fa-check overlay"></i>&nbsp;&nbsp;High Power LED</td>
+                                        </tr>
+                                        <tr>
+                                            <td width="450px"><i class="fa fa-check overlay"></i>&nbsp;&nbsp;Cold-light illumination</td>
+                                        </tr>
+                                        <tr>
+                                            <td width="450px"><i class="fa fa-check overlay"></i>&nbsp;&nbsp;On-axis shielding gas supply</td>
+                                        </tr>
+                                        <tr>
+                                            <td width="450px" style="border-bottom: 1px solid #ddd"><i class="fa fa-check overlay"></i>&nbsp;&nbsp;Service, diagnosis and upgrade</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                <div style="height: 10px"></div>
+                                <img src="images/products/yag_120.jpg" alt="" />
+                                <img src="images/products/fss_150.jpg" alt="" />
+                                <img src="images/products/fss_300.jpg" alt="" />
+                                <img src="images/products/dreheinheit.jpg" alt="" />
+                                <img src="images/products/display.jpg" alt="" />
+                                <img src="images/products/beamtuning.jpg" alt="" />
+                                <img src="images/products/schutzgas.jpg" alt="" />
+                                <!-- User button -->
+                                <div class="user-button">
+                                    <div class="row" style="margin-bottom:-25px">
+                                        <div class="col-md-6">
+                                            <p:commandButton update="msg" style="border: none; font-weight: normal; font-family: 'Open Sans'; padding-top: 6px; padding-bottom: 7px; padding-left: 22px; padding-right: 22px" styleClass="btn btn-primary btn-xs" value="View Details" action="#{productQuotationManagedBean.addToCacheList('Machine','LWI Small Chamber Type',1)}" icon="" />
+                                        </div>
+                                        <div class="col-md-6" style="margin-left: -35px">
+                                            <p:commandButton update="msg" style="border: none; font-weight: normal; font-family: 'Open Sans'; padding-top: 6px; padding-bottom: 7px; padding-left: 22px; padding-right: 22px" styleClass="btn btn-primary2 btn-xs" value="Add to RFQ list" action="#{productQuotationManagedBean.addToCacheList('Machine','LWI Small Chamber Type',1)}" icon="" />
+                                        </div>
+                                    </div>
+                                </div><!-- End div .user-button -->
+                            </div>
+                        </div><!-- End div #website-statistic -->
+                    </div><!-- End div .box-info -->
+                </div>
+                <div class="col-sm-3 col-xs-6">
+                    <!-- Website statistic -->
+                    <div class="box-info full">
+                        <h2><strong>LWI V Flexx</strong></h2>
+                        <!-- Additional buttons -->
+                        <div class="additional-btn">
+                            <a class="additional-icon" href="#" data-toggle="collapse" data-target="#website-statistic2"><i class="fa fa-chevron-down"></i></a>
+                        </div><!-- End div .additional-button -->
+                        <!-- Statistic inner -->
+                        <div id="website-statistic2" class="statistic-chart collapse in">
+                            <div class="img-wrap">
+                                <img src="images/products/MG_2044-236x366.jpg" alt="" />
+                            </div>
+                            <div class="des-thumbnail">
+                                <h4 style="color: #428bca;">The versatile workstation for individual customisation or integration</h4>
+                                <p style="text-align: justify; padding-top: 0px">
+                                    Over 1000 installed LWI series systems stand for excellent performance and reliability. In a simple... <i>(To read more, click View Details)</i>
+                                </p><div style="height: 10px"></div>
+                                <table data-sortable="" class="table table-striped">
+                                    <tbody>
+                                        <tr>
+                                            <td width="450px"><i class="fa fa-check overlay"></i>&nbsp;&nbsp;Display, operating, integrated energy measuring</td>
+                                        </tr>
+                                        <tr>
+                                            <td width="450px"><i class="fa fa-check overlay"></i>&nbsp;&nbsp;Programmable shielding gas post-flooding</td>
+                                        </tr>
+                                        <tr>
+                                            <td width="450px"><i class="fa fa-check overlay"></i>&nbsp;&nbsp;PWM mode</td>
+                                        </tr>
+                                        <tr>
+                                            <td width="450px"><i class="fa fa-check overlay"></i>&nbsp;&nbsp;Service, diagnosis and upgrade</td>
+                                        </tr>
+                                        <tr>
+                                            <td width="450px"><i class="fa fa-check overlay"></i>&nbsp;&nbsp;Pulse shaping</td>
+                                        </tr>
+                                        <tr>
+                                            <td width="450px" style="border-bottom: 1px solid #ddd"><i class="fa fa-check overlay"></i>&nbsp;&nbsp;Booster technology</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                <div style="height: 10px"></div>
+                                <img src="images/products/fss_150.jpg" alt="" />
+                                <img src="images/products/fss_300.jpg" alt="" />
+                                <img src="images/products/yag_120.jpg" alt="" />
+                                <img src="images/products/yag_150.jpg" alt="" />
+                                <img src="images/products/yag_200.jpg" alt="" />
+                                <img src="images/products/yag_300.jpg" alt="" />
+                                <img src="images/products/display.jpg" alt="" />
+                                <img src="images/products/on_axis_gas.jpg" alt="" />
+                                <img src="images/products/on_axis_light.jpg" alt="" />
+                                <img src="images/products/schutzgas.jpg" alt="" />
+                                <div class="user-profile-inner">
+                                    <!-- User button -->
+                                    <div class="user-button">
+                                        <div class="row" style="margin-bottom:-25px">
+                                            <div class="col-md-6">
+                                                <p:commandButton update="msg" style="border: none; font-weight: normal; font-family: 'Open Sans'; padding-top: 6px; padding-bottom: 7px; padding-left: 22px; padding-right: 22px" styleClass="btn btn-primary btn-xs" value="View Details" action="#{productQuotationManagedBean.addToCacheList('Machine','LWI Small Chamber Type',1)}" icon="" />
+                                            </div>
+                                            <div class="col-md-6" style="margin-left: -35px">
+                                                <p:commandButton update="msg" style="border: none; font-weight: normal; font-family: 'Open Sans'; padding-top: 6px; padding-bottom: 7px; padding-left: 22px; padding-right: 22px" styleClass="btn btn-primary2 btn-xs" value="Add to RFQ list" action="#{productQuotationManagedBean.addToCacheList('Machine','LWI V T-BaseV3',1)}" icon="" />
+                                            </div>
+                                        </div>
+                                    </div><!-- End div .user-button -->
+                                </div><!-- End div .user-profile-inner -->
+                            </div>
 
+                        </div><!-- End div #website-statistic -->
+                    </div>
+                </div>
+                <div class="col-sm-3 col-xs-6">
+                    <!-- Website statistic -->
+                    <div class="box-info full">
+                        <h2><strong>LWI V ERGO</strong></h2>
+                        <!-- Additional buttons -->
+                        <div class="additional-btn">
+                            <a class="additional-icon" href="#" data-toggle="collapse" data-target="#website-statistic3"><i class="fa fa-chevron-down"></i></a>
+                        </div><!-- End div .additional-button -->
+                        <!-- Statistic inner -->
+                        <div id="website-statistic3" class="statistic-chart collapse in">
+                            <div class="img-wrap">
+                                <img src="images/products/tn_ERGO_2013.jpg" alt="" />
+                            </div>
+                            <div class="des-thumbnail">
+                                <h4 style="color: #428bca">Ergonomic, flexible, advantageous</h4>
+                                <p style="text-align: justify; padding-top: 0px">
+                                    2 Z-axes for an ergonomic sitting position. Ergonomic workspace with covered guideways... <i>(To read more, click View Details)</i></p>
+                                <div style="height: 10px"></div>
+                                <table data-sortable="" class="table table-striped">
+                                    <tbody>
+                                        <tr>
+                                            <td width="450px"><i class="fa fa-check overlay"></i>&nbsp;&nbsp;Combineable with a rotating device</td>
+                                        </tr>
+                                        <tr>
+                                            <td width="450px"><i class="fa fa-check overlay"></i>&nbsp;&nbsp;Display, operating, integrated energy measuring</td>
+                                        </tr>
+                                        <tr>
+                                            <td width="450px"><i class="fa fa-check overlay"></i>&nbsp;&nbsp;Beam tuning</td>
+                                        </tr>
+                                        <tr>
+                                            <td width="450px"><i class="fa fa-check overlay"></i>&nbsp;&nbsp;Booster technology</td>
+                                        </tr>
+                                        <tr>
+                                            <td width="450px"><i class="fa fa-check overlay"></i>&nbsp;&nbsp;Pulse shaping</td>
+                                        </tr>
+                                        <tr>
+                                            <td width="450px"><i class="fa fa-check overlay"></i>&nbsp;&nbsp;PWM mode</td>
+                                        </tr>
+                                        <tr>
+                                            <td width="450px" style="border-bottom: 1px solid #ddd"><i class="fa fa-check overlay"></i>&nbsp;&nbsp;Programmable shielding gas post-flooding</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                <div style="height: 10px"></div>
+                                <img src="images/products/fss_150.jpg" alt="" />
+                                <img src="images/products/fss_300.jpg" alt="" />
+                                <img src="images/products/yag_120.jpg" alt="" />
+                                <img src="images/products/yag_150.jpg" alt="" />
+                                <img src="images/products/display.jpg" alt="" />
+                                <img src="images/products/dreheinheit.jpg" alt="" />
+                                <img src="images/products/on_axis_gas.jpg" alt="" />
+                                <img src="images/products/on_axis_light.jpg" alt="" />
+                                <img src="images/products/pulsformung.jpg" alt="" />
+                                <img src="images/products/pwm.jpg" alt="" />
+                                <img src="images/products/schutzgas.jpg" alt="" />
+                                <div class="user-profile-inner">
+                                    <!-- User button -->
+                                    <div class="user-button">
+                                        <div class="row" style="margin-bottom:-25px">
+                                            <div class="col-md-6">
+                                                <p:commandButton update="msg" style="border: none; font-weight: normal; font-family: 'Open Sans'; padding-top: 6px; padding-bottom: 7px; padding-left: 22px; padding-right: 22px" styleClass="btn btn-primary btn-xs" value="View Details" action="#{productQuotationManagedBean.addToCacheList('Machine','LWI Small Chamber Type',1)}" icon="" />
+                                            </div>
+                                            <div class="col-md-6" style="margin-left: -35px">
+                                                <p:commandButton update="msg" style="border: none; font-weight: normal; font-family: 'Open Sans'; padding-top: 6px; padding-bottom: 7px; padding-left: 22px; padding-right: 22px" styleClass="btn btn-primary2 btn-xs" value="Add to RFQ list" action="#{productQuotationManagedBean.addToCacheList('Machine','LWI V Unixx III',1)}" icon="" />
+                                            </div>
+                                        </div>
+                                    </div><!-- End div .user-button -->
+                                </div><!-- End div .user-profile-inner -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <hr style="border-width: 1px;border-color: grey; margin-top: 0px" />
+            <div class="row">
+                <div class="col-sm-3 col-xs-6">
+                    <!-- Website statistic -->
+                    <div class="box-info full">
+                        <h2><strong>LWI V T-BaseV3</strong></h2>
+                        <!-- Additional buttons -->
+                        <div class="additional-btn">
+                            <a class="additional-icon" href="#" data-toggle="collapse" data-target="#website-statistic4"><i class="fa fa-chevron-down"></i></a>
+                        </div><!-- End div .additional-button -->
+                        <!-- Statistic inner -->
+                        <div id="website-statistic4" class="statistic-chart collapse in">
+                            <div class="img-wrap">
+                                <img src="images/products/LIFE_Vision_01-550x366.jpg" alt="" />
+                            </div>
+                            <div class="des-thumbnail">
+                                <h4 style="color: #428bca;">Increased productivity and replicable welding quality!</h4>
+                                <p style="text-align: justify; padding-top: 0px">
+                                    The Workstation T-Base V3 expands your FLEXX, turning it into a compact, open welding... <i>(To read more, click View Details)</i>
+                                </p><div style="height: 10px"></div>
+                                <table data-sortable="" class="table table-striped">
+                                    <tbody>
+                                        <tr>
+                                            <td width="450px"><i class="fa fa-check overlay"></i>&nbsp;&nbsp;Precise work table</td>
+                                        </tr>
+                                        <tr>
+                                            <td width="450px"><i class="fa fa-check overlay"></i>&nbsp;&nbsp;Stable stamp axis</td>
+                                        </tr>
+                                        <tr>
+                                            <td width="450px"><i class="fa fa-check overlay"></i>&nbsp;&nbsp;CAN-Step: The intelligent axis control</td>
+                                        </tr>
+                                        <tr>
+                                            <td width="450px"><i class="fa fa-check overlay"></i>&nbsp;&nbsp;PDS – Pulse Distance Synchronization</td>
+                                        </tr>
+                                        <tr>
+                                            <td width="450px" style="border-bottom: 1px solid #ddd"><i class="fa fa-check overlay"></i>&nbsp;&nbsp;PCD – 3 Point Cycle Definition</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                <div style="height: 10px"></div>
+                                <img src="images/products/fss_150.jpg" alt="" />
+                                <img src="images/products/fss_300.jpg" alt="" />
+                                <img src="images/products/yag_120.jpg" alt="" />
+                                <img src="images/products/yag_150.jpg" alt="" />
+                                <img src="images/products/yag_200.jpg" alt="" />
+                                <img src="images/products/display.jpg" alt="" />
+                                <img src="images/products/dreheinheit.jpg" alt="" />
+                                <img src="images/products/on_axis_gas.jpg" alt="" />
+                                <img src="images/products/on_axis_light.jpg" alt="" />
+                                <img src="images/products/pulse_distance.jpg" alt="" />
+                                <img src="images/products/pulsformung.jpg" alt="" />
+                                <img src="images/products/pwm.jpg" alt="" />
+                                <img src="images/products/schutzgas.jpg" alt="" />
+                                <img src="images/products/teach_in.jpg" alt="" />
+                                <div class="user-profile-inner">
+                                    <!-- User button -->
+                                    <div class="user-button">
+                                        <div class="row" style="margin-bottom:-25px">
+                                            <div class="col-md-6">
+                                                <p:commandButton update="msg" style="border: none; font-weight: normal; font-family: 'Open Sans'; padding-top: 6px; padding-bottom: 7px; padding-left: 22px; padding-right: 22px" styleClass="btn btn-primary btn-xs" value="View Details" action="#{productQuotationManagedBean.addToCacheList('Machine','LWI Small Chamber Type',1)}" icon="" />
+                                            </div>
+                                            <div class="col-md-6" style="margin-left: -35px">
+                                                <p:commandButton update="msg" style="border: none; font-weight: normal; font-family: 'Open Sans'; padding-top: 6px; padding-bottom: 7px; padding-left: 22px; padding-right: 22px" styleClass="btn btn-primary2 btn-xs" value="Add to RFQ list" action="#{productQuotationManagedBean.addToCacheList('Machine','LWI V T-BaseV3',1)}" icon="" />
+                                            </div>
+                                        </div>
+                                    </div><!-- End div .user-button -->
+                                </div><!-- End div .user-profile-inner -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-3 col-xs-6">
+                    <!-- Website statistic -->
+                    <div class="box-info full">
+                        <h2><strong>LWI V MobileFlexx</strong></h2>
+                        <!-- Additional buttons -->
+                        <div class="additional-btn">
+                            <a class="additional-icon" href="#" data-toggle="collapse" data-target="#website-statistic5"><i class="fa fa-chevron-down"></i></a>
+                        </div><!-- End div .additional-button -->
+                        <!-- Statistic inner -->
+                        <div id="website-statistic5" class="statistic-chart collapse in">
+                            <div class="img-wrap">
+                                <img src="images/products/MobileFlexxV2014-407x366.jpg" alt="" />
+                            </div>
+                            <div class="des-thumbnail">
+                                <h4 style="color: #428bca">When flexibility counts...</h4>
+                                <p style="text-align: justify; padding-top: 0px">
+                                    All functions included in our workstations as Unixx III or T-base are available here too. So you have... <i>(To read more, click View Details)</i>
+                                </p>
+                                <div style="height: 10px"></div>
+                                <table data-sortable="" class="table table-striped">
+                                    <tbody>
+                                        <tr>
+                                            <td width="450px"><i class="fa fa-check overlay"></i>&nbsp;&nbsp;CAN-Step: The intelligent axis control</td>
+                                        </tr>
+                                        <tr>
+                                            <td width="450px"><i class="fa fa-check overlay"></i>&nbsp;&nbsp;PDS – Pulse Distance Synchronization</td>
+                                        </tr>
+                                        <tr>
+                                            <td width="450px"><i class="fa fa-check overlay"></i>&nbsp;&nbsp;PCD – 3 Point Cycle Definition</td>
+                                        </tr>
+                                        <tr>
+                                            <td width="450px" style="border-bottom: 1px solid #ddd"><i class="fa fa-check overlay"></i>&nbsp;&nbsp;Combinable with a rotating device</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                <div style="height: 10px"></div>
+                                <img src="images/products/fss_150.jpg" alt="" />
+                                <img src="images/products/fss_300.jpg" alt="" />
+                                <img src="images/products/yag_120.jpg" alt="" />
+                                <img src="images/products/yag_150.jpg" alt="" />
+                                <img src="images/products/yag_200.jpg" alt="" />
+                                <img src="images/products/yag_300.jpg" alt="" />
+                                <img src="images/products/display.jpg" alt="" />
+                                <img src="images/products/dreheinheit.jpg" alt="" />
+                                <img src="images/products/on_axis_gas.jpg" alt="" />
+                                <img src="images/products/on_axis_light.jpg" alt="" />
+                                <img src="images/products/pulse_distance.jpg" alt="" />
+                                <img src="images/products/pulsformung.jpg" alt="" />
+                                <img src="images/products/pwm.jpg" alt="" />
+                                <img src="images/products/schutzgas.jpg" alt="" />
+                                <img src="images/products/teach_in.jpg" alt="" />
+                                <div class="user-profile-inner">
+                                    <!-- User button -->
+                                    <div class="user-button">
+                                        <div class="row" style="margin-bottom:-25px">
+                                            <div class="col-md-6">
+                                                <p:commandButton update="msg" style="border: none; font-weight: normal; font-family: 'Open Sans'; padding-top: 6px; padding-bottom: 7px; padding-left: 22px; padding-right: 22px" styleClass="btn btn-primary btn-xs" value="View Details" action="#{productQuotationManagedBean.addToCacheList('Machine','LWI Small Chamber Type',1)}" icon="" />
+                                            </div>
+                                            <div class="col-md-6" style="margin-left: -35px">
+                                                <p:commandButton update="msg" style="border: none; font-weight: normal; font-family: 'Open Sans'; padding-top: 6px; padding-bottom: 7px; padding-left: 22px; padding-right: 22px" styleClass="btn btn-primary2 btn-xs" value="Add to RFQ list" action="#{productQuotationManagedBean.addToCacheList('Machine','LWI V Unixx III',1)}" icon="" />
+                                            </div>
+                                        </div>
+                                    </div><!-- End div .user-button -->
+                                </div><!-- End div .user-profile-inner -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-3 col-xs-6">
+                    <!-- Website statistic -->
+                    <div class="box-info full">
+                        <h2><strong>LWI V Unixx III</strong></h2>
+                        <!-- Additional buttons -->
+                        <div class="additional-btn">
+                            <a class="additional-icon" href="#" data-toggle="collapse" data-target="#website-statistic6"><i class="fa fa-chevron-down"></i></a>
+                        </div><!-- End div .additional-button -->
+                        <!-- Statistic inner -->
+                        <div id="website-statistic6" class="statistic-chart collapse in">
+                            <div class="img-wrap">
+                                <img src="images/products/tn_Unixx-3-LWI-5-A-382x366.jpg" alt="" />
+                            </div>
+                            <div class="des-thumbnail">
+                                <h4 style="color: #428bca">When working on very big pieces...</h4>
+                                <p style="text-align: justify; padding-top: 0px">
+                                    This unit has been developed for areas where the laser work shop needs to be prepared for any type... <i>(To read more, click View Details)</i></p>
+                                <div style="height: 10px"></div>
+                                <table data-sortable="" class="table table-striped">
+                                    <tbody>
+                                        <tr>
+                                            <td width="450px"><i class="fa fa-check overlay"></i>&nbsp;&nbsp;CAN-Step: The intelligent axis control</td>
+                                        </tr>
+                                        <tr>
+                                            <td width="450px"><i class="fa fa-check overlay"></i>&nbsp;&nbsp;PDS – Pulse Distance Synchronization</td>
+                                        </tr>
+                                        <tr>
+                                            <td width="450px"><i class="fa fa-check overlay"></i>&nbsp;&nbsp;PCD – 3 Point Cycle Definition</td>
+                                        </tr>
+                                        <tr>
+                                            <td width="450px"><i class="fa fa-check overlay"></i>&nbsp;&nbsp;Combinable with a rotating device</td>
+                                        </tr>
+                                        <tr>
+                                            <td width="450px" style="border-bottom: 1px solid #ddd"><i class="fa fa-check overlay"></i>&nbsp;&nbsp;Integrated work table with aperture</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                <div style="height: 10px"></div>
+                                <img src="images/products/fss_150.jpg" alt="" />
+                                <img src="images/products/fss_300.jpg" alt="" />
+                                <img src="images/products/yag_120.jpg" alt="" />
+                                <img src="images/products/yag_150.jpg" alt="" />
+                                <img src="images/products/yag_200.jpg" alt="" />
+                                <img src="images/products/display.jpg" alt="" />
+                                <img src="images/products/dreheinheit.jpg" alt="" />
+                                <img src="images/products/on_axis_gas.jpg" alt="" />
+                                <img src="images/products/on_axis_light.jpg" alt="" />
+                                <img src="images/products/pulse_distance.jpg" alt="" />
+                                <img src="images/products/pulsformung.jpg" alt="" />
+                                <img src="images/products/pwm.jpg" alt="" />
+                                <img src="images/products/schutzgas.jpg" alt="" />
+                                <img src="images/products/teach_in.jpg" alt="" />
+                                <div class="user-profile-inner">
+                                    <!-- User button -->
+                                    <div class="user-button">
+                                        <div class="row" style="margin-bottom:-25px">
+                                            <div class="col-md-6">
+                                                <p:commandButton update="msg" style="border: none; font-weight: normal; font-family: 'Open Sans'; padding-top: 6px; padding-bottom: 7px; padding-left: 22px; padding-right: 22px" styleClass="btn btn-primary btn-xs" value="View Details" action="#{productQuotationManagedBean.addToCacheList('Machine','LWI Small Chamber Type',1)}" icon="" />
+                                            </div>
+                                            <div class="col-md-6" style="margin-left: -35px">
+                                                <p:commandButton update="msg" style="border: none; font-weight: normal; font-family: 'Open Sans'; padding-top: 6px; padding-bottom: 7px; padding-left: 22px; padding-right: 22px" styleClass="btn btn-primary2 btn-xs" value="Add to RFQ list" action="#{productQuotationManagedBean.addToCacheList('Machine','LWI V Unixx III',1)}" icon="" />
+                                            </div>
+                                        </div>
+                                    </div><!-- End div .user-button -->
+                                </div><!-- End div .user-profile-inner -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <hr style="border-width: 1px;border-color: grey; margin-top: 0px" />
+            <div class="row">
+                <div class="col-sm-3 col-xs-6">
+                    <!-- Website statistic -->
+                    <div class="box-info full">
+                        <h2><strong>LWI V UltraFlexx</strong></h2>
+                        <!-- Additional buttons -->
+                        <div class="additional-btn">
+                            <a class="additional-icon" href="#" data-toggle="collapse" data-target="#website-statistic7"><i class="fa fa-chevron-down"></i></a>
+                        </div><!-- End div .additional-button -->
+                        <!-- Statistic inner -->
+                        <div id="website-statistic7" class="statistic-chart collapse in">
+                            <div class="img-wrap">
+                                <img src="images/products/pb_ultraflexx-269x366.jpg" alt="" />
+                            </div>
+                            <div class="des-thumbnail">
+                                <h4 style="color: #428bca">Precise On-Site Laser Welding</h4>
+                                <p style="text-align: justify; padding-top: 0px">
+                                    The new Vision Ultra Flexx sets new standards within the framework of repair welding... <i>(To read more, click View Details)</i>
+                                </p>
+                                <div style="height: 10px"></div>
+                                <table data-sortable="" class="table table-striped">
+                                    <tbody>
+                                        <tr>
+                                            <td width="450px"><i class="fa fa-check overlay"></i>&nbsp;&nbsp;Compact operating headCompact operating head</td>
+                                        </tr>
+                                        <tr>
+                                            <td width="450px"><i class="fa fa-check overlay"></i>&nbsp;&nbsp;Swivelling and inclinable</td>
+                                        </tr>
+                                        <tr>
+                                            <td width="450px"><i class="fa fa-check overlay"></i>&nbsp;&nbsp;Lockable arm joint</td>
+                                        </tr>
+                                        <tr>
+                                            <td width="450px"><i class="fa fa-check overlay"></i>&nbsp;&nbsp;Fast pre-positioning</td>
+                                        </tr>
+                                        <tr>
+                                            <td width="450px" style="border-bottom: 1px solid #ddd"><i class="fa fa-check overlay"></i>&nbsp;&nbsp;Precise movement</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                <div style="height: 10px"></div>
+                                <img src="images/products/fss_150.jpg" alt="" />
+                                <img src="images/products/fss_300.jpg" alt="" />
+                                <img src="images/products/3Point.jpg" alt="" />
+                                <img src="images/products/booster.jpg" alt="" />
+                                <img src="images/products/can_step.jpg" alt="" />
+                                <img src="images/products/display.jpg" alt="" />
+                                <img src="images/products/dreheinheit.jpg" alt="" />
+                                <img src="images/products/pulse_distance.jpg" alt="" />
+                                <img src="images/products/pulsformung.jpg" alt="" />
+                                <img src="images/products/pwm.jpg" alt="" />
+                                <img src="images/products/schutzgas.jpg" alt="" />
+                                <!-- User button -->
+                                <div class="user-button">
+                                    <div class="row" style="margin-bottom:-25px">
+                                        <div class="col-md-6">
+                                            <p:commandButton update="msg" style="border: none; font-weight: normal; font-family: 'Open Sans'; padding-top: 6px; padding-bottom: 7px; padding-left: 22px; padding-right: 22px" styleClass="btn btn-primary btn-xs" value="View Details" action="#{productQuotationManagedBean.addToCacheList('Machine','LWI Small Chamber Type',1)}" icon="" />
+                                        </div>
+                                        <div class="col-md-6" style="margin-left: -35px">
+                                            <p:commandButton update="msg" style="border: none; font-weight: normal; font-family: 'Open Sans'; padding-top: 6px; padding-bottom: 7px; padding-left: 22px; padding-right: 22px" styleClass="btn btn-primary2 btn-xs" value="Add to RFQ list" action="#{productQuotationManagedBean.addToCacheList('Machine','LWI Small Chamber Type',1)}" icon="" />
+                                        </div>
+                                    </div>
+                                </div><!-- End div .user-button -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- End thumbnail box -->
+        </h:form>
+    </ui:define>
 </ui:composition>

@@ -16,113 +16,788 @@
         </div>
         <!-- End page header -->
         <h:form id="mainForm">
+            <b><a href="c-product-machines-compare.xhtml"><i class="fa fa-search overlay"></i>&nbsp;&nbsp;Click here to select and compare two models for a more detailed comparison.</a></b>
+            <br />
+            <div style="height: 15px"></div>
+            <div>
+                <b>Select a laser welding machine and view full details: </b>&nbsp;
+                <p:selectOneMenu id="selectedMachine" value="#{productQuotationManagedBean.selectedMachine}" style="width:230px; display: inline-table">
+                    <p:ajax listener="#{productQuotationManagedBean.redirectToSelectedMachine()}" />
+                    <f:selectItem itemValue="" itemLabel="-" />
+                    <f:selectItem itemValue="LWI Small Chamber Type" itemLabel="LWI Small Chamber Type" />
+                    <f:selectItem itemValue="LWI V Flexx" itemLabel="LWI V Flexx" />
+                    <f:selectItem itemValue="LWI V ERGO" itemLabel="LWI V ERGO" />
+                    <f:selectItem itemValue="LWI V T-BaseV3" itemLabel="LWI V T-BaseV3" />
+                    <f:selectItem itemValue="LWI V MobileFlexx" itemLabel="LWI V MobileFlexx" />
+                    <f:selectItem itemValue="LWI V Unixx III" itemLabel="LWI V Unixx III" />
+                    <f:selectItem itemValue="LWI V UltraFlexx" itemLabel="LWI V UltraFlexx" />
+                </p:selectOneMenu>
+            </div>
+            <div style="height: 15px"></div>
             <p:messages id="msg"  showDetail="false" />
             <p:messages id="warnMsg"  showDetail="false" />
             <!-- Begin thumbnail box -->
-            <div class="row">
-                <div class="col-sm-3 col-xs-6">
+            <div class="row" style="display: block">
+                <div class="col-sm-33 col-xs-6">
+                    <!-- Website statistic -->
                     <div class="box-info full">
-                        <div class="img-wrap">
-                            <img src="images/products/sct_500_366-500x366.jpg" alt="" />
-                        </div>
-                        <div class="des-thumbnail">
-                            <h3>LWI Small Chamber Type</h3>
-                            <h4 style="color: #428bca">The compact manual work station.</h4>
-                            <p style="text-align: justify; padding-top: 15px">
-                                As an enclosed laser workstation in laser class 1 or as an open model for greater flexibility
-                                <br /><br />
-                                No matter which model you choose, the lasers will meet all your design, technology and performance requirements.
-                                <br /><br />
-                                Design and ergonomics were a key focus of development as these lasers are often part of advanced modern laboratory facilities.
-                                <br /><br />
-                                The 3-dimensional milled Corian panel with an integrated display and large laser safety window reflects our strict functionality and design standards.
-                                <br /><br />
-                                In technical terms, this laser is based on series V components, which are the product of over 20 years of experience.
-                                <br /><br />
-                                All components are developed and manufactured by Vision. This is the only way to guarantee the long-term availability of all spare parts.
-                                <br /><br />
-                                With a wide range of optional accessories, this laser can be optimised to suit your specific applications.
-                                <br /><br />
-                                We have already modified lasers to meet the special demands of specific sectors for a number of applications. For other customised solutions, simply talk to our sales engineers.
-                            </p>
-                            <div class="user-profile-inner">
-                                <!-- User button -->
-                                <div class="user-button">
-                                    <div class="row">
-                                        <div class="col-md-6">
-                                            <p:commandButton update="msg" style="border: none; font-weight: normal; font-family: 'Open Sans'; padding-top: 6px; padding-bottom: 7px; padding-left: 22px; padding-right: 22px" styleClass="btn btn-primary buttonOverride" value="Add to Request for Quotation list" action="#{productQuotationManagedBean.addToCacheList('Machine','LWI Small Chamber Type',1)}" icon="" />
+                        <h2><strong>LWI Small Chamber Type</strong></h2>
+                        <!-- Additional buttons -->
+                        <div class="additional-btn" style="top:15px">
+                            <p:commandButton update="msg" style="border: none; font-weight: normal; font-family: 'Open Sans'; padding-top: 3px; padding-bottom: 4px; padding-left: 10px; padding-right: 10px" styleClass="btn btn-primary2 btn-xs" value="Add to RFQ list" action="#{productQuotationManagedBean.addToCacheList('Machine','LWI Small Chamber Type',1)}" icon="" />
+                            <a class="additional-icon" href="#" data-toggle="collapse" data-target="#website-statistic"><i class="fa fa-chevron-down"></i></a>
+                        </div><!-- End div .additional-button -->
+                        <!-- Statistic inner -->
+                        <div id="website-statistic" class="statistic-chart collapse in">
+                            <div class="img-wrap-ind">
+                                <center><img src="images/products/MG_2044-236x366.jpg" alt="" /></center>
+                            </div>
+                            <div class="des-thumbnail">
+                                <h4 style="color: #428bca">The versatile workstation for individual customisation or integration</h4>
+                                <p style="text-align: justify; padding-top: 0px">
+                                    Over 1000 installed LWI series systems stand for excellent performance and reliability.
+                                    <br /><br />
+                                    In a simple and dynamic design, the series V laser head has all the standard features that make work in fields such as tool-making and moulding-making, precision mechanics and sensor technology simple and easy.
+                                    <br /><br />
+                                    For all other applications where the standard version is not enough, we have optional packages at the ready for special and specialised applications. These include, for example, special sets for energy stabilisation and spot sizes in the µm range for microelement production applications in medical and microsensor technology.
+                                    <br /><br />
+                                    No matter what your current requirements, our LWI V Flexx system will provide the basis you need with the option of almost any technical extension. Our system is already equipped now for the applications of the future.
+                                    <br /><br />
+                                    If you cannot find the option you are looking for in our range of accessories, simply contact us. We enjoy solving your application needs.
+                                    <br /><br />
+                                    T-slot nuts in the ultra-stable basic profile ensure easy connection of the laser head to your systems.
+                                    <br /><br />
+                                    Each laser has multiple sensors that monitor operation and display errors in plain text. The modular design means repairs are rapid and inexpensive, and ensures a supply of spare parts long after the set statutory period.
+                                    <br /><br />
+                                    We are still supplying all spares for series I, still in use at our clients’ sites worldwide after more than 20 years.
+                                </p>
+                            </div>
+                        </div><!-- End div #website-statistic -->
+                    </div><!-- End div .box-info -->
+                    <div class="box-info full">
+                        <h2>Highlights</h2>
+                        <!-- Additional buttons -->
+                        <div class="additional-btn">
+                            <a class="additional-icon" href="#" data-toggle="collapse" data-target="#website-statistic-highlights"><i class="fa fa-chevron-down"></i></a>
+                        </div><!-- End div .additional-button -->
+                        <!-- Statistic inner -->
+                        <div id="website-statistic-highlights" class="statistic-chart collapse in">
+                            <div class="des-thumbnail">
+                                <!-- Begin Image responsive zoom -->
+                                <div class="gallery-wrap">
+                                    <div class="column">
+                                        <div class="inner">
+                                            <a class="zooming" href="images/products/sct_500_366-500x366.jpg" title="">
+                                                <div class="img-wrap">
+                                                    <img src="images/products/sct_500_366-140x100.jpg" alt="" title="" class="mfp-fade" />
+                                                </div>
+                                            </a>
                                         </div>
                                     </div>
-                                </div><!-- End div .user-button -->
-                            </div><!-- End div .user-profile-inner -->
+                                    <div class="column">
+                                        <div class="inner">
+                                            <a class="zooming" href="images/products/sct06-500-500x333.jpg" title="">
+                                                <div class="img-wrap">
+                                                    <img src="images/products/sct06-500-140x100.jpg" alt="" title="" class="mfp-fade" />
+                                                </div>
+                                            </a>
+                                        </div>
+                                    </div>
+                                    <div class="column">
+                                        <div class="inner">
+                                            <a class="zooming" href="images/products/sct04-500-500x333.jpg" title="">
+                                                <div class="img-wrap">
+                                                    <img src="images/products/sct04-500-140x100.jpg" alt="" title="" class="mfp-fade" />
+                                                </div>
+                                            </a>
+                                        </div>
+                                    </div>
+                                    <div class="column">
+                                        <div class="inner">
+                                            <a class="zooming" href="images/products/sct05-500-500x333.jpg" title="">
+                                                <div class="img-wrap">
+                                                    <img src="images/products/sct05-500-140x100.jpg" alt="" title="" class="mfp-fade" />
+                                                </div>
+                                            </a>
+                                        </div>
+                                    </div>
+                                    <div class="column">
+                                        <div class="inner">
+                                            <a class="zooming" href="images/products/sct02-500-500x333.jpg" title="">
+                                                <div class="img-wrap">
+                                                    <img src="images/products/sct02-500-140x100.jpg" alt="" title="" class="mfp-fade" />
+                                                </div>
+                                            </a>
+                                        </div>
+                                    </div>
+                                    <div class="column">
+                                        <div class="inner">
+                                            <a class="zooming" href="images/products/sct03-500-500x333.jpg" title="">
+                                                <div class="img-wrap">
+                                                    <img src="images/products/sct03-500-140x100.jpg" alt="" title="" class="mfp-fade" />
+                                                </div>
+                                            </a>
+                                        </div>
+                                    </div>
+                                    <div class="column">
+                                        <div class="inner">
+                                            <a class="zooming" href="images/products/sct01-5001-500x500.jpg" title="">
+                                                <div class="img-wrap">
+                                                    <img src="images/products/sct01-5001-140x100.jpg" alt="" title="" class="mfp-fade" />
+                                                </div>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div><!-- End div .gallery-wrap -->
+                                <!-- End simple gallery Image responsive zoom -->
+                                <div class="gallery-wrap">
+                                    <div class="column-small">
+                                        <div class="inner">
+                                            <div style="height: 10px"></div>
+                                            <img src="images/products/yag_120.jpg" alt="YAG 120" />
+                                            <img src="images/products/fss_150.jpg" alt="FSS 150" />
+                                            <img src="images/products/fss_300.jpg" alt="FSS 300" />
+                                            <img src="images/products/dreheinheit.jpg" alt="Rotation Axis" />
+                                            <img src="images/products/display.jpg" alt="display" />
+                                            <img src="images/products/beamtuning.jpg" alt="Beam Tuning" />
+                                            <img src="images/products/schutzgas.jpg" alt="Schutzgas" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="box-info full">
+                        <h2>Specifications</h2>
+                        <!-- Additional buttons -->
+                        <div class="additional-btn">
+                            <a class="additional-icon" href="#" data-toggle="collapse" data-target="#website-statistic-spec"><i class="fa fa-chevron-down"></i></a>
+                        </div><!-- End div .additional-button -->
+                        <!-- Statistic inner -->
+                        <div id="website-statistic-spec" class="statistic-chart collapse in">
+                            <div class="des-thumbnail-products">
+                                <div class="box-info full">
+                                    <!-- Nav tab -->
+                                    <ul class="nav nav-tabs nav-justified">
+                                        <li class="active"><a href="#about" data-toggle="tab">60W Nd:YAG</a></li>
+                                        <li><a href="#edit-profile" data-toggle="tab">120W Nd:YAG</a></li>
+                                        <li><a href="#change-password" data-toggle="tab">150W FSS</a></li>
+                                        <li><a href="#subscription" data-toggle="tab">300W FSS</a></li>
+                                    </ul>
+                                    <!-- End nav tab -->
+
+                                    <!-- Tab panes -->
+                                    <div class="tab-content">
+                                        <!-- Tab about -->
+                                        <div class="tab-pane active animated fadeInRight" id="about">
+                                            <div class="products-content">
+                                                <table data-sortable="" class="table table-striped">
+                                                    <tbody>
+                                                        <tr>
+                                                            <td width="240px" style="font-weight: bold; border-right: 1px solid #ddd">Technical Data</td>
+                                                            <td width="660px" style="font-weight: bold;">LWI V Nd:YAG 60 W</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="font-weight: bold; border-right: 1px solid #ddd">Laser safety class</td>
+                                                            <td>4 as open version, 1 as closed version</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="font-weight: bold; border-right: 1px solid #ddd">Beam source</td>
+                                                            <td>Nd:YAG, flashlamp, pulsed</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="font-weight: bold; border-right: 1px solid #ddd">Wavelength</td>
+                                                            <td>1064 nm</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="font-weight: bold; border-right: 1px solid #ddd">Max. pulse energy</td>
+                                                            <td>70 joule</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="font-weight: bold; border-right: 1px solid #ddd">Max. peak power</td>
+                                                            <td>17 kW</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="font-weight: bold; border-right: 1px solid #ddd">Max. average power</td>
+                                                            <td>60 W</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="font-weight: bold; border-right: 1px solid #ddd">Energy adjustment mode</td>
+                                                            <td>Voltage or PWM mode</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="font-weight: bold; border-right: 1px solid #ddd">Voltage</td>
+                                                            <td>160-500V</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="font-weight: bold; border-right: 1px solid #ddd">Pulse width</td>
+                                                            <td>1-20 ms</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="font-weight: bold; border-right: 1px solid #ddd">Pulse frequency</td>
+                                                            <td>1-20 hz</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="font-weight: bold; border-right: 1px solid #ddd">Pulse fill</td>
+                                                            <td>10 - 100 %</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="font-weight: bold; border-right: 1px solid #ddd">PWM mode</td>
+                                                            <td>1 - 100 %</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="font-weight: bold; border-right: 1px solid #ddd">Focal length</td>
+                                                            <td>190 mm</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="font-weight: bold; border-right: 1px solid #ddd">Beam diameter</td>
+                                                            <td>200 µm - 2mm, motorized beam-expander</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="font-weight: bold; border-right: 1px solid #ddd">Microscope</td>
+                                                            <td>Leica binocular, oculars magnification 20x</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="font-weight: bold; border-right: 1px solid #ddd">Illumination of workplace</td>
+                                                            <td>Dual LED cold-light, switchable</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="font-weight: bold; border-right: 1px solid #ddd">Parameter settings memory</td>
+                                                            <td>50 settings, individual named</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="font-weight: bold; border-right: 1px solid #ddd">Energy measurement system</td>
+                                                            <td>Integrated</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="font-weight: bold; border-right: 1px solid #ddd">Controller</td>
+                                                            <td>Multi-controller-system, self-diagnostic-system, plaintext for maintenance and status messages</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="font-weight: bold; border-right: 1px solid #ddd">Interface</td>
+                                                            <td>RS232, CAN-Bus</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="font-weight: bold; border-right: 1px solid #ddd">Shielding gas supply</td>
+                                                            <td>Flexible nozzle, adjustable gas delay</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="font-weight: bold; border-right: 1px solid #ddd">Cooling system</td>
+                                                            <td>Integrated, closed, water/air heat-exchanger, temperature controlled fan</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="font-weight: bold; border-right: 1px solid #ddd">Cooling option</td>
+                                                            <td>External cooler optional, integrated bypass-controller</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="font-weight: bold; border-right: 1px solid #ddd">Electrical supply</td>
+                                                            <td>1 phase, 230V /50 hz</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="font-weight: bold; border-right: 1px solid #ddd">Power consumption</td>
+                                                            <td>2 kW</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="font-weight: bold; border-right: 1px solid #ddd; border-bottom: 1px solid #ddd">Dimensions</td>
+                                                            <td style="border-bottom: 1px solid #ddd">1155mm x 640mm x 1080mm</td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div><!-- End div .user-profile-content -->
+                                        </div><!-- End div .tab-pane -->
+                                        <!-- End Tab about -->
+
+                                        <!-- Tab Edit profile -->
+                                        <div class="tab-pane animated fadeInRight" id="edit-profile">
+                                            <div class="products-content">
+                                                <table data-sortable="" class="table table-striped">
+                                                    <tbody>
+                                                        <tr>
+                                                            <td width="240px" style="font-weight: bold; border-right: 1px solid #ddd">Technical Data</td>
+                                                            <td width="660px" style="font-weight: bold;">LWI V Nd:YAG 120 W</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="font-weight: bold; border-right: 1px solid #ddd">Laser safety class</td>
+                                                            <td>4</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="font-weight: bold; border-right: 1px solid #ddd">Beam source</td>
+                                                            <td>Nd:YAG, flashlamp, pulsed</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="font-weight: bold; border-right: 1px solid #ddd">Wavelength</td>
+                                                            <td>1064 nm</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="font-weight: bold; border-right: 1px solid #ddd">Max. pulse energy</td>
+                                                            <td>70 joule</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="font-weight: bold; border-right: 1px solid #ddd">Max. peak power</td>
+                                                            <td>17 kW</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="font-weight: bold; border-right: 1px solid #ddd">Max. average power</td>
+                                                            <td>120 W</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="font-weight: bold; border-right: 1px solid #ddd">Energy adjustment mode</td>
+                                                            <td>Voltage or PWM mode</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="font-weight: bold; border-right: 1px solid #ddd">Voltage</td>
+                                                            <td>160-500V</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="font-weight: bold; border-right: 1px solid #ddd">Pulse width</td>
+                                                            <td>1-20 ms</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="font-weight: bold; border-right: 1px solid #ddd">Pulse frequency</td>
+                                                            <td>1-20 hz</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="font-weight: bold; border-right: 1px solid #ddd">Pulse fill</td>
+                                                            <td>10 - 100 %</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="font-weight: bold; border-right: 1px solid #ddd">PWM mode</td>
+                                                            <td>1 - 100 %</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="font-weight: bold; border-right: 1px solid #ddd">Focal length</td>
+                                                            <td>190 mm</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="font-weight: bold; border-right: 1px solid #ddd">Beam diameter</td>
+                                                            <td>200 µm - 2mm, motorized beam-expander</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="font-weight: bold; border-right: 1px solid #ddd">Microscope</td>
+                                                            <td>Leica binocular, oculars magnification 20x</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="font-weight: bold; border-right: 1px solid #ddd">Illumination of workplace</td>
+                                                            <td>Dual LED cold-light, switchable</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="font-weight: bold; border-right: 1px solid #ddd">Parameter settings memory</td>
+                                                            <td>50 settings, individual named</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="font-weight: bold; border-right: 1px solid #ddd">Energy measurement system</td>
+                                                            <td>Integrated</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="font-weight: bold; border-right: 1px solid #ddd">Controller</td>
+                                                            <td>Multi-controller-system, self-diagnostic-system, plaintext for maintenance and status messages</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="font-weight: bold; border-right: 1px solid #ddd">Interface</td>
+                                                            <td>RS232, CAN-Bus</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="font-weight: bold; border-right: 1px solid #ddd">Shielding gas supply</td>
+                                                            <td>Flexible nozzle, adjustable gas delay</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="font-weight: bold; border-right: 1px solid #ddd">Cooling system</td>
+                                                            <td>Integrated, closed, water/air heat-exchanger, temperature controlled fan</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="font-weight: bold; border-right: 1px solid #ddd">Cooling option</td>
+                                                            <td>External cooler optional, integrated bypass-controller</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="font-weight: bold; border-right: 1px solid #ddd">Electrical supply</td>
+                                                            <td>3 phases, 400V /50 hz</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="font-weight: bold; border-right: 1px solid #ddd">Power consumption</td>
+                                                            <td>4 kW</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="font-weight: bold; border-right: 1px solid #ddd; border-bottom: 1px solid #ddd">Dimensions</td>
+                                                            <td style="border-bottom: 1px solid #ddd">1155mm x 640mm x 1080mm</td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div><!-- End div .user-profile-content -->
+                                        </div><!-- End div .tab-pane -->
+                                        <!-- End Tab Edit profile -->
+
+                                        <!-- Tab Change password -->
+                                        <div class="tab-pane animated fadeInRight" id="change-password">
+                                            <div class="products-content">
+                                                <table data-sortable="" class="table table-striped">
+                                                    <tbody>
+                                                        <tr>
+                                                            <td width="240px" style="font-weight: bold; border-right: 1px solid #ddd">Technical Data</td>
+                                                            <td width="660px" style="font-weight: bold;">LWI V FSS 150 W</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="font-weight: bold; border-right: 1px solid #ddd">Laser safety class</td>
+                                                            <td>4</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="font-weight: bold; border-right: 1px solid #ddd">Beam source</td>
+                                                            <td>FSS FullSolidState Fibrelaser, Diodes</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="font-weight: bold; border-right: 1px solid #ddd">Wavelength</td>
+                                                            <td>1070 nm</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="font-weight: bold; border-right: 1px solid #ddd">Max. pulse energy</td>
+                                                            <td>15 joule</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="font-weight: bold; border-right: 1px solid #ddd">Max. peak power</td>
+                                                            <td>1,5 kW</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="font-weight: bold; border-right: 1px solid #ddd">Max. average power</td>
+                                                            <td>150 W</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="font-weight: bold; border-right: 1px solid #ddd">Energy adjustment mode</td>
+                                                            <td>Current</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="font-weight: bold; border-right: 1px solid #ddd">Voltage</td>
+                                                            <td>10 - 100 %</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="font-weight: bold; border-right: 1px solid #ddd">Pulse width</td>
+                                                            <td>0,1 - 50 ms /cw</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="font-weight: bold; border-right: 1px solid #ddd">Pulse frequency</td>
+                                                            <td>1-100 hz</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="font-weight: bold; border-right: 1px solid #ddd">Pulse fill</td>
+                                                            <td>-</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="font-weight: bold; border-right: 1px solid #ddd">PWM mode</td>
+                                                            <td>1 - 100 %</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="font-weight: bold; border-right: 1px solid #ddd">Focal length</td>
+                                                            <td>190 mm</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="font-weight: bold; border-right: 1px solid #ddd">Beam diameter</td>
+                                                            <td>100 µm - 2mm, motorized beam-expander</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="font-weight: bold; border-right: 1px solid #ddd">Microscope</td>
+                                                            <td>Leica binocular, oculars magnification 20x</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="font-weight: bold; border-right: 1px solid #ddd">Illumination of workplace</td>
+                                                            <td>Dual LED cold-light, switchable</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="font-weight: bold; border-right: 1px solid #ddd">Parameter settings memory</td>
+                                                            <td>50 settings, individual named</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="font-weight: bold; border-right: 1px solid #ddd">Energy measurement system</td>
+                                                            <td>Integrated</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="font-weight: bold; border-right: 1px solid #ddd">Controller</td>
+                                                            <td>Multi-controller-system, self-diagnostic-system, plaintext for maintenance and status messages</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="font-weight: bold; border-right: 1px solid #ddd">Interface</td>
+                                                            <td>RS232, CAN-Bus</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="font-weight: bold; border-right: 1px solid #ddd">Shielding gas supply</td>
+                                                            <td>Flexible nozzle, adjustable gas delay</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="font-weight: bold; border-right: 1px solid #ddd">Cooling system</td>
+                                                            <td>Integrated, closed, temperature controlled fan</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="font-weight: bold; border-right: 1px solid #ddd">Cooling option</td>
+                                                            <td>-</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="font-weight: bold; border-right: 1px solid #ddd">Electrical supply</td>
+                                                            <td>1-phasig, 90-250V, 50/60 hz</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="font-weight: bold; border-right: 1px solid #ddd">Power consumption</td>
+                                                            <td>800 W</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="font-weight: bold; border-right: 1px solid #ddd; border-bottom: 1px solid #ddd">Dimensions</td>
+                                                            <td style="border-bottom: 1px solid #ddd">1155mm x 640mm x 1080mm</td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div><!-- End div .scroll-user-widget -->
+                                        </div><!-- End div .tab-pane -->
+                                        <!-- End Tab Change password -->
+
+                                        <!-- Tab Settings -->
+                                        <div class="tab-pane animated fadeInRight" id="subscription">
+                                            <div class="products-content">
+                                                <table data-sortable="" class="table table-striped">
+                                                    <tbody>
+                                                        <tr>
+                                                            <td width="240px" style="font-weight: bold; border-right: 1px solid #ddd">Technical Data</td>
+                                                            <td width="660px" style="font-weight: bold;">LWI V FSS 300 W</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="font-weight: bold; border-right: 1px solid #ddd">Laser safety class</td>
+                                                            <td>4</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="font-weight: bold; border-right: 1px solid #ddd">Beam source</td>
+                                                            <td>FSS FullSolidState Fibrelaser, Diodes</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="font-weight: bold; border-right: 1px solid #ddd">Wavelength</td>
+                                                            <td>1070 nm</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="font-weight: bold; border-right: 1px solid #ddd">Max. pulse energy</td>
+                                                            <td>30 joule</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="font-weight: bold; border-right: 1px solid #ddd">Max. peak power</td>
+                                                            <td>3 kW</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="font-weight: bold; border-right: 1px solid #ddd">Max. average power</td>
+                                                            <td>300 W</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="font-weight: bold; border-right: 1px solid #ddd">Energy adjustment mode</td>
+                                                            <td>Current</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="font-weight: bold; border-right: 1px solid #ddd">Voltage</td>
+                                                            <td>10 - 100 %</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="font-weight: bold; border-right: 1px solid #ddd">Pulse width</td>
+                                                            <td>0,1 - 50 ms /cw</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="font-weight: bold; border-right: 1px solid #ddd">Pulse frequency</td>
+                                                            <td>1-100 hz</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="font-weight: bold; border-right: 1px solid #ddd">Pulse fill</td>
+                                                            <td>-</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="font-weight: bold; border-right: 1px solid #ddd">PWM mode</td>
+                                                            <td>1 - 100 %</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="font-weight: bold; border-right: 1px solid #ddd">Focal length</td>
+                                                            <td>190 mm</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="font-weight: bold; border-right: 1px solid #ddd">Beam diameter</td>
+                                                            <td>100 µm - 2mm, motorized beam-expander</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="font-weight: bold; border-right: 1px solid #ddd">Microscope</td>
+                                                            <td>Leica binocular, oculars magnification 20x</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="font-weight: bold; border-right: 1px solid #ddd">Illumination of workplace</td>
+                                                            <td>Dual LED cold-light, switchable</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="font-weight: bold; border-right: 1px solid #ddd">Parameter settings memory</td>
+                                                            <td>50 settings, individual named</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="font-weight: bold; border-right: 1px solid #ddd">Energy measurement system</td>
+                                                            <td>Integrated</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="font-weight: bold; border-right: 1px solid #ddd">Controller</td>
+                                                            <td>Multi-controller-system, self-diagnostic-system, plaintext for maintenance and status messages</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="font-weight: bold; border-right: 1px solid #ddd">Interface</td>
+                                                            <td>RS232, CAN-Bus</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="font-weight: bold; border-right: 1px solid #ddd">Shielding gas supply</td>
+                                                            <td>Flexible nozzle, adjustable gas delay</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="font-weight: bold; border-right: 1px solid #ddd">Cooling system</td>
+                                                            <td>Integrated, closed, temperature controlled fan</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="font-weight: bold; border-right: 1px solid #ddd">Cooling option</td>
+                                                            <td>-</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="font-weight: bold; border-right: 1px solid #ddd">Electrical supply</td>
+                                                            <td>1 Phase , 90-250V, 50/60 hz</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="font-weight: bold; border-right: 1px solid #ddd">Power consumption</td>
+                                                            <td>1,2 kW</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="font-weight: bold; border-right: 1px solid #ddd; border-bottom: 1px solid #ddd">Dimensions</td>
+                                                            <td style="border-bottom: 1px solid #ddd">1155mm x 640mm x 1080mm</td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div><!-- End div .scroll-user-widget -->
+                                        </div><!-- End div .tab-pane -->
+                                        <!-- End Tab Settings -->
+
+                                    </div><!-- End div .tab-content -->
+                                </div><!-- End div .box-info -->
+                            </div>
                         </div>
                     </div>
                 </div>
-                <div class="col-sm-3 col-xs-6">
-                    <div class="box-info full">
-                        <div class="img-wrap">
-                            <img src="images/products/LIFE_Vision_01-550x366.jpg" alt="" />
-                        </div>
-                        <div class="des-thumbnail">
-                            <h3>LWI V T-BaseV3</h3>
-                            <h4 style="color: #428bca;">Your benefit: increased productivity and replicable welding quality!</h4>
-                            <p style="text-align: justify; padding-top: 15px">
-                                The Workstation T-Base V3 expands your FLEXX, turning it into a compact, open welding station with a digitally-controlled three-axis work table and a separate height-adjustable laser head.
-                                <br /><br />
-                                With a unique control concept, you can extend manual welding via a precise motion control with sophisticated automatic and program functions.
-                            </p>
-                            <div class="user-profile-inner">
-                                <!-- User button -->
-                                <div class="user-button">
-                                    <div class="row">
-                                        <div class="col-md-6">
-                                            <p:commandButton update="msg" style="border: none; font-weight: normal; font-family: 'Open Sans'; padding-top: 6px; padding-bottom: 7px; padding-left: 22px; padding-right: 22px" styleClass="btn btn-primary buttonOverride" value="Add to Request for Quotation list" action="#{productQuotationManagedBean.addToCacheList('Machine','LWI V T-BaseV3',1)}" icon="" />
-                                        </div>
-                                    </div>
-                                </div><!-- End div .user-button -->
-                            </div><!-- End div .user-profile-inner -->
-                        </div>
-                    </div>
-                </div>
-                <div class="col-sm-3 col-xs-6">
-                    <div class="box-info full">
-                        <div class="img-wrap">
-                            <img src="images/products/tn_Unixx-3-LWI-5-A-382x366.jpg" alt="" />
-                        </div>
-                        <div class="des-thumbnail">
-                            <h3>LWI V Unixx III</h3>
-                            <h4 style="color: #428bca">When working on very big pieces...</h4>
-                            <p style="text-align: justify; padding-top: 15px">
-                                This unit has been developed for areas where the laser work shop needs to be prepared for any type of job. Regardless of whether thousands of small pipes need to be welded or cut today and a three ton mould delivery  tomorrow, the UNIxX III will fulfils any task with the highest precision.
-                                <br /><br />
-                                The many software tools provided will ensure speedy and high precision processing.
-                                <br /><br />
-                                The range of 700mm in the x axis and 400mm in the y axis enable you to process big components without the necessity of them being repositioned.
-                                <br /><br />
-                                Small pieces with the weight up to 300kg can be processed on the working table aforementioned in UNIXX and the working position pivoted accordingly.
-                                <br /><br />
-                                The positioning and height of the working table has been designed to level with a normal office chair to allow one to sit and work ergonomically, and provides enough legroom. The sturdy table tipped at a well positioned angle ensures that there are no obstacles in your way.
-                                <br /><br />
-                                When working on very big pieces, the working table can simple be swivelled to the side to allow the component to be placed under the laser by forklift. The extended range length enables you to reach the area to be repaired quickly.
-                                <br /><br />
-                                The head is equipped with a bracket allowing for rotation of the laser head and enables you to weld on edges and angles.
-                            </p>
-                            <div class="user-profile-inner">
-                                <!-- User button -->
-                                <div class="user-button">
-                                    <div class="row">
-                                        <div class="col-md-6">
-                                            <p:commandButton update="msg" style="border: none; font-weight: normal; font-family: 'Open Sans'; padding-top: 6px; padding-bottom: 7px; padding-left: 22px; padding-right: 22px" styleClass="btn btn-primary buttonOverride" value="Add to Request for Quotation list" action="#{productQuotationManagedBean.addToCacheList('Machine','LWI V Unixx III',1)}" icon="" />
-                                        </div>
-                                    </div>
-                                </div><!-- End div .user-button -->
-                            </div><!-- End div .user-profile-inner -->
-                        </div>
-                    </div>
-                </div>
+                <div class="col-md-4">
+                    <!-- Quick post widget -->
+                    <div class="box-info">
+                        <h2>Display, operating, integrated energy measuring</h2>
+                        <!-- Additional button -->
+                        <div class="additional-btn">
+                            <a class="additional-icon" href="#" data-toggle="collapse" data-target="#quick-post-1"><i class="fa fa-chevron-down"></i></a>
+                        </div><!-- End div .additional-btn -->
+                        <!-- Quick post inner -->
+                        <div id="quick-post-1" class="collapse in">
+                            <div class="form-group">
+                                <a class="pull-left">
+                                    <img class="media-object" src="images/products/display_energiemessung.png" style="width: 100px; height: 70px" alt="" />
+                                </a>
+                                <div class="media-body" style="padding-left: 10px">
+                                    <p>The ergonomically arranged display and terminal located closley behind the microscope give you a direct view of all the important operating parameters. The integrated energy measuring system indicates the emitted energy after every laser pulse and therefore enables the monitoring of the welding process as well as the precise adjustment of the pulse energy.</p>
+                                </div>
+                            </div>
+                        </div><!-- End div #quick-post -->
+                    </div><!-- End div .box-info -->
+                    <!-- End Quick post widget -->
+
+                    <!-- Quick post widget -->
+                    <div class="box-info">
+                        <h2>Programmable shielding gas post-flooding</h2>
+                        <!-- Additional button -->
+                        <div class="additional-btn">
+                            <a class="additional-icon" href="#" data-toggle="collapse" data-target="#quick-post-2"><i class="fa fa-chevron-down"></i></a>
+                        </div><!-- End div .additional-btn -->
+                        <!-- Quick post inner -->
+                        <div id="quick-post-2" class="collapse in">
+                            <div class="form-group">
+                                <a class="pull-left">
+                                    <img class="media-object" src="images/products/schutzglas_flutung.png" style="width: 100px; height: 70px" alt="" />
+                                </a>
+                                <div class="media-body" style="padding-left: 10px">
+                                    <p>In order to eliminate the oxidation of the welded joint directly after it has been welded, the times during which the shielding gas ist still conducted on the welded joint following the welding can be individually set.</p>
+                                </div>
+                            </div>
+                        </div><!-- End div #quick-post -->
+                    </div><!-- End div .box-info -->
+                    <!-- End Quick post widget -->
+
+                    <!-- Quick post widget -->
+                    <div class="box-info">
+                        <h2>PWM mode</h2>
+                        <!-- Additional button -->
+                        <div class="additional-btn">
+                            <a class="additional-icon" href="#" data-toggle="collapse" data-target="#quick-post-3"><i class="fa fa-chevron-down"></i></a>
+                        </div><!-- End div .additional-btn -->
+                        <!-- Quick post inner -->
+                        <div id="quick-post-3" class="collapse in">
+                            <div class="form-group">
+                                <a class="pull-left">
+                                    <img class="media-object" src="images/products/pwm.png" style="width: 100px; height: 70px" alt="" />
+                                </a>
+                                <div class="media-body" style="padding-left: 10px">
+                                    <p>In the lower power range, which depends upon high stability, traditional lasers are inclinined toward a low „pulse to pulse stability“ and thus to a non-uniform welding result. The Pulse Width Modulation (PWM) gives a vastly more fine and stable coordination, as the internal energy supply here works in the area of the optimal output.</p>
+                                </div>
+                            </div>
+                        </div><!-- End div #quick-post -->
+                    </div><!-- End div .box-info -->
+                    <!-- End Quick post widget -->
+
+                    <!-- Quick post widget -->
+                    <div class="box-info">
+                        <h2>Service, diagnosis and upgrade</h2>
+                        <!-- Additional button -->
+                        <div class="additional-btn">
+                            <a class="additional-icon" href="#" data-toggle="collapse" data-target="#quick-post-4"><i class="fa fa-chevron-down"></i></a>
+                        </div><!-- End div .additional-btn -->
+                        <!-- Quick post inner -->
+                        <div id="quick-post-4" class="collapse in">
+                            <div class="form-group">
+                                <a class="pull-left">
+                                    <img class="media-object" src="images/products/diagnose_terminal1.png" style="width: 100px; height: 70px" alt="" />
+                                </a>
+                                <div class="media-body" style="padding-left: 10px">
+                                    <p>With the integrated selfdiagnostic system, you have the opportunity to detect faults in ongoing operations and to display this as plain text in a message. Even the laser's own software undergoes constant further development: you can bring your device up to date with a firmware upgrade.</p>
+                                </div>
+                            </div>
+                        </div><!-- End div #quick-post -->
+                    </div><!-- End div .box-info -->
+                    <!-- End Quick post widget -->
+
+                    <!-- Quick post widget -->
+                    <div class="box-info">
+                        <h2>Pulse shaping</h2>
+                        <!-- Additional button -->
+                        <div class="additional-btn">
+                            <a class="additional-icon" href="#" data-toggle="collapse" data-target="#quick-post-5"><i class="fa fa-chevron-down"></i></a>
+                        </div><!-- End div .additional-btn -->
+                        <!-- Quick post inner -->
+                        <div id="quick-post-5" class="collapse in">
+                            <div class="form-group">
+                                <a class="pull-left">
+                                    <img class="media-object" src="images/products/pulse_shaping.png" style="width: 100px; height: 70px" alt="" />
+                                </a>
+                                <div class="media-body" style="padding-left: 10px">
+                                    <p>Free pulse shaping enables the setting and saving of all possible variations in the pulse process. Materials with different thermal coefficients of expansion thus show a clearly better welding behaviour - your laser´s area of application thus expands.</p>
+                                </div>
+                            </div>
+                        </div><!-- End div #quick-post -->
+                    </div><!-- End div .box-info -->
+
+                    <!-- Quick post widget -->
+                    <div class="box-info">
+                        <h2>Booster technology</h2>
+                        <!-- Additional button -->
+                        <div class="additional-btn">
+                            <a class="additional-icon" href="#" data-toggle="collapse" data-target="#quick-post-6"><i class="fa fa-chevron-down"></i></a>
+                        </div><!-- End div .additional-btn -->
+                        <!-- Quick post inner -->
+                        <div id="quick-post-6" class="collapse in">
+                            <div class="form-group">
+                                <a class="pull-left">
+                                    <img class="media-object" src="images/products/booster.png" style="width: 100px; height: 70px" alt="" />
+                                </a>
+                                <div class="media-body" style="padding-left: 10px">
+                                    <p>Booster technology for long lamp lifespan and heightened pulse stability The booster enables you to further raise the „pulse to pulse stability“ and to lengthen the lifespan of the flash lamp. Shortly before the shoot, the simmer power is automatically increased, thus stabilizing the plasma in the lamp and increasing the electrode temperature. This leads to a substanitially more stable energy output of the laser, especially with low energy.</p>
+                                </div>
+                            </div>
+                        </div><!-- End div #quick-post -->
+                    </div><!-- End div .box-info -->
+                    <!-- End Quick post widget -->
+                </div><!-- End div .col-md-4 -->
             </div>
             <!-- End thumbnail box -->
         </h:form>
     </ui:define>
-
 </ui:composition>

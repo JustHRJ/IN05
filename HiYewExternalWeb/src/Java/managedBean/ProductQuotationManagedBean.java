@@ -33,7 +33,7 @@ public class ProductQuotationManagedBean implements Serializable {
     private String date = "";
     private String productQuotationNo = "";
     private Integer count;
-    
+
     private String selectedMachine = "";
 
     private ArrayList<ProductQuotationDescription> cacheList = new ArrayList<>();
@@ -64,6 +64,27 @@ public class ProductQuotationManagedBean implements Serializable {
         receivedProductQuotationList = new ArrayList<>(productQuotationSessionBean.receivedProductQuotationList(username));
     }
 
+    public void redirectToSelectedMachine() throws IOException {
+        if (!selectedMachine.equals("")) {
+            System.out.println("selectedMachine ===== " + selectedMachine);
+            if (selectedMachine.equals("LWI Small Chamber Type")) {
+                FacesContext.getCurrentInstance().getExternalContext().redirect("/HiYewExternalWeb/c-products-machines-SmallChamberType.xhtml");
+            } else if (selectedMachine.equals("LWI V Flexx")) {
+                FacesContext.getCurrentInstance().getExternalContext().redirect("/HiYewExternalWeb/c-products-machines-Flexx.xhtml");
+            } else if (selectedMachine.equals("LWI V ERGO")) {
+                FacesContext.getCurrentInstance().getExternalContext().redirect("/HiYewExternalWeb/c-products-machines-ERGO.xhtml");
+            } else if (selectedMachine.equals("LWI V T-BaseV3")) {
+                FacesContext.getCurrentInstance().getExternalContext().redirect("/HiYewExternalWeb/c-products-machines-TBaseV3.xhtml");
+            } else if (selectedMachine.equals("LWI V MobileFlexx")) {
+                FacesContext.getCurrentInstance().getExternalContext().redirect("/HiYewExternalWeb/c-products-machines-MobileFlexx.xhtml");
+            } else if (selectedMachine.equals("LWI V Unixx III")) {
+                FacesContext.getCurrentInstance().getExternalContext().redirect("/HiYewExternalWeb/c-products-machines-UnixxIII.xhtml");
+            } else if (selectedMachine.equals("LWI V UltraFlexx")) {
+                FacesContext.getCurrentInstance().getExternalContext().redirect("/HiYewExternalWeb/c-products-machines-UltraFlexx.xhtml");
+            }
+        }
+    }
+
     public String formatPrice(Double input) {
         DecimalFormat df = new DecimalFormat("0.00");
         // System.out.println("formatPrice() ===== " + df.format(input));
@@ -84,12 +105,11 @@ public class ProductQuotationManagedBean implements Serializable {
     }
 
     public void reset() {
-        System.out.println("ProductQuotationManagedBean.java ProductQuotationManagedBean()");
+        System.out.println("ProductQuotationManagedBean.java reset()");
         newProductQuotation = new ProductQuotation();
         newProductQuotationDescription = new ProductQuotationDescription();
         receivedProductQuotationList = new ArrayList<>();
         displayProductQuotationDescriptionList = new ArrayList<>();
-
         count = 1;
         if (FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("username") != null) {
             username = FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("username").toString();

@@ -12,7 +12,7 @@ body{
 //////////////////////////////////////////////////////////////////////
 
 .ab{
-    
+
 }
 
 .ui-state-hover {
@@ -99,7 +99,7 @@ body{
     border: 1px solid #666666;
     /* background: #aaaaaa; */
     /*background: none; // DDL? But now is row edit section*/
-     background: #aaaaaa -webkit-gradient(linear, left top, left bottom, from(rgba(255,255,255,0.8)), to(rgba(234,234,234,0))); 
+    background: #aaaaaa -webkit-gradient(linear, left top, left bottom, from(rgba(255,255,255,0.8)), to(rgba(234,234,234,0))); 
     /*background: white; */
     color: black;
     text-shadow: none; // DDL
@@ -853,13 +853,14 @@ footer{
     content: " ";
 }
 .box-info:after {clear: both;}
-.box-info .des-thumbnail{padding: 20px;padding-top: 0px;}
+.box-info .des-thumbnail{padding: 20px; padding-top: 0px;}
 .box-info .img-wrap{
     width: 100%;
     height: auto;
     overflow: hidden;
 }
 .box-info .img-wrap img{width: 100%;}
+.box-info .img-wrap-ind img{}
 .box-info .icon-box{
     width: 65px;
     font-size: 30px;
@@ -884,8 +885,8 @@ footer{
     border-bottom: none;
 }
 .box-info.box-messages h2{border-bottom: none;}
-.box-info .statistic-chart{padding: 0 0 30px 0;}
-.box-info.full{padding: 0px;}
+.box-info .statistic-chart{padding: 0 0 0px 0;}
+.box-info.full{padding: 0px;padding-left: 10px;padding-right: 10px;padding-top:10px}
 .box-info.full .box-footer{padding: 20px 20px 15px 20px;}
 .box-info.full .box-footer a,
 .box-info.full .box-footer a:hover{
@@ -956,9 +957,15 @@ footer{
 }
 .box-info .additional-btn{
     position: absolute;
+    top: 21px;
+    right: 15px;
+    /*z-index: 99991;*/
+}
+.box-info .additional-btn-ind{
+    position: absolute;
     top: 17px;
     right: 15px;
-    z-index: 99991;
+    /*z-index: 99991;*/
 }
 .box-info .btn-group{z-index: 9999;}
 .box-info table .btn-group{z-index: 1;}
@@ -1055,7 +1062,7 @@ footer{
 .box-info .additional .list-box-info ul li:last-child{border-bottom: 1px solid #fff;}
 .box-info.full h2{
     padding: 15px;
-    margin: 5px 0px 20px 0px;
+    margin: 5px 0px 8px 0px;
 }
 .box-info table{margin: 0;}
 .box-info table tr th,
@@ -1296,7 +1303,7 @@ TABLE SELECTOR
 GALLERY SELECTOR
 =========================================================================
 */
-.gallery-wrap{margin: 10px -10px;}
+.gallery-wrap{margin: 0px 0px;}
 .gallery-wrap:before,
 .gallery-wrap:after {
     display: table;
@@ -1306,6 +1313,12 @@ GALLERY SELECTOR
 .gallery-wrap .column{
     float: left;
     width: 20%;
+    margin: 0;
+    padding: 0;
+}
+.gallery-wrap .column-small{
+    float: left;
+    width: 100%;
     margin: 0;
     padding: 0;
 }
@@ -1322,9 +1335,11 @@ GALLERY SELECTOR
     padding: 0;
 }
 .gallery-wrap .column .inner,
+.gallery-wrap .column-small .inner,
 .gallery-wrap .column-4 .inner,
 .gallery-wrap .column-3 .inner{
     margin: 10px;
+    margin-bottom: 0px;
     position: relative;
     overflow: hidden;
     -webkit-transition:All 0.4s ease;
@@ -1347,7 +1362,7 @@ GALLERY SELECTOR
     cursor: zoom-in;
 }
 .gallery-wrap .column .inner .img-wrap{
-    height: 100px;
+    /*    height: 0px; // for machine images*/
     overflow: hidden;
     background: #ddd;
 }
@@ -1812,6 +1827,7 @@ table.pricing-table-style-1 thead tr th.th-success {
 .fa-circle.tumblr{color: #4D77A3;}
 .fa-circle.linkedin{color: #3097CE;}
 .user-profile-content{margin: 30px 15px;}
+.products-content{margin: 30px 15px;margin-bottom: 0px;}
 
 
 
