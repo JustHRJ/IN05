@@ -15,7 +15,7 @@ import javax.faces.view.ViewScoped;
 import session.stateless.CustomerSessionBeanLocal;
 import session.stateless.SupplierSessionBeanLocal;
 import manager.EmailManager;
-import session.stateful.HiYewSystemBeanLocal;
+import session.stateless.HiYewSystemBeanLocal;
 
 @Named(value = "loginManagedBean")
 @ViewScoped

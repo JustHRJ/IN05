@@ -5,7 +5,7 @@
  */
 package managedbean.ICS;
 
-import entity.ItemEntity;
+import entity.FillerEntity;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -27,10 +27,10 @@ public class ViewLowStockManagedBean implements Serializable {
     @EJB
     private HiYewICSSessionBeanLocal hiYewICSSessionBean;
 
-    private List<ItemEntity> lowStockItems;
-    private List<ItemEntity> filteredLowStockItems;
+    private List<FillerEntity> lowStockItems;
+    private List<FillerEntity> filteredLowStockItems;
     private int numOfLowStockItems;
-    private ItemEntity selectedItem;
+    private FillerEntity selectedItem;
 
     /**
      * Creates a new instance of ViewLowStockManagedBean
@@ -48,14 +48,14 @@ public class ViewLowStockManagedBean implements Serializable {
     /**
      * @return the lowStockItems
      */
-    public List<ItemEntity> getLowStockItems() {
+    public List<FillerEntity> getLowStockItems() {
         return lowStockItems;
     }
 
     /**
      * @param lowStockItems the lowStockItems to set
      */
-    public void setLowStockItems(List<ItemEntity> lowStockItems) {
+    public void setLowStockItems(List<FillerEntity> lowStockItems) {
         this.lowStockItems = lowStockItems;
     }
 
@@ -76,33 +76,33 @@ public class ViewLowStockManagedBean implements Serializable {
     /**
      * @return the filteredLowStockItems
      */
-    public List<ItemEntity> getFilteredLowStockItems() {
+    public List<FillerEntity> getFilteredLowStockItems() {
         return filteredLowStockItems;
     }
 
     /**
      * @param filteredLowStockItems the filteredLowStockItems to set
      */
-    public void setFilteredLowStockItems(List<ItemEntity> filteredLowStockItems) {
+    public void setFilteredLowStockItems(List<FillerEntity> filteredLowStockItems) {
         this.filteredLowStockItems = filteredLowStockItems;
     }
 
     /**
      * @return the selectedItem
      */
-    public ItemEntity getSelectedItem() {
+    public FillerEntity getSelectedItem() {
         return selectedItem;
     }
 
     /**
      * @param selectedItem the selectedItem to set
      */
-    public void setSelectedItem(ItemEntity selectedItem) {
+    public void setSelectedItem(FillerEntity selectedItem) {
         this.selectedItem = selectedItem;
     }
 
     public String passSelectedItemToNext() {
-        System.out.println(this.selectedItem.getItemCode());
+        System.out.println(this.selectedItem.getFillerCode());
         FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("SelectedItem", this.selectedItem);
         //  FacesContext.getCurrentInstance().getExternalContext().getFlash().put("SelectedItem", this.selectedItem);
         System.out.println("here2");

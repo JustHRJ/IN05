@@ -5,7 +5,7 @@
  */
 package session.stateless;
 
-import entity.ItemEntity;
+import entity.FillerEntity;
 import entity.RackEntity;
 import entity.ShelveEntity;
 import entity.StorageInfoEntity;
@@ -20,21 +20,21 @@ import javax.ejb.Local;
 @Local
 public interface HiYewICSSessionBeanLocal {
 
-    public void createItem(ItemEntity item);
+    public void createItem(FillerEntity item);
 
-    public List<ItemEntity> getAllItems();
+    public List<FillerEntity> getAllItems();
 
-    public ItemEntity getExistingItem(String itemCode);
+    public FillerEntity getExistingItem(String itemCode);
 
-    public void updateItemDetails(ItemEntity item);
+    public void updateItemDetails(FillerEntity item);
 
-    public void stockUp(ItemEntity item, int inQty);
+    public void stockUp(FillerEntity item, int inQty);
 
-    public void stockDown(ItemEntity item, int outQty);
+    public void stockDown(FillerEntity item, int outQty);
 
-    public void deleteItem(ItemEntity item);
+    public void deleteItem(FillerEntity item);
 
-    public void updateCost(ItemEntity item, double newCost);
+    public void updateCost(FillerEntity item, double newCost);
 
     public void createRack(RackEntity rack);
 
@@ -56,25 +56,25 @@ public interface HiYewICSSessionBeanLocal {
 
     public List<RackEntity> getAllRacks();
 
-    public List<ItemEntity> getAllLowStockItems();
+    public List<FillerEntity> getAllLowStockItems();
 
-    public void addStorageInfo(ItemEntity item, ShelveEntity shelve, int storedQty);
+    public void addStorageInfo(FillerEntity item, ShelveEntity shelve, int storedQty);
 
-    public Long getUnallocatedQty(ItemEntity item);
+    public Long getUnallocatedQty(FillerEntity item);
 
     public List<StorageInfoEntity> getAllStorageInfoOfShelve(ShelveEntity shelve);
 
-    public List<StorageInfoEntity> getAllStorageInfoOfItem(ItemEntity item);
+    public List<StorageInfoEntity> getAllStorageInfoOfItem(FillerEntity item);
 
-    public StorageInfoEntity getStorageInfo(ItemEntity item, ShelveEntity shelve);
+    public StorageInfoEntity getStorageInfo(FillerEntity item, ShelveEntity shelve);
 
-    public void deleteStorageInfo(ItemEntity item, ShelveEntity shelve);
+    public void deleteStorageInfo(FillerEntity item, ShelveEntity shelve);
 
-    public void reduceStorageQty(ItemEntity item, ShelveEntity shelve, int reduceAmt);
+    public void reduceStorageQty(FillerEntity item, ShelveEntity shelve, int reduceAmt);
 
     public void updateRackStatus(RackEntity rack, String status);
 
-    public ItemEntity getExistingItemByName(String itemName);
+    public FillerEntity getExistingItemByName(String itemName);
 
     public void updateShelveStatus(ShelveEntity shelve, String status);
 
@@ -86,6 +86,18 @@ public interface HiYewICSSessionBeanLocal {
 
     public void deleteShelve(ShelveEntity shelve);
 
+    public double getWireVolume(FillerEntity item);
 
-   
+    public List<StorageInfoEntity> getStorageInfoOfRack(RackEntity rack);
+
+    public void reduceShelveFillCapac(ShelveEntity shelve, FillerEntity item, int reduceQty);
+
+    public void addShelveFillCapac(ShelveEntity shelve, FillerEntity item, int storedQty);
+
+    public double getShelveFreeSpace(ShelveEntity shelve);
+
+    public boolean checkIfItemInShelve(FillerEntity item, ShelveEntity shelve);
+
+    public List<String> getFillerCodeAutoComplete(String input);
+
 }

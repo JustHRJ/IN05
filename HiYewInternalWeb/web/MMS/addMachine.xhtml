@@ -99,7 +99,7 @@
                             <p:outputLabel for ="machine_name" style ="font-weight: bold" value ="Machine Name:  "/>
                         </p:column>
                         <p:column>
-                            <p:inputText label ="Machine Name" id ="machine_name" value ="#{hiYewManagedBean.machineName}" required="true" requiredMessage="Please enter a machine name" validator="#{registrationValidator.validateMachineName}" validatorMessage="Machine Name exist" > </p:inputText>
+                            <p:inputText label ="Machine Name" id ="machine_name" value ="#{hiYewManagedBean.machineName}" required="true" requiredMessage="Please enter a machine name" validator="#{machineValidator.validateMachineName}" validatorMessage="Machine Name exist" > </p:inputText>
                         </p:column>
 
                     </p:row>

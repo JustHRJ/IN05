@@ -90,6 +90,7 @@
                         <p:submenu label="Purchase Order Preparation Module">
                             <p:menuitem value="Create Purchase Order" url="/PS/createPO.xhtml" />                   
                             <p:menuitem value="View Purchase Order" url="/PS/viewPO.xhtml" />
+                            <p:menuitem value="View Procurement Bid" url="/PS/viewProcurementBid.xhtml" />
                         </p:submenu>
                     </p:column>
                 </p:submenu>
@@ -112,28 +113,31 @@
                         <p:inputText id="globalFilter" onkeyup="PF('itemsTable').filter()" style="width:150px" placeholder="Enter keyword"/>
                     </p:outputPanel>
                 </f:facet>
-                <p:column filterBy="#{item.itemCode}" sortBy="#{item.itemCode}" headerText="Item Code" footerText="contains" filterMatchMode="contains">
-                    <h:outputText value="#{item.itemCode}" />
+                <p:column filterBy="#{item.fillerCode}" sortBy="#{item.fillerCode}" headerText="WireCode" footerText="contains" filterMatchMode="contains">
+                    <h:outputText value="#{item.fillerCode}" />
                 </p:column>
 
-                <p:column filterBy="#{item.itemName}" sortBy="#{item.itemName}" headerText="Item Name" footerText="contains" filterMatchMode="contains">
-                    <h:outputText value="#{item.itemName}" />
+                <p:column filterBy="#{item.fillerName}" sortBy="#{item.fillerName}" headerText="Name" footerText="contains" filterMatchMode="contains">
+                    <h:outputText value="#{item.fillerName}" />
                 </p:column>
 
-                <p:column filterBy="#{item.itemType}" headerText="Item Type" footerText="equals" filterMatchMode="equals" style="width: 250px">
+                <p:column filterBy="#{item.wireGrade}" headerText="Grade" footerText="equals" filterMatchMode="equals">
                     <f:facet name="filter">
-                        <p:selectOneButton onchange="PF('itemsTable').filter()">
+                        <p:selectOneMenu onchange="PF('itemsTable').filter()">
                             <f:selectItem itemLabel="All" itemValue="" />
-                            <f:selectItem itemLabel="Wires" itemValue="Wires" />
-                            <f:selectItem itemLabel="Metals" itemValue="Metals" />
-                        </p:selectOneButton>
+                            <f:selectItem itemLabel="A" itemValue="A" />
+                            <f:selectItem itemLabel="B" itemValue="B" />
+                            <f:selectItem itemLabel="C" itemValue="C" />
+                            <f:selectItem itemLabel="D" itemValue="D" />
+                            <f:selectItem itemLabel="E" itemValue="E" />
+                        </p:selectOneMenu>
                     </f:facet>
-                    <h:outputText value="#{item.itemType}" />
+                    <h:outputText value="#{item.wireGrade}" />
                 </p:column>
 
                 <p:column filterBy="#{item.quantity}" headerText="Quantity" footerText="less than or equal" filterMatchMode="lte" >
                     <f:facet name="filter" >      
-                        <p:spinner onchange="PF('itemsTable').filter()" size="5">
+                        <p:spinner onchange="PF('itemsTable').filter()" size="3">
                             <f:converter converterId="javax.faces.Integer" />
                         </p:spinner>
                     </f:facet>
@@ -158,6 +162,20 @@
                 <p:column  headerText="Average Weight" >
                     <h:outputText value="#{item.averageWeight}">
                     </h:outputText>
+                </p:column>
+
+                <p:column  headerText="Wire Length(mm)" >
+                    <h:outputText value="#{item.wireLength}">
+                    </h:outputText>
+                </p:column>
+
+                <p:column filterBy="#{item.diameter}" sortBy="#{item.diameter}" headerText="Diameter(mm)" footerText="equal" filterMatchMode="exact" style="width:140px;text-align: center" >
+<!--                    <f:facet name="filter" >      
+                        <p:spinner onchange="PF('itemsTable').filter()" size="3">
+                            <f:converter converterId="javax.faces.Double" />
+                        </p:spinner>
+                    </f:facet>-->
+                    <h:outputText value="#{item.diameter}" />
                 </p:column>
 
                 <p:column style="width:32px;text-align: center">
