@@ -513,6 +513,7 @@ public class KnowledgeManageBean implements Serializable {
     public DualListModel<String> getFillerDisplay() {
         System.out.println("here1");
         if (metalName.isEmpty() || metalName.equals("")) {
+            System.out.println("no metal name");
         } else {
             fillerList = hiYewSystemBean.FillersNotAssociated(metalName);
             fillerChosen = hiYewSystemBean.FillersAssociated(metalName);

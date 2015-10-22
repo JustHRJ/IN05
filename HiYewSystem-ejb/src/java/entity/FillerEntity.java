@@ -33,6 +33,26 @@ public class FillerEntity implements Serializable {
     private int plastic;
     private int platinium;
 
+    public FillerEntity() {
+    }
+
+    public FillerEntity(String name, int copper, int silver, int gold, int bronze, int topaz, int iron, int alluminium, int titanium, int plastic, int platinium) {
+        this.name = name;
+        this.copper = copper;
+        this.silver = silver;
+        this.gold = gold;
+        this.bronze = bronze;
+        this.topaz = topaz;
+        this.iron = iron;
+        this.alluminium = alluminium;
+        this.titanium = titanium;
+        this.plastic = plastic;
+        this.platinium = platinium;
+    }
+
+
+    
+    
     public Long getId() {
         return id;
     }
