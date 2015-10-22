@@ -14,6 +14,7 @@ import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
+import javax.faces.bean.ManagedBean;
 import javax.faces.context.FacesContext;
 import javax.inject.Named;
 import javax.faces.view.ViewScoped;
@@ -23,6 +24,7 @@ import session.stateless.HiYewICSSessionBeanLocal;
  *
  * @author K.guoxiang
  */
+@ManagedBean
 @Named(value = "allocateStorageManagedBean")
 @ViewScoped
 public class AllocateStorageManagedBean implements Serializable {
@@ -53,11 +55,13 @@ public class AllocateStorageManagedBean implements Serializable {
         } else {
             selectedShelve = new ShelveEntity();
         }
+
     }
 
     @PostConstruct
     public void init() {
         infoList = hiYewICSSessionBean.getAllStorageInfoOfShelve(selectedShelve);
+
     }
 
     /**
@@ -103,20 +107,26 @@ public class AllocateStorageManagedBean implements Serializable {
     }
 
     public void addItemToShelve() {
+
         if (hiYewICSSessionBean.getExistingItem(itemCode) == null) {
             System.out.println("Non exist itemcode");
             FacesContext.getCurrentInstance().addMessage("formMain:itemCode", new FacesMessage(FacesMessage.SEVERITY_ERROR, "No Such Item", "No such item in inventory"));
         } else {
             System.out.println("Existing itemcode");
             ItemEntity item = hiYewICSSessionBean.getExistingItem(itemCode);
-            if (allocationQty > hiYewICSSessionBean.getUnallocatedQty(item)) {
-                System.out.println("Qty Overshot");
-                FacesContext.getCurrentInstance().addMessage("formMain:quantity", new FacesMessage(FacesMessage.SEVERITY_ERROR, "Invalid Input", "Quantity to allocate is greater than amount available for allocation!"));
+            if (hiYewICSSessionBean.getShelveFreeSpace(selectedShelve) < (hiYewICSSessionBean.getWireVolume(item) * allocationQty)) {
+                FacesContext.getCurrentInstance().addMessage("formMain:quantity", new FacesMessage(FacesMessage.SEVERITY_ERROR, "Unable to allocate", "Insufficient space available!"));
             } else {
-                System.out.println("Added Ok");
-                hiYewICSSessionBean.addStorageInfo(item, selectedShelve, allocationQty);
-                infoList = hiYewICSSessionBean.getAllStorageInfoOfShelve(selectedShelve);
-                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Success, Items added to shelve", "Items added to shelve"));
+
+                if (allocationQty > hiYewICSSessionBean.getUnallocatedQty(item)) {
+                    System.out.println("Qty Overshot");
+                    FacesContext.getCurrentInstance().addMessage("formMain:quantity", new FacesMessage(FacesMessage.SEVERITY_ERROR, "Invalid Input", "Quantity to allocate is greater than amount available for allocation!"));
+                } else {
+                    System.out.println("Added Ok");
+                    hiYewICSSessionBean.addStorageInfo(item, selectedShelve, allocationQty);
+                    infoList = hiYewICSSessionBean.getAllStorageInfoOfShelve(selectedShelve);
+                    FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Success, Items added to shelve", "Items added to shelve"));
+                }
             }
         }
     }
@@ -211,6 +221,12 @@ public class AllocateStorageManagedBean implements Serializable {
      */
     public void setSelectedSI(StorageInfoEntity selectedSI) {
         this.selectedSI = selectedSI;
+    }
+
+    public List<String> completeText(String query) {
+        List<String> results = new ArrayList<String>();
+        results = hiYewICSSessionBean.getItemCodeAutoComplete(query);
+        return results;
     }
 
 }

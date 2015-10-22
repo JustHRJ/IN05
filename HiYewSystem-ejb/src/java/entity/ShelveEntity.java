@@ -28,7 +28,8 @@ public class ShelveEntity implements Serializable {
     private double width;
     private double height;
     private String status;
-
+    private double filledCapac;
+    
     @ManyToOne
     private RackEntity rack = new RackEntity();
 
@@ -45,6 +46,17 @@ public class ShelveEntity implements Serializable {
         this.height = height;
         this.status = status;
     }
+
+    public ShelveEntity(String shelveID, double shelveLength, double width, double height, String status, double filledCapac) {
+        this.shelveID = shelveID;
+        this.shelveLength = shelveLength;
+        this.width = width;
+        this.height = height;
+        this.status = status;
+        this.filledCapac = filledCapac;
+    }
+    
+    
 
     public ShelveEntity(String shelveID, double shelveLength, double width, double height, String status, RackEntity rack) {
         this.shelveID = shelveID;
@@ -176,6 +188,20 @@ public class ShelveEntity implements Serializable {
      */
     public void setStorageInfos(Set<StorageInfoEntity> storageInfos) {
         this.storageInfos = storageInfos;
+    }
+
+    /**
+     * @return the filledCapac
+     */
+    public double getFilledCapac() {
+        return filledCapac;
+    }
+
+    /**
+     * @param filledCapac the filledCapac to set
+     */
+    public void setFilledCapac(double filledCapac) {
+        this.filledCapac = filledCapac;
     }
 
 }

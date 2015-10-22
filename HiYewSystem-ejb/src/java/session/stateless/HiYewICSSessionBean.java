@@ -9,7 +9,10 @@ import entity.ItemEntity;
 import entity.RackEntity;
 import entity.ShelveEntity;
 import entity.StorageInfoEntity;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -26,6 +29,8 @@ public class HiYewICSSessionBean implements HiYewICSSessionBeanLocal {
 
     @PersistenceContext(unitName = "HiYewSystem-ejbPU")
     private EntityManager em;
+
+    final double pi = 3.142;
 
     @Override
     public void createItem(ItemEntity item) {
@@ -54,6 +59,15 @@ public class HiYewICSSessionBean implements HiYewICSSessionBeanLocal {
             return null;
         }
     }
+    
+     @Override
+    public List<String> getItemCodeAutoComplete(String input) {
+        ArrayList<String> itemCodes = new ArrayList<String>();
+        Query q = em.createQuery("SELECT i.itemCode FROM ItemEntity i WHERE i.itemCode LIKE :input");
+        q.setParameter("input", input+'%');
+        itemCodes.addAll(q.getResultList());
+        return itemCodes;
+    }
 
     @Override
     public ItemEntity getExistingItemByName(String itemName) {
@@ -73,12 +87,14 @@ public class HiYewICSSessionBean implements HiYewICSSessionBeanLocal {
         System.out.println("Update item: " + item.getItemCode());
         ItemEntity i = em.find(ItemEntity.class, item.getItemCode());
         i.setItemName(item.getItemName());
-        i.setItemType(item.getItemType());
+        i.setWireGrade(item.getWireGrade());
         i.setQuantity(item.getQuantity());
         i.setCost(item.getCost());
         i.setSellingPrice(item.getSellingPrice());
         i.setReorderPoint(item.getReorderPoint());
         i.setAverageWeight(item.getAverageWeight());
+        i.setWireLength(item.getWireLength());
+        i.setDiameter(item.getDiameter());
     }
 
     @Override
@@ -170,18 +186,26 @@ public class HiYewICSSessionBean implements HiYewICSSessionBeanLocal {
 
     @Override
     public String getNextIDForRack() {
-        Query q = em.createQuery("SELECT r FROM RackEntity r");
-        if (q.getResultList().isEmpty()) {
+        Query q = em.createQuery("SELECT r.rackID FROM RackEntity r");
+        ArrayList<String> alpha = new ArrayList<String>();
+        alpha.addAll(q.getResultList());
+        if (alpha.isEmpty()) {
             return "A";
         } else {
             System.out.println("Got Existing Racks in DB");
-            Query q2 = em.createQuery("SELECT max(r.rackID) FROM RackEntity r");
-            String biggestCharID = q2.getSingleResult().toString();
-            char charBiggestChar = biggestCharID.charAt(0);
-            System.out.println("Current biggest char = " + charBiggestChar);
-            charBiggestChar++;
-            System.out.println("Next bigger char = " + charBiggestChar);
-            return charBiggestChar + "";
+            Collections.sort(alpha);
+            int startingIndex = 65;
+            String toReturn = "";
+            for (int i = 0; i < alpha.size(); i++) {
+                char c = alpha.get(i).charAt(0);
+                if (c != startingIndex) {
+                    toReturn = (char) startingIndex + "";
+                    return toReturn;
+                }
+                startingIndex++;
+            }
+            toReturn = (char) startingIndex + "";
+            return toReturn;
         }
     }
 
@@ -222,6 +246,7 @@ public class HiYewICSSessionBean implements HiYewICSSessionBeanLocal {
         Query q = em.createQuery("SELECT r FROM RackEntity r");
         return q.getResultList();
     }
+    
 
     @Override
     public void addStorageInfo(ItemEntity item, ShelveEntity shelve, int storedQty) {
@@ -232,14 +257,42 @@ public class HiYewICSSessionBean implements HiYewICSSessionBeanLocal {
             q.setParameter("shelve", shelve);
             StorageInfoEntity storageInfo = (StorageInfoEntity) q.getSingleResult();
             storageInfo.setStoredQty(storageInfo.getStoredQty() + storedQty);
+            addShelveFillCapac(shelve, item, storedQty);
             System.out.println("StatelessBean: addStorageInfo");
         } else {
             System.out.println(".................sessionBean:addStorageInfo:2");
             StorageInfoEntity storageInfo = new StorageInfoEntity(item, shelve, storedQty);
+            addShelveFillCapac(shelve, item, storedQty);
             em.persist(storageInfo);
         }
     }
 
+    @Override
+    public void addShelveFillCapac(ShelveEntity shelve, ItemEntity item, int storedQty) {
+        Query q = em.createQuery("SELECT s FROM ShelveEntity s WHERE s.shelveID = :shelveID");
+        q.setParameter("shelveID", shelve.getShelveID());
+        ShelveEntity selectedShelve = (ShelveEntity) q.getSingleResult();
+        double itemVolume = getWireVolume(item);
+        System.out.println("item volume is = " + itemVolume);
+        double volumeToAdd = itemVolume * storedQty;
+        System.out.println("volume to add is = " + volumeToAdd);
+        double existingCapac = selectedShelve.getFilledCapac();
+        System.out.println("existingCapac is = " + existingCapac);
+        double sum = round((volumeToAdd + existingCapac),3);
+        System.out.println("sum is = " + sum);
+        selectedShelve.setFilledCapac(sum);
+    }
+    
+    @Override
+    public double getShelveFreeSpace(ShelveEntity shelve){
+        Query q = em.createQuery("SELECT s FROM ShelveEntity s WHERE s.shelveID = :shelveID");
+        q.setParameter("shelveID", shelve.getShelveID());
+        ShelveEntity selectedShelve = (ShelveEntity) q.getSingleResult();
+        double shelveVolume = selectedShelve.getHeight()*selectedShelve.getWidth()*selectedShelve.getShelveLength();
+        return round((shelveVolume-selectedShelve.getFilledCapac()),2);
+    }
+
+    @Override
     public boolean checkIfItemInShelve(ItemEntity item, ShelveEntity shelve) {
 
         try {
@@ -300,6 +353,14 @@ public class HiYewICSSessionBean implements HiYewICSSessionBeanLocal {
     }
 
     @Override
+    public List<StorageInfoEntity> getStorageInfoOfRack(RackEntity rack) {
+        Query q = em.createQuery("SELECT si FROM StorageInfoEntity si WHERE si.shelve.shelveID LIKE :shelveID");
+        q.setParameter("shelveID", rack.getRackID() + '%');
+        System.out.println("here at sessionBean getStorageInfoOfRack " + q.getResultList().size());
+        return q.getResultList();
+    }
+
+    @Override
     public StorageInfoEntity getStorageInfo(ItemEntity item, ShelveEntity shelve) {
         Query q = em.createQuery("SELECT si FROM StorageInfoEntity si WHERE si.item = :item AND si.shelve = :shelve");
         q.setParameter("item", item);
@@ -309,14 +370,30 @@ public class HiYewICSSessionBean implements HiYewICSSessionBeanLocal {
 
     @Override
     public void reduceStorageQty(ItemEntity item, ShelveEntity shelve, int reduceAmt) {
-
         StorageInfoEntity si = getStorageInfo(item, shelve);
         if (reduceAmt < si.getStoredQty()) {
             si.setStoredQty(si.getStoredQty() - reduceAmt);
+
         } else if (reduceAmt == si.getStoredQty()) {
             deleteStorageInfo(item, shelve);
         }
+        reduceShelveFillCapac(shelve, item, reduceAmt);
         System.out.println("StatelessBean: reduceStorageQty");
+    }
+
+    @Override
+    public void reduceShelveFillCapac(ShelveEntity shelve, ItemEntity item, int reduceQty) {
+        Query q = em.createQuery("SELECT s FROM ShelveEntity s WHERE s.shelveID = :shelveID");
+        q.setParameter("shelveID", shelve.getShelveID());
+        ShelveEntity selectedShelve = (ShelveEntity) q.getSingleResult();
+        double volumeToReduce = getWireVolume(item) * reduceQty;
+        System.out.println("here at session bean reduceShelveFillCapac() wire volume = " + getWireVolume(item));
+        System.out.println("here at session bean reduceShelveFillCapac() reduceQty = " + reduceQty);
+        System.out.println("here at session bean reduceShelveFillCapac() = " + volumeToReduce);
+        System.out.println("here at session bean reduceShelveFillCapac() selectedShelve.getFilledCapac() = " + selectedShelve.getFilledCapac());
+        double existingCapac = selectedShelve.getFilledCapac();
+        double newTotal = existingCapac - volumeToReduce;
+        selectedShelve.setFilledCapac(round(newTotal,3));
     }
 
     @Override
@@ -347,7 +424,8 @@ public class HiYewICSSessionBean implements HiYewICSSessionBeanLocal {
         int fullCounter = 0;
         for (int i = 0; i < shelves.size(); i++) {
             ShelveEntity shelve = shelves.get(i);
-            if (shelve.getStatus().equals("Full")) {
+            double threshold = (shelve.getHeight() * shelve.getShelveLength() * shelve.getWidth())*0.95;
+            if (shelve.getFilledCapac()>=threshold) {
                 fullCounter++;
             }
         }
@@ -376,25 +454,47 @@ public class HiYewICSSessionBean implements HiYewICSSessionBeanLocal {
         }
         return gotItem;
     }
-    
-     @Override
+
+    @Override
     public void deleteRack(RackEntity rack) {
         System.out.println("Deleting rack: " + rack.getRackID());
         ArrayList<ShelveEntity> shelves = new ArrayList<ShelveEntity>();
         shelves.addAll(getShelvesInRack(rack.getRackID()));
-         for (int i = 0; i < shelves.size(); i++) {
+        for (int i = 0; i < shelves.size(); i++) {
             ShelveEntity shelve = shelves.get(i);
-             deleteShelve(shelve);
+            deleteShelve(shelve);
         }
         Query query = em.createQuery("DELETE FROM RackEntity r WHERE r.rackID = :rackID");
         query.setParameter("rackID", rack.getRackID()).executeUpdate();
     }
-    
+
     @Override
     public void deleteShelve(ShelveEntity shelve) {
         System.out.println("Deleting shelve: " + shelve.getShelveID());
         Query query = em.createQuery("DELETE FROM ShelveEntity s WHERE s.shelveID = :shelveID");
         query.setParameter("shelveID", shelve.getShelveID()).executeUpdate();
+    }
+    
+    
+
+    @Override
+    public double getWireVolume(ItemEntity item) {
+        double r = (item.getDiameter() / 10) / 2;
+        double h = item.getWireLength() / 10;
+        double volume = pi * (r * r) * h;
+        System.out.println("here at session bean getWireVolume() = " + volume);
+        //   return round(volume,2);
+        return volume;
+    }
+
+    private double round(double value, int places) {
+        if (places < 0) {
+            throw new IllegalArgumentException();
+        }
+
+        BigDecimal bd = new BigDecimal(value);
+        bd = bd.setScale(places, RoundingMode.HALF_UP);
+        return bd.doubleValue();
     }
 
 }

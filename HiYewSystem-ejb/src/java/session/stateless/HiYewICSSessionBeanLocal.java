@@ -86,6 +86,20 @@ public interface HiYewICSSessionBeanLocal {
 
     public void deleteShelve(ShelveEntity shelve);
 
+    public double getWireVolume(ItemEntity item);
+
+    public List<StorageInfoEntity> getStorageInfoOfRack(RackEntity rack);
+
+    public void reduceShelveFillCapac(ShelveEntity shelve, ItemEntity item, int reduceQty);
+
+    public void addShelveFillCapac(ShelveEntity shelve, ItemEntity item, int storedQty);
+
+    public double getShelveFreeSpace(ShelveEntity shelve);
+
+    public boolean checkIfItemInShelve(ItemEntity item, ShelveEntity shelve);
+
+    public List<String> getItemCodeAutoComplete(String input);
+
 
    
 }

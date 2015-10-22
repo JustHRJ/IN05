@@ -306,5 +306,12 @@ public class ItemDetailsManagedBean implements Serializable {
     public void setFilteredInfoList(List<StorageInfoEntity> filteredInfoList) {
         this.filteredInfoList = filteredInfoList;
     }
+    
+    public String passSelectedItemToNext() {
+        System.out.println(this.selectedItem.getItemCode());
+        FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("SelectedItem2", this.selectedItem);
+        //  FacesContext.getCurrentInstance().getExternalContext().getFlash().put("SelectedItem", this.selectedItem);
+        return "/PS/createProcurementBid?faces-redirect=true";
+    }
 
 }

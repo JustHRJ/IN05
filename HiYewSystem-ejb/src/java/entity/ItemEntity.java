@@ -27,7 +27,7 @@ public class ItemEntity implements Serializable {
 
     @Size(min = 3, message = "Please enter item name more than 2 characters!")
     private String itemName;
-    private String itemType;
+    private String wireGrade;
 
 //     @Digits(integer=6,fraction=0, message = "Invalid input! Note: only up to 6 digits integer. Example: 1234")
     private int quantity;
@@ -42,6 +42,12 @@ public class ItemEntity implements Serializable {
 
     @Digits(integer = 9, fraction = 2, message = "Invalid input! Note: only up to 9 integers and 2 decimal places. Example: 1234.32")
     private double averageWeight;
+    
+    @Digits(integer = 9, fraction = 2, message = "Invalid input! Note: only up to 9 integers and 2 decimal places. Example: 1234.32")
+    private double wireLength;
+    
+    @Digits(integer = 9, fraction = 2, message = "Invalid input! Note: only up to 9 integers and 2 decimal places. Example: 1234.32")
+    private double diameter;
 
     @OneToMany(mappedBy = "item")
     private Set<StorageInfoEntity> storageInfos = new HashSet<StorageInfoEntity>();
@@ -49,16 +55,31 @@ public class ItemEntity implements Serializable {
     public ItemEntity() {
     }
 
-    public ItemEntity(String itemCode, String itemName, String itemType, int quantity, double cost, double sellingPrice, int reorderPoint, double averageWeight) {
+    public ItemEntity(String itemCode, String itemName, String wireGrade, int quantity, double cost, double sellingPrice, int reorderPoint, double averageWeight) {
         this.itemCode = itemCode;
         this.itemName = itemName;
-        this.itemType = itemType;
+        this.wireGrade = wireGrade;
         this.quantity = quantity;
         this.cost = cost;
         this.sellingPrice = sellingPrice;
         this.reorderPoint = reorderPoint;
         this.averageWeight = averageWeight;
     }
+
+    public ItemEntity(String itemCode, String itemName, String wireGrade, int quantity, double cost, double sellingPrice, int reorderPoint, double averageWeight, double wireLength, double diameter) {
+        this.itemCode = itemCode;
+        this.itemName = itemName;
+        this.wireGrade = wireGrade;
+        this.quantity = quantity;
+        this.cost = cost;
+        this.sellingPrice = sellingPrice;
+        this.reorderPoint = reorderPoint;
+        this.averageWeight = averageWeight;
+        this.wireLength = wireLength;
+        this.diameter = diameter;
+    }
+    
+    
 
     @Override
     public int hashCode() {
@@ -172,15 +193,15 @@ public class ItemEntity implements Serializable {
     /**
      * @return the itemType
      */
-    public String getItemType() {
-        return itemType;
+    public String getWireGrade() {
+        return wireGrade;
     }
 
     /**
      * @param itemType the itemType to set
      */
-    public void setItemType(String itemType) {
-        this.itemType = itemType;
+    public void setWireGrade(String wireGrade) {
+        this.wireGrade = wireGrade;
     }
 
     /**
@@ -195,6 +216,34 @@ public class ItemEntity implements Serializable {
      */
     public void setAverageWeight(double averageWeight) {
         this.averageWeight = averageWeight;
+    }
+
+    /**
+     * @return the wireLength
+     */
+    public double getWireLength() {
+        return wireLength;
+    }
+
+    /**
+     * @param wireLength the wireLength to set
+     */
+    public void setWireLength(double wireLength) {
+        this.wireLength = wireLength;
+    }
+
+    /**
+     * @return the diameter
+     */
+    public double getDiameter() {
+        return diameter;
+    }
+
+    /**
+     * @param diameter the diameter to set
+     */
+    public void setDiameter(double diameter) {
+        this.diameter = diameter;
     }
 
     /**
