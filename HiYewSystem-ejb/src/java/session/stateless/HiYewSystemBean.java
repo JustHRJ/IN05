@@ -3,8 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package session.stateful;
+package session.stateless;
 
+import entity.ActivationCode;
 import entity.EmployeeClaimEntity;
 import entity.SupplierPurchaseOrder;
 import javax.ejb.Stateful;
@@ -12,8 +13,11 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import entity.MachineEntity;
 import entity.EmployeeEntity;
+import entity.FillerEntity;
 import entity.LeaveEntity;
 import entity.MachineMaintainenceEntity;
+import entity.MachineRepairEntity;
+import entity.Metal;
 import entity.PayrollEntity;
 import entity.TrainingScheduleEntity;
 import java.math.BigInteger;
@@ -28,13 +32,14 @@ import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 import java.util.Vector;
+import javax.ejb.Stateless;
 import javax.persistence.Query;
 
 /**
  *
  * @author JustHRJ
  */
-@Stateful
+@Stateless
 public class HiYewSystemBean implements HiYewSystemBeanLocal {
 
     // Add business logic below. (Right-click in editor and choose
@@ -102,10 +107,41 @@ public class HiYewSystemBean implements HiYewSystemBeanLocal {
             machine.setExtension(extension);
             Collection<MachineMaintainenceEntity> machineMaint = new ArrayList<MachineMaintainenceEntity>();
             machine.setMachineMaintainence(machineMaint);
+            Collection<MachineRepairEntity> repairs = new ArrayList<MachineRepairEntity>();
+            machine.setMachineRepair(repairs);
             em.persist(machine);
             return true;
         }
 
+    }
+
+    public boolean updateClaim(EmployeeClaimEntity claim, double amount, Date date) {
+        boolean check = false;
+        EmployeeEntity employee = claim.getEmployee();
+        if (amount > 0 && amount != claim.getAmount()) {
+            double check1 = checkExceedLimit(employee, amount);
+            if (check1 == 0) {
+                return false;
+            }
+            check = true;
+            claim.setAmount(amount);
+            claim.setClaimAmt(check1);
+        }
+        if (date != null) {
+            Timestamp time = new Timestamp(date.getTime());
+            if (time.equals(claim.getClaimDate())) {
+
+            } else {
+                claim.setClaimDate(time);
+                check = true;
+            }
+        }
+        if (check) {
+            em.merge(claim);
+            return true;
+        } else {
+            return false;
+        }
     }
 
     public boolean createPO(String supPONo, Timestamp date, String termsOfPayment, String description, String supCompanyName, int quantity) {
@@ -129,6 +165,31 @@ public class HiYewSystemBean implements HiYewSystemBeanLocal {
 
     }
 
+    private double checkExceedLimit(EmployeeEntity e, double cd) {
+        double sum = 0.0;
+        SimpleDateFormat format = new SimpleDateFormat("MMM");
+        Calendar c = Calendar.getInstance();
+        String month = format.format(c.getTime());
+        for (Object o : e.getEmployeeClaims()) {
+            EmployeeClaimEntity claim = (EmployeeClaimEntity) o;
+            Date date = new Date(claim.getClaimDate().getTime());
+            String claimMonth = format.format(date);
+            if (month.equals(claimMonth) && (claim.getStatus().equals("approved") || claim.getStatus().equals(("pending")))) {
+                sum += claim.getAmount();
+            }
+        }
+        double remainder = 100 - sum;
+        if (remainder <= 0) {
+            return 0;
+        } else {
+            if (remainder < cd) {
+                return remainder;
+            } else {
+                return cd;
+            }
+        }
+    }
+
     private double checkExceedLimit(EmployeeEntity e, EmployeeClaimEntity cd) {
         double sum = 0.0;
         SimpleDateFormat format = new SimpleDateFormat("MMM");
@@ -138,7 +199,7 @@ public class HiYewSystemBean implements HiYewSystemBeanLocal {
             EmployeeClaimEntity claim = (EmployeeClaimEntity) o;
             Date date = new Date(claim.getClaimDate().getTime());
             String claimMonth = format.format(date);
-            if (month.equals(claimMonth) && claim.getStatus().equals("approved")) {
+            if (month.equals(claimMonth) && (claim.getStatus().equals("approved") || claim.getStatus().equals(("pending")))) {
                 sum += claim.getAmount();
             }
         }
@@ -147,7 +208,7 @@ public class HiYewSystemBean implements HiYewSystemBeanLocal {
             return 0;
         } else {
             if (remainder < cd.getAmount()) {
-                return cd.getAmount() - remainder;
+                return remainder;
             } else {
                 return cd.getAmount();
             }
@@ -2453,8 +2514,10 @@ public class HiYewSystemBean implements HiYewSystemBeanLocal {
                     return "disabled";
                 } else if (e.getAccount_status().equals("firstTime")) {
                     return "firstTime";
+                } else if (e.getAccount_status().equals("reset")) {
+                    return "reset";
                 } else {
-                    return e.getAccount_status();
+                    return e.getEmployee_account_status();
                 }
             } else {
                 return "fail";
@@ -2570,6 +2633,400 @@ public class HiYewSystemBean implements HiYewSystemBeanLocal {
         String newPassword = new BigInteger(50, random).toString(32);
         System.out.println(newPassword);
         return newPassword;
+
+    }
+
+    public String sendActivationCode(String email) {
+        ActivationCode code = new ActivationCode();
+        Calendar c = Calendar.getInstance();
+        c.add(Calendar.DATE, 1);
+
+        Timestamp time = new Timestamp(c.getTime().getTime());
+        String pass = createRandomPass();
+        code.setCode(pass);
+        code.setExpiry(time);
+        em.persist(code);
+        return pass;
+
+    }
+
+    @Override
+    public boolean checkActivationCode(String code) {
+        boolean available = false;
+
+        Query q = em.createQuery("Select a from ActivationCode a where a.code = :code");
+        q.setParameter("code", code);
+        if (q.getResultList().size() >= 1) {
+            available = true;
+        }
+        return available;
+    }
+
+    @Override
+    public void deleteActivationCode(String code) {
+        Query q = em.createQuery("Delete from ActivationCode a where a.code = :code");
+        q.setParameter("code", code);
+        q.executeUpdate();
+
+    }
+
+    public void addFillers(List<Vector> fillers) {
+        Query z = em.createQuery("select c from Metal c");
+        for(Object o: z.getResultList()){
+            Metal m = (Metal) o;
+            m.setFillers(null);
+            em.merge(m);
+        }
+    
+        Query q = em.createQuery("select c from FillerEntity c");
+        for (Object o : q.getResultList()) {
+            FillerEntity f = (FillerEntity) o;
+            em.remove(f);
+        }
+        if (fillers != null) {
+            for (Object o : fillers) {
+                Vector im = (Vector) o;
+                FillerEntity f = new FillerEntity();
+                f.setName((String) im.get(1));
+                f.setAlluminium(Integer.parseInt(im.get(2).toString()));
+                f.setBronze(Integer.parseInt(im.get(3).toString()));
+                f.setCopper(Integer.parseInt(im.get(4).toString()));
+                f.setGold(Integer.parseInt(im.get(5).toString()));
+                f.setIron(Integer.parseInt(im.get(6).toString()));
+                f.setPlastic(Integer.parseInt(im.get(7).toString()));
+                f.setSilver(Integer.parseInt(im.get(8).toString()));
+                f.setTitanium(Integer.parseInt(im.get(9).toString()));
+                f.setPlatinium(Integer.parseInt(im.get(10).toString()));
+                f.setTopaz(Integer.parseInt(im.get(11).toString()));
+                em.persist(f);
+            }
+            System.out.println("ompleted");
+        }
+    }
+
+    public List<Vector> transferFillerInfo() {
+        List<Vector> results = new ArrayList<Vector>();
+        Query q = em.createQuery("select c from FillerEntity c");
+        System.out.println("shit");
+        for (Object o : q.getResultList()) {
+            FillerEntity f = (FillerEntity) o;
+            Vector im = new Vector();
+            im.add(f.getId());
+            im.add(f.getName());
+            im.add(f.getAlluminium());
+            im.add(f.getBronze());
+            im.add(f.getCopper());
+            im.add(f.getIron());
+            im.add(f.getPlastic());
+            im.add(f.getTitanium());
+            im.add(f.getPlatinium());
+            im.add(f.getSilver());
+            im.add(f.getTopaz());
+            im.add(f.getGold());
+
+            results.add(im);
+        }
+        if (results.isEmpty()) {
+            System.out.println("here");
+            return null;
+        }
+        System.out.println("collected");
+        System.out.println(results.size());
+        return results;
+    }
+
+    public List<Vector> transferMetalInfo() {
+        List<Vector> results = new ArrayList<Vector>();
+        Query q = em.createQuery("select c from Metal c");
+        System.out.println("shit");
+        for (Object o : q.getResultList()) {
+            Metal f = (Metal) o;
+            Vector im = new Vector();
+            im.add(f.getId());
+            im.add(f.getMetalName());
+            im.add(f.getAluminium());
+            im.add(f.getBronze());
+            im.add(f.getCopper());
+            im.add(f.getIron());
+            im.add(f.getPlastic());
+            im.add(f.getTitanium());
+            im.add(f.getPlatinium());
+            im.add(f.getSilver());
+            im.add(f.getTopaz());
+            im.add(f.getGold());
+
+            results.add(im);
+        }
+        if (results.isEmpty()) {
+            System.out.println("here");
+            return null;
+        }
+        System.out.println("collected");
+        System.out.println(results.size());
+        return results;
+    }
+
+    public List<FillerEntity> fillerRecords() {
+
+        List<FillerEntity> results = new ArrayList<FillerEntity>();
+        Query q = em.createQuery("select c from FillerEntity c");
+
+        for (Object o : q.getResultList()) {
+            FillerEntity f = (FillerEntity) o;
+
+            results.add(f);
+        }
+        if (results.isEmpty()) {
+            System.out.println("here");
+            return null;
+        }
+
+        return results;
+
+    }
+
+    public void editFiller(FillerEntity filler) {
+        if (filler == null) {
+            System.out.println("filler info is missing");
+        } else {
+            em.merge(filler);
+        }
+    }
+
+    public void deleteFiller(FillerEntity filler) {
+        if (filler != null) {
+            Long id = filler.getId();
+            FillerEntity f = em.find(FillerEntity.class, id);
+            if (f == null) {
+                System.out.println("no filler to delete");
+            } else {
+                em.remove(f);
+            }
+        }
+    }
+
+    public void createRepair(MachineRepairEntity machine, Date date, String machineName) {
+        Timestamp time = new Timestamp(date.getTime());
+        machine.setDate(time);
+
+        MachineEntity m = new MachineEntity();
+        try {
+            Query q = em.createQuery("select m from MachineEntity m where m.machine_name =:id");
+            q.setParameter("id", machineName);
+            m = (MachineEntity) q.getSingleResult();
+            machine.setMachine(m);
+            em.persist(machine);
+
+            m.getMachineRepair().add(machine);
+
+            em.merge(m);
+
+        } catch (Exception ex) {
+
+        }
+    }
+
+    public List<MachineRepairEntity> repairList(MachineEntity machine) {
+        Collection<MachineRepairEntity> records = machine.getMachineRepair();
+
+        List<MachineRepairEntity> results = new ArrayList<MachineRepairEntity>();
+
+        for (Object o : records) {
+            MachineRepairEntity m = (MachineRepairEntity) o;
+            results.add(m);
+        }
+        if (results.isEmpty()) {
+            return null;
+        } else {
+            return results;
+        }
+    }
+
+    public void addMetal(List<Vector> metals) {
+        Query q = em.createQuery("Select c from Metal c");
+        for (Object o : q.getResultList()) {
+            Metal m = (Metal) o;
+            m.setFillers(null);
+            em.merge(m);
+            em.remove(m);
+            em.flush();
+        }
+
+        if (metals != null) {
+            for (Object o : metals) {
+                Vector im = (Vector) o;
+                Metal f = new Metal();
+                f.setId(im.get(0).toString());
+                f.setMetalName(im.get(1).toString());
+                f.setAluminium(Integer.parseInt(im.get(2).toString()));
+                f.setBronze(Integer.parseInt(im.get(3).toString()));
+                f.setCopper(Integer.parseInt(im.get(4).toString()));
+                f.setGold(Integer.parseInt(im.get(5).toString()));
+                f.setIron(Integer.parseInt(im.get(6).toString()));
+                f.setPlastic(Integer.parseInt(im.get(7).toString()));
+                f.setSilver(Integer.parseInt(im.get(8).toString()));
+                f.setTitanium(Integer.parseInt(im.get(9).toString()));
+                f.setPlatinium(Integer.parseInt(im.get(10).toString()));
+                f.setTopaz(Integer.parseInt(im.get(11).toString()));
+                em.persist(f);
+            }
+        }
+        System.out.println("metal added");
+    }
+
+    public List<Metal> metalRecords() {
+        List<Metal> results = new ArrayList<Metal>();
+        Query q = em.createQuery("select c from Metal c");
+
+        for (Object o : q.getResultList()) {
+            Metal f = (Metal) o;
+
+            results.add(f);
+        }
+        if (results.isEmpty()) {
+            System.out.println("no metal records found");
+            return null;
+        }
+
+        return results;
+    }
+
+    public void editMetal(Metal metal) {
+        if (metal == null) {
+            System.out.println("no metal info present");
+        } else {
+            em.merge(metal);
+        }
+    }
+
+    public void deleteMetal(Metal metal) {
+        if (metal == null) {
+            System.out.println("no metal to delete");
+        } else {
+            String id = metal.getId();
+            Metal m = em.find(Metal.class, id);
+            if (m == null) {
+                System.out.println("entity failed to find id of metal");
+            } else {
+                em.remove(m);
+                em.flush();
+            }
+        }
+    }
+
+    public List<String> retrieveFillerNames() {
+        Query q = em.createQuery("select c from FillerEntity c");
+        List<String> results = new ArrayList<String>();
+        for (Object o : q.getResultList()) {
+            FillerEntity f = (FillerEntity) o;
+            results.add(f.getName());
+        }
+        if (results.isEmpty()) {
+            return null;
+        } else {
+            return results;
+        }
+    }
+
+    public List<String> metalNames() {
+        List<String> result = new ArrayList<String>();
+        Query q = em.createQuery("select c from Metal c");
+        for (Object o : q.getResultList()) {
+            Metal m = (Metal) o;
+            result.add(m.getMetalName());
+        }
+        if (result.isEmpty()) {
+            return null;
+        } else {
+            return result;
+        }
+    }
+
+    public void createPairings(String metal, List<String> fillerChosen) {
+        Metal m = new Metal();
+        Collection<FillerEntity> fillers = new ArrayList<FillerEntity>();
+        try {
+            Query q = em.createQuery("select m from Metal m where m.metalName = :id");
+            q.setParameter("id", metal);
+            m = (Metal) q.getSingleResult();
+
+            if (fillerChosen.isEmpty()) {
+                System.out.println("no fillerchosen");
+            }
+            System.out.println(fillerChosen.size());
+            for (Object o : fillerChosen) {
+                String fn = (String) o;
+                System.out.println(fn);
+                FillerEntity f = new FillerEntity();
+                q = em.createQuery("select f from FillerEntity f where f.name =:id");
+                q.setParameter("id", fn);
+                f = (FillerEntity) q.getSingleResult();
+                fillers.add(f);
+            }
+            System.out.println("error here3");
+            m.setFillers(fillers);
+            System.out.println("error here4");
+            em.merge(m);
+            System.out.println("Pairing created");
+        } catch (Exception ex) {
+            System.out.println("error occured");
+        }
+    }
+
+    public List<String> FillersNotAssociated(String metalName) {
+        Metal m = new Metal();
+        List<String> result = new ArrayList<String>();
+        try {
+            Query q = em.createQuery("select c from FillerEntity c");
+            Query z = em.createQuery("select m from Metal m where m.metalName = :id");
+            z.setParameter("id", metalName);
+            m = (Metal) z.getSingleResult();
+            for (Object o : q.getResultList()) {
+                FillerEntity f = (FillerEntity) o;
+                if (m.getFillers().contains(f)) {
+                    System.out.println("should not add: not associated");
+                } else {
+                    result.add(f.getName());
+                }
+            }
+            if (result.isEmpty()) {
+                return new ArrayList<String>();
+            } else {
+                return result;
+            }
+
+        } catch (Exception ex) {
+            return new ArrayList<String>();
+        }
+
+    }
+
+    public List<String> FillersAssociated(String metalName) {
+        Metal m = new Metal();
+        List<String> result = new ArrayList<String>();
+        try {
+            Query q = em.createQuery("select c from FillerEntity c");
+            Query z = em.createQuery("select m from Metal m where m.metalName = :id");
+            z.setParameter("id", metalName);
+            m = (Metal) z.getSingleResult();
+            for (Object o : q.getResultList()) {
+                FillerEntity f = (FillerEntity) o;
+                if (m.getFillers().contains(f)) {
+                    result.add(f.getName());
+                } else {
+                    System.out.println("should not add: associated");
+
+                }
+            }
+            if (result.isEmpty()) {
+                return new ArrayList<String>();
+            } else {
+                return result;
+            }
+
+        } catch (Exception ex) {
+            return new ArrayList<String>();
+        }
 
     }
 }

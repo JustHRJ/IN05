@@ -104,7 +104,7 @@
                                             <f:validateRegex pattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$" />
                                         </p:inputText>
                                     </div>
-                                    <p:commandButton style="border: none; font-family: 'Open Sans'; padding-right: 17px" styleClass="btn btn-primary" value="Update" action="#{supplierManagedBean.handleSave()}" update=":changePasswordForm:msgs "/>
+                                    <p:commandButton style="border: none; font-weight: normal; font-family: 'Open Sans'; padding-top: 6px; padding-bottom: 7px; padding-left: 22px; padding-right: 22px" styleClass="btn btn-primary" value="Update" action="#{customerManagedBean.handleSave()}" update=":changePasswordForm:msgs " icon=""/>
                                 </h:form>
                             </div><!-- End div .user-profile-content -->
                         </div><!-- End div .tab-pane -->
@@ -127,13 +127,13 @@
                                         <label for="">Re-Password</label>
                                         <p:password style="font-family: 'Open Sans';" styleClass="form-control" placeholder="At least 8 alphanumeric characters." value="#{supplierManagedBean.rePassword}"  inline="true" requiredMessage="Password is required." id="Re-Password"  />
                                     </div>
-                                    <p:commandButton style="border: none; font-family: 'Open Sans'; padding-right: 17px" styleClass="btn btn-primary" value="Update" action="#{supplierManagedBean.changePassword()}" update=":changePasswordForm:msgs " icon="ui-icon-check"/>
+                                    <p:commandButton style="border: none; font-weight: normal; font-family: 'Open Sans'; padding-top: 6px; padding-bottom: 7px; padding-left: 22px; padding-right: 22px" styleClass="btn btn-primary" value="Update" action="#{customerManagedBean.changePassword()}" update=":changePasswordForm:msgs " icon=""/>
                                 </h:form>
                             </div><!-- End div .scroll-user-widget -->
                         </div><!-- End div .tab-pane -->
                         <!-- End Tab Change password -->
 
-                        
+
                         <!-- End Tab Settings -->
 
                     </div><!-- End div .tab-content -->

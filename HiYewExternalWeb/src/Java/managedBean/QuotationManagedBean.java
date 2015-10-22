@@ -15,21 +15,26 @@ import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 import javax.inject.Named;
 import session.stateless.CustomerSessionBeanLocal;
+import session.stateless.MetalSessionBeanLocal;
 import session.stateless.QuotationSessionBeanLocal;
 
 @Named(value = "quotationManagedBean")
 @SessionScoped
 public class QuotationManagedBean implements Serializable {
-
+    
     @EJB
     private QuotationSessionBeanLocal quotationSessionBean;
     @EJB
     private CustomerSessionBeanLocal customerSessionBean;
+    @EJB
+    private MetalSessionBeanLocal metalSessionBean;
+
 
     private String username = "";
     private String date = "";
     private String quotationNo = "";
     private Integer count;
+    private String txt1 = "";
 
     private ArrayList<QuotationDescription> cacheList = new ArrayList<>();
     private Quotation newQuotation;
@@ -79,6 +84,12 @@ public class QuotationManagedBean implements Serializable {
         }
         date = new SimpleDateFormat("dd/MM/yyyy").format(Calendar.getInstance().getTime());
     }
+    
+    public ArrayList<String> completeText(String str) {
+        ArrayList<String> results = new ArrayList<>(metalSessionBean.getMetalBySubString(str));
+        System.out.println("Size of results: " + results.size());
+        return results;
+    }
 
     public void receivedQuotations() {
         System.out.println("QuotationManagedBean.java receivedQuotations() ===== " + username);
@@ -109,8 +120,8 @@ public class QuotationManagedBean implements Serializable {
 
     public void addToCacheList(ActionEvent event) {
 
-        if (newQuotationDesc.getItemDesc().equals("") || newQuotationDesc.getQty() == null) {
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Descriptions and quantity must not be left unfilled!", ""));
+        if (newQuotationDesc.getMetalName().equals("") || newQuotationDesc.getQty() == null) {
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Metal Name or quantity must not be left unfilled!", ""));
         } else {
             
             newQuotationDesc.setQuotationDescNo(count);
@@ -168,8 +179,8 @@ public class QuotationManagedBean implements Serializable {
             newQuotation = new Quotation();
             newQuotationDesc = new QuotationDescription();
             //set quotation tab to be selected
-            System.out.println("Your RFQ has been submitted successfully!");
-            FacesContext.getCurrentInstance().addMessage("msg", new FacesMessage("Your RFQ has been submitted successfully!", ""));
+            //System.out.println("Your RFQ has been sent successfully!");
+            FacesContext.getCurrentInstance().addMessage("msg", new FacesMessage("Your RFQ has been sent successfully!", ""));
         }
     }
 
@@ -306,6 +317,20 @@ public class QuotationManagedBean implements Serializable {
             return false;
         }
         return true;
+    }
+
+    /**
+     * @return the txt1
+     */
+    public String getTxt1() {
+        return txt1;
+    }
+
+    /**
+     * @param txt1 the txt1 to set
+     */
+    public void setTxt1(String txt1) {
+        this.txt1 = txt1;
     }
 
 }

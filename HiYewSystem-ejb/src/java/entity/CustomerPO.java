@@ -16,6 +16,7 @@ public class CustomerPO implements Serializable {
 
     @Id
     private String poId; //follows quotation no
+    private String customerRefPoNumber; //provided by customer in case they choose to have their own po number instead
 
     private Timestamp poDate;
     private Timestamp expectedStartDate;
@@ -35,7 +36,7 @@ public class CustomerPO implements Serializable {
         poDate = new Timestamp(Calendar.getInstance().getTime().getTime());
     }
 
-    public CustomerPO(String poId, Timestamp expectedStartDate, Timestamp expectedEndDate, String mailingAddr1, String mailingAddr2, Double totalPrice, Quotation quotation, Customer customer) {
+    public CustomerPO(String poId, String customerRefPoNumber ,Timestamp expectedStartDate, Timestamp expectedEndDate, String mailingAddr1, String mailingAddr2, Double totalPrice, Quotation quotation, Customer customer) {
         this.poId = poId;
         this.poDate = new Timestamp(Calendar.getInstance().getTime().getTime());
         this.expectedStartDate = expectedStartDate;
@@ -45,6 +46,7 @@ public class CustomerPO implements Serializable {
         this.totalPrice = totalPrice;
         this.quotation = quotation;
         this.customer = customer;
+        this.customerRefPoNumber = customerRefPoNumber;
     }
 
     public String getPoId() {
@@ -199,6 +201,20 @@ public class CustomerPO implements Serializable {
      */
     public void setCustomer(Customer customer) {
         this.customer = customer;
+    }
+
+    /**
+     * @return the customerRefPoNumber
+     */
+    public String getCustomerRefPoNumber() {
+        return customerRefPoNumber;
+    }
+
+    /**
+     * @param customerRefPoNumber the customerRefPoNumber to set
+     */
+    public void setCustomerRefPoNumber(String customerRefPoNumber) {
+        this.customerRefPoNumber = customerRefPoNumber;
     }
 
 }

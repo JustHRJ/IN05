@@ -31,7 +31,12 @@ public class SupplierEntity implements Serializable {
     private String email;
     private String postalCode;
     private String companyName;
-    private boolean subscribeEmail;
+    private boolean subscribeEmail_qPriceUpdates;
+    private boolean subscribeSMS_qPriceUpdates;
+    private boolean subscribeEmail_poDeliveryUpdates;
+    private boolean subscribeSMS_poDeliveryUpdates;
+    private String secretQuestion;
+    private String secretAnswer;
 
     //private Integer active; // set 1 for existing supplier;
     //@Enumerated(EnumType.STRING)
@@ -209,17 +214,6 @@ public class SupplierEntity implements Serializable {
         this.companyName = companyName;
     }
 
-    public boolean getSubscribeEmail() {
-        return subscribeEmail;
-    }
-
-    /**
-     * @param subscribeEmail the subscribeEmail to set
-     */
-    public void setSubscribeEmail(boolean subscribeEmail) {
-        this.subscribeEmail = subscribeEmail;
-    }
-
     /**
      * @return the supplierStatusEnum
      */
@@ -232,6 +226,90 @@ public class SupplierEntity implements Serializable {
      */
     public void setSupplierStatusEnum(SupplierStatusEnum supplierStatusEnum) {
         this.supplierStatusEnum = supplierStatusEnum;
+    }
+
+    /**
+     * @return the secretQuestion
+     */
+    public String getSecretQuestion() {
+        return secretQuestion;
+    }
+
+    /**
+     * @param secretQuestion the secretQuestion to set
+     */
+    public void setSecretQuestion(String secretQuestion) {
+        this.secretQuestion = secretQuestion;
+    }
+
+    /**
+     * @return the secretAnswer
+     */
+    public String getSecretAnswer() {
+        return secretAnswer;
+    }
+
+    /**
+     * @param secretAnswer the secretAnswer to set
+     */
+    public void setSecretAnswer(String secretAnswer) {
+        this.secretAnswer = secretAnswer;
+    }
+
+    /**
+     * @return the subscribeEmail_qPriceUpdates
+     */
+    public boolean isSubscribeEmail_qPriceUpdates() {
+        return subscribeEmail_qPriceUpdates;
+    }
+
+    /**
+     * @param subscribeEmail_qPriceUpdates the subscribeEmail_qPriceUpdates to set
+     */
+    public void setSubscribeEmail_qPriceUpdates(boolean subscribeEmail_qPriceUpdates) {
+        this.subscribeEmail_qPriceUpdates = subscribeEmail_qPriceUpdates;
+    }
+
+    /**
+     * @return the subscribeSMS_qPriceUpdates
+     */
+    public boolean isSubscribeSMS_qPriceUpdates() {
+        return subscribeSMS_qPriceUpdates;
+    }
+
+    /**
+     * @param subscribeSMS_qPriceUpdates the subscribeSMS_qPriceUpdates to set
+     */
+    public void setSubscribeSMS_qPriceUpdates(boolean subscribeSMS_qPriceUpdates) {
+        this.subscribeSMS_qPriceUpdates = subscribeSMS_qPriceUpdates;
+    }
+
+    /**
+     * @return the subscribeEmail_poDeliveryUpdates
+     */
+    public boolean isSubscribeEmail_poDeliveryUpdates() {
+        return subscribeEmail_poDeliveryUpdates;
+    }
+
+    /**
+     * @param subscribeEmail_poDeliveryUpdates the subscribeEmail_poDeliveryUpdates to set
+     */
+    public void setSubscribeEmail_poDeliveryUpdates(boolean subscribeEmail_poDeliveryUpdates) {
+        this.subscribeEmail_poDeliveryUpdates = subscribeEmail_poDeliveryUpdates;
+    }
+
+    /**
+     * @return the subscribeSMS_poDeliveryUpdates
+     */
+    public boolean isSubscribeSMS_poDeliveryUpdates() {
+        return subscribeSMS_poDeliveryUpdates;
+    }
+
+    /**
+     * @param subscribeSMS_poDeliveryUpdates the subscribeSMS_poDeliveryUpdates to set
+     */
+    public void setSubscribeSMS_poDeliveryUpdates(boolean subscribeSMS_poDeliveryUpdates) {
+        this.subscribeSMS_poDeliveryUpdates = subscribeSMS_poDeliveryUpdates;
     }
     /**
      * @return the purcOrder

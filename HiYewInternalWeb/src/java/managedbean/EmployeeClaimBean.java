@@ -7,45 +7,48 @@ package managedbean;
 
 import entity.EmployeeClaimEntity;
 import entity.EmployeeEntity;
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.sql.Blob;
+import java.io.Serializable;
 import java.sql.Timestamp;
 import java.util.Date;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.inject.Named;
-import javax.enterprise.context.RequestScoped;
 import javax.faces.context.FacesContext;
+import javax.faces.event.ActionEvent;
+import javax.faces.view.ViewScoped;
 import org.primefaces.event.FileUploadEvent;
+import org.primefaces.event.RowEditEvent;
 import org.primefaces.model.UploadedFile;
-import session.stateful.HiYewSystemBeanLocal;
-import sun.misc.IOUtils;
+import session.stateless.HiYewSystemBeanLocal;
 
 /**
  *
  * @author JustHRJ
  */
 @Named(value = "employeeClaimBean")
-@RequestScoped
-public class EmployeeClaimBean {
+@ViewScoped
+public class EmployeeClaimBean implements Serializable {
 
     @EJB
     private HiYewSystemBeanLocal hiYewSystemBean;
     private EmployeeEntity employee;
     private EmployeeClaimEntity employeeClaim;
-    private Date claimTime;
+    private Date claimTime = null;
+    private double amount = 0.00;
     private UploadedFile file;
-    private String destination = "C:\\Users\\JustHRJ\\Desktop\\IN05\\HiYewInternalWeb\\web\\image\\receipts\\";
+    private String destination = "C:\\Users\\User\\Desktop\\SouceTreeRepo\\IN05\\HiYewInternalWeb\\web\\image\\receipts\\";
     private EmployeeClaimEntity selectedClaim;
     private String months = "";
     private String employeeName = "";
     private String filename = "";
+
+    private List<EmployeeClaimEntity> employeeClaimEntities;
 
     /**
      * Creates a new instance of EmployeeClaimBean
@@ -54,6 +57,7 @@ public class EmployeeClaimBean {
         employee = new EmployeeEntity();
         employeeClaim = new EmployeeClaimEntity();
     }
+
 
     @PostConstruct
     public void init() {
@@ -89,18 +93,29 @@ public class EmployeeClaimBean {
     }
 
     public void removeClaim() {
-        
+
         if (selectedClaim == null) {
             System.out.println("hello");
         } else {
             hiYewSystemBean.removeClaim(selectedClaim);
+            employeeClaimEntities.remove(selectedClaim);
+        }
+    }
+
+    public void updateClaim(RowEditEvent event) {
+        System.out.println("here");
+        boolean check = hiYewSystemBean.updateClaim((EmployeeClaimEntity) event.getObject(), amount, claimTime);
+        if (check) {
+
+        } else {
+
         }
     }
 
     public void applyForClaim() throws IOException {
         Timestamp time = new Timestamp(claimTime.getTime());
         employeeClaim.setClaimDate(time);
-        String destination = "../image/receipts/";
+        String destinations = "../image/receipts/";
 
         if (FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("filename") == null) {
             destination = "";
@@ -108,7 +123,7 @@ public class EmployeeClaimBean {
             destination += FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("filename").toString();
         }
 
-        boolean check = hiYewSystemBean.applyClaim(employee.getEmployee_name(), employeeClaim, destination);
+        boolean check = hiYewSystemBean.applyClaim(employee.getEmployee_name(), employeeClaim, destinations);
         FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("employeeName", employee.getEmployee_name());
         FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("employeeClaim", employeeClaim);
         if (check) {
@@ -191,12 +206,16 @@ public class EmployeeClaimBean {
 
     public List<EmployeeClaimEntity> getApprovedClaimRecords() {
 
+        return employeeClaimEntities;
+    }
+
+    public void search(ActionEvent event) {
         if (("select").equals(months) && !("select").equals(employeeName)) {
-            return hiYewSystemBean.approvedClaimRecords(employeeName);
+            employeeClaimEntities = hiYewSystemBean.approvedClaimRecords(employeeName);
         } else if ("select".equals(employeeName) && !("select".equals(months))) {
-            return hiYewSystemBean.approvedClaimRecordsM(months);
+            employeeClaimEntities = hiYewSystemBean.approvedClaimRecordsM(months);
         } else {
-            return hiYewSystemBean.approvedClaimRecordsA(employeeName, months);
+            employeeClaimEntities = hiYewSystemBean.approvedClaimRecordsA(employeeName, months);
         }
     }
 
@@ -257,6 +276,21 @@ public class EmployeeClaimBean {
     }
 
     /**
+     * @return the amount
+     */
+    public double getAmount() {
+        return amount;
+    }
+
+    /**
+     * @param amount the amount to set
+     */
+    public void setAmount(double amount) {
+        this.amount = amount;
+    }
+
+    /**
      * @return the employeeName
      */
+ 
 }
