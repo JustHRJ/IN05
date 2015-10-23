@@ -118,9 +118,10 @@ public class EmployeeClaimBean implements Serializable {
         String destinations = "../image/receipts/";
 
         if (FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("filename") == null) {
-            destination = "";
+            System.out.println("no file name here");
+            destinations = "";
         } else {
-            destination += FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("filename").toString();
+            destinations += FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("filename").toString();
         }
 
         boolean check = hiYewSystemBean.applyClaim(employee.getEmployee_name(), employeeClaim, destinations);
@@ -136,6 +137,7 @@ public class EmployeeClaimBean implements Serializable {
         try {
             copyFile(event.getFile().getFileName(), event.getFile().getInputstream());
             FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("filename", event.getFile().getFileName());
+            System.out.println( FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("filename"));
         } catch (IOException e) {
             e.printStackTrace();
         }

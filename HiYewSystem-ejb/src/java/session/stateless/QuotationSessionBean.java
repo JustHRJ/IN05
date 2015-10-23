@@ -49,7 +49,7 @@ public class QuotationSessionBean implements QuotationSessionBeanLocal {
         return newQuotationNo;
     }
 
-    @Override
+    
     public void conductMerge(Quotation q) {
         em.merge(q);
     }
@@ -89,13 +89,13 @@ public class QuotationSessionBean implements QuotationSessionBeanLocal {
         return cal.getTime();
     }
 
-    private Date getFirstDayOfYear(int year) {
+    public Date getFirstDayOfYear(int year) {
         Calendar cld = Calendar.getInstance();
         cld.set(year, 0, 0);
         return cld.getTime();
     }
 
-    private Date getLastDayOfYear(int year) {
+    public Date getLastDayOfYear(int year) {
         Calendar cld = Calendar.getInstance();
         cld.set(year + 1, 0, -1);
         return cld.getTime();
