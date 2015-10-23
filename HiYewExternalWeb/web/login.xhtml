@@ -14,7 +14,7 @@
         <meta name="author" content="" />
 
         <!-- BOOTSTRAP -->
-        <link href="assets/css/bootstrap.min.css" rel="stylesheet" />
+        <link href="assets/css/bootstrap.min_login.css" rel="stylesheet" />
 
         <!-- LANCENG CSS -->
         <link href="assets/css/style.css" rel="stylesheet" />
@@ -36,7 +36,7 @@
     </h:head>
     <h:body class="tooltips full-content">
         #{loginManagedBean.checkAfterLoginRedirect()}
-        
+
         <!-- BEGIN PAGE -->
         <div class="container">
             <!-- Begin Login Page -->
@@ -71,7 +71,8 @@
                                                         </div>-->
                             <div class="row">
                                 <div class="col-sm-6">
-                                    <p:commandButton style="border: none; font-family: 'Open Sans';" styleClass="btn btn-success btn-block" value="Login" action="#{loginManagedBean.login()}" update="msgs loginOutputId" />
+                                    <p:commandButton  style="padding-top: 1px; padding-left: 24px; padding-right: 24px; font-family: 'Open Sans'; height: 34px" value="Login" styleClass="btn btn-success btn-block md-close" action="#{loginManagedBean.login()}" update="msgs loginOutputId" />
+
                                 </div>
                                 <div class="col-sm-6">
                                     <a class="md-trigger" href="register.xhtml" style="color: #333; text-decoration: none;"><p style="padding-top: 7px; font-family: 'Open Sans'; height: 35px" class="btn btn-default btn-block" >Register</p></a>

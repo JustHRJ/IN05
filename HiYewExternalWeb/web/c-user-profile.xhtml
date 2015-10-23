@@ -133,27 +133,49 @@
                                 <h:form id="changeSubscriptionForm">
                                     <p:growl id="msgs" showDetail="false" />
                                     <p:messages id="emailMsg"  showDetail="false" />
+                                    <h:outputText style="font-weight: bold;" value="Subscriptions" />
+                                    <br />
+                                    <div style="height: 8px"></div>
                                     Subscribe to receive notifications on any changes on updates. 
                                     If you do not wish to receive any notifications, please unsubscribe from the tools.
                                     <br />
-                                    <br />
-                                    <h:outputText style="font-weight: bold;" value="Email" />
-                                    <br />
-                                    <div style="height: 8px"></div>
-                                    <p:selectBooleanCheckbox style="vertical-align: middle" styleClass="subscribe" value="#{customerManagedBean.customer.subscribeEmail}" />
-                                    An email will be sent if there are updates.
-                                    <br /><br />
-                                    <p:commandButton style="border: none; font-weight: normal; font-family: 'Open Sans'; padding-top: 6px; padding-bottom: 7px; padding-left: 22px; padding-right: 22px" styleClass="btn btn-primary buttonOverride" value="Update" update="emailMsg" action="#{customerManagedBean.changeSubscribeEmail()}" icon=""/>
+                                    <!-- Sales report -->
+                                    <table data-sortable="" class="table table-striped">
+                                        <thead>
+                                            <tr>
+                                                <th></th>
+                                                <th>Email</th>
+                                                <th>Send to Mobile</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td width="450px">Quotation Price Updates</td>
+                                                <td><p:selectBooleanCheckbox style="vertical-align: middle" styleClass="subscribe" value="#{customerManagedBean.customer.subscribeEmail_qPriceUpdates}" /></td>
+                                                <td><p:selectBooleanCheckbox style="vertical-align: middle" styleClass="subscribe" value="#{customerManagedBean.customer.subscribeSMS_qPriceUpdates}" /></td>
+                                            </tr>
+                                            <tr>
+                                                <td width="450px">Purchase Order Delivery Date Updates</td>
+                                                <td><p:selectBooleanCheckbox style="vertical-align: middle" styleClass="subscribe" value="#{customerManagedBean.customer.subscribeEmail_poDeliveryUpdates}" /></td>
+                                                <td><p:selectBooleanCheckbox style="vertical-align: middle" styleClass="subscribe" value="#{customerManagedBean.customer.subscribeSMS_poDeliveryUpdates}" /></td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                    <!-- End sales report --><br />
+                                    <p:commandButton style="border: none; font-weight: normal; font-family: 'Open Sans'; padding-top: 6px; padding-bottom: 7px; padding-left: 22px; padding-right: 22px" styleClass="btn btn-primary buttonOverride" value="Update" update="emailMsg" action="#{customerManagedBean.changeSubscription()}" icon=""/>
                                 </h:form>
-                                
+
                                 <h:form id="supplierApplicationForm">
                                     <div class="form-group">
-                                        <label for="">Application for a joint Supplier Account</label>
-                                        <p:inputText class="form-control text-input"  placeholder="Your Supplier's code" value="#{loginManagedBean.supplierCodeWord}" required="true" requiredMessage="A supplier's codeword is required." >
-                                         </p:inputText>
+                                        <br />
+                                        <h:outputText style="font-weight: bold;" value="Application for a Joint Supplier Account" />
+                                        <br />
+                                        <div style="height: 8px"></div>
+                                        <p:inputText class="form-control text-input"  placeholder="Your supplier's code" value="#{loginManagedBean.supplierCodeWord}" required="true" requiredMessage="A supplier's codeword is required." >
+                                        </p:inputText>
                                     </div>
                                     <p:commandButton style="border: none; font-weight: normal; font-family: 'Open Sans'; padding-top: 6px; padding-bottom: 7px; padding-left: 22px; padding-right: 22px" styleClass="btn btn-primary" value="Submit" action="#{loginManagedBean.createSupplierFromExistingCustomerAcct(customerManagedBean.customer.userName)}" update=":changePasswordForm:msgs " icon=""/>
-                               
+
                                 </h:form>
                             </div><!-- End div .scroll-user-widget -->
                         </div><!-- End div .tab-pane -->

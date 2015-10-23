@@ -7,7 +7,10 @@ package managedbean.ICS;
 
 import entity.RackEntity;
 import entity.ShelveEntity;
+import entity.StorageInfoEntity;
 import java.io.Serializable;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.PostConstruct;
@@ -39,6 +42,10 @@ public class ViewRacksManagedBean implements Serializable {
     private ShelveEntity selectedShelve;
 
     private boolean openShelvePanel;
+    
+    private List<StorageInfoEntity> itemsInsideRack;
+   
+    private String progressBarStyle;
 
     /**
      * Creates a new instance of ViewRacksManagedBean
@@ -46,12 +53,20 @@ public class ViewRacksManagedBean implements Serializable {
     public ViewRacksManagedBean() {
         racks = new ArrayList<RackEntity>();
         shelvesInsideSelectRack = new ArrayList<ShelveEntity>();
+        itemsInsideRack = new ArrayList<StorageInfoEntity>();
     }
 
     @PostConstruct
     public void init() {
+        System.out.println("view racks init()................................");
         racks.addAll(hiYewICSSessionBean.getAllRacks());
+        
         openShelvePanel = true;
+        for (int i =0; i<racks.size();i++){
+            hiYewICSSessionBean.checkAllShelvesInRackStatus(racks.get(i));
+        }
+        racks.clear();
+        racks.addAll(hiYewICSSessionBean.getAllRacks());
     }
 
     /**
@@ -159,6 +174,11 @@ public class ViewRacksManagedBean implements Serializable {
         System.out.println("here at passSelectedShelveToNext()");
         return "allocateStorage?faces-redirect=true";
     }
+    
+    public double getAvailCapac(ShelveEntity shelve){
+        double shelveVolume = shelve.getHeight() * shelve.getShelveLength() * shelve.getWidth();
+        return round(((shelveVolume - round(shelve.getFilledCapac(),2))),2);
+    }
 
     /**
      * @return the selectedShelve
@@ -212,5 +232,69 @@ public class ViewRacksManagedBean implements Serializable {
         }
 
     }
+
+    /**
+     * @return the itemsInsideRack
+     */
+    public List<StorageInfoEntity> getItemsInsideRack() {
+        return itemsInsideRack;
+    }
+
+    /**
+     * @param itemsInsideRack the itemsInsideRack to set
+     */
+    public void setItemsInsideRack(List<StorageInfoEntity> itemsInsideRack) {
+        this.itemsInsideRack = itemsInsideRack;
+    }
+    
+    public void selectRackStorageInfo(){
+        itemsInsideRack.clear();
+        System.out.println("here at view rack managed bean, selected rack = " + selectedRack.getRackID());
+        itemsInsideRack.addAll(hiYewICSSessionBean.getStorageInfoOfRack(selectedRack));
+        System.out.println("here at view rack managed bean, itemsInsideRack size = " + itemsInsideRack.size());
+    }
+    
+    public int getShelveFilledCapacPercent(ShelveEntity shelve){
+        double filledCapac = round(shelve.getFilledCapac(),2);
+        double shelveTotalCapac = shelve.getHeight()*shelve.getWidth()*shelve.getShelveLength();
+        int percent = (int)Math.ceil((filledCapac/shelveTotalCapac)*100);
+        if (percent>100){
+            percent = 100;
+        }
+        if (percent<=65){
+            progressBarStyle = "greenBar";
+        }else if (percent<=85){
+            progressBarStyle = "yellowBar";
+        }else{
+            progressBarStyle = "redBar";
+        }
+        return percent;
+    }
+
+    /**
+     * @return the progressBarStyle
+     */
+    public String getProgressBarStyle() {
+        return progressBarStyle;
+    }
+
+    /**
+     * @param progressBarStyle the progressBarStyle to set
+     */
+    public void setProgressBarStyle(String progressBarStyle) {
+        this.progressBarStyle = progressBarStyle;
+    }
+
+    private double round(double value, int places) {
+        if (places < 0) {
+            throw new IllegalArgumentException();
+        }
+
+        BigDecimal bd = new BigDecimal(value);
+        bd = bd.setScale(places, RoundingMode.HALF_UP);
+        return bd.doubleValue();
+    }
+    
+    
 
 }

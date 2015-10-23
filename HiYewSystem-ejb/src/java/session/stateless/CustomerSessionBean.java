@@ -92,7 +92,12 @@ public class CustomerSessionBean implements CustomerSessionBeanLocal {
         c.setAddress2(c1.getAddress2());
         c.setEmail(c1.getEmail());
         c.setPostalCode(c1.getPostalCode());
-        c.setSubscribeEmail(c1.getSubscribeEmail());
+        
+        c.setSubscribeEmail_qPriceUpdates(c1.isSubscribeEmail_qPriceUpdates());
+        c.setSubscribeSMS_qPriceUpdates(c1.isSubscribeSMS_qPriceUpdates());
+        
+        c.setSubscribeEmail_poDeliveryUpdates(c1.isSubscribeEmail_poDeliveryUpdates());
+        c.setSubscribeSMS_poDeliveryUpdates(c1.isSubscribeSMS_poDeliveryUpdates());
     }
 
     public String resetCustomerPassword(String username) {

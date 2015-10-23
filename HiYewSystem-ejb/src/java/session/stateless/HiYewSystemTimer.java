@@ -87,7 +87,7 @@ public class HiYewSystemTimer {
 
     @Schedule(hour = "*")
     public void runEveryHour() {
-        Query q = em.createQuery("Select c ActivationCode c");
+        Query q = em.createQuery("Select c FROM ActivationCode c");
         Calendar c = Calendar.getInstance();
         Timestamp time = new Timestamp(c.getTime().getTime());
         for (Object o : q.getResultList()) {

@@ -154,7 +154,7 @@
                             <p:outputLabel value ="#{hiYewManagedBean.formatCurrency(im.otherAmount)}"/>
                         </p:column>
                         <p:column headerText="Total Salary">
-                            <p:outputLabel value =" #{hiYewManagedBean.formatCurrency(hiYewManagedBean.calculateTotal(im.bonus, im.salary, im.otherAmount))}"/>
+                            <p:outputLabel value =" #{hiYewManagedBean.formatCurrency(hiYewManagedBean.calculateTotal(im.overtime, im.bonus, im.salary, im.otherAmount, im.taxiClaim))}"/>
                         </p:column>
                         <p:column headerText="Pay Status">
                             <p:outputLabel value ="#{im.status}"/>

@@ -15,7 +15,7 @@ import javax.faces.view.ViewScoped;
 import session.stateless.CustomerSessionBeanLocal;
 import session.stateless.SupplierSessionBeanLocal;
 import manager.EmailManager;
-import session.stateful.HiYewSystemBeanLocal;
+import session.stateless.HiYewSystemBeanLocal;
 
 @Named(value = "loginManagedBean")
 @ViewScoped
@@ -73,13 +73,13 @@ public class LoginManagedBean implements Serializable {
                     System.out.println("Login Success");
                     path = "c-user-profile?faces-redirect=true"; //navigation
                 } else {
-                    FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("loginMessage", "Invalid Username or password! Please try again.");
+                    FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("loginMessage", "Invalid username or password! Please try again.");
                     //FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Invalid Username or password!"));
                     System.out.println("Login Fail");
                     path = ""; //navigation
                 }
             } catch (NullPointerException e) {
-                FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("loginMessage", "Invalid Username or password! Please try again.");
+                FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("loginMessage", "Invalid username or password! Please try again.");
                 //FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Invalid Username or password!"));
                 System.out.println("Login Fail");
                 path = ""; //navigation
@@ -96,7 +96,7 @@ public class LoginManagedBean implements Serializable {
                     FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("username", this.username);
 
                     System.out.println("Login Success");
-                    path = "s-home?faces-redirect=true"; //navigation
+                    path = "s-user-profile?faces-redirect=true"; //navigation
 
                 } else {
                     FacesContext.getCurrentInstance().addMessage("loginMessage", new FacesMessage("Invalid Username or password!"));
@@ -160,8 +160,8 @@ public class LoginManagedBean implements Serializable {
                     EmailManager emailManager = new EmailManager();
                     emailManager.emailPassword(output[0], output[1], output[2]);
                     return "login?faces-redirect=true";
-                }else{
-                    FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("forgotMessage", "Invalid Secret Question or Answer!");
+                } else {
+                    FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("forgotMessage", "Invalid secret question or answer!");
                 }
             } else {
                 FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("forgotMessage", "Username does not exist!");
@@ -183,7 +183,10 @@ public class LoginManagedBean implements Serializable {
             newSupplier.setPhone(c.getPhone());
             newSupplier.setPostalCode(c.getPostalCode());
             newSupplier.setPw(c.getPw());
-            newSupplier.setSubscribeEmail(c.getSubscribeEmail());
+            newSupplier.setSubscribeEmail_qPriceUpdates(c.isSubscribeEmail_qPriceUpdates());
+            newSupplier.setSubscribeSMS_qPriceUpdates(c.isSubscribeSMS_qPriceUpdates());
+            newSupplier.setSubscribeEmail_poDeliveryUpdates(c.isSubscribeEmail_poDeliveryUpdates());
+            newSupplier.setSubscribeSMS_poDeliveryUpdates(c.isSubscribeSMS_poDeliveryUpdates());
             newSupplier.setUserName(c.getUserName());
             newSupplier.setSecretQuestion(c.getSecretQuestion());
             newSupplier.setSecretAnswer(c.getSecretAnswer());
@@ -208,7 +211,10 @@ public class LoginManagedBean implements Serializable {
                 if (newCustomer.getPw().equals(rePassword)) {
                     // encrypt password
                     newCustomer.setPw(customerSessionBean.encryptPassword(newCustomer.getPw()));
-                    newCustomer.setSubscribeEmail(true);
+                    newCustomer.setSubscribeEmail_qPriceUpdates(true);
+                    newCustomer.setSubscribeSMS_qPriceUpdates(true);
+                    newCustomer.setSubscribeEmail_poDeliveryUpdates(true);
+                    newCustomer.setSubscribeSMS_poDeliveryUpdates(true);
 
                     customerSessionBean.createCustomer(newCustomer);
                     EmailManager emailManager = new EmailManager();
@@ -234,7 +240,10 @@ public class LoginManagedBean implements Serializable {
 
                         // encrypt password
                         newCustomer.setPw(customerSessionBean.encryptPassword(newCustomer.getPw()));
-                        newCustomer.setSubscribeEmail(true);
+                        newCustomer.setSubscribeEmail_qPriceUpdates(true);
+                        newCustomer.setSubscribeSMS_qPriceUpdates(true);
+                        newCustomer.setSubscribeEmail_poDeliveryUpdates(true);
+                        newCustomer.setSubscribeSMS_poDeliveryUpdates(true);
 
                         //map values from customer acct to supplier acct for same user
                         newSupplier.setAddress1(newCustomer.getAddress1());
@@ -244,7 +253,10 @@ public class LoginManagedBean implements Serializable {
                         newSupplier.setPhone(newCustomer.getPhone());
                         newSupplier.setPostalCode(newCustomer.getPostalCode());
                         newSupplier.setPw(newCustomer.getPw());
-                        newSupplier.setSubscribeEmail(newCustomer.getSubscribeEmail());
+                        newSupplier.setSubscribeEmail_qPriceUpdates(newCustomer.isSubscribeEmail_qPriceUpdates());
+                        newSupplier.setSubscribeSMS_qPriceUpdates(newCustomer.isSubscribeSMS_qPriceUpdates());
+                        newSupplier.setSubscribeEmail_poDeliveryUpdates(newCustomer.isSubscribeEmail_poDeliveryUpdates());
+                        newSupplier.setSubscribeSMS_poDeliveryUpdates(newCustomer.isSubscribeSMS_poDeliveryUpdates());
                         newSupplier.setUserName(newCustomer.getUserName());
                         newSupplier.setSecretQuestion(newCustomer.getSecretQuestion());
                         newSupplier.setSecretAnswer(newCustomer.getSecretAnswer());
@@ -268,7 +280,7 @@ public class LoginManagedBean implements Serializable {
                     FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("registerMessage", "This username has been taken by someone else. Please choose a different username.");
                 }
             } else {
-                FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("registerMessage", "The Supplier's code provided is invalid!");
+                FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("registerMessage", "The supplier's code provided is invalid!");
             }
         }
         return "";

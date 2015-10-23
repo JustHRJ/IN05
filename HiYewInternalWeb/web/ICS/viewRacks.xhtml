@@ -13,7 +13,19 @@
                 margin-bottom:30px;
                 background-color: lightblue;
             }
+            .greenBar .ui-progressbar-value {
+
+                background: #7fb80e;
+            }
+            .yellowBar .ui-progressbar-value {
+                background: #f47920;
+            }
+            .redBar .ui-progressbar-value {
+                background: #A80000;
+
+            }
         </style>
+
     </h:head>
 
     <h:body>
@@ -87,14 +99,15 @@
                     </p:submenu>
                 </p:column>
             </p:submenu>
-               <p:submenu label="Procurement System" icon="ui-icon-check" style="font-weight:bold">
-                    <p:column>
-                        <p:submenu label="Purchase Order Preparation Module">
-                            <p:menuitem value="Create Purchase Order" url="/PS/createPO.xhtml" />                   
-                            <p:menuitem value="View Purchase Order" url="/PS/viewPO.xhtml" />
-                        </p:submenu>
-                    </p:column>
-                </p:submenu>
+            <p:submenu label="Procurement System" icon="ui-icon-check" style="font-weight:bold">
+                <p:column>
+                    <p:submenu label="Purchase Order Preparation Module">
+                        <p:menuitem value="Create Purchase Order" url="/PS/createPO.xhtml" />                   
+                        <p:menuitem value="View Purchase Order" url="/PS/viewPO.xhtml" />
+                        <p:menuitem value="View Procurement Bid" url="/PS/viewProcurementBid.xhtml" />
+                    </p:submenu>
+                </p:column>
+            </p:submenu>
         </p:megaMenu>
 
         <h:form id="form">
@@ -135,6 +148,11 @@
                     <h:outputText value="#{rack.status}" />
                 </p:column>
 
+                <p:column style="width:32px;text-align: center">
+                    <p:commandButton update=":form:storageInfoDetail" action="#{viewRacksManagedBean.selectRackStorageInfo()}" oncomplete="PF('storageInfoDialog').show()" icon="ui-icon-note" title="View Stored Items">
+                        <f:setPropertyActionListener value="#{rack}" target="#{viewRacksManagedBean.selectedRack}" />
+                    </p:commandButton>
+                </p:column>
 
 
                 <p:column style="width:32px;text-align: center">
@@ -159,6 +177,25 @@
                 <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
             </p:confirmDialog>
 
+            <p:dialog header="Storage Info" widgetVar="storageInfoDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false">
+                <p:outputPanel id="storageInfoDetail" style="text-align:center;">
+                    <p:dataTable id="rackStorageInfoDT" var="rackSI" value="#{viewRacksManagedBean.itemsInsideRack}">
+                        <f:facet name="header">
+                            Rack #{viewRacksManagedBean.selectedRack.rackID}'s Storage Info
+                        </f:facet>
+                        <p:column headerText="FillerCode">
+                            <h:outputText value="#{rackSI.item.fillerCode}" />
+                        </p:column>
+                        <p:column headerText="Stored Quantity">
+                            <h:outputText value="#{rackSI.storedQty}" />
+                        </p:column>
+                        <p:column headerText="Shelve Stored">
+                            <h:outputText value="#{rackSI.shelve.shelveID}" />
+                        </p:column>
+                    </p:dataTable>
+                </p:outputPanel>
+            </p:dialog>
+
             <p:panel id="shelvesOfRackPanel" header="Rack #{viewRacksManagedBean.selectedRack.rackID}'s Shelves Details" toggleable="true" toggleSpeed="500" closeSpeed="500" style="margin-bottom:20px"  collapsed="#{viewRacksManagedBean.openShelvePanel}">
                 <p:dataTable id="shelveDataTable" editable="true" var="shelve" value="#{viewRacksManagedBean.shelvesInsideSelectRack}" widgetVar="shelvesTable" 
                              emptyMessage="No shelves found with given criteria" filteredValue="#{viewRacksManagedBean.filteredShelves}" >
@@ -173,19 +210,7 @@
                         </h:outputText>
                     </p:column>
 
-
-<!--                    <p:column filterBy="#{shelve.status}" headerText="Status" footerText="equals" filterMatchMode="equals" style="text-align:center">
-                        <f:facet name="filter">
-                            <p:selectOneButton onchange="PF('racksTable').filter()">
-                                <f:selectItem itemLabel="All" itemValue="" />
-                                <f:selectItem itemLabel="Not Full" itemValue="Not Full" />
-                                <f:selectItem itemLabel="Full" itemValue="Full" />
-                            </p:selectOneButton>
-                        </f:facet>
-                        <h:outputText value="#{shelve.status}" />
-                    </p:column>-->
-
-                    <p:column  filterBy="#{shelve.status}" headerText="Status" footerText="equals" filterMatchMode="equals" style="text-align:center">
+<!--                    <p:column  filterBy="#{shelve.status}" headerText="Status" footerText="equals" filterMatchMode="equals" style="text-align:center">
                         <f:facet name="filter">
                             <p:selectOneButton onchange="PF('shelvesTable').filter()">
                                 <f:selectItem itemLabel="All" itemValue="" />
@@ -207,6 +232,16 @@
 
                     <p:column style="width:32px">
                         <p:rowEditor/>
+                    </p:column>-->
+                    <p:column headerText="Filled Capacity">
+
+                        <p:progressBar value="#{viewRacksManagedBean.getShelveFilledCapacPercent(shelve)}" labelTemplate="{value}%" displayOnly="true" styleClass="#{viewRacksManagedBean.progressBarStyle}"/>                     
+
+                    </p:column>
+                    
+                     <p:column  headerText="Available Capacity(cm3)" style="text-align:center">
+                        <h:outputText value="#{viewRacksManagedBean.getAvailCapac(shelve)}">
+                        </h:outputText>
                     </p:column>
 
                     <p:column style="width:32px;text-align: center">

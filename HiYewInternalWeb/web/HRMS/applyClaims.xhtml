@@ -89,7 +89,7 @@
                     <p:row>
                         <p:column>
                             <p:selectOneMenu value ="#{employeeClaimBean.employee.employee_name}" style="width: 100%">
-                                <f:selectItems value ="#{hiYewDataTableBean.employeeNames}"/>
+                                <f:selectItems value ="#{loginControlBean.validateLeaveName()}"/>
                             </p:selectOneMenu>
                         </p:column>
                     </p:row>

@@ -34,11 +34,23 @@ public class MachineEntity implements Serializable {
     private int extension;
     private String description;
     private Collection<MachineMaintainenceEntity> machineMaintainence = new ArrayList<MachineMaintainenceEntity>();
-
+    private Collection<MachineRepairEntity> machineRepair = new ArrayList<MachineRepairEntity>();
+    
+    
     public MachineEntity() {
 
     }
 
+    @OneToMany(cascade = {CascadeType.ALL}, mappedBy = "machine")
+    public Collection<MachineRepairEntity> getMachineRepair(){
+        return machineRepair;
+    }
+    
+    public void setMachineRepair(Collection<MachineRepairEntity> machineRepair){
+        this.machineRepair = machineRepair;
+    }
+    
+    
     @OneToMany(cascade = {CascadeType.ALL}, mappedBy = "machine")
     public Collection<MachineMaintainenceEntity> getMachineMaintainence() {
         return machineMaintainence;

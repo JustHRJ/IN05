@@ -11,7 +11,7 @@ import javax.ejb.EJB;
 import javax.inject.Named;
 import javax.enterprise.context.RequestScoped;
 import manager.EmailManager;
-import session.stateful.HiYewSystemBeanLocal;
+import session.stateless.HiYewSystemBeanLocal;
 
 /**
  *

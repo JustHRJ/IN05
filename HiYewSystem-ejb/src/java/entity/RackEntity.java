@@ -35,6 +35,9 @@ public class RackEntity implements Serializable {
     private double height;
 
     private String status;
+    
+    //@Digits(integer = 9, fraction = 1, message = "Invalid input! Note: only up to 9 integers and 1 decimal places. Example: 1234.3")
+    private double filledCapac;
 
     @OneToMany(cascade = {CascadeType.PERSIST}, mappedBy = "rack")
     private Collection<ShelveEntity> shelves = new ArrayList<ShelveEntity>();
@@ -50,6 +53,17 @@ public class RackEntity implements Serializable {
         this.height = height;
         this.status = status;
     }
+
+    public RackEntity(String rackID, String location, double length, double width, double height, String status, double filledCapac) {
+        this.rackID = rackID;
+        this.location = location;
+        this.length = length;
+        this.width = width;
+        this.height = height;
+        this.status = status;
+        this.filledCapac = filledCapac;
+    }
+    
 
     @Override
     public int hashCode() {
@@ -176,6 +190,20 @@ public class RackEntity implements Serializable {
 
     public void addShelveToRack(ShelveEntity shelve) {
         shelves.add(shelve);
+    }
+
+    /**
+     * @return the filledCapac
+     */
+    public double getFilledCapac() {
+        return filledCapac;
+    }
+
+    /**
+     * @param filledCapac the filledCapac to set
+     */
+    public void setFilledCapac(double filledCapac) {
+        this.filledCapac = filledCapac;
     }
 
 }

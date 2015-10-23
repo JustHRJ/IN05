@@ -75,7 +75,7 @@
                             <p:menuitem value ="View Machinery" url ="viewMachine.xhtml" />
                         </p:submenu>
                         <p:submenu label ="Machine Maintenance">
-                            <p:menuitem value ="#{hiYewManagedBean.getMAlert()}" url ="alertMachine.xhtml" />
+                            <p:menuitem value ="#{machineManageBean.getMAlert()}" url ="alertMachine.xhtml" />
                             <p:menuitem value ="Add Maintenance Schedule" url ="addMaintainenceSchedule.xhtml"/>
                             <p:menuitem value ="View Maintenance Schedule" url ="viewMaintainenceSchedule.xhtml" />
                         </p:submenu>
@@ -94,9 +94,9 @@
 
 
             Machines:
-            <p:selectOneMenu value ="#{hiYewManagedBean.machineName}" required ="true" requiredMessage="Please select Machine to maintain" >
-                <f:selectItem itemValue ="#{hiYewManagedBean.retrieveMachineName()}" itemLabel="#{hiYewManagedBean.retrieveMachineName()}" />
-                <f:selectItems value ="#{hiYewDataTableBean.machineNames}"/>
+            <p:selectOneMenu value ="#{machineManageBean.machineName}" required ="true" requiredMessage="Please select Machine to maintain" >
+                <f:selectItem itemValue ="#{machineManageBean.retrieveMachineName()}" itemLabel="#{machineManageBean.retrieveMachineName() eq null ? 'Select One' : machineManageBean.retrieveMachineName()}" />
+                <f:selectItems value ="#{machineManageBean.machineNames}"/>
             </p:selectOneMenu>
 
             <p:growl id ="msgs" showDetail="false"/>
@@ -106,7 +106,7 @@
                         <p:outputLabel value ="Schedule Date"/>
                     </p:column>
                     <p:column>
-                        <p:calendar id = "cal" value = "#{hiYewManagedBean.mScheduleDate}" mindate="#{hiYewManagedBean.getToday()}" pattern ="dd/MM/yyyy"  required ="true" requiredMessage="Please input Schedule Date"/>
+                        <p:calendar id = "cal" value = "#{machineManageBean.mScheduleDate}" mindate="#{hiYewManagedBean.getToday()}" pattern ="dd/MM/yyyy"  required ="true" requiredMessage="Please input Schedule Date"/>
                     </p:column>
                 </p:row>
                 <p:row>
@@ -114,7 +114,7 @@
                         <p:outputLabel value ="Schedule Time (hhmm format)" />
                     </p:column>
                     <p:column>
-                        <p:inputText value ="#{hiYewManagedBean.mScheduleHour}" required ="true" validator="#{registrationValidator.validateTime}" requiredMessage="Please input Schedule Time" validatorMessage="Please input correct Schedule Time (hhmm) format"/>
+                        <p:inputText value ="#{machineManageBean.mScheduleHour}" required ="true" validator="#{machineValidator.validateTime}" requiredMessage="Please input Schedule Time" validatorMessage="Please input correct Schedule Time (hhmm) format"/>
                     </p:column>
                 </p:row>
                 <p:row>
@@ -122,7 +122,7 @@
                         <p:outputLabel value ="Comments"/>
                     </p:column>
                     <p:column>
-                        <p:inputTextarea id="desc" value="#{hiYewManagedBean.maintainenceComments}" style ="width: 95%" >
+                        <p:inputTextarea id="desc" value="#{machineManageBean.maintainenceComments}" style ="width: 95%" >
                         </p:inputTextarea>
                     </p:column>
                 </p:row>
@@ -131,7 +131,7 @@
                         <p:outputLabel value ="Service Provider"/>
                     </p:column>
                     <p:column>
-                        <p:inputText value ="#{hiYewManagedBean.mServiceProvider}" required="true" requiredMessage="Please input service provider"/>
+                        <p:inputText value ="#{machineManageBean.mServiceProvider}" required="true" requiredMessage="Please input service provider"/>
                     </p:column>
                 </p:row>
                 <p:row>
@@ -139,11 +139,11 @@
                         <p:outputLabel value ="Service Contact"/>
                     </p:column>
                     <p:column>
-                        <p:inputText value ="#{hiYewManagedBean.mServiceContact}"  maxlength="8" required = "true" validator ="#{registrationValidator.validateNumeric}" requiredMessage="Please input contact" validatorMessage="Please input correct contact" />
+                        <p:inputText value ="#{machineManageBean.mServiceContact}"  maxlength="8" required = "true" validator ="#{machineValidator.validateNumeric}" requiredMessage="Please input contact" validatorMessage="Please input correct contact" />
                     </p:column>
                 </p:row>
             </p:panelGrid>
-            <p:commandButton value ="Submit machine Schedule" action="#{hiYewManagedBean.addMachineSchedule()}" update =":formMain:msgs" />
+            <p:commandButton value ="Submit machine Schedule" action="#{machineManageBean.addMachineSchedule()}" update =":formMain:msgs" />
         </h:form>
     </h:body>
 </html>

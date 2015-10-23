@@ -29,7 +29,7 @@ import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import manager.EmailManager;
 import org.primefaces.event.RowEditEvent;
-import session.stateful.HiYewSystemBeanLocal;
+import session.stateless.HiYewSystemBeanLocal;
 import session.stateless.HiYewSystemTimer;
 
 /**
@@ -97,15 +97,15 @@ public class HiYewManagedBean {
     private String trainingCode = "";
     private String leaveType = "";
     private EmployeeEntity selectedEmployeeTraining;
-    private String supPONo = "";
-    private Date date;
-    private String termsOfPayment; //30, 60, 90 days
-    private String description;
-    private String supCompanyName;
-    private String supPoStatus;//= "Pending";
-    private SupplierPurchaseOrder selectedSupplierPurchaseOrder;
-    private List<SupplierPurchaseOrder> selectedList;
-    private int quantity;
+   // private String supPONo = "";
+    //private Date date;
+    //private String termsOfPayment; //30, 60, 90 days
+    //private String description;
+    //private String supCompanyName;
+    //private String supPoStatus;//= "Pending";
+    //private SupplierPurchaseOrder selectedSupplierPurchaseOrder;
+    //private List<SupplierPurchaseOrder> selectedList;
+    // private int quantity;
 
     /**
      * Creates a new instance of HiYewManagedBean
@@ -117,21 +117,20 @@ public class HiYewManagedBean {
     /**
      * @return the employee_name
      */
-    public void createPO() {
-        Timestamp poDate = new Timestamp(getDate().getTime());
-        supPONo += getSupCompanyName();
-        supPONo += new SimpleDateFormat("yyyyMMddhhmmss").format(Calendar.getInstance().getTime());
-        boolean check = hiYewSystemBean.createPO(supPONo, poDate, getTermsOfPayment(), getDescription(), getSupCompanyName(), getQuantity());
-
-        if (check) {
-            FacesMessage msg = new FacesMessage("PO Created", null);
-            FacesContext.getCurrentInstance().addMessage(null, msg);
-        } else {
-            FacesMessage msg = new FacesMessage("Please check for existing PO number");
-            FacesContext.getCurrentInstance().addMessage(null, msg);
-        }
-    }
-
+//    public void createPO() {
+//        Timestamp poDate = new Timestamp(getDate().getTime());
+//        supPONo += getSupCompanyName();
+//        supPONo += new SimpleDateFormat("yyyyMMddhhmmss").format(Calendar.getInstance().getTime());
+//        boolean check = hiYewSystemBean.createPO(supPONo, poDate, getTermsOfPayment(), getDescription(), getSupCompanyName(), getQuantity());
+//
+//        if (check) {
+//            FacesMessage msg = new FacesMessage("PO Created", null);
+//            FacesContext.getCurrentInstance().addMessage(null, msg);
+//        } else {
+//            FacesMessage msg = new FacesMessage("Please check for existing PO number");
+//            FacesContext.getCurrentInstance().addMessage(null, msg);
+//        }
+//    }
     public List<TrainingScheduleEntity> getEmployeePastTraining() {
         if (selectedEmployeeTraining != null) {
             return hiYewSystemBean.pastEmployeeTraining(selectedEmployeeTraining);
@@ -140,23 +139,22 @@ public class HiYewManagedBean {
         }
     }
 
-    public void sendPO() {
-        boolean check = hiYewSystemBean.updateSupPoStatus("Sent", selectedList);
-        if (check) {
-            FacesMessage msg = new FacesMessage("PO Sent", null);
-            FacesContext.getCurrentInstance().addMessage(null, msg);
-        } else {
-            FacesMessage msg = new FacesMessage("Encountered error. Please try again later");
-            FacesContext.getCurrentInstance().addMessage(null, msg);
-        }
-    }
-
-    public String generateSupPONo(String supPONo) {
-        supPONo += new SimpleDateFormat("yyyyMMddhhmmss").format(Calendar.getInstance().getTime());
-        //setSupPONo(supPONo);
-        return supPONo;
-    }
-
+//    public void sendPO() {
+//        boolean check = hiYewSystemBean.updateSupPoStatus("Sent", selectedList);
+//        if (check) {
+//            FacesMessage msg = new FacesMessage("PO Sent", null);
+//            FacesContext.getCurrentInstance().addMessage(null, msg);
+//        } else {
+//            FacesMessage msg = new FacesMessage("Encountered error. Please try again later");
+//            FacesContext.getCurrentInstance().addMessage(null, msg);
+//        }
+//    }
+//    public String generateSupPONo(String supPONo) {
+//        supPONo += new SimpleDateFormat("yyyyMMddhhmmss").format(Calendar.getInstance().getTime());
+//        //setSupPONo(supPONo);
+//        return supPONo;
+//    }
+//
     public String addMachine() {
         Timestamp machineTime = new Timestamp(machineNxtMaint.getTime());
         if (machineType.equals("A")) {
@@ -501,18 +499,17 @@ public class HiYewManagedBean {
         }
     }
 
-    public void updatePO(RowEditEvent event) {
-        boolean check = hiYewSystemBean.updatePO(termsOfPayment, (SupplierPurchaseOrder) event.getObject(), description, quantity);
-        // supCompanyName,
-        if (check) {
-            FacesMessage msg = new FacesMessage("Edited PO ID:", ((SupplierPurchaseOrder) event.getObject()).getSupPONo());
-            FacesContext.getCurrentInstance().addMessage(null, msg);
-        } else {
-            FacesMessage msg = new FacesMessage("Not Edited", ((SupplierPurchaseOrder) event.getObject()).getSupPONo());
-            FacesContext.getCurrentInstance().addMessage(null, msg);
-        }
-    }
-
+//    public void updatePO(RowEditEvent event) {
+//        boolean check = hiYewSystemBean.updatePO(termsOfPayment, (SupplierPurchaseOrder) event.getObject(), description, quantity);
+//        // supCompanyName,
+//        if (check) {
+//            FacesMessage msg = new FacesMessage("Edited PO ID:", ((SupplierPurchaseOrder) event.getObject()).getSupPONo());
+//            FacesContext.getCurrentInstance().addMessage(null, msg);
+//        } else {
+//            FacesMessage msg = new FacesMessage("Not Edited", ((SupplierPurchaseOrder) event.getObject()).getSupPONo());
+//            FacesContext.getCurrentInstance().addMessage(null, msg);
+//        }
+//    }
     public void indexRedirect() throws IOException {
         FacesContext facesCtx = FacesContext.getCurrentInstance();
         ExternalContext externalContext = facesCtx.getExternalContext();
@@ -1226,115 +1223,114 @@ public class HiYewManagedBean {
     /**
      * @return the supPONo
      */
-    public String getSupPONo() {
-        return supPONo;
-    }
-
-    /**
-     * @param supPONo the supPONo to set
-     */
-    public void setSupPONo(String supPONo) {
-        this.supPONo = supPONo;
-    }
-
-    /**
-     * @return the date
-     */
-    public Date getDate() {
-        return date;
-    }
-
-    /**
-     * @param date the date to set
-     */
-    public void setDate(Date date) {
-        this.date = date;
-    }
-
-    /**
-     * @return the termsOfPayment
-     */
-    public String getTermsOfPayment() {
-        return termsOfPayment;
-    }
-
-    /**
-     * @param termsOfPayment the termsOfPayment to set
-     */
-    public void setTermsOfPayment(String termsOfPayment) {
-        this.termsOfPayment = termsOfPayment;
-    }
-
-    /**
-     * @return the description
-     */
-    public String getDescription() {
-        return description;
-    }
-
-    /**
-     * @param description the description to set
-     */
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    /**
-     * @return the supCompanyName
-     */
-    public String getSupCompanyName() {
-        return supCompanyName;
-    }
-
-    /**
-     * @param supCompanyName the supCompanyName to set
-     */
-    public void setSupCompanyName(String supCompanyName) {
-        this.supCompanyName = supCompanyName;
-    }
-
-    /**
-     * @return the supPoStatus
-     */
-    public String getSupPoStatus() {
-        return supPoStatus;
-    }
-
-    /**
-     * @param supPoStatus the supPoStatus to set
-     */
-    public void setSupPoStatus(String supPoStatus) {
-        this.supPoStatus = supPoStatus;
-    }
-
-    /**
-     * @return the selectedList
-     */
-    public List<SupplierPurchaseOrder> getSelectedList() {
-        return selectedList;
-    }
-
-    /**
-     * @param selectedList the selectedList to set
-     */
-    public void setSelectedList(List<SupplierPurchaseOrder> selectedList) {
-        this.selectedList = selectedList;
-    }
-
-    /**
-     * @return the quantity
-     */
-    public int getQuantity() {
-        return quantity;
-    }
-
-    /**
-     * @param quantity the quantity to set
-     */
-    public void setQuantity(int quantity) {
-        this.quantity = quantity;
-    }
-
+//    public String getSupPONo() {
+//        return supPONo;
+//    }
+//
+//    /**
+//     * @param supPONo the supPONo to set
+//     */
+//    public void setSupPONo(String supPONo) {
+//        this.supPONo = supPONo;
+//    }
+//
+//    /**
+//     * @return the date
+//     */
+//    public Date getDate() {
+//        return date;
+//    }
+//
+//    /**
+//     * @param date the date to set
+//     */
+//    public void setDate(Date date) {
+//        this.date = date;
+//    }
+//
+//    /**
+//     * @return the termsOfPayment
+//     */
+//    public String getTermsOfPayment() {
+//        return termsOfPayment;
+//    }
+//
+//    /**
+//     * @param termsOfPayment the termsOfPayment to set
+//     */
+//    public void setTermsOfPayment(String termsOfPayment) {
+//        this.termsOfPayment = termsOfPayment;
+//    }
+//
+//    /**
+//     * @return the description
+//     */
+//    public String getDescription() {
+//        return description;
+//    }
+//
+//    /**
+//     * @param description the description to set
+//     */
+//    public void setDescription(String description) {
+//        this.description = description;
+//    }
+//
+//    /**
+//     * @return the supCompanyName
+//     */
+//    public String getSupCompanyName() {
+//        return supCompanyName;
+//    }
+//
+//    /**
+//     * @param supCompanyName the supCompanyName to set
+//     */
+//    public void setSupCompanyName(String supCompanyName) {
+//        this.supCompanyName = supCompanyName;
+//    }
+//
+//    /**
+//     * @return the supPoStatus
+//     */
+//    public String getSupPoStatus() {
+//        return supPoStatus;
+//    }
+//
+//    /**
+//     * @param supPoStatus the supPoStatus to set
+//     */
+//    public void setSupPoStatus(String supPoStatus) {
+//        this.supPoStatus = supPoStatus;
+//    }
+//
+//    /**
+//     * @return the selectedList
+//     */
+//    public List<SupplierPurchaseOrder> getSelectedList() {
+//        return selectedList;
+//    }
+//
+//    /**
+//     * @param selectedList the selectedList to set
+//     */
+//    public void setSelectedList(List<SupplierPurchaseOrder> selectedList) {
+//        this.selectedList = selectedList;
+//    }
+//
+//    /**
+//     * @return the quantity
+//     */
+//    public int getQuantity() {
+//        return quantity;
+//    }
+//
+//    /**
+//     * @param quantity the quantity to set
+//     */
+//    public void setQuantity(int quantity) {
+//        this.quantity = quantity;
+//    }
     /**
      * @return the selectedEmployee
      */
