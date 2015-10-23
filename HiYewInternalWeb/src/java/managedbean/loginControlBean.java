@@ -189,7 +189,7 @@ public class loginControlBean implements Serializable {
         return !loginPosition.equals("admin");
     }
 
-    public boolean checkValid1() {    
+    public boolean checkValid1() {
         return loginPosition.equals("admin");
     }
 
@@ -311,5 +311,9 @@ public class loginControlBean implements Serializable {
      */
     public void setEmployeeName(String employeeName) {
         this.employeeName = employeeName;
+    }
+
+    public void firstLogin() throws IOException {
+        FacesContext.getCurrentInstance().getExternalContext().redirect("/HiYewInternalWeb/login.xhtml");
     }
 }
