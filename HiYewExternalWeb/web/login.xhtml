@@ -51,17 +51,20 @@
                             <p style="margin-bottom: 5%"></p>
                             <div class="form-group">
                                 I am a:&nbsp;&nbsp;
-                                <p:selectOneMenu style="width: 315px; display: inline-block;" styleClass="form-control selectpicker" value="#{loginManagedBean.user}" >
+                                <p:selectOneMenu id="user" style="width: 315px; display: inline-block;" styleClass="form-control selectpicker" value="#{loginManagedBean.user}" >
                                     <f:selectItems class="form-control selectpicker" value="#{loginManagedBean.users}" />
                                 </p:selectOneMenu>
+                                <p:message for="user" />
                             </div>
                             <div class="form-group login-input">
                                 <i class="fa fa-sign-in overlay"></i>
                                 <p:inputText class="form-control text-input" placeholder="Username" value="#{loginManagedBean.username}" required="true" requiredMessage="Username is required." id="Username"/>
+                                <p:message for="Username" />
                             </div>
                             <div class="form-group login-input">
                                 <i class="fa fa-key overlay"></i>
                                 <p:password class="form-control text-input" placeholder="Password" value="#{loginManagedBean.password}"  required="true" requiredMessage="Password is required." id="Password"/>
+                                <p:message for="Password" />
                             </div>
                             <!--                            <div class="checkbox">
                                                             <label>
@@ -70,8 +73,7 @@
                                                         </div>-->
                             <div class="row">
                                 <div class="col-sm-6">
-                                    <p:commandButton  style="padding-top: 1px; padding-left: 24px; padding-right: 24px; font-family: 'Open Sans'; height: 34px" value="Login" styleClass="btn btn-success btn-block md-close" action="#{loginManagedBean.login()}" update="msgs loginOutputId" />
-
+                                    <p:commandButton  style="padding-top: 1px; padding-left: 24px; padding-right: 24px; font-family: 'Open Sans'; height: 34px" value="Login" styleClass="btn btn-success btn-block md-close" action="#{loginManagedBean.login()}" ajax="false" update="msgs loginOutputId" />
                                 </div>
                                 <div class="col-sm-6">
                                     <a class="md-trigger" href="register.xhtml" style="color: #333; text-decoration: none;"><p style="padding-top: 7px; font-family: 'Open Sans'; height: 35px" class="btn btn-default btn-block" >Register</p></a>
