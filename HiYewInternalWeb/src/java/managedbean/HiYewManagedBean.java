@@ -157,9 +157,9 @@ public class HiYewManagedBean {
 //
     public String addMachine() {
         Timestamp machineTime = new Timestamp(machineNxtMaint.getTime());
-        if (machineType.equals("A")) {
+        if (machineType.equals("Laser")) {
             machineSubMaint = 2;
-        } else if (machineType.equals("B")) {
+        } else if (machineType.equals("TIG")) {
             machineSubMaint = 4;
         } else {
             machineSubMaint = 6;

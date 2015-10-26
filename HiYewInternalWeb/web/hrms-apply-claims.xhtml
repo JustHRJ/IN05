@@ -32,7 +32,8 @@
         </div>
         <!-- End page header -->
         <div style="padding:20px!important;padding-top:0px!important;">
-            <h:form enctype="multipart/form-data">
+            <h:form enctype="multipart/form-data" id ="formMain">
+                <p:growl id ="msgs"/>
                 <p:panel>
                     <p:panelGrid style='width:25%'>
                         <p:row>
@@ -40,7 +41,8 @@
                                 <p:outputLabel style="font-weight:bold" value ="Employee" />
                             </p:column>
                             <p:column>
-                                <p:selectOneMenu value ="#{employeeClaimBean.employee.employee_name}" style="width: 100%">
+                                <p:selectOneMenu value ="#{employeeClaimBean.employee.employee_name}" style="width: 100%" required="true" requiredMessage="Please input employee name">
+                                    <f:selectItem itemValue ="" itemLabel ="Select One" noSelectionOption="true"/>
                                     <f:selectItems value ="#{loginControlBean.validateLeaveName()}"/>
                                 </p:selectOneMenu>
                             </p:column>
@@ -60,7 +62,9 @@
                                 <p:outputLabel style="font-weight:bold" value ="Amount" />
                             </p:column>
                             <p:column>
-                                <p:inputText style="font-weight:normal" value ="#{employeeClaimBean.employeeClaim.amount}"/>
+                                <p:inputText style="font-weight:normal" value ="#{employeeClaimBean.employeeClaim.amount}" required="true" requiredMessage="Please enter amount" validatorMessage="Please enter amount range of $1 to$1000" >
+                                    <f:validateDoubleRange minimum="1" maximum="1000" />
+                                </p:inputText>
                             </p:column>
                         </p:row>
                         <p:row>
@@ -68,7 +72,7 @@
                                 <p:outputLabel style="font-weight:bold" value ="Date" />
                             </p:column>
                             <p:column>
-                                <p:calendar style="font-weight:normal" value ="#{employeeClaimBean.claimTime}" pattern = "dd/MM/yyyy"/>
+                                <p:calendar style="font-weight:normal" value ="#{employeeClaimBean.claimTime}" pattern = "dd/MM/yyyy" required="true" maxdate="#{hiYewManagedBean.today}" requiredMessage="Please enter date" />
                             </p:column>
                         </p:row>
                     </p:panelGrid>
@@ -76,7 +80,7 @@
                     <p:fileUpload fileUploadListener="#{employeeClaimBean.upload}" />
                 </p:panel>
                 <br />
-                <p:commandButton value ="Apply Claim" action ="#{employeeClaimBean.applyForClaim()}"/>
+                <p:commandButton value ="Apply Claim" action ="#{employeeClaimBean.applyForClaim()}" update=":formMain:msgs"/>
             </h:form>
             <br /><br />
             <h:form>

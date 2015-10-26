@@ -15,14 +15,15 @@
         <!-- End page header -->
         <div style="padding:20px!important;padding-top:0px!important;">
             <h:form id="formMain">
+                <p:growl id ="msgs"/>
                 <p:panelGrid>
                     <p:row>
                         <p:column style="font-weight:bold">
                             <p:outputLabel value ="Machine Sent for Repair " />
                         </p:column>
                         <p:column>
-                            <h:selectOneMenu style="width:190px" value ="#{repairManageBean.machineName}" required = "true">
-                                <f:selectItem itemValue ="" itemLabel ="Select" noSelectionOption="true"/>
+                            <h:selectOneMenu style="width:190px" value ="#{repairManageBean.machineName}" required = "true" requiredMessage="Please select Machine">
+                                <f:selectItem itemValue ="" itemLabel ="Select One" noSelectionOption="true"/>
                                 <f:selectItems value ="#{machineManageBean.machineNames}"/>
                             </h:selectOneMenu>
                         </p:column>
@@ -33,7 +34,7 @@
                             <p:outputLabel value ="Date of Machine Repair"/>
                         </p:column>
                         <p:column>
-                            <p:calendar style="width:190px;font-weight:normal" value ="#{repairManageBean.repairDate}" pattern ="dd/MM/yyyy" />
+                            <p:calendar style="width:190px;font-weight:normal" value ="#{repairManageBean.repairDate}" pattern ="dd/MM/yyyy" required="true" requiredMessage="Please select date"  />
                         </p:column>
                     </p:row>
 
@@ -42,7 +43,9 @@
                             <p:outputLabel value ="Pulse Count of Machine" />
                         </p:column>
                         <p:column>
-                            <p:inputText style="width:190px;font-weight:normal" value ="#{repairManageBean.machine.laserPulse}"/>
+                            <p:inputText style="width:190px;font-weight:normal" value ="#{repairManageBean.machine.laserPulse}" required="true" requiredMessage="Please enter pulse" validatorMessage="Please enter pulse of > 1">
+                                <f:validateDoubleRange minimum="1" />
+                            </p:inputText>
                         </p:column>
                     </p:row>
 
@@ -60,7 +63,9 @@
                             <p:outputLabel value ="Cost of Repair"/>
                         </p:column>
                         <p:column>
-                            <p:inputText style="width:190px;font-weight:normal" value ="#{repairManageBean.machine.repairCost}"/>
+                            <p:inputText style="width:190px;font-weight:normal" value ="#{repairManageBean.machine.repairCost}" validatorMessage="Cost cannot be free" >
+                                <f:validateDoubleRange minimum="1" maximum="100000"/>
+                            </p:inputText>
                         </p:column>
                     </p:row>
 
@@ -75,7 +80,7 @@
 
                 </p:panelGrid>
                 <br />
-                <p:commandButton value ="Submit" action ="#{repairManageBean.createRepair()}"/>
+                <p:commandButton value ="Submit" action ="#{repairManageBean.createRepair()}" update =":formMain:msgs"   />
             </h:form>
         </div>
     </ui:define>
