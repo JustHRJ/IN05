@@ -6,65 +6,85 @@
 package entity;
 
 import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
+import javax.validation.constraints.Digits;
+import javax.validation.constraints.Size;
 
 /**
  *
- * @author JustHRJ
+ * @author K.guoxiang
  */
 @Entity
 public class FillerEntity implements Serializable {
+
     private static final long serialVersionUID = 1L;
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
-    private String name;
-    private int copper;
-    private int silver;
-    private int gold;
-    private int bronze;
-    private int topaz;
-    private int iron;
-    private int alluminium;
-    private int titanium;
-    private int plastic;
-    private int platinium;
+    private String fillerCode;
+
+    @Size(min = 3, message = "Please enter item name more than 2 characters!")
+    private String fillerName;
+    private String wireGrade;
+
+//     @Digits(integer=6,fraction=0, message = "Invalid input! Note: only up to 6 digits integer. Example: 1234")
+    private int quantity;
+
+    @Digits(integer = 9, fraction = 2, message = "Invalid input! Note: only up to 9 integers and 2 decimal places. Example: 1234.32")
+    private double cost;
+
+    @Digits(integer = 9, fraction = 2, message = "Invalid input! Note: only up to 9 integers and 2 decimal places. Example: 1234.32")
+    private double sellingPrice;
+
+    private int reorderPoint;
+
+    @Digits(integer = 9, fraction = 2, message = "Invalid input! Note: only up to 9 integers and 2 decimal places. Example: 1234.32")
+    private double averageWeight;
+    
+    @Digits(integer = 9, fraction = 2, message = "Invalid input! Note: only up to 9 integers and 2 decimal places. Example: 1234.32")
+    private double wireLength;
+    
+    @Digits(integer = 9, fraction = 2, message = "Invalid input! Note: only up to 9 integers and 2 decimal places. Example: 1234.32")
+    private double diameter;
+
+    @OneToMany(mappedBy = "item")
+    private Set<StorageInfoEntity> storageInfos = new HashSet<StorageInfoEntity>();
 
     public FillerEntity() {
     }
 
-    public FillerEntity(String name, int copper, int silver, int gold, int bronze, int topaz, int iron, int alluminium, int titanium, int plastic, int platinium) {
-        this.name = name;
-        this.copper = copper;
-        this.silver = silver;
-        this.gold = gold;
-        this.bronze = bronze;
-        this.topaz = topaz;
-        this.iron = iron;
-        this.alluminium = alluminium;
-        this.titanium = titanium;
-        this.plastic = plastic;
-        this.platinium = platinium;
+    public FillerEntity(String fillerCode, String fillerName, String wireGrade, int quantity, double cost, double sellingPrice, int reorderPoint, double averageWeight) {
+        this.fillerCode = fillerCode;
+        this.fillerName = fillerName;
+        this.wireGrade = wireGrade;
+        this.quantity = quantity;
+        this.cost = cost;
+        this.sellingPrice = sellingPrice;
+        this.reorderPoint = reorderPoint;
+        this.averageWeight = averageWeight;
     }
 
-
+    public FillerEntity(String fillerCode, String fillerName, String wireGrade, int quantity, double cost, double sellingPrice, int reorderPoint, double averageWeight, double wireLength, double diameter) {
+        this.fillerCode = fillerCode;
+        this.fillerName = fillerName;
+        this.wireGrade = wireGrade;
+        this.quantity = quantity;
+        this.cost = cost;
+        this.sellingPrice = sellingPrice;
+        this.reorderPoint = reorderPoint;
+        this.averageWeight = averageWeight;
+        this.wireLength = wireLength;
+        this.diameter = diameter;
+    }
     
     
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
 
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (id != null ? id.hashCode() : 0);
+        hash += (getFillerCode() != null ? getFillerCode().hashCode() : 0);
         return hash;
     }
 
@@ -75,7 +95,7 @@ public class FillerEntity implements Serializable {
             return false;
         }
         FillerEntity other = (FillerEntity) object;
-        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
+        if ((this.getFillerCode() == null && other.getFillerCode() != null) || (this.getFillerCode() != null && !this.fillerCode.equals(other.fillerCode))) {
             return false;
         }
         return true;
@@ -83,161 +103,164 @@ public class FillerEntity implements Serializable {
 
     @Override
     public String toString() {
-        return "entity.FillerEntity[ id=" + id + " ]";
+        return "entity.ItemEntity[ itemCode=" + getFillerCode() + " ]";
     }
 
     /**
-     * @return the name
+     * @return the fillerCode
      */
-    public String getName() {
-        return name;
+    public String getFillerCode() {
+        return fillerCode;
     }
 
     /**
-     * @param name the name to set
+     * @param fillerCode the fillerCode to set
      */
-    public void setName(String name) {
-        this.name = name;
+    public void setFillerCode(String fillerCode) {
+        this.fillerCode = fillerCode;
     }
 
     /**
-     * @return the copper
+     * @return the fillerName
      */
-    public int getCopper() {
-        return copper;
+    public String getFillerName() {
+        return fillerName;
     }
 
     /**
-     * @param copper the copper to set
+     * @param fillerName the fillerName to set
      */
-    public void setCopper(int copper) {
-        this.copper = copper;
+    public void setFillerName(String fillerName) {
+        this.fillerName = fillerName;
     }
 
     /**
-     * @return the silver
+     * @return the quantity
      */
-    public int getSilver() {
-        return silver;
+    public int getQuantity() {
+        return quantity;
     }
 
     /**
-     * @param silver the silver to set
+     * @param quantity the quantity to set
      */
-    public void setSilver(int silver) {
-        this.silver = silver;
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
     }
 
     /**
-     * @return the gold
+     * @return the cost
      */
-    public int getGold() {
-        return gold;
+    public double getCost() {
+        return cost;
     }
 
     /**
-     * @param gold the gold to set
+     * @param cost the cost to set
      */
-    public void setGold(int gold) {
-        this.gold = gold;
+    public void setCost(double cost) {
+        this.cost = cost;
     }
 
     /**
-     * @return the bronze
+     * @return the sellingPrice
      */
-    public int getBronze() {
-        return bronze;
+    public double getSellingPrice() {
+        return sellingPrice;
     }
 
     /**
-     * @param bronze the bronze to set
+     * @param sellingPrice the sellingPrice to set
      */
-    public void setBronze(int bronze) {
-        this.bronze = bronze;
+    public void setSellingPrice(double sellingPrice) {
+        this.sellingPrice = sellingPrice;
     }
 
     /**
-     * @return the topaz
+     * @return the reorderPoint
      */
-    public int getTopaz() {
-        return topaz;
+    public int getReorderPoint() {
+        return reorderPoint;
     }
 
     /**
-     * @param topaz the topaz to set
+     * @param reorderPoint the reorderPoint to set
      */
-    public void setTopaz(int topaz) {
-        this.topaz = topaz;
+    public void setReorderPoint(int reorderPoint) {
+        this.reorderPoint = reorderPoint;
     }
 
     /**
-     * @return the iron
+     * @return the itemType
      */
-    public int getIron() {
-        return iron;
+    public String getWireGrade() {
+        return wireGrade;
     }
 
     /**
-     * @param iron the iron to set
+     * @param itemType the itemType to set
      */
-    public void setIron(int iron) {
-        this.iron = iron;
+    public void setWireGrade(String wireGrade) {
+        this.wireGrade = wireGrade;
     }
 
     /**
-     * @return the alluminium
+     * @return the averageWeight
      */
-    public int getAlluminium() {
-        return alluminium;
+    public double getAverageWeight() {
+        return averageWeight;
     }
 
     /**
-     * @param alluminium the alluminium to set
+     * @param averageWeight the averageWeight to set
      */
-    public void setAlluminium(int alluminium) {
-        this.alluminium = alluminium;
+    public void setAverageWeight(double averageWeight) {
+        this.averageWeight = averageWeight;
     }
 
     /**
-     * @return the titanium
+     * @return the wireLength
      */
-    public int getTitanium() {
-        return titanium;
+    public double getWireLength() {
+        return wireLength;
     }
 
     /**
-     * @param titanium the titanium to set
+     * @param wireLength the wireLength to set
      */
-    public void setTitanium(int titanium) {
-        this.titanium = titanium;
+    public void setWireLength(double wireLength) {
+        this.wireLength = wireLength;
     }
 
     /**
-     * @return the plastic
+     * @return the diameter
      */
-    public int getPlastic() {
-        return plastic;
+    public double getDiameter() {
+        return diameter;
     }
 
     /**
-     * @param plastic the plastic to set
+     * @param diameter the diameter to set
      */
-    public void setPlastic(int plastic) {
-        this.plastic = plastic;
+    public void setDiameter(double diameter) {
+        this.diameter = diameter;
     }
 
     /**
-     * @return the platinium
+     * @return the bins
      */
-    public int getPlatinium() {
-        return platinium;
-    }
-
-    /**
-     * @param platinium the platinium to set
-     */
-    public void setPlatinium(int platinium) {
-        this.platinium = platinium;
-    }
-    
+//    public Set<BinEntity> getBins() {
+//        return bins;
+//    }
+//
+//    /**
+//     * @param bins the bins to set
+//     */
+//    public void setBins(Set<BinEntity> bins) {
+//        this.bins = bins;
+//    }
+//    
+//    public void addBin(BinEntity bin){
+//        this.bins.add(bin);
+//    }
 }

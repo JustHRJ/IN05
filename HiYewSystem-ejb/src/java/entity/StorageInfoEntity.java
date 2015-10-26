@@ -28,7 +28,7 @@ public class StorageInfoEntity implements Serializable {
 
     @ManyToOne
     @JoinColumn(name = "itemCode")
-    private ItemEntity item;
+    private FillerEntity item;
 
     @ManyToOne
     @JoinColumn(name = "shelveID")
@@ -39,7 +39,7 @@ public class StorageInfoEntity implements Serializable {
     public StorageInfoEntity() {
     }
 
-    public StorageInfoEntity(ItemEntity item, ShelveEntity shelve, int storedQty) {
+    public StorageInfoEntity(FillerEntity item, ShelveEntity shelve, int storedQty) {
         this.item = item;
         this.shelve = shelve;
         this.storedQty = storedQty;
@@ -67,14 +67,14 @@ public class StorageInfoEntity implements Serializable {
     /**
      * @return the item
      */
-    public ItemEntity getItem() {
+    public FillerEntity getItem() {
         return item;
     }
 
     /**
      * @param item the item to set
      */
-    public void setItem(ItemEntity item) {
+    public void setItem(FillerEntity item) {
         this.item = item;
     }
 

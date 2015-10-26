@@ -64,7 +64,7 @@
                     <p:submenu label ="Quotation">
                         <p:menuitem value ="View Customer Services RFQ" url ="/SMS/viewEditQuotations.xhtml"/>
                         <p:menuitem value ="View Customer Products RFQ" url ="/SMS/viewEditProductQuotations.xhtml" />
-                          <p:menuitem value ="View Customer Product Purchase Order" url ="/SMS/viewEditProductPurchaseOrders.xhtml"/>
+                        <p:menuitem value ="View Customer Product Purchase Order" url ="/SMS/viewEditProductPurchaseOrders.xhtml"/>
                     </p:submenu>
                 </p:column>
             </p:submenu>
@@ -81,14 +81,15 @@
                     </p:submenu>
                 </p:column>
             </p:submenu>
-               <p:submenu label="Procurement System" icon="ui-icon-check" style="font-weight:bold">
-                    <p:column>
-                        <p:submenu label="Purchase Order Preparation Module">
-                            <p:menuitem value="Create Purchase Order" url="/PS/createPO.xhtml" />                   
-                            <p:menuitem value="View Purchase Order" url="/PS/viewPO.xhtml" />
-                        </p:submenu>
-                    </p:column>
-                </p:submenu>
+            <p:submenu label="Procurement System" icon="ui-icon-check" style="font-weight:bold">
+                <p:column>
+                    <p:submenu label="Purchase Order Preparation Module">
+                        <p:menuitem value="Create Purchase Order" url="/PS/createPO.xhtml" />                   
+                        <p:menuitem value="View Purchase Order" url="/PS/viewPO.xhtml" />
+                        <p:menuitem value="View Procurement Bid" url="/PS/viewProcurementBid.xhtml" />
+                    </p:submenu>
+                </p:column>
+            </p:submenu>
         </p:megaMenu>
         <br/>
         <h:form id="upperForm">
@@ -98,30 +99,33 @@
 
                 <h:panelGrid id="itemDetailsGrid" columns="3" columnClasses="column" cellpadding="5">
 
-                    <h:outputLabel for="itemCode" value="Item Code:" style="font-weight:bold" />
-                    <h:outputText id="itemCode" value="#{itemDetailsManagedBean.selectedItem.itemCode}" />
+                    <h:outputLabel for="itemCode" value="WireCode:" style="font-weight:bold" />
+                    <h:outputText id="itemCode" value="#{itemDetailsManagedBean.selectedItem.fillerCode}" />
                     <p:message for="itemCode" />
 
 
-                    <h:outputLabel for="itemName1" value="Item Name:" style="font-weight:bold"/>
+                    <h:outputLabel for="itemName1" value="WireName:" style="font-weight:bold"/>
                     <p:inplace id="itemName" editor="true">
                         <p:ajax  event="save" update="itemDetailsPanel"/>
-                        <p:inputText id="itemName1" value="#{itemDetailsManagedBean.selectedItem.itemName}" required="true" requiredMessage="Item Name is required!" label="text" />
+                        <p:inputText id="itemName1" value="#{itemDetailsManagedBean.selectedItem.fillerName}" required="true" requiredMessage="Item Name is required!" label="text" />
                     </p:inplace>
                     <p:message for="itemName1" />
 
 
 
-                    <h:outputLabel for="itemType1" value="Item Type:" style="font-weight:bold"/>
-                    <p:inplace id="itemType" editor="true">
+                    <h:outputLabel for="wireGrade1" value="WireGrade:" style="font-weight:bold"/>
+                    <p:inplace id="wireGrade" editor="true">
                         <p:ajax  event="save" update="itemDetailsPanel"/>
-                        <p:selectOneMenu id="itemType1" value="#{itemDetailsManagedBean.selectedItem.itemType}" required="true" requiredMessage="Item Type is required, please select one." style="width:125px" >
+                        <p:selectOneMenu id="wireGrade1" value="#{itemDetailsManagedBean.selectedItem.wireGrade}" required="true" requiredMessage="Item Type is required, please select one." style="width:125px" >
                             <f:selectItem itemLabel="Select One" itemValue="" />
-                            <f:selectItem itemLabel="Wires" itemValue="Wires" />
-                            <f:selectItem itemLabel="Metals" itemValue="Metals" />
+                            <f:selectItem itemLabel="A" itemValue="A" />
+                            <f:selectItem itemLabel="B" itemValue="B" />
+                            <f:selectItem itemLabel="C" itemValue="C" />
+                            <f:selectItem itemLabel="D" itemValue="D" />
+                            <f:selectItem itemLabel="E" itemValue="E" />
                         </p:selectOneMenu>
                     </p:inplace>
-                    <p:message for="itemType1" />
+                    <p:message for="wireGrade1" />
 
 
 
@@ -174,10 +178,28 @@
                     </p:inplace>
                     <p:message for="averageWeight1" />
 
+                    <h:outputLabel for="wireLength1" value="Wire Length(mm): " style="font-weight:bold"/>
+                    <p:inplace id="wireLength" editor="true">
+                        <p:ajax event="save" update="itemDetailsPanel"/>
+                        <p:inputText id="wireLength1" value="#{itemDetailsManagedBean.selectedItem.wireLength}"  maxlength="11" label="text" converterMessage="Invalid Input! Please enter a positive number up to 2 decimal for length. Example: 53.0 or 42.53">
+                            <f:validateDoubleRange minimum="1.0"  />
+                        </p:inputText>
+                    </p:inplace>
+                    <p:message for="wireLength1" />
+
+                    <h:outputLabel for="diameter1" value="Diameter(mm): " style="font-weight:bold"/>
+                    <p:inplace id="diameter" editor="true">
+                        <p:ajax event="save" update="itemDetailsPanel"/>
+                        <p:inputText id="diameter1" value="#{itemDetailsManagedBean.selectedItem.diameter}"  maxlength="11" label="text" converterMessage="Invalid Input! Please enter a positive number up to 2 decimal for diameter. Example: 53.0 or 42.53">
+                            <f:validateDoubleRange minimum="1.0"  />
+                        </p:inputText>
+                    </p:inplace>
+                    <p:message for="diameter1" />
+
                     <p:commandButton value="Update Item Details" update="upperForm" icon="ui-icon-check" action="#{itemDetailsManagedBean.updateItemDetails}"/>
-                    <p:commandButton value="Procurement Request"/>
+                    <p:commandButton  value="Procurement Request" action="#{itemDetailsManagedBean.passSelectedItemToNext()}" />    
                     <p:commandButton value="Delete Item" action="#{itemDetailsManagedBean.deleteItem}" update="message">
-                        <p:confirm header="Deletion Confirmation" message="Are you sure you want to delete item #{itemDetailsManagedBean.selectedItem.itemCode}?" icon="ui-icon-alert" />
+                        <p:confirm header="Deletion Confirmation" message="Are you sure you want to delete item #{itemDetailsManagedBean.selectedItem.fillerCode}?" icon="ui-icon-alert" />
                     </p:commandButton>
                 </h:panelGrid>
 
@@ -191,7 +213,7 @@
         <h:form id="middleForm">
             <p:panel id="shelvesOfItemPanel"  header="Storage Location Details" toggleable="true" toggleSpeed="500" closeSpeed="500" style="margin-bottom:20px"  collapsed="true">
                 <p:dataTable id="infoListTable" var="itemShelve" value="#{itemDetailsManagedBean.infoList}" widgetVar="infoListTable" 
-                             emptyMessage="No shelves found with given criteria" filteredValue="#{allocateStorageManagedBean.filteredInfoList}" >
+                             emptyMessage="No shelves found with given criteria" filteredValue="#{itemDetailsManagedBean.filteredInfoList}" >
 
                     <p:column filterBy="#{itemShelve.shelve.shelveID}" sortBy="#{itemShelve.shelve.shelveID}" headerText="ShelveID" footerText="contains" filterMatchMode="contains">
                         <h:outputText value="#{itemShelve.shelve.shelveID}" />

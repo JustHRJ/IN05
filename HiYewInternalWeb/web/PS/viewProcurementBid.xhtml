@@ -55,14 +55,15 @@
             <p:submenu label="Inventory Control System" icon="ui-icon-check" style="font-weight:bold">
                 <p:column>
                     <p:submenu label="Items Management">
-                        <p:menuitem value="View Inventory" url="viewInventory.xhtml" />
-                        <p:menuitem value="Add New Item" url="addNewItem.xhtml" />
+                        <p:menuitem value="View Inventory" url="/ICS/viewInventory.xhtml" />
+                        <p:menuitem value="Add New Item" url="/ICS/addNewItem.xhtml" />
                     </p:submenu>
                     <p:submenu label="Storage Management">
-                        <p:menuitem value="View Storage" url="viewRacks.xhtml" />
-                        <p:menuitem value="Create Storage" url="createStorage.xhtml" />
+                        <p:menuitem value="View Storage" url="/ICS/viewRacks.xhtml" />
+                        <p:menuitem value="Create Storage" url="/ICS/createStorage.xhtml" />
                     </p:submenu>
                 </p:column>
+
             </p:submenu>
             <p:submenu label ="Sales Management System" icon ="ui-icon-check" style ="font-weight: bold">
                 <p:column>
@@ -91,18 +92,18 @@
             <p:submenu label="Procurement System" icon="ui-icon-check" style="font-weight:bold">
                 <p:column>
                     <p:submenu label="Purchase Order Preparation Module">
-                        <p:menuitem value="Create Purchase Order" url="/PS/createPO.xhtml" />                   
-                        <p:menuitem value="View Purchase Order" url="/PS/viewPO.xhtml" />
-                        <p:menuitem value="View Procurement Bid" url="/PS/viewProcurementBid.xhtml" />
+                        <p:menuitem value="Create Purchase Order" url="createPO.xhtml" />                   
+                        <p:menuitem value="View Purchase Order" url="viewPO.xhtml" />
+                        <p:menuitem value="View Procurement Bid" url="viewProcurementBid.xhtml" />
                     </p:submenu>
                 </p:column>
             </p:submenu>
         </p:megaMenu>
         <br/>
-        <h:form>
+        <h:form> 
 
-            <p:dataTable var="item" value="#{viewInventoryManagedBean.itemList}" widgetVar="itemsTable" 
-                         emptyMessage="No items found with given criteria" filteredValue="#{viewInventoryManagedBean.filteredItems}" rowStyleClass="#{item.quantity le item.reorderPoint ? 'highlight1' : 'highlight2'}"
+            <p:dataTable var="pb" value="#{viewPBManagedBean.pbList}" widgetVar="pbsTable" 
+                         emptyMessage="No result found with given criteria" filteredValue="#{viewPBManagedBean.filteredPBs}" 
                          rows="10"
                          paginator="true"
                          paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
@@ -110,84 +111,69 @@
 
 
                 <f:facet name="header">
-                    Hi-Yew's Inventory
+                    View Wire Bidding Sent for Procurement
                     <p:outputPanel style="text-align:right;">
                         <h:outputText value="Search all fields:" />
-                        <p:inputText id="globalFilter" onkeyup="PF('itemsTable').filter()" style="width:150px" placeholder="Enter keyword"/>
+                        <p:inputText id="globalFilter" onkeyup="PF('pbsTable').filter()" style="width:150px" placeholder="Enter keyword"/>
                     </p:outputPanel>
                 </f:facet>
-                <p:column filterBy="#{item.fillerCode}" sortBy="#{item.fillerCode}" headerText="WireCode" footerText="contains" filterMatchMode="contains">
-                    <h:outputText value="#{item.fillerCode}" />
+                <p:column sortBy="#{pb.id}" headerText="Bid ID" >
+                    <h:outputText value="#{pb.id}" />
                 </p:column>
 
-                <p:column filterBy="#{item.fillerName}" sortBy="#{item.fillerName}" headerText="Name" footerText="contains" filterMatchMode="contains">
-                    <h:outputText value="#{item.fillerName}" />
+                <p:column filterBy="#{pb.fillerCode}" sortBy="#{pb.fillerCode}" headerText="WireCode" footerText="contains" filterMatchMode="contains">
+                    <h:outputText value="#{pb.fillerCode}" />
                 </p:column>
 
-                <p:column filterBy="#{item.wireGrade}" headerText="Grade" footerText="equals" filterMatchMode="equals">
+
+                <p:column filterBy="#{pb.requiredQty}" sortBy="#{pb.requiredQty}" headerText="Quantity Asked" footerText="equal" filterMatchMode="exact" >
+                    <h:outputText value="#{pb.requiredQty}" />
+                </p:column>
+
+                <p:column  headerText="Delivered By" sortBy="#{pb.byWhen}"  >
+                    <h:outputText value="#{viewPBManagedBean.formatDate(pb.byWhen)}" />
+                </p:column>
+
+                <p:column filterBy="#{pb.requiredQty}" sortBy="#{pb.requiredQty}" headerText="Quantity Asked" footerText="equal" filterMatchMode="exact" >
+                    <h:outputText value="#{pb.requiredQty}" />
+                </p:column>
+
+                <p:column sortBy="#{pb.quotedPrice}" headerText="Quoted Price" >
+                    <h:outputText value="#{pb.quotedPrice}">
+                    </h:outputText>
+                </p:column>
+
+                <p:column filterBy="#{pb.companyName}" sortBy="#{pb.companyName}" headerText="Quoted By" footerText="contains" filterMatchMode="contains">
+                    <h:outputText value="#{pb.companyName}">
+                    </h:outputText>
+                </p:column>
+
+                <p:column  headerText="Bid End Date" sortBy="#{pb.bidEnd}"  >
+                    <h:outputText value="#{viewPBManagedBean.formatDate(pb.bidEnd)}" />
+                </p:column>
+
+                <p:column filterBy="#{pb.status}" headerText="Status" footerText="equals" filterMatchMode="equals">
                     <f:facet name="filter">
-                        <p:selectOneMenu onchange="PF('itemsTable').filter()">
+                        <p:selectOneMenu onchange="PF('pbsTable').filter()">
                             <f:selectItem itemLabel="All" itemValue="" />
-                            <f:selectItem itemLabel="A" itemValue="A" />
-                            <f:selectItem itemLabel="B" itemValue="B" />
-                            <f:selectItem itemLabel="C" itemValue="C" />
-                            <f:selectItem itemLabel="D" itemValue="D" />
-                            <f:selectItem itemLabel="E" itemValue="E" />
+                            <f:selectItem itemLabel="Open" itemValue="Open" />
+                            <f:selectItem itemLabel="Accepted" itemValue="Accepted" />
+                            <f:selectItem itemLabel="Rejected" itemValue="Rejected" />
+                            <f:selectItem itemLabel="Closed" itemValue="Closed" />
                         </p:selectOneMenu>
                     </f:facet>
-                    <h:outputText value="#{item.wireGrade}" />
+                    <h:outputText value="#{pb.status}" />
                 </p:column>
 
-                <p:column filterBy="#{item.quantity}" headerText="Quantity" footerText="less than or equal" filterMatchMode="lte" >
-                    <f:facet name="filter" >      
-                        <p:spinner onchange="PF('itemsTable').filter()" size="3">
-                            <f:converter converterId="javax.faces.Integer" />
-                        </p:spinner>
-                    </f:facet>
-                    <h:outputText value="#{item.quantity}" />
-                </p:column>
-
-                <p:column  headerText="Cost" >
-                    <h:outputText value="#{item.cost}">
-                    </h:outputText>
-                </p:column>
-
-                <p:column  headerText="Selling Price" >
-                    <h:outputText value="#{item.sellingPrice}">
-                    </h:outputText>
-                </p:column>
-
-                <p:column  headerText="Reorder Point">
-                    <h:outputText value="#{item.reorderPoint}">
-                    </h:outputText>
-                </p:column>
-
-                <p:column  headerText="Average Weight" >
-                    <h:outputText value="#{item.averageWeight}">
-                    </h:outputText>
-                </p:column>
-
-                <p:column  headerText="Wire Length(mm)" >
-                    <h:outputText value="#{item.wireLength}">
-                    </h:outputText>
-                </p:column>
-
-                <p:column filterBy="#{item.diameter}" sortBy="#{item.diameter}" headerText="Diameter(mm)" footerText="equal" filterMatchMode="exact" style="width:140px;text-align: center" >
-<!--                    <f:facet name="filter" >      
-                        <p:spinner onchange="PF('itemsTable').filter()" size="3">
-                            <f:converter converterId="javax.faces.Double" />
-                        </p:spinner>
-                    </f:facet>-->
-                    <h:outputText value="#{item.diameter}" />
-                </p:column>
-
-                <p:column style="width:30px;text-align: center">
-                    <p:commandButton  action="#{viewInventoryManagedBean.passSelectedItemToNext()}" icon="ui-icon-search" title="View/Update">
-                        <f:setPropertyActionListener value="#{item}" target="#{viewInventoryManagedBean.selectedItem}" />
-                    </p:commandButton>
-                </p:column>
+                <!--                <p:column style="width:30px;text-align: center">
+                                    <p:commandButton  action="#{viewInventoryManagedBean.passSelectedItemToNext()}" icon="ui-icon-search" title="View/Update">
+                                        <f:setPropertyActionListener value="#{item}" target="#{viewInventoryManagedBean.selectedItem}" />
+                                    </p:commandButton>
+                                </p:column>-->
             </p:dataTable>
+
         </h:form>
+
     </h:body>
 </html>
 
