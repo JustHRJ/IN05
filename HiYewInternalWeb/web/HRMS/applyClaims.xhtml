@@ -8,7 +8,7 @@
         <title>Facelet Title</title>
     </h:head>
     <h:body>
-        <h:form  enctype="multipart/form-data">
+        <h:form  id = "formMain"  enctype="multipart/form-data">
             #{loginControlBean.checkLoginRedirect()}
             <a href ="/HiYewInternalWeb/index.xhtml"><img src = "../image/hiyew.gif" /></a>       <h1>Apply Claims</h1>
             <h3>logged in as: #{loginControlBean.employeeNameLog} </h3>
@@ -84,11 +84,15 @@
                     </p:column>
                 </p:submenu>
             </p:megaMenu>
+
+
             <p:panel>
+                <p:growl id ="msgs" />
                 <p:panelGrid>
                     <p:row>
                         <p:column>
-                            <p:selectOneMenu value ="#{employeeClaimBean.employee.employee_name}" style="width: 100%">
+                            <p:selectOneMenu value ="#{employeeClaimBean.employee.employee_name}" style="width: 100%" required = "true" requiredMessage="Please select Employee">
+                                <f:selectItem itemValue ="" itemLabel ="Select One" noSelectionOption="true"/>
                                 <f:selectItems value ="#{loginControlBean.validateLeaveName()}"/>
                             </p:selectOneMenu>
                         </p:column>
@@ -102,12 +106,14 @@
                     </p:row>
                     <p:row>
                         <p:column>
-                            <p:inputText value ="#{employeeClaimBean.employeeClaim.amount}"/>
+                            <p:inputText value ="#{employeeClaimBean.employeeClaim.amount}" required = "true" requiredMessage="Please put amount" validatorMessage="range should be between 1 - 1500">
+                                <f:validateDoubleRange minimum ="1" maximum = "1500"/>
+                            </p:inputText>
                         </p:column>
                     </p:row>
                     <p:row>
                         <p:column>
-                            <p:calendar value ="#{employeeClaimBean.claimTime}" pattern = "dd/MM/yyyy"/>
+                            <p:calendar value ="#{employeeClaimBean.claimTime}"  maxdate="#{hiYewManagedBean.today}" pattern = "dd/MM/yyyy" required="true" requiredMessage="Please put date"></p:calendar>
                         </p:column>
                     </p:row>
                 </p:panelGrid>
@@ -115,7 +121,7 @@
                 <p:fileUpload fileUploadListener="#{employeeClaimBean.upload}" />
 
 
-                <p:commandButton value ="Apply Claim" action ="#{employeeClaimBean.applyForClaim()}"/>
+                <p:commandButton value ="Apply Claim" action ="#{employeeClaimBean.applyForClaim()}" update =":formMain:msgs" />
             </p:panel>
         </h:form>
     </h:body>
