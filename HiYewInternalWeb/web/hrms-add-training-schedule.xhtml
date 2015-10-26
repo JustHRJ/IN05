@@ -1,0 +1,77 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                template="./template.xhtml">
+
+    <ui:define name="content">
+        <!-- Page header -->
+        <div class="page-heading animated fadeInDownBig" style="padding:20px!important;padding-bottom:10px!important;">
+            <h1>Add Training Schedule <small>Training and Expiry</small></h1>
+        </div>
+        <!-- End page header -->
+        <div style="padding:20px!important;padding-top:0px!important;">
+            <h:form>
+                <p:panelGrid>
+                    <p:growl id ="msgs" showDetail="false"/>
+                    <p:row>
+                        <p:column>
+                            <p:outputLabel style="font-weight:bold" value ="Name of Training"/>
+                        </p:column>
+                        <p:column>
+                            <p:inputText style="font-weight:normal;width: 100%;" value ="#{hiYewManagedBean.trainingName}" required = "true" requiredMessage="Please input Training Name"/>
+                        </p:column>
+                    </p:row>
+                    <p:row>
+                        <p:column>
+                            <p:outputLabel style="font-weight:bold" value ="Training Code" />
+                        </p:column>
+                        <p:column>
+                            <p:inputText style="font-weight:normal;width: 100%;" value ="#{hiYewManagedBean.trainingCode}" required = "true" requiredMessage="Please input Training Code"/>
+                        </p:column>
+                    </p:row>
+                    <p:row>
+                        <p:column>
+                            <p:outputLabel style="font-weight:bold" value ="Start Date of training"/>    
+                        </p:column>
+                        <p:column>
+                            <p:calendar style="font-weight:normal" id = "cal" value = "#{hiYewManagedBean.trainingStartDate}"  pattern ="dd/MM/yyyy"  required ="true" requiredMessage="Please input startDate"/>
+                        </p:column>
+                    </p:row>
+                    <p:row>
+                        <p:column>
+                            <p:outputLabel style="font-weight:bold" value ="End Date of Training"/>
+                        </p:column>
+                        <p:column>
+                            <p:calendar style="font-weight:normal;width: 100%;" id = "cal1" value = "#{hiYewManagedBean.trainingEndDate}"  pattern ="dd/MM/yyyy"  required ="true" requiredMessage="Please input endDate" />
+                        </p:column>
+                    </p:row>
+                    <p:row>
+                        <p:column>
+                            <p:outputLabel style="font-weight:bold" value ="Description"/>
+                        </p:column>
+                        <p:column>
+                            <p:inputTextarea value ="#{hiYewManagedBean.trainingDescription}" style="width: 100%;font-weight:normal"/>
+                        </p:column>
+                    </p:row>
+                    <p:row>
+                        <p:column>
+                            <p:outputLabel style="font-weight:bold" value ="Training Size"/>
+                        </p:column>
+                        <p:column>
+                            <p:inputText style="font-weight:normal;width: 100%;" value ="#{hiYewManagedBean.trainingSize}" required = "true" requiredMessage="Please input training size" validatorMessage="Please input proper range between 1 - 15">
+                                <f:validateDoubleRange minimum="1" maximum="15"/>
+                            </p:inputText>
+                        </p:column>
+                    </p:row>
+                </p:panelGrid>
+                <br />
+                <p:commandButton value ="Submit New Training" action ="#{hiYewManagedBean.addTrainingSchedule()}" update="msgs" />
+            </h:form>
+        </div>
+    </ui:define>
+
+</ui:composition>

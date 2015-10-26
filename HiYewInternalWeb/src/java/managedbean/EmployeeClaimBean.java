@@ -58,7 +58,6 @@ public class EmployeeClaimBean implements Serializable {
         employeeClaim = new EmployeeClaimEntity();
     }
 
-
     @PostConstruct
     public void init() {
 
@@ -128,7 +127,7 @@ public class EmployeeClaimBean implements Serializable {
         FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("employeeClaim", employeeClaim);
         if (check) {
             FacesContext.getCurrentInstance().getExternalContext().getSessionMap().remove("filename");
-            FacesContext.getCurrentInstance().getExternalContext().redirect("/HiYewInternalWeb/HRMS/viewApprovedClaim.xhtml");
+            FacesContext.getCurrentInstance().getExternalContext().redirect("/HiYewInternalWeb/hrms-view-approved-claim.xhtml");
         }
     }
 
@@ -292,5 +291,4 @@ public class EmployeeClaimBean implements Serializable {
     /**
      * @return the employeeName
      */
- 
 }

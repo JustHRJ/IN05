@@ -1,0 +1,270 @@
+<?xml version='1.0' encoding='UTF-8' ?> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
+
+    <h:head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <title>Singapore Welding | SgWeld.com | Welding Service in Singapore | Welding</title>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="description" content=""/>
+        <meta name="keywords" content="admin, bootstrap,admin template, bootstrap admin, simple, awesome" />
+        <meta name="author" content="" />
+
+        <!-- BOOTSTRAP -->
+        <link href="assets/css/bootstrap.min.css" rel="stylesheet" />
+
+        <!-- LANCENG CSS -->
+        <link href="assets/css/style.css" rel="stylesheet" />
+        <link href="assets/css/style-responsive.css" rel="stylesheet" />
+
+        <!-- VENDOR -->
+        <link href="assets/css/animate.css" rel="stylesheet" />
+        <link href="assets/third/font-awesome/css/font-awesome.min.css" rel="stylesheet" />
+        <link href="assets/third/weather-icon/css/weather-icons.min.css" rel="stylesheet" />
+        <link href="assets/third/morris/morris.css" rel="stylesheet" />
+        <link href="assets/third/nifty-modal/css/component.css" rel="stylesheet" />
+        <link href="assets/third/sortable/sortable-theme-bootstrap.css" rel="stylesheet" /> 
+        <link href="assets/third/icheck/skins/minimal/grey.css" rel="stylesheet" /> 
+        <link href="assets/third/select/bootstrap-select.min.css" rel="stylesheet" /> 
+        <link href="assets/third/summernote/summernote.css" rel="stylesheet" />
+        <link href="assets/third/magnific-popup/magnific-popup.css" rel="stylesheet" /> 
+        <link href="assets/third/datepicker/css/datepicker.css" rel="stylesheet" />
+        <link rel="shortcut icon" href="images/favicon.ico" />
+    </h:head>
+
+    <h:body class="tooltips">
+        <!-- BEGIN PAGE -->
+        <div class="container">
+            #{loginControlBean.checkLoginRedirect()}
+
+            <div class="logo-brand header sidebar rows" style="margin-left: -20px;">
+                <div class="logo">
+                    <a style="margin-left: 19px" class="pull-left" href="">
+                        <img class="media-object img-circle" src="images/logo4.jpg" alt="" />
+                    </a>
+                    <div style="margin-top:14px;margin-left:83px;font-size:14px;">
+                        HI-YEW <sub>Welding For The Future</sub>
+                    </div>
+                </div>
+                <div class="navbar-collapse collapse" style="float: right;">
+                    <ul class="nav navbar-nav navbar-right top-navbar">
+                        <li class="dropdown">
+                            <div class="dropdown-toggle" style="color: white; margin-top: -35px; margin-right: 40px; ">
+                                Hi admin,&nbsp;&nbsp;<strong><h:outputText value="#{loginControlBean.employeeNameLog}" style=""/></strong>&nbsp;&nbsp;|&nbsp;&nbsp;<a href="changePassword.xhtml" style="color: white">Change Password</a>&nbsp;&nbsp;|&nbsp;&nbsp;<a class="md-trigger" data-modal="logout-modal-alt" style="color: white">Logout</a>
+                            </div>
+                        </li>
+                    </ul>
+                </div> 
+            </div>
+
+            <!-- BEGIN CONTENT -->
+            <div class="right content-page">
+
+                <!-- ============================================================== -->
+                <!-- START YOUR CONTENT HERE -->
+                <!-- ============================================================== -->
+
+                <div class="body content rows scroll-y">
+                    <p:megaMenu orientation="horizontal" styleClass="menu" style="width:100%!important;">
+                        <p:submenu label ="Human Resource Management System" icon ="">
+                            <p:column>
+                                <p:submenu label ="Employee Management">
+                                    <p:menuitem value ="Register Employee" url ="hrms-employee-registration.xhtml" rendered ="#{loginControlBean.checkValid1()}"/>
+                                    <p:menuitem value ="View Employee" url = "hrms-employee-details.xhtml" />
+                                    <p:menuitem value ="Employee Schedule" url ="hrms-employee-schedule.xhtml"/>
+                                </p:submenu>
+                            </p:column>
+                            <p:column>
+                                <p:submenu label="Payroll Management">
+                                    <p:menuitem value ="Assign Payroll" url ="hrms-create-payroll.xhtml" rendered = "#{loginControlBean.checkValid1()}"/>
+                                    <p:menuitem value ="Release Payroll" url ="hrms-release-payroll.xhtml" rendered="#{loginControlBean.checkValid1()}"/>
+                                    <p:menuitem value ="View Released Payroll" url ="hrms-view-payroll.xhtml"/>
+                                </p:submenu>
+                            </p:column>
+                            <p:column>
+                                <p:submenu label="Training and Expiry">
+                                    <p:menuitem value ="#{loginControlBean.getEAlert()}" url ="hrms-alert-employee.xhtml" />
+                                    <p:menuitem value ="Add Training Schedule" url ="hrms-add-training-schedule.xhtml" rendered="#{loginControlBean.checkValid1()}" />
+                                    <p:menuitem value ="Add Employee Training" url ="hrms-add-employee-training.xhtml" rendered="#{loginControlBean.checkValid1()}" />
+                                    <p:menuitem value ="View Upcoming Training" url ="hrms-view-trainingSchedule.xhtml"/>
+                                </p:submenu>
+                            </p:column>
+                            <p:column>
+                                <p:submenu label ="Leave Management">
+                                    <p:menuitem value ="Apply for Leave" url ="hrms-leave-application.xhtml" />
+                                    <p:menuitem value ="Approve Leave" url ="hrms-approve-leave.xhtml" rendered ="#{loginControlBean.checkValid1()}"/>
+                                    <p:menuitem value ="Check Leave Status" url ="hrms-leave-status.xhtml" />
+                                </p:submenu>
+                            </p:column>
+                        </p:submenu>
+                        <p:submenu label="Inventory Control System" icon="">
+                            <p:column>
+                                <p:submenu label="Items Management">
+                                    <p:menuitem value="View Inventory" url="/ICS/viewInventory.xhtml" />
+                                    <p:menuitem value="Add New Item" url="/ICS/addNewItem.xhtml" />
+                                    <p:menuitem value="View Low Stock Alert (#{viewLowStockManagedBean.numOfLowStockItems})" url="/ICS/viewLowStock.xhtml" />
+                                </p:submenu>
+                            </p:column>
+                            <p:column>
+                                <p:submenu label="Storage Management">
+                                    <p:menuitem value="View Storage" url="/ICS/viewRacks.xhtml" />
+                                    <p:menuitem value="Create Storage" url="/ICS/createStorage.xhtml" />
+                                </p:submenu>
+                            </p:column>
+                        </p:submenu>
+                        <p:submenu label ="Machine Management System" icon ="">
+                            <p:column>
+                                <p:submenu label = "Machine Management" >
+                                    <p:menuitem value ="Add Machinery" url ="mms-add-machine.xhtml" />
+                                    <p:menuitem value ="View Machinery" url ="mms-view-machine.xhtml" />
+                                </p:submenu>
+                            </p:column>
+                            <p:column>
+                                <p:submenu label ="Machine Maintenance">
+                                    <p:menuitem value ="#{hiYewManagedBean.getMAlert()}" url ="mms-alert-machine.xhtml" />
+                                    <p:menuitem value ="Add Maint. Schedule" url ="mms-add-maintenence-schedule.xhtml"/>
+                                    <p:menuitem value ="View Maint. Schedule" url ="mms-view-maintenence-schedule.xhtml" />
+                                </p:submenu>
+                            </p:column>
+                        </p:submenu>
+                        <p:submenu label="Procurement System" icon="">
+                            <p:column>
+                                <p:submenu label="Supplier Management">
+                                    <p:menuitem value="Supplier Activation" url="ps-activation.xhtml" />
+                                </p:submenu>
+                            </p:column>
+                            <p:column>
+                                <p:submenu label="PO Management">
+                                    <p:menuitem value="Create Purchase Order" url="/PS/createPO.xhtml" />                   
+                                    <p:menuitem value="View Purchase Order" url="/PS/viewPO.xhtml" />
+                                </p:submenu>
+                            </p:column>
+                        </p:submenu>
+                        <p:submenu label ="Sales Management System" icon ="">
+                            <p:column>
+                                <p:submenu label ="Laser Welding Products">
+                                    <p:menuitem value ="View RFQ" url ="/SMS/viewEditProductQuotations.xhtml" />
+                                    <p:menuitem value ="View Purchase Order" url ="/SMS/viewEditProductPurchaseOrders.xhtml"/>
+                                </p:submenu>
+                            </p:column>
+                            <p:column>
+                                <p:submenu label ="Laser Welding Services">
+                                    <p:menuitem value ="View RFQ" url ="/SMS/viewEditQuotations.xhtml"/>
+                                </p:submenu>
+                            </p:column>
+                        </p:submenu>
+                    </p:megaMenu>
+
+                    <ui:insert name="content"></ui:insert>
+
+                    <footer style="padding:20px!important">
+                        &copy; 2012. HI-YEW TECHNOLOGY PTE LTD. All Rights Reserved.
+                    </footer>
+                </div>
+
+                <!-- ============================================================== -->
+                <!-- END YOUR CONTENT HERE -->
+                <!-- ============================================================== -->
+
+            </div>
+            <!-- END CONTENT -->
+
+            <!--
+            ============================================================================
+            MODAL DIALOG EXAMPLE
+            You can change transition style, just view element page
+            ============================================================================
+            -->
+
+            <!-- Modal Logout Alternatif -->
+            <div class="md-modal md-3d-slit" id="logout-modal-alt">
+                <div class="md-content">
+                    <h3><strong>Logout</strong> Confirmation</h3>
+                    <div>
+                        <p class="text-center">Are you sure want to logout from this system?</p>
+                        <h:form id="logoutForm2">
+                            <p class="text-center">
+                                <button style="padding-top: 3px; padding-left: 24px; padding-right: 24px; font-family: 'Open Sans'; height: 30px" class="btn btn-danger md-close">Nope!</button>
+                                &nbsp;&nbsp;
+                                <p:commandButton  style="padding-top: 1px; padding-left: 24px; padding-right: 24px; font-family: 'Open Sans'; height: 30px" value="Yeah, I'm sure" styleClass="btn btn-success md-close" action="#{loginControlBean.userAction()}" />
+                            </p>
+                        </h:form>
+                    </div>
+                </div>
+            </div>
+            <!-- End .md-modal -->
+
+            <!--
+            ============================================================================
+            END MODAL DIALOG EXAMPLE
+            ============================================================================
+            -->
+
+            <!--
+            MODAL OVERLAY
+            Always place this div at the end of the page content
+            -->
+            <div class="md-overlay"></div>
+
+        </div><!-- End div .container -->
+        <!-- END PAGE -->
+
+        <!--
+        ================================================
+        JAVASCRIPT
+        ================================================
+        -->
+        <!-- Basic Javascripts (Jquery and bootstrap) -->
+        <!--<script src="assets/js/jquery.js"></script>-->
+        <script src="assets/js/bootstrap.min.js"></script>
+
+        <!-- VENDOR -->
+
+        <!-- Slimscroll js -->
+        <script src="assets/third/slimscroll/jquery.slimscroll.min.js"></script>
+
+        <!-- Morris js -->
+        <script src="http://cdnjs.cloudflare.com/ajax/libs/raphael/2.1.0/raphael-min.js"></script>
+        <script src="assets/third/morris/morris.js"></script>
+
+        <!-- Nifty modals js -->
+        <script src="assets/third/nifty-modal/js/classie.js"></script>
+        <script src="assets/third/nifty-modal/js/modalEffects.js"></script>
+
+        <!-- Sortable js -->
+        <script src="assets/third/sortable/sortable.min.js"></script>
+
+        <!-- Bootstrao selectpicker js -->
+        <script src="assets/third/select/bootstrap-select.min.js"></script>
+
+        <!-- Summernote js -->
+        <script src="assets/third/summernote/summernote.js"></script>
+
+        <!-- Magnific popup js -->
+        <script src="assets/third/magnific-popup/jquery.magnific-popup.min.js"></script> 
+
+        <!-- Bootstrap file input js -->
+        <script src="assets/third/input/bootstrap.file-input.js"></script>
+
+        <!-- Bootstrao datepicker js -->
+        <!--<script src="assets/third/datepicker/js/bootstrap-datepicker.js"></script>-->
+
+        <!-- Icheck js -->
+        <script src="assets/third/icheck/icheck.min.js"></script>
+
+        <!-- Form wizard js -->
+        <script src="assets/third/wizard/jquery.snippet.min.js"></script>
+        <script src="assets/third/wizard/jquery.easyWizard.js"></script>
+        <script src="assets/third/wizard/scripts.js"></script>
+
+        <!-- LANCENG TEMPLATE JAVASCRIPT -->
+        <script src="assets/js/lanceng.js"></script>
+
+    </h:body>
+
+</html>

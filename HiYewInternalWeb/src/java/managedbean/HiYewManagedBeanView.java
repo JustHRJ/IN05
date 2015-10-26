@@ -55,7 +55,7 @@ public class HiYewManagedBeanView implements Serializable {
             FacesMessage msg = new FacesMessage("Employee Added", getEmployeeName());
             FacesContext.getCurrentInstance().addMessage(null, msg);
         } else {
-            FacesMessage msg = new FacesMessage("Please select a course, else it is either full or employee is in the course / clashed");
+            FacesMessage msg = new FacesMessage("Please select a course, else it is either full or employee is in the course / clashed.");
             FacesContext.getCurrentInstance().addMessage(null, msg);
         }
     }

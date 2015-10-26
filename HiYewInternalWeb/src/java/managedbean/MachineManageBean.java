@@ -66,7 +66,7 @@ public class MachineManageBean {
         if (check) {
             return "viewMachine";
         } else {
-            FacesMessage msg = new FacesMessage("Failed to Add", "Please check for existing machine number or machine Name");
+            FacesMessage msg = new FacesMessage("Failed to Add", "Please check for existing machine number or machine name.");
             FacesContext.getCurrentInstance().addMessage(null, msg);
             return "";
         }
@@ -79,7 +79,7 @@ public class MachineManageBean {
     public void extendMachineMaintenance() throws IOException {
         FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("machineName", machineName);
 
-        FacesContext.getCurrentInstance().getExternalContext().redirect("/HiYewInternalWeb/MMS/addMaintainenceSchedule.xhtml");
+        FacesContext.getCurrentInstance().getExternalContext().redirect("/HiYewInternalWeb/mms-add-maintenence-schedule.xhtml");
     }
 
     public void deleteMachineMaintainence() throws IOException {
@@ -95,9 +95,9 @@ public class MachineManageBean {
         if (check) {
             FacesContext facesCtx = FacesContext.getCurrentInstance();
             ExternalContext externalContext = facesCtx.getExternalContext();
-            externalContext.redirect("viewMaintainenceSchedule.xhtml");
+            externalContext.redirect("mms-view-maintenence-schedule.xhtml");
         } else {
-            FacesMessage msg = new FacesMessage("Maintenance id does not exist", machineMaintainenceID);
+            FacesMessage msg = new FacesMessage("Maintenance ID does not exist.", machineMaintainenceID);
             FacesContext.getCurrentInstance().addMessage(null, msg);
         }
     }
@@ -108,7 +108,7 @@ public class MachineManageBean {
 
             FacesContext facesCtx = FacesContext.getCurrentInstance();
             ExternalContext externalContext = facesCtx.getExternalContext();
-            externalContext.redirect("viewMaintainenceSchedule.xhtml");
+            externalContext.redirect("mms-view-maintenence-schedule.xhtml");
         } else {
             FacesMessage msg = new FacesMessage("Not Edited", ((MachineMaintainenceEntity) event.getObject()).getMachine().getMachine_name());
             FacesContext.getCurrentInstance().addMessage(null, msg);
@@ -120,11 +120,11 @@ public class MachineManageBean {
         boolean check = hiYewSystemBean.addMachineMaintainence(machineName, getmScheduleDate(), getmScheduleHour(), getMaintainenceComments(), getmServiceProvider(), getmServiceContact());
         if (check) {
             FacesContext.getCurrentInstance().getExternalContext().getSessionMap().remove("machineName");
-            FacesMessage msg = new FacesMessage("Schedule Added", machineName + " has a maintainence schedule");
+            FacesMessage msg = new FacesMessage("Schedule Added", machineName + " has a maintainence schedule.");
             FacesContext.getCurrentInstance().addMessage(null, msg);
-            FacesContext.getCurrentInstance().getExternalContext().redirect("/HiYewInternalWeb/MMS/viewMaintainenceSchedule.xhtml");
+            FacesContext.getCurrentInstance().getExternalContext().redirect("/HiYewInternalWeb/mms-view-maintenence-schedule.xhtml.xhtml");
         } else {
-            FacesMessage msg = new FacesMessage("Failed to Add", "Please check for exisiting schedule");
+            FacesMessage msg = new FacesMessage("Failed to Add", "Please check for exisiting schedule.");
             FacesContext.getCurrentInstance().addMessage(null, msg);
         }
     }
@@ -134,7 +134,7 @@ public class MachineManageBean {
         if (check) {
             return "viewMachine";
         } else {
-            FacesMessage msg = new FacesMessage("Machine not updated.", "Please enter Machine ID");
+            FacesMessage msg = new FacesMessage("Machine not updated.", "Please enter Machine ID.");
             FacesContext.getCurrentInstance().addMessage(null, msg);
             return "";
         }
