@@ -2671,12 +2671,12 @@ public class HiYewSystemBean implements HiYewSystemBeanLocal {
 
     public void addFillers(List<Vector> fillers) {
         Query z = em.createQuery("select c from Metal c");
-        for(Object o: z.getResultList()){
+        for (Object o : z.getResultList()) {
             Metal m = (Metal) o;
             m.setFillers(null);
             em.merge(m);
         }
-    
+
         Query q = em.createQuery("select c from FillerEntity c");
         for (Object o : q.getResultList()) {
             FillerComposition f = (FillerComposition) o;
@@ -2741,7 +2741,7 @@ public class HiYewSystemBean implements HiYewSystemBeanLocal {
         for (Object o : q.getResultList()) {
             Metal f = (Metal) o;
             Vector im = new Vector();
-    
+
             im.add(f.getMetalName());
             im.add(f.getAluminium());
             im.add(f.getBronze());
@@ -2840,8 +2840,6 @@ public class HiYewSystemBean implements HiYewSystemBeanLocal {
             return results;
         }
     }
-    
-
 
     public void addMetal(List<Vector> metals) {
         Query q = em.createQuery("Select c from Metal c");
@@ -2857,7 +2855,7 @@ public class HiYewSystemBean implements HiYewSystemBeanLocal {
             for (Object o : metals) {
                 Vector im = (Vector) o;
                 Metal f = new Metal();
-          
+
                 f.setMetalName(im.get(0).toString());
                 f.setAluminium(Integer.parseInt(im.get(1).toString()));
                 f.setBronze(Integer.parseInt(im.get(2).toString()));
@@ -3028,6 +3026,7 @@ public class HiYewSystemBean implements HiYewSystemBeanLocal {
         } catch (Exception ex) {
             return new ArrayList<String>();
         }
-
     }
+
+   
 }

@@ -47,5 +47,9 @@ public interface KnowledgeSystemBeanLocal {
     public void deleteFiller(FillerComposition filler);
 
     public void editFiller(FillerComposition filler);
+
+    public void addMatch(List<Vector> results);
+
+    public List<Vector> transferMatchingInfo();
     
 }

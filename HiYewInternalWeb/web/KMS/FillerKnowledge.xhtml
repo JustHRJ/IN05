@@ -207,9 +207,9 @@
                 </p:outputPanel>
             </p:dialog>
             
-             <p:commandButton value ="Import from Excel File" action ="#{knowledgeManageBean.readFile()}"/>
+             <p:commandButton value ="Import from Excel File" action ="#{knowledgeManageBean.readFile()}" update ="table" />
              <br/>
-             <p:commandButton value ="Transfer into Excel File" action ="#{knowledgeManageBean.writeFile2()}"/> 
+             <p:commandButton value ="Transfer into Excel File" action ="#{knowledgeManageBean.writeFile2()}" update="table" /> 
             
         </h:form>
     </h:body>

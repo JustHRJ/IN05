@@ -21,7 +21,10 @@
             <p:pickList id="pickList" value="#{knowledgeManageBean.fillerDisplay}" var="im" itemLabel="#{im}" itemValue="#{im}" />
 
             <p:commandButton value ="Set Pairings" action ="#{knowledgeManageBean.createPairings()}"/>
-
+            <br/><br/>
+            <p:commandButton value ="Import matching from Excel File" action ="#{knowledgeManageBean.readFile3()}" />
+            <br/>
+            <p:commandButton value ="Export matching" action ="#{knowledgeManageBean.writeFile4()}"/>
         </h:form>
     </h:body>
 </html>

@@ -49,7 +49,7 @@ public class KnowledgeManageBean implements Serializable {
     private List<Metal> MetalRecords;
     private FillerComposition selectedFiller;
     private Metal selectedMetal;
-
+    private List<Vector> result3 = new ArrayList<Vector>();
     private List<Vector> results2 = new ArrayList<Vector>();
     private String metalName = "";
     private List<String> fillerList = new ArrayList<String>();
@@ -76,6 +76,10 @@ public class KnowledgeManageBean implements Serializable {
 
     }
 
+    public void metalMatchingList(){
+        result3 = knowledgeSystemBean.transferMatchingInfo();
+    }
+    
     public void metalList() {
         results2 = knowledgeSystemBean.transferMetalInfo();
     }
@@ -557,4 +561,101 @@ public class KnowledgeManageBean implements Serializable {
         fillerChosen = fillerDisplay.getTarget();
         knowledgeSystemBean.createPairings(metalName, fillerChosen);
     }
+
+    public void readFile3() throws IOException {
+        setInputFile("C:\\Users\\JustHRJ\\Desktop\\Book1.xls");
+        List<Vector> result = read3();
+        knowledgeSystemBean.addMatch(result);
+    }
+
+    public List<Vector> read3() throws IOException {
+        File inputWorkbook = new File(inputFile);
+        List<Vector> results = new ArrayList<Vector>();
+        Workbook w;
+        try {
+            w = Workbook.getWorkbook(inputWorkbook);
+            // Get the first sheet
+            Sheet sheet = w.getSheet(2);
+            // Loop over first 10 column and lines
+
+            System.out.println(sheet.getColumns());
+            System.out.println(sheet.getRows());
+            for (int j = 1; j < sheet.getRows(); j++) {
+                Vector im = new Vector();
+                for (int i = 0; i < sheet.getColumns(); i++) {
+                    Cell cell = sheet.getCell(i, j);
+
+                    if (cell.getContents().isEmpty()) {
+                        im.add(0);
+                    } else {
+                        im.add(cell.getContents());
+                    }
+                }
+                results.add(im);
+            }
+            w.close();
+            if (results.isEmpty()) {
+                return null;
+            }
+            return results;
+        } catch (BiffException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public void writeFile4() throws IOException, WriteException, BiffException {
+        setInputFile("C:\\Users\\JustHRJ\\Desktop\\Book1.xls");
+        metalMatchingList();
+        write4();
+    }
+
+    private void write4() throws IOException, WriteException, BiffException {
+
+        Workbook workbook = Workbook.getWorkbook(new File(inputFile));
+        WritableWorkbook copy = Workbook.createWorkbook(new File(inputFile), workbook);
+        WritableSheet sheet1 = copy.createSheet("MetalMatching", 2);
+
+        jxl.write.Label number3 = new jxl.write.Label(0, 0, "NetalName");
+        sheet1.addCell(number3);
+
+        number3 = new jxl.write.Label(1, 0, "Filler ID");
+        sheet1.addCell(number3);
+
+        if (result3 != null) {
+            int rows = result3.size();
+            for (int i = 1; i <= rows; i++) {
+                Vector im = result3.get(i - 1);
+                int cols = im.size();
+                System.out.println(cols);
+               
+                for (int j = 0; j < cols; j++) {
+                    jxl.write.Number number = new jxl.write.Number(j, i, Integer.parseInt(im.get(j).toString()));
+                    sheet1.addCell(number);
+                }
+
+            }
+        }
+        copy.removeSheet(3);
+        System.out.println("done metal pairing");
+        copy.write();
+
+        copy.close();
+
+    }
+
+    /**
+     * @return the result3
+     */
+    public List<Vector> getResult3() {
+        return result3;
+    }
+
+    /**
+     * @param result3 the result3 to set
+     */
+    public void setResult3(List<Vector> result3) {
+        this.result3 = result3;
+    }
+
 }

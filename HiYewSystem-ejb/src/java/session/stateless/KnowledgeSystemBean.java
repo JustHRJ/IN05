@@ -42,7 +42,7 @@ public class KnowledgeSystemBean implements KnowledgeSystemBeanLocal {
             for (Object o : metals) {
                 Vector im = (Vector) o;
                 Metal f = new Metal();
-               
+
                 f.setMetalName(im.get(0).toString());
                 f.setAluminium(Integer.parseInt(im.get(1).toString()));
                 f.setBronze(Integer.parseInt(im.get(2).toString()));
@@ -113,10 +113,6 @@ public class KnowledgeSystemBean implements KnowledgeSystemBeanLocal {
             return results;
         }
     }
-    
-
-    
-    
 
     public List<String> metalNames() {
         List<String> result = new ArrayList<String>();
@@ -143,7 +139,7 @@ public class KnowledgeSystemBean implements KnowledgeSystemBeanLocal {
             if (fillerChosen.isEmpty()) {
                 System.out.println("no fillerchosen");
             }
-         
+
             for (Object o : fillerChosen) {
                 String fn = (String) o;
                 System.out.println(fn);
@@ -293,7 +289,7 @@ public class KnowledgeSystemBean implements KnowledgeSystemBeanLocal {
         for (Object o : q.getResultList()) {
             Metal f = (Metal) o;
             Vector im = new Vector();
-           
+
             im.add(f.getMetalName());
             im.add(f.getAluminium());
             im.add(f.getBronze());
@@ -353,6 +349,67 @@ public class KnowledgeSystemBean implements KnowledgeSystemBeanLocal {
             System.out.println("filler info is missing");
         } else {
             em.merge(filler);
+        }
+    }
+
+    public void addMatch(List<Vector> results) {
+        try {
+
+            Metal m = new Metal();
+            FillerComposition f = new FillerComposition();
+
+            for (Object o : results) {
+                Vector im = (Vector) o;
+                String metalN = im.get(0).toString();
+                Long id = Long.parseLong(im.get(1).toString());
+                m = em.find(Metal.class, metalN);
+                if (m == null) {
+                    System.out.println("metal not found");
+                } else {
+                    f = em.find(FillerComposition.class, id);
+                    if (f == null) {
+                        System.out.println("filler not found");
+                    } else {
+                        m.getFillers().add(f);
+
+                    }
+                }
+                em.merge(m);
+            }
+            System.out.println("fillers added to metals");
+
+        } catch (Exception ex) {
+            System.out.println("matching went wrong");
+        }
+    }
+
+    public List<Vector> transferMatchingInfo() {
+        try {
+            List<Vector> result = new ArrayList<Vector>();
+            Query q = em.createQuery("select c from Metal c");
+            for (Object o : q.getResultList()) {
+                Metal m = (Metal) o;
+                if (m.getFillers().isEmpty()) {
+
+                } else {
+                    for (Object p : m.getFillers()) {
+                        FillerComposition f = (FillerComposition) p;
+                        Vector im = new Vector();
+                        im.add(m.getMetalName());
+                        im.add(f.getId());
+                        result.add(im);
+                    }
+                }
+            }
+
+            if (result.isEmpty()) {
+                return null;
+            } else {
+                return result;
+            }
+
+        } catch (Exception ex) {
+            return null;
         }
     }
 
