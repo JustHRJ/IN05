@@ -68,6 +68,15 @@ public class MachineSystemBean implements MachineSystemBeanLocal {
 
     }
 
+    public int getNoAlert() {
+        List<MachineEntity> machines = checkMachineExpiry();
+        if (machines == null) {
+            return 0;
+        } else {
+            return machines.size();
+        }
+    }
+
     public boolean deleteMachineMaintainence(String id) {
         try {
             MachineMaintainenceEntity mm = em.find(MachineMaintainenceEntity.class, Long.parseLong(id));
