@@ -23,7 +23,7 @@
                                 <p:outputLabel for ="machine_name" style ="font-weight: bold" value ="Machine Name "/>
                             </p:column>
                             <p:column>
-                                <p:inputText style="font-weight: normal;width:100%" label ="Machine Name" id ="machine_name" value ="#{hiYewManagedBean.machineName}" required="true" requiredMessage="Please enter a machine name" validator="#{machineValidator.validateMachineName}" validatorMessage="Machine Name exist" > </p:inputText>
+                                <p:inputText style="font-weight: normal;width:100%" label ="Machine Name" id ="machine_name" value ="#{machineManageBean.machineName}" required="true" requiredMessage="Please enter a machine name" validator="#{machineValidator.validateMachineName}" validatorMessage="Machine Name exist" > </p:inputText>
                             </p:column>
 
                         </p:row>
@@ -32,7 +32,7 @@
                                 <p:outputLabel for ="machine_id" style ="font-weight: bold" value ="Machine ID "/>
                             </p:column>
                             <p:column>
-                                <p:inputText style="font-weight: normal;width:100%" label ="Machine_Id" id ="machine_id" value ="#{hiYewManagedBean.machineId}" required = "true" requiredMessage="Please enter machine ID"> </p:inputText>
+                                <p:inputText style="font-weight: normal;width:100%" label ="Machine_Id" id ="machine_id" value ="#{machineManageBean.machineId}" required = "true" requiredMessage="Please enter machine ID"> </p:inputText>
                             </p:column>
 
                         </p:row>
@@ -41,7 +41,7 @@
                                 <p:outputLabel for ="machine_description" style ="font-weight: bold" value ="Machine Description "/>
                             </p:column>
                             <p:column>
-                                <p:inputText style="font-weight: normal;width:100%" label ="Machine_Description" id ="machine_description" value ="#{hiYewManagedBean.machineDescript}"> </p:inputText>
+                                <p:inputText style="font-weight: normal;width:100%" label ="Machine_Description" id ="machine_description" value ="#{machineManageBean.machineDescript}"> </p:inputText>
                             </p:column>
                         </p:row>
                         <p:row>   
@@ -49,7 +49,7 @@
                                 <p:outputLabel for ="cal" style ="font-weight: bold" value ="Machine Next Maintainence " />
                             </p:column>
                             <p:column>
-                                <p:calendar style="font-weight: normal;width:100%" id = "cal" value = "#{hiYewManagedBean.machineNxtMaint}" mindate="#{hiYewManagedBean.getToday()}" pattern ="dd/MM/yyyy" required = "true" requiredMessage="Please enter next maintainence date"/>
+                                <p:calendar style="font-weight: normal;width:100%" id = "cal" value = "#{machineManageBean.machineNxtMaint}" mindate="#{hiYewManagedBean.getToday()}" pattern ="dd/MM/yyyy" required = "true" requiredMessage="Please enter next maintainence date"/>
                             </p:column>
 
                         </p:row>
@@ -59,11 +59,11 @@
                                 <p:outputLabel for ="machine_subMaint" style ="font-weight: bold" value ="Set Periodic Maintainence Schedule (in Months) "/>
                             </p:column>
                             <p:column>
-                                <h:selectOneMenu style ="font-weight: normal;width:190px" id = "machine_subMaint" value ="#{hiYewManagedBean.machineType}" required="true" requiredMessage="Please Select Machine Type">
+                                <h:selectOneMenu style ="font-weight: normal;width:190px" id = "machine_subMaint" value ="#{machineManageBean.machineType}" required="true" requiredMessage="Please Select Machine Type">
                                     <f:selectItem itemLabel ="Select" itemValue ="" noSelectionOption="true"/>
-                                    <f:selectItem itemLabel ="A" itemValue ="A"/>
-                                    <f:selectItem itemLabel ="B" itemValue ="B"/>
-                                    <f:selectItem itemLabel ="C" itemValue ="C"/>
+                                    <f:selectItem itemLabel ="Laser" itemValue ="Laser"/>
+                                    <f:selectItem itemLabel ="TIG" itemValue ="TIG"/>
+                                    <f:selectItem itemLabel ="Others" itemValue ="Others"/>
                                 </h:selectOneMenu>
                             </p:column>
 
@@ -72,7 +72,7 @@
                     </p:panelGrid>
                 </p:panel>
                 <br />
-                <p:commandButton id="btn" value="Add New Machine"  action="#{hiYewManagedBean.addMachine}"  update =":formMain:msgs" />
+                <p:commandButton id="btn" value="Add New Machine"  action="#{machineManageBean.addMachine}"  update =":formMain:msgs" />
             </h:form>
         </div>
     </ui:define>
