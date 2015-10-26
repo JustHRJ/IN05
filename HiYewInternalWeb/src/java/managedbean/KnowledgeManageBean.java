@@ -29,6 +29,7 @@ import jxl.write.WriteException;
 import org.primefaces.event.RowEditEvent;
 import org.primefaces.model.DualListModel;
 import session.stateless.HiYewSystemBeanLocal;
+import session.stateless.KnowledgeSystemBeanLocal;
 
 /**
  *
@@ -39,7 +40,8 @@ import session.stateless.HiYewSystemBeanLocal;
 public class KnowledgeManageBean implements Serializable {
 
     @EJB
-    private HiYewSystemBeanLocal hiYewSystemBean;
+    private KnowledgeSystemBeanLocal knowledgeSystemBean;
+
     private List<Vector> results = new ArrayList<Vector>();
     private String inputFile;
     private List<FillerComposition> fillerRecords;
@@ -47,7 +49,7 @@ public class KnowledgeManageBean implements Serializable {
     private List<Metal> MetalRecords;
     private FillerComposition selectedFiller;
     private Metal selectedMetal;
-    private int copper;
+
     private List<Vector> results2 = new ArrayList<Vector>();
     private String metalName = "";
     private List<String> fillerList = new ArrayList<String>();
@@ -62,7 +64,7 @@ public class KnowledgeManageBean implements Serializable {
 
     @PostConstruct
     public void init() {
-        setFillerList(hiYewSystemBean.retrieveFillerNames());
+        setFillerList(knowledgeSystemBean.retrieveFillerNames());
         System.out.println("stuck here");
         setFillerChosen(new ArrayList<String>());
         System.out.println("stuck here2");
@@ -70,21 +72,21 @@ public class KnowledgeManageBean implements Serializable {
     }
 
     public void fillerList() {
-        results = hiYewSystemBean.transferFillerInfo();
+        results = knowledgeSystemBean.transferFillerInfo();
 
     }
 
     public void metalList() {
-        results2 = hiYewSystemBean.transferMetalInfo();
+        results2 = knowledgeSystemBean.transferMetalInfo();
     }
 
     public List<FillerComposition> getAllFillers() {
-        fillerRecords = hiYewSystemBean.fillerRecords();
+        fillerRecords = knowledgeSystemBean.fillerRecords();
         return fillerRecords;
     }
 
     public List<Metal> getAllMetals() {
-        MetalRecords = hiYewSystemBean.metalRecords();
+        MetalRecords = knowledgeSystemBean.metalRecords();
         return MetalRecords;
     }
 
@@ -97,11 +99,11 @@ public class KnowledgeManageBean implements Serializable {
     }
 
     public void deleteFiller() {
-        hiYewSystemBean.deleteFiller(selectedFiller);
+        knowledgeSystemBean.deleteFiller(selectedFiller);
     }
 
     public void deleteMetal() {
-        hiYewSystemBean.deleteMetal(selectedMetal);
+        knowledgeSystemBean.deleteMetal(selectedMetal);
     }
 
     private List<Vector> read() throws IOException {
@@ -151,13 +153,13 @@ public class KnowledgeManageBean implements Serializable {
     public void readFile() throws IOException {
         setInputFile("C:\\Users\\JustHRJ\\Desktop\\Book1.xls");
         List<Vector> result = read();
-        hiYewSystemBean.addFillers(result);
+        knowledgeSystemBean.addFillers(result);
     }
 
     public void readFile2() throws IOException {
         setInputFile("C:\\Users\\JustHRJ\\Desktop\\Book1.xls");
         List<Vector> result = read2();
-        hiYewSystemBean.addMetal(result);
+        knowledgeSystemBean.addMetal(result);
     }
 
     private List<Vector> read2() throws IOException {
@@ -201,7 +203,7 @@ public class KnowledgeManageBean implements Serializable {
         write();
     }
 
-    public void write() throws IOException, WriteException, BiffException {
+    private void write() throws IOException, WriteException, BiffException {
         Workbook workbook = Workbook.getWorkbook(new File(inputFile));
         WritableWorkbook copy = Workbook.createWorkbook(new File(inputFile), workbook);
         WritableSheet sheet1 = copy.getSheet(0);
@@ -234,7 +236,7 @@ public class KnowledgeManageBean implements Serializable {
         write3();
     }
 
-    public void write2() throws IOException, WriteException, BiffException {
+    private void write2() throws IOException, WriteException, BiffException {
 
         Workbook workbook = Workbook.getWorkbook(new File(inputFile));
         WritableWorkbook copy = Workbook.createWorkbook(new File(inputFile), workbook);
@@ -302,46 +304,43 @@ public class KnowledgeManageBean implements Serializable {
 
     }
 
-    public void write3() throws IOException, WriteException, BiffException {
+    private void write3() throws IOException, WriteException, BiffException {
 
         Workbook workbook = Workbook.getWorkbook(new File(inputFile));
         WritableWorkbook copy = Workbook.createWorkbook(new File(inputFile), workbook);
         WritableSheet sheet1 = copy.createSheet("MetalInformation", 1);
 
-        jxl.write.Label number3 = new jxl.write.Label(0, 0, "ID");
+        jxl.write.Label number3 = new jxl.write.Label(0, 0, "NAME");
         sheet1.addCell(number3);
 
-        number3 = new jxl.write.Label(1, 0, "NAME");
+        number3 = new jxl.write.Label(1, 0, "GOLD");
         sheet1.addCell(number3);
 
-        number3 = new jxl.write.Label(2, 0, "GOLD");
+        number3 = new jxl.write.Label(2, 0, "SILVER");
         sheet1.addCell(number3);
 
-        number3 = new jxl.write.Label(3, 0, "SILVER");
+        number3 = new jxl.write.Label(3, 0, "BRONZE");
         sheet1.addCell(number3);
 
-        number3 = new jxl.write.Label(4, 0, "BRONZE");
+        number3 = new jxl.write.Label(4, 0, "IRON");
         sheet1.addCell(number3);
 
-        number3 = new jxl.write.Label(5, 0, "IRON");
+        number3 = new jxl.write.Label(5, 0, "COPPER");
         sheet1.addCell(number3);
 
-        number3 = new jxl.write.Label(6, 0, "COPPER");
+        number3 = new jxl.write.Label(6, 0, "TITANIUM");
         sheet1.addCell(number3);
 
-        number3 = new jxl.write.Label(7, 0, "TITANIUM");
+        number3 = new jxl.write.Label(7, 0, "PLATINIUM");
         sheet1.addCell(number3);
 
-        number3 = new jxl.write.Label(8, 0, "PLATINIUM");
+        number3 = new jxl.write.Label(8, 0, "ALUMINIUM");
         sheet1.addCell(number3);
 
-        number3 = new jxl.write.Label(9, 0, "ALUMINIUM");
+        number3 = new jxl.write.Label(9, 0, "TOPAZ");
         sheet1.addCell(number3);
 
-        number3 = new jxl.write.Label(10, 0, "TOPAZ");
-        sheet1.addCell(number3);
-
-        number3 = new jxl.write.Label(11, 0, "PLASTIC");
+        number3 = new jxl.write.Label(10, 0, "PLASTIC");
         sheet1.addCell(number3);
         if (results2 != null) {
 
@@ -362,13 +361,13 @@ public class KnowledgeManageBean implements Serializable {
 
             }
         }
-        
-            copy.removeSheet(2);
-            System.out.println("done1");
-            copy.write();
 
-            copy.close();
-        
+        copy.removeSheet(2);
+        System.out.println("done1");
+        copy.write();
+
+        copy.close();
+
     }
 
     /**
@@ -416,27 +415,16 @@ public class KnowledgeManageBean implements Serializable {
     public void updateFiller() {
         System.out.println("here");
 
-        hiYewSystemBean.editFiller(selectedFiller);
+        knowledgeSystemBean.editFiller(selectedFiller);
     }
 
     public void updateMetal() {
-        hiYewSystemBean.editMetal(selectedMetal);
+        knowledgeSystemBean.editMetal(selectedMetal);
     }
 
     /**
      * @return the copper
      */
-    public int getCopper() {
-        return copper;
-    }
-
-    /**
-     * @param copper the copper to set
-     */
-    public void setCopper(int copper) {
-        this.copper = copper;
-    }
-
     /**
      * @return the results2
      */
@@ -470,6 +458,23 @@ public class KnowledgeManageBean implements Serializable {
      */
     public Metal getSelectedMetal() {
         return selectedMetal;
+    }
+
+    public List<FillerComposition> viewMatch() {
+        if (selectedMetal != null) {
+            List<FillerComposition> result = new ArrayList<FillerComposition>();
+            for (Object o : selectedMetal.getFillers()) {
+                FillerComposition f = (FillerComposition) o;
+                result.add(f);
+            }
+            if (result.isEmpty()) {
+                return null;
+            } else {
+                return result;
+            }
+        } else {
+            return null;
+        }
     }
 
     /**
@@ -513,9 +518,10 @@ public class KnowledgeManageBean implements Serializable {
     public DualListModel<String> getFillerDisplay() {
         System.out.println("here1");
         if (metalName.isEmpty() || metalName.equals("")) {
+
         } else {
-            fillerList = hiYewSystemBean.FillersNotAssociated(metalName);
-            fillerChosen = hiYewSystemBean.FillersAssociated(metalName);
+            fillerList = knowledgeSystemBean.FillersNotAssociated(metalName);
+            fillerChosen = knowledgeSystemBean.FillersAssociated(metalName);
         }
         setFillerDisplay(new DualListModel<String>(fillerList, fillerChosen));
         System.out.println("here2");
@@ -530,7 +536,7 @@ public class KnowledgeManageBean implements Serializable {
     }
 
     public List<String> getRetrieveMetalName() {
-        return hiYewSystemBean.metalNames();
+        return knowledgeSystemBean.metalNames();
     }
 
     /**
@@ -549,6 +555,6 @@ public class KnowledgeManageBean implements Serializable {
 
     public void createPairings() {
         fillerChosen = fillerDisplay.getTarget();
-        hiYewSystemBean.createPairings(metalName, fillerChosen);
+        knowledgeSystemBean.createPairings(metalName, fillerChosen);
     }
 }

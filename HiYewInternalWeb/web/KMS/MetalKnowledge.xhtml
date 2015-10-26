@@ -19,9 +19,7 @@
                 </f:facet>
 
 
-                <p:column filterBy="#{im.id}" headerText="Id"  filterMatchMode="contains" width ="100" >
-                    <h:outputText value="#{im.id}" />
-                </p:column>
+
 
                 <p:column filterBy="#{im.metalName}" headerText="Name" filterMatchMode="contains"  width ="100">
                     <h:outputText value="#{im.metalName}" />
@@ -134,17 +132,18 @@
                         <f:setPropertyActionListener value="#{im}" target="#{knowledgeManageBean.selectedMetal}" />
                     </p:commandButton>
                 </p:column>
+                <p:column style="width:32px;text-align: center">
+                    <p:commandButton update=":formMain:matchDetail" oncomplete="PF('matchDialog').show()" icon="ui-icon-search" title="View">
+                        <f:setPropertyActionListener value="#{im}" target="#{knowledgeManageBean.selectedMetal}" />
+                    </p:commandButton>
+                </p:column>
             </p:dataTable>
 
 
 
-            <p:dialog header="Filler Edit" widgetVar="claimDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="true">
+            <p:dialog header="Metal Edit" widgetVar="claimDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="true">
                 <p:outputPanel id="claimDetail" style="text-align:center;">
                     <p:dataTable var ="im" value ="#{knowledgeManageBean.retrieveMetal}" paginator="true" rows="5" emptyMessage="No Filler to Show" scrollable="true" scrollWidth="95%" >
-                        <p:column  headerText="Id" width ="100"  >
-                            <h:outputText value="#{knowledgeManageBean.selectedMetal.id}" />
-                        </p:column>
-
                         <p:column  headerText="Name"  width ="100">
                             <h:outputText value="#{knowledgeManageBean.selectedMetal.metalName}" />
                         </p:column>
@@ -200,10 +199,35 @@
                     </p:dataTable>
                     <p:commandButton value="Edit" action ="#{knowledgeManageBean.updateMetal()}" update ="formMain" />
                     <p:commandButton value ="Delete" action ="#{knowledgeManageBean.deleteMetal()}" update ="formMain" >
-                       
+
                     </p:commandButton>
                 </p:outputPanel>
             </p:dialog>
+
+
+
+            <p:dialog header="Filler Association" widgetVar="matchDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="true">
+                <p:outputPanel id="matchDetail" style="text-align:center;">
+                    <p:dataTable var ="im" value ="#{knowledgeManageBean.viewMatch()}" paginator="true" rows="5" emptyMessage="No Match" scrollable="true" scrollWidth="95%" >
+                        <p:column headerText ="ID">
+                            <p:outputLabel value ="#{im.id}"/>
+                        </p:column>
+                        <p:column headerText ="Filler name">
+                            <p:outputLabel value ="#{im.name}"/>
+                        </p:column>
+                    </p:dataTable>
+
+                    <p:commandButton value ="Edit Matching" action ="matchMetal"/>
+                </p:outputPanel>
+
+            </p:dialog>
+
+
+            <p:commandButton value ="Import from Excel File" action ="#{knowledgeManageBean.readFile2()}"/> <br/>
+            <p:commandButton value ="Transfer into excel File" action ="#{knowledgeManageBean.writeFile3()}"/>
+
+
+
         </h:form>
     </h:body>
 </html>

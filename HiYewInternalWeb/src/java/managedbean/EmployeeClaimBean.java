@@ -42,7 +42,7 @@ public class EmployeeClaimBean implements Serializable {
     private Date claimTime = null;
     private double amount = 0.00;
     private UploadedFile file;
-    private String destination = "C:\\Users\\User\\Desktop\\SouceTreeRepo\\IN05\\HiYewInternalWeb\\web\\image\\receipts\\";
+    private String destination = "C:\\Users\\JustHRJ\\Desktop\\IN05\\HiYewInternalWeb\\web\\image\\receipts\\";
     private EmployeeClaimEntity selectedClaim;
     private String months = "";
     private String employeeName = "";
@@ -118,9 +118,9 @@ public class EmployeeClaimBean implements Serializable {
         String destinations = "../image/receipts/";
 
         if (FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("filename") == null) {
-            destination = "";
+            destinations = "";
         } else {
-            destination += FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("filename").toString();
+            destinations += FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("filename").toString();
         }
 
         boolean check = hiYewSystemBean.applyClaim(employee.getEmployee_name(), employeeClaim, destinations);

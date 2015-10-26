@@ -23,7 +23,6 @@ import javax.persistence.ManyToMany;
 public class Metal implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
-    private String id;
     private String metalName;
     private int gold;
     private int silver;
@@ -235,18 +234,6 @@ public class Metal implements Serializable {
         this.plastic = plastic;
     }
 
-    /**
-     * @return the id
-     */
-    public String getId() {
-        return id;
-    }
 
-    /**
-     * @param id the id to set
-     */
-    public void setId(String id) {
-        this.id = id;
-    }
     
 }

@@ -36,7 +36,7 @@ public class MachineManageBean {
      */
   
     @EJB
-    private HiYewSystemBeanLocal machineSystemBean;
+    private MachineSystemBeanLocal machineSystemBean;
     private String machineType;
     private String machine_status = "";
     private List<Long> machineMaintainenceIDList;

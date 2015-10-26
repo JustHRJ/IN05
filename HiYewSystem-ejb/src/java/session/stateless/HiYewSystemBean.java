@@ -2741,7 +2741,7 @@ public class HiYewSystemBean implements HiYewSystemBeanLocal {
         for (Object o : q.getResultList()) {
             Metal f = (Metal) o;
             Vector im = new Vector();
-            im.add(f.getId());
+    
             im.add(f.getMetalName());
             im.add(f.getAluminium());
             im.add(f.getBronze());
@@ -2840,6 +2840,8 @@ public class HiYewSystemBean implements HiYewSystemBeanLocal {
             return results;
         }
     }
+    
+
 
     public void addMetal(List<Vector> metals) {
         Query q = em.createQuery("Select c from Metal c");
@@ -2855,18 +2857,18 @@ public class HiYewSystemBean implements HiYewSystemBeanLocal {
             for (Object o : metals) {
                 Vector im = (Vector) o;
                 Metal f = new Metal();
-                f.setId(im.get(0).toString());
-                f.setMetalName(im.get(1).toString());
-                f.setAluminium(Integer.parseInt(im.get(2).toString()));
-                f.setBronze(Integer.parseInt(im.get(3).toString()));
-                f.setCopper(Integer.parseInt(im.get(4).toString()));
-                f.setGold(Integer.parseInt(im.get(5).toString()));
-                f.setIron(Integer.parseInt(im.get(6).toString()));
-                f.setPlastic(Integer.parseInt(im.get(7).toString()));
-                f.setSilver(Integer.parseInt(im.get(8).toString()));
-                f.setTitanium(Integer.parseInt(im.get(9).toString()));
-                f.setPlatinium(Integer.parseInt(im.get(10).toString()));
-                f.setTopaz(Integer.parseInt(im.get(11).toString()));
+          
+                f.setMetalName(im.get(0).toString());
+                f.setAluminium(Integer.parseInt(im.get(1).toString()));
+                f.setBronze(Integer.parseInt(im.get(2).toString()));
+                f.setCopper(Integer.parseInt(im.get(3).toString()));
+                f.setGold(Integer.parseInt(im.get(4).toString()));
+                f.setIron(Integer.parseInt(im.get(5).toString()));
+                f.setPlastic(Integer.parseInt(im.get(6).toString()));
+                f.setSilver(Integer.parseInt(im.get(7).toString()));
+                f.setTitanium(Integer.parseInt(im.get(8).toString()));
+                f.setPlatinium(Integer.parseInt(im.get(9).toString()));
+                f.setTopaz(Integer.parseInt(im.get(10).toString()));
                 em.persist(f);
             }
         }
@@ -2902,7 +2904,7 @@ public class HiYewSystemBean implements HiYewSystemBeanLocal {
         if (metal == null) {
             System.out.println("no metal to delete");
         } else {
-            String id = metal.getId();
+            String id = metal.getMetalName();
             Metal m = em.find(Metal.class, id);
             if (m == null) {
                 System.out.println("entity failed to find id of metal");

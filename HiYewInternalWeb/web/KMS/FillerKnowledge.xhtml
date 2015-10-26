@@ -203,10 +203,14 @@
                     </p:dataTable>
                     <p:commandButton value="Edit" action ="#{knowledgeManageBean.updateFiller()}" update ="formMain" />
                     <p:commandButton value ="Delete" action ="#{knowledgeManageBean.deleteFiller()}" update ="formMain" >
-                       
                     </p:commandButton>
                 </p:outputPanel>
             </p:dialog>
+            
+             <p:commandButton value ="Import from Excel File" action ="#{knowledgeManageBean.readFile()}"/>
+             <br/>
+             <p:commandButton value ="Transfer into Excel File" action ="#{knowledgeManageBean.writeFile2()}"/> 
+            
         </h:form>
     </h:body>
 </html>
