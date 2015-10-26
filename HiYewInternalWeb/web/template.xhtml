@@ -35,6 +35,11 @@
         <link href="assets/third/magnific-popup/magnific-popup.css" rel="stylesheet" /> 
         <link href="assets/third/datepicker/css/datepicker.css" rel="stylesheet" />
         <link rel="shortcut icon" href="images/favicon.ico" />
+
+        <style>
+            .ui-menubar .ui-menuitem-link:hover {
+            }
+        </style>
     </h:head>
 
     <h:body class="tooltips">
@@ -68,10 +73,16 @@
                 <!-- ============================================================== -->
                 <!-- START YOUR CONTENT HERE -->
                 <!-- ============================================================== -->
-
                 <div class="body content rows scroll-y">
                     <p:megaMenu orientation="horizontal" styleClass="menu" style="width:100%!important;">
-                        <p:submenu label ="Human Resource Management System" icon ="">
+                        <p:submenu style="#{loginControlBean.current_page eq 'DSS' ? 'border: 1px solid #a8a8a8;background: #85b2cb -webkit-gradient(linear, left top, left bottom, from(rgba(255,255,255,0.8)), to(rgba(255,255,255,0)));' : ''}" label="Decision Support System" icon="">
+                            <p:column>
+                                <p:submenu label="Title">
+                                    <p:menuitem value="Page" url="" />
+                                </p:submenu>
+                            </p:column>
+                        </p:submenu>
+                        <p:submenu style="#{loginControlBean.current_page eq 'HRMS' ? 'border: 1px solid #a8a8a8;background: #85b2cb -webkit-gradient(linear, left top, left bottom, from(rgba(255,255,255,0.8)), to(rgba(255,255,255,0)));' : ''}" label ="HR Mgmt. System" icon ="">
                             <p:column>
                                 <p:submenu label ="Employee Management">
                                     <p:menuitem value ="Register Employee" url ="hrms-employee-registration.xhtml" rendered ="#{loginControlBean.checkValid1()}"/>
@@ -102,22 +113,35 @@
                                 </p:submenu>
                             </p:column>
                         </p:submenu>
-                        <p:submenu label="Inventory Control System" icon="">
+                        <p:submenu style="#{loginControlBean.current_page eq 'ICS' ? 'border: 1px solid #a8a8a8;background: #85b2cb -webkit-gradient(linear, left top, left bottom, from(rgba(255,255,255,0.8)), to(rgba(255,255,255,0)));' : ''}" label="Inventory Control System" icon="">
                             <p:column>
                                 <p:submenu label="Items Management">
-                                    <p:menuitem value="View Inventory" url="/ICS/viewInventory.xhtml" />
-                                    <p:menuitem value="Add New Item" url="/ICS/addNewItem.xhtml" />
-                                    <p:menuitem value="View Low Stock Alert (#{viewLowStockManagedBean.numOfLowStockItems})" url="/ICS/viewLowStock.xhtml" />
+                                    <p:menuitem value="View Inventory" url="ics-view-inventory.xhtml" />
+                                    <p:menuitem value="Add New Item" url="ics-add-new-item.xhtml" />
+                                    <p:menuitem value="View Low Stock Alert (#{viewLowStockManagedBean.numOfLowStockItems})" url="ics-view-low-stock.xhtml" />
                                 </p:submenu>
                             </p:column>
                             <p:column>
                                 <p:submenu label="Storage Management">
-                                    <p:menuitem value="View Storage" url="/ICS/viewRacks.xhtml" />
-                                    <p:menuitem value="Create Storage" url="/ICS/createStorage.xhtml" />
+                                    <p:menuitem value="View Storage" url="ics-view-racks.xhtml" />
+                                    <p:menuitem value="Create Storage" url="ics-create-storage.xhtml" />
                                 </p:submenu>
                             </p:column>
                         </p:submenu>
-                        <p:submenu label ="Machine Management System" icon ="">
+                        <p:submenu style="#{loginControlBean.current_page eq 'KMS' ? 'border: 1px solid #a8a8a8;background: #85b2cb -webkit-gradient(linear, left top, left bottom, from(rgba(255,255,255,0.8)), to(rgba(255,255,255,0)));' : ''}" label="Knowledge Mgmt. System" icon="">
+                            <p:column>
+                                <p:submenu label="Metal Knowledge Mgmt.">
+                                    <p:menuitem value="Metal Knowledge" url="kms-metal-knowledge.xhtml" />
+                                    <p:menuitem value="Match Metal" url="kms-match-metal.xhtml" />
+                                </p:submenu>
+                            </p:column>
+                            <p:column>
+                                <p:submenu label="Filler Knowledge Mgmt.">
+                                    <p:menuitem value="Filler Knowledge" url="kms-filler-knowledge.xhtml" />
+                                </p:submenu>
+                            </p:column>
+                        </p:submenu>
+                        <p:submenu style="#{loginControlBean.current_page eq 'MMS' ? 'border: 1px solid #a8a8a8;background: #85b2cb -webkit-gradient(linear, left top, left bottom, from(rgba(255,255,255,0.8)), to(rgba(255,255,255,0)));' : ''}" label ="Machine Mgmt. System" icon ="">
                             <p:column>
                                 <p:submenu label = "Machine Management" >
                                     <p:menuitem value ="Add Machinery" url ="mms-add-machine.xhtml" />
@@ -132,7 +156,7 @@
                                 </p:submenu>
                             </p:column>
                         </p:submenu>
-                        <p:submenu label="Procurement System" icon="">
+                        <p:submenu style="#{loginControlBean.current_page eq 'PS' ? 'border: 1px solid #a8a8a8;background: #85b2cb -webkit-gradient(linear, left top, left bottom, from(rgba(255,255,255,0.8)), to(rgba(255,255,255,0)));' : ''}" label="Procurement System" icon="">
                             <p:column>
                                 <p:submenu label="Supplier Management">
                                     <p:menuitem value="Supplier Activation" url="ps-activation.xhtml" />
@@ -145,16 +169,23 @@
                                 </p:submenu>
                             </p:column>
                         </p:submenu>
-                        <p:submenu label ="Sales Management System" icon ="">
+                        <p:submenu style="#{loginControlBean.current_page eq 'PMS' ? 'border: 1px solid #a8a8a8;background: #85b2cb -webkit-gradient(linear, left top, left bottom, from(rgba(255,255,255,0.8)), to(rgba(255,255,255,0)));' : ''}" label="Project Mgmt. System" icon="">
+                            <p:column>
+                                <p:submenu label="Title">
+                                    <p:menuitem value="Page" url="" />
+                                </p:submenu>
+                            </p:column>
+                        </p:submenu>
+                        <p:submenu style="#{loginControlBean.current_page eq 'SMS' ? 'border: 1px solid #a8a8a8;background: #85b2cb -webkit-gradient(linear, left top, left bottom, from(rgba(255,255,255,0.8)), to(rgba(255,255,255,0)));' : ''}" label ="Sales Mgmt. System" icon ="">
                             <p:column>
                                 <p:submenu label ="Laser Welding Products">
-                                    <p:menuitem value ="View RFQ" url ="/SMS/viewEditProductQuotations.xhtml" />
-                                    <p:menuitem value ="View Purchase Order" url ="/SMS/viewEditProductPurchaseOrders.xhtml"/>
+                                    <p:menuitem value ="View RFQ" url ="sms-view-product-quotations.xhtml" />
+                                    <p:menuitem value ="View Purchase Order" url ="sms-view-product-po.xhtml"/>
                                 </p:submenu>
                             </p:column>
                             <p:column>
                                 <p:submenu label ="Laser Welding Services">
-                                    <p:menuitem value ="View RFQ" url ="/SMS/viewEditQuotations.xhtml"/>
+                                    <p:menuitem value ="View RFQ" url ="sms-view-quotations.xhtml"/>
                                 </p:submenu>
                             </p:column>
                         </p:submenu>

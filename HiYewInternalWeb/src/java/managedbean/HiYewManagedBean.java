@@ -166,7 +166,7 @@ public class HiYewManagedBean {
         }
         boolean check = hiYewSystemBean.addMachine(machineName, machineId, machineTime, machineDescript, machineSubMaint);
         if (check) {
-            return "viewMachine";
+            return "mms-add-machine";
         } else {
             FacesMessage msg = new FacesMessage("Failed to Add", "Please check for existing machine number or machine name.");
             FacesContext.getCurrentInstance().addMessage(null, msg);
