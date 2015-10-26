@@ -122,7 +122,7 @@ public class MachineManageBean {
             FacesContext.getCurrentInstance().getExternalContext().getSessionMap().remove("machineName");
             FacesMessage msg = new FacesMessage("Schedule Added", machineName + " has a maintainence schedule.");
             FacesContext.getCurrentInstance().addMessage(null, msg);
-            FacesContext.getCurrentInstance().getExternalContext().redirect("/HiYewInternalWeb/mms-view-maintenence-schedule.xhtml.xhtml");
+            FacesContext.getCurrentInstance().getExternalContext().redirect("/HiYewInternalWeb/mms-view-maintenence-schedule.xhtml");
         } else {
             FacesMessage msg = new FacesMessage("Failed to Add", "Please check for exisiting schedule.");
             FacesContext.getCurrentInstance().addMessage(null, msg);
