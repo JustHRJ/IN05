@@ -1,0 +1,89 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                template="./template.xhtml">
+
+    <ui:define name="content">
+        <!-- Page header -->
+        <div class="page-heading animated fadeInDownBig" style="padding:20px!important;padding-bottom:10px!important;">
+            <h1>View Payroll <small>Payroll Management</small></h1>
+        </div>
+        <!-- End page header -->
+        <div style="padding:20px!important;padding-top:0px!important;">
+            <h:form id="formMain">
+                <p:outputLabel style="font-weight:bold;color:#4f4f4f;font-size:14px;" value ="Search Criteria" />
+                <p:panelGrid style = "width:28%" id = "lll"> 
+                    <p:row>
+                        <p:column style="font-weight:bold;vertical-align: bottom">
+                            <p:outputLabel value ="View by Employee"/>
+                        </p:column>
+                        <p:column>
+                            <h:selectOneMenu style="width:200px" id ="panelG" value ="#{hiYewManagedBean.employeeName}">
+                                <f:selectItem itemValue ="select" itemLabel ="Select One"/>
+                                <f:selectItems value ="#{loginControlBean.validateLeaveName()}"/>
+                            </h:selectOneMenu>
+                        </p:column>
+                    </p:row>
+                    <p:row>
+                        <p:column style="font-weight:bold;vertical-align: bottom">
+                            <p:outputLabel value ="View by Month" />                        
+                        </p:column>
+                        <p:column>
+                            <h:selectOneMenu style="width:200px" id = "panelF" value ="#{hiYewManagedBean.months}" disabled="#{loginControlBean.checkValid()}">
+                                <f:selectItem itemValue ="select" itemLabel = "Select One" />
+                                <f:selectItem itemValue ="Jan" itemLabel = "January" />
+                                <f:selectItem itemValue ="Feb" itemLabel = "Feburary" />
+                                <f:selectItem itemValue ="Mar" itemLabel = "March" />
+                                <f:selectItem itemValue ="Apr" itemLabel = "April" />
+                                <f:selectItem itemValue ="May" itemLabel = "May" />
+                                <f:selectItem itemValue ="Jun" itemLabel ="June" />
+                                <f:selectItem itemValue ="Jul" itemLabel = "July" />
+                                <f:selectItem itemValue ="Aug" itemLabel ="August" />
+                                <f:selectItem itemValue ="Sep" itemLabel ="September" />
+                                <f:selectItem itemValue ="Oct" itemLabel ="October" />
+                                <f:selectItem itemValue ="Nov" itemLabel ="November" />
+                                <f:selectItem itemValue ="Dec" itemLabel ="December" />
+                            </h:selectOneMenu>
+                        </p:column>
+                    </p:row>
+                </p:panelGrid>
+                <p:commandButton value="Search for Pay Slip(s)" id = "btn" update =":formMain:lll" >
+                    <f:ajax execute ="lll" render="data1"/>
+
+                    <br/>
+                    <p:panel id ="panel">
+                        <p:dataTable  id = "data1" var ="im" value = "#{hiYewManagedBean.payrolls}" paginator="true" rows="5" emptyMessage="No Pay Yet" >
+                            <p:column headerText="Employee Name">
+                                <p:outputLabel value ="#{im.employee.employee_name}"/>
+                            </p:column>
+                            <p:column headerText="Period">
+                                <p:outputLabel value ="#{im.month}"/>
+                            </p:column>
+                            <p:column headerText="Basic Salary">
+                                <p:outputLabel value =" #{hiYewManagedBean.formatCurrency(im.salary)}"/>
+                            </p:column>
+                            <p:column headerText="Bonus">
+                                <p:outputLabel value ="#{hiYewManagedBean.formatCurrency(im.bonus)}"/>
+                            </p:column>
+                            <p:column headerText="other amounts">
+                                <p:outputLabel value ="#{hiYewManagedBean.formatCurrency(im.otherAmount)}"/>
+                            </p:column>
+                            <p:column headerText="Total Salary">
+                                <p:outputLabel value =" #{hiYewManagedBean.formatCurrency(hiYewManagedBean.calculateTotal(im.overtime, im.bonus, im.salary, im.otherAmount, im.taxiClaim))}"/>
+                            </p:column>
+                            <p:column headerText="Pay Status">
+                                <p:outputLabel value ="#{im.status}"/>
+                            </p:column>
+                        </p:dataTable>
+                    </p:panel>
+                    <br />
+                </p:commandButton>
+            </h:form>
+        </div>
+    </ui:define>
+
+</ui:composition>

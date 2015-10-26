@@ -1,0 +1,73 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                template="./template.xhtml">
+
+    <ui:define name="content">
+        <!-- Page header -->
+        <div class="page-heading animated fadeInDownBig" style="padding:20px!important;padding-bottom:10px!important;">
+            <h1>Leave Application <small>Leave Management</small></h1>
+        </div>
+        <!-- End page header -->
+        <div style="padding:20px!important;padding-top:0px!important;">
+            <h:form id="formMain">
+                <p:growl id ="msgs" showDetail="true" />
+                <p:panelGrid>
+                    <p:row>
+                        <p:column>
+                            <p:outputLabel style ="font-weight: bold" value ="Employee Name "/>
+                        </p:column>
+                        <p:column>
+                            <h:selectOneMenu value="#{hiYewManagedBean.employeeName}" style="width:100%" required = "true" requiredMessage="Please select Employee">
+                                <f:selectItem itemValue ="" itemLabel="Select" noSelectionOption="true"/>
+                                <f:selectItems value="#{loginControlBean.validateLeaveName()}"  />
+                            </h:selectOneMenu> 
+                        </p:column>
+                    </p:row>
+                    <p:row>
+                        <p:column>
+                            <p:outputLabel value ="Type of Leave"  style ="font-weight: bold" />
+                        </p:column>
+                        <p:column>
+                            <h:selectOneMenu value ="#{hiYewManagedBean.leaveType}" style ="width: 100%">
+                                <f:selectItem itemValue ="paid" itemLabel="Paid Leave"/>
+                                <f:selectItem itemValue ="unpaid" itemLabel ="Unpaid Leave" />
+                            </h:selectOneMenu>
+                        </p:column>
+                    </p:row>
+                    <p:row>
+                        <p:column>
+                            <p:outputLabel style ="font-weight: bold" value ="Start Date"/>
+                        </p:column>
+                        <p:column>
+                            <p:calendar style="font-weight:normal" value = "#{hiYewManagedBean.startDate}"  pattern ="dd/MM/yyyy" required="true" requiredMessage="Please input start date" />
+                        </p:column>
+                    </p:row>
+                    <p:row>
+                        <p:column>
+                            <p:outputLabel  style ="font-weight: bold" value ="End Date"/>
+                        </p:column>
+                        <p:column>
+                            <p:calendar style="font-weight:normal" value = "#{hiYewManagedBean.endDate}"  pattern ="dd/MM/yyyy" required ="true" requiredMessage="Please input end date" />
+                        </p:column>
+                    </p:row>
+                    <p:row>
+                        <p:column>
+                            <p:outputLabel for = "leave_Remarks" style ="font-weight: bold" value ="Remarks "/>
+                        </p:column>
+                        <p:column>
+                            <p:inputText style="font-weight:normal;width:100%" label = "leaveRemarks" id = "leave_Remarks" value ="#{hiYewManagedBean.leaveRemarks}" />
+                        </p:column>
+                    </p:row>
+                </p:panelGrid>
+                <br />
+                <p:commandButton id ="btn" value ="Submit Leave Application" actionListener ="#{hiYewManagedBean.applyLeave}" update =":formMain:msgs" />
+            </h:form>
+        </div>
+    </ui:define>
+
+</ui:composition>

@@ -16,6 +16,7 @@ import javax.faces.validator.ValidatorException;
 import javax.mail.internet.InternetAddress;
 import session.stateless.HiYewSystemBeanLocal;
 import java.util.regex.*;
+
 /**
  *
  * @author JustHRJ
@@ -42,23 +43,22 @@ public class registrationValidator implements Validator {
         }
 
         if (hiYewSystemBean.existEmployeeName(username)) {
-            throw new ValidatorException(new FacesMessage("Employee Name already in use, choose another"));
+            throw new ValidatorException(new FacesMessage("Employee Name already in use, choose another."));
         }
     }
 
     public void validateEmail(FacesContext context, UIComponent component, Object submittedAndConvertedValue) throws ValidatorException {
 
         String email = (String) submittedAndConvertedValue;
-         String emailregex = "^[_A-Za-z0-9-]+(\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\\.[A-Za-z0-9-]+)*(\\.[A-Za-z]{2,})$";
-        
-            if (!(email.isEmpty())) {
-                if(email.matches(emailregex)){
-                    
-                }else{
-                    throw new ValidatorException(new FacesMessage("Employee Name already in use, choose another"));
-                }
+        String emailregex = "^[_A-Za-z0-9-]+(\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\\.[A-Za-z0-9-]+)*(\\.[A-Za-z]{2,})$";
+
+        if (!(email.isEmpty())) {
+            if (email.matches(emailregex)) {
+
+            } else {
+                throw new ValidatorException(new FacesMessage("Employee Name already in use, choose another."));
             }
-   
+        }
 
     }
 
@@ -71,11 +71,11 @@ public class registrationValidator implements Validator {
                 return; // Let required="true" or @NotNull handle it.
             }
             if (numeric < 500) {
-                throw new ValidatorException(new FacesMessage("not enough pay"));
+                throw new ValidatorException(new FacesMessage("Not enough pay!"));
             }
 
         } catch (Exception ex) {
-            throw new ValidatorException(new FacesMessage("String is not numeric"));
+            throw new ValidatorException(new FacesMessage("String is not numeric!"));
         }
 
     }
@@ -90,11 +90,11 @@ public class registrationValidator implements Validator {
             }
             if (numeric != 0) {
                 if (numeric < 500) {
-                    throw new ValidatorException(new FacesMessage("not enough pay"));
+                    throw new ValidatorException(new FacesMessage("Not enough pay!"));
                 }
             }
         } catch (Exception ex) {
-            throw new ValidatorException(new FacesMessage("String is not numeric"));
+            throw new ValidatorException(new FacesMessage("String is not numeric!"));
         }
 
     }
@@ -113,14 +113,14 @@ public class registrationValidator implements Validator {
             try {
                 Integer.parseInt(username.substring(1, username.length() - 1));
             } catch (Exception ex) {
-                throw new ValidatorException(new FacesMessage("Middle is not numeric"));
+                throw new ValidatorException(new FacesMessage("Middle is not numeric!"));
             }
         } else {
-            throw new ValidatorException(new FacesMessage("Employee Number already in use, choose another"));
+            throw new ValidatorException(new FacesMessage("Employee Number already in use, choose another."));
         }
 
         if (hiYewSystemBean.existEmployeeNumber(username)) {
-            throw new ValidatorException(new FacesMessage("Employee Number already in use, choose another"));
+            throw new ValidatorException(new FacesMessage("Employee Number already in use, choose another."));
         }
 
     }
@@ -136,14 +136,14 @@ public class registrationValidator implements Validator {
             Integer i = Integer.parseInt(numeric);
             if (numeric.substring(0, 1).equals("8") || numeric.substring(0, 1).equals("9") || numeric.substring(0, 1).equals("6")) {
             } else {
-                throw new ValidatorException(new FacesMessage("Contact number is invalid"));
+                throw new ValidatorException(new FacesMessage("Contact number is invalid!"));
             }
             if (!(numeric.length() == 8)) {
-                throw new ValidatorException(new FacesMessage("Contact number is invalid"));
+                throw new ValidatorException(new FacesMessage("Contact number is invalid!"));
             }
 
         } catch (Exception ex) {
-            throw new ValidatorException(new FacesMessage("Contzct number is invalid."));
+            throw new ValidatorException(new FacesMessage("Contact number is invalid!"));
         }
 
     }
@@ -158,11 +158,11 @@ public class registrationValidator implements Validator {
         try {
             Integer.parseInt(numeric);
             if (numeric.length() != 6) {
-                throw new ValidatorException(new FacesMessage("numeric not postal code"));
+                throw new ValidatorException(new FacesMessage("Numeric not postal code!"));
             }
 
         } catch (Exception ex) {
-            throw new ValidatorException(new FacesMessage("String is not numeric"));
+            throw new ValidatorException(new FacesMessage("String is not numeric!"));
         }
 
     }
@@ -193,7 +193,7 @@ public class registrationValidator implements Validator {
             Integer i = Integer.parseInt(numeric);
 
         } catch (Exception ex) {
-            throw new ValidatorException(new FacesMessage("Time is invalid"));
+            throw new ValidatorException(new FacesMessage("Time is invalid."));
         }
 
     }
@@ -206,7 +206,7 @@ public class registrationValidator implements Validator {
         }
 
         if (hiYewSystemBean.existEmployeeUsername(username)) {
-            throw new ValidatorException(new FacesMessage("Employee Number already in use, choose another"));
+            throw new ValidatorException(new FacesMessage("Employee Number already in use, choose another."));
         }
     }
 
@@ -218,7 +218,7 @@ public class registrationValidator implements Validator {
         }
 
         if (hiYewSystemBean.existMachineName(username)) {
-            throw new ValidatorException(new FacesMessage("Machine Name already in use, choose another"));
+            throw new ValidatorException(new FacesMessage("Machine Name already in use, choose another."));
         }
     }
 
@@ -230,7 +230,7 @@ public class registrationValidator implements Validator {
         }
 
         if (hiYewSystemBean.notExistExpiredName(name)) {
-            throw new ValidatorException(new FacesMessage("Employee not existent. Please check"));
+            throw new ValidatorException(new FacesMessage("Employee not existent. Please check."));
         }
     }
 
@@ -242,7 +242,7 @@ public class registrationValidator implements Validator {
         }
 
         if (hiYewSystemBean.notExistMachine(name)) {
-            throw new ValidatorException(new FacesMessage("Machine not existent. Please check"));
+            throw new ValidatorException(new FacesMessage("Machine not existent. Please check."));
         }
     }
 
