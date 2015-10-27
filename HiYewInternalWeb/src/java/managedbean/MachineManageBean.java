@@ -98,7 +98,7 @@ public class MachineManageBean {
         if (check) {
             FacesContext facesCtx = FacesContext.getCurrentInstance();
             ExternalContext externalContext = facesCtx.getExternalContext();
-            externalContext.redirect("mms-view-maintenence-schedule.xhtml");
+            externalContext.redirect("/HiYewInternalWeb/mms-view-maintenence-schedule.xhtml");
         } else {
             FacesMessage msg = new FacesMessage("Maintenance ID does not exist.", machineMaintainenceID);
             FacesContext.getCurrentInstance().addMessage(null, msg);
@@ -111,7 +111,7 @@ public class MachineManageBean {
 
             FacesContext facesCtx = FacesContext.getCurrentInstance();
             ExternalContext externalContext = facesCtx.getExternalContext();
-            externalContext.redirect("mms-view-maintenence-schedule.xhtml");
+            externalContext.redirect("/HiYewInternalWeb/mms-view-maintenence-schedule.xhtml");
         } else {
             FacesMessage msg = new FacesMessage("Not Edited", ((MachineMaintainenceEntity) event.getObject()).getMachine().getMachine_name());
             FacesContext.getCurrentInstance().addMessage(null, msg);
@@ -135,7 +135,7 @@ public class MachineManageBean {
     public String extendMachine() {
         boolean check = machineSystemBean.extendMachineExpiry(machineId);
         if (check) {
-            return "viewMachine";
+            return "mms-view-machine";
         } else {
             FacesMessage msg = new FacesMessage("Machine not updated.", "Please enter Machine ID.");
             FacesContext.getCurrentInstance().addMessage(null, msg);

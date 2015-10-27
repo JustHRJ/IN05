@@ -163,7 +163,7 @@ public class ItemDetailsManagedBean implements Serializable {
         if (selectedItem.getFillerCode().length() > 0) {
             hiYewICSSessionBean.deleteItem(selectedItem);
             FacesContext.getCurrentInstance().addMessage("upperMessages", new FacesMessage("Item " + selectedItem.getFillerCode() + "'s quantity deleted successfully!"));
-            return "viewInventory?faces-redirect=true";
+            return "ics-view-inventory?faces-redirect=true";
         } else {
             FacesContext.getCurrentInstance().addMessage("upperMessages", new FacesMessage("Unable to delete!"));
             return "";
@@ -316,7 +316,7 @@ public class ItemDetailsManagedBean implements Serializable {
         System.out.println(this.selectedItem.getFillerCode());
         FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("SelectedItem2", this.selectedItem);
         //  FacesContext.getCurrentInstance().getExternalContext().getFlash().put("SelectedItem", this.selectedItem);
-        return "/PS/createProcurementBid?faces-redirect=true";
+        return "ps-create-procurement-bid?faces-redirect=true";
     }
 
 }

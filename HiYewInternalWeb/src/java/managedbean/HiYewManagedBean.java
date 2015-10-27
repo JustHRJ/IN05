@@ -226,7 +226,7 @@ public class HiYewManagedBean {
         if (check) {
             FacesContext facesCtx = FacesContext.getCurrentInstance();
             ExternalContext externalContext = facesCtx.getExternalContext();
-            externalContext.redirect("mms-view-maintenence-schedule.xhtml");
+            externalContext.redirect("/HiYewInternalWeb/mms-view-maintenence-schedule.xhtml");
         } else {
             FacesMessage msg = new FacesMessage("Maintenance ID does not exist.", machineMaintainenceID);
             FacesContext.getCurrentInstance().addMessage(null, msg);
@@ -239,7 +239,7 @@ public class HiYewManagedBean {
 
             FacesContext facesCtx = FacesContext.getCurrentInstance();
             ExternalContext externalContext = facesCtx.getExternalContext();
-            externalContext.redirect("mms-view-maintenence-schedule.xhtml");
+            externalContext.redirect("/HiYewInternalWeb/mms-view-maintenence-schedule.xhtml");
         } else {
             FacesMessage msg = new FacesMessage("Not Edited", ((MachineMaintainenceEntity) event.getObject()).getMachine().getMachine_name());
             FacesContext.getCurrentInstance().addMessage(null, msg);
@@ -320,7 +320,7 @@ public class HiYewManagedBean {
         if (check) {
             return "hrms-employee-details";
         } else {
-            return "hrms-alert-employee.xhtml";
+            return "hrms-alert-employee";
         }
     }
 

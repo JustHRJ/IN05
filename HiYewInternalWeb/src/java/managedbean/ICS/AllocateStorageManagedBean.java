@@ -205,7 +205,7 @@ public class AllocateStorageManagedBean implements Serializable {
         } else {
             hiYewICSSessionBean.reduceStorageQty(selectedItem, selectedShelve, removalQty);
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Success", "Items removed from shelve"));
-            return "allocateStorage?faces-redirect=true";
+            return "ics-allocate-storage?faces-redirect=true";
         }
     }
 

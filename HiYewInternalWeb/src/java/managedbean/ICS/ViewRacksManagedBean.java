@@ -172,7 +172,7 @@ public class ViewRacksManagedBean implements Serializable {
         FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("SelectedShelve", this.selectedShelve);
         //  FacesContext.getCurrentInstance().getExternalContext().getFlash().put("SelectedItem", this.selectedItem);
         System.out.println("here at passSelectedShelveToNext()");
-        return "allocateStorage?faces-redirect=true";
+        return "ics-allocate-storage?faces-redirect=true";
     }
     
     public double getAvailCapac(ShelveEntity shelve){
