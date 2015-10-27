@@ -8,6 +8,134 @@
                 template="./template.xhtml">
 
     <ui:define name="content">
+        <!-- Page header -->
+        <div class="page-heading animated fadeInDownBig" style="padding:20px!important;padding-bottom:10px!important;">
+            <h1>View Employee Schedule <small>Employee Management</small></h1>
+        </div>
+        <!-- End page header -->
+        <div style="padding:20px!important;padding-top:0px!important;">
+            <h:form>
+                <p:accordionPanel>
+                    <p:tab title="Today">
+                        <p:accordionPanel multiple="true">
+                            <p:tab title ="Leave" >
+                                <p:dataTable var ="im" value ="#{loginControlBean.employeeLeaveToday}"  paginator="true" rows="5" emptyMessage="No Approved Leave Today" >
+                                    <p:column styleClass="employeeSchedule" headerText="Employee Name"  filterBy="#{im.employee.employee_name}" >
+                                        <p:outputLabel styleClass="employeeSchedule" style="font-weight:normal;font-family:'Open Sans'" value ="#{im.employee.employee_name}"/>
+                                    </p:column>
+                                    <p:column styleClass="employeeSchedule" headerText="Leave Start Date">
+                                        <p:outputLabel style="font-weight:normal;font-family:'Open Sans'" value ="#{hiYewManagedBean.formatDate(im.startDate)}"/>
+                                    </p:column>
+                                    <p:column styleClass="employeeSchedule" headerText="Leave End Date">
+                                        <p:outputLabel style="font-weight:normal;font-family:'Open Sans'" value ="#{hiYewManagedBean.formatDate(im.endDate)}"/>
+                                    </p:column>
+                                </p:dataTable>
+                            </p:tab>
+                            <p:tab title ="Training">
+                                <p:dataTable var ="im" value ="#{loginControlBean.employeeTrainingToday}"  paginator="true" rows="5" emptyMessage="No Employee Training Today" >
+                                    <p:column styleClass="employeeSchedule" headerText="Employee Name"  filterBy="#{im.get(0)}" >
+                                        <p:outputLabel style="font-weight:normal;font-family:'Open Sans'" value = "#{im.get(0)}"/>
+                                    </p:column>
+                                    <p:column styleClass="employeeSchedule" headerText="Employee Pass Number">
+                                        <p:outputLabel style="font-weight:normal;font-family:'Open Sans'" value ="#{im.get(1)}"/>
+                                    </p:column>
+                                    <p:column styleClass="employeeSchedule" headerText="Training Name">
+                                        <p:outputLabel style="font-weight:normal;font-family:'Open Sans'" value ="#{im.get(2)}"/>
+                                    </p:column>
+                                    <p:column styleClass="employeeSchedule" headerText="Training Code">
+                                        <p:outputLabel style="font-weight:normal;font-family:'Open Sans'" value ="#{im.get(3)}"/>
+                                    </p:column>
+                                    <p:column styleClass="employeeSchedule" headerText="Training Start Date">
+                                        <p:outputLabel style="font-weight:normal;font-family:'Open Sans'" value ="#{hiYewManagedBean.formatDate(im.get(4))}"/>
+                                    </p:column>
+                                    <p:column styleClass="employeeSchedule" headerText="Training End Date">
+                                        <p:outputLabel style="font-weight:normal;font-family:'Open Sans'" value ="#{hiYewManagedBean.formatDate(im.get(5))}"/>
+                                    </p:column>
+                                </p:dataTable>
+                            </p:tab>    
+                        </p:accordionPanel>
+                    </p:tab>
+                    <p:tab title ="Next 7 Days #{hiYewManagedBean.view7Days()}">
+                        <p:accordionPanel multiple="true">
+                            <p:tab title ="Leave">
+                                <p:dataTable var ="im" value ="#{loginControlBean.employeeLeave7Days}"  paginator="true" rows="5" emptyMessage="No Approved Leaves For the Next 7 Days" >
+                                    <p:column styleClass="employeeSchedule" headerText="Employee Name"  filterBy="#{im.employee.employee_name}" >
+                                        <p:outputLabel style="font-weight:normal;font-family:'Open Sans'" value ="#{im.employee.employee_name}"/>
+                                    </p:column>
+                                    <p:column styleClass="employeeSchedule" headerText="Leave Start Date">
+                                        <p:outputLabel style="font-weight:normal;font-family:'Open Sans'" value ="#{hiYewManagedBean.formatDate(im.startDate)}"/>
+                                    </p:column>
+                                    <p:column styleClass="employeeSchedule" headerText="Leave End Date">
+                                        <p:outputLabel style="font-weight:normal;font-family:'Open Sans'" value ="#{hiYewManagedBean.formatDate(im.endDate)}"/>
+                                    </p:column>
+                                </p:dataTable>
+                            </p:tab>
+                            <p:tab title ="Training">
+                                <p:dataTable var ="im" value ="#{loginControlBean.employeeTraining7Days}"  paginator="true" rows="5" emptyMessage="No Employee under Training For the Next 7 Days" >
+                                    <p:column styleClass="employeeSchedule" headerText="Employee Name"  filterBy="#{im.get(0)}" >
+                                        <p:outputLabel style="font-weight:normal;font-family:'Open Sans'" value = "#{im.get(0)}"/>
+                                    </p:column>
+                                    <p:column styleClass="employeeSchedule" headerText="Employee Pass Number">
+                                        <p:outputLabel style="font-weight:normal;font-family:'Open Sans'" value ="#{im.get(1)}"/>
+                                    </p:column>
+                                    <p:column styleClass="employeeSchedule" headerText="Training Name">
+                                        <p:outputLabel style="font-weight:normal;font-family:'Open Sans'" value ="#{im.get(2)}"/>
+                                    </p:column>
+                                    <p:column styleClass="employeeSchedule" headerText="Training Code">
+                                        <p:outputLabel style="font-weight:normal;font-family:'Open Sans'" value ="#{im.get(3)}"/>
+                                    </p:column>
+                                    <p:column styleClass="employeeSchedule" headerText="Training Start Date">
+                                        <p:outputLabel style="font-weight:normal;font-family:'Open Sans'" value ="#{hiYewManagedBean.formatDate(im.get(4))}"/>
+                                    </p:column>
+                                    <p:column styleClass="employeeSchedule" headerText="Training End Date">
+                                        <p:outputLabel style="font-weight:normal;font-family:'Open Sans'" value ="#{hiYewManagedBean.formatDate(im.get(5))}"/>
+                                    </p:column>
+                                </p:dataTable>
+                            </p:tab>
+                        </p:accordionPanel>
+                    </p:tab>
+                    <p:tab title ="For the Month #{hiYewManagedBean.month}">
+                        <p:accordionPanel multiple="true">
+                            <p:tab title ="Leave">
+                                <p:dataTable var ="im" value ="#{loginControlBean.employeeLeaveMonth}"  paginator="true" rows="5" emptyMessage="No Approved Leaves For the Month" >
+                                    <p:column styleClass="employeeSchedule" headerText="Employee Name"  filterBy="#{im.employee.employee_name}" >
+                                        <p:outputLabel style="font-weight:normal;font-family:'Open Sans'" value ="#{im.employee.employee_name}"/>
+                                    </p:column>
+                                    <p:column styleClass="employeeSchedule" headerText="Leave Start Date">
+                                        <p:outputLabel style="font-weight:normal;font-family:'Open Sans'" value ="#{hiYewManagedBean.formatDate(im.startDate)}"/>
+                                    </p:column>
+                                    <p:column styleClass="employeeSchedule" headerText="Leave End Date">
+                                        <p:outputLabel style="font-weight:normal;font-family:'Open Sans'" value ="#{hiYewManagedBean.formatDate(im.endDate)}"/>
+                                    </p:column>
+                                </p:dataTable>
+                            </p:tab>
+                            <p:tab title ="Training">
+                                <p:dataTable var ="im" value ="#{loginControlBean.employeeTrainingMonth}"  paginator="true" rows="5" emptyMessage="No Employee under Training For the Month" >
+                                    <p:column styleClass="employeeSchedule" headerText="Employee Name"  filterBy="#{im.get(0)}" >
+                                        <p:outputLabel style="font-weight:normal;font-family:'Open Sans'" value = "#{im.get(0)}"/>
+                                    </p:column>
+                                    <p:column styleClass="employeeSchedule" headerText="Employee Pass Number">
+                                        <p:outputLabel style="font-weight:normal;font-family:'Open Sans'" value ="#{im.get(1)}"/>
+                                    </p:column>
+                                    <p:column styleClass="employeeSchedule" headerText="Training Name">
+                                        <p:outputLabel style="font-weight:normal;font-family:'Open Sans'" value ="#{im.get(2)}"/>
+                                    </p:column>
+                                    <p:column styleClass="employeeSchedule" headerText="Training Code">
+                                        <p:outputLabel style="font-weight:normal;font-family:'Open Sans'" value ="#{im.get(3)}"/>
+                                    </p:column>
+                                    <p:column styleClass="employeeSchedule" headerText="Training Start Date">
+                                        <p:outputLabel style="font-weight:normal;font-family:'Open Sans'" value ="#{hiYewManagedBean.formatDate(im.get(4))}"/>
+                                    </p:column>
+                                    <p:column styleClass="employeeSchedule" headerText="Training End Date">
+                                        <p:outputLabel style="font-weight:normal;font-family:'Open Sans'" value ="#{hiYewManagedBean.formatDate(im.get(5))}"/>
+                                    </p:column>
+                                </p:dataTable>
+                            </p:tab>
+                        </p:accordionPanel>
+                    </p:tab>
+                </p:accordionPanel>
+            </h:form>
+        </div>
     </ui:define>
 
 </ui:composition>

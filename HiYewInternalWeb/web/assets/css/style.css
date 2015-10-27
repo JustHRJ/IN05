@@ -15,9 +15,36 @@ body{
 
 }
 
+.itemDetails .ui-inputfield {
+    font-weight: normal!important;
+}
+
+.employeeSchedule .ui-inputfield {
+    font-weight: normal!important;
+}
+
+.employeeSchedule .ui-inputfield:hover {
+    background:white;
+}
+
+.ui-paginator .ui-paginator-current, .ui-paginator .ui-paginator-rpp-options {
+    font-size:14px;
+    font-family: 'Open Sans';
+    color:#4f4f4f;
+}
+
+.ui-button-text-icon-left .ui-icon{
+    display:none;
+}
+
 .metalFilter .ui-inputfield {
     font-weight: normal!important;
     width: 90px!important;
+}
+
+.lowStock .ui-inputfield {
+    font-weight: normal!important;
+    width: 70px!important;
 }
 
 .ui-datepicker {

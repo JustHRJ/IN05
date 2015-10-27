@@ -70,9 +70,9 @@
                         </p:row>
 
                     </p:panelGrid>
+                    <br />
+                    <p:commandButton id="btn" value="Add New Machine"  action="#{machineManageBean.addMachine}"  update =":formMain:msgs" />
                 </p:panel>
-                <br />
-                <p:commandButton id="btn" value="Add New Machine"  action="#{machineManageBean.addMachine}"  update =":formMain:msgs" />
             </h:form>
         </div>
     </ui:define>

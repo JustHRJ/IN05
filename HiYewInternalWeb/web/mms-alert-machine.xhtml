@@ -46,7 +46,7 @@
                                 <p:outputLabel value = "Enter machine name to extend date" />
                             </p:column>
                             <p:column>
-                                <p:inputText id ="machine_id" value ="#{machineManageBean.machineName}" requiredMessage="Please enter machine ID" validator="#{registrationValidator.validateMachineExpiry}"  validatorMessage="No existing expiring Machine" />
+                                <p:inputText style="font-weight:normal" id ="machine_id" value ="#{machineManageBean.machineName}" requiredMessage="Please enter machine ID" validator="#{registrationValidator.validateMachineExpiry}"  validatorMessage="No existing expiring Machine" />
                             </p:column>
                             <p:column>
                                 <p:message for="machine_id"/>
