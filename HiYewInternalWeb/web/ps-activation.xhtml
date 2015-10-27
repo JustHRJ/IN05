@@ -14,8 +14,8 @@
         </div>
         <!-- End page header -->
         <div style="padding:20px!important;padding-top:0px!important;">
-            <h:form>
-
+            <h:form id = "formMain">
+                <p:growl id ="msgs" />
                 <p:panelGrid style="margin-top:10px;">
                     <p:row style="border:none;background:none">
                         <p:column style="vertical-align: bottom">
@@ -29,7 +29,7 @@
                     </p:row>
                 </p:panelGrid>
                 <br />
-                <p:commandButton style="margin-left:10px;margin-bottom:10px" value ="Send Code" action ="#{activationManageBean.sendActivationCode()}"/>
+                <p:commandButton style="margin-left:10px;margin-bottom:10px" value ="Send Code" action ="#{activationManageBean.sendActivationCode()}"  update =":formMain:msgs" />
 
             </h:form>
         </div>

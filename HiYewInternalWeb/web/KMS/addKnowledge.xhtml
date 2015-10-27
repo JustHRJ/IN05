@@ -1,0 +1,53 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:head>
+        <title>Facelet Title</title>
+    </h:head>
+    <h:body>
+        <h:form id ="formMain">
+
+            <p:panelGrid id ="panel">
+                <p:row>
+                    <p:column>
+                        <p:selectOneMenu value ="#{knowledgeManageBean.knowledge}">
+                            <f:selectItem itemValue="Select One" itemLabel ="Select One"/>
+                            <f:selectItem itemValue ="Filler" itemLabel ="Filler"/>
+                            <f:selectItem itemValue ="Metal" itemLabel ="Metal"/>
+                        </p:selectOneMenu> 
+                    </p:column>
+                </p:row>
+
+            </p:panelGrid>           
+            <p:commandButton value ="add new Knowledge" action = "#{knowledgeManageBean.processAdd}"  update ="panel2"/>
+            <br/><br/><br/><br/>
+            <p:panel id = "panel2" >
+                <p:panelGrid rendered="#{knowledgeManageBean.fillerAdd}">
+                    <p:row>
+                        <p:column>
+
+                        </p:column>
+                    </p:row>
+
+                    <p:commandButton value ="Add Filler Information"  />
+
+                </p:panelGrid> 
+
+                <p:panelGrid rendered="#{knowledgeManageBean.metalAdd}">
+                    <p:row>
+                        <p:column>
+
+                        </p:column>
+                    </p:row>
+                    <p:commandButton value = "Add Metal Information"  />
+
+                </p:panelGrid> 
+            </p:panel>
+
+        </h:form>
+    </h:body>
+</html>
+

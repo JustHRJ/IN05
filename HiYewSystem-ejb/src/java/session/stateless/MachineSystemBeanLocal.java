@@ -56,7 +56,7 @@ public interface MachineSystemBeanLocal {
 
     public boolean existMachineName(String name);
 
-    public boolean addMachine(String machineName, String machineIdentity, Timestamp machineExpiry, String description, int extension);
+    public boolean addMachine(String machineName, String machineIdentity, Timestamp machineExpiry, String description, int extension, String machineType);
 
     public int getNoAlert();
     

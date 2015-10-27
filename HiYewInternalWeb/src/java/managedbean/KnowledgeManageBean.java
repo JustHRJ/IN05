@@ -55,6 +55,9 @@ public class KnowledgeManageBean implements Serializable {
     private List<String> fillerList = new ArrayList<String>();
     private List<String> fillerChosen = new ArrayList<String>();
     private DualListModel<String> fillerDisplay;
+    private String knowledge ="";
+    private boolean FillerAdd = false;
+    private boolean MetalAdd = false;
 
     /**
      * Creates a new instance of KnowledgeManageBean
@@ -65,15 +68,31 @@ public class KnowledgeManageBean implements Serializable {
     @PostConstruct
     public void init() {
         setFillerList(knowledgeSystemBean.retrieveFillerNames());
-        System.out.println("stuck here");
+        System.out.println(FillerAdd);
         setFillerChosen(new ArrayList<String>());
-        System.out.println("stuck here2");
-        System.out.println("stuck here3");
+    
     }
 
     public void fillerList() {
         results = knowledgeSystemBean.transferFillerInfo();
 
+    }
+    
+    public void processAdd(){
+        System.out.println("did it come here");
+        if(knowledge.equals("Filler")){
+            System.out.println("filler is captured");
+            setFillerAdd(true);
+            System.out.println(FillerAdd);
+            setMetalAdd(false);
+        }else if(knowledge.equals("Metal")){
+            setFillerAdd(false);
+            setMetalAdd(true);
+        } else{
+            System.out.println("not working");
+            setFillerAdd(false);
+            setMetalAdd(false); 
+        }
     }
 
     public void metalMatchingList(){
@@ -252,34 +271,34 @@ public class KnowledgeManageBean implements Serializable {
         number3 = new jxl.write.Label(1, 0, "NAME");
         sheet1.addCell(number3);
 
-        number3 = new jxl.write.Label(2, 0, "GOLD");
+        number3 = new jxl.write.Label(2, 0, "COPPER");
         sheet1.addCell(number3);
 
-        number3 = new jxl.write.Label(3, 0, "SILVER");
+        number3 = new jxl.write.Label(3, 0, "ZINC");
         sheet1.addCell(number3);
 
-        number3 = new jxl.write.Label(4, 0, "BRONZE");
+        number3 = new jxl.write.Label(4, 0, "IRON");
         sheet1.addCell(number3);
 
-        number3 = new jxl.write.Label(5, 0, "IRON");
+        number3 = new jxl.write.Label(5, 0, "LEAD");
         sheet1.addCell(number3);
 
-        number3 = new jxl.write.Label(6, 0, "COPPER");
+        number3 = new jxl.write.Label(6, 0, "ALUMINIUM");
         sheet1.addCell(number3);
 
-        number3 = new jxl.write.Label(7, 0, "TITANIUM");
+        number3 = new jxl.write.Label(7, 0, "CARBON");
         sheet1.addCell(number3);
 
-        number3 = new jxl.write.Label(8, 0, "PLATINIUM");
+        number3 = new jxl.write.Label(8, 0, "NICKEL");
         sheet1.addCell(number3);
 
-        number3 = new jxl.write.Label(9, 0, "ALUMINIUM");
+        number3 = new jxl.write.Label(9, 0, "MANGANESE");
         sheet1.addCell(number3);
 
-        number3 = new jxl.write.Label(10, 0, "TOPAZ");
+        number3 = new jxl.write.Label(10, 0, "SILICON");
         sheet1.addCell(number3);
 
-        number3 = new jxl.write.Label(11, 0, "PLASTIC");
+        number3 = new jxl.write.Label(11, 0, "CHROMIUM");
         sheet1.addCell(number3);
         if (results != null) {
 
@@ -317,34 +336,34 @@ public class KnowledgeManageBean implements Serializable {
         jxl.write.Label number3 = new jxl.write.Label(0, 0, "NAME");
         sheet1.addCell(number3);
 
-        number3 = new jxl.write.Label(1, 0, "GOLD");
+        number3 = new jxl.write.Label(1, 0, "COPPER");
         sheet1.addCell(number3);
 
-        number3 = new jxl.write.Label(2, 0, "SILVER");
+        number3 = new jxl.write.Label(2, 0, "ZINC");
         sheet1.addCell(number3);
 
-        number3 = new jxl.write.Label(3, 0, "BRONZE");
+        number3 = new jxl.write.Label(3, 0, "IRON");
         sheet1.addCell(number3);
 
-        number3 = new jxl.write.Label(4, 0, "IRON");
+        number3 = new jxl.write.Label(4, 0, "LEAD");
         sheet1.addCell(number3);
 
-        number3 = new jxl.write.Label(5, 0, "COPPER");
+        number3 = new jxl.write.Label(5, 0, "ALUMINIUM");
         sheet1.addCell(number3);
 
-        number3 = new jxl.write.Label(6, 0, "TITANIUM");
+        number3 = new jxl.write.Label(6, 0, "CARBON");
         sheet1.addCell(number3);
 
-        number3 = new jxl.write.Label(7, 0, "PLATINIUM");
+        number3 = new jxl.write.Label(7, 0, "NICKEL");
         sheet1.addCell(number3);
 
-        number3 = new jxl.write.Label(8, 0, "ALUMINIUM");
+        number3 = new jxl.write.Label(8, 0, "MANGANESE");
         sheet1.addCell(number3);
 
-        number3 = new jxl.write.Label(9, 0, "TOPAZ");
+        number3 = new jxl.write.Label(9, 0, "SILICON");
         sheet1.addCell(number3);
 
-        number3 = new jxl.write.Label(10, 0, "PLASTIC");
+        number3 = new jxl.write.Label(10, 0, "CHROMIUM");
         sheet1.addCell(number3);
         if (results2 != null) {
 
@@ -656,6 +675,48 @@ public class KnowledgeManageBean implements Serializable {
      */
     public void setResult3(List<Vector> result3) {
         this.result3 = result3;
+    }
+
+    /**
+     * @return the knowledge
+     */
+    public String getKnowledge() {
+        return knowledge;
+    }
+
+    /**
+     * @param knowledge the knowledge to set
+     */
+    public void setKnowledge(String knowledge) {
+        this.knowledge = knowledge;
+    }
+
+    /**
+     * @return the FillerAdd
+     */
+    public boolean isFillerAdd() {
+        return FillerAdd;
+    }
+
+    /**
+     * @param FillerAdd the FillerAdd to set
+     */
+    public void setFillerAdd(boolean FillerAdd) {
+        this.FillerAdd = FillerAdd;
+    }
+
+    /**
+     * @return the MetalAdd
+     */
+    public boolean isMetalAdd() {
+        return MetalAdd;
+    }
+
+    /**
+     * @param MetalAdd the MetalAdd to set
+     */
+    public void setMetalAdd(boolean MetalAdd) {
+        this.MetalAdd = MetalAdd;
     }
 
 }
