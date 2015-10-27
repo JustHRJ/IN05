@@ -886,7 +886,7 @@ footer{
 }
 .box-info.box-messages h2{border-bottom: none;}
 .box-info .statistic-chart{padding: 0 0 0px 0;}
-.box-info.full{padding: 0px;padding-left: 10px;padding-right: 10px;padding-top:10px}
+.box-info.full{padding: 0px;padding-left: 10px;padding-right: 10px;}
 .box-info.full .box-footer{padding: 20px 20px 15px 20px;}
 .box-info.full .box-footer a,
 .box-info.full .box-footer a:hover{
