@@ -228,7 +228,7 @@ public class LoginManagedBean implements Serializable {
 
                     newCustomer = new Customer();
 
-                    FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("loginMessage", "Your account registration has been successful.");
+                    FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("loginMessage", "Your customer account registration has been successful.");
                     FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("msgColor", "green");
                     FacesContext facesCtx = FacesContext.getCurrentInstance();
                     ExternalContext externalContext = facesCtx.getExternalContext();
@@ -282,7 +282,7 @@ public class LoginManagedBean implements Serializable {
 
                         hiYewSystemBean.deleteActivationCode(supplierCodeWord);
 
-                        FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("loginMessage", "Your account registration has been successful.");
+                        FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("loginMessage", "Your supplier account registration has been successful.");
                         FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("msgColor", "green");
                         FacesContext facesCtx = FacesContext.getCurrentInstance();
                         ExternalContext externalContext = facesCtx.getExternalContext();
