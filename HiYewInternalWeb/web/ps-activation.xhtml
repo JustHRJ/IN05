@@ -16,6 +16,7 @@
         <div style="padding:20px!important;padding-top:0px!important;">
             <h:form>
                 <p:panelGrid id="grid">
+                    <p:messages id="msg" showDetail="false" />
                     <p:row style="vertical-align:bottom">
                         <p:column>
                             <p:outputLabel for ="emailAddress" style ="font-weight: bold" value ="Email Address"/>
@@ -31,7 +32,7 @@
                     </p:row>
                 </p:panelGrid>
                 <br />
-                <p:commandButton update="grid" icon="" validateClient="true" style="margin-right:10px" id="btn" value="Send Supplier Code" action="#{activationManageBean.sendActivationCode()}" />
+                <p:commandButton update="grid msg" icon="" validateClient="true" style="margin-right:10px" id="btn" value="Send Supplier Code" actionListener="#{activationManageBean.sendActivationCode()}" />
             </h:form>
         </div>
     </ui:define>
