@@ -20,10 +20,10 @@
                     <p:panelGrid id="grid" style="border:none">
                         <p:row style="vertical-align:bottom">
                             <p:column style="vertical-align:bottom">
-                                <p:outputLabel for ="shelveID" style ="font-weight: bold" value ="ShelveID: "/>
+                                <p:outputLabel for ="shelveID" style ="font-weight: bold" value ="Shelve ID "/>
                             </p:column>
                             <p:column style="vertical-align:top">
-                                <h:outputText style="font-weight:bold;width:100%" id="shelveID" value="aa" />
+                                <h:outputText style="font-weight:bold;width:100%" id="shelveID" value="#{allocateStorageManagedBean.selectedShelve.shelveID}" />
                             </p:column>
                             <p:column>
                                 <p:message for="shelveID" />

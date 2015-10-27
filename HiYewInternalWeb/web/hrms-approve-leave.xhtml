@@ -10,7 +10,7 @@
     <ui:define name="content">#{loginControlBean.setCurrentPage('HRMS')}
         <!-- Page header -->
         <div class="page-heading animated fadeInDownBig" style="padding:20px!important;padding-bottom:10px!important;">
-            <h1>Leave Approval <small></small></h1>
+            <h1>Leave Approval <small>Leave Management</small></h1>
         </div>
         <!-- End page header -->
         <div style="padding:20px!important;padding-top:0px!important;">
@@ -67,7 +67,7 @@
 
                     <br/><br/>
                     <p:commandButton value ="Approve All Leave" action ="#{hiYewManagedBean.approveLeaveEs}" update = ":formMain">
-                        <p:inputText id ="data2" value ="#{hiYewManagedBean.employeeName}" />
+                        <p:inputText style="font-weight:normal" id ="data2" value ="#{hiYewManagedBean.employeeName}" />
                         <p:confirm header="Confirmation" message="Approve all leave for this Employee?" icon="ui-icon-alert" />
                         <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
                             <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
