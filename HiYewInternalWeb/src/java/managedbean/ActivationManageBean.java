@@ -5,11 +5,14 @@
  */
 package managedbean;
 
+import java.io.IOException;
 import java.util.Date;
 import java.util.Vector;
 import javax.ejb.EJB;
 import javax.inject.Named;
 import javax.enterprise.context.RequestScoped;
+import javax.faces.context.ExternalContext;
+import javax.faces.context.FacesContext;
 import manager.EmailManager;
 import session.stateless.HiYewSystemBeanLocal;
 
@@ -20,32 +23,32 @@ import session.stateless.HiYewSystemBeanLocal;
 @Named(value = "activationManageBean")
 @RequestScoped
 public class ActivationManageBean {
+
     @EJB
     private HiYewSystemBeanLocal hiYewSystemBean;
     private String email;
+
     /**
      * Creates a new instance of ActivationManageBean
      */
-  
-    
     public ActivationManageBean() {
     }
 
-    
-    public void sendActivationCode(){
+    public void sendActivationCode() throws IOException {
         String check = hiYewSystemBean.sendActivationCode(email);
-        if(!(check.equals(""))){
-             EmailManager emailManager = new EmailManager();
+        if (!(check.equals(""))) {
+            EmailManager emailManager = new EmailManager();
             emailManager.emailActivation(check, email);
+            FacesContext facesCtx = FacesContext.getCurrentInstance();
+            ExternalContext externalContext = facesCtx.getExternalContext();
+            externalContext.redirect("/HiYewInternalWeb/ps-activation.xhtml");
+        } else {
+            FacesContext facesCtx = FacesContext.getCurrentInstance();
+            ExternalContext externalContext = facesCtx.getExternalContext();
+            externalContext.redirect("/HiYewInternalWeb/ps-activation.xhtml");
         }
     }
-    
-    
-    
-    
 
-
- 
     public String getEmail() {
         return email;
     }
@@ -57,5 +60,4 @@ public class ActivationManageBean {
         this.email = email;
     }
 
-    
 }
