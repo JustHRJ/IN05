@@ -99,12 +99,12 @@ public class LoginManagedBean implements Serializable {
                     path = "s-user-profile?faces-redirect=true"; //navigation
 
                 } else {
-                    FacesContext.getCurrentInstance().addMessage("loginMessage", new FacesMessage("Invalid Username or password!"));
+                    FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Invalid username or password! Please try again.", ""));
                     System.out.println("Login Fail");
 
                 }
-            } catch (NullPointerException e) {
-                FacesContext.getCurrentInstance().addMessage("loginMessage", new FacesMessage("Invalid Username or password!"));
+            } catch (NullPointerException ex) {
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Invalid username or password! Please try again.", ""));
                 System.out.println("Login Fail");
 
             }
