@@ -21,7 +21,7 @@
             <div style="height: 15px"></div>
             <div>
                 <b>Select a laser welding machine and view full details: </b>&nbsp;
-                <p:selectOneMenu id="selectedMachine" value="#{productQuotationManagedBean.selectedMachine}" style="width:230px; display: inline-table">
+                <h:selectOneMenu id="selectedMachine" value="#{productQuotationManagedBean.selectedMachine}" style="width:230px; display: inline-table">
                     <p:ajax listener="#{productQuotationManagedBean.redirectToSelectedMachine()}" />
                     <f:selectItem itemValue="" itemLabel="-" />
                     <f:selectItem itemValue="LWI Small Chamber Type" itemLabel="LWI Small Chamber Type" />
@@ -31,7 +31,7 @@
                     <f:selectItem itemValue="LWI V MobileFlexx" itemLabel="LWI V MobileFlexx" />
                     <f:selectItem itemValue="LWI V Unixx III" itemLabel="LWI V Unixx III" />
                     <f:selectItem itemValue="LWI V UltraFlexx" itemLabel="LWI V UltraFlexx" />
-                </p:selectOneMenu>
+                </h:selectOneMenu>
             </div>
             <div style="height: 15px"></div>
             <p:messages id="msg"  showDetail="false" />
@@ -43,7 +43,7 @@
                     <div class="box-info full">
                         <h2><strong>LWI Small Chamber Type</strong></h2>
                         <!-- Additional buttons -->
-                        <div class="additional-btn" style="top:15px">
+                        <div class="additional-btn" style="top:16px">
                             <p:commandButton update="msg" style="border: none; font-weight: normal; font-family: 'Open Sans'; padding-top: 3px; padding-bottom: 4px; padding-left: 10px; padding-right: 10px" styleClass="btn btn-primary2 btn-xs" value="Add to RFQ list" action="#{productQuotationManagedBean.addToCacheList('Machine','LWI Small Chamber Type',1)}" icon="" />
                             <a class="additional-icon" href="#" data-toggle="collapse" data-target="#website-statistic"><i class="fa fa-chevron-down"></i></a>
                         </div><!-- End div .additional-button -->
@@ -54,7 +54,7 @@
                             </div>
                             <div class="des-thumbnail">
                                 <h4 style="color: #428bca">The compact manual work station</h4>
-                                <p style="text-align: justify; padding-top: 0px">
+                                <p style="text-align: left; padding-top: 0px">
                                     As an enclosed laser workstation in laser class 1 or as an open model for greater flexibility.
                                     <br /><br />
                                     No matter which model you choose, the lasers will meet all your design, technology and performance requirements.
@@ -158,7 +158,7 @@
                                             <img src="images/products/fss_150.jpg" alt="FSS 150" />
                                             <img src="images/products/fss_300.jpg" alt="FSS 300" />
                                             <img src="images/products/dreheinheit.jpg" alt="Rotation Axis" />
-                                            <img src="images/products/display.jpg" alt="display" />
+                                            <img src="images/products/display.jpg" alt="Display" />
                                             <img src="images/products/beamtuning.jpg" alt="Beam Tuning" />
                                             <img src="images/products/schutzgas.jpg" alt="Schutzgas" />
                                         </div>
@@ -227,15 +227,15 @@
                                                         </tr>
                                                         <tr>
                                                             <td style="font-weight: bold; border-right: 1px solid #ddd">Voltage</td>
-                                                            <td>160-500V</td>
+                                                            <td>160 - 500V</td>
                                                         </tr>
                                                         <tr>
                                                             <td style="font-weight: bold; border-right: 1px solid #ddd">Pulse width</td>
-                                                            <td>1-20 ms</td>
+                                                            <td>1 - 20 ms</td>
                                                         </tr>
                                                         <tr>
                                                             <td style="font-weight: bold; border-right: 1px solid #ddd">Pulse frequency</td>
-                                                            <td>1-20 hz</td>
+                                                            <td>1 - 20 hz</td>
                                                         </tr>
                                                         <tr>
                                                             <td style="font-weight: bold; border-right: 1px solid #ddd">Pulse fill</td>
@@ -251,7 +251,7 @@
                                                         </tr>
                                                         <tr>
                                                             <td style="font-weight: bold; border-right: 1px solid #ddd">Beam diameter</td>
-                                                            <td>200 µm - 2mm, motorized beam-expander</td>
+                                                            <td>200 µm - 2 mm, motorized beam-expander</td>
                                                         </tr>
                                                         <tr>
                                                             <td style="font-weight: bold; border-right: 1px solid #ddd">Microscope</td>
@@ -291,7 +291,7 @@
                                                         </tr>
                                                         <tr>
                                                             <td style="font-weight: bold; border-right: 1px solid #ddd">Electrical supply</td>
-                                                            <td>1 phase, 230V /50 hz</td>
+                                                            <td>1 phase, 230V / 50 hz</td>
                                                         </tr>
                                                         <tr>
                                                             <td style="font-weight: bold; border-right: 1px solid #ddd">Power consumption</td>
@@ -346,15 +346,15 @@
                                                         </tr>
                                                         <tr>
                                                             <td style="font-weight: bold; border-right: 1px solid #ddd">Voltage</td>
-                                                            <td>160-500V</td>
+                                                            <td>160 - 500V</td>
                                                         </tr>
                                                         <tr>
                                                             <td style="font-weight: bold; border-right: 1px solid #ddd">Pulse width</td>
-                                                            <td>1-20 ms</td>
+                                                            <td>1 - 20 ms</td>
                                                         </tr>
                                                         <tr>
                                                             <td style="font-weight: bold; border-right: 1px solid #ddd">Pulse frequency</td>
-                                                            <td>1-20 hz</td>
+                                                            <td>1 - 20 hz</td>
                                                         </tr>
                                                         <tr>
                                                             <td style="font-weight: bold; border-right: 1px solid #ddd">Pulse fill</td>
@@ -370,7 +370,7 @@
                                                         </tr>
                                                         <tr>
                                                             <td style="font-weight: bold; border-right: 1px solid #ddd">Beam diameter</td>
-                                                            <td>200 µm - 2mm, motorized beam-expander</td>
+                                                            <td>200 µm - 2 mm, motorized beam-expander</td>
                                                         </tr>
                                                         <tr>
                                                             <td style="font-weight: bold; border-right: 1px solid #ddd">Microscope</td>
@@ -410,7 +410,7 @@
                                                         </tr>
                                                         <tr>
                                                             <td style="font-weight: bold; border-right: 1px solid #ddd">Electrical supply</td>
-                                                            <td>3 phases, 400V /50 hz</td>
+                                                            <td>3 phases, 400V / 50 hz</td>
                                                         </tr>
                                                         <tr>
                                                             <td style="font-weight: bold; border-right: 1px solid #ddd">Power consumption</td>
@@ -469,11 +469,11 @@
                                                         </tr>
                                                         <tr>
                                                             <td style="font-weight: bold; border-right: 1px solid #ddd">Pulse width</td>
-                                                            <td>0,1 - 50 ms /cw</td>
+                                                            <td>0,1 - 50 ms/cw</td>
                                                         </tr>
                                                         <tr>
                                                             <td style="font-weight: bold; border-right: 1px solid #ddd">Pulse frequency</td>
-                                                            <td>1-100 hz</td>
+                                                            <td>1 - 100 hz</td>
                                                         </tr>
                                                         <tr>
                                                             <td style="font-weight: bold; border-right: 1px solid #ddd">Pulse fill</td>
@@ -489,7 +489,7 @@
                                                         </tr>
                                                         <tr>
                                                             <td style="font-weight: bold; border-right: 1px solid #ddd">Beam diameter</td>
-                                                            <td>100 µm - 2mm, motorized beam-expander</td>
+                                                            <td>100 µm - 2 mm, motorized beam-expander</td>
                                                         </tr>
                                                         <tr>
                                                             <td style="font-weight: bold; border-right: 1px solid #ddd">Microscope</td>
@@ -529,7 +529,7 @@
                                                         </tr>
                                                         <tr>
                                                             <td style="font-weight: bold; border-right: 1px solid #ddd">Electrical supply</td>
-                                                            <td>1-phasig, 90-250V, 50/60 hz</td>
+                                                            <td>1-phasig, 90 - 250V, 50/60 hz</td>
                                                         </tr>
                                                         <tr>
                                                             <td style="font-weight: bold; border-right: 1px solid #ddd">Power consumption</td>
@@ -588,11 +588,11 @@
                                                         </tr>
                                                         <tr>
                                                             <td style="font-weight: bold; border-right: 1px solid #ddd">Pulse width</td>
-                                                            <td>0,1 - 50 ms /cw</td>
+                                                            <td>0,1 - 50 ms/cw</td>
                                                         </tr>
                                                         <tr>
                                                             <td style="font-weight: bold; border-right: 1px solid #ddd">Pulse frequency</td>
-                                                            <td>1-100 hz</td>
+                                                            <td>1 - 100 hz</td>
                                                         </tr>
                                                         <tr>
                                                             <td style="font-weight: bold; border-right: 1px solid #ddd">Pulse fill</td>
@@ -608,7 +608,7 @@
                                                         </tr>
                                                         <tr>
                                                             <td style="font-weight: bold; border-right: 1px solid #ddd">Beam diameter</td>
-                                                            <td>100 µm - 2mm, motorized beam-expander</td>
+                                                            <td>100 µm - 2 mm, motorized beam-expander</td>
                                                         </tr>
                                                         <tr>
                                                             <td style="font-weight: bold; border-right: 1px solid #ddd">Microscope</td>
@@ -648,7 +648,7 @@
                                                         </tr>
                                                         <tr>
                                                             <td style="font-weight: bold; border-right: 1px solid #ddd">Electrical supply</td>
-                                                            <td>1 Phase , 90-250V, 50/60 hz</td>
+                                                            <td>1 Phase , 90 - 250V, 50/60 hz</td>
                                                         </tr>
                                                         <tr>
                                                             <td style="font-weight: bold; border-right: 1px solid #ddd">Power consumption</td>

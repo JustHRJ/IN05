@@ -14,23 +14,25 @@
         </div>
         <!-- End page header -->
         <div style="padding:20px!important;padding-top:0px!important;">
-            <h:form id = "formMain">
-                <p:growl id ="msgs" />
-                <p:panelGrid style="margin-top:10px;">
-                    <p:row style="border:none;background:none">
-                        <p:column style="vertical-align: bottom">
-                            <p:outputLabel style="font-weight:bold" value ="Email Address" />
+            <h:form>
+                <p:panelGrid id="grid">
+                    <p:messages id="msg" showDetail="false" />
+                    <p:row style="vertical-align:bottom">
+                        <p:column>
+                            <p:outputLabel for ="emailAddress" style ="font-weight: bold" value ="Email Address"/>
                         </p:column>
                         <p:column>
                             <p:inputText size="30" style="font-weight:normal" id ="emailAddress" value ="#{activationManageBean.email}" required ="true" requiredMessage="Please enter email address." placeholder="e.g. someone@gmail.com" validatorMessage="Please enter correct email format.">
                                 <f:validateRegex pattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$" />
                             </p:inputText>
                         </p:column>
+                        <p:column>
+                            <p:message for="emailAddress" />
+                        </p:column>
                     </p:row>
                 </p:panelGrid>
                 <br />
-                <p:commandButton style="margin-left:10px;margin-bottom:10px" value ="Send Code" action ="#{activationManageBean.sendActivationCode()}"  update =":formMain:msgs" />
-
+                <p:commandButton update="grid msg" icon="" validateClient="true" style="margin-right:10px" id="btn" value="Send Supplier Code" actionListener="#{activationManageBean.sendActivationCode()}" />
             </h:form>
         </div>
     </ui:define>

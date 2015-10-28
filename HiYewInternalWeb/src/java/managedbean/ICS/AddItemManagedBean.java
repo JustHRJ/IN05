@@ -51,7 +51,7 @@ public class AddItemManagedBean implements Serializable {
           hiYewICSSessionBean.createItem(newItem);
           newItem = new FillerEntity(); //To reinitialise and create new customer
            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Item added to inventory successfully!"));
-             return "viewInventory?faces-redirect=true";
+             return "ics-view-inventory?faces-redirect=true";
         }
     }
 

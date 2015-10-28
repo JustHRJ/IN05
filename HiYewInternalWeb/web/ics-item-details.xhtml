@@ -1,0 +1,264 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                template="./template.xhtml">
+
+    <ui:define name="content">
+        <!-- Page header -->
+        <div class="page-heading animated fadeInDownBig" style="padding:20px!important;padding-bottom:10px!important;">
+            <h1>Item Details <small>Items Management</small></h1>
+        </div>
+        <!-- End page header -->
+        <div style="padding:20px!important;padding-top:0px!important;">
+            <h:form id="upperForm">
+                <p:growl id="message" showDetail="true" />
+                <p:messages  id="upperMessages" autoUpdate="false"/>
+                <p:panel id="itemDetailsPanel" header="Item Details (Click values for editing)" toggleable="true" toggleSpeed="500" closeSpeed="500">
+                    <p:panelGrid id="itemDetailsGrid">
+                        <p:row style="vertical-align:bottom">
+                            <p:column>
+                                <h:outputLabel for="itemCode" value="Wire Code" style="font-weight:bold" />
+                            </p:column>
+                            <p:column>
+                                <h:outputText id="itemCode" value="#{itemDetailsManagedBean.selectedItem.fillerCode}" style="font-weight:bold" />
+                            </p:column>
+                            <p:column>
+                                <p:message for="itemCode" />
+                            </p:column> 
+                        </p:row>
+                        <p:row style="vertical-align:bottom">
+                            <p:column>
+                                <h:outputLabel for="itemName1" value="Wire Name" style="font-weight:bold"/>
+                            </p:column>
+                            <p:column>
+                                <p:inplace id="itemName" editor="true">
+                                    <p:ajax  event="save" update="itemDetailsPanel"/>
+                                    <p:inputText id="itemName1" value="#{itemDetailsManagedBean.selectedItem.fillerName}" required="true" requiredMessage="Item Name is required!" label="text" style="font-weight:bold" />
+                                </p:inplace>
+                            </p:column>
+                            <p:column>
+                                <p:message for="itemName1" />
+                            </p:column>
+                        </p:row>
+                        <p:row style="vertical-align:bottom">
+                            <p:column>
+                                <h:outputLabel for="wireGrade1" value="Wire Grade" style="font-weight:bold"/>
+                            </p:column>
+                            <p:column>
+                                <p:inplace id="wireGrade" editor="true">
+                                    <p:ajax  event="save" update="itemDetailsPanel"/>
+                                    <h:selectOneMenu id="wireGrade1" value="#{itemDetailsManagedBean.selectedItem.wireGrade}" required="true" requiredMessage="Item Type is required, please select one.">
+                                        <f:selectItem itemLabel="Select One" itemValue="" />
+                                        <f:selectItem itemLabel="A" itemValue="A" />
+                                        <f:selectItem itemLabel="B" itemValue="B" />
+                                        <f:selectItem itemLabel="C" itemValue="C" />
+                                        <f:selectItem itemLabel="D" itemValue="D" />
+                                        <f:selectItem itemLabel="E" itemValue="E" />
+                                    </h:selectOneMenu>
+                                </p:inplace>
+                            </p:column>
+                            <p:column>
+                                <p:message for="wireGrade1" />
+                            </p:column>
+                        </p:row>
+                        <p:row style="vertical-align:bottom">
+                            <p:column>
+                                <h:outputLabel for="quantity1" value="Quantity" style="font-weight:bold"/>
+                            </p:column>
+                            <p:column styleClass="itemDetails">
+                                <p:inplace id="quantity" editor="true">
+                                    <p:ajax  event="save" update="itemDetailsPanel"/>
+                                    <p:inputText style="font-weight:bold" id="quantity1" value="#{itemDetailsManagedBean.selectedItem.quantity}" maxlength="6"  label="text" validatorMessage="Invalid Input! Please enter a positive integer for quantity(max of up to 6 digits)" converterMessage="Invalid Input! Please enter a positive integer for Quantity(max of up to 6 digits)">
+                                        <f:validateLongRange minimum="0" maximum="999999" /> 
+                                    </p:inputText>
+                                </p:inplace>
+                            </p:column>
+                            <p:column>
+                                <p:message for="quantity1" />
+                            </p:column>
+                        </p:row>
+                        <p:row style="vertical-align:bottom">
+                            <p:column>
+                                <h:outputLabel for="cost1" value="Cost (SGD) " style="font-weight:bold"/>
+                            </p:column>
+                            <p:column styleClass="itemDetails">
+                                <p:inplace id="cost" editor="true">
+                                    <p:ajax  event="save" update="itemDetailsPanel"/>
+                                    <p:inputText style="font-weight:bold" id="cost1" value="#{itemDetailsManagedBean.selectedItem.cost}"  maxlength="11" label="text" converterMessage="Invalid Input! Please enter a positive number up to 2 decimal for Cost. Example: 53.0 or 42.53">
+                                        <f:validateDoubleRange minimum="0.0"  />
+                                    </p:inputText>
+                                </p:inplace>
+                            </p:column>
+                            <p:column>
+                                <p:message for="cost1" />
+                            </p:column>
+                        </p:row>
+                        <p:row style="vertical-align:bottom">
+                            <p:column>
+                                <h:outputLabel for="sellingPrice1" value="Selling price (SGD) " style="font-weight:bold"/>
+                            </p:column>
+                            <p:column styleClass="itemDetails">
+                                <p:inplace id="sellingPrice" editor="true">
+                                    <p:ajax  event="save" update="itemDetailsPanel"/>
+                                    <p:inputText style="font-weight:bold" id="sellingPrice1" value="#{itemDetailsManagedBean.selectedItem.sellingPrice}" maxlength="11" label="text" converterMessage="Invalid Input! Please enter a positive number up to 2 decimal for Selling Price. Example: 53.0 or 42.53">
+                                        <f:validateDoubleRange minimum="0.0"  />
+                                    </p:inputText>
+                                </p:inplace>
+                            </p:column>
+                            <p:column>
+                                <p:message for="sellingPrice1" />
+                            </p:column>
+                        </p:row>
+                        <p:row style="vertical-align:bottom">
+                            <p:column>
+                                <h:outputLabel for="reorderPoint1" value="Reorder Point " style="font-weight:bold"/>
+                            </p:column>
+                            <p:column styleClass="itemDetails">
+                                <p:inplace id="reorderPoint" editor="true" >
+                                    <p:ajax  event="save" update="itemDetailsPanel"/>
+                                    <p:inputText style="font-weight:bold" id="reorderPoint1" value="#{itemDetailsManagedBean.selectedItem.reorderPoint}" maxlength="6"  label="text" validatorMessage="Invalid Input! Please enter a positive integer for Reorder Point(max of up to 6 digits)" converterMessage="Invalid Input! Please enter a positive integer for Reorder Point(max of up to 6 digits)">
+                                        <f:validateLongRange minimum="0" maximum="999999" /> 
+                                    </p:inputText>
+                                </p:inplace>
+                            </p:column>
+                            <p:column>
+                                <p:message for="reorderPoint1" />
+                            </p:column>
+                        </p:row>
+                        <p:row style="vertical-align:bottom">
+                            <p:column>
+                                <h:outputLabel for="averageWeight1" value="Average Weight (grams) " style="font-weight:bold"/>
+                            </p:column>
+                            <p:column styleClass="itemDetails">
+                                <p:inplace id="averageWeight" editor="true">
+                                    <p:ajax event="save" update="itemDetailsPanel"/>
+                                    <p:inputText style="font-weight:bold" id="averageWeight1" value="#{itemDetailsManagedBean.selectedItem.averageWeight}"  maxlength="11" label="text" converterMessage="Invalid Input! Please enter a positive number up to 2 decimal for Average weight. Example: 53.0 or 42.53">
+                                        <f:validateDoubleRange minimum="0.0"  />
+                                    </p:inputText>
+                                </p:inplace>
+                            </p:column>
+                            <p:column>
+                                <p:message for="averageWeight1" />
+                            </p:column>
+                        </p:row>
+                        <p:row style="vertical-align:bottom">
+                            <p:column>
+                                <h:outputLabel for="wireLength1" value="Wire Length (mm) " style="font-weight:bold"/>
+                            </p:column>
+                            <p:column styleClass="itemDetails">
+                                <p:inplace id="wireLength" editor="true">
+                                    <p:ajax event="save" update="itemDetailsPanel"/>
+                                    <p:inputText style="font-weight:bold" id="wireLength1" value="#{itemDetailsManagedBean.selectedItem.wireLength}"  maxlength="11" label="text" converterMessage="Invalid Input! Please enter a positive number up to 2 decimal for length. Example: 53.0 or 42.53">
+                                        <f:validateDoubleRange minimum="1.0"  />
+                                    </p:inputText>
+                                </p:inplace>
+                            </p:column>
+                            <p:column>
+                                <p:message for="wireLength1" />
+                            </p:column>
+                        </p:row>
+                        <p:row style="vertical-align:bottom">
+                            <p:column>
+                                <h:outputLabel for="diameter1" value="Diameter (mm) " style="font-weight:bold"/>
+                            </p:column>
+                            <p:column styleClass="itemDetails">
+                                <p:inplace id="diameter" editor="true">
+                                    <p:ajax event="save" update="itemDetailsPanel"/>
+                                    <p:inputText id="diameter1" value="#{itemDetailsManagedBean.selectedItem.diameter}"  maxlength="11" label="text" converterMessage="Invalid Input! Please enter a positive number up to 2 decimal for diameter. Example: 53.0 or 42.53">
+                                        <f:validateDoubleRange minimum="1.0"  />
+                                    </p:inputText>
+                                </p:inplace>
+                            </p:column>
+                            <p:column>
+                                <p:message for="diameter1" />
+                            </p:column>
+                        </p:row>
+                    </p:panelGrid>
+                    <br />
+                    <p:commandButton value="Update Item Details" update="upperForm" icon="ui-icon-check" action="#{itemDetailsManagedBean.updateItemDetails}"/>
+                    <p:commandButton  value="Procurement Request" action="#{itemDetailsManagedBean.passSelectedItemToNext()}" />    
+                    <p:commandButton value="Delete Item" action="#{itemDetailsManagedBean.deleteItem}" update="message">
+                        <p:confirm header="Deletion Confirmation" message="Are you sure you want to delete item #{itemDetailsManagedBean.selectedItem.fillerCode}?" icon="ui-icon-alert" />
+                    </p:commandButton>
+                    <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+                        <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+                        <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+                    </p:confirmDialog>
+                </p:panel>
+            </h:form>
+
+            <h:form id="middleForm">
+                <p:panel id="shelvesOfItemPanel"  header="Storage Location Details" toggleable="true" toggleSpeed="500" closeSpeed="500" style="margin-bottom:20px"  collapsed="true">
+                    <p:dataTable id="infoListTable" var="itemShelve" value="#{itemDetailsManagedBean.infoList}" widgetVar="infoListTable" 
+                                 emptyMessage="No shelves found with given criteria" filteredValue="#{itemDetailsManagedBean.filteredInfoList}" >
+
+                        <p:column styleClass="itemDetails" filterBy="#{itemShelve.shelve.shelveID}" sortBy="#{itemShelve.shelve.shelveID}" headerText="ShelveID" footerText="contains" filterMatchMode="contains">
+                            <h:outputText style="font-weight:normal;font-size:14px;font-family:'Open Sans'" value="#{itemShelve.shelve.shelveID}" />
+                        </p:column>
+
+                        <p:column styleClass="itemDetails" filterBy="#{itemShelve.shelve.rack.location}" sortBy="#{itemShelve.shelve.rack.location}" headerText="Location" footerText="contains" filterMatchMode="contains">
+                            <h:outputText style="font-weight:normal;font-size:14px;font-family:'Open Sans'" value="#{itemShelve.shelve.rack.location}" />
+                        </p:column>
+
+                        <p:column styleClass="itemDetails" sortBy="#{itemShelve.storedQty}"  headerText="Stored Quantity"  >
+                            <h:outputText style="font-weight:normal;font-size:14px;font-family:'Open Sans'" value="#{itemShelve.storedQty}" />
+                        </p:column>
+
+                    </p:dataTable>
+                </p:panel>
+
+            </h:form>
+
+
+            <h:form id="lowerForm">
+                <p:messages id="lowerMessages" showDetail="false" autoUpdate="false" closable="true" />
+                <p:panel id="stockInOutPanel" header="Stock In/Out" toggleable="true" toggleSpeed="500" closeSpeed="500" style="margin-bottom:20px"  collapsed="#{itemDetailsManagedBean.showInOuttPanel}">
+                    <h:panelGrid id= "stockInOutGrid" columns="1" cellpadding="10">
+                        <br />
+                        <p:panel id="activityPanel" style="border:none">
+                            <h:panelGrid id= "activityPanelGrid" columns="3" cellpadding="10">
+                                <h:outputLabel for="action" value="Choose an activity: " style="font-weight:bold"/>&nbsp;
+                                <h:selectOneRadio id="action" value="#{itemDetailsManagedBean.activityChoice}" required="true" requiredMessage="Please select either Stock Incoming or Stock Outgoing!" >
+                                    <p:ajax event = "click" listener="#{itemDetailsManagedBean.clickEventHandler}" update="@form"/>
+                                    <f:selectItem itemLabel="Incoming" itemValue="stockIn" />
+                                    <f:selectItem itemLabel="Outgoing" itemValue="stockOut" />
+                                </h:selectOneRadio>
+                                <p:message for="action" />
+                            </h:panelGrid>
+                        </p:panel>
+
+
+                        <p:panel header = "Stock Incoming" visible = "#{itemDetailsManagedBean.showInPanel}" style="border:none">&nbsp;
+                            <h:outputLabel for="inQty" value="Please enter the number of quantity coming in: " style="font-weight:bold"/>
+                            <p:inputText style="font-weight:normal;font-size:14px;font-family:'Open Sans'" id="inQty" value="#{itemDetailsManagedBean.quantityIn}" required="true" requiredMessage="Please enter value for incoming quantity!" validatorMessage="Invalid Input! Please enter a positive integer for quantity(max of up to 6 digits)" converterMessage="Invalid Input! Please enter a positive integer for In-Quantity(max of up to 6 digits)">
+                                <f:validateLongRange minimum="0" maximum="999999" /> 
+                            </p:inputText>
+                            <p:message for="inQty" />
+
+                            <h:outputLabel for="inCost" value="Please enter the cost per unit for this incoming batch: " style="font-weight:bold"/>
+                            <p:inputText style="font-weight:normal;font-size:14px;font-family:'Open Sans'" id="inCost" value="#{itemDetailsManagedBean.inCost}" required="true" requiredMessage="Please enter the cost per unit for this incoming batch!" converterMessage="Invalid Input! Please enter a positive number up to 2 decimal for Cost. Example: 53.0 or 42.53">
+                                <f:validateDoubleRange minimum="0.0" maximum="999999.99" />
+                            </p:inputText>
+                            <p:message for="inCost" />
+                        </p:panel>
+
+                        <p:panel header = "Stock Outgoing" visible = "#{itemDetailsManagedBean.showOutPanel}" style="border:none">&nbsp;
+                            <h:outputLabel for="outQty" value="Please enter the number of quantity going out: " style="font-weight:bold"/>
+                            <p:inputText style="font-weight:normal;font-size:14px;font-family:'Open Sans'" id="outQty" value="#{itemDetailsManagedBean.quantityOut}" required="true" requiredMessage="Please enter value for outgoing quantity!" validatorMessage="Invalid Input! Please enter a positive integer for quantity(max of up to Item's Available Quantity)" converterMessage="Invalid Input! Please enter a positive integer for Out-Quantity(max of up to Item's Available Quantity)">
+                                <f:validateLongRange minimum="0" maximum="#{itemDetailsManagedBean.selectedItem.quantity}" /> 
+                            </p:inputText>
+                            <p:message for="outQty" />
+                        </p:panel>
+                        <br />
+                        <p:commandButton value="Update" update="upperForm:itemDetailsPanel lowerForm:lowerMessages" icon="ui-icon-check" action="#{itemDetailsManagedBean.updateStock()}"/>
+                    </h:panelGrid>
+                </p:panel>
+            </h:form>
+        </div>
+    </ui:define>
+
+</ui:composition>

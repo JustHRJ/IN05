@@ -12,6 +12,7 @@
 
         <style>
             html {
+                font-family: 'Open Sans';
                 font-size:14px;
                 background:#eee;
             }
@@ -41,10 +42,10 @@
                                 <p:outputLabel style="font-weight:bold" value ="Employee" />
                             </p:column>
                             <p:column>
-                                <p:selectOneMenu value ="#{employeeClaimBean.employee.employee_name}" style="width: 100%" required="true" requiredMessage="Please input employee name">
-                                    <f:selectItem itemValue ="" itemLabel ="Select One" noSelectionOption="true"/>
+                                <h:selectOneMenu value ="#{employeeClaimBean.employee.employee_name}" style="width: 100%" required="true" requiredMessage="Please input employee name">
+                                    <f:selectItem itemValue ="" itemLabel ="Select" noSelectionOption="true"/>
                                     <f:selectItems value ="#{loginControlBean.validateLeaveName()}"/>
-                                </p:selectOneMenu>
+                                </h:selectOneMenu>
                             </p:column>
                         </p:row>
                         <p:row>
@@ -52,9 +53,9 @@
                                 <p:outputLabel style="font-weight:bold" value ="Claim" />
                             </p:column>
                             <p:column>
-                                <p:selectOneMenu value ="#{employeeClaimBean.employeeClaim.type}" style="width: 100%" >
+                                <h:selectOneMenu value ="#{employeeClaimBean.employeeClaim.type}" style="width: 100%" >
                                     <f:selectItem itemValue ="taxi" itemLabel ="Taxi"/>
-                                </p:selectOneMenu>
+                                </h:selectOneMenu>
                             </p:column>
                         </p:row>
                         <p:row>

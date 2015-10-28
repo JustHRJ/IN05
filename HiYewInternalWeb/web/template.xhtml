@@ -87,7 +87,7 @@
                                 <p:submenu label ="Employee Management">
                                     <p:menuitem value ="Register Employee" url ="hrms-employee-registration.xhtml" rendered ="#{loginControlBean.checkValid1()}"/>
                                     <p:menuitem value ="View Employee" url = "hrms-employee-details.xhtml" />
-                                    <p:menuitem value ="Employee Schedule" url ="hrms-employee-schedule.xhtml"/>
+                                    <p:menuitem value ="Employee Schedule" url ="index.xhtml"/>
                                 </p:submenu>
                             </p:column>
                             <p:column>
@@ -102,7 +102,7 @@
                                     <p:menuitem value ="#{loginControlBean.getEAlert()}" url ="hrms-alert-employee.xhtml" />
                                     <p:menuitem value ="Add Training Schedule" url ="hrms-add-training-schedule.xhtml" rendered="#{loginControlBean.checkValid1()}" />
                                     <p:menuitem value ="Add Employee Training" url ="hrms-add-employee-training.xhtml" rendered="#{loginControlBean.checkValid1()}" />
-                                    <p:menuitem value ="View Upcoming Training" url ="hrms-view-trainingSchedule.xhtml"/>
+                                    <p:menuitem value ="View Upcoming Training" url ="hrms-view-training-schedule.xhtml"/>
                                 </p:submenu>
                             </p:column>
                             <p:column>
@@ -116,15 +116,17 @@
                         <p:submenu style="#{loginControlBean.current_page eq 'ICS' ? 'border: 1px solid #a8a8a8;background: #85b2cb -webkit-gradient(linear, left top, left bottom, from(rgba(255,255,255,0.8)), to(rgba(255,255,255,0)));' : ''}" label="Inventory Control System" icon="">
                             <p:column>
                                 <p:submenu label="Items Management">
-                                    <p:menuitem value="View Inventory" url="ics-view-inventory.xhtml" />
                                     <p:menuitem value="Add New Item" url="ics-add-new-item.xhtml" />
+                                    <p:menuitem value="View Items" url="ics-items-details.xhtml" />
+                                    <p:menuitem value="View Inventory" url="ics-view-inventory.xhtml" />
                                     <p:menuitem value="View Low Stock Alert (#{viewLowStockManagedBean.numOfLowStockItems})" url="ics-view-low-stock.xhtml" />
                                 </p:submenu>
                             </p:column>
                             <p:column>
                                 <p:submenu label="Storage Management">
-                                    <p:menuitem value="View Storage" url="ics-view-racks.xhtml" />
                                     <p:menuitem value="Create Storage" url="ics-create-storage.xhtml" />
+                                    <p:menuitem value="Allocate Storage" url="ics-allocate-storage.xhtml" />
+                                    <p:menuitem value="View Storage" url="ics-view-racks.xhtml" />
                                 </p:submenu>
                             </p:column>
                         </p:submenu>
@@ -146,6 +148,8 @@
                                 <p:submenu label = "Machine Management" >
                                     <p:menuitem value ="Add Machinery" url ="mms-add-machine.xhtml" />
                                     <p:menuitem value ="View Machinery" url ="mms-view-machine.xhtml" />
+                                    <p:menuitem value ="Alert Machinery" url ="mms-alert-machine.xhtml" />
+                                    <p:menuitem value ="Repair Machinery" url ="mms-repair-machine.xhtml" />
                                 </p:submenu>
                             </p:column>
                             <p:column>
@@ -216,7 +220,7 @@
             <div class="md-modal md-3d-slit" id="logout-modal-alt">
                 <div class="md-content">
                     <h3><strong>Logout</strong> Confirmation</h3>
-                    <div>
+                    <div style="padding: 15px 40px 5px;">
                         <p class="text-center">Are you sure want to logout from this system?</p>
                         <h:form id="logoutForm2">
                             <p class="text-center">
