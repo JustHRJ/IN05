@@ -44,6 +44,17 @@ public class ProductQuotationManagedBean implements Serializable {
     private ArrayList<ProductQuotation> receivedProductQuotationList;
     private ArrayList<ProductQuotationDescription> displayProductQuotationDescriptionList;
 
+    // compare
+    private Integer selectedCount = 0;
+    private Boolean selectedMachine1 = false;
+    private Boolean selectedMachine2 = false;
+    private Boolean selectedMachine3 = false;
+    private Boolean selectedMachine4 = false;
+    private Boolean selectedMachine5 = false;
+    private Boolean selectedMachine6 = false;
+    private Boolean selectedMachine7 = false;
+    // compare end
+
     public ProductQuotationManagedBean() {
         System.out.println("ProductQuotationManagedBean.java ProductQuotationManagedBean()");
         newProductQuotation = new ProductQuotation();
@@ -64,11 +75,40 @@ public class ProductQuotationManagedBean implements Serializable {
         receivedProductQuotationList = new ArrayList<>(productQuotationSessionBean.receivedProductQuotationList(username));
     }
 
+    public Integer doCount() throws IOException {
+        selectedCount = 0;
+        if (selectedMachine1) {
+            selectedCount = selectedCount + 1;
+        }
+        if (selectedMachine2) {
+            selectedCount = selectedCount + 1;
+        }
+        if (selectedMachine3) {
+            selectedCount = selectedCount + 1;
+        }
+        if (selectedMachine4) {
+            selectedCount = selectedCount + 1;
+        }
+        if (selectedMachine5) {
+            selectedCount = selectedCount + 1;
+        }
+        if (selectedMachine6) {
+            selectedCount = selectedCount + 1;
+        }
+        if (selectedMachine7) {
+            selectedCount = selectedCount + 1;
+        }
+
+        FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("compareMsg", selectedCount.toString());
+        FacesContext.getCurrentInstance().getExternalContext().redirect("/HiYewExternalWeb/c-products-machines.xhtml");
+        return selectedCount;
+    }
+
     public void redirectToSelectedMachine() throws IOException {
         if (!selectedMachine.equals("")) {
             System.out.println("selectedMachine ===== " + selectedMachine);
-            if (selectedMachine.equals("LWI Small Chamber Type")) {
-                FacesContext.getCurrentInstance().getExternalContext().redirect("/HiYewExternalWeb/c-products-machines-SmallChamberType.xhtml");
+            if (selectedMachine.equals("LWI Small Chamber")) {
+                FacesContext.getCurrentInstance().getExternalContext().redirect("/HiYewExternalWeb/c-products-machines-SmallChamber.xhtml");
             } else if (selectedMachine.equals("LWI V Flexx")) {
                 FacesContext.getCurrentInstance().getExternalContext().redirect("/HiYewExternalWeb/c-products-machines-Flexx.xhtml");
             } else if (selectedMachine.equals("LWI V ERGO")) {
@@ -432,5 +472,117 @@ public class ProductQuotationManagedBean implements Serializable {
      */
     public void setSelectedMachine(String selectedMachine) {
         this.selectedMachine = selectedMachine;
+    }
+
+    /**
+     * @return the selectedCount
+     */
+    public Integer getSelectedCount() {
+        return selectedCount;
+    }
+
+    /**
+     * @param selectedCount the selectedCount to set
+     */
+    public void setSelectedCount(Integer selectedCount) {
+        this.selectedCount = selectedCount;
+    }
+
+    /**
+     * @return the selectedMachine1
+     */
+    public Boolean getSelectedMachine1() {
+        return selectedMachine1;
+    }
+
+    /**
+     * @param selectedMachine1 the selectedMachine1 to set
+     */
+    public void setSelectedMachine1(Boolean selectedMachine1) {
+        this.selectedMachine1 = selectedMachine1;
+    }
+
+    /**
+     * @return the selectedMachine2
+     */
+    public Boolean getSelectedMachine2() {
+        return selectedMachine2;
+    }
+
+    /**
+     * @param selectedMachine2 the selectedMachine2 to set
+     */
+    public void setSelectedMachine2(Boolean selectedMachine2) {
+        this.selectedMachine2 = selectedMachine2;
+    }
+
+    /**
+     * @return the selectedMachine3
+     */
+    public Boolean getSelectedMachine3() {
+        return selectedMachine3;
+    }
+
+    /**
+     * @param selectedMachine3 the selectedMachine3 to set
+     */
+    public void setSelectedMachine3(Boolean selectedMachine3) {
+        this.selectedMachine3 = selectedMachine3;
+    }
+
+    /**
+     * @return the selectedMachine4
+     */
+    public Boolean getSelectedMachine4() {
+        return selectedMachine4;
+    }
+
+    /**
+     * @param selectedMachine4 the selectedMachine4 to set
+     */
+    public void setSelectedMachine4(Boolean selectedMachine4) {
+        this.selectedMachine4 = selectedMachine4;
+    }
+
+    /**
+     * @return the selectedMachine5
+     */
+    public Boolean getSelectedMachine5() {
+        return selectedMachine5;
+    }
+
+    /**
+     * @param selectedMachine5 the selectedMachine5 to set
+     */
+    public void setSelectedMachine5(Boolean selectedMachine5) {
+        this.selectedMachine5 = selectedMachine5;
+    }
+
+    /**
+     * @return the selectedMachine6
+     */
+    public Boolean getSelectedMachine6() {
+        return selectedMachine6;
+    }
+
+    /**
+     * @param selectedMachine6 the selectedMachine6 to set
+     */
+    public void setSelectedMachine6(Boolean selectedMachine6) {
+        this.selectedMachine6 = selectedMachine6;
+    }
+
+    /**
+     * @return the selectedMachine7
+     */
+    public Boolean getSelectedMachine7() {
+        return selectedMachine7;
+    }
+
+    /**
+     * @param selectedMachine7 the selectedMachine7 to set
+     */
+    public void setSelectedMachine7(Boolean selectedMachine7) {
+        this.selectedMachine7 = selectedMachine7;
     }
 }

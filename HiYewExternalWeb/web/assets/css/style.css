@@ -1067,6 +1067,8 @@ footer{
 .box-info .additional .list-box-info ul li:last-child{border-bottom: 1px solid #fff;}
 .box-info.full h2{
     padding: 15px;
+    padding-left: 0px;
+    padding-right: 0px;
     margin: 5px 0px 8px 0px;
 }
 .box-info table{margin: 0;}
