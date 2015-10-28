@@ -47,90 +47,90 @@
 
                     </p:column>
 
-                    <p:column styleClass="metalFilter" filterBy="#{im.iron}" headerText="Iron"  filterMatchMode="lte" width ="93" >
+                    <p:column styleClass="metalFilter" filterBy="#{im.zinc}" headerText="Zinc"  filterMatchMode="lte" width ="93" >
                         <f:facet name="filter">
                             <p:spinner onchange="PF('fillerTable').filter()" styleClass="year-spinner">
+                                <f:converter converterId="javax.faces.Integer" />
+                            </p:spinner>
+                        </f:facet>
+                        <h:outputText styleClass="metalFilter" value="#{im.zinc}" />
+                    </p:column>
+
+                    <p:column styleClass="metalFilter" filterBy="#{im.iron}" headerText="Iron"  filterMatchMode="lte" width ="93">
+                        <f:facet name="filter">
+                            <p:spinner onchange="PF('fillerTable').filter()" styleClass="year-spinner" >
                                 <f:converter converterId="javax.faces.Integer" />
                             </p:spinner>
                         </f:facet>
                         <h:outputText styleClass="metalFilter" value="#{im.iron}" />
                     </p:column>
 
-                    <p:column styleClass="metalFilter" filterBy="#{im.alluminium}" headerText="Aluminium"  filterMatchMode="lte" width ="93">
-                        <f:facet name="filter">
-                            <p:spinner onchange="PF('fillerTable').filter()" styleClass="year-spinner" >
-                                <f:converter converterId="javax.faces.Integer" />
-                            </p:spinner>
-                        </f:facet>
-                        <h:outputText styleClass="metalFilter" value="#{im.alluminium}" />
-                    </p:column>
 
-
-                    <p:column styleClass="metalFilter" filterBy="#{im.gold}" headerText="Gold"  filterMatchMode="lte" width ="93">
+                    <p:column styleClass="metalFilter" filterBy="#{im.aluminium}" headerText="Aluminium"  filterMatchMode="lte" width ="93">
                         <f:facet name="filter">
                             <p:spinner onchange="PF('fillerTable').filter()" styleClass="year-spinner">
                                 <f:converter converterId="javax.faces.Integer" />
                             </p:spinner>
                         </f:facet>
-                        <h:outputText styleClass="metalFilter" value="#{im.gold}" />
+                        <h:outputText styleClass="metalFilter" value="#{im.aluminium}" />
                     </p:column>
 
 
 
-                    <p:column styleClass="metalFilter" filterBy="#{im.bronze}" headerText="Bronze"  filterMatchMode="lte" width ="93">
+                    <p:column styleClass="metalFilter" filterBy="#{im.carbon}" headerText="Carbon"  filterMatchMode="lte" width ="93">
                         <f:facet name="filter">
                             <p:spinner onchange="PF('fillerTable').filter()" styleClass="year-spinner">
                                 <f:converter converterId="javax.faces.Integer" />
                             </p:spinner>
                         </f:facet>
-                        <h:outputText styleClass="metalFilter" value="#{im.bronze}" />
+                        <h:outputText styleClass="metalFilter" value="#{im.carbon}" />
                     </p:column>
 
-                    <p:column styleClass="metalFilter" filterBy="#{im.silver}" headerText="Silver"  filterMatchMode="lte" width ="100" >
+                    <p:column styleClass="metalFilter" filterBy="#{im.nickel}" headerText="Nickel"  filterMatchMode="lte" width ="100" >
                         <f:facet name="filter">
                             <p:spinner onchange="PF('fillerTable').filter()" styleClass="year-spinner">
                                 <f:converter converterId="javax.faces.Integer" />
                             </p:spinner>
                         </f:facet>
-                        <h:outputText styleClass="metalFilter" value="#{im.silver}" />
+                        <h:outputText styleClass="metalFilter" value="#{im.nickel}" />
                     </p:column>
 
-                    <p:column styleClass="metalFilter" filterBy="#{im.plastic}" headerText="Plastic"  filterMatchMode="lte" width ="100">
+                    <p:column styleClass="metalFilter" filterBy="#{im.manganese}" headerText="Manganese"  filterMatchMode="lte" width ="100">
                         <f:facet name="filter">
                             <p:spinner onchange="PF('fillerTable').filter()" styleClass="year-spinner">
                                 <f:converter converterId="javax.faces.Integer" />
                             </p:spinner>
                         </f:facet>
-                        <h:outputText styleClass="metalFilter" value="#{im.plastic}" />
+                        <h:outputText styleClass="metalFilter" value="#{im.manganese}" />
                     </p:column>
 
 
-                    <p:column styleClass="metalFilter" filterBy="#{im.platinium}" headerText="Platinum"  filterMatchMode="lte" width ="100" >
+                    <p:column styleClass="metalFilter" filterBy="#{im.silicon}" headerText="silicon"  filterMatchMode="lte" width ="100" >
                         <f:facet name="filter">
                             <p:spinner onchange="PF('fillerTable').filter()" styleClass="year-spinner">
                                 <f:converter converterId="javax.faces.Integer" />
                             </p:spinner>
                         </f:facet>
-                        <h:outputText styleClass="metalFilter" value="#{im.platinium}" />
+                        <h:outputText styleClass="metalFilter" value="#{im.silicon}" />
                     </p:column>
 
-                    <p:column styleClass="metalFilter" filterBy="#{im.titanium}" headerText="Titanium"  filterMatchMode="lte"  width ="100">
+                    <p:column styleClass="metalFilter" filterBy="#{im.chromium}" headerText="chromium"  filterMatchMode="lte"  width ="100">
                         <f:facet name="filter">
                             <p:spinner onchange="PF('fillerTable').filter()" styleClass="year-spinner">
                                 <f:converter converterId="javax.faces.Integer" />
                             </p:spinner>
                         </f:facet>
-                        <h:outputText styleClass="metalFilter" value="#{im.titanium}" />
+                        <h:outputText styleClass="metalFilter" value="#{im.chromium}" />
                     </p:column>
 
 
-                    <p:column styleClass="metalFilter" filterBy="#{im.topaz}" headerText="Topaz"  filterMatchMode="lte" width ="100" >
+                    <p:column styleClass="metalFilter" filterBy="#{im.lead}" headerText="Lead"  filterMatchMode="lte" width ="100" >
                         <f:facet name="filter">
                             <p:spinner onchange="PF('fillerTable').filter()" styleClass="year-spinner">
                                 <f:converter converterId="javax.faces.Integer" />
                             </p:spinner>
                         </f:facet>
-                        <h:outputText styleClass="metalFilter" value="#{im.topaz}" />
+                        <h:outputText styleClass="metalFilter" value="#{im.lead}" />
                     </p:column>
 
 
@@ -160,47 +160,47 @@
                                 <h:inputText value="#{knowledgeManageBean.selectedFiller.copper}" />
                             </p:column>
 
+                            <p:column  headerText="Zinc" width ="100">
+                                <h:inputText value="#{knowledgeManageBean.selectedFiller.zinc}" />
+                            </p:column>
+
+
                             <p:column  headerText="Iron" width ="100">
                                 <h:inputText value="#{knowledgeManageBean.selectedFiller.iron}" />
                             </p:column>
 
 
-                            <p:column  headerText="Aluminum" width ="100">
-                                <h:inputText value="#{knowledgeManageBean.selectedFiller.alluminium}" />
-                            </p:column>
-
-
-                            <p:column  headerText="Gold" width ="100">
-                                <h:inputText value="#{knowledgeManageBean.selectedFiller.gold}" />
+                            <p:column  headerText="Aluminium" width ="100">
+                                <h:inputText value="#{knowledgeManageBean.selectedFiller.aluminium}" />
                             </p:column>
 
 
 
-                            <p:column  headerText="Bronze" width ="100">
-                                <h:inputText value="#{knowledgeManageBean.selectedFiller.bronze}" />
+                            <p:column  headerText="Carbon" width ="100">
+                                <h:inputText value="#{knowledgeManageBean.selectedFiller.carbon}" />
                             </p:column>
 
 
-                            <p:column  headerText="Silver" width ="100">
-                                <h:inputText value="#{knowledgeManageBean.selectedFiller.silver}" />
+                            <p:column  headerText="Nickel" width ="100">
+                                <h:inputText value="#{knowledgeManageBean.selectedFiller.nickel}" />
                             </p:column>
 
-                            <p:column headerText="Plastic" width ="100">
-                                <h:inputText value="#{knowledgeManageBean.selectedFiller.plastic}" />
-                            </p:column>
-
-
-                            <p:column  headerText="Platinum" width ="100">
-                                <h:inputText value="#{knowledgeManageBean.selectedFiller.platinium}" />
-                            </p:column>
-
-                            <p:column  headerText="Titanium" width ="100">
-                                <h:inputText value="#{knowledgeManageBean.selectedFiller.titanium}" />
+                            <p:column headerText="Manganese" width ="100">
+                                <h:inputText value="#{knowledgeManageBean.selectedFiller.manganese}" />
                             </p:column>
 
 
-                            <p:column  headerText="Topaz" width ="100" >
-                                <h:inputText value="#{knowledgeManageBean.selectedFiller.topaz}" />
+                            <p:column  headerText="Silicon" width ="100">
+                                <h:inputText value="#{knowledgeManageBean.selectedFiller.silicon}" />
+                            </p:column>
+
+                            <p:column  headerText="Chromium" width ="100">
+                                <h:inputText value="#{knowledgeManageBean.selectedFiller.chromium}" />
+                            </p:column>
+
+
+                            <p:column  headerText="Lead" width ="100" >
+                                <h:inputText value="#{knowledgeManageBean.selectedFiller.lead}" />
                             </p:column>
                         </p:dataTable>
                         <p:commandButton value="Edit" action ="#{knowledgeManageBean.updateFiller()}" update ="formMain" />

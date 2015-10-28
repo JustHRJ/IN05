@@ -35,7 +35,7 @@ public class MachineEntity implements Serializable {
     private String description;
     private Collection<MachineMaintainenceEntity> machineMaintainence = new ArrayList<MachineMaintainenceEntity>();
     private Collection<MachineRepairEntity> machineRepair = new ArrayList<MachineRepairEntity>();
-    
+    private String machine_type;
     
     public MachineEntity() {
 
@@ -175,6 +175,20 @@ public class MachineEntity implements Serializable {
      */
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    /**
+     * @return the machine_type
+     */
+    public String getMachine_type() {
+        return machine_type;
+    }
+
+    /**
+     * @param machine_type the machine_type to set
+     */
+    public void setMachine_type(String machine_type) {
+        this.machine_type = machine_type;
     }
 
 }

@@ -59,12 +59,12 @@ public class MachineManageBean {
         Timestamp machineTime = new Timestamp(machineNxtMaint.getTime());
         if (machineType.equals("Laser")) {
             machineSubMaint = 2;
-        } else if (machineType.equals("TIG")) {
+        } else if (machineType.equals("T.I.G")) {
             machineSubMaint = 4;
         } else {
             machineSubMaint = 6;
         }
-        boolean check = machineSystemBean.addMachine(machineName, machineId, machineTime, machineDescript, machineSubMaint);
+        boolean check = machineSystemBean.addMachine(machineName, machineId, machineTime, machineDescript, machineSubMaint, machineType);
         if (check) {
             return "mms-view-machine";   
         } else {
