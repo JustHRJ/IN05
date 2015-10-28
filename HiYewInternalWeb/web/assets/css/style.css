@@ -15,6 +15,11 @@ body{
 
 }
 
+.ui-messages-info-detail, .ui-messages-warn-detail, .ui-messages-error-detail, .ui-messages-fatal-detail, .ui-message-info-detail, .ui-message-warn-detail, .ui-message-error-detail, .ui-message-fatal-detail {
+    font-size: 14px;
+    margin-left: 5px;
+}
+
 .itemDetails .ui-inputfield {
     font-weight: normal!important;
 }
