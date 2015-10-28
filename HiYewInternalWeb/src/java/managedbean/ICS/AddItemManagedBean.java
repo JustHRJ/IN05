@@ -38,7 +38,7 @@ public class AddItemManagedBean implements Serializable {
 
     }
 
-    public String createItem(ActionEvent event) {
+    public String createItem() {
         System.out.println("Here");
         if ((hiYewICSSessionBean.getExistingItem(newItem.getFillerCode())) != null) {
             FacesContext.getCurrentInstance().addMessage("formMain:itemCode", new FacesMessage(FacesMessage.SEVERITY_ERROR, "Unable to add item! Existing Item Code", "Unable to add item! Existing Item Code"));
@@ -49,9 +49,10 @@ public class AddItemManagedBean implements Serializable {
         }
         else{
           hiYewICSSessionBean.createItem(newItem);
+          FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("ItemToPassToComposition", this.newItem);
           newItem = new FillerEntity(); //To reinitialise and create new customer
            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Item added to inventory successfully!"));
-             return "ics-view-inventory?faces-redirect=true";
+             return "ics-add-newItem-Composite?faces-redirect=true";
         }
     }
 

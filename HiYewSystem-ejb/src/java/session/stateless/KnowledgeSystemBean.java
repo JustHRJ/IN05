@@ -6,6 +6,7 @@
 package session.stateless;
 
 import entity.FillerComposition;
+import entity.FillerEntity;
 import entity.Metal;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -84,6 +85,13 @@ public class KnowledgeSystemBean implements KnowledgeSystemBeanLocal {
         }
     }
 
+    
+    public void addNewFiller(FillerComposition fillerC, FillerEntity filler){
+        filler.setFiller(fillerC);
+        em.persist(fillerC);
+        em.merge(filler);
+    }
+    
     public void deleteMetal(Metal metal) {
         if (metal == null) {
             System.out.println("no metal to delete");

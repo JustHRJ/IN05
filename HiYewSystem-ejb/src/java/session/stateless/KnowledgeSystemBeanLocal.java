@@ -6,6 +6,7 @@
 package session.stateless;
 
 import entity.FillerComposition;
+import entity.FillerEntity;
 import entity.Metal;
 import java.util.List;
 import java.util.Vector;
@@ -55,5 +56,7 @@ public interface KnowledgeSystemBeanLocal {
     public void addNewFiller(FillerComposition filler);
 
     public void addNewMetal(Metal metal);
+
+    public void addNewFiller(FillerComposition fillerC, FillerEntity filler);
     
 }

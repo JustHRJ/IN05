@@ -6,6 +6,7 @@
 package managedbean;
 
 import entity.FillerComposition;
+import entity.FillerEntity;
 import entity.Metal;
 import java.io.File;
 import java.io.IOException;
@@ -16,6 +17,7 @@ import java.util.Vector;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.enterprise.context.RequestScoped;
+import javax.faces.context.FacesContext;
 import javax.inject.Named;
 import javax.faces.view.ViewScoped;
 import jxl.Cell;
@@ -83,6 +85,11 @@ public class KnowledgeManageBean implements Serializable {
         }
     }
 
+    public void addNewFillerInfoInv(){
+         FillerEntity filler = (FillerEntity) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("ItemToPassToComposition");
+         knowledgeSystemBean.addNewFiller(selectedFiller, filler);
+    }
+    
     public void addNewMetalInfo() {
         if (selectedMetal.getMetalName().isEmpty()) {
 
