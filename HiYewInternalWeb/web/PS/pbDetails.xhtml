@@ -8,7 +8,7 @@
         <title>Hi-Yew Internal System</title>
         <style>
             .highlight1 {
-                background: salmon;
+                background: yellow;
             }
             .highlight2 {
 
@@ -100,69 +100,72 @@
             </p:submenu>
         </p:megaMenu>
         <br/>
-        <h:form> 
+        <h:form id="formMain"> 
+            <p:growl id="message" showDetail="true" />
+            
+            
+            <p:panel id="pbResultPanel" header="View Bidding Result of Bid Batch Reference: #{pbDetailsManagedBean.selectedBidRefNum}" style="margin-bottom:20px;text-align: center">
+                <p:dataTable var="pb" value="#{pbDetailsManagedBean.quotedList}" widgetVar="pbsTable"  rowStyleClass="#{pb.quotedPrice eq pbDetailsManagedBean.cheapestBid ? 'highlight1' : 'highlight2'}"
+                             emptyMessage="No result found with given criteria" filteredValue="#{pbDetailsManagedBean.filteredPBs}" 
+                             rows="10"
+                             paginator="true"
+                             paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                             rowsPerPageTemplate="5,10,15">
 
-            <p:dataTable var="pb" value="#{viewPBManagedBean.pbList}" widgetVar="pbsTable" 
-                         emptyMessage="No result found with given criteria" filteredValue="#{viewPBManagedBean.filteredPBs}" 
-                         rows="10"
-                         paginator="true"
-                         paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-                         rowsPerPageTemplate="5,10,15">
 
-
-                <f:facet name="header">
-                    View Wire Bidding Sent for Procurement
-                    <p:outputPanel style="text-align:right;">
-                        <h:outputText value="Search all fields:" />
-                        <p:inputText id="globalFilter" onkeyup="PF('pbsTable').filter()" style="width:150px" placeholder="Enter keyword"/>
-                    </p:outputPanel>
-                </f:facet>
-                <p:column sortBy="#{pb.bidRefNum}" headerText="Ref No." >
-                    <h:outputText value="#{pb.bidRefNum}" />
-                </p:column>
                 
-                <p:column sortBy="#{pb.createdOn}" headerText="Created On" >
-                    <h:outputText value="#{viewPBManagedBean.formatDate(pb.createdOn)}" />
-                </p:column>
 
-                <p:column filterBy="#{pb.itemCode}" sortBy="#{pb.itemCode}" headerText="WireCode" footerText="contains" filterMatchMode="contains">
-                    <h:outputText value="#{pb.itemCode}" />
-                </p:column>
+                    <p:column filterBy="#{pb.companyName}" sortBy="#{pb.companyName}" headerText="Quoted By" footerText="contains" filterMatchMode="contains">
+                        <h:outputText value="#{pb.companyName}">
+                        </h:outputText>
+                    </p:column>
+
+                    <p:column sortBy="#{pb.quotedPrice}" headerText="Quoted Price" >
+                        <h:outputText value="#{pb.quotedPrice}">
+                        </h:outputText>
+                    </p:column>
+
+                    <p:column headerText="Bid Status" >
+                        <h:outputText value="#{pb.ifAccept}">
+                        </h:outputText>
+                    </p:column>
+
+                    <p:column style="text-align: center">
+                        <p:commandButton  value="Accept" action="#{pbDetailsManagedBean.acceptPB(pb)}" disabled="#{pbDetailsManagedBean.disableAcceptButton}" update="formMain:pbResultPanel" />
+                        
+                    </p:column>
+                    
 
 
-                <p:column  sortBy="#{pb.requiredQty}" headerText="Quantity Asked" >
-                    <h:outputText value="#{pb.requiredQty}" />
-                </p:column>
+                </p:dataTable>
+            </p:panel>
+            
+            <p:panel id="pbPendingPanel" header="Bid Not Quoted" toggleable="true" toggleSpeed="500" closeSpeed="500" style="margin-bottom:20px;text-align:center "  collapsed="true">
+                 <p:dataTable var="pb" value="#{pbDetailsManagedBean.pendingList}" widgetVar="pbsTable" 
+                             emptyMessage="No result found with given criteria" filteredValue="#{pbDetailsManagedBean.filteredPBs}" 
+                             rows="10"
+                             paginator="true"
+                             paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                             rowsPerPageTemplate="5,10,15">
 
-                <p:column  headerText="Delivered By" sortBy="#{pb.byWhen}"  >
-                    <h:outputText value="#{viewPBManagedBean.formatDate(pb.byWhen)}" />
-                </p:column>
 
-
-                <p:column  headerText="Bid End Date" sortBy="#{pb.bidEnd}"  >
-                    <h:outputText value="#{viewPBManagedBean.formatDate(pb.bidEnd)}" />
-                </p:column>
-
-                <p:column filterBy="#{pb.status}" headerText="Status" footerText="equals" filterMatchMode="equals">
-                    <f:facet name="filter">
-                        <p:selectOneMenu onchange="PF('pbsTable').filter()">
-                            <f:selectItem itemLabel="All" itemValue="" />
-                            <f:selectItem itemLabel="Open" itemValue="Open" />
-                            <f:selectItem itemLabel="Closed" itemValue="Closed" />
-                            <f:selectItem itemLabel="Completed" itemValue="Completed" />
-                        </p:selectOneMenu>
-                    </f:facet>
-                    <h:outputText value="#{pb.status}" />
-                </p:column>
-
-               <p:column style="width:30px;text-align: center">
-                    <p:commandButton  action="#{viewPBManagedBean.passSelectedBatchToNext()}" icon="ui-icon-search" title="View Details">
-                        <f:setPropertyActionListener value="#{pb.bidRefNum}" target="#{viewPBManagedBean.selectedBidRefNum}" />
-                    </p:commandButton>
-                </p:column>
                 
-            </p:dataTable>
 
+                     <p:column filterBy="#{pb.companyName}" sortBy="#{pb.companyName}" headerText="Quoted By" footerText="contains" filterMatchMode="contains" style="text-align: center">
+                        <h:outputText value="#{pb.companyName}">
+                        </h:outputText>
+                    </p:column>
+
+
+                    <p:column headerText="Bid Status" style="text-align: center">
+                        <h:outputText value="#{pb.ifAccept}">
+                        </h:outputText>
+                    </p:column>
+                    
+
+
+                </p:dataTable>
+            </p:panel>
         </h:form>
 
     </h:body>

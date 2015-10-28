@@ -25,9 +25,9 @@ public class ProcurementBidEntity implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    
+
     private String itemCode;
-    
+
     private String grade;
     @Digits(integer = 9, fraction = 2, message = "Invalid input! Note: only up to 9 integers and 2 decimal places. Example: 1234.32")
     private double wireLength;
@@ -35,33 +35,36 @@ public class ProcurementBidEntity implements Serializable {
     private double diameter;
     private int requiredQty;
     private String companyName;
+    private Timestamp createdOn;
     private Timestamp byWhen;
     private Timestamp bidEnd;
     private String status;
-    
+    private String ifAccept;
+
+    private int bidRefNum;
+
     @Digits(integer = 9, fraction = 2, message = "Invalid input! Note: only up to 9 integers and 2 decimal places. Example: 1234.32")
     private double quotedPrice;
 
     public ProcurementBidEntity() {
     }
 
-    public ProcurementBidEntity(String itemCode, String grade, double wireLength, double diameter, int requiredQty, String companyName, Timestamp byWhen, Timestamp bidEnd, String status, double quotedPrice) {
+    public ProcurementBidEntity(String itemCode, String grade, double wireLength, double diameter, int requiredQty, String companyName, Timestamp createdOn, Timestamp byWhen, Timestamp bidEnd, String status, String ifAccept, int bidRefNum, double quotedPrice) {
         this.itemCode = itemCode;
         this.grade = grade;
         this.wireLength = wireLength;
         this.diameter = diameter;
         this.requiredQty = requiredQty;
         this.companyName = companyName;
+        this.createdOn = createdOn;
         this.byWhen = byWhen;
         this.bidEnd = bidEnd;
         this.status = status;
+        this.ifAccept = ifAccept;
+        this.bidRefNum = bidRefNum;
         this.quotedPrice = quotedPrice;
     }
 
-    
-    
-    
-    
     public Long getId() {
         return id;
     }
@@ -233,6 +236,48 @@ public class ProcurementBidEntity implements Serializable {
      */
     public void setQuotedPrice(double quotedPrice) {
         this.quotedPrice = quotedPrice;
+    }
+
+    /**
+     * @return the bidRefNum
+     */
+    public int getBidRefNum() {
+        return bidRefNum;
+    }
+
+    /**
+     * @param bidRefNum the bidRefNum to set
+     */
+    public void setBidRefNum(int bidRefNum) {
+        this.bidRefNum = bidRefNum;
+    }
+
+    /**
+     * @return the ifAccept
+     */
+    public String getIfAccept() {
+        return ifAccept;
+    }
+
+    /**
+     * @param ifAccept the ifAccept to set
+     */
+    public void setIfAccept(String ifAccept) {
+        this.ifAccept = ifAccept;
+    }
+
+    /**
+     * @return the createdOn
+     */
+    public Timestamp getCreatedOn() {
+        return createdOn;
+    }
+
+    /**
+     * @param createdOn the createdOn to set
+     */
+    public void setCreatedOn(Timestamp createdOn) {
+        this.createdOn = createdOn;
     }
 
 }

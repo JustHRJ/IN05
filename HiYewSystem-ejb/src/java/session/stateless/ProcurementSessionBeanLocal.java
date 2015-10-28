@@ -34,5 +34,19 @@ public interface ProcurementSessionBeanLocal {
     public List<ProcurementBidEntity> getAllBids();
 
     public List<String> getAllSuppliers();
-    
+
+    public int getNextBatchNo();
+
+    public List<ProcurementBidEntity> getBidsOverview();
+
+    public List<ProcurementBidEntity> getBidsOfBidRef(int batchNum);
+
+    public void updateAcceptStatus(ProcurementBidEntity pb, String status);
+
+    public SupplierEntity getSupplierByUsername(String username);
+
+    public void updatePBStatusByBatch(int batchRefNum, String status);
+
+    public void updateAllPBStatus();
+
 }

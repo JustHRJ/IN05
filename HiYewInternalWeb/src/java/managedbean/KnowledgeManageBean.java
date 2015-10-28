@@ -6,6 +6,7 @@
 package managedbean;
 
 import entity.FillerComposition;
+import entity.FillerEntity;
 import entity.Metal;
 import java.io.File;
 import java.io.IOException;
@@ -16,6 +17,7 @@ import java.util.Vector;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.enterprise.context.RequestScoped;
+import javax.faces.context.FacesContext;
 import javax.inject.Named;
 import javax.faces.view.ViewScoped;
 import jxl.Cell;
@@ -83,6 +85,11 @@ public class KnowledgeManageBean implements Serializable {
         }
     }
 
+    public void addNewFillerInfoInv(){
+         FillerEntity filler = (FillerEntity) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("ItemToPassToComposition");
+         knowledgeSystemBean.addNewFiller(selectedFiller, filler);
+    }
+    
     public void addNewMetalInfo() {
         if (selectedMetal.getMetalName().isEmpty()) {
 
@@ -194,13 +201,13 @@ public class KnowledgeManageBean implements Serializable {
     }
 
     public void readFile() throws IOException {
-        setInputFile("C:\\Users\\JustHRJ\\Desktop\\Book1.xls");
+        setInputFile("C:\\Users\\K.guoxiang\\Desktop\\Book1.xls");
         List<Vector> result = read();
         knowledgeSystemBean.addFillers(result);
     }
 
     public void readFile2() throws IOException {
-        setInputFile("C:\\Users\\JustHRJ\\Desktop\\Book1.xls");
+        setInputFile("C:\\Users\\K.guoxiang\\Desktop\\Book1.xls");
         List<Vector> result = read2();
         knowledgeSystemBean.addMetal(result);
     }
@@ -242,7 +249,7 @@ public class KnowledgeManageBean implements Serializable {
     }
 
     public void writeFile() throws IOException, WriteException, BiffException {
-        setInputFile("C:\\Users\\JustHRJ\\Desktop\\Book1.xls");
+        setInputFile("C:\\Users\\K.guoxiang\\Desktop\\Book1.xls");
         write();
     }
 
@@ -268,13 +275,13 @@ public class KnowledgeManageBean implements Serializable {
     }
 
     public void writeFile2() throws IOException, WriteException, BiffException {
-        setInputFile("C:\\Users\\JustHRJ\\Desktop\\Book1.xls");
+        setInputFile("C:\\Users\\K.guoxiang\\Desktop\\Book1.xls");
         fillerList();
         write2();
     }
 
     public void writeFile3() throws IOException, WriteException, BiffException {
-        setInputFile("C:\\Users\\JustHRJ\\Desktop\\Book1.xls");
+        setInputFile("C:\\Users\\K.guoxiang\\Desktop\\Book1.xls");
         metalList();
         write3();
     }
@@ -602,7 +609,7 @@ public class KnowledgeManageBean implements Serializable {
     }
 
     public void readFile3() throws IOException {
-        setInputFile("C:\\Users\\JustHRJ\\Desktop\\Book1.xls");
+        setInputFile("C:\\Users\\K.guoxiang\\Desktop\\Book1.xls");
         List<Vector> result = read3();
         knowledgeSystemBean.addMatch(result);
     }
@@ -644,7 +651,7 @@ public class KnowledgeManageBean implements Serializable {
     }
 
     public void writeFile4() throws IOException, WriteException, BiffException {
-        setInputFile("C:\\Users\\JustHRJ\\Desktop\\Book1.xls");
+        setInputFile("C:\\Users\\K.guoxiang\\Desktop\\Book1.xls");
         metalMatchingList();
         write4();
     }
@@ -655,7 +662,7 @@ public class KnowledgeManageBean implements Serializable {
         WritableWorkbook copy = Workbook.createWorkbook(new File(inputFile), workbook);
         WritableSheet sheet1 = copy.createSheet("MetalMatching", 2);
 
-        jxl.write.Label number3 = new jxl.write.Label(0, 0, "NetalName");
+        jxl.write.Label number3 = new jxl.write.Label(0, 0, "MetalName");
         sheet1.addCell(number3);
 
         number3 = new jxl.write.Label(1, 0, "Filler ID");
@@ -667,8 +674,9 @@ public class KnowledgeManageBean implements Serializable {
                 Vector im = result3.get(i - 1);
                 int cols = im.size();
                 System.out.println(cols);
-
-                for (int j = 0; j < cols; j++) {
+                jxl.write.Label number4 = new jxl.write.Label(0, 1, im.get(0).toString());
+                sheet1.addCell(number4);
+                for (int j = 1; j < cols; j++) {
                     jxl.write.Number number = new jxl.write.Number(j, i, Integer.parseInt(im.get(j).toString()));
                     sheet1.addCell(number);
                 }
