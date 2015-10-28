@@ -15,6 +15,7 @@ import java.util.Date;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
+import javax.faces.context.FacesContext;
 import javax.inject.Named;
 import javax.faces.view.ViewScoped;
 import session.stateless.ProcurementSessionBeanLocal;
@@ -31,6 +32,7 @@ public class ViewPBManagedBean implements Serializable{
     private List<ProcurementBidEntity> pbList;
     private List<ProcurementBidEntity> filteredPBs;
     private ProcurementBidEntity selectedPB;
+    private int selectedBidRefNum;
     /**
      * Creates a new instance of ViewPBManagedBean
      */
@@ -40,7 +42,8 @@ public class ViewPBManagedBean implements Serializable{
     }
     @PostConstruct
     public void init() {
-        pbList = procurementSessionBean.getAllBids();
+        setAllPBStatus();
+        pbList = procurementSessionBean.getBidsOverview();
     }
 
     /**
@@ -48,6 +51,10 @@ public class ViewPBManagedBean implements Serializable{
      */
     public List<ProcurementBidEntity> getPbList() {
         return pbList;
+    }
+    
+    public void setAllPBStatus(){
+        procurementSessionBean.updateAllPBStatus();
     }
 
     /**
@@ -93,6 +100,27 @@ public class ViewPBManagedBean implements Serializable{
         } else {
             return "";
         }
+    }
+    
+    public String passSelectedBatchToNext() {
+      
+        FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("SelectedBidBatch", this.selectedBidRefNum);
+        //  FacesContext.getCurrentInstance().getExternalContext().getFlash().put("SelectedItem", this.selectedItem);
+        return "pbDetails?faces-redirect=true";
+    }
+
+    /**
+     * @return the selectedBidRefNum
+     */
+    public int getSelectedBidRefNum() {
+        return selectedBidRefNum;
+    }
+
+    /**
+     * @param selectedBidRefNum the selectedBidRefNum to set
+     */
+    public void setSelectedBidRefNum(int selectedBidRefNum) {
+        this.selectedBidRefNum = selectedBidRefNum;
     }
     
 }

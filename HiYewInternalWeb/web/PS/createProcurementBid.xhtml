@@ -130,7 +130,7 @@
                     <p:message for="suppliersMenu" />
 
                     <p:outputLabel for="bidEnd" value="Bidding End Date:" />
-                    <p:calendar id="bidEnd" value="#{createBiddingManagedBean.bidEnd}" mindate="#{hiYewManagedBean.getToday()}" pattern ="dd/MM/yyyy" required = "true" requiredMessage="Please enter end date for bidding">
+                    <p:calendar id="bidEnd" value="#{createBiddingManagedBean.bidEnd}" mindate="#{createBiddingManagedBean.getTomorrow()}" pattern ="dd/MM/yyyy" required = "true" requiredMessage="Please enter end date for bidding">
                         <p:ajax event="dateSelect" listener="#{createBiddingManagedBean.onDateSelect1}" update="formMain:procurementDetailsPanel" />
                     </p:calendar>
                     <p:message for="bidEnd" />
@@ -156,7 +156,7 @@
                 </h:panelGrid>
 
             </p:panel>
-            <p:commandButton value="Submit" update="formMain" actionListener="#{createBiddingManagedBean.createPB}" icon="ui-icon-check" validateClient="true" style="margin-right:10px;"/>
+            <p:commandButton value="Submit" update="formMain" action="#{createBiddingManagedBean.createPB()}" icon="ui-icon-check" validateClient="true" style="margin-right:10px;"/>
         </h:form>
 
 

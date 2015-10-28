@@ -58,7 +58,7 @@ public class CreateBiddingManagedBean implements Serializable {
         byWhenTimeStamp = null;
         if (FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("SelectedItem2") != null) {
             selectedItem = (FillerEntity) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("SelectedItem2");
-            
+
         } else {
             selectedItem = new FillerEntity();
         }
@@ -76,24 +76,24 @@ public class CreateBiddingManagedBean implements Serializable {
     }
 
     public void onDateSelect1(SelectEvent event) {
-   //     SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
+        //     SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
         SimpleDateFormat formatter = new SimpleDateFormat("E MMM dd yyyy");
         String dateString = event.getObject().toString();
-        String subDateStr = dateString.substring(0, 10) + " " + dateString.substring(dateString.length()-4, dateString.length());
+        String subDateStr = dateString.substring(0, 10) + " " + dateString.substring(dateString.length() - 4, dateString.length());
         System.out.println(subDateStr);
         try {
-        earliestByWhen = formatter.parse(subDateStr);
-         
+            earliestByWhen = formatter.parse(subDateStr);
+
         } catch (ParseException e) {
-		e.printStackTrace();
+            e.printStackTrace();
+        }
     }
-    }
-    
-    public Date setMinByWhenDate(){
-        if(earliestByWhen==null){
-            return getToday();
-        }else{
-            return earliestByWhen;
+
+    public Date setMinByWhenDate() {
+        if (earliestByWhen == null) {
+            return getTomorrow();
+        } else {
+            return getNextDay(earliestByWhen);
         }
     }
 
@@ -101,10 +101,26 @@ public class CreateBiddingManagedBean implements Serializable {
         Calendar c = Calendar.getInstance();
         return c.getTime();
     }
-    
-   
 
-    public String createPB(ActionEvent event) {
+    public Date getNextDay(Date dt) {
+        Calendar c = Calendar.getInstance();
+        Date nextDay = dt;
+        c.setTime(nextDay);
+        c.add(Calendar.DATE, 1);
+        nextDay = c.getTime();
+        return nextDay;
+    }
+
+    public Date getTomorrow() {
+        Calendar c = Calendar.getInstance();
+        Date tml = getToday();
+        c.setTime(tml);
+        c.add(Calendar.DATE, 1);
+        tml = c.getTime();
+        return tml;
+    }
+
+    public String createPB() {
         if (bidEnd == null) {
             bidEndTimeStamp = null;
         } else {
@@ -116,11 +132,15 @@ public class CreateBiddingManagedBean implements Serializable {
         } else {
             byWhenTimeStamp = new Timestamp(byWhen.getTime());
         }
-
+        Timestamp todayCreatedOn = new Timestamp(getToday().getTime());
+        int nextBatchRefNum = procurementSessionBean.getNextBatchNo();
         for (int i = 0; i < selectedSuppliers.size(); i++) {
             newPB.setCompanyName(selectedSuppliers.get(i));
+            newPB.setBidRefNum(nextBatchRefNum);
             newPB.setStatus("Open");
             newPB.setQuotedPrice(0.00);
+            newPB.setCreatedOn(todayCreatedOn);
+            newPB.setIfAccept("Pending");
             newPB.setItemCode(selectedItem.getFillerCode());
             newPB.setDiameter(selectedItem.getDiameter());
             newPB.setGrade(selectedItem.getWireGrade());
@@ -129,11 +149,11 @@ public class CreateBiddingManagedBean implements Serializable {
             newPB.setByWhen(byWhenTimeStamp);
             procurementSessionBean.createProcurementBid(newPB);
         }
-         FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Procurement Quotation Bidding Created and Sent Successfully!"));
+     //   FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Procurement Quotation Bidding Created and Sent Successfully!"));
         newPB = new ProcurementBidEntity();
-        //        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Procurement Quotation Bid created successfully!"));
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Procurement Quotation Bid created successfully!"));
         //           return "viewInventory?faces-redirect=true";
-        return "";
+        return "viewProcurementBid?faces-redirect=true";
     }
 
     /**
