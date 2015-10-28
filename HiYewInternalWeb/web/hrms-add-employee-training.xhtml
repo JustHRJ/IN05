@@ -1,0 +1,68 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                template="./template.xhtml">
+
+    <ui:define name="content">
+        <!-- Page header -->
+        <div class="page-heading animated fadeInDownBig" style="padding:20px!important;padding-bottom:10px!important;">
+            <h1>Add Employee Schedule <small>Training and Expiry</small></h1>
+        </div>
+        <!-- End page header -->
+        <div style="padding:20px!important;padding-top:0px!important;">
+            <h:form>
+                <p:growl id ="msgs" showDetail="false"/>
+                <p:panelGrid>
+                    <p:row>
+                        <p:column style="vertical-align: bottom">
+                            <p:outputLabel style="font-weight:bold" value ="Employee"/>
+                        </p:column>
+                        <p:column>
+                            <h:selectOneMenu style="width:200px" value ="#{hiYewManagedBeanView.employeeName}" required="true" requiredMessage="Please select an employee">
+                                <f:selectItem itemValue ="" itemLabel ="Select" noSelectionOption="true"/>
+                                <f:selectItems value ="#{hiYewDataTableBean.employeeNames}"/>
+                            </h:selectOneMenu>
+                        </p:column>
+                    </p:row>
+                </p:panelGrid>
+                <br />
+                <p:dataTable id = "data1" var ="im" value = "#{hiYewDataTableBean.trainingSchedule}" selection="#{hiYewManagedBeanView.selectedTraining}" rowKey = "#{im.trainingCode}">
+                    <f:facet name="header">
+                        Available Training
+                    </f:facet>
+                    <p:column selectionMode="single" style="width:16px;text-align:center" >
+                    </p:column>
+                    <p:column headerText="Training Code">
+                        <p:outputLabel value ="#{im.trainingCode}"/>
+                    </p:column>
+                    <p:column headerText="Training Name">
+                        <p:outputLabel value ="#{im.trainingName}"/>
+                    </p:column>
+                    <p:column headerText="Trainging Start Date">
+                        <p:outputLabel value ="#{hiYewManagedBean.formatDate(im.trainingStartDate)}"/>
+                    </p:column>
+                    <p:column headerText="Training End Date">
+                        <p:outputLabel value ="#{hiYewManagedBean.formatDate(im.trainingEndDate)}"/>
+                    </p:column>
+                    <p:column headerText="Training Description">
+                        <p:outputLabel value ="#{im.trainingDescription}"/>
+                    </p:column>
+                    <p:column headerText="Training Size (Remainder)">
+                        <p:outputLabel value ="#{hiYewManagedBeanView.getRemainder(im)}"/>
+                    </p:column>
+                    <f:facet name="footer">
+                    </f:facet>
+                </p:dataTable>
+                <br />
+                <p:commandButton action ="#{hiYewManagedBeanView.processEmployeeTraining()}" update="data1 msgs" value="Add" />
+                <br/><br/> 
+                <p:commandButton value ="Training not available?" action ="#{redirector.employeeTraining()}"/>
+            </h:form>
+        </div>
+    </ui:define>
+
+</ui:composition>

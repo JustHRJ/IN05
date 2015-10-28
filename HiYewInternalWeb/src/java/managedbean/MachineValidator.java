@@ -49,14 +49,14 @@ public class MachineValidator implements Validator {
             Integer i = Integer.parseInt(numeric);
             if (numeric.substring(0, 1).equals("8") || numeric.substring(0, 1).equals("9") || numeric.substring(0, 1).equals("6")) {
             } else {
-                throw new ValidatorException(new FacesMessage("Contact number is invalid"));
+                throw new ValidatorException(new FacesMessage("Contact number is invalid!"));
             }
             if (!(numeric.length() == 8)) {
-                throw new ValidatorException(new FacesMessage("Contact number is invalid"));
+                throw new ValidatorException(new FacesMessage("Contact number is invalid!"));
             }
 
         } catch (Exception ex) {
-            throw new ValidatorException(new FacesMessage("Contzct number is invalid."));
+            throw new ValidatorException(new FacesMessage("Contzct number is invalid!"));
         }
 
     }
@@ -69,7 +69,7 @@ public class MachineValidator implements Validator {
         }
 
         if (hiYewSystemBean.existMachineName(username)) {
-            throw new ValidatorException(new FacesMessage("Machine Name already in use, choose another"));
+            throw new ValidatorException(new FacesMessage("Machine Name already in use, choose another."));
         }
     }
 
@@ -99,7 +99,7 @@ public class MachineValidator implements Validator {
             Integer i = Integer.parseInt(numeric);
 
         } catch (Exception ex) {
-            throw new ValidatorException(new FacesMessage("Time is invalid"));
+            throw new ValidatorException(new FacesMessage("Time is invalid."));
         }
 
     }
@@ -112,7 +112,7 @@ public class MachineValidator implements Validator {
         }
 
         if (hiYewSystemBean.notExistMachine(name)) {
-            throw new ValidatorException(new FacesMessage("Machine not existent. Please check"));
+            throw new ValidatorException(new FacesMessage("Machine not existent. Please check."));
         }
     }
 

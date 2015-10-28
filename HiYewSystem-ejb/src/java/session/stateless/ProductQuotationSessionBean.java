@@ -23,7 +23,7 @@ public class ProductQuotationSessionBean implements ProductQuotationSessionBeanL
         return generateProductQuotationNo(customer);
     }
 
-    public String generateProductQuotationNo(Customer customer) {
+    private String generateProductQuotationNo(Customer customer) {
         String customerUsername = customer.getName();
         String newProductQuotationNo = "";
         String[] splitArray = null;

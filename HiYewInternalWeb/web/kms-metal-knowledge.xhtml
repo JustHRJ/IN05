@@ -1,0 +1,238 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                template="./template.xhtml">
+
+    <ui:define name="content">
+        <!-- Page header -->
+        <div class="page-heading animated fadeInDownBig" style="padding:20px!important;padding-bottom:10px!important;">
+            <h1>Metal Knowledge <small>Metal Knowledge Management</small></h1>
+        </div>
+        <!-- End page header -->
+        <div style="padding:20px!important;padding-top:0px!important;">
+            <h:form id="formMain">
+                <p:dataTable  id ="table" var="im" value="#{knowledgeManageBean.allMetals}" widgetVar="fillerTable"  scrollable="true" scrollWidth="100%"  emptyMessage="No filler found with given criteria" filteredValue="#{knowledgeManageBean.filteredFillers}">
+                    <f:facet name="header">
+                        <p:outputPanel style="text-align:left">
+                            <h:outputText value="Search all fields: " />&nbsp;&nbsp;
+                            <p:inputText id="globalFilter" onkeyup="PF('fillerTable').filter()" style="font-weight:normal;width:220px" placeholder="Enter keyword" />
+                        </p:outputPanel>
+                    </f:facet>
+
+
+
+
+                    <p:column styleClass="metalFilter" filterBy="#{im.metalName}" headerText="Name" filterMatchMode="contains"  width ="90">
+                        <h:outputText styleClass="metalFilter" value="#{im.metalName}" />
+                    </p:column>
+
+                    <p:column styleClass="metalFilter" filterBy="#{im.copper}" headerText="Copper"  filterMatchMode="lte" width ="95">
+                        <f:facet name="filter">
+                            <p:spinner onchange="PF('fillerTable').filter()" styleClass="year-spinner" >
+                                <f:converter converterId="javax.faces.Integer" />
+                            </p:spinner>
+                        </f:facet>
+
+                        <p:cellEditor>
+                            <f:facet name ="output"><p:outputLabel styleClass="metalFilter" value="#{im.copper}" /></f:facet>
+                            <f:facet name ="input"><p:inputText styleClass="metalFilter" value = "#{im.copper}" />
+                            </f:facet>
+                        </p:cellEditor>
+
+                    </p:column>
+
+                    <p:column styleClass="metalFilter" filterBy="#{im.zinc}" headerText="Zinc"  filterMatchMode="lte" width ="95" >
+                        <f:facet name="filter">
+                            <p:spinner onchange="PF('fillerTable').filter()" styleClass="year-spinner">
+                                <f:converter converterId="javax.faces.Integer" />
+                            </p:spinner>
+                        </f:facet>
+                        <h:outputText styleClass="metalFilter" value="#{im.zinc}" />
+                    </p:column>
+
+                    <p:column styleClass="metalFilter" filterBy="#{im.iron}" headerText="Iron"  filterMatchMode="lte" width ="100">
+                        <f:facet name="filter">
+                            <p:spinner onchange="PF('fillerTable').filter()" styleClass="year-spinner" >
+                                <f:converter converterId="javax.faces.Integer" />
+                            </p:spinner>
+                        </f:facet>
+                        <h:outputText styleClass="metalFilter" value="#{im.iron}" />
+                    </p:column>
+
+
+                    <p:column styleClass="metalFilter" filterBy="#{im.aluminium}" headerText="Aluminium"  filterMatchMode="lte" width ="100">
+                        <f:facet name="filter">
+                            <p:spinner onchange="PF('fillerTable').filter()" styleClass="year-spinner">
+                                <f:converter converterId="javax.faces.Integer" />
+                            </p:spinner>
+                        </f:facet>
+                        <h:outputText styleClass="metalFilter" value="#{im.aluminium}" />
+                    </p:column>
+
+
+
+                    <p:column styleClass="metalFilter" filterBy="#{im.carbon}" headerText="Carbon"  filterMatchMode="lte" width ="100">
+                        <f:facet name="filter">
+                            <p:spinner onchange="PF('fillerTable').filter()" styleClass="year-spinner">
+                                <f:converter converterId="javax.faces.Integer" />
+                            </p:spinner>
+                        </f:facet>
+                        <h:outputText styleClass="metalFilter" value="#{im.carbon}" />
+                    </p:column>
+
+                    <p:column styleClass="metalFilter" filterBy="#{im.nickel}" headerText="Nickel"  filterMatchMode="lte" width ="100" >
+                        <f:facet name="filter">
+                            <p:spinner onchange="PF('fillerTable').filter()" styleClass="year-spinner">
+                                <f:converter converterId="javax.faces.Integer" />
+                            </p:spinner>
+                        </f:facet>
+                        <h:outputText styleClass="metalFilter" value="#{im.nickel}" />
+                    </p:column>
+
+                    <p:column styleClass="metalFilter" filterBy="#{im.manganese}" headerText="Manganese"  filterMatchMode="lte" width ="100">
+                        <f:facet name="filter">
+                            <p:spinner onchange="PF('fillerTable').filter()" styleClass="year-spinner">
+                                <f:converter converterId="javax.faces.Integer" />
+                            </p:spinner>
+                        </f:facet>
+                        <h:outputText styleClass="metalFilter" value="#{im.manganese}" />
+                    </p:column>
+
+
+                    <p:column styleClass="metalFilter" filterBy="#{im.silicon}" headerText="Silicon"  filterMatchMode="lte" width ="100" >
+                        <f:facet name="filter">
+                            <p:spinner onchange="PF('fillerTable').filter()" styleClass="year-spinner">
+                                <f:converter converterId="javax.faces.Integer" />
+                            </p:spinner>
+                        </f:facet>
+                        <h:outputText styleClass="metalFilter" value="#{im.silicon}" />
+                    </p:column>
+
+                    <p:column styleClass="metalFilter" filterBy="#{im.chromium}" headerText="Chromium"  filterMatchMode="lte"  width ="100">
+                        <f:facet name="filter">
+                            <p:spinner onchange="PF('fillerTable').filter()" styleClass="year-spinner">
+                                <f:converter converterId="javax.faces.Integer" />
+                            </p:spinner>
+                        </f:facet>
+                        <h:outputText styleClass="metalFilter" value="#{im.chromium}" />
+                    </p:column>
+
+
+                    <p:column styleClass="metalFilter" filterBy="#{im.lead}" headerText="Lead"  filterMatchMode="lte" width ="100" >
+                        <f:facet name="filter">
+                            <p:spinner onchange="PF('fillerTable').filter()" styleClass="year-spinner">
+                                <f:converter converterId="javax.faces.Integer" />
+                            </p:spinner>
+                        </f:facet>
+                        <h:outputText styleClass="metalFilter" value="#{im.lead}" />
+                    </p:column>
+
+
+                    <p:column style="width:32px;text-align: center">
+                        <p:commandButton update=":formMain:claimDetail" oncomplete="PF('claimDialog').show()" icon="ui-icon-search" title="View">
+                            <f:setPropertyActionListener value="#{im}" target="#{knowledgeManageBean.selectedMetal}" />
+                        </p:commandButton>
+                    </p:column>
+                    <p:column style="width:32px;text-align: center">
+                        <p:commandButton update=":formMain:matchDetail" oncomplete="PF('matchDialog').show()" icon="ui-icon-search" title="View">
+                            <f:setPropertyActionListener value="#{im}" target="#{knowledgeManageBean.selectedMetal}" />
+                        </p:commandButton>
+                    </p:column>
+                </p:dataTable>
+
+
+
+                <p:dialog header="Metal Edit" widgetVar="claimDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="true">
+                    <p:outputPanel id="claimDetail" style="text-align:center;">
+                        <p:dataTable var ="im" value ="#{knowledgeManageBean.retrieveMetal}" paginator="true" rows="5" emptyMessage="No Filler to Show" scrollable="true" scrollWidth="95%" >
+                            <p:column  headerText="Name"  width ="100">
+                                <h:outputText value="#{knowledgeManageBean.selectedMetal.metalName}" />
+                            </p:column>
+
+
+
+                            <p:column  headerText="Copper" width ="100">
+                                <h:inputText value="#{knowledgeManageBean.selectedMetal.copper}" />
+                            </p:column>
+
+                            <p:column  headerText="Iron" width ="100">
+                                <h:inputText value="#{knowledgeManageBean.selectedMetal.zinc}" />
+                            </p:column>
+
+
+                            <p:column  headerText="Aluminum" width ="100">
+                                <h:inputText value="#{knowledgeManageBean.selectedMetal.iron}" />
+                            </p:column>
+
+
+                            <p:column  headerText="Gold" width ="100">
+                                <h:inputText value="#{knowledgeManageBean.selectedMetal.aluminium}" />
+                            </p:column>
+
+
+
+                            <p:column  headerText="Bronze" width ="100">
+                                <h:inputText value="#{knowledgeManageBean.selectedMetal.carbon}" />
+                            </p:column>
+
+
+                            <p:column  headerText="Silver" width ="100">
+                                <h:inputText value="#{knowledgeManageBean.selectedMetal.nickel}" />
+                            </p:column>
+
+                            <p:column headerText="Plastic" width ="100">
+                                <h:inputText value="#{knowledgeManageBean.selectedMetal.manganese}" />
+                            </p:column>
+
+
+                            <p:column  headerText="Platinum" width ="100">
+                                <h:inputText value="#{knowledgeManageBean.selectedMetal.silicon}" />
+                            </p:column>
+
+                            <p:column  headerText="Titanium" width ="100">
+                                <h:inputText value="#{knowledgeManageBean.selectedMetal.chromium}" />
+                            </p:column>
+
+
+                            <p:column  headerText="Topaz" width ="100" >
+                                <h:inputText value="#{knowledgeManageBean.selectedMetal.lead}" />
+                            </p:column>
+                        </p:dataTable>
+                        <p:commandButton value="Edit" action ="#{knowledgeManageBean.updateMetal()}" update ="formMain" />
+                        <p:commandButton value ="Delete" action ="#{knowledgeManageBean.deleteMetal()}" update ="formMain" >
+
+                        </p:commandButton>
+                    </p:outputPanel>
+                </p:dialog>
+
+
+
+                <p:dialog header="Filler Association" widgetVar="matchDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="true">
+                    <p:outputPanel id="matchDetail" style="text-align:center;">
+                        <p:dataTable var ="im" value ="#{knowledgeManageBean.viewMatch()}" paginator="true" rows="5" emptyMessage="No Match" scrollable="true" scrollWidth="95%" >
+                            <p:column headerText ="ID">
+                                <p:outputLabel value ="#{im.id}"/>
+                            </p:column>
+                            <p:column headerText ="Filler name">
+                                <p:outputLabel value ="#{im.name}"/>
+                            </p:column>
+                        </p:dataTable>
+
+                        <p:commandButton value ="Edit Matching" action ="matchMetal"/>
+                    </p:outputPanel>
+
+                </p:dialog>
+
+                <br />
+                <p:commandButton value ="Import from Excel File" action ="#{knowledgeManageBean.readFile2()}" update ="table" />
+                &nbsp;&nbsp;
+                <p:commandButton value ="Transfer into Excel File" action ="#{knowledgeManageBean.writeFile3()}" update ="table" />
+            </h:form>
+        </div>
+    </ui:define>
+
+</ui:composition>

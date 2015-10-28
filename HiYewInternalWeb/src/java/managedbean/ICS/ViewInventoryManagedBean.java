@@ -91,7 +91,7 @@ public class ViewInventoryManagedBean implements Serializable {
         FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("SelectedItem", this.selectedItem);
         //  FacesContext.getCurrentInstance().getExternalContext().getFlash().put("SelectedItem", this.selectedItem);
         System.out.println("here2");
-        return "itemDetails?faces-redirect=true";
+        return "ics-item-details?faces-redirect=true";
     }
 
 }

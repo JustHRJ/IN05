@@ -46,83 +46,91 @@
                     <div class="box-info">
                         <h2 class="text-center"><strong>Register</strong> new account</h2>
                         <h:form id="mainForm">
-                            <h:outputText value="#{registerMessage}" id="outputID" style="font-weight: bold; color: red; margin-bottom: 100%" />
+                            <h:outputText value="#{registerMessage}" id="loginOutputId" style="font-weight: bold; color: #{msgColor}; margin-bottom: 100%" />
                             <p style="margin-bottom: 5%"></p>
-
-
                             <p:growl id="msgs" showDetail="false" />
-
                             <div class="form-group login-input">
                                 I am a:&nbsp;&nbsp;
-                                <p:selectOneMenu style="width: 315px; display: inline-block;" styleClass="form-control selectpicker" value="#{loginManagedBean.user}" >
+                                <h:selectOneMenu id="user" style="" styleClass="form-control selectpicker" value="#{loginManagedBean.user}" >
                                     <p:ajax listener="#{loginManagedBean.display()}" update="mainForm"/> 
                                     <f:selectItems class="form-control selectpicker" value="#{loginManagedBean.users}" />
-                                </p:selectOneMenu>
+                                </h:selectOneMenu>
+                                <p:message for="user" />
                             </div>
                             <div class="form-group login-input">
                                 <i class="fa fa-key overlay"></i>
                                 <p:inputText class="form-control text-input" placeholder="Your supplier's code" value="#{loginManagedBean.supplierCodeWord}" required="true" rendered="#{loginManagedBean.visibility}" requiredMessage="A supplier codeword is required." id="supplierCodeWord"  />
-
+                                <p:message for="supplierCodeWord" />
                             </div>
                             <div class="form-group login-input">
                                 <i class="fa fa-user overlay"></i>
                                 <p:inputText class="form-control text-input" placeholder="Your name" value="#{loginManagedBean.newCustomer.name}" required="true" requiredMessage="Name is required." id="customerName"  />
+                                <p:message for="customerName" />
                             </div>
                             <div class="form-group login-input">
                                 <i class="fa fa-phone-square overlay"></i>
                                 <p:inputText class="form-control text-input" placeholder="Your phone" value="#{loginManagedBean.newCustomer.phone}" required="true" requiredMessage="Phone is required." maxlength="8" id="Phone" validatorMessage="[Phone] Please enter only 8 digits starting with 6, 8 and 9.">
                                     <f:validateRegex pattern="(^[6,8,9]{1}[0-9]{7}$)"/>
                                 </p:inputText>
+                                <p:message for="Phone" />
                             </div>
                             <div class="form-group login-input">
                                 <i class="fa fa-envelope overlay"></i>
                                 <p:inputText class="form-control text-input" placeholder="Your email (e.g. your_email@gmail.com)" value="#{loginManagedBean.newCustomer.email}" required="true" requiredMessage="Email is required." id="Email" validatorMessage="[Email] Invalid email format. e.g. your_email@gmail.com" >
                                     <f:validateRegex pattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$" />
                                 </p:inputText>
+                                <p:message for="Email" />
                             </div>
                             <div class="form-group login-input">
                                 <i class="fa fa-building-o overlay"></i>
                                 <p:inputText class="form-control text-input" placeholder="Your street name (e.g. Beach Road)" value="#{loginManagedBean.newCustomer.address1}" required="true" requiredMessage="Street name is required." id="Address1"  />
                                 <p:inputText style="margin-top: -1px" class="form-control text-input" placeholder="Your unit number (e.g. 12, #01-02)" value="#{loginManagedBean.newCustomer.address2}" id="Address2"  />
+                                <p:message for="Address1" />
                             </div>
                             <div class="form-group login-input">
                                 <i class="fa fa-compass overlay"></i>
                                 <p:inputText class="form-control text-input" placeholder="Your postal code" value="#{loginManagedBean.newCustomer.postalCode}" required="true" maxlength="6" requiredMessage="Postal code is required." id="Postal" validatorMessage="[Postal Code] Please enter only 6 digits.">
                                     <f:validateRegex pattern="(^[0-9]{6}$)"/>
                                 </p:inputText>
+                                <p:message for="Postal" />
                             </div>
 
                             <div class="form-group login-input">
                                 <i class="fa fa-sign-in overlay"></i>
                                 <p:inputText class="form-control text-input" placeholder="Username" value="#{loginManagedBean.newCustomer.userName}" required="true" requiredMessage="Username is required." id="Username"  />
+                                <p:message for="Username" />
                             </div>
                             <div class="form-group login-input">
                                 <i class="fa fa-key overlay"></i>
-                                <p:password class="form-control text-input" placeholder="Password" value="#{loginManagedBean.newCustomer.pw}" required="true" feedback="true" inline="true" requiredMessage="Password is required." id="Password" validatorMessage="[Password] Your password should be of at least 8 alphanumeric characters.">
+                                <p:password match="Re-Password" class="form-control text-input" placeholder="Password" value="#{loginManagedBean.newCustomer.pw}" required="true" feedback="true" inline="true" requiredMessage="Password is required." id="Password" validatorMessage="[Password] Your password should be of at least 8 alphanumeric characters / Mismatch password.">
                                     <f:validateRegex pattern="(^[0-9a-z-A-Z]{8,}$)"/>
                                 </p:password>
+                                <p:message for="Password" />
                             </div>
                             <div class="form-group login-input">
                                 <i class="fa fa-eye overlay"></i>
                                 <p:password class="form-control text-input" placeholder="Re-Password" value="#{loginManagedBean.rePassword}" required="true" inline="true" requiredMessage="Re-Password is required." id="Re-Password" validatorMessage="[Re-Password] Your Re-password should be of at least 8 alphanumeric characters.">
                                     <f:validateRegex pattern="(^[0-9a-z-A-Z]{8,}$)"/>
                                 </p:password>
+                                <p:message for="Re-Password" />
                             </div>
                             <div class="form-group login-input">
-                                <p:selectOneMenu style="width: 370px" styleClass="form-control selectpicker"  id = "secretQn"  value ="#{loginManagedBean.newCustomer.secretQuestion}" required = "true" requiredMessage="Please select Secret Question">
+                                <h:selectOneMenu style="width: 370px" styleClass="form-control selectpicker"  id = "secretQn"  value ="#{loginManagedBean.newCustomer.secretQuestion}" required = "true" requiredMessage="Please select Secret Question">
                                     <f:selectItem itemValue ="" itemLabel ="Please select your secret question" noSelectionOption="true"/>
                                     <f:selectItem itemValue ="What is the name of your favourite teacher?" itemLabel ="What is the name of your favourite teacher?"/>
                                     <f:selectItem itemValue ="Where did you spend your honeymoon?" itemLabel ="Where did you spend your honeymoon?"/>
                                     <f:selectItem itemValue ="What is the name of your favourite pet?" itemLabel ="What is the name of your favourite pet?"/>
                                     <f:selectItem itemValue ="Which hospital were you born in?" itemLabel ="Which hospital were you born in?"/>
                                     <f:selectItem itemValue ="What is the first name of your favourite uncle?" itemLabel ="What is the first name of your favourite uncle?"/>
-                                </p:selectOneMenu>
+                                </h:selectOneMenu>
+                                <p:message for="secretQn" />
                             </div>
                             <div class="form-group login-input">
                                 <i class="fa fa-lock overlay"></i>
                                 <p:inputText class="form-control text-input" placeholder="Your secret answer" value="#{loginManagedBean.newCustomer.secretAnswer}" required="true" requiredMessage="Secret Answer is required." id="SecretAns"  />
+                                <p:message for="SecretAns" />
                             </div>
-                            <p:commandButton style="border: none; font-size: 14px; font-family: 'Open Sans'" class=" btn btn-success btn-block" action="#{loginManagedBean.createUser()}" value="Register" update="outputID msgs"></p:commandButton>
+                            <p:commandButton style="border: none; font-size: 14px; font-family: 'Open Sans'" class=" btn btn-success btn-block" action="#{loginManagedBean.createUser()}" value="Register" ajax="false" update="outputID msgs"></p:commandButton>
                         </h:form>
                     </div>
                     <p class="text-center"><a href="login.xhtml"><i class="fa fa-sign-in"> </i>Back to login</a></p>

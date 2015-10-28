@@ -1,0 +1,93 @@
+<?xml version='1.0' encoding='UTF-8' ?> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <h:head>
+        <title>Singapore Welding | SgWeld.com | Welding Service in Singapore | Welding</title>
+        <link rel="shortcut icon" href="images/favicon.ico" />
+
+        <style>
+            html {
+                font-family: 'Open Sans';
+                font-size:14px;
+                background:#eee;
+            }
+            .page-heading h1 {
+                margin: 0;
+                padding: 0;
+                font-weight: 400;
+                font-size: 25px;
+                font-family: 'Arial';
+            }
+        </style>
+    </h:head>
+
+    <h:body>
+        <!-- Page header -->
+        <div class="page-heading animated fadeInDownBig" style="padding:20px!important;padding-bottom:10px!important;">
+            <h1>Claim Application <small></small></h1>
+        </div>
+        <!-- End page header -->
+        <div style="padding:20px!important;padding-top:0px!important;">
+            <h:form enctype="multipart/form-data" id ="formMain">
+                <p:growl id ="msgs"/>
+                <p:panel>
+                    <p:panelGrid style='width:25%'>
+                        <p:row>
+                            <p:column style="vertical-align: middle">
+                                <p:outputLabel style="font-weight:bold" value ="Employee" />
+                            </p:column>
+                            <p:column>
+                                <h:selectOneMenu value ="#{employeeClaimBean.employee.employee_name}" style="width: 100%" required="true" requiredMessage="Please input employee name">
+                                    <f:selectItem itemValue ="" itemLabel ="Select" noSelectionOption="true"/>
+                                    <f:selectItems value ="#{loginControlBean.validateLeaveName()}"/>
+                                </h:selectOneMenu>
+                            </p:column>
+                        </p:row>
+                        <p:row>
+                            <p:column style="vertical-align: middle">
+                                <p:outputLabel style="font-weight:bold" value ="Claim" />
+                            </p:column>
+                            <p:column>
+                                <h:selectOneMenu value ="#{employeeClaimBean.employeeClaim.type}" style="width: 100%" >
+                                    <f:selectItem itemValue ="taxi" itemLabel ="Taxi"/>
+                                </h:selectOneMenu>
+                            </p:column>
+                        </p:row>
+                        <p:row>
+                            <p:column style="vertical-align: middle;width:100%">
+                                <p:outputLabel style="font-weight:bold" value ="Amount" />
+                            </p:column>
+                            <p:column>
+                                <p:inputText style="font-weight:normal" value ="#{employeeClaimBean.employeeClaim.amount}" required="true" requiredMessage="Please enter amount" validatorMessage="Please enter amount range of $1 to$1000" >
+                                    <f:validateDoubleRange minimum="1" maximum="1000" />
+                                </p:inputText>
+                            </p:column>
+                        </p:row>
+                        <p:row>
+                            <p:column style="vertical-align: middle">
+                                <p:outputLabel style="font-weight:bold" value ="Date" />
+                            </p:column>
+                            <p:column>
+                                <p:calendar style="font-weight:normal" value ="#{employeeClaimBean.claimTime}" pattern = "dd/MM/yyyy" required="true" maxdate="#{hiYewManagedBean.today}" requiredMessage="Please enter date" />
+                            </p:column>
+                        </p:row>
+                    </p:panelGrid>
+                    <br />
+                    <p:fileUpload fileUploadListener="#{employeeClaimBean.upload}" />
+                </p:panel>
+                <br />
+                <p:commandButton value ="Apply Claim" action ="#{employeeClaimBean.applyForClaim()}" update=":formMain:msgs"/>
+            </h:form>
+            <br /><br />
+            <h:form>
+                <p:commandLink  style="font-weight: normal; font-family: 'Arial';font-size:15px" value ="Back" action="#{loginControlBean.returnPage()}"/>
+            </h:form>
+        </div>
+    </h:body>
+
+</html>

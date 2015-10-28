@@ -1,0 +1,105 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                template="./template.xhtml">
+
+    <ui:define name="content">
+        <!-- Page header -->
+        <div class="page-heading animated fadeInDownBig" style="padding:20px!important;padding-bottom:10px!important;">
+            <h1>Storage Allocation <small>Storage Management</small></h1>
+        </div>
+        <!-- End page header -->
+        <div style="padding:20px!important;padding-top:0px!important;">
+            <h:form id="formMain">
+                <p:messages id ="msg" autoUpdate="false" globalOnly="true"/>
+                <p:panel id="allocationPanel" header="Storage Allocation Details" style="margin-bottom:10px;">
+                    <p:panelGrid id="grid" style="border:none">
+                        <p:row style="vertical-align:bottom">
+                            <p:column style="vertical-align:bottom">
+                                <p:outputLabel for ="shelveID" style ="font-weight: bold" value ="Shelve ID "/>
+                            </p:column>
+                            <p:column style="vertical-align:top">
+                                <h:outputText style="font-weight:bold;width:100%" id="shelveID" value="#{allocateStorageManagedBean.selectedShelve.shelveID}" />
+                            </p:column>
+                            <p:column>
+                                <p:message for="shelveID" />
+                            </p:column>
+                        </p:row>
+                        <p:row style="vertical-align:bottom">   
+                            <p:column>
+                                <p:outputLabel for ="itemCode" style ="font-weight: bold" value ="Item Code"/>
+                            </p:column>
+                            <p:column>
+                                <p:autoComplete required="true" style="font-weight:normal;width:100%" id="itemCode" value="#{allocateStorageManagedBean.fillerCode}" completeMethod="#{allocateStorageManagedBean.completeText}" />
+                            </p:column>
+                            <p:column>
+                                <p:message for="itemCode"/>
+                            </p:column>
+                        </p:row>
+                        <p:row style="vertical-align:bottom">   
+                            <p:column>
+                                <p:outputLabel for="quantity" style ="font-weight: bold" value ="Allocation Quantity"/>
+                            </p:column>
+                            <p:column>
+                                <p:inputText required="true" style="font-weight:normal;width:100%" id="quantity" value="#{allocateStorageManagedBean.allocationQty}" maxlength="6" label="Quantity" validatorMessage="Invalid Input! Please enter a positive integer greater than 0 for quantity(max of up to 6 digits)" converterMessage="Invalid Input! Please enter a positive integer greater than 0 for Quantity(max of up to 6 digits)"> 
+                                    <f:validateLongRange minimum="1" maximum="999999" />   
+                                </p:inputText>
+                            </p:column>
+                            <p:column>
+                                <p:message for ="quantity" />
+                            </p:column>
+                        </p:row>
+                    </p:panelGrid>
+                    <br />
+                    <p:commandButton value="Add Item to Shelve"  update="formMain:allocationPanel msg dataForm:shelveInfoDataTable " actionListener="#{allocateStorageManagedBean.addItemToShelve}" icon="ui-icon-check" validateClient="true" style="margin-right:10px" />
+                </p:panel>
+            </h:form>
+
+            <h:form id="dataForm">
+                <p:panel id="itemsOfShelvesPanel"  header="Shelve#{allocateStorageManagedBean.selectedShelve.shelveID}'s Storage Details" toggleable="true" toggleSpeed="500" closeSpeed="500" style="margin-bottom:20px"  collapsed="false">
+
+                    <p:dataTable  id="shelveInfoDataTable" var="shelveItem" value="#{allocateStorageManagedBean.infoList}" widgetVar="infoListTable" 
+                                  emptyMessage="No items found with given criteria" filteredValue="#{allocateStorageManagedBean.filteredInfoList}" >
+
+                        <p:column filterBy="#{shelveItem.item.fillerCode}" sortBy="#{shelveItem.item.fillerCode}" headerText="Item Code" footerText="contains" filterMatchMode="contains">
+                            <h:outputText value="#{shelveItem.item.fillerCode}" />
+                        </p:column>
+
+                        <p:column sortBy="#{shelveItem.storedQty}" filterBy="#{shelveItem.storedQty}" headerText="Stored Quantity"  >
+                            <h:outputText value="#{shelveItem.storedQty}" />
+                        </p:column>
+
+                        <p:column style="width:32px;text-align: center">
+                            <p:commandButton action="#{allocateStorageManagedBean.openDialog()}" icon="ui-icon-trash" update=":formMain:allocationPanel" title="Remove" oncomplete="PF('removalDialog').show()">
+                                <f:setPropertyActionListener value="#{shelveItem}" target="#{allocateStorageManagedBean.selectedSI}" />
+                            </p:commandButton>
+                        </p:column>
+
+                    </p:dataTable>
+                </p:panel>       
+            </h:form>
+
+
+
+            <p:dialog header="Removal Details" widgetVar="removalDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false">
+                <h:form id="dialogForm">
+                    <p:outputPanel id="removalDetail" style="text-align:center;">
+                        <p:panelGrid  columns="3" >
+                            <h:outputLabel for="rQty" value="Removal Quantity:" style="font-weight:bold"/>                    
+                            <p:inputText id="rQty" value="#{allocateStorageManagedBean.removalQty}" maxlength="6" label="RQuantity" validatorMessage="Invalid Input! Please enter a positive integer for removal quantity(max of up to 6 digits)" converterMessage="Invalid Input! Please enter a positive integer for Removal Quantity(max of up to 6 digits)"> 
+                                <f:validateLongRange minimum="0" maximum="999999" />   
+                            </p:inputText>
+                            <p:message for="rQty" />           
+                        </p:panelGrid>
+                        <p:commandButton value="Remove"  update=":dialogForm:removalDetail" action="#{allocateStorageManagedBean.removeItemFromShelve()}" icon="ui-icon-check" validateClient="true" style="margin-right:10px"/>
+                    </p:outputPanel>
+                </h:form>
+            </p:dialog>
+        </div>
+    </ui:define>
+
+</ui:composition>

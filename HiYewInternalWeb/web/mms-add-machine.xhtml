@@ -1,0 +1,80 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                template="./template.xhtml">
+
+    <ui:define name="content">
+        <!-- Page header -->
+        <div class="page-heading animated fadeInDownBig" style="padding:20px!important;padding-bottom:10px!important;">
+            <h1>Add Machine <small>Machine Management</small></h1>
+        </div>
+        <!-- End page header -->
+        <div style="padding:20px!important;padding-top:0px!important;">
+            <h:form id="formMain">
+                <p:panel id ="panel" header="Add New Machinery">
+                    <p:growl id ="msgs" showDetail="false"/>
+                    <p:panelGrid id = "grid">
+                        <p:row>
+                            <p:column>
+                                <p:outputLabel for ="machine_name" style ="font-weight: bold" value ="Machine Name "/>
+                            </p:column>
+                            <p:column>
+                                <p:inputText style="font-weight: normal;width:100%" label ="Machine Name" id ="machine_name" value ="#{machineManageBean.machineName}" required="true" requiredMessage="Please enter a machine name" validator="#{machineValidator.validateMachineName}" validatorMessage="Machine Name exist" > </p:inputText>
+                            </p:column>
+
+                        </p:row>
+                        <p:row>   
+                            <p:column>
+                                <p:outputLabel for ="machine_id" style ="font-weight: bold" value ="Machine ID "/>
+                            </p:column>
+                            <p:column>
+                                <p:inputText style="font-weight: normal;width:100%" label ="Machine_Id" id ="machine_id" value ="#{machineManageBean.machineId}" required = "true" requiredMessage="Please enter machine ID"> </p:inputText>
+                            </p:column>
+
+                        </p:row>
+                        <p:row>   
+                            <p:column>
+                                <p:outputLabel for ="machine_description" style ="font-weight: bold" value ="Machine Description "/>
+                            </p:column>
+                            <p:column>
+                                <p:inputText style="font-weight: normal;width:100%" label ="Machine_Description" id ="machine_description" value ="#{machineManageBean.machineDescript}"> </p:inputText>
+                            </p:column>
+                        </p:row>
+                        <p:row>   
+                            <p:column>
+                                <p:outputLabel for ="cal" style ="font-weight: bold" value ="Machine Next Maintainence " />
+                            </p:column>
+                            <p:column>
+                                <p:calendar style="font-weight: normal;width:100%" id = "cal" value = "#{machineManageBean.machineNxtMaint}" mindate="#{hiYewManagedBean.getToday()}" pattern ="dd/MM/yyyy" required = "true" requiredMessage="Please enter next maintainence date"/>
+                            </p:column>
+
+                        </p:row>
+
+                        <p:row>   
+                            <p:column>
+                                <p:outputLabel for ="machine_subMaint" style ="font-weight: bold" value ="Set Periodic Maintainence Schedule (in Months) "/>
+                            </p:column>
+                            <p:column>
+                                <h:selectOneMenu style ="font-weight: normal;width:190px" id = "machine_subMaint" value ="#{machineManageBean.machineType}" required="true" requiredMessage="Please Select Machine Type">
+                                    <f:selectItem itemLabel ="Select" itemValue ="" noSelectionOption="true"/>
+                                    <f:selectItem itemLabel ="Laser" itemValue ="Laser"/>
+                                    <f:selectItem itemLabel ="T.I.G" itemValue ="T.I.G"/>
+                                    <f:selectItem itemLabel ="Others" itemValue ="Others"/>
+                                </h:selectOneMenu>
+                            </p:column>
+
+                        </p:row>
+
+                    </p:panelGrid>
+                    <br />
+                    <p:commandButton id="btn" value="Add New Machine"  action="#{machineManageBean.addMachine}"  update =":formMain:msgs" />
+                </p:panel>
+            </h:form>
+        </div>
+    </ui:define>
+
+</ui:composition>
