@@ -51,5 +51,9 @@ public interface KnowledgeSystemBeanLocal {
     public void addMatch(List<Vector> results);
 
     public List<Vector> transferMatchingInfo();
+
+    public void addNewFiller(FillerComposition filler);
+
+    public void addNewMetal(Metal metal);
     
 }

@@ -55,7 +55,7 @@ public class KnowledgeManageBean implements Serializable {
     private List<String> fillerList = new ArrayList<String>();
     private List<String> fillerChosen = new ArrayList<String>();
     private DualListModel<String> fillerDisplay;
-    private String knowledge ="";
+    private String knowledge = "";
     private boolean FillerAdd = false;
     private boolean MetalAdd = false;
 
@@ -70,35 +70,55 @@ public class KnowledgeManageBean implements Serializable {
         setFillerList(knowledgeSystemBean.retrieveFillerNames());
         System.out.println(FillerAdd);
         setFillerChosen(new ArrayList<String>());
-    
+        selectedFiller = new FillerComposition();
+        selectedMetal = new Metal();
+
+    }
+
+    public void addNewFillerInfo() {
+        if (selectedFiller.getName().isEmpty()) {
+
+        } else {
+            knowledgeSystemBean.addNewFiller(selectedFiller);
+        }
+    }
+
+    public void addNewMetalInfo() {
+        if (selectedMetal.getMetalName().isEmpty()) {
+
+        } else {
+
+            knowledgeSystemBean.addNewMetal(selectedMetal);
+
+        }
     }
 
     public void fillerList() {
         results = knowledgeSystemBean.transferFillerInfo();
 
     }
-    
-    public void processAdd(){
+
+    public void processAdd() {
         System.out.println("did it come here");
-        if(knowledge.equals("Filler")){
+        if (knowledge.equals("Filler")) {
             System.out.println("filler is captured");
             setFillerAdd(true);
             System.out.println(FillerAdd);
             setMetalAdd(false);
-        }else if(knowledge.equals("Metal")){
+        } else if (knowledge.equals("Metal")) {
             setFillerAdd(false);
             setMetalAdd(true);
-        } else{
+        } else {
             System.out.println("not working");
             setFillerAdd(false);
-            setMetalAdd(false); 
+            setMetalAdd(false);
         }
     }
 
-    public void metalMatchingList(){
+    public void metalMatchingList() {
         result3 = knowledgeSystemBean.transferMatchingInfo();
     }
-    
+
     public void metalList() {
         results2 = knowledgeSystemBean.transferMetalInfo();
     }
@@ -647,7 +667,7 @@ public class KnowledgeManageBean implements Serializable {
                 Vector im = result3.get(i - 1);
                 int cols = im.size();
                 System.out.println(cols);
-               
+
                 for (int j = 0; j < cols; j++) {
                     jxl.write.Number number = new jxl.write.Number(j, i, Integer.parseInt(im.get(j).toString()));
                     sheet1.addCell(number);

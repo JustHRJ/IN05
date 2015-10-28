@@ -28,21 +28,189 @@
                 <p:panelGrid rendered="#{knowledgeManageBean.fillerAdd}">
                     <p:row>
                         <p:column>
-
+                            <p:outputLabel value ="Filler Name"/>
+                        </p:column>
+                        <p:column>
+                            <p:inputText value ="#{knowledgeManageBean.selectedFiller.name}"/>
+                        </p:column>
+                    </p:row>
+                    <p:row>
+                        <p:column>
+                            <p:outputLabel value ="Copper "/>
+                        </p:column>
+                        <p:column>
+                            <p:inputText value ="#{knowledgeManageBean.selectedFiller.copper}"/>
+                        </p:column>
+                    </p:row>
+                    <p:row>
+                        <p:column>
+                            <p:outputLabel value ="Zinc"/>
+                        </p:column>
+                        <p:column>
+                            <p:inputText value ="#{knowledgeManageBean.selectedFiller.zinc}"/>
+                        </p:column>
+                    </p:row>
+                    <p:row>
+                        <p:column>
+                            <p:outputLabel value ="Filler Iron"/>
+                        </p:column>
+                        <p:column>
+                            <p:inputText value ="#{knowledgeManageBean.selectedFiller.iron}"/>
+                        </p:column>
+                    </p:row>
+                    <p:row>
+                        <p:column>
+                            <p:outputLabel value ="Lead"/>
+                        </p:column>
+                        <p:column>
+                            <p:inputText value ="#{knowledgeManageBean.selectedFiller.lead}"/>
+                        </p:column>
+                    </p:row>
+                    <p:row>
+                        <p:column>
+                            <p:outputLabel value ="Aluminium"/>
+                        </p:column>
+                        <p:column>
+                            <p:inputText value ="#{knowledgeManageBean.selectedFiller.aluminium}"/>
+                        </p:column>
+                    </p:row>
+                    <p:row>
+                        <p:column>
+                            <p:outputLabel value ="Carbon"/>
+                        </p:column>
+                        <p:column>
+                            <p:inputText value ="#{knowledgeManageBean.selectedFiller.carbon}"/>
+                        </p:column>
+                    </p:row>
+                    <p:row>
+                        <p:column>
+                            <p:outputLabel value ="Nickel"/>
+                        </p:column>
+                        <p:column>
+                            <p:inputText value ="#{knowledgeManageBean.selectedFiller.nickel}"/>
+                        </p:column>
+                    </p:row>
+                    <p:row>
+                        <p:column>
+                            <p:outputLabel value ="Chromium"/>
+                        </p:column>
+                        <p:column>
+                            <p:inputText value ="#{knowledgeManageBean.selectedFiller.chromium}"/>
+                        </p:column>
+                    </p:row>
+                    <p:row>
+                        <p:column>
+                            <p:outputLabel value ="Manganese"/>
+                        </p:column>
+                        <p:column>
+                            <p:inputText value ="#{knowledgeManageBean.selectedFiller.manganese}"/>
+                        </p:column>
+                    </p:row>
+                    <p:row>
+                        <p:column>
+                            <p:outputLabel value ="Silicon"/>
+                        </p:column>
+                        <p:column>
+                            <p:inputText value ="#{knowledgeManageBean.selectedFiller.silicon}"/>
                         </p:column>
                     </p:row>
 
-                    <p:commandButton value ="Add Filler Information"  />
+                    <p:commandButton value ="Add Filler Information" action ="#{knowledgeManageBean.addNewFillerInfo}" />
 
                 </p:panelGrid> 
 
                 <p:panelGrid rendered="#{knowledgeManageBean.metalAdd}">
+               
                     <p:row>
                         <p:column>
-
+                            <p:outputLabel value ="Metal Name"/>
+                        </p:column>
+                        <p:column>
+                            <p:inputText value ="#{knowledgeManageBean.selectedMetal.metalName}"/>
                         </p:column>
                     </p:row>
-                    <p:commandButton value = "Add Metal Information"  />
+                    <p:row>
+                        <p:column>
+                            <p:outputLabel value ="Copper "/>
+                        </p:column>
+                        <p:column>
+                            <p:inputText value ="#{knowledgeManageBean.selectedMetal.copper}"/>
+                        </p:column>
+                    </p:row>
+                    <p:row>
+                        <p:column>
+                            <p:outputLabel value ="Zinc"/>
+                        </p:column>
+                        <p:column>
+                            <p:inputText value ="#{knowledgeManageBean.selectedMetal.zinc}"/>
+                        </p:column>
+                    </p:row>
+                    <p:row>
+                        <p:column>
+                            <p:outputLabel value ="Filler Iron"/>
+                        </p:column>
+                        <p:column>
+                            <p:inputText value ="#{knowledgeManageBean.selectedMetal.iron}"/>
+                        </p:column>
+                    </p:row>
+                    <p:row>
+                        <p:column>
+                            <p:outputLabel value ="Lead"/>
+                        </p:column>
+                        <p:column>
+                            <p:inputText value ="#{knowledgeManageBean.selectedMetal.lead}"/>
+                        </p:column>
+                    </p:row>
+                    <p:row>
+                        <p:column>
+                            <p:outputLabel value ="Aluminium"/>
+                        </p:column>
+                        <p:column>
+                            <p:inputText value ="#{knowledgeManageBean.selectedMetal.aluminium}"/>
+                        </p:column>
+                    </p:row>
+                    <p:row>
+                        <p:column>
+                            <p:outputLabel value ="Carbon"/>
+                        </p:column>
+                        <p:column>
+                            <p:inputText value ="#{knowledgeManageBean.selectedMetal.carbon}"/>
+                        </p:column>
+                    </p:row>
+                    <p:row>
+                        <p:column>
+                            <p:outputLabel value ="Nickel"/>
+                        </p:column>
+                        <p:column>
+                            <p:inputText value ="#{knowledgeManageBean.selectedMetal.nickel}"/>
+                        </p:column>
+                    </p:row>
+                    <p:row>
+                        <p:column>
+                            <p:outputLabel value ="Chromium"/>
+                        </p:column>
+                        <p:column>
+                            <p:inputText value ="#{knowledgeManageBean.selectedMetal.chromium}"/>
+                        </p:column>
+                    </p:row>
+                    <p:row>
+                        <p:column>
+                            <p:outputLabel value ="Manganese"/>
+                        </p:column>
+                        <p:column>
+                            <p:inputText value ="#{knowledgeManageBean.selectedMetal.manganese}"/>
+                        </p:column>
+                    </p:row>
+                    <p:row>
+                        <p:column>
+                            <p:outputLabel value ="Silicon"/>
+                        </p:column>
+                        <p:column>
+                            <p:inputText value ="#{knowledgeManageBean.selectedMetal.silicon}"/>
+                        </p:column>
+                    </p:row>
+
+                    <p:commandButton value = "Add Metal Information" action ="#{knowledgeManageBean.addNewMetalInfo}" />
 
                 </p:panelGrid> 
             </p:panel>

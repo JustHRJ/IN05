@@ -42,18 +42,17 @@ public class KnowledgeSystemBean implements KnowledgeSystemBeanLocal {
             for (Object o : metals) {
                 Vector im = (Vector) o;
                 Metal f = new Metal();
-
                 f.setMetalName(im.get(0).toString());
-                f.setAluminium(Integer.parseInt(im.get(1).toString()));
-                f.setCarbon(Integer.parseInt(im.get(2).toString()));
-                f.setCopper(Integer.parseInt(im.get(3).toString()));
-                f.setChromium(Integer.parseInt(im.get(4).toString()));
-                f.setZinc(Integer.parseInt(im.get(5).toString()));
-                f.setIron(Integer.parseInt(im.get(6).toString()));
-                f.setLead(Integer.parseInt(im.get(7).toString()));
+                f.setCopper(Integer.parseInt(im.get(1).toString()));
+                f.setZinc(Integer.parseInt(im.get(2).toString()));
+                f.setIron(Integer.parseInt(im.get(3).toString()));
+                f.setLead(Integer.parseInt(im.get(4).toString()));
+                f.setAluminium(Integer.parseInt(im.get(5).toString()));
+                f.setCarbon(Integer.parseInt(im.get(6).toString()));
+                f.setNickel(Integer.parseInt(im.get(7).toString()));
                 f.setManganese(Integer.parseInt(im.get(8).toString()));
-                f.setNickel(Integer.parseInt(im.get(9).toString()));
-                f.setSilicon(Integer.parseInt(im.get(10).toString()));
+                f.setSilicon(Integer.parseInt(im.get(9).toString()));
+                f.setChromium(Integer.parseInt(im.get(10).toString()));
                 em.persist(f);
             }
         }
@@ -111,6 +110,29 @@ public class KnowledgeSystemBean implements KnowledgeSystemBeanLocal {
             return null;
         } else {
             return results;
+        }
+    }
+
+    public void addNewFiller(FillerComposition filler) {
+        try {
+            if (filler != null) {
+                em.persist(filler);
+            }
+        } catch (Exception ex) {
+            System.out.println("Filler cannot persist");
+        }
+    }
+
+    public void addNewMetal(Metal metal) {
+        try {
+            if (metal != null) {
+                Metal m = em.find(Metal.class, metal.getMetalName());
+                if (m == null) {
+                    em.persist(metal);
+                }
+            }
+        } catch (Exception ex) {
+            System.out.println("metal cannot persist");
         }
     }
 
@@ -291,14 +313,15 @@ public class KnowledgeSystemBean implements KnowledgeSystemBeanLocal {
             Vector im = new Vector();
 
             im.add(f.getMetalName());
-            im.add(f.getAluminium());
-            im.add(f.getCarbon());
+
             im.add(f.getCopper());
             im.add(f.getZinc());
             im.add(f.getIron());
-            im.add(f.getManganese());
-            im.add(f.getNickel());
             im.add(f.getLead());
+            im.add(f.getAluminium());
+            im.add(f.getCarbon());
+            im.add(f.getNickel());
+            im.add(f.getManganese());
             im.add(f.getSilicon());
             im.add(f.getChromium());
 
@@ -336,7 +359,8 @@ public class KnowledgeSystemBean implements KnowledgeSystemBeanLocal {
         if (filler != null) {
             Long id = filler.getId();
             FillerComposition f = em.find(FillerComposition.class, id);
-            if (f == null) {
+            if (f
+                    == null) {
                 System.out.println("no filler to delete");
             } else {
                 em.remove(f);
@@ -362,8 +386,10 @@ public class KnowledgeSystemBean implements KnowledgeSystemBeanLocal {
                 Vector im = (Vector) o;
                 String metalN = im.get(0).toString();
                 Long id = Long.parseLong(im.get(1).toString());
-                m = em.find(Metal.class, metalN);
-                if (m == null) {
+                m
+                        = em.find(Metal.class, metalN);
+                if (m
+                        == null) {
                     System.out.println("metal not found");
                 } else {
                     f = em.find(FillerComposition.class, id);
@@ -374,6 +400,7 @@ public class KnowledgeSystemBean implements KnowledgeSystemBeanLocal {
 
                     }
                 }
+
                 em.merge(m);
             }
             System.out.println("fillers added to metals");
