@@ -16,36 +16,7 @@
         </div>
         <!-- End page header -->
         <h:form id="mainForm">
-
-            <div style="height:30px;background:#2a6496;padding:5px;display: #{productQuotationManagedBean.selectedCount eq 0 ? 'none' : 'block'}">
-                <h:outputText value="#{compareMsg}" style="font-weight: bold; color: #eee; margin-bottom: 100%" />
-            </div>
-
-            <h:panelGrid columns="2" style="margin-bottom:10px" cellpadding="5">
-                <h:outputText value="1: " />
-                <p:selectBooleanCheckbox value="#{productQuotationManagedBean.selectedMachine1}" disabled="#{(productQuotationManagedBean.selectedCount >= 2) ? (productQuotationManagedBean.selectedMachine1 eq true) ? 'false' : 'true' : 'false'}">
-                    <p:ajax listener="#{productQuotationManagedBean.doCount()}" />
-                </p:selectBooleanCheckbox>
-
-                <h:outputText value="2: " />
-                <p:selectBooleanCheckbox value="#{productQuotationManagedBean.selectedMachine2}" disabled="#{(productQuotationManagedBean.selectedCount >= 2) ? (productQuotationManagedBean.selectedMachine2 eq true) ? 'false' : 'true' : 'false'}">
-                    <p:ajax listener="#{productQuotationManagedBean.doCount()}" />
-                </p:selectBooleanCheckbox>
-
-                <h:outputText value="3: " />
-                <p:selectBooleanCheckbox value="#{productQuotationManagedBean.selectedMachine3}" disabled="#{(productQuotationManagedBean.selectedCount >= 2) ? (productQuotationManagedBean.selectedMachine3 eq true) ? 'false' : 'true' : 'false'}">
-                    <p:ajax listener="#{productQuotationManagedBean.doCount()}" />
-                </p:selectBooleanCheckbox>
-            </h:panelGrid>
-
-
-
-
-
-
-
-
-            <b><a href="c-product-machines-compare.xhtml"><i class="fa fa-search overlay"></i>&nbsp;&nbsp;Click here to select and compare two models for a more detailed comparison.</a></b>
+            <b><a href="c-products-machines-compare.xhtml"><i class="fa fa-search overlay"></i>&nbsp;&nbsp;Click here to select and compare two models for a more detailed comparison.</a></b>
             <br />
             <div style="height: 15px"></div>
             <div>
@@ -125,7 +96,7 @@
                 <div class="col-sm-3 col-xs-6">
                     <!-- Website statistic -->
                     <div class="box-info full">
-                        <h2><strong>LWI V Flexx</strong></h2>
+                        <h2 style="font-size:15px"><strong>LWI V Flexx</strong></h2>
                         <!-- Additional buttons -->
                         <div class="additional-btn" style="top:15px">
                             <p:commandButton update="msg" style="border: none; font-weight: normal; font-family: 'Open Sans'; padding-top: 3px; padding-bottom: 4px; padding-left: 10px; padding-right: 10px" styleClass="btn btn-primary btn-xs" value="View" action="#{productQuotationManagedBean.addToCacheList('Machine','LWI Small Chamber Type',1)}" icon="" />
@@ -183,7 +154,7 @@
                 <div class="col-sm-3 col-xs-6">
                     <!-- Website statistic -->
                     <div class="box-info full">
-                        <h2><strong>LWI V ERGO</strong></h2>
+                        <h2 style="font-size:15px"><strong>LWI V ERGO</strong></h2>
                         <!-- Additional buttons -->
                         <div class="additional-btn" style="top:15px">
                             <p:commandButton update="msg" style="border: none; font-weight: normal; font-family: 'Open Sans'; padding-top: 3px; padding-bottom: 4px; padding-left: 10px; padding-right: 10px" styleClass="btn btn-primary btn-xs" value="View" action="#{productQuotationManagedBean.addToCacheList('Machine','LWI Small Chamber Type',1)}" icon="" />
@@ -247,7 +218,7 @@
                 <div class="col-sm-3 col-xs-6">
                     <!-- Website statistic -->
                     <div class="box-info full">
-                        <h2><strong>LWI V T-BaseV3</strong></h2>
+                        <h2 style="font-size:15px"><strong>LWI V T-BaseV3</strong></h2>
                         <!-- Additional buttons -->
                         <div class="additional-btn" style="top:15px">
                             <p:commandButton update="msg" style="border: none; font-weight: normal; font-family: 'Open Sans'; padding-top: 3px; padding-bottom: 4px; padding-left: 10px; padding-right: 10px" styleClass="btn btn-primary btn-xs" value="View" action="#{productQuotationManagedBean.addToCacheList('Machine','LWI Small Chamber Type',1)}" icon="" />
@@ -305,7 +276,7 @@
                 <div class="col-sm-3 col-xs-6">
                     <!-- Website statistic -->
                     <div class="box-info full">
-                        <h2><strong>LWI V MobileFlexx</strong></h2>
+                        <h2 style="font-size:15px"><strong>LWI V MobileFlexx</strong></h2>
                         <!-- Additional buttons -->
                         <div class="additional-btn" style="top:15px">
                             <p:commandButton update="msg" style="border: none; font-weight: normal; font-family: 'Open Sans'; padding-top: 3px; padding-bottom: 4px; padding-left: 10px; padding-right: 10px" styleClass="btn btn-primary btn-xs" value="View" action="#{productQuotationManagedBean.addToCacheList('Machine','LWI Small Chamber Type',1)}" icon="" />
@@ -362,7 +333,7 @@
                 <div class="col-sm-3 col-xs-6">
                     <!-- Website statistic -->
                     <div class="box-info full">
-                        <h2><strong>LWI V Unixx III</strong></h2>
+                        <h2 style="font-size:15px"><strong>LWI V Unixx III</strong></h2>
                         <!-- Additional buttons -->
                         <div class="additional-btn" style="top:15px">
                             <p:commandButton update="msg" style="border: none; font-weight: normal; font-family: 'Open Sans'; padding-top: 3px; padding-bottom: 4px; padding-left: 10px; padding-right: 10px" styleClass="btn btn-primary btn-xs" value="View" action="#{productQuotationManagedBean.addToCacheList('Machine','LWI Small Chamber Type',1)}" icon="" />
@@ -423,7 +394,7 @@
                 <div class="col-sm-3 col-xs-6">
                     <!-- Website statistic -->
                     <div class="box-info full">
-                        <h2><strong>LWI V UltraFlexx</strong></h2>
+                        <h2 style="font-size:15px"><strong>LWI V UltraFlexx</strong></h2>
                         <!-- Additional buttons -->
                         <div class="additional-btn" style="top:15px">
                             <p:commandButton update="msg" style="border: none; font-weight: normal; font-family: 'Open Sans'; padding-top: 3px; padding-bottom: 4px; padding-left: 10px; padding-right: 10px" styleClass="btn btn-primary btn-xs" value="View" action="#{productQuotationManagedBean.addToCacheList('Machine','LWI Small Chamber Type',1)}" icon="" />

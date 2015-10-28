@@ -100,7 +100,7 @@ public class ProductQuotationManagedBean implements Serializable {
         }
 
         FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("compareMsg", selectedCount.toString());
-        FacesContext.getCurrentInstance().getExternalContext().redirect("/HiYewExternalWeb/c-products-machines.xhtml");
+        FacesContext.getCurrentInstance().getExternalContext().redirect("/HiYewExternalWeb/c-products-machines-compare.xhtml");
         return selectedCount;
     }
 
