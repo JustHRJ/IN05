@@ -1,0 +1,108 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                template="./template.xhtml">
+
+    <ui:define name="content">
+        <!-- Page header -->
+        <div class="page-heading animated fadeInDownBig" style="padding:20px!important;padding-bottom:10px!important;">
+            <h1>View Low Stock <small>Items Management</small></h1>
+        </div>
+        <!-- End page header -->
+        <div style="padding:20px!important;padding-top:0px!important;">
+            <h:form>
+                <p:dataTable var="item" value="#{viewLowStockManagedBean.lowStockItems}" widgetVar="itemsTable" 
+                             emptyMessage="No items found with given criteria" filteredValue="#{viewLowStockManagedBean.filteredLowStockItems}" 
+                             rows="10"
+                             paginator="true"
+                             paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                             rowsPerPageTemplate="5,10,15">
+
+
+                    <f:facet name="header">
+                        Inventory
+                        <p:outputPanel style="text-align:right;">
+                            <h:outputText value="Search all fields: " />
+                            <p:inputText style="font-weight:normal;font-family:'Open Sans';font-size:14px;width:150px" id="globalFilter" onkeyup="PF('itemsTable').filter()" placeholder="Enter keyword"/>
+                        </p:outputPanel>
+                    </f:facet>
+                    <p:column width="100" filterBy="#{item.fillerCode}" sortBy="#{item.fillerCode}" headerText="WireCode" footerText="contains" filterMatchMode="contains">
+                        <h:outputText value="#{item.fillerCode}" style="width:100%" />
+                    </p:column>
+
+                    <p:column width="100" filterBy="#{item.fillerName}" sortBy="#{item.fillerName}" headerText="Name" footerText="contains" filterMatchMode="contains">
+                        <h:outputText value="#{item.fillerName}" style="width:100%" />
+                    </p:column>
+
+                    <p:column width="100" filterBy="#{item.wireGrade}" headerText="Grade" footerText="equals" filterMatchMode="equals">
+                        <f:facet name="filter">
+                            <h:selectOneMenu onchange="PF('itemsTable').filter()" style="font-weight:normal;font-family:'Open Sans';font-size:14px;width:100%">
+                                <f:selectItem itemLabel="All" itemValue="" />
+                                <f:selectItem itemLabel="A" itemValue="A" />
+                                <f:selectItem itemLabel="B" itemValue="B" />
+                                <f:selectItem itemLabel="C" itemValue="C" />
+                                <f:selectItem itemLabel="D" itemValue="D" />
+                                <f:selectItem itemLabel="E" itemValue="E" />
+                            </h:selectOneMenu>
+                        </f:facet>
+                        <h:outputText value="#{item.wireGrade}" />
+                    </p:column>
+
+                    <p:column width="80" styleClass="lowStock" filterBy="#{item.quantity}" headerText="Quantity" footerText="less than or equal" filterMatchMode="lte" >
+                        <f:facet name="filter" >      
+                            <p:spinner onchange="PF('itemsTable').filter()" size="3">
+                                <f:converter converterId="javax.faces.Integer" />
+                            </p:spinner>
+                        </f:facet>
+                        <h:outputText styleClass="lowStock" value="#{item.quantity}" />
+                    </p:column>
+
+                    <p:column width="85" headerText="Cost" >
+                        <h:outputText value="#{item.cost}" style="font-weight:normal;font-family:'Open Sans';font-size:14px;width:100%">
+                        </h:outputText>
+                    </p:column>
+
+                    <p:column width="85" headerText="Selling Price" >
+                        <h:outputText value="#{item.sellingPrice}">
+                        </h:outputText>
+                    </p:column>
+
+                    <p:column width="100" headerText="Reorder Point">
+                        <h:outputText value="#{item.reorderPoint}">
+                        </h:outputText>
+                    </p:column>
+
+                    <p:column width="110" headerText="Average Weight" >
+                        <h:outputText value="#{item.averageWeight}">
+                        </h:outputText>
+                    </p:column>
+
+                    <p:column width="110" headerText="Wire Length(mm)" >
+                        <h:outputText value="#{item.wireLength}">
+                        </h:outputText>
+                    </p:column>
+
+                    <p:column style="width:100%" width="110" filterBy="#{item.diameter}" sortBy="#{item.diameter}" headerText="Diameter(mm)" footerText="equal" filterMatchMode="exact">
+                        <!--                    <f:facet name="filter" >      
+                                                <p:spinner onchange="PF('itemsTable').filter()" size="3">
+                                                    <f:converter converterId="javax.faces.Double" />
+                                                </p:spinner>
+                                            </f:facet>-->
+                        <h:outputText  value="#{item.diameter}" />
+                    </p:column>
+
+                    <p:column style="width:32px;text-align: center">
+                        <p:commandButton  action="#{viewLowStockManagedBean.passSelectedItemToNext()}" icon="ui-icon-search" title="View/Update">
+                            <f:setPropertyActionListener value="#{item}" target="#{viewLowStockManagedBean.selectedItem}" />
+                        </p:commandButton>
+                    </p:column>
+                </p:dataTable>
+            </h:form>
+        </div>
+    </ui:define>
+
+</ui:composition>

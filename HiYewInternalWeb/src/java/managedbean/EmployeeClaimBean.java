@@ -42,7 +42,7 @@ public class EmployeeClaimBean implements Serializable {
     private Date claimTime = null;
     private double amount = 0.00;
     private UploadedFile file;
-    private String destination = "C:\\Users\\User\\Desktop\\SouceTreeRepo\\IN05\\HiYewInternalWeb\\web\\image\\receipts\\";
+    private String destination = "C:\\Users\\User\\Desktop\\SouceTreeRepo\\IN05\\HiYewInternalWeb\\web\\images\\receipts\\";
     private EmployeeClaimEntity selectedClaim;
     private String months = "";
     private String employeeName = "";
@@ -57,7 +57,6 @@ public class EmployeeClaimBean implements Serializable {
         employee = new EmployeeEntity();
         employeeClaim = new EmployeeClaimEntity();
     }
-
 
     @PostConstruct
     public void init() {
@@ -118,10 +117,9 @@ public class EmployeeClaimBean implements Serializable {
         String destinations = "../image/receipts/";
 
         if (FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("filename") == null) {
-            System.out.println("no file name here");
-            destinations = "";
+            destination = "";
         } else {
-            destinations += FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("filename").toString();
+            destination += FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("filename").toString();
         }
 
         boolean check = hiYewSystemBean.applyClaim(employee.getEmployee_name(), employeeClaim, destinations);
@@ -129,7 +127,7 @@ public class EmployeeClaimBean implements Serializable {
         FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("employeeClaim", employeeClaim);
         if (check) {
             FacesContext.getCurrentInstance().getExternalContext().getSessionMap().remove("filename");
-            FacesContext.getCurrentInstance().getExternalContext().redirect("/HiYewInternalWeb/HRMS/viewApprovedClaim.xhtml");
+            FacesContext.getCurrentInstance().getExternalContext().redirect("/HiYewInternalWeb/hrms-view-approved-claim.xhtml");
         }
     }
 
@@ -137,7 +135,6 @@ public class EmployeeClaimBean implements Serializable {
         try {
             copyFile(event.getFile().getFileName(), event.getFile().getInputstream());
             FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("filename", event.getFile().getFileName());
-            System.out.println( FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("filename"));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -294,5 +291,4 @@ public class EmployeeClaimBean implements Serializable {
     /**
      * @return the employeeName
      */
- 
 }

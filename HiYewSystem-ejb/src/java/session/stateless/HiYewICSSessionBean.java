@@ -5,6 +5,7 @@
  */
 package session.stateless;
 
+import entity.FillerComposition;
 import entity.FillerEntity;
 import entity.RackEntity;
 import entity.ShelveEntity;

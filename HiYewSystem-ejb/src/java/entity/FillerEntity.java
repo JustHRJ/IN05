@@ -11,6 +11,7 @@ import java.util.Set;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.validation.constraints.Digits;
 import javax.validation.constraints.Size;
 
@@ -21,6 +22,7 @@ import javax.validation.constraints.Size;
 @Entity
 public class FillerEntity implements Serializable {
 
+    private FillerComposition filler;
     private static final long serialVersionUID = 1L;
     @Id
     private String fillerCode;
@@ -52,6 +54,16 @@ public class FillerEntity implements Serializable {
     @OneToMany(mappedBy = "item")
     private Set<StorageInfoEntity> storageInfos = new HashSet<StorageInfoEntity>();
 
+    @OneToOne
+    public FillerComposition getFiller(){
+        return filler;
+    }
+    
+    public void setFiller(FillerComposition filler){
+        this.filler = filler;
+    }
+    
+    
     public FillerEntity() {
     }
 

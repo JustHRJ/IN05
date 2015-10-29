@@ -1,0 +1,163 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                template="./template.xhtml">
+
+    <ui:define name="content">
+        <!-- Page header -->
+        <div class="page-heading animated fadeInDownBig" style="padding:20px!important;padding-bottom:10px!important;">
+            <h1>Add New Item <small>Items Management</small></h1>
+        </div>
+        <!-- End page header -->
+        <div style="padding:20px!important;padding-top:0px!important;">
+            <h:form id="formMain">
+                <p:panel id ="panel" header="Add New Filler">
+                    <p:messages id="msg" autoUpdate="false" globalOnly="true"/>
+                    <p:panelGrid id="grid">
+                        <p:row style="vertical-align:bottom">
+                            <p:column>
+                                <p:outputLabel for ="itemCode" style ="font-weight: bold" value ="Filler Code "/>
+                            </p:column>
+                            <p:column>
+                                <p:inputText style="font-weight:normal;width:100%" id="itemCode" value="#{addItemManagedBean.newItem.fillerCode}" required="true" requiredMessage="Filler Code is required" label="Item Code"> 
+                                </p:inputText>
+                            </p:column>
+                            <p:column>
+                                <p:message for="itemCode" />
+                            </p:column>
+                        </p:row>
+                        <p:row style="vertical-align:bottom">   
+                            <p:column>
+                                <p:outputLabel for ="itemName" style ="font-weight: bold" value ="Filler Name "/>
+                            </p:column>
+                            <p:column>
+                                <p:inputText style="font-weight:normal;width:100%" id="itemName" value="#{addItemManagedBean.newItem.fillerName}" required="true" requiredMessage="Filler Name is required" label="Item Name"> 
+                                </p:inputText>
+                            </p:column>
+                            <p:column>
+                                <p:message for="itemName"/>
+                            </p:column>
+                        </p:row>
+                        <p:row style="vertical-align:bottom">   
+                            <p:column>
+                                <p:outputLabel for="wireGrade" style ="font-weight: bold" value ="Filler Grade"/>
+                            </p:column>
+                            <p:column>
+                                <h:selectOneMenu style="font-weight:normal;width:100%" id="wireGrade" value="#{addItemManagedBean.newItem.wireGrade}" required="true" requiredMessage="Filler Grade is required, please select one.">
+                                    <f:selectItem itemLabel="Select" itemValue="" />
+                                    <f:selectItem itemLabel="A" itemValue="A" />
+                                    <f:selectItem itemLabel="B" itemValue="B" />
+                                    <f:selectItem itemLabel="C" itemValue="C" />
+                                    <f:selectItem itemLabel="D" itemValue="D" />
+                                    <f:selectItem itemLabel="E" itemValue="E" />
+                                </h:selectOneMenu>
+                            </p:column>
+                            <p:column>
+                                <p:message for ="wireGrade" />
+                            </p:column>
+                        </p:row>
+                        <p:row style="vertical-align:bottom">   
+                            <p:column>
+                                <p:outputLabel for ="quantity" style ="font-weight: bold" value ="Quantity"/>
+                            </p:column>
+                            <p:column>
+                                <p:inputText style="font-weight:normal;width:100%" id="quantity" value="#{addItemManagedBean.newItem.quantity}" maxlength="6" label="Quantity" validatorMessage="Invalid Input! Please enter a positive integer for quantity(max of up to 6 digits)" converterMessage="Invalid Input! Please enter a positive integer for Quantity(max of up to 6 digits)"> 
+                                    <f:validateLongRange minimum="0" maximum="999999" />   
+                                </p:inputText>
+                            </p:column>
+                            <p:column>
+                                <p:message for="quantity"/>
+                            </p:column>
+                        </p:row>
+                        <p:row style="vertical-align:bottom">   
+                            <p:column>
+                                <p:outputLabel for ="cost" style ="font-weight: bold" value ="Cost ($)"/>
+                            </p:column>
+                            <p:column>
+                                <p:inputText style="font-weight:normal;width:100%" id="cost" maxlength="11" value="#{addItemManagedBean.newItem.cost}" label="Cost" converterMessage="Invalid Input! Please enter a positive number up to 2 decimal for Cost. Example: 53.0 or 42.53">
+                                    <f:validateDoubleRange minimum="0.0"  />
+                                </p:inputText>
+                            </p:column>
+                            <p:column>
+                                <p:message for="cost"/>
+                            </p:column>
+                        </p:row>
+                        <p:row style="vertical-align:bottom">   
+                            <p:column>
+                                <p:outputLabel for ="sellingPrice" style ="font-weight: bold" value ="Selling Price ($)"/>
+                            </p:column>
+                            <p:column>
+                                <p:inputText style="font-weight:normal;width:100%" id="sellingPrice" maxlength="11" value="#{addItemManagedBean.newItem.sellingPrice}" label="Selling Price" converterMessage="Invalid Input! Please enter a positive number up to 2 decimal for Selling Price. Example: 53.0 or 42.53">
+                                    <f:validateDoubleRange minimum="0.0" />
+                                </p:inputText>
+                            </p:column>
+                            <p:column>
+                                <p:message for="sellingPrice" />
+                            </p:column>
+                        </p:row>
+
+                        <p:row style="vertical-align:bottom">
+                            <p:column>
+                                <p:outputLabel for ="reorderPoint"  style ="font-weight: bold" value ="Reorder Point"/>
+                            </p:column>
+                            <p:column>
+                                <p:inputText style="font-weight:normal;width:100%" id="reorderPoint" maxlength="6" value="#{addItemManagedBean.newItem.reorderPoint}" label="Reorder Point" validatorMessage="Invalid Input! Please enter a positive integer for Reorder Point(max of up to 6 digits)" converterMessage="Invalid Input! Please enter a positive integer for Reorder Point(max of up to 6 digits)">
+                                    <f:validateLongRange minimum="0" maximum="999999" />   
+                                </p:inputText>
+                            </p:column>
+                            <p:column>
+                                <p:message for ="reorderPoint"/>
+                            </p:column>
+                        </p:row>
+                        <p:row style="vertical-align:bottom">   
+                            <p:column>
+                                <p:outputLabel for ="averageWeight" style ="font-weight: bold" value ="Average Weight (grams)"/>
+                            </p:column>
+                            <p:column>
+                                <p:inputText style="font-weight:normal;width:100%" id="averageWeight" maxlength="11" value="#{addItemManagedBean.newItem.averageWeight}" label="Average Weight"  converterMessage="Invalid Input! Please enter a positive number up to 2 decimal for Average Weight. Example: 53.0 or 42.53">
+                                    <f:validateDoubleRange minimum="0.0" />                       
+                                </p:inputText>
+                            </p:column>
+                            <p:column>
+                                <p:message for="averageWeight"/>
+                            </p:column>
+                        </p:row>
+                        <p:row style="vertical-align:bottom">
+                            <p:column>
+                                <p:outputLabel value ="Filler Length (mm)" style ="font-weight: bold" for ="fillerLength"/>
+                            </p:column>
+                            <p:column>
+                                <p:inputText style="font-weight:normal;width:100%" id="fillerLength" maxlength="11" value="#{addItemManagedBean.newItem.wireLength}" label="Filler Length"  required="true" requiredMessage="Filler Length is required" converterMessage="Invalid Input! Please enter a positive number up to 2 decimal for Filler Length. Example: 53.0 or 42.53">
+                                    <f:validateDoubleRange minimum="0.1" />                       
+                                </p:inputText>
+                            </p:column>
+                            <p:column>
+                                <p:message for ="fillerLength"/>
+                            </p:column>
+                        </p:row>
+                        <p:row style="vertical-align:bottom">   
+                            <p:column>
+                                <p:outputLabel for ="diameter" style ="font-weight: bold" value ="Filler Diameter (mm)"/>
+                            </p:column>
+                            <p:column>
+                                <p:inputText style="font-weight:normal;width:100%" id="diameter" maxlength="11" value="#{addItemManagedBean.newItem.diameter}" label="Diameter" required="true" requiredMessage="Diameter is required" converterMessage="Invalid Input! Please enter a positive number up to 2 decimal for Filler Diameter. Example: 53.0 or 42.53">
+                                    <f:validateDoubleRange minimum="0.1" />                       
+                                </p:inputText>
+                            </p:column>
+                            <p:column>
+                                <p:message for="diameter"/>
+                            </p:column>
+                        </p:row>
+                    </p:panelGrid>
+                    <br />
+                    <p:commandButton style="margin-right:10px" value="Add New Filler" update="grid msg" action="#{addItemManagedBean.createItem()}" icon="" validateClient="true"/>
+                </p:panel>
+            </h:form>
+        </div>
+    </ui:define>
+
+</ui:composition>

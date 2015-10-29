@@ -16,22 +16,22 @@
         </div>
         <!-- End page header -->
         <h:form id="mainForm">
-            <b><a href="c-product-machines-compare.xhtml"><i class="fa fa-search overlay"></i>&nbsp;&nbsp;Click here to select and compare two models for a more detailed comparison.</a></b>
+            <b><a href="c-products-machines-compare.xhtml"><i class="fa fa-search overlay"></i>&nbsp;&nbsp;Click here to select and compare two models for a more detailed comparison.</a></b>
             <br />
             <div style="height: 15px"></div>
             <div>
                 <b>Select a laser welding machine and view full details: </b>&nbsp;
-                <p:selectOneMenu id="selectedMachine" value="#{productQuotationManagedBean.selectedMachine}" style="width:230px; display: inline-table">
+                <h:selectOneMenu id="selectedMachine" value="#{productQuotationManagedBean.selectedMachine}" style="width:230px; display: inline-table">
                     <p:ajax listener="#{productQuotationManagedBean.redirectToSelectedMachine()}" />
                     <f:selectItem itemValue="" itemLabel="-" />
-                    <f:selectItem itemValue="LWI Small Chamber Type" itemLabel="LWI Small Chamber Type" />
+                    <f:selectItem itemValue="LWI Small Chamber" itemLabel="LWI Small Chamber" />
                     <f:selectItem itemValue="LWI V Flexx" itemLabel="LWI V Flexx" />
                     <f:selectItem itemValue="LWI V ERGO" itemLabel="LWI V ERGO" />
                     <f:selectItem itemValue="LWI V T-BaseV3" itemLabel="LWI V T-BaseV3" />
                     <f:selectItem itemValue="LWI V MobileFlexx" itemLabel="LWI V MobileFlexx" />
                     <f:selectItem itemValue="LWI V Unixx III" itemLabel="LWI V Unixx III" />
                     <f:selectItem itemValue="LWI V UltraFlexx" itemLabel="LWI V UltraFlexx" />
-                </p:selectOneMenu>
+                </h:selectOneMenu>
             </div>
             <div style="height: 15px"></div>
             <p:messages id="msg" showDetail="false" />
@@ -41,9 +41,11 @@
                 <div class="col-sm-3 col-xs-6">
                     <!-- Website statistic -->
                     <div class="box-info full">
-                        <h2><strong>LWI Small Chamber Type</strong></h2>
+                        <h2 style="font-size:15px"><strong>LWI Small Chamber</strong></h2>
                         <!-- Additional buttons -->
-                        <div class="additional-btn">
+                        <div class="additional-btn" style="top:15px">
+                            <p:commandButton update="msg" style="border: none; font-weight: normal; font-family: 'Open Sans'; padding-top: 3px; padding-bottom: 4px; padding-left: 10px; padding-right: 10px" styleClass="btn btn-primary btn-xs" value="View" action="#{productQuotationManagedBean.redirectToSelectedMachine('LWI Small Chamber')}" icon="" />
+                            <p:commandButton update="msg" style="border: none; font-weight: normal; font-family: 'Open Sans'; padding-top: 3px; padding-bottom: 4px; padding-left: 10px; padding-right: 10px" styleClass="btn btn-primary2 btn-xs" value="Add" action="#{productQuotationManagedBean.addToCacheList('Machine','LWI Small Chamber Type',1)}" icon="" />
                             <a class="additional-icon" href="#" data-toggle="collapse" data-target="#website-statistic"><i class="fa fa-chevron-down"></i></a>
                         </div><!-- End div .additional-button -->
                         <!-- Statistic inner -->
@@ -80,24 +82,13 @@
                                     </tbody>
                                 </table>
                                 <div style="height: 10px"></div>
-                                <img src="images/products/yag_120.jpg" alt="" />
-                                <img src="images/products/fss_150.jpg" alt="" />
-                                <img src="images/products/fss_300.jpg" alt="" />
-                                <img src="images/products/dreheinheit.jpg" alt="" />
-                                <img src="images/products/display.jpg" alt="" />
-                                <img src="images/products/beamtuning.jpg" alt="" />
-                                <img src="images/products/schutzgas.jpg" alt="" />
-                                <!-- User button -->
-                                <div class="user-button">
-                                    <div class="row" style="margin-bottom:-25px">
-                                        <div class="col-md-6">
-                                            <p:commandButton update="msg" style="border: none; font-weight: normal; font-family: 'Open Sans'; padding-top: 6px; padding-bottom: 7px; padding-left: 22px; padding-right: 22px" styleClass="btn btn-primary btn-xs" value="View Details" action="#{productQuotationManagedBean.addToCacheList('Machine','LWI Small Chamber Type',1)}" icon="" />
-                                        </div>
-                                        <div class="col-md-6" style="margin-left: -35px">
-                                            <p:commandButton update="msg" style="border: none; font-weight: normal; font-family: 'Open Sans'; padding-top: 6px; padding-bottom: 7px; padding-left: 22px; padding-right: 22px" styleClass="btn btn-primary2 btn-xs" value="Add to RFQ list" action="#{productQuotationManagedBean.addToCacheList('Machine','LWI Small Chamber Type',1)}" icon="" />
-                                        </div>
-                                    </div>
-                                </div><!-- End div .user-button -->
+                                <img src="images/products/yag_120.jpg" alt="YAG 120" />
+                                <img src="images/products/fss_150.jpg" alt="FSS 150" />
+                                <img src="images/products/fss_300.jpg" alt="FSS 300" />
+                                <img src="images/products/dreheinheit.jpg" alt="Rotation Axis" />
+                                <img src="images/products/display.jpg" alt="Display" />
+                                <img src="images/products/beamtuning.jpg" alt="Beam Tuning" />
+                                <img src="images/products/schutzgas.jpg" alt="Schutzgas" />
                             </div>
                         </div><!-- End div #website-statistic -->
                     </div><!-- End div .box-info -->
@@ -105,9 +96,11 @@
                 <div class="col-sm-3 col-xs-6">
                     <!-- Website statistic -->
                     <div class="box-info full">
-                        <h2><strong>LWI V Flexx</strong></h2>
+                        <h2 style="font-size:15px"><strong>LWI V Flexx</strong></h2>
                         <!-- Additional buttons -->
-                        <div class="additional-btn">
+                        <div class="additional-btn" style="top:15px">
+                            <p:commandButton update="msg" style="border: none; font-weight: normal; font-family: 'Open Sans'; padding-top: 3px; padding-bottom: 4px; padding-left: 10px; padding-right: 10px" styleClass="btn btn-primary btn-xs" value="View" action="#{productQuotationManagedBean.redirectToSelectedMachine('LWI V Flexx')}" icon="" />
+                            <p:commandButton update="msg" style="border: none; font-weight: normal; font-family: 'Open Sans'; padding-top: 3px; padding-bottom: 4px; padding-left: 10px; padding-right: 10px" styleClass="btn btn-primary2 btn-xs" value="Add" action="#{productQuotationManagedBean.addToCacheList('Machine','LWI Small Chamber Type',1)}" icon="" />
                             <a class="additional-icon" href="#" data-toggle="collapse" data-target="#website-statistic2"><i class="fa fa-chevron-down"></i></a>
                         </div><!-- End div .additional-button -->
                         <!-- Statistic inner -->
@@ -143,29 +136,16 @@
                                     </tbody>
                                 </table>
                                 <div style="height: 10px"></div>
-                                <img src="images/products/fss_150.jpg" alt="" />
-                                <img src="images/products/fss_300.jpg" alt="" />
-                                <img src="images/products/yag_120.jpg" alt="" />
-                                <img src="images/products/yag_150.jpg" alt="" />
-                                <img src="images/products/yag_200.jpg" alt="" />
-                                <img src="images/products/yag_300.jpg" alt="" />
-                                <img src="images/products/display.jpg" alt="" />
-                                <img src="images/products/on_axis_gas.jpg" alt="" />
-                                <img src="images/products/on_axis_light.jpg" alt="" />
-                                <img src="images/products/schutzgas.jpg" alt="" />
-                                <div class="user-profile-inner">
-                                    <!-- User button -->
-                                    <div class="user-button">
-                                        <div class="row" style="margin-bottom:-25px">
-                                            <div class="col-md-6">
-                                                <p:commandButton update="msg" style="border: none; font-weight: normal; font-family: 'Open Sans'; padding-top: 6px; padding-bottom: 7px; padding-left: 22px; padding-right: 22px" styleClass="btn btn-primary btn-xs" value="View Details" action="#{productQuotationManagedBean.addToCacheList('Machine','LWI Small Chamber Type',1)}" icon="" />
-                                            </div>
-                                            <div class="col-md-6" style="margin-left: -35px">
-                                                <p:commandButton update="msg" style="border: none; font-weight: normal; font-family: 'Open Sans'; padding-top: 6px; padding-bottom: 7px; padding-left: 22px; padding-right: 22px" styleClass="btn btn-primary2 btn-xs" value="Add to RFQ list" action="#{productQuotationManagedBean.addToCacheList('Machine','LWI V T-BaseV3',1)}" icon="" />
-                                            </div>
-                                        </div>
-                                    </div><!-- End div .user-button -->
-                                </div><!-- End div .user-profile-inner -->
+                                <img src="images/products/fss_150.jpg" alt="FSS 150" />
+                                <img src="images/products/fss_300.jpg" alt="FSS 300" />
+                                <img src="images/products/yag_120.jpg" alt="Yag 120" />
+                                <img src="images/products/yag_150.jpg" alt="Yag 150" />
+                                <img src="images/products/yag_200.jpg" alt="Yag 200" />
+                                <img src="images/products/yag_300.jpg" alt="Yag 300" />
+                                <img src="images/products/display.jpg" alt="Display" />
+                                <img src="images/products/on_axis_gas.jpg" alt="On Axis Gas" />
+                                <img src="images/products/on_axis_light.jpg" alt="On Axis Light" />
+                                <img src="images/products/schutzgas.jpg" alt="Schutzgas" />
                             </div>
 
                         </div><!-- End div #website-statistic -->
@@ -174,9 +154,11 @@
                 <div class="col-sm-3 col-xs-6">
                     <!-- Website statistic -->
                     <div class="box-info full">
-                        <h2><strong>LWI V ERGO</strong></h2>
+                        <h2 style="font-size:15px"><strong>LWI V ERGO</strong></h2>
                         <!-- Additional buttons -->
-                        <div class="additional-btn">
+                        <div class="additional-btn" style="top:15px">
+                            <p:commandButton update="msg" style="border: none; font-weight: normal; font-family: 'Open Sans'; padding-top: 3px; padding-bottom: 4px; padding-left: 10px; padding-right: 10px" styleClass="btn btn-primary btn-xs" value="View" action="#{productQuotationManagedBean.redirectToSelectedMachine('LWI V ERGO')}" icon="" />
+                            <p:commandButton update="msg" style="border: none; font-weight: normal; font-family: 'Open Sans'; padding-top: 3px; padding-bottom: 4px; padding-left: 10px; padding-right: 10px" styleClass="btn btn-primary2 btn-xs" value="Add" action="#{productQuotationManagedBean.addToCacheList('Machine','LWI Small Chamber Type',1)}" icon="" />
                             <a class="additional-icon" href="#" data-toggle="collapse" data-target="#website-statistic3"><i class="fa fa-chevron-down"></i></a>
                         </div><!-- End div .additional-button -->
                         <!-- Statistic inner -->
@@ -226,19 +208,6 @@
                                 <img src="images/products/pulsformung.jpg" alt="" />
                                 <img src="images/products/pwm.jpg" alt="" />
                                 <img src="images/products/schutzgas.jpg" alt="" />
-                                <div class="user-profile-inner">
-                                    <!-- User button -->
-                                    <div class="user-button">
-                                        <div class="row" style="margin-bottom:-25px">
-                                            <div class="col-md-6">
-                                                <p:commandButton update="msg" style="border: none; font-weight: normal; font-family: 'Open Sans'; padding-top: 6px; padding-bottom: 7px; padding-left: 22px; padding-right: 22px" styleClass="btn btn-primary btn-xs" value="View Details" action="#{productQuotationManagedBean.addToCacheList('Machine','LWI Small Chamber Type',1)}" icon="" />
-                                            </div>
-                                            <div class="col-md-6" style="margin-left: -35px">
-                                                <p:commandButton update="msg" style="border: none; font-weight: normal; font-family: 'Open Sans'; padding-top: 6px; padding-bottom: 7px; padding-left: 22px; padding-right: 22px" styleClass="btn btn-primary2 btn-xs" value="Add to RFQ list" action="#{productQuotationManagedBean.addToCacheList('Machine','LWI V Unixx III',1)}" icon="" />
-                                            </div>
-                                        </div>
-                                    </div><!-- End div .user-button -->
-                                </div><!-- End div .user-profile-inner -->
                             </div>
                         </div>
                     </div>
@@ -249,9 +218,11 @@
                 <div class="col-sm-3 col-xs-6">
                     <!-- Website statistic -->
                     <div class="box-info full">
-                        <h2><strong>LWI V T-BaseV3</strong></h2>
+                        <h2 style="font-size:15px"><strong>LWI V T-BaseV3</strong></h2>
                         <!-- Additional buttons -->
-                        <div class="additional-btn">
+                        <div class="additional-btn" style="top:15px">
+                            <p:commandButton update="msg" style="border: none; font-weight: normal; font-family: 'Open Sans'; padding-top: 3px; padding-bottom: 4px; padding-left: 10px; padding-right: 10px" styleClass="btn btn-primary btn-xs" value="View" action="#{productQuotationManagedBean.redirectToSelectedMachine('LWI V T-BaseV3')}" icon="" />
+                            <p:commandButton update="msg" style="border: none; font-weight: normal; font-family: 'Open Sans'; padding-top: 3px; padding-bottom: 4px; padding-left: 10px; padding-right: 10px" styleClass="btn btn-primary2 btn-xs" value="Add" action="#{productQuotationManagedBean.addToCacheList('Machine','LWI Small Chamber Type',1)}" icon="" />
                             <a class="additional-icon" href="#" data-toggle="collapse" data-target="#website-statistic4"><i class="fa fa-chevron-down"></i></a>
                         </div><!-- End div .additional-button -->
                         <!-- Statistic inner -->
@@ -298,19 +269,6 @@
                                 <img src="images/products/pwm.jpg" alt="" />
                                 <img src="images/products/schutzgas.jpg" alt="" />
                                 <img src="images/products/teach_in.jpg" alt="" />
-                                <div class="user-profile-inner">
-                                    <!-- User button -->
-                                    <div class="user-button">
-                                        <div class="row" style="margin-bottom:-25px">
-                                            <div class="col-md-6">
-                                                <p:commandButton update="msg" style="border: none; font-weight: normal; font-family: 'Open Sans'; padding-top: 6px; padding-bottom: 7px; padding-left: 22px; padding-right: 22px" styleClass="btn btn-primary btn-xs" value="View Details" action="#{productQuotationManagedBean.addToCacheList('Machine','LWI Small Chamber Type',1)}" icon="" />
-                                            </div>
-                                            <div class="col-md-6" style="margin-left: -35px">
-                                                <p:commandButton update="msg" style="border: none; font-weight: normal; font-family: 'Open Sans'; padding-top: 6px; padding-bottom: 7px; padding-left: 22px; padding-right: 22px" styleClass="btn btn-primary2 btn-xs" value="Add to RFQ list" action="#{productQuotationManagedBean.addToCacheList('Machine','LWI V T-BaseV3',1)}" icon="" />
-                                            </div>
-                                        </div>
-                                    </div><!-- End div .user-button -->
-                                </div><!-- End div .user-profile-inner -->
                             </div>
                         </div>
                     </div>
@@ -318,9 +276,11 @@
                 <div class="col-sm-3 col-xs-6">
                     <!-- Website statistic -->
                     <div class="box-info full">
-                        <h2><strong>LWI V MobileFlexx</strong></h2>
+                        <h2 style="font-size:15px"><strong>LWI V MobileFlexx</strong></h2>
                         <!-- Additional buttons -->
-                        <div class="additional-btn">
+                        <div class="additional-btn" style="top:15px">
+                            <p:commandButton update="msg" style="border: none; font-weight: normal; font-family: 'Open Sans'; padding-top: 3px; padding-bottom: 4px; padding-left: 10px; padding-right: 10px" styleClass="btn btn-primary btn-xs" value="View" action="#{productQuotationManagedBean.redirectToSelectedMachine('LWI V MobileFlexx')}" icon="" />
+                            <p:commandButton update="msg" style="border: none; font-weight: normal; font-family: 'Open Sans'; padding-top: 3px; padding-bottom: 4px; padding-left: 10px; padding-right: 10px" styleClass="btn btn-primary2 btn-xs" value="Add" action="#{productQuotationManagedBean.addToCacheList('Machine','LWI Small Chamber Type',1)}" icon="" />
                             <a class="additional-icon" href="#" data-toggle="collapse" data-target="#website-statistic5"><i class="fa fa-chevron-down"></i></a>
                         </div><!-- End div .additional-button -->
                         <!-- Statistic inner -->
@@ -366,19 +326,6 @@
                                 <img src="images/products/pwm.jpg" alt="" />
                                 <img src="images/products/schutzgas.jpg" alt="" />
                                 <img src="images/products/teach_in.jpg" alt="" />
-                                <div class="user-profile-inner">
-                                    <!-- User button -->
-                                    <div class="user-button">
-                                        <div class="row" style="margin-bottom:-25px">
-                                            <div class="col-md-6">
-                                                <p:commandButton update="msg" style="border: none; font-weight: normal; font-family: 'Open Sans'; padding-top: 6px; padding-bottom: 7px; padding-left: 22px; padding-right: 22px" styleClass="btn btn-primary btn-xs" value="View Details" action="#{productQuotationManagedBean.addToCacheList('Machine','LWI Small Chamber Type',1)}" icon="" />
-                                            </div>
-                                            <div class="col-md-6" style="margin-left: -35px">
-                                                <p:commandButton update="msg" style="border: none; font-weight: normal; font-family: 'Open Sans'; padding-top: 6px; padding-bottom: 7px; padding-left: 22px; padding-right: 22px" styleClass="btn btn-primary2 btn-xs" value="Add to RFQ list" action="#{productQuotationManagedBean.addToCacheList('Machine','LWI V Unixx III',1)}" icon="" />
-                                            </div>
-                                        </div>
-                                    </div><!-- End div .user-button -->
-                                </div><!-- End div .user-profile-inner -->
                             </div>
                         </div>
                     </div>
@@ -386,9 +333,11 @@
                 <div class="col-sm-3 col-xs-6">
                     <!-- Website statistic -->
                     <div class="box-info full">
-                        <h2><strong>LWI V Unixx III</strong></h2>
+                        <h2 style="font-size:15px"><strong>LWI V Unixx III</strong></h2>
                         <!-- Additional buttons -->
-                        <div class="additional-btn">
+                        <div class="additional-btn" style="top:15px">
+                            <p:commandButton update="msg" style="border: none; font-weight: normal; font-family: 'Open Sans'; padding-top: 3px; padding-bottom: 4px; padding-left: 10px; padding-right: 10px" styleClass="btn btn-primary btn-xs" value="View" action="#{productQuotationManagedBean.redirectToSelectedMachine('LWI V Unixx III')}" icon="" />
+                            <p:commandButton update="msg" style="border: none; font-weight: normal; font-family: 'Open Sans'; padding-top: 3px; padding-bottom: 4px; padding-left: 10px; padding-right: 10px" styleClass="btn btn-primary2 btn-xs" value="Add" action="#{productQuotationManagedBean.addToCacheList('Machine','LWI Small Chamber Type',1)}" icon="" />
                             <a class="additional-icon" href="#" data-toggle="collapse" data-target="#website-statistic6"><i class="fa fa-chevron-down"></i></a>
                         </div><!-- End div .additional-button -->
                         <!-- Statistic inner -->
@@ -435,19 +384,6 @@
                                 <img src="images/products/pwm.jpg" alt="" />
                                 <img src="images/products/schutzgas.jpg" alt="" />
                                 <img src="images/products/teach_in.jpg" alt="" />
-                                <div class="user-profile-inner">
-                                    <!-- User button -->
-                                    <div class="user-button">
-                                        <div class="row" style="margin-bottom:-25px">
-                                            <div class="col-md-6">
-                                                <p:commandButton update="msg" style="border: none; font-weight: normal; font-family: 'Open Sans'; padding-top: 6px; padding-bottom: 7px; padding-left: 22px; padding-right: 22px" styleClass="btn btn-primary btn-xs" value="View Details" action="#{productQuotationManagedBean.addToCacheList('Machine','LWI Small Chamber Type',1)}" icon="" />
-                                            </div>
-                                            <div class="col-md-6" style="margin-left: -35px">
-                                                <p:commandButton update="msg" style="border: none; font-weight: normal; font-family: 'Open Sans'; padding-top: 6px; padding-bottom: 7px; padding-left: 22px; padding-right: 22px" styleClass="btn btn-primary2 btn-xs" value="Add to RFQ list" action="#{productQuotationManagedBean.addToCacheList('Machine','LWI V Unixx III',1)}" icon="" />
-                                            </div>
-                                        </div>
-                                    </div><!-- End div .user-button -->
-                                </div><!-- End div .user-profile-inner -->
                             </div>
                         </div>
                     </div>
@@ -458,9 +394,11 @@
                 <div class="col-sm-3 col-xs-6">
                     <!-- Website statistic -->
                     <div class="box-info full">
-                        <h2><strong>LWI V UltraFlexx</strong></h2>
+                        <h2 style="font-size:15px"><strong>LWI V UltraFlexx</strong></h2>
                         <!-- Additional buttons -->
-                        <div class="additional-btn">
+                        <div class="additional-btn" style="top:15px">
+                            <p:commandButton update="msg" style="border: none; font-weight: normal; font-family: 'Open Sans'; padding-top: 3px; padding-bottom: 4px; padding-left: 10px; padding-right: 10px" styleClass="btn btn-primary btn-xs" value="View" action="#{productQuotationManagedBean.redirectToSelectedMachine('LWI V UltraFlexx')}" icon="" />
+                            <p:commandButton update="msg" style="border: none; font-weight: normal; font-family: 'Open Sans'; padding-top: 3px; padding-bottom: 4px; padding-left: 10px; padding-right: 10px" styleClass="btn btn-primary2 btn-xs" value="Add" action="#{productQuotationManagedBean.addToCacheList('Machine','LWI Small Chamber Type',1)}" icon="" />
                             <a class="additional-icon" href="#" data-toggle="collapse" data-target="#website-statistic7"><i class="fa fa-chevron-down"></i></a>
                         </div><!-- End div .additional-button -->
                         <!-- Statistic inner -->
@@ -505,17 +443,6 @@
                                 <img src="images/products/pulsformung.jpg" alt="" />
                                 <img src="images/products/pwm.jpg" alt="" />
                                 <img src="images/products/schutzgas.jpg" alt="" />
-                                <!-- User button -->
-                                <div class="user-button">
-                                    <div class="row" style="margin-bottom:-25px">
-                                        <div class="col-md-6">
-                                            <p:commandButton update="msg" style="border: none; font-weight: normal; font-family: 'Open Sans'; padding-top: 6px; padding-bottom: 7px; padding-left: 22px; padding-right: 22px" styleClass="btn btn-primary btn-xs" value="View Details" action="#{productQuotationManagedBean.addToCacheList('Machine','LWI Small Chamber Type',1)}" icon="" />
-                                        </div>
-                                        <div class="col-md-6" style="margin-left: -35px">
-                                            <p:commandButton update="msg" style="border: none; font-weight: normal; font-family: 'Open Sans'; padding-top: 6px; padding-bottom: 7px; padding-left: 22px; padding-right: 22px" styleClass="btn btn-primary2 btn-xs" value="Add to RFQ list" action="#{productQuotationManagedBean.addToCacheList('Machine','LWI Small Chamber Type',1)}" icon="" />
-                                        </div>
-                                    </div>
-                                </div><!-- End div .user-button -->
                             </div>
                         </div>
                     </div>

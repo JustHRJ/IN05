@@ -1,0 +1,46 @@
+<?xml version='1.0' encoding='UTF-8' ?> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <h:head>
+        <title>Singapore Welding | SgWeld.com | Welding Service in Singapore | Welding</title>
+        <link rel="shortcut icon" href="images/favicon.ico" />
+
+        <style>
+            html {
+                font-size:14px;
+                background:#eee;
+            }
+            .page-heading h1 {
+                margin: 0;
+                padding: 0;
+                font-weight: 400;
+                font-size: 25px;
+                font-family: 'Arial';
+            }
+        </style>
+    </h:head>
+
+    <h:body>
+        <!-- Page header -->
+        <div class="page-heading animated fadeInDownBig" style="padding:20px!important;padding-bottom:10px!important;">
+            <h1>Upload Receipt <small></small></h1>
+        </div>
+        <!-- End page header -->
+        <div style="padding:20px!important;padding-top:0px!important;">
+            <h:form>
+                <p:fileUpload fileUploadListener="#{employeeClaimBean.upload}"/>
+                <br />
+                <p:commandButton value ="Continue Without Upload" action ="viewApprovedClaim"/>
+            </h:form>
+            <br /><br />
+            <h:form>
+                <p:commandLink  style="font-weight: normal; font-family: 'Arial';font-size:15px" value ="Back" action="#{loginControlBean.returnPage()}"/>
+            </h:form>
+        </div>
+    </h:body>
+</html>

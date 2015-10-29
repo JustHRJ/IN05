@@ -46,15 +46,15 @@
                     <div class="box-info">
                         <h2 class="text-center"><strong>Register</strong> new account</h2>
                         <h:form id="mainForm">
-                            <h:outputText value="#{registerMessage}" id="outputID" style="font-weight: bold; color: red; margin-bottom: 100%" />
+                            <h:outputText value="#{registerMessage}" id="loginOutputId" style="font-weight: bold; color: #{msgColor}; margin-bottom: 100%" />
                             <p style="margin-bottom: 5%"></p>
                             <p:growl id="msgs" showDetail="false" />
                             <div class="form-group login-input">
                                 I am a:&nbsp;&nbsp;
-                                <p:selectOneMenu id="user" style="width: 315px; display: inline-block;" styleClass="form-control selectpicker" value="#{loginManagedBean.user}" >
+                                <h:selectOneMenu id="user" style="" styleClass="form-control selectpicker" value="#{loginManagedBean.user}" >
                                     <p:ajax listener="#{loginManagedBean.display()}" update="mainForm"/> 
                                     <f:selectItems class="form-control selectpicker" value="#{loginManagedBean.users}" />
-                                </p:selectOneMenu>
+                                </h:selectOneMenu>
                                 <p:message for="user" />
                             </div>
                             <div class="form-group login-input">
@@ -102,7 +102,7 @@
                             </div>
                             <div class="form-group login-input">
                                 <i class="fa fa-key overlay"></i>
-                                <p:password class="form-control text-input" placeholder="Password" value="#{loginManagedBean.newCustomer.pw}" required="true" feedback="true" inline="true" requiredMessage="Password is required." id="Password" validatorMessage="[Password] Your password should be of at least 8 alphanumeric characters.">
+                                <p:password match="Re-Password" class="form-control text-input" placeholder="Password" value="#{loginManagedBean.newCustomer.pw}" required="true" feedback="true" inline="true" requiredMessage="Password is required." id="Password" validatorMessage="[Password] Your password should be of at least 8 alphanumeric characters / Mismatch password.">
                                     <f:validateRegex pattern="(^[0-9a-z-A-Z]{8,}$)"/>
                                 </p:password>
                                 <p:message for="Password" />
@@ -115,14 +115,14 @@
                                 <p:message for="Re-Password" />
                             </div>
                             <div class="form-group login-input">
-                                <p:selectOneMenu style="width: 370px" styleClass="form-control selectpicker"  id = "secretQn"  value ="#{loginManagedBean.newCustomer.secretQuestion}" required = "true" requiredMessage="Please select Secret Question">
+                                <h:selectOneMenu style="width: 370px" styleClass="form-control selectpicker"  id = "secretQn"  value ="#{loginManagedBean.newCustomer.secretQuestion}" required = "true" requiredMessage="Please select Secret Question">
                                     <f:selectItem itemValue ="" itemLabel ="Please select your secret question" noSelectionOption="true"/>
                                     <f:selectItem itemValue ="What is the name of your favourite teacher?" itemLabel ="What is the name of your favourite teacher?"/>
                                     <f:selectItem itemValue ="Where did you spend your honeymoon?" itemLabel ="Where did you spend your honeymoon?"/>
                                     <f:selectItem itemValue ="What is the name of your favourite pet?" itemLabel ="What is the name of your favourite pet?"/>
                                     <f:selectItem itemValue ="Which hospital were you born in?" itemLabel ="Which hospital were you born in?"/>
                                     <f:selectItem itemValue ="What is the first name of your favourite uncle?" itemLabel ="What is the first name of your favourite uncle?"/>
-                                </p:selectOneMenu>
+                                </h:selectOneMenu>
                                 <p:message for="secretQn" />
                             </div>
                             <div class="form-group login-input">

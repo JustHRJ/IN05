@@ -1,0 +1,129 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                template="./template.xhtml">
+
+    <ui:define name="content">
+        <!-- Page header -->
+        <div class="page-heading animated fadeInDownBig" style="padding:20px!important;padding-bottom:10px!important;">
+            <h1>Leave Approval <small>Leave Management</small></h1>
+        </div>
+        <!-- End page header -->
+        <div style="padding:20px!important;padding-top:0px!important;">
+            <h:form id ="formMain">
+                <p:growl id ="msgs" showDetail="false"/>
+
+                <p:panel header ="View Leave By Employee">
+                    <br />
+                    <p:panelGrid style="border:none;">
+                        <p:row style="border:none;">
+                            <p:column style="vertical-align:middle">
+                                <p:outputLabel style="font-weight:bold;" value ="Select Employee" />
+                            </p:column>
+                            <p:column>
+                                <h:selectOneMenu value ="#{hiYewManagedBean.employeeName}" id ="inputTxt1" style="width:200px">
+                                    <f:selectItem itemValue="" itemLabel="Select" noSelectionOption="true" />
+                                    <f:selectItems value ="#{loginControlBean.validateLeaveName()}"/>
+                                </h:selectOneMenu>
+                            </p:column>
+                        </p:row>
+                    </p:panelGrid>
+                    <br />
+                    <p:commandButton id ="btn1" value ="Search for Employee" update = "msgs">
+                        <f:ajax execute ="inputTxt1" render ="data1" />
+                        <f:ajax execute ="inputTxt1" render ="data2" />
+                        <p:dataTable id = "data1" var="im" value="#{hiYewManagedBean.leaveE}" paginator="true" rows="5" emptyMessage="No leave pending">
+                            <p:column headerText ="Leave ID">
+                                <h:outputText value ="#{im.id}" />
+                            </p:column>
+                            <p:column headerText ="Applied Days">
+                                <h:outputText value ="#{im.number_of_leave}" />
+                            </p:column>
+                            <p:column headerText ="Start Date">
+                                <h:outputText value ="#{hiYewManagedBean.formatDate(im.startDate)}" />
+                            </p:column>
+                            <p:column headerText ="End Date">
+                                <h:outputText value ="#{hiYewManagedBean.formatDate(im.endDate)}" />
+                            </p:column>
+                            <p:column headerText ="Leave Remarks">
+                                <h:outputText value ="#{im.remarks}" />
+                            </p:column>
+                            <p:column headerText="Leave Type">
+                                <h:outputText value ="#{im.type}"/>
+                            </p:column>
+                            <p:column headerText ="Application Time" >
+                                <h:outputText value ="#{hiYewManagedBean.formatDate(im.appliedTime)}" />
+                            </p:column>
+                            <p:column headerText ="Leave status" >
+                                <h:outputText value ="#{im.status}" />
+                            </p:column>
+                        </p:dataTable>
+                        <br />
+                    </p:commandButton>
+
+                    <br/><br/>
+                    <p:commandButton value ="Approve All Leave" action ="#{hiYewManagedBean.approveLeaveEs}" update = ":formMain">
+                        <p:inputText style="font-weight:normal" id ="data2" value ="#{hiYewManagedBean.employeeName}" />
+                        <p:confirm header="Confirmation" message="Approve all leave for this Employee?" icon="ui-icon-alert" />
+                        <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+                            <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+                            <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+                        </p:confirmDialog>
+                        &nbsp;&nbsp;
+                    </p:commandButton>
+                </p:panel>
+                <br/><br/>
+
+                <p:panel header ="View All Leave">
+                    <br />
+                    <p:dataTable var="im" value="#{hiYewDataTableBean.leaves}" paginator="true" rows="5" emptyMessage="No pending leaves">
+                        <p:column headerText ="Employee Name">
+                            <h:outputText value ="#{im.get(0)}" />
+                        </p:column>
+                        <p:column headerText ="Leave ID" sortBy="#{im.get(1)}">
+                            <h:outputText value ="#{im.get(1)}" />
+                        </p:column>
+                        <p:column headerText ="Applied Days" sortBy="#{im.get(2)}">
+                            <h:outputText value ="#{im.get(2)}" />
+                        </p:column>
+
+                        <p:column headerText ="Start Date" sortBy="#{im.get(3)}">
+                            <h:outputText value ="#{im.get(3)}" />
+                        </p:column>
+
+                        <p:column headerText ="End Date" sortBy="#{im.get(4)}">
+                            <h:outputText value ="#{im.get(4)}" />
+                        </p:column>
+                        <p:column headerText ="Leave Remarks" sortBy="#{im.get(5)}">
+                            <h:outputText value ="#{im.get(5)}" />
+                        </p:column>
+                        <p:column headerText="Leave Type">
+                            <h:outputText value ="#{im.get(6)}"/>
+                        </p:column>
+                        <p:column headerText ="Application Time" sortBy="#{im.get(6)}">
+                            <h:outputText value ="#{im.get(7)}" />
+                        </p:column>
+                        <p:column headerText="Action">
+                            <p:commandLink ajax="false" title="Approve" action="#{hiYewManagedBean.approveLeave}"
+                                           value="approve" update=":formMain">
+                                <f:param name="objectId" value="#{im.get(0)}" />     
+                                <f:param name="objectId1" value="#{im.get(1)}" />
+                            </p:commandLink>
+                        </p:column>
+                        <p:column headerText="Action2">
+                            <p:commandLink ajax ="false" title ="Disaprove" action ="#{hiYewManagedBean.rejectLeave}" value ="Reject" update = ":formMain" >
+                                <f:param name="objectId" value="#{im.get(0)}" />     
+                                <f:param name="objectId1" value="#{im.get(1)}" />
+                            </p:commandLink>
+                        </p:column>
+                    </p:dataTable>
+                </p:panel>
+            </h:form>
+        </div>
+    </ui:define>
+
+</ui:composition>

@@ -35,11 +35,29 @@ public class loginControlBean implements Serializable {
     private String password = "";
     private boolean logined = false;
     private String employeeName = "";
+    private String current_page = "index";
 
     /**
      * Creates a new instance of loginControlBean
      */
     public loginControlBean() {
+    }
+
+    public String currentPage() {
+        return getCurrent_page();
+    }
+
+    public void setCurrentPage(String userCurrentPage) {
+        setCurrent_page(userCurrentPage);
+    }
+
+    public String redirectPage() throws IOException {
+        System.out.println("hello");
+        if (true) {
+            FacesContext.getCurrentInstance().getExternalContext().redirect("/HiYewInternalWeb/login.xhtml");
+            return "";
+        }
+        return "";
     }
 
     public void checkLogoutRedirect() throws IOException {
@@ -212,11 +230,21 @@ public class loginControlBean implements Serializable {
         }
     }
 
+    public void errorLogout() throws IOException {
+        if (logined) {
+            FacesContext.getCurrentInstance().getExternalContext().invalidateSession();
+            username = "";
+            password = "";
+
+        } else {
+        }
+    }
+
     public void checkLogin() throws IOException {
         String result = hiYewSystemBean.login(username, password);
         FacesContext.getCurrentInstance().getExternalContext().getSessionMap().remove("loginMessage");
         if (result.equals("disabled")) {
-            FacesMessage msg = new FacesMessage("Failed to login", "Account has been locked");
+            FacesMessage msg = new FacesMessage("Failed to login!", "Account has been locked");
             FacesContext.getCurrentInstance().addMessage(null, msg);
 
         } else if (result.equals("reset")) {
@@ -228,8 +256,8 @@ public class loginControlBean implements Serializable {
             FacesContext.getCurrentInstance().getExternalContext().redirect("/HiYewInternalWeb/firstChangePassword.xhtml");
 
         } else if (result.equals("fail")) {
-            FacesMessage msg = new FacesMessage("Failed to login", "Wrong username or password");
-            FacesContext.getCurrentInstance().addMessage(null, msg);
+            // FacesMessage msg = new FacesMessage("Failed to login", "Wrong username or password");
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Failed to login!", "Wrong username or password"));
         } else {
             loginPosition = result;
             logined = true;
@@ -315,5 +343,20 @@ public class loginControlBean implements Serializable {
 
     public void firstLogin() throws IOException {
         FacesContext.getCurrentInstance().getExternalContext().redirect("/HiYewInternalWeb/login.xhtml");
+    }
+
+    /**
+     * @return the current_page
+     */
+    public String getCurrent_page() {
+        System.out.println("====================================== getCurrent_page() = " + current_page);
+        return current_page;
+    }
+
+    /**
+     * @param current_page the current_page to set
+     */
+    public void setCurrent_page(String current_page) {
+        this.current_page = current_page;
     }
 }

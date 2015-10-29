@@ -1,0 +1,63 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                template="./template.xhtml">
+
+    <ui:define name="content">
+        <!-- Page header -->
+        <div class="page-heading animated fadeInDownBig" style="padding:20px!important;padding-bottom:10px!important;">
+            <h1>Machine Alert <small>Machine Maintenance</small></h1>
+        </div>
+        <!-- End page header -->
+        <div style="padding:20px!important;padding-top:0px!important;">
+            <h:form id="formMain">
+                <p:commandButton value ="Refresh Alerts" id ="btn">
+                    <f:ajax execute="btn" render ="data1"/>
+                    <p:panel header ="View Machine">
+                        <p:dataTable id = "data1" var="im" value="#{machineManageBean.expiredMachines}" paginator="true" rows="5" emptyMessage="No Machine Maintenance" >
+                            <p:column headerText ="Machine ID" >
+                                <h:outputText value ="#{im.id}" />
+                            </p:column>
+                            <p:column headerText ="Machine Name">
+                                <h:outputText value ="#{im.machine_name}" />
+                            </p:column>
+                            <p:column id ="cl1" headerText ="Machine Number">
+                                <h:outputText value ="#{im.machine_number}" />
+                            </p:column>
+                            <p:column headerText ="Machine Expiry" >
+                                <h:outputText value ="#{machineManageBean.formatDate(im.machine_expiry)}" />
+                            </p:column>
+
+                        </p:dataTable>
+                    </p:panel>
+                    <br />
+                </p:commandButton>
+
+                <br /><br />
+
+                <p:panel style ="border: none;background:none">
+                    <p:panelGrid style="background:white;" id ="grid">
+                        <p:row style="background:none;">
+                            <p:column style="vertical-align: bottom;font-weight:bold">
+                                <p:outputLabel value = "Enter machine name to extend date" />
+                            </p:column>
+                            <p:column>
+                                <p:inputText style="font-weight:normal" id ="machine_id" value ="#{machineManageBean.machineName}" requiredMessage="Please enter machine ID" validator="#{registrationValidator.validateMachineExpiry}"  validatorMessage="No existing expiring Machine" />
+                            </p:column>
+                            <p:column>
+                                <p:message for="machine_id"/>
+                            </p:column>
+                        </p:row>
+                    </p:panelGrid>
+                    <br />
+                    <p:commandButton value ="Extend" action ="#{machineManageBean.extendMachineMaintenance()}" update = "grid"/> 
+                </p:panel>
+            </h:form>
+        </div>
+    </ui:define>
+
+</ui:composition>

@@ -31,7 +31,7 @@ public class MachineSystemBean implements MachineSystemBeanLocal {
     @PersistenceContext
     private EntityManager em;
 
-    public boolean addMachine(String machineName, String machineIdentity, Timestamp machineExpiry, String description, int extension) {
+    public boolean addMachine(String machineName, String machineIdentity, Timestamp machineExpiry, String description, int extension, String machineType) {
         MachineEntity machine = new MachineEntity();
         try {
             Query q = em.createQuery("Select machine from MachineEntity machine where machine.machine_number = :id");
@@ -43,6 +43,7 @@ public class MachineSystemBean implements MachineSystemBeanLocal {
             machine.setMachine_number(machineIdentity);
             machine.setMachine_expiry(machineExpiry);
             machine.setStatus("Available");
+            machine.setMachine_type(machineType);
             machine.setDescription(description);
             machine.setExtension(extension);
             Collection<MachineMaintainenceEntity> machineMaint = new ArrayList<MachineMaintainenceEntity>();
@@ -66,6 +67,15 @@ public class MachineSystemBean implements MachineSystemBeanLocal {
             return false;
         }
 
+    }
+
+    public int getNoAlert() {
+        List<MachineEntity> machines = checkMachineExpiry();
+        if (machines == null) {
+            return 0;
+        } else {
+            return machines.size();
+        }
     }
 
     public boolean deleteMachineMaintainence(String id) {

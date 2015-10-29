@@ -5,8 +5,9 @@
  */
 package servlet;
 
+import com.hoiio.sdk.services.SmsService;
 import java.io.IOException;
-import java.io.PrintWriter;
+import javax.ejb.EJBException;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -33,7 +34,6 @@ public class Login extends HttpServlet {
             throws ServletException, IOException {
         
         response.sendRedirect("/HiYewExternalWeb/login.xhtml");
-        
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

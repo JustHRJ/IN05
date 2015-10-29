@@ -22,7 +22,6 @@ import javax.persistence.OneToMany;
  */
 @Entity
 public class EmployeeEntity implements Serializable {
-
     private static final long serialVersionUID = 1L;
 
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -53,7 +52,28 @@ public class EmployeeEntity implements Serializable {
     private Collection<EmployeeClaimEntity> claimRecords = new ArrayList<EmployeeClaimEntity>();
     
     public EmployeeEntity() {
+    }
 
+    public EmployeeEntity(String employee_name, String employee_passNumber, String employee_address, int number_of_leaves, String employee_account_status, String previousPosition, String username, String password, Timestamp employee_passExpiry, String employee_contact, double employee_basic, Timestamp employee_employedDate, String addressPostal, String unit, String secretQuestion, String secretAnswer, String optional, String account_status, String emailAddress) {
+        this.employee_name = employee_name;
+        this.employee_passNumber = employee_passNumber;
+        this.employee_address = employee_address;
+        this.number_of_leaves = number_of_leaves;
+        this.employee_account_status = employee_account_status;
+        this.previousPosition = previousPosition;
+        this.username = username;
+        this.password = password;
+        this.employee_passExpiry = employee_passExpiry;
+        this.employee_contact = employee_contact;
+        this.employee_basic = employee_basic;
+        this.employee_employedDate = employee_employedDate;
+        this.addressPostal = addressPostal;
+        this.unit = unit;
+        this.secretQuestion = secretQuestion;
+        this.secretAnswer = secretAnswer;
+        this.optional = optional;
+        this.account_status = account_status;
+        this.emailAddress = emailAddress;
     }
     
     @OneToMany(cascade ={CascadeType.ALL}, mappedBy ="employee", orphanRemoval=true)

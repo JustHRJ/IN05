@@ -36,7 +36,7 @@ public class MachineEntity implements Serializable {
     private String description;
     private Collection<MachineMaintainenceEntity> machineMaintainence = new ArrayList<MachineMaintainenceEntity>();
     private Collection<MachineRepairEntity> machineRepair = new ArrayList<MachineRepairEntity>();
-    
+    private String machine_type;
     
     public MachineEntity() {
 

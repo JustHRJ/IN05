@@ -19,19 +19,18 @@ import javax.persistence.Id;
 public class FillerComposition implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+    private String id;
     private String name;
     private int copper;
-    private int silver;
-    private int gold;
-    private int bronze;
-    private int topaz;
+    private int zinc;
+    private int lead;
+    private int aluminium;
+    private int carbon;
     private int iron;
-    private int alluminium;
-    private int titanium;
-    private int plastic;
-    private int platinium;
+    private int nickel;
+    private int manganese;
+    private int silicon;
+    private int chromium;
 
     public FillerComposition() {
     }
@@ -39,25 +38,25 @@ public class FillerComposition implements Serializable {
     public FillerComposition(String name, int copper, int silver, int gold, int bronze, int topaz, int iron, int alluminium, int titanium, int plastic, int platinium) {
         this.name = name;
         this.copper = copper;
-        this.silver = silver;
-        this.gold = gold;
-        this.bronze = bronze;
-        this.topaz = topaz;
+        this.zinc = silver;
+        this.lead = gold;
+        this.aluminium = bronze;
+        this.carbon = topaz;
         this.iron = iron;
-        this.alluminium = alluminium;
-        this.titanium = titanium;
-        this.plastic = plastic;
-        this.platinium = platinium;
+        this.nickel = alluminium;
+        this.manganese = titanium;
+        this.silicon = plastic;
+        this.chromium = platinium;
     }
     
     
     
 
-    public Long getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -115,59 +114,59 @@ public class FillerComposition implements Serializable {
     }
 
     /**
-     * @return the silver
+     * @return the zinc
      */
-    public int getSilver() {
-        return silver;
+    public int getZinc() {
+        return zinc;
     }
 
     /**
-     * @param silver the silver to set
+     * @param silver the zinc to set
      */
-    public void setSilver(int silver) {
-        this.silver = silver;
+    public void setZinc(int zinc) {
+        this.zinc = zinc;
     }
 
     /**
-     * @return the gold
+     * @return the lead
      */
-    public int getGold() {
-        return gold;
+    public int getLead() {
+        return lead;
     }
 
     /**
-     * @param gold the gold to set
+     * @param gold the lead to set
      */
-    public void setGold(int gold) {
-        this.gold = gold;
+    public void setLead(int lead) {
+        this.lead = lead;
     }
 
     /**
-     * @return the bronze
+     * @return the aluminium
      */
-    public int getBronze() {
-        return bronze;
+    public int getAluminium() {
+        return aluminium;
     }
 
     /**
-     * @param bronze the bronze to set
+     * @param aluminium the aluminium to set
      */
-    public void setBronze(int bronze) {
-        this.bronze = bronze;
+    public void setAluminium(int aluminium) {
+        this.aluminium = aluminium;
     }
 
     /**
-     * @return the topaz
+     * @return the carbon
      */
-    public int getTopaz() {
-        return topaz;
+    public int getCarbon() {
+        return carbon;
     }
 
     /**
-     * @param topaz the topaz to set
+     * @param carbon the carbon to set
      */
-    public void setTopaz(int topaz) {
-        this.topaz = topaz;
+    public void setCarbon(int carbon) {
+        this.carbon = carbon;
     }
 
     /**
@@ -185,59 +184,59 @@ public class FillerComposition implements Serializable {
     }
 
     /**
-     * @return the alluminium
+     * @return the nickel
      */
-    public int getAlluminium() {
-        return alluminium;
+    public int getNickel() {
+        return nickel;
     }
 
     /**
-     * @param alluminium the alluminium to set
+     * @param nickel the nickel to set
      */
-    public void setAlluminium(int alluminium) {
-        this.alluminium = alluminium;
+    public void setNickel(int nickel) {
+        this.nickel = nickel;
     }
 
     /**
-     * @return the titanium
+     * @return the manganese
      */
-    public int getTitanium() {
-        return titanium;
+    public int getManganese() {
+        return manganese;
     }
 
     /**
-     * @param titanium the titanium to set
+     * @param manganese the manganese to set
      */
-    public void setTitanium(int titanium) {
-        this.titanium = titanium;
+    public void setManganese(int manganese) {
+        this.manganese = manganese;
     }
 
     /**
-     * @return the plastic
+     * @return the silicon
      */
-    public int getPlastic() {
-        return plastic;
+    public int getSilicon() {
+        return silicon;
     }
 
     /**
-     * @param plastic the plastic to set
+     * @param silicon the silicon to set
      */
-    public void setPlastic(int plastic) {
-        this.plastic = plastic;
+    public void setSilicon(int silicon) {
+        this.silicon = silicon;
     }
 
     /**
-     * @return the platinium
+     * @return the chromium
      */
-    public int getPlatinium() {
-        return platinium;
+    public int getChromium() {
+        return chromium;
     }
 
     /**
-     * @param platinium the platinium to set
+     * @param chromium the chromium to set
      */
-    public void setPlatinium(int platinium) {
-        this.platinium = platinium;
+    public void setChromium(int chromium) {
+        this.chromium = chromium;
     }
     
 }

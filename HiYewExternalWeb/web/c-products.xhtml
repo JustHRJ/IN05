@@ -23,6 +23,12 @@
             <p:tabView dynamic="false" cache="false" >
                 <p:tab title="Request for Quotation">
                     <p:messages id="rfqMsg"  showDetail="false" />
+                    
+                    <h:outputText  value="Set Delivery Date: " />
+                    <p:calendar style="position:absolute;z-index: 999;"  id="cal" value="#{adminProductPOManagedBean.deliveryDate}" placeholder="e.g 01/01/2015" mindate="#{adminProductPOManagedBean.getToday()}" pattern ="dd/MM/yyyy">
+                            </p:calendar>
+                    
+                    
                     <p:dataTable value="#{productQuotationManagedBean.cacheList}" var="item" id="mydata" editable="true">
                         <p:column headerText="ID" width="4%">
                             <h:outputText value="#{item.productQuotationDescNo}"/>

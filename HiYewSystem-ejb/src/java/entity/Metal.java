@@ -23,25 +23,23 @@ public class Metal implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
     private String metalName;
-    private int gold;
-    private int silver;
-    private int bronze;
-    private int iron;
+    private int chromium;
+    private int lead;
+    private int carbon;
+    private int zinc;
     private int copper;
-    private int titanium;
-    private int platinium;
+    private int manganese;
+    private int nickel;
     private int aluminium;
-    private int topaz;
-    private int plastic;
-    
-    @OneToMany(cascade ={CascadeType.ALL})
-    private Collection <FillerEntity> fillers = new ArrayList<>();
+    private int silicon;
+    private int iron;
+    private Collection<FillerEntity> fillers = new ArrayList<FillerEntity>();
     
     public Metal() {
     }
 
     
-    
+    @ManyToMany(cascade ={CascadeType.ALL})
     public Collection<FillerEntity> getFillers(){
         return fillers;
     }
@@ -96,59 +94,59 @@ public class Metal implements Serializable {
     }
 
     /**
-     * @return the gold
+     * @return the chromium
      */
-    public int getGold() {
-        return gold;
+    public int getChromium() {
+        return chromium;
     }
 
     /**
-     * @param gold the gold to set
+     * @param chromium the chromium to set
      */
-    public void setGold(int gold) {
-        this.gold = gold;
+    public void setChromium(int chromium) {
+        this.chromium = chromium;
     }
 
     /**
-     * @return the silver
+     * @return the lead
      */
-    public int getSilver() {
-        return silver;
+    public int getLead() {
+        return lead;
     }
 
     /**
-     * @param silver the silver to set
+     * @param lead the lead to set
      */
-    public void setSilver(int silver) {
-        this.silver = silver;
+    public void setLead(int lead) {
+        this.lead = lead;
     }
 
     /**
-     * @return the bronze
+     * @return the carbon
      */
-    public int getBronze() {
-        return bronze;
+    public int getCarbon() {
+        return carbon;
     }
 
     /**
-     * @param bronze the bronze to set
+     * @param carbon the carbon to set
      */
-    public void setBronze(int bronze) {
-        this.bronze = bronze;
+    public void setCarbon(int carbon) {
+        this.carbon = carbon;
     }
 
     /**
-     * @return the iron
+     * @return the zinc
      */
-    public int getIron() {
-        return iron;
+    public int getZinc() {
+        return zinc;
     }
 
     /**
-     * @param iron the iron to set
+     * @param zinc the zinc to set
      */
-    public void setIron(int iron) {
-        this.iron = iron;
+    public void setZinc(int zinc) {
+        this.zinc = zinc;
     }
 
     /**
@@ -166,31 +164,31 @@ public class Metal implements Serializable {
     }
 
     /**
-     * @return the titanium
+     * @return the manganese
      */
-    public int getTitanium() {
-        return titanium;
+    public int getManganese() {
+        return manganese;
     }
 
     /**
-     * @param titanium the titanium to set
+     * @param manganese the manganese to set
      */
-    public void setTitanium(int titanium) {
-        this.titanium = titanium;
+    public void setManganese(int manganese) {
+        this.manganese = manganese;
     }
 
     /**
-     * @return the platinium
+     * @return the nickel
      */
-    public int getPlatinium() {
-        return platinium;
+    public int getNickel() {
+        return nickel;
     }
 
     /**
-     * @param platinium the platinium to set
+     * @param nickel the nickel to set
      */
-    public void setPlatinium(int platinium) {
-        this.platinium = platinium;
+    public void setNickel(int nickel) {
+        this.nickel = nickel;
     }
 
     /**
@@ -208,32 +206,33 @@ public class Metal implements Serializable {
     }
 
     /**
-     * @return the topaz
+     * @return the silicon
      */
-    public int getTopaz() {
-        return topaz;
+    public int getSilicon() {
+        return silicon;
     }
 
     /**
-     * @param topaz the topaz to set
+     * @param silicon the silicon to set
      */
-    public void setTopaz(int topaz) {
-        this.topaz = topaz;
+    public void setSilicon(int silicon) {
+        this.silicon = silicon;
     }
 
     /**
-     * @return the plastic
+     * @return the iron
      */
-    public int getPlastic() {
-        return plastic;
+    public int getIron() {
+        return iron;
     }
 
     /**
-     * @param plastic the plastic to set
+     * @param iron the iron to set
      */
-    public void setPlastic(int plastic) {
-        this.plastic = plastic;
+    public void setIron(int iron) {
+        this.iron = iron;
     }
+
 
     
 }

@@ -29,6 +29,6 @@ public class redirector {
     }
 
     public void employeeTraining() throws IOException {
-        FacesContext.getCurrentInstance().getExternalContext().redirect("/HiYewInternalWeb/HRMS/addTrainingSchedule.xhtml");
+        FacesContext.getCurrentInstance().getExternalContext().redirect("/HiYewInternalWeb/hrms-add-training-schedule.xhtml");
     }
 }

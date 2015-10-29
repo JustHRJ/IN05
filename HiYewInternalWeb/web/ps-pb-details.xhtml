@@ -1,0 +1,87 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                template="./template.xhtml">
+
+    <ui:define name="content">
+        <!-- Page header -->
+        <div class="page-heading animated fadeInDownBig" style="padding:20px!important;padding-bottom:10px!important;">
+            <h1>View Procurement Bid Details <small>Procurement Bid Management</small></h1>
+        </div>
+        <!-- End page header -->
+        <div style="padding:20px!important;padding-top:0px!important;">
+            <h:form id="formMain"> 
+                <p:growl id="message" showDetail="true" />
+
+
+                <p:panel id="pbResultPanel" header="View Bidding Result of Bid Batch Reference: #{pbDetailsManagedBean.selectedBidRefNum}" style="margin-bottom:20px;text-align: center">
+                    <p:dataTable var="pb" value="#{pbDetailsManagedBean.quotedList}" widgetVar="pbsTable"  rowStyleClass="#{pb.quotedPrice eq pbDetailsManagedBean.cheapestBid ? 'highlight1' : 'highlight2'}"
+                                 emptyMessage="No result found with given criteria" filteredValue="#{pbDetailsManagedBean.filteredPBs}" 
+                                 rows="10"
+                                 paginator="true"
+                                 paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                 rowsPerPageTemplate="5,10,15">
+
+
+
+
+                        <p:column filterBy="#{pb.companyName}" sortBy="#{pb.companyName}" headerText="Quoted By" footerText="contains" filterMatchMode="contains">
+                            <h:outputText value="#{pb.companyName}">
+                            </h:outputText>
+                        </p:column>
+
+                        <p:column sortBy="#{pb.quotedPrice}" headerText="Quoted Price" >
+                            <h:outputText value="#{pb.quotedPrice}">
+                            </h:outputText>
+                        </p:column>
+
+                        <p:column headerText="Bid Status" >
+                            <h:outputText value="#{pb.ifAccept}">
+                            </h:outputText>
+                        </p:column>
+
+                        <p:column style="text-align: center">
+                            <p:commandButton  value="Accept" action="#{pbDetailsManagedBean.acceptPB(pb)}" disabled="#{pbDetailsManagedBean.disableAcceptButton}" update="formMain:pbResultPanel" />
+
+                        </p:column>
+
+
+
+                    </p:dataTable>
+                </p:panel>
+
+                <p:panel id="pbPendingPanel" header="Bid Not Quoted" toggleable="true" toggleSpeed="500" closeSpeed="500" style="margin-bottom:20px;text-align:center "  collapsed="true">
+                    <p:dataTable var="pb" value="#{pbDetailsManagedBean.pendingList}" widgetVar="pbsTable" 
+                                 emptyMessage="No result found with given criteria" filteredValue="#{pbDetailsManagedBean.filteredPBs}" 
+                                 rows="10"
+                                 paginator="true"
+                                 paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                 rowsPerPageTemplate="5,10,15">
+
+
+
+
+                        <p:column filterBy="#{pb.companyName}" sortBy="#{pb.companyName}" headerText="Quoted By" footerText="contains" filterMatchMode="contains" style="text-align: center">
+                            <h:outputText value="#{pb.companyName}">
+                            </h:outputText>
+                        </p:column>
+
+
+                        <p:column headerText="Bid Status" style="text-align: center">
+                            <h:outputText value="#{pb.ifAccept}">
+                            </h:outputText>
+                        </p:column>
+
+
+
+                    </p:dataTable>
+                </p:panel>
+            </h:form>
+        </div>
+    </ui:define>
+
+</ui:composition>
