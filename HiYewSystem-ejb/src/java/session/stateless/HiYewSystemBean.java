@@ -1301,6 +1301,7 @@ public class HiYewSystemBean implements HiYewSystemBeanLocal {
                 xin.setEmployee_passExpiry(expiry);
                 xin.setEmployee_contact(contact);
                 xin.setEmailAddress(email);
+                xin.setAvailability(true);
                 xin.setAccount_status("firstTime");
                 xin.setEmployee_basic(employeePay);
                 Timestamp time = new Timestamp(employedDate.getTime());

@@ -78,7 +78,7 @@ public class ProjectSessionBean implements ProjectSessionBeanLocal {
     @Override
     public Integer getSimilarPastProjectDuration(String metal1, String metal2) {
         System.out.println("getSimilarPastProjectDuration: Start");
-        Integer days = -1;
+        Integer days = 0;
         //find projects with two similar metals for welding 
         Query query = em.createQuery("Select w FROM WeldJob AS w where w.project.projectCompletion = true AND "
                 + "( (w.metal1=:metal1 OR w.metal1=:metal2) AND (w.metal2=:metal1 OR w.metal2=:metal2) ) ");
@@ -96,19 +96,22 @@ public class ProjectSessionBean implements ProjectSessionBeanLocal {
 
             projects = query.getResultList();
         }
+        int avgDays = 0;
         //if there are references to such projects, we get the longest duration among these projects
         if (!projects.isEmpty()) {
-            //get the longest duration from these projects (ActualEnd - ActualStart)
+            //get the average duration from these projects (ActualEnd - ActualStart)
             for (Project p : projects) {
-                if (days == -1) {
-                    days = getDifferenceDays(p.getActualStart(), p.getActualEnd());
-                }
-                if (days < getDifferenceDays(p.getActualStart(), p.getActualEnd())) {
-                    days = getDifferenceDays(p.getActualStart(), p.getActualEnd());
-                }
+                //if (days == -1) {
+                //    days = getDifferenceDays(p.getActualStart(), p.getActualEnd());
+                //}
+                //if (days < getDifferenceDays(p.getActualStart(), p.getActualEnd())) {
+                //    days = getDifferenceDays(p.getActualStart(), p.getActualEnd());
+                //}
+                days += getDifferenceDays(p.getActualStart(), p.getActualEnd());
             }
-        }System.out.println("getSimilarPastProjectDuration: End; days = " + days);
-        return days;
+        }
+        avgDays = days / projects.size();
+        return avgDays;
     }
 
     //get project with earliest completion date
@@ -191,7 +194,7 @@ public class ProjectSessionBean implements ProjectSessionBeanLocal {
                 for (int j = 0; j < projects.get(i).getWeldJobs().size(); j++) {
                     weldJobs.add(projects.get(i).getWeldJobs().get(j));
                 }
-            }System.out.println("receivedWeldJobs - size: " + weldJobs.size() + " " + weldJobs.get(0).getProjectNo());
+            }//System.out.println("receivedWeldJobs - size: " + weldJobs.size() + " " + weldJobs.get(0).getProjectNo());
             return weldJobs; 
         } else {
             return null;

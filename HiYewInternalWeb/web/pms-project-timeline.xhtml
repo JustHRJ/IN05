@@ -76,13 +76,13 @@
         </style>
         <!-- Page header -->
         <div class="page-heading animated fadeInDownBig" style="padding:20px!important;padding-bottom:10px!important;">
-            <h1>Project Timeline <small>Project System</small></h1>
+            <h1>Project Timeline<small>Project System</small></h1>
         </div>
         <!-- End page header -->
         <div style="padding:20px!important;padding-top:0px!important;">
             <h:form id="form">
                 <p:growl id="growl" showSummary="true" showDetail="true" autoUpdate="true"/>  
-                <h3 align="center"><i>Projects Viewer by its Actual Start and Planned End.</i></h3>
+                <h3 align="center"><i>Project Timeline By Welding Progress</i></h3>
 
                 <pe:timeline id="timeline" value="#{projectManagedbean.model}"
                              editable="false" eventMargin="10" eventMarginAxis="10"
@@ -92,7 +92,11 @@
                              showNavigation="true" showButtonNew="false"
                              axisOnTop="true" stackEvents="true"/>
 
-                <p ><b>Green Flag:</b> Actual End is earlier than the Planned End<br /><b>Red Flag:</b> Ongoing projects not ready to dispense labors and machines.</p>
+                <p ><b>Green Flag:</b> Ahead of Schedule<br />
+                    <b>Red Flag:</b> Behind Schedule<br />
+                    <b>Orange Flag:</b> Schedule On Track<br />
+                    <b>Grey Flag:</b> Projects not started<br />
+                </p>
             </h:form>
         </div>
     </ui:define>
