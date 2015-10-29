@@ -42,8 +42,12 @@ public interface ProjectSessionBeanLocal {
 
     public void conductMerge(Project p);
 
-    public List<Project> getUncompletedProjects();
+    public List<Project> getAllProjects();
 
     public Integer getDifferenceDays(Timestamp t1, Timestamp t2);
+
+    public List<Project> getUncompletedProjects();
+
+    public List<WeldJob> getWeldJobs(Project p);
     
 }

@@ -136,7 +136,7 @@ public class KnowledgeSystemBean implements KnowledgeSystemBeanLocal {
             results.add(f.getFillerName());
         }
         if (results.isEmpty()) {
-            return null;
+            return results;
         } else {
             return results;
         }
@@ -283,11 +283,14 @@ public class KnowledgeSystemBean implements KnowledgeSystemBeanLocal {
         for (Object o : q.getResultList()) {
             FillerComposition f = (FillerComposition) o;
             em.remove(f);
+            
         }
+        em.flush();
         if (fillers != null) {
             for (Object o : fillers) {
                 Vector im = (Vector) o;
                 FillerComposition f = new FillerComposition();
+                f.setId((String)im.get(0));
                 f.setName((String) im.get(1));
                 f.setCopper(Integer.parseInt(im.get(2).toString()));
                 f.setZinc(Integer.parseInt(im.get(3).toString()));

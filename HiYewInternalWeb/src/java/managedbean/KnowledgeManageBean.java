@@ -249,13 +249,13 @@ public class KnowledgeManageBean implements Serializable {
     }
 
     public void readFile() throws IOException {
-        setInputFile("C:\\Users\\K.guoxiang\\Desktop\\Book1.xls");
+        setInputFile("C:\\Users\\User\\Desktop\\Book1.xls");
         List<Vector> result = read();
         knowledgeSystemBean.addFillers(result);
     }
 
     public void readFile2() throws IOException {
-        setInputFile("C:\\Users\\K.guoxiang\\Desktop\\Book1.xls");
+        setInputFile("C:\\Users\\User\\Desktop\\Book1.xls");
         List<Vector> result = read2();
         knowledgeSystemBean.addMetal(result);
     }
@@ -297,7 +297,7 @@ public class KnowledgeManageBean implements Serializable {
     }
 
     public void writeFile() throws IOException, WriteException, BiffException {
-        setInputFile("C:\\Users\\K.guoxiang\\Desktop\\Book1.xls");
+        setInputFile("C:\\Users\\User\\Desktop\\Book1.xls");
         write();
     }
 
@@ -323,13 +323,13 @@ public class KnowledgeManageBean implements Serializable {
     }
 
     public void writeFile2() throws IOException, WriteException, BiffException {
-        setInputFile("C:\\Users\\K.guoxiang\\Desktop\\Book1.xls");
+        setInputFile("C:\\Users\\User\\Desktop\\Book1.xls");
         fillerList();
         write2();
     }
 
     public void writeFile3() throws IOException, WriteException, BiffException {
-        setInputFile("C:\\Users\\K.guoxiang\\Desktop\\Book1.xls");
+        setInputFile("C:\\Users\\User\\Desktop\\Book1.xls");
         metalList();
         write3();
     }
@@ -667,7 +667,7 @@ public class KnowledgeManageBean implements Serializable {
     }
 
     public void readFile3() throws IOException {
-        setInputFile("C:\\Users\\K.guoxiang\\Desktop\\Book1.xls");
+        setInputFile("C:\\Users\\User\\Desktop\\Book1.xls");
         List<Vector> result = read3();
         knowledgeSystemBean.addMatch(result);
     }
@@ -709,7 +709,7 @@ public class KnowledgeManageBean implements Serializable {
     }
 
     public void writeFile4() throws IOException, WriteException, BiffException {
-        setInputFile("C:\\Users\\K.guoxiang\\Desktop\\Book1.xls");
+        setInputFile("C:\\Users\\User\\Desktop\\Book1.xls");
         metalMatchingList();
         write4();
     }

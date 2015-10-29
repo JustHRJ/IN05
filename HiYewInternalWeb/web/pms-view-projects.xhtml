@@ -1,0 +1,95 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                template="./template.xhtml">
+
+    <ui:define name="content">
+        
+         <style>
+            .highlight1 {
+                background: salmon;
+            }
+            .highlight2 {
+
+            }
+             </style>
+        
+        <!-- Page header -->
+        <div class="page-heading animated fadeInDownBig" style="padding:20px!important;padding-bottom:10px!important;">
+            <h1>View Projects<small>Project Management</small></h1>
+        </div>
+        <!-- End page header -->
+        <div style="padding:20px!important;padding-top:0px!important;">
+            <h:form id="formMain">
+                <p:messages id="pMsg"  showDetail="false" />
+                <p:commandButton value="Refresh" action="#{projManagedBean.receivedProjects}"  update="pMsg rcvProject" icon="" style="padding-top: 5px; padding-bottom: 5px; padding-left: 22px; padding-right: 22px" />
+                    <br /><br />
+                    <p:dataTable value="#{projManagedBean.receivedProjects}"  widgetVar="projsTable" var="pItem" id="rcvProject" editable="true" emptyMessage="No records" filteredValue="#{projManagedBean.filteredProj}" 
+                                 rowStyleClass="#{projManagedBean.compareActualEndAndPlannedEnd(pItem.projectCompletion, pItem.actualEnd, pItem.plannedEnd) lt 0 ? 'highlight1' : 'highlight2'}">
+                        <p:column style="font-weight: bold"  headerText="Project No" width="15%">
+                            <p:outputLabel style="font-weight: normal" value="#{pItem.projectNo}"/>
+                        </p:column>
+                        <p:column style="font-weight: bold" sortBy="#{projManagedBean.formatDate(pItem.actualStart)}" headerText="Actual Start Date (dd/mm/yyyy)" width="11%">
+                            <h:outputText style="font-weight: normal" value="#{projManagedBean.formatDate(pItem.actualStart) eq '' ? 'N.A' : projManagedBean.formatDate(pItem.actualStart)}"/>
+                        </p:column>
+                        <p:column style="font-weight: bold" sortBy="#{projManagedBean.formatDate(pItem.actualEnd)}" headerText="Actual End Date (dd/mm/yyyy)" width="11%">
+                            <h:outputText style="font-weight: normal" value="#{projManagedBean.formatDate(pItem.actualEnd) eq '' ? 'N.A' :  projManagedBean.formatDate(pItem.actualEnd)}"/>
+                        </p:column>
+                        <p:column style="font-weight: bold" sortBy="#{projManagedBean.formatDate(pItem.plannedStart)}" headerText="Planned Start Date (dd/mm/yyyy)" width="11%">
+                            <h:outputText style="font-weight: normal" value="#{projManagedBean.formatDate(pItem.plannedStart)}"/>
+                        </p:column>
+                        <p:column style="font-weight: bold" sortBy="#{projManagedBean.formatDate(pItem.plannedEnd)}" headerText="Planned End Date (dd/mm/yyyy)" width="11%">
+                            <h:outputText style="font-weight: normal" value="#{projManagedBean.formatDate(pItem.plannedEnd)}"/>
+                        </p:column>
+                        <p:column style="font-weight: bold" headerText="Customer Name" width="8%">
+                            <h:outputText style="font-weight: normal" value="#{projManagedBean.getCustomerName(pItem.customerKey)}"/>
+                        </p:column>
+                        <p:column style="font-weight: bold" filterBy="#{projManagedBean.getProjectStatus(pItem.projectCompletion)}" headerText="Project Completion" width="10%">
+                            <f:facet name="filter">
+                            <p:selectOneButton onchange="PF('projsTable').filter()">
+                                <f:selectItem itemLabel="All" itemValue="" />
+                                <f:selectItem itemLabel="Y" itemValue="Y" />
+                                <f:selectItem itemLabel="N" itemValue="N" />
+                            </p:selectOneButton>
+                        </f:facet>
+                            <h:outputText style="font-weight: normal" value="#{projManagedBean.getProjectStatus(pItem.projectCompletion)}"/>
+                        </p:column>
+                        <p:column style="font-weight: bold" headerText="Duration (days)" width="8%">
+                            <h:outputText style="font-weight: normal" value="#{projManagedBean.getDurationForCompletedProjects(pItem.projectCompletion,pItem.actualStart,pItem.actualEnd)}"/>
+                        </p:column>
+                        
+                        
+                        <p:column style="font-weight: bold" headerText="View" width="5%" >
+                            
+                            <p:commandButton id="weldJobBtn" icon="ui-icon-search" title="View" update="WeldJobPanel" action="#{projManagedBean.selectProject(pItem)}" style="padding-top: 5px; padding-bottom: 5px; padding-left: 5px; padding-right: 5px"/>
+                            
+                            <p:overlayPanel for="weldJobBtn" showEffect="fade" hideEffect="fade" dismissable="false" showCloseIcon="true" style="width:800px">
+                                <p:outputPanel id="WeldJobPanel" style="text-align:center;" >
+                                    <p:dataTable var="wItem" value="#{projManagedBean.receivedWeldJobs}" rows="5" paginator="true">
+                                        
+                                        <p:column headerText="Metal 1" width="15%">
+                                            <h:outputText value="#{wItem.metal1}" />
+                                        </p:column>
+
+                                        <p:column headerText="Metal 2" width="15%">
+                                            <h:outputText value="#{wItem.metal2}" />
+                                        </p:column>
+                                        <p:column headerText="Weld. Job Engineer" width="25%">
+                                            <h:outputText value="#{wItem.empName}" />
+                                        </p:column>
+                                    </p:dataTable>
+                                </p:outputPanel>
+                            </p:overlayPanel>
+                        </p:column>
+                        
+                        
+                    </p:dataTable>
+            </h:form>
+        </div>
+    </ui:define>
+
+</ui:composition>
