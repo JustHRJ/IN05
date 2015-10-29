@@ -2741,7 +2741,7 @@ public class HiYewSystemBean implements HiYewSystemBeanLocal {
         for (Object o : q.getResultList()) {
             Metal f = (Metal) o;
             Vector im = new Vector();
-            im.add(f.getId());
+            //im.add(f.getId());
             im.add(f.getMetalName());
             im.add(f.getAluminium());
             im.add(f.getBronze());
@@ -2855,7 +2855,7 @@ public class HiYewSystemBean implements HiYewSystemBeanLocal {
             for (Object o : metals) {
                 Vector im = (Vector) o;
                 Metal f = new Metal();
-                f.setId(im.get(0).toString());
+                //f.setId(im.get(0).toString());
                 f.setMetalName(im.get(1).toString());
                 f.setAluminium(Integer.parseInt(im.get(2).toString()));
                 f.setBronze(Integer.parseInt(im.get(3).toString()));
@@ -2902,7 +2902,7 @@ public class HiYewSystemBean implements HiYewSystemBeanLocal {
         if (metal == null) {
             System.out.println("no metal to delete");
         } else {
-            String id = metal.getId();
+            String id = metal.getMetalName();
             Metal m = em.find(Metal.class, id);
             if (m == null) {
                 System.out.println("entity failed to find id of metal");
@@ -2963,7 +2963,7 @@ public class HiYewSystemBean implements HiYewSystemBeanLocal {
                 fillers.add(f);
             }
             System.out.println("error here3");
-            m.setFillers(fillers);
+            //m.setFillers(fillers);
             System.out.println("error here4");
             em.merge(m);
             System.out.println("Pairing created");

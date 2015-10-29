@@ -19,9 +19,9 @@ public class CustomerPO implements Serializable {
     private String customerRefPoNumber; //provided by customer in case they choose to have their own po number instead
 
     private Timestamp poDate;
-    private Timestamp expectedStartDate;
-    private Timestamp expectedEndDate;
-
+    //private Timestamp expectedStartDate;
+    //private Timestamp expectedEndDate;
+    private Timestamp deliveryDate;
     //Assumptions: Not possible for customer to self-collect
     private String mailingAddr1; //street name
     private String mailingAddr2; //unit no
@@ -36,11 +36,11 @@ public class CustomerPO implements Serializable {
         poDate = new Timestamp(Calendar.getInstance().getTime().getTime());
     }
 
-    public CustomerPO(String poId, String customerRefPoNumber ,Timestamp expectedStartDate, Timestamp expectedEndDate, String mailingAddr1, String mailingAddr2, Double totalPrice, Quotation quotation, Customer customer) {
+    public CustomerPO(String poId, String customerRefPoNumber , String mailingAddr1, String mailingAddr2, Double totalPrice, Quotation quotation, Customer customer) {
         this.poId = poId;
         this.poDate = new Timestamp(Calendar.getInstance().getTime().getTime());
-        this.expectedStartDate = expectedStartDate;
-        this.expectedEndDate = expectedEndDate;
+        //this.expectedStartDate = expectedStartDate;
+        //this.expectedEndDate = expectedEndDate;
         this.mailingAddr1 = mailingAddr1;
         this.mailingAddr2 = mailingAddr2;
         this.totalPrice = totalPrice;
@@ -103,34 +103,6 @@ public class CustomerPO implements Serializable {
      */
     public void setPoDate(Timestamp poDate) {
         this.poDate = poDate;
-    }
-
-    /**
-     * @return the expectedStartDate
-     */
-    public Timestamp getExpectedStartDate() {
-        return expectedStartDate;
-    }
-
-    /**
-     * @param expectedStartDate the expectedStartDate to set
-     */
-    public void setExpectedStartDate(Timestamp expectedStartDate) {
-        this.expectedStartDate = expectedStartDate;
-    }
-
-    /**
-     * @return the expectedEndDate
-     */
-    public Timestamp getExpectedEndDate() {
-        return expectedEndDate;
-    }
-
-    /**
-     * @param expectedEndDate the expectedEndDate to set
-     */
-    public void setExpectedEndDate(Timestamp expectedEndDate) {
-        this.expectedEndDate = expectedEndDate;
     }
 
     /**
@@ -215,6 +187,20 @@ public class CustomerPO implements Serializable {
      */
     public void setCustomerRefPoNumber(String customerRefPoNumber) {
         this.customerRefPoNumber = customerRefPoNumber;
+    }
+
+    /**
+     * @return the deliveryDate
+     */
+    public Timestamp getDeliveryDate() {
+        return deliveryDate;
+    }
+
+    /**
+     * @param deliveryDate the deliveryDate to set
+     */
+    public void setDeliveryDate(Timestamp deliveryDate) {
+        this.deliveryDate = deliveryDate;
     }
 
 }

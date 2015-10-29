@@ -13,4 +13,6 @@ public interface CustomerPOSessionBeanLocal {
 
     public List<CustomerPO> receivedCustomerPO(String username);
 
+    public List<CustomerPO> getCustomerPOsByYear(Integer year);
+
 }

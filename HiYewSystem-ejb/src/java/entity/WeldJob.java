@@ -10,6 +10,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 
 /**
  *
@@ -23,16 +25,38 @@ public class WeldJob implements Serializable {
     private Integer weldJobId;
     private String projectNo; // id from project
     private String empName; // 
-    private Integer machineId; // id from machine
+    //private Integer machineId; // id from machine
     private String metal1; // id from metal entity
     private String metal2; // id from metal entity
-    private String fillerCode; //id from filler entity
-    private Double SurfaceArea;
+    //private String fillerCode; //id from filler entity
+    private Double surfaceArea;
 
     //Design the association after justin and gx have linked up itementity and filler entity
     //change itemEntity to filler and fillerentity to fillerComposition
     //@gx: change your itemCode to fillerCode
     //I am waiting; It's a simple job don't drag; update the report too
+    @ManyToOne
+    private Project project;
+    @OneToOne
+    private MachineEntity machine;
+    @OneToOne()
+    private FillerEntity filler;
+
+    public WeldJob() {
+    }
+
+    public WeldJob(Integer weldJobId, String projectNo, String empName, Integer machineId, String metal1, String metal2, String fillerCode, Double SurfaceArea, Project project, FillerEntity filler) {
+        this.weldJobId = weldJobId;
+        this.projectNo = projectNo;
+        this.empName = empName;
+        //this.machineId = machineId;
+        this.metal1 = metal1;
+        this.metal2 = metal2;
+        //this.fillerCode = fillerCode;
+        this.surfaceArea = SurfaceArea;
+        this.project = project;
+        this.filler = filler;
+    }
     
     public Integer getWeldJobId() {
         return weldJobId;
@@ -42,7 +66,6 @@ public class WeldJob implements Serializable {
         this.weldJobId = weldJobId;
     }
     
-
     @Override
     public int hashCode() {
         int hash = 0;
@@ -96,33 +119,19 @@ public class WeldJob implements Serializable {
         this.empName = empName;
     }
 
-    /**
-     * @return the machineId
-     */
-    public Integer getMachineId() {
-        return machineId;
-    }
-
-    /**
-     * @param machineId the machineId to set
-     */
-    public void setMachineId(Integer machineId) {
-        this.machineId = machineId;
-    }
-
 
     /**
      * @return the SurfaceArea
      */
     public Double getSurfaceArea() {
-        return SurfaceArea;
+        return surfaceArea;
     }
 
     /**
      * @param SurfaceArea the SurfaceArea to set
      */
-    public void setSurfaceArea(Double SurfaceArea) {
-        this.SurfaceArea = SurfaceArea;
+    public void setSurfaceArea(Double surfaceArea) {
+        this.surfaceArea = surfaceArea;
     }
 
     /**
@@ -151,6 +160,48 @@ public class WeldJob implements Serializable {
      */
     public void setMetal2(String metal2) {
         this.metal2 = metal2;
+    }
+
+    /**
+     * @return the project
+     */
+    public Project getProject() {
+        return project;
+    }
+
+    /**
+     * @param project the project to set
+     */
+    public void setProject(Project project) {
+        this.project = project;
+    }
+
+    /**
+     * @return the filler
+     */
+    public FillerEntity getFiller() {
+        return filler;
+    }
+
+    /**
+     * @param filler the filler to set
+     */
+    public void setFiller(FillerEntity filler) {
+        this.filler = filler;
+    }
+
+    /**
+     * @return the machine
+     */
+    public MachineEntity getMachine() {
+        return machine;
+    }
+
+    /**
+     * @param machine the machine to set
+     */
+    public void setMachine(MachineEntity machine) {
+        this.machine = machine;
     }
     
 }

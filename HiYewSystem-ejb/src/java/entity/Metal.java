@@ -10,10 +10,9 @@ import java.util.ArrayList;
 import java.util.Collection;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
+import javax.swing.Box.Filler;
 
 /**
  *
@@ -23,7 +22,6 @@ import javax.persistence.ManyToMany;
 public class Metal implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
-    private String id;
     private String metalName;
     private int gold;
     private int silver;
@@ -35,19 +33,21 @@ public class Metal implements Serializable {
     private int aluminium;
     private int topaz;
     private int plastic;
-    private Collection<FillerComposition> fillers = new ArrayList<FillerComposition>();
+    
+    @OneToMany(cascade ={CascadeType.ALL})
+    private Collection <FillerEntity> fillers = new ArrayList<>();
     
     public Metal() {
     }
 
     
-    @ManyToMany(cascade ={CascadeType.ALL})
-    public Collection<FillerComposition> getFillers(){
+    
+    public Collection<FillerEntity> getFillers(){
         return fillers;
     }
     
     
-    public void setFillers(Collection<FillerComposition> fillers){
+    public void setFillers(Collection<FillerEntity> fillers){
         this.fillers = fillers;
     }
     
@@ -235,18 +235,5 @@ public class Metal implements Serializable {
         this.plastic = plastic;
     }
 
-    /**
-     * @return the id
-     */
-    public String getId() {
-        return id;
-    }
-
-    /**
-     * @param id the id to set
-     */
-    public void setId(String id) {
-        this.id = id;
-    }
     
 }

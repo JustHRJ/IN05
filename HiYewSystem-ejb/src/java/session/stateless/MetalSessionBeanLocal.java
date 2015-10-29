@@ -17,5 +17,7 @@ import javax.ejb.Local;
 public interface MetalSessionBeanLocal {
 
     public List<String> getMetalBySubString(String str);
+
+    public Metal getMetalByName(String metalName);
     
 }

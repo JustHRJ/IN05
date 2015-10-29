@@ -7,25 +7,57 @@ package entity;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.List;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 
 /**
  *
- * @author Jitcheong
+ * @author: Jitcheong
  */
 @Entity
 public class Project implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
     private String projectNo;
+    private String customerKey;
     private Timestamp actualStart;
     private Timestamp actualEnd;
     private Timestamp plannedStart;
     private Timestamp plannedEnd;
     private Timestamp latestStart;
     private Timestamp latestEnd;
+    private Boolean projectCompletion;
+    
+    //private Boolean projectOverrun;
+    //private Integer projectDaysExceed;
+    //private String causeOfDelay;
+    //private String takeAway;
+    //private Integer daysDiffFromActualAndPlannedStart;
+    //private Integer daysDiffFromActualAndPlannedEnd;
+            
     private String projectManager; //if applicable
+    
+    @OneToMany(mappedBy = "project")
+    private List <WeldJob> weldJobs = new ArrayList<>();
+    
+
+    public Project() {
+    }
+
+    public Project(String projectNo, Timestamp actualStart, Timestamp actualEnd, Timestamp plannedStart, Timestamp plannedEnd, Timestamp latestStart, Timestamp latestEnd, String projectManager) {
+        this.projectNo = projectNo;
+        this.actualStart = actualStart;
+        this.actualEnd = actualEnd;
+        this.plannedStart = plannedStart;
+        this.plannedEnd = plannedEnd;
+        this.latestStart = latestStart;
+        this.latestEnd = latestEnd;
+        this.projectManager = projectManager;
+
+    }
 
     public String getProjectNo() {
         return projectNo;
@@ -34,10 +66,7 @@ public class Project implements Serializable {
     public void setProjectNo(String projectNo) {
         this.projectNo = projectNo;
     }
-    
-    
-    
-
+   
     @Override
     public int hashCode() {
         int hash = 0;
@@ -159,6 +188,52 @@ public class Project implements Serializable {
      */
     public void setProjectManager(String projectManager) {
         this.projectManager = projectManager;
+    }
+
+    /**
+     * @return the projectCompletion
+     */
+    public Boolean getProjectCompletion() {
+        return projectCompletion;
+    }
+
+    /**
+     * @param projectCompletion the projectCompletion to set
+     */
+    public void setProjectCompletion(Boolean projectCompletion) {
+        this.projectCompletion = projectCompletion;
+    }
+
+    /**
+     * @return the weldJobs
+     */
+    public List <WeldJob> getWeldJobs() {
+        return weldJobs;
+    }
+
+    /**
+     * @param weldJobs the weldJobs to set
+     */
+    public void setWeldJobs(List <WeldJob> weldJobs) {
+        this.weldJobs = weldJobs;
+    }
+
+    public void addWeldJobs(WeldJob weldJob) {
+        this.weldJobs.add(weldJob);
+    }
+
+    /**
+     * @return the customerKey
+     */
+    public String getCustomerKey() {
+        return customerKey;
+    }
+
+    /**
+     * @param customerKey the customerKey to set
+     */
+    public void setCustomerKey(String customerKey) {
+        this.customerKey = customerKey;
     }
     
 }
