@@ -16,7 +16,7 @@
         <div style="padding:20px!important;padding-top:0px!important;">
             <h:form id="upperForm">
                 <p:growl id="message" showDetail="true" />
-                <p:messages  id="upperMessages" autoUpdate="false"/>
+                <p:messages id="upperMessages" showDetail="true" autoUpdate="false"/>
                 <p:panel id="itemDetailsPanel" header="Item Details (Click values for editing)" toggleable="true" toggleSpeed="500" closeSpeed="500">
                     <p:panelGrid id="itemDetailsGrid">
                         <p:row style="vertical-align:bottom">
@@ -181,7 +181,7 @@
                     <br />
                     <p:commandButton value="Update Item Details" update="upperForm" icon="ui-icon-check" action="#{itemDetailsManagedBean.updateItemDetails}"/>
                     <p:commandButton  value="Procurement Request" action="#{itemDetailsManagedBean.passSelectedItemToNext()}" />    
-                    <p:commandButton value="Delete Item" action="#{itemDetailsManagedBean.deleteItem}" update="message">
+                    <p:commandButton value="Delete Item" action="#{itemDetailsManagedBean.deleteItem}" update="upperMessages">
                         <p:confirm header="Deletion Confirmation" message="Are you sure you want to delete item #{itemDetailsManagedBean.selectedItem.fillerCode}?" icon="ui-icon-alert" />
                     </p:commandButton>
                     <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
@@ -218,12 +218,12 @@
                 <p:messages id="lowerMessages" showDetail="false" autoUpdate="false" closable="true" />
                 <p:panel id="stockInOutPanel" header="Stock In/Out" toggleable="true" toggleSpeed="500" closeSpeed="500" style="margin-bottom:20px"  collapsed="#{itemDetailsManagedBean.showInOuttPanel}">
                     <h:panelGrid id= "stockInOutGrid" columns="1" cellpadding="10">
-                        <br />
+                        
                         <p:panel id="activityPanel" style="border:none">
                             <h:panelGrid id= "activityPanelGrid" columns="3" cellpadding="10">
-                                <h:outputLabel for="action" value="Choose an activity: " style="font-weight:bold"/>&nbsp;
+                                <h:outputLabel for="action" value="Choose an activity: " style="font-weight:bold"/>
                                 <h:selectOneRadio id="action" value="#{itemDetailsManagedBean.activityChoice}" required="true" requiredMessage="Please select either Stock Incoming or Stock Outgoing!" >
-                                    <p:ajax event = "click" listener="#{itemDetailsManagedBean.clickEventHandler}" update="@form"/>
+                                    <p:ajax listener="#{itemDetailsManagedBean.clickEventHandler}" update="@form"/>
                                     <f:selectItem itemLabel="Incoming" itemValue="stockIn" />
                                     <f:selectItem itemLabel="Outgoing" itemValue="stockOut" />
                                 </h:selectOneRadio>
