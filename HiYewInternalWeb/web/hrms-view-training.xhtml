@@ -27,7 +27,7 @@
                     <p:column headerText="Training Name">
                         <p:outputLabel value ="#{im.trainingName}"/>
                     </p:column>
-                    <p:column headerText="Trainging Start Date">
+                    <p:column headerText="Training Start Date">
                         <p:cellEditor>
                             <f:facet name ="output"><p:outputLabel value ="#{hiYewManagedBean.formatDate(im.trainingStartDate)}"/></f:facet>
                             <f:facet name ="input"><p:calendar value = "#{hiYewManagedBean.trainingStartDate}" mindate="#{hiYewManagedBean.getToday()}" pattern="dd/MM/yyyy" />  </f:facet>

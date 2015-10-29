@@ -1,0 +1,276 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                template="./template.xhtml">
+
+    <ui:define name="content">
+        <!-- Page header -->
+        <div class="page-heading animated fadeInDownBig" style="padding:20px!important;padding-bottom:10px!important;">
+            <h1>Add Knowledge <small>Knowledge Management</small></h1>
+        </div>
+        <!-- End page header -->
+        <div style="padding:20px!important;padding-top:0px!important;">
+            <h:form id ="formMain">
+
+
+                <h:selectOneMenu value ="#{knowledgeManageBean.knowledge}">
+                    <f:selectItem itemValue="Select One" itemLabel ="Select One"/>
+                    <f:selectItem itemValue ="Filler" itemLabel ="Filler"/>
+                    <f:selectItem itemValue ="Metal" itemLabel ="Metal"/>
+                </h:selectOneMenu>
+                &nbsp;&nbsp;
+
+                <p:commandButton value ="Add New Knowledge" action = "#{knowledgeManageBean.processAdd}"  update =":form2:panel2"/>
+                <br/><br/><br/><br/>
+            </h:form>
+            <h:form id ="form2">
+                <p:panel id = "panel2" >
+                    <p:growl id ="msgs" />
+                    <p:panelGrid rendered="#{knowledgeManageBean.fillerAdd}">
+                        <p:row>
+                            <p:column>
+                                <p:outputLabel value ="Filler ID"/>
+                            </p:column>
+                            <p:column>
+                                <p:inputText value ="#{knowledgeManageBean.selectedFiller.id}" required = "true" requiredMessage="Plesae input Filler DIN number" validator="#{knowledgeValidator.fillerID}" validatorMessage="Filler ID has been taken"/>
+                            </p:column>
+                        </p:row>
+
+                        <p:row>
+                            <p:column>
+                                <p:outputLabel value ="Filler Name"/>
+                            </p:column>
+                            <p:column>
+                                <p:inputText value ="#{knowledgeManageBean.selectedFiller.name}" required="true" requiredMessage="Please input Filler Name" validator="#{knowledgeValidator.fillerName}" validatorMessage="Filler Name has been taken" />
+                            </p:column>
+                        </p:row>
+                        <p:row>
+                            <p:column>
+                                <p:outputLabel value ="Copper "/>
+                            </p:column>
+                            <p:column>
+                                <p:inputText value ="#{knowledgeManageBean.selectedFiller.copper}" validatorMessage="Please input valid amount - Copper " >
+                                    <f:validateDoubleRange minimum="0" maximum="100"/>
+                                </p:inputText>
+                            </p:column>
+                        </p:row>
+                        <p:row>
+                            <p:column>
+                                <p:outputLabel value ="Zinc"/>
+                            </p:column>
+                            <p:column>
+                                <p:inputText value ="#{knowledgeManageBean.selectedFiller.zinc}" validatorMessage="Please input valid amount - Zinc " >
+                                    <f:validateDoubleRange minimum="0" maximum="100"/>
+                                </p:inputText>
+                            </p:column>
+                        </p:row>
+                        <p:row>
+                            <p:column>
+                                <p:outputLabel value ="Filler Iron"/>
+                            </p:column>
+                            <p:column>
+                                <p:inputText value ="#{knowledgeManageBean.selectedFiller.iron}" validatorMessage="Please input valid amount - Iron " >
+                                    <f:validateDoubleRange minimum="0" maximum="100"/>
+                                </p:inputText>
+                            </p:column>
+                        </p:row>
+                        <p:row>
+                            <p:column>
+                                <p:outputLabel value ="Lead"/>
+                            </p:column>
+                            <p:column>
+                                <p:inputText value ="#{knowledgeManageBean.selectedFiller.lead}" validatorMessage="Please input valid amount - Lead " >
+                                    <f:validateDoubleRange minimum="0" maximum="100"/>
+                                </p:inputText>
+                            </p:column>
+                        </p:row>
+                        <p:row>
+                            <p:column>
+                                <p:outputLabel value ="Aluminium"/>
+                            </p:column>
+                            <p:column>
+                                <p:inputText value ="#{knowledgeManageBean.selectedFiller.aluminium}" validatorMessage="Please input valid amount - Aluminium " >
+                                    <f:validateDoubleRange minimum="0" maximum="100"/>
+                                </p:inputText>
+                            </p:column>
+                        </p:row>
+                        <p:row>
+                            <p:column>
+                                <p:outputLabel value ="Carbon"/>
+                            </p:column>
+                            <p:column>
+                                <p:inputText value ="#{knowledgeManageBean.selectedFiller.carbon}" validatorMessage="Please input valid amount - Carbon " >
+                                    <f:validateDoubleRange minimum="0" maximum="100"/>
+                                </p:inputText>
+                            </p:column>
+                        </p:row>
+                        <p:row>
+                            <p:column>
+                                <p:outputLabel value ="Nickel"/>
+                            </p:column>
+                            <p:column>
+                                <p:inputText value ="#{knowledgeManageBean.selectedFiller.nickel}" validatorMessage="Please input valid amount - Nickel " >
+                                    <f:validateDoubleRange minimum="0" maximum="100"/>
+                                </p:inputText>
+                            </p:column>
+                        </p:row>
+                        <p:row>
+                            <p:column>
+                                <p:outputLabel value ="Chromium"/>
+                            </p:column>
+                            <p:column>
+                                <p:inputText value ="#{knowledgeManageBean.selectedFiller.chromium}" validatorMessage="Please input valid amount - Chromium  " >
+                                    <f:validateDoubleRange minimum="0" maximum="100"/>
+                                </p:inputText>
+                            </p:column>
+                        </p:row>
+                        <p:row>
+                            <p:column>
+                                <p:outputLabel value ="Manganese"/>
+                            </p:column>
+                            <p:column>
+                                <p:inputText value ="#{knowledgeManageBean.selectedFiller.manganese}" validatorMessage="Please input valid amount - Manganese  " >
+                                    <f:validateDoubleRange minimum="0" maximum="100"/>
+                                </p:inputText>
+                            </p:column>
+                        </p:row>
+                        <p:row>
+                            <p:column>
+                                <p:outputLabel value ="Silicon"/>
+                            </p:column>
+                            <p:column>
+                                <p:inputText value ="#{knowledgeManageBean.selectedFiller.silicon}" validatorMessage="Please input valid amount - Silicon " >
+                                    <f:validateDoubleRange minimum="0" maximum="100"/>
+                                </p:inputText>
+                            </p:column>
+                        </p:row>
+
+                        <p:commandButton value ="Add Filler Information" action ="#{knowledgeManageBean.addNewFillerInfo}" update =":form2:msgs" />
+
+                    </p:panelGrid> 
+
+                    <p:panelGrid rendered="#{knowledgeManageBean.metalAdd}">
+
+                        <p:row>
+                            <p:column>
+                                <p:outputLabel value ="Metal Name"/>
+                            </p:column>
+                            <p:column>
+                                <p:inputText value ="#{knowledgeManageBean.selectedMetal.metalName}" validator="#{knowledgeValidator.metalName}" />
+                            </p:column>
+                        </p:row>
+                        <p:row>
+                            <p:column>
+                                <p:outputLabel value ="Copper "/>
+                            </p:column>
+                            <p:column>
+                                <p:inputText value ="#{knowledgeManageBean.selectedMetal.copper}" validatorMessage="Please input valid amount - Copper " >
+                                    <f:validateDoubleRange minimum="0" maximum="100"/>
+                                </p:inputText>
+                            </p:column>
+                        </p:row>
+                        <p:row>
+                            <p:column>
+                                <p:outputLabel value ="Zinc"/>
+                            </p:column>
+                            <p:column>
+                                <p:inputText value ="#{knowledgeManageBean.selectedMetal.zinc}" validatorMessage="Please input valid amount - Zinc " >
+                                    <f:validateDoubleRange minimum="0" maximum="100"/>
+                                </p:inputText>
+                            </p:column>
+                        </p:row>
+                        <p:row>
+                            <p:column>
+                                <p:outputLabel value ="Filler Iron"/>
+                            </p:column>
+                            <p:column>
+                                <p:inputText value ="#{knowledgeManageBean.selectedMetal.iron}" validatorMessage="Please input valid amount - Iron  " >
+                                    <f:validateDoubleRange minimum="0" maximum="100"/>
+                                </p:inputText>
+                            </p:column>
+                        </p:row>
+                        <p:row>
+                            <p:column>
+                                <p:outputLabel value ="Lead"/>
+                            </p:column>
+                            <p:column>
+                                <p:inputText value ="#{knowledgeManageBean.selectedMetal.lead}" validatorMessage="Please input valid amount - Lead  " >
+                                    <f:validateDoubleRange minimum="0" maximum="100"/>
+                                </p:inputText>
+                            </p:column>
+                        </p:row>
+                        <p:row>
+                            <p:column>
+                                <p:outputLabel value ="Aluminium"/>
+                            </p:column>
+                            <p:column>
+                                <p:inputText value ="#{knowledgeManageBean.selectedMetal.aluminium}" validatorMessage="Please input valid amount - Aluminium  " >
+                                    <f:validateDoubleRange minimum="0" maximum="100"/>
+                                </p:inputText>
+                            </p:column>
+                        </p:row>
+                        <p:row>
+                            <p:column>
+                                <p:outputLabel value ="Carbon"/>
+                            </p:column>
+                            <p:column>
+                                <p:inputText value ="#{knowledgeManageBean.selectedMetal.carbon}" validatorMessage="Please input valid amount - Carbon " >
+                                    <f:validateDoubleRange minimum="0" maximum="100"/>
+                                </p:inputText>
+                            </p:column>
+                        </p:row>
+                        <p:row>
+                            <p:column>
+                                <p:outputLabel value ="Nickel"/>
+                            </p:column>
+                            <p:column>
+                                <p:inputText value ="#{knowledgeManageBean.selectedMetal.nickel}" validatorMessage="Please input valid amount - Nickel " >
+                                    <f:validateDoubleRange minimum="0" maximum="100"/>
+                                </p:inputText>
+                            </p:column>
+                        </p:row>
+                        <p:row>
+                            <p:column>
+                                <p:outputLabel value ="Chromium"/>
+                            </p:column>
+                            <p:column>
+                                <p:inputText value ="#{knowledgeManageBean.selectedMetal.chromium}" validatorMessage="Please input valid amount - Chromium " >
+                                    <f:validateDoubleRange minimum="0" maximum="100"/>
+                                </p:inputText>
+                            </p:column>
+                        </p:row>
+                        <p:row>
+                            <p:column>
+                                <p:outputLabel value ="Manganese"/>
+                            </p:column>
+                            <p:column>
+                                <p:inputText value ="#{knowledgeManageBean.selectedMetal.manganese}" validatorMessage="Please input valid amount - Manganese " >
+                                    <f:validateDoubleRange minimum="0" maximum="100"/>
+                                </p:inputText>
+                            </p:column>
+                        </p:row>
+                        <p:row>
+                            <p:column>
+                                <p:outputLabel value ="Silicon"/>
+                            </p:column>
+                            <p:column>
+                                <p:inputText value ="#{knowledgeManageBean.selectedMetal.silicon}" validatorMessage="Please input valid amount - Silicon " >
+                                    <f:validateDoubleRange minimum="0" maximum="100"/>
+                                </p:inputText>
+                            </p:column>
+                        </p:row>
+
+                        <p:commandButton value = "Add Metal Information" action ="#{knowledgeManageBean.addNewMetalInfo}" update =":form2:msgs" />
+
+                    </p:panelGrid> 
+                </p:panel>
+
+            </h:form>
+        </div>
+    </ui:define>
+
+</ui:composition>

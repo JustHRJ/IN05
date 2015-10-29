@@ -10,7 +10,7 @@
     <ui:define name="content">
         <!-- Page header -->
         <div class="page-heading animated fadeInDownBig" style="padding:20px!important;padding-bottom:10px!important;">
-            <h1>View Approved Claims <small></small></h1>
+            <h1>View Approved Claims <small>Claim Management</small></h1>
         </div>
         <!-- End page header -->
         <div style="padding:20px!important;padding-top:0px!important;">
@@ -55,7 +55,7 @@
                 </p:panelGrid>
 
                 <br />
-                <p:commandButton value="Search for Pay Slip(s)" id = "btn" update ="basicDT" actionListener="#{employeeClaimBean.search}" >
+                <p:commandButton value="Search for Approved Claim(s)" id = "btn" update ="basicDT" actionListener="#{employeeClaimBean.search}" >
                 </p:commandButton>
                 <br/><br/>
                 <p:dataTable id="basicDT" var="im" value="#{employeeClaimBean.approvedClaimRecords}" editable="true" selection="#{employeeClaimBean.selectedClaim}" rowKey="#{im.id}">
