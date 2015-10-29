@@ -136,7 +136,7 @@ public class KnowledgeSystemBean implements KnowledgeSystemBeanLocal {
             results.add(f.getFillerName());
         }
         if (results.isEmpty()) {
-            return null;
+            return results;
         } else {
             return results;
         }
@@ -282,12 +282,21 @@ public class KnowledgeSystemBean implements KnowledgeSystemBeanLocal {
         Query q = em.createQuery("select c from FillerComposition c");
         for (Object o : q.getResultList()) {
             FillerComposition f = (FillerComposition) o;
-            em.remove(f);
+            FillerEntity filler = em.find(FillerEntity.class, f.getId());
+            if (filler == null) {
+                em.remove(f);
+            } else {
+                filler.setFiller(null);
+                em.merge(filler);
+                em.remove(f);
+            }
         }
+        em.flush();
         if (fillers != null) {
             for (Object o : fillers) {
                 Vector im = (Vector) o;
                 FillerComposition f = new FillerComposition();
+                f.setId(im.get(0).toString());
                 f.setName((String) im.get(1));
                 f.setCopper(Integer.parseInt(im.get(2).toString()));
                 f.setZinc(Integer.parseInt(im.get(3).toString()));
@@ -408,15 +417,15 @@ public class KnowledgeSystemBean implements KnowledgeSystemBeanLocal {
         }
     }
 
-    public boolean checkMetalName(String id){
+    public boolean checkMetalName(String id) {
         Metal f = em.find(Metal.class, id);
-        if(f == null){
+        if (f == null) {
             return false;
-        } else{
+        } else {
             return true;
         }
     }
-    
+
     public boolean checkFillerName(String id) {
         FillerComposition f = new FillerComposition();
         try {
@@ -455,7 +464,11 @@ public class KnowledgeSystemBean implements KnowledgeSystemBeanLocal {
                     if (f == null) {
                         System.out.println("filler not found");
                     } else {
-                        m.getFillers().add(f);
+                        if (m.getFillers().contains(f)) {
+
+                        } else {
+                            m.getFillers().add(f);
+                        }
 
                     }
                 }
@@ -479,10 +492,10 @@ public class KnowledgeSystemBean implements KnowledgeSystemBeanLocal {
 
                 } else {
                     for (Object p : m.getFillers()) {
-                        FillerComposition f = (FillerComposition) p;
+                        FillerEntity f = (FillerEntity) p;
                         Vector im = new Vector();
                         im.add(m.getMetalName());
-                        im.add(f.getId());
+                        im.add(f.getFillerCode());
                         result.add(im);
                     }
                 }
