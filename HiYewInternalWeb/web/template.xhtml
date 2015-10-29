@@ -107,9 +107,9 @@
                             </p:column>
                             <p:column>
                                 <p:submenu label ="Leave Management">
-                                    <p:menuitem value ="Apply for Claim" url ="hrms-leave-application.xhtml" />
-                                    <p:menuitem value ="Approve Claims" url ="hrms-approve-leave.xhtml" rendered ="#{loginControlBean.checkValid1()}"/>
-                                    <p:menuitem value ="Check Claim Status" url ="hrms-leave-status.xhtml" />
+                                    <p:menuitem value ="Apply for Leave" url ="hrms-leave-application.xhtml" />
+                                    <p:menuitem value ="Approve Leave" url ="hrms-approve-leave.xhtml" rendered ="#{loginControlBean.checkValid1()}"/>
+                                    <p:menuitem value ="Check Leave Status" url ="hrms-leave-status.xhtml" />
                                 </p:submenu>
                             </p:column>
                             <p:column>
@@ -146,6 +146,11 @@
                             <p:column>
                                 <p:submenu label="Filler Knowledge Mgmt.">
                                     <p:menuitem value="Filler Knowledge" url="kms-filler-knowledge.xhtml" />
+                                </p:submenu>
+                            </p:column>
+                            <p:column>
+                                <p:submenu  label ="Add New Knowledge">
+                                    <p:menuitem value ="Add New Knowledge (Metal/Filler)" url ="kms-add-knowledge.xhtml"/>
                                 </p:submenu>
                             </p:column>
                         </p:submenu>
@@ -305,7 +310,7 @@
         <script src="assets/third/wizard/scripts.js"></script>
 
         <!-- LANCENG TEMPLATE JAVASCRIPT -->
-        <script src="assets/js/lanceng.js"></script>
+        <!--<script src="assets/js/lanceng.js"></script>-->
 
     </h:body>
 

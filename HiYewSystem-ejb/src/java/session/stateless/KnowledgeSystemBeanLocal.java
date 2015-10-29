@@ -58,5 +58,13 @@ public interface KnowledgeSystemBeanLocal {
     public void addNewMetal(Metal metal);
 
     public void addNewFiller(FillerComposition fillerC, FillerEntity filler);
+
+    public FillerComposition retrieveFiller(FillerEntity filler);
+
+    public boolean checkFillerID(String id);
+
+    public boolean checkFillerName(String id);
+
+    public boolean checkMetalName(String id);
     
 }

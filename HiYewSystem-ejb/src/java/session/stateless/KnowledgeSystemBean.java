@@ -87,11 +87,15 @@ public class KnowledgeSystemBean implements KnowledgeSystemBeanLocal {
 
     public void addNewFiller(FillerComposition fillerC, FillerEntity filler) {
         FillerComposition c = em.find(FillerComposition.class, filler.getFillerCode());
+        fillerC.setId(filler.getFillerCode());
+        fillerC.setName(filler.getFillerName());
         if (c == null) {
-
-            fillerC.setId(filler.getFillerCode());
-            fillerC.setName(filler.getFillerName());
             em.persist(fillerC);
+            filler.setFiller(fillerC);
+            em.merge(filler);
+        } else {
+            c = fillerC;
+            em.merge(c);
             filler.setFiller(fillerC);
             em.merge(filler);
         }
@@ -110,6 +114,18 @@ public class KnowledgeSystemBean implements KnowledgeSystemBeanLocal {
                 em.flush();
             }
         }
+    }
+
+    public FillerComposition retrieveFiller(FillerEntity filler) {
+        String id = filler.getFillerCode();
+        FillerComposition f = em.find(FillerComposition.class, id);
+
+        if (f == null) {
+            return new FillerComposition();
+        } else {
+            return f;
+        }
+
     }
 
     public List<String> retrieveFillerNames() {
@@ -380,6 +396,36 @@ public class KnowledgeSystemBean implements KnowledgeSystemBeanLocal {
             } else {
                 em.remove(f);
             }
+        }
+    }
+
+    public boolean checkFillerID(String id) {
+        FillerComposition f = em.find(FillerComposition.class, id);
+        if (f == null) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    public boolean checkMetalName(String id){
+        Metal f = em.find(Metal.class, id);
+        if(f == null){
+            return false;
+        } else{
+            return true;
+        }
+    }
+    
+    public boolean checkFillerName(String id) {
+        FillerComposition f = new FillerComposition();
+        try {
+            Query q = em.createQuery("select f from FillerComposition f where f.name = :id");
+            q.setParameter("id", id);
+            f = (FillerComposition) q.getSingleResult();
+            return true;
+        } catch (Exception ex) {
+            return false;
         }
     }
 
