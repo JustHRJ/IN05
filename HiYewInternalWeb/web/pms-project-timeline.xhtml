@@ -1,21 +1,16 @@
 <?xml version='1.0' encoding='UTF-8' ?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:h="http://xmlns.jcp.org/jsf/html"
-      xmlns:f="http://xmlns.jcp.org/jsf/core"
-      xmlns:p="http://primefaces.org/ui"
-      xmlns:pe="http://primefaces.org/ui/extensions">
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:pe="http://primefaces.org/ui/extensions"
+                template="./template.xhtml">
 
-    <h:head>
-        <title>View/Edit Product Purchase Order</title>
+    <ui:define name="content">
+
         <style>
-            .menu{
-                margin-top:20px;
-                margin-bottom:30px;
-                background-color: lightblue;
-            }
-
-            //timeline css
             /* Custom styles for the Timeline */  
             div.timeline-frame {  
                 border-color: #5D99C3;  
@@ -55,133 +50,50 @@
                 text-shadow: none;  
             }  
 
-            div.unavailable {  
+            div.behindSchedule {  
                 background: #F03030 none !important;  /* red */  
                 border-color: #bd2828 !important;     /* red */  
             }  
 
-            div.available {  
+            div.aheadSchedule {  
                 background: #1AA11A none !important;  /* green */  
                 border-color: #136e13 !important;     /* green */  
             }  
 
-            div.maybe {  
+            div.scheduleOnTrack {  
                 background: #FFA500 none !important;  /* orange */  
                 border-color: #cc8100 !important;     /* orange */  
             }  
+            div.notStarted {  
+                background: #e3e3e3 none !important;  /* light grey */  
+                border-color: #e3e3e3 !important;     /* light grey */  
+            } 
 
             div.timeline-event-selected {  
                 background: #BECEFE none !important;  
                 border-color: #97B0F8 !important;  
             }  
         </style>
-    </h:head>
-    <h:body>
-        <a href ="/HiYewInternalWeb/index.xhtml"><img src = "../image/hiyew.gif" /></a>  
-        #{loginControlBean.checkLoginRedirect()}
-        <h1>Project Timeline</h1>
+        <!-- Page header -->
+        <div class="page-heading animated fadeInDownBig" style="padding:20px!important;padding-bottom:10px!important;">
+            <h1>Project Timeline <small>Project System</small></h1>
+        </div>
+        <!-- End page header -->
+        <div style="padding:20px!important;padding-top:0px!important;">
+            <h:form id="form">
+                <p:growl id="growl" showSummary="true" showDetail="true" autoUpdate="true"/>  
+                <h3 align="center"><i>Projects Viewer by its Actual Start and Planned End.</i></h3>
 
-        <p:megaMenu orientation="horizontal"  styleClass="menu">
-            <p:submenu label ="Human Resource Management System" icon ="ui-icon-check" style ="font-weight: bold">
-                <p:column>
-                    <p:submenu label ="Employee Management">
-                        <p:menuitem value ="Register employee" url ="/HRMS/employeeRegistration.xhtml" disabled="#{loginControlBean.checkValid()}"/>
-                        <p:menuitem value ="View Employee" url = "/HRMS/employee_details.xhtml" />
-                    </p:submenu>
-                    <p:submenu label="Payroll Management">
-                        <p:menuitem value ="Assign Payroll" url ="/HRMS/createPayroll.xhtml" disabled = "#{loginControlBean.checkValid()}"/>
-                        <p:menuitem value ="Release Payroll" url ="/HRMS/releasePayroll.xhtml" disabled="#{loginControlBean.checkValid()}"/>
-                        <p:menuitem value ="View Released Payroll" url ="/HRMS/viewPayroll.xhtml"/>
+                <pe:timeline id="timeline" value="#{projectManagedbean.model}"
+                             editable="false" eventMargin="10" eventMarginAxis="10"
+                             locale="#{projectManagedbean.locale}"
+                             start="#{projectManagedbean.start}"
+                             end="#{projectManagedbean.end}"
+                             showNavigation="true" showButtonNew="false"
+                             axisOnTop="true" stackEvents="true"/>
 
-                    </p:submenu>
-
-                </p:column>
-                <p:column>
-                    <p:submenu label="Training and Expiry">
-                        <p:menuitem value ="#{loginControlBean.getEAlert()}" url ="/HRMS/alertEmployee.xhtml" />
-                        <p:menuitem value ="Add Training Schedule" url ="/HRMS/addTrainingSchedule.xhtml" disabled="#{loginControlBean.checkValid()}" />
-                        <p:menuitem value ="Add Employee Training" url ="/HRMS/addEmployeeTraining.xhtml" disabled="#{loginControlBean.checkValid()}" />
-                        <p:menuitem value ="view Upcoming training" url ="/HRMS/viewTrainingSchedule.xhtml"/>
-                    </p:submenu>
-                    <p:submenu label ="Leave Management">
-                        <p:menuitem value ="Apply for Leave" url ="/HRMS/leaveApplication.xhtml" />
-                        <p:menuitem value ="Approve Leave" url ="/HRMS/approveLeave.xhtml" disabled="#{loginControlBean.checkValid()}"/>
-                        <p:menuitem value ="Check Leave Status" url ="/HRMS/leaveStatus.xhtml" />
-                    </p:submenu>
-
-                </p:column>
-
-            </p:submenu>
-
-            <p:submenu label="Inventory Control System" icon="ui-icon-check" style="font-weight:bold">
-                <p:column>
-                    <p:submenu label="Items Management">
-                        <p:menuitem value="View Inventory" url="/ICS/viewInventory.xhtml" />
-                        <p:menuitem value="Add New Item" url="/ICS/addNewItem.xhtml" />
-                    </p:submenu>
-                    <p:submenu label="Storage Management">
-                        <p:menuitem value="View Storage" url="/ICS/viewRacks.xhtml" />
-                        <p:menuitem value="Create Storage" url="/ICS/createStorage.xhtml" />
-                    </p:submenu>
-                </p:column>
-            </p:submenu>
-            <p:submenu label ="Sales Management System" icon ="ui-icon-check" style ="font-weight: bold">
-                <p:column>
-                    <p:submenu label ="Products">
-                        <p:menuitem value ="View RFQ" url ="/SMS/viewEditProductQuotations.xhtml" />
-                        <p:menuitem value ="View Purchase Order" url ="/SMS/viewEditProductPurchaseOrders.xhtml"/>
-                    </p:submenu>
-                    <p:submenu label ="Services">
-                        <p:menuitem value ="View Customer Services RFQ" url ="/SMS/viewEditQuotations.xhtml"/>
-                    </p:submenu>
-                </p:column>
-            </p:submenu>
-            <p:submenu label ="Machine Management System" icon ="ui-icon-check" style ="font-weight: bold">
-                <p:column>
-                    <p:submenu label = "Machine Management" >
-                        <p:menuitem value ="Add Machinery" url ="/MMS/addMachine.xhtml" />
-                        <p:menuitem value ="View Machinery" url ="/MMS/viewMachine.xhtml" />
-
-                    </p:submenu>
-                    <p:submenu label ="Machine Maintenance">
-                        <p:menuitem value ="#{hiYewManagedBean.getMAlert()}" url ="/MMS/alertMachine.xhtml" />
-                        <p:menuitem value ="Add Maintenance Schedule" url ="/MMS/addMaintainenceSchedule.xhtml"/>
-                        <p:menuitem value ="View Maintenance Schedule" url ="/MMS/viewMaintainenceSchedule.xhtml" />
-                    </p:submenu>
-                </p:column>
-            </p:submenu>
-            <p:submenu label="Procurement System" icon="ui-icon-check" style="font-weight:bold">
-                <p:column>
-                    <p:submenu label="Purchase Order Preparation Module">
-                        <p:menuitem value="Create Purchase Order" url="/PS/createPO.xhtml" />                   
-                        <p:menuitem value="View Purchase Order" url="/PS/viewPO.xhtml" />
-                    </p:submenu>
-                </p:column>
-            </p:submenu>
-            <p:submenu label="Project System" icon="ui-icon-check" style="font-weight:bold">
-                <p:column>
-                    <p:submenu label="Current Projects">
-                        <p:menuitem value="Timeline" url="/PMS/projectTimeline.xhtml" />                   
-                    </p:submenu>
-                </p:column>
-            </p:submenu>
-        </p:megaMenu>
-
-        <h:form id="form">
-            <p:growl id="growl" showSummary="true" showDetail="true" autoUpdate="true"/>  
-            <h3 align="center"><i>Projects Viewer by its Actual Start and Planned End.</i></h3>
-            
-            <pe:timeline id="timeline" value="#{projectManagedbean.model}"
-                         editable="false" eventMargin="10" eventMarginAxis="10"
-                         locale="#{projectManagedbean.locale}"
-                         start="#{projectManagedbean.start}"
-                         end="#{projectManagedbean.end}"
-                         showNavigation="true" showButtonNew="false"
-                         axisOnTop="true" stackEvents="true"/>
-
-            <p ><b>Green Flag:</b> Actual End is earlier than the Planned End<br /><b>Red Flag:</b> Ongoing projects not ready to dispense labors and machines.</p>
-        </h:form>
-
-    </h:body>
-</html>
-
+                <p ><b>Green Flag:</b> Actual End is earlier than the Planned End<br /><b>Red Flag:</b> Ongoing projects not ready to dispense labors and machines.</p>
+            </h:form>
+        </div>
+    </ui:define>
+</ui:composition>

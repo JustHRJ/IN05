@@ -29,6 +29,8 @@ public class Project implements Serializable {
     private Timestamp plannedEnd;
     private Timestamp latestStart;
     private Timestamp latestEnd;
+    private Integer projectProgress; //determine by the amt of job welded to the expected amt of metal to be welded
+    
     private Boolean projectCompletion;
     
     //private Boolean projectOverrun;
@@ -234,6 +236,20 @@ public class Project implements Serializable {
      */
     public void setCustomerKey(String customerKey) {
         this.customerKey = customerKey;
+    }
+
+    /**
+     * @return the projectProgress
+     */
+    public Integer getProjectProgress() {
+        return projectProgress;
+    }
+
+    /**
+     * @param projectProgress the projectProgress to set
+     */
+    public void setProjectProgress(Integer projectProgress) {
+        this.projectProgress = projectProgress;
     }
     
 }
