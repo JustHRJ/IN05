@@ -17,6 +17,7 @@ import java.util.Vector;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.enterprise.context.RequestScoped;
+import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.inject.Named;
 import javax.faces.view.ViewScoped;
@@ -110,13 +111,15 @@ public class KnowledgeManageBean implements Serializable {
 
     }
 
-    public void addNewFillerInfoInv() {
+    public void addNewFillerInfoInv() throws IOException {
         boolean check = countPercentage(selectedFiller);
         if (check) {
             FillerEntity filler = (FillerEntity) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("ItemToPassToComposition");
             knowledgeSystemBean.addNewFiller(selectedFiller, filler);
+            FacesContext.getCurrentInstance().getExternalContext().redirect("/HiYewInternalWeb/ics-view-inventory.xhtml");
         } else {
-            System.out.println("percentage not 100");
+            FacesMessage msg = new FacesMessage("Please check for composition total - needs to be 100%");
+            FacesContext.getCurrentInstance().addMessage(null, msg);
         }
     }
 

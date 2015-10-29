@@ -2458,19 +2458,25 @@ public class HiYewSystemBean implements HiYewSystemBeanLocal {
             q.setParameter("id", employeeName);
             e = (EmployeeEntity) q.getSingleResult();
             String oldPassE = hashingPassword(oldPass);
+            System.out.println("old password in xhtml" + oldPassE);
+            System.out.println("password from database" + e.getPassword());
             if (e.getPassword().equals(oldPassE)) {
                 String newPassE = hashingPassword(newPass);
                 if (oldPassE.equals(newPassE)) {
                     return "Password same as old password";
                 }
                 e.setPassword(newPassE);
-                e.setAccount_status("normal");
+                e.setAccount_status("normal");  
                 em.merge(e);
+                System.out.println("here - changed");
                 return "changed";
             } else {
+                System.out.println("here - unchanged");
                 return "Old password is incorrect";
             }
         } catch (Exception ex) {
+
+            System.out.println("here - screwed");
             return "no such user";
         }
     }
@@ -3028,5 +3034,4 @@ public class HiYewSystemBean implements HiYewSystemBeanLocal {
         }
     }
 
-   
 }
