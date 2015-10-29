@@ -299,7 +299,7 @@ public class EmailManager {
                 String message = "<div class=\"text\">";
                 message = message + "To whom it may concern,<br /><br />";
                 message = message + "This message is intended for supplier registration with HiYew Corporation Limited.<br /><br />";
-                message = message + "Your Activation Code is  <b>" + code + "</b>.";
+                message = message + "Your Activation Code is  <b>" + code + "</b>. ";
                 message = message + "Your are required to provide this code for registration within a day.<br /><br />Thank you.<br /><br />";
                 message = message + "Best Regards,<br />";
                 message = message + "HiYew Team";

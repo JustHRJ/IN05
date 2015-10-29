@@ -260,7 +260,7 @@ public interface HiYewSystemBeanLocal {
 
     public List<String> metalNames();
 
-    public void createPairings(String metal, List<String> fillerChosen);
+  //  public void createPairings(String metal, List<String> fillerChosen);
 
     public List<String> FillersNotAssociated(String metalName);
 

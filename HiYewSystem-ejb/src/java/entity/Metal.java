@@ -34,19 +34,19 @@ public class Metal implements Serializable {
     private int aluminium;
     private int silicon;
     private int iron;
-    private Collection<FillerComposition> fillers = new ArrayList<FillerComposition>();
+    private Collection<FillerEntity> fillers = new ArrayList<FillerEntity>();
     
     public Metal() {
     }
 
     
     @ManyToMany(cascade ={CascadeType.ALL})
-    public Collection<FillerComposition> getFillers(){
+    public Collection<FillerEntity> getFillers(){
         return fillers;
     }
     
     
-    public void setFillers(Collection<FillerComposition> fillers){
+    public void setFillers(Collection<FillerEntity> fillers){
         this.fillers = fillers;
     }
     

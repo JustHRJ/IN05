@@ -2794,7 +2794,7 @@ public class HiYewSystemBean implements HiYewSystemBeanLocal {
 
     public void deleteFiller(FillerComposition filler) {
         if (filler != null) {
-            Long id = filler.getId();
+            String id = filler.getId();
             FillerComposition f = em.find(FillerComposition.class, id);
             if (f == null) {
                 System.out.println("no filler to delete");
@@ -2940,37 +2940,37 @@ public class HiYewSystemBean implements HiYewSystemBeanLocal {
             return result;
         }
     }
-
-    public void createPairings(String metal, List<String> fillerChosen) {
-        Metal m = new Metal();
-        Collection<FillerComposition> fillers = new ArrayList<FillerComposition>();
-        try {
-            Query q = em.createQuery("select m from Metal m where m.metalName = :id");
-            q.setParameter("id", metal);
-            m = (Metal) q.getSingleResult();
-
-            if (fillerChosen.isEmpty()) {
-                System.out.println("no fillerchosen");
-            }
-            System.out.println(fillerChosen.size());
-            for (Object o : fillerChosen) {
-                String fn = (String) o;
-                System.out.println(fn);
-                FillerComposition f = new FillerComposition();
-                q = em.createQuery("select f from FillerEntity f where f.name =:id");
-                q.setParameter("id", fn);
-                f = (FillerComposition) q.getSingleResult();
-                fillers.add(f);
-            }
-            System.out.println("error here3");
-            m.setFillers(fillers);
-            System.out.println("error here4");
-            em.merge(m);
-            System.out.println("Pairing created");
-        } catch (Exception ex) {
-            System.out.println("error occured");
-        }
-    }
+//
+//    public void createPairings(String metal, List<String> fillerChosen) {
+//        Metal m = new Metal();
+//        Collection<FillerComposition> fillers = new ArrayList<FillerComposition>();
+//        try {
+//            Query q = em.createQuery("select m from Metal m where m.metalName = :id");
+//            q.setParameter("id", metal);
+//            m = (Metal) q.getSingleResult();
+//
+//            if (fillerChosen.isEmpty()) {
+//                System.out.println("no fillerchosen");
+//            }
+//            System.out.println(fillerChosen.size());
+//            for (Object o : fillerChosen) {
+//                String fn = (String) o;
+//                System.out.println(fn);
+//                FillerComposition f = new FillerComposition();
+//                q = em.createQuery("select f from FillerEntity f where f.name =:id");
+//                q.setParameter("id", fn);
+//                f = (FillerComposition) q.getSingleResult();
+//                fillers.add(f);
+//            }
+//            System.out.println("error here3");
+//            m.setFillers(fillers);
+//            System.out.println("error here4");
+//            em.merge(m);
+//            System.out.println("Pairing created");
+//        } catch (Exception ex) {
+//            System.out.println("error occured");
+//        }
+//    }
 
     public List<String> FillersNotAssociated(String metalName) {
         Metal m = new Metal();
