@@ -42,11 +42,11 @@ public class loginControlBean implements Serializable {
      */
     public loginControlBean() {
     }
-    
+
     public String currentPage() {
         return getCurrent_page();
     }
-    
+
     public void setCurrentPage(String userCurrentPage) {
         setCurrent_page(userCurrentPage);
     }
@@ -225,6 +225,16 @@ public class loginControlBean implements Serializable {
             username = "";
             password = "";
             FacesContext.getCurrentInstance().getExternalContext().redirect("/HiYewInternalWeb/login.xhtml");
+
+        } else {
+        }
+    }
+
+    public void errorLogout() throws IOException {
+        if (logined) {
+            FacesContext.getCurrentInstance().getExternalContext().invalidateSession();
+            username = "";
+            password = "";
 
         } else {
         }
