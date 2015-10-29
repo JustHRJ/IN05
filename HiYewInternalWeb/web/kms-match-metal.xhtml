@@ -15,7 +15,7 @@
         <!-- End page header -->
         <div style="padding:20px!important;padding-top:0px!important;">
             <h:form id="formMain">
-
+                <p:growl id ="msgs"/>
                 <h:selectOneMenu style="width:200px" value ="#{knowledgeManageBean.metalName}" required ="true">
                     <f:selectItem itemValue ="" itemLabel ="Select" noSelectionOption="true" />
                     <f:selectItems value ="#{knowledgeManageBean.retrieveMetalName}" />
@@ -30,9 +30,9 @@
 
                 <p:commandButton value ="Set Pairings" action ="#{knowledgeManageBean.createPairings()}"/>
                 <br/><br/>
-                <p:commandButton value ="Import Matching from Excel File" action ="#{knowledgeManageBean.readFile3()}" />
+                <p:commandButton value ="Import Matching from Excel File" action ="#{knowledgeManageBean.readFile3()}" update =":formMain:msgs"/>
                 <br/>
-                <p:commandButton value ="Export Matching" action ="#{knowledgeManageBean.writeFile4()}"/>
+                <p:commandButton value ="Export Matching" action ="#{knowledgeManageBean.writeFile4()}" update =":formMain:msgs" />
             </h:form>
         </div>
     </ui:define>

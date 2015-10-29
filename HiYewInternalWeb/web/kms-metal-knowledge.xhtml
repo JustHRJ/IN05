@@ -22,7 +22,7 @@
                             <p:inputText id="globalFilter" onkeyup="PF('fillerTable').filter()" style="font-weight:normal;width:220px" placeholder="Enter keyword" />
                         </p:outputPanel>
                     </f:facet>
-
+                    <p:growl id ="msgs" showDetail="true" />
 
 
 
@@ -228,9 +228,9 @@
                 </p:dialog>
 
                 <br />
-                <p:commandButton value ="Import from Excel File" action ="#{knowledgeManageBean.readFile2()}" update ="table" />
+                <p:commandButton value ="Import from Excel File" action ="#{knowledgeManageBean.readFile2()}" update ="formMain" />
                 &nbsp;&nbsp;
-                <p:commandButton value ="Transfer into Excel File" action ="#{knowledgeManageBean.writeFile3()}" update ="table" />
+                <p:commandButton value ="Transfer into Excel File" action ="#{knowledgeManageBean.writeFile3()}" update ="formMain" />
             </h:form>
         </div>
     </ui:define>

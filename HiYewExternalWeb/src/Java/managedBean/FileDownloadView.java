@@ -17,17 +17,14 @@ import com.itextpdf.text.pdf.PdfWriter;
 import entity.ProductPurchaseOrder;
 import entity.ProductQuotation;
 import entity.ProductQuotationDescription;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import javax.faces.bean.ManagedBean;
-import javax.faces.context.FacesContext;
-import javax.faces.view.ViewScoped;
-import javax.servlet.ServletContext;
 import org.primefaces.model.DefaultStreamedContent;
 import org.primefaces.model.StreamedContent;
 
@@ -59,7 +56,7 @@ public class FileDownloadView {
         // step 1
         Document document = new Document();
         // step 2
-        PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream("C:\\Users\\QiWen\\Documents\\NetBeansProjects\\IN05\\HiYewExternalWeb\\web\\pdf\\pdf_testing1.pdf"));
+        PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream("C:\\Users\\User\\Desktop\\SouceTreeRepo\\IN05\\HiYewExternalWeb\\web\\pdf\\pdf_testing1.pdf"));
         // step 3
         document.open();
         // step 4
@@ -79,8 +76,8 @@ public class FileDownloadView {
 //        }
         System.out.println("PDF Created!");
 
-        InputStream stream = ((ServletContext) FacesContext.getCurrentInstance().getExternalContext().getContext()).getResourceAsStream("/pdf/pdf_testing1.pdf");
-
+     //   InputStream stream = ((ServletContext) FacesContext.getCurrentInstance().getExternalContext().getContext()).getResourceAsStream("/pdf/pdf_testing1.pdf");
+        InputStream stream = new FileInputStream("C:\\Users\\User\\Desktop\\SouceTreeRepo\\IN05\\HiYewExternalWeb\\web\\pdf\\pdf_testing1.pdf");
         file = new DefaultStreamedContent(stream, "application/pdf", "pdf_testing_outcome_1.pdf");
 
         return file;

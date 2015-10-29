@@ -141,7 +141,7 @@ public class KnowledgeManageBean implements Serializable {
                 knowledgeSystemBean.addNewMetal(selectedMetal);
                 FacesContext.getCurrentInstance().getExternalContext().redirect("/HiYewInternalWeb/kms-metal-knowledge.xhtml");
             } else {
-                FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Please check for composition total - needs to be 100%", "" );
+                FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Please check for composition total - needs to be 100%", "");
                 FacesContext.getCurrentInstance().addMessage(null, msg);
             }
 
@@ -252,12 +252,17 @@ public class KnowledgeManageBean implements Serializable {
         setInputFile("C:\\Users\\User\\Desktop\\Book1.xls");
         List<Vector> result = read();
         knowledgeSystemBean.addFillers(result);
+        FacesMessage msg = new FacesMessage("Filler is Imported");
+        FacesContext.getCurrentInstance().addMessage(null, msg);
+
     }
 
     public void readFile2() throws IOException {
         setInputFile("C:\\Users\\User\\Desktop\\Book1.xls");
         List<Vector> result = read2();
         knowledgeSystemBean.addMetal(result);
+        FacesMessage msg = new FacesMessage("Metal is Imported");
+        FacesContext.getCurrentInstance().addMessage(null, msg);
     }
 
     private List<Vector> read2() throws IOException {
@@ -326,12 +331,16 @@ public class KnowledgeManageBean implements Serializable {
         setInputFile("C:\\Users\\User\\Desktop\\Book1.xls");
         fillerList();
         write2();
+        FacesMessage msg = new FacesMessage("Filler is Exported");
+        FacesContext.getCurrentInstance().addMessage(null, msg);
     }
 
     public void writeFile3() throws IOException, WriteException, BiffException {
         setInputFile("C:\\Users\\User\\Desktop\\Book1.xls");
         metalList();
         write3();
+        FacesMessage msg = new FacesMessage("Metal is Exported");
+        FacesContext.getCurrentInstance().addMessage(null, msg);
     }
 
     private void write2() throws IOException, WriteException, BiffException {
@@ -670,6 +679,8 @@ public class KnowledgeManageBean implements Serializable {
         setInputFile("C:\\Users\\User\\Desktop\\Book1.xls");
         List<Vector> result = read3();
         knowledgeSystemBean.addMatch(result);
+        FacesMessage msg = new FacesMessage("Matched Metals and Fillers have been updated");
+        FacesContext.getCurrentInstance().addMessage(null, msg);
     }
 
     public List<Vector> read3() throws IOException {
@@ -712,6 +723,8 @@ public class KnowledgeManageBean implements Serializable {
         setInputFile("C:\\Users\\User\\Desktop\\Book1.xls");
         metalMatchingList();
         write4();
+        FacesMessage msg = new FacesMessage("Matched Metal is Exported");
+        FacesContext.getCurrentInstance().addMessage(null, msg);
     }
 
     private void write4() throws IOException, WriteException, BiffException {
