@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.util.Date;
 import java.util.Vector;
 import javax.ejb.EJB;
+import javax.ejb.EJBException;
 import javax.inject.Named;
 import javax.enterprise.context.RequestScoped;
 import javax.faces.application.FacesMessage;
@@ -36,19 +37,25 @@ public class ActivationManageBean {
     }
 
     public void sendActivationCode() throws IOException {
-        String check = hiYewSystemBean.sendActivationCode(email);
-        if (!(check.equals(""))) {
-            FacesContext.getCurrentInstance().addMessage("msg", new FacesMessage(FacesMessage.SEVERITY_INFO, "Supplier Code has been sent.", ""));
-            EmailManager emailManager = new EmailManager();
-            emailManager.emailActivation(check, email);
+        try {
+            String check = hiYewSystemBean.sendActivationCode(email);
+            if (!(check.equals(""))) {
+                FacesContext.getCurrentInstance().addMessage("msg", new FacesMessage(FacesMessage.SEVERITY_INFO, "Supplier Code has been sent.", ""));
+                EmailManager emailManager = new EmailManager();
+                emailManager.emailActivation(check, email);
 //            FacesContext facesCtx = FacesContext.getCurrentInstance();
 //            ExternalContext externalContext = facesCtx.getExternalContext();
 //            externalContext.redirect("/HiYewInternalWeb/ps-activation.xhtml");
-        } else {
-            FacesContext facesCtx = FacesContext.getCurrentInstance();
-            ExternalContext externalContext = facesCtx.getExternalContext();
-            externalContext.redirect("/HiYewInternalWeb/ps-activation.xhtml");
-            // FacesContext.getCurrentInstance().addMessage("null", new FacesMessage(FacesMessage.SEVERITY_ERROR, "Email exists.", ""));
+            } else {
+                FacesContext facesCtx = FacesContext.getCurrentInstance();
+                ExternalContext externalContext = facesCtx.getExternalContext();
+                externalContext.redirect("/HiYewInternalWeb/ps-activation.xhtml");
+                // FacesContext.getCurrentInstance().addMessage("null", new FacesMessage(FacesMessage.SEVERITY_ERROR, "Email exists.", ""));
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            FacesContext.getCurrentInstance().getExternalContext().redirect("/HiYewInternalWeb/error.xhtml");
+            throw new EJBException(ex.getMessage());
         }
     }
 

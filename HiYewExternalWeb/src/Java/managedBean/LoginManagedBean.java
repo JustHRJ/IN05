@@ -146,6 +146,20 @@ public class LoginManagedBean implements Serializable {
             System.out.println("Logout Success");
         }
     }
+    
+    public void errorLogout() throws IOException {
+
+        String serverName = FacesContext.getCurrentInstance().getExternalContext().getRequestServerName();
+        String serverPort = "8080";
+
+        if (FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("username") != null) {
+            FacesContext.getCurrentInstance().getExternalContext().invalidateSession();
+            username = "";
+            password = "";
+
+            System.out.println("Logout Success");
+        }
+    }
 
     public String sendPassword() throws IOException {
         if (this.user.equals("Customer")) {
