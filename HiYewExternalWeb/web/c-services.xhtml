@@ -257,7 +257,7 @@
                     <p:messages id="poMsg"  showDetail="false" />
                     <p:commandButton value="Refresh" actionListener="#{pOManagedBean.receivedCustomerPO}" update="poMsg rcvPO" icon="" style="padding-top: 5px; padding-bottom: 5px; padding-left: 22px; padding-right: 22px" />
                     <br /><br />
-                    <p:dataTable value="#{pOManagedBean.receivedCustomerPO}" var="poItem" id="rcvPO" editable="true">
+                    <p:dataTable value="#{pOManagedBean.receivedCustomerPO}" var="poItem" id="rcvPO" editable="true" emptyMessage="No records">
                         <p:column style="font-weight: bold" headerText="PO No" width="15%">
                             <p:outputLabel style="font-weight: normal" value="#{poItem.customerRefPoNumber}"/>
                         </p:column>
@@ -280,7 +280,7 @@
                     <p:messages id="wjMsg"  showDetail="false" />
                     <p:commandButton value="Refresh" actionListener="#{pOManagedBean.receivedCustomerWJ()}" update="wjMsg rcvWJ" icon="" style="padding-top: 5px; padding-bottom: 5px; padding-left: 22px; padding-right: 22px" />
                     <br /><br />
-                    <p:dataTable value="#{pOManagedBean.receivedCustomerWJ}" var="wjItem" id="rcvWJ" editable="true">
+                    <p:dataTable value="#{pOManagedBean.receivedCustomerWJ}" var="wjItem" id="rcvWJ" editable="true" emptyMessage="No records">
                         <p:column style="font-weight: bold" headerText="PO No" width="15%">
                             <p:outputLabel style="font-weight: normal" value="#{wjItem.projectNo}"/>
                         </p:column>

@@ -60,37 +60,29 @@ public class ProjectTimelineManagedbean implements Serializable {
 
             // create timeline model  
             model = new TimelineModel();
-
+            long r = 0;
+            Date actualStart = new Date();
+            Date plannedEnd = new Date();
             for (Project p : curStartedProjects) {
-                long r = 0;
-                Date actualStart;
+
                 if (p.getActualStart() != null) {
                     actualStart = new Date(p.getActualStart().getTime());
 
-                    try {
-                        if (convertDateToTimestamp(now).after(p.getPlannedEnd())) {
+                    if (p.getProjectProgress() != null) {
+                        if (p.getProjectProgress() >= 90 && p.getProjectProgress() <= 110) {
+                            r = 2;
+                        } else if (p.getProjectProgress() > 110) {
+                            r = 1;
+                        } else if (p.getProjectProgress() < 90) {
                             r = 0;
-                        } else {
-                            if (p.getActualEnd() != null) {
-                                if (p.getActualEnd().before(p.getPlannedEnd())) {
-                                    int diff = projectSessionBean.getDifferenceDays(p.getActualEnd(), p.getPlannedEnd());
-                                    if (diff <= 5) {
-                                        r = 2;
-                                    } else {
-                                        r = 1;
-                                    }
-                                }
-                            }
                         }
-                    } catch (NullPointerException e) {
-
                     }
 
                 } else {
                     actualStart = new Date(p.getPlannedStart().getTime());
                     r = 3;
                 }
-                Date plannedEnd = new Date(p.getPlannedEnd().getTime());
+                plannedEnd = new Date(p.getPlannedEnd().getTime());
 
                 //long r = Math.round(Math.random() * 2);
                 String availability = (r == 0 ? "behindSchedule" : (r == 1 ? "aheadSchedule" : (r == 2 ? "scheduleOnTrack" : "notStarted")));
