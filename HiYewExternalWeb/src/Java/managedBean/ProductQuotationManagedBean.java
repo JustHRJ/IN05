@@ -103,25 +103,54 @@ public class ProductQuotationManagedBean implements Serializable {
         FacesContext.getCurrentInstance().getExternalContext().redirect("/HiYewExternalWeb/c-products-machines-compare.xhtml");
         return selectedCount;
     }
-
+    
     public void redirectToSelectedMachine() throws IOException {
-        if (!selectedMachine.equals("")) {
-            System.out.println("selectedMachine ===== " + selectedMachine);
-            if (selectedMachine.equals("LWI Small Chamber")) {
-                FacesContext.getCurrentInstance().getExternalContext().redirect("/HiYewExternalWeb/c-products-machines-SmallChamber.xhtml");
-            } else if (selectedMachine.equals("LWI V Flexx")) {
-                FacesContext.getCurrentInstance().getExternalContext().redirect("/HiYewExternalWeb/c-products-machines-Flexx.xhtml");
-            } else if (selectedMachine.equals("LWI V ERGO")) {
-                FacesContext.getCurrentInstance().getExternalContext().redirect("/HiYewExternalWeb/c-products-machines-ERGO.xhtml");
-            } else if (selectedMachine.equals("LWI V T-BaseV3")) {
-                FacesContext.getCurrentInstance().getExternalContext().redirect("/HiYewExternalWeb/c-products-machines-TBaseV3.xhtml");
-            } else if (selectedMachine.equals("LWI V MobileFlexx")) {
-                FacesContext.getCurrentInstance().getExternalContext().redirect("/HiYewExternalWeb/c-products-machines-MobileFlexx.xhtml");
-            } else if (selectedMachine.equals("LWI V Unixx III")) {
-                FacesContext.getCurrentInstance().getExternalContext().redirect("/HiYewExternalWeb/c-products-machines-UnixxIII.xhtml");
-            } else if (selectedMachine.equals("LWI V UltraFlexx")) {
-                FacesContext.getCurrentInstance().getExternalContext().redirect("/HiYewExternalWeb/c-products-machines-UltraFlexx.xhtml");
+        if (selectedMachine != null) {
+            if (!selectedMachine.equals("")) {
+                System.out.println("selectedMachine ===== " + selectedMachine);
+                if (selectedMachine.equals("LWI Small Chamber")) {
+                    FacesContext.getCurrentInstance().getExternalContext().redirect("/HiYewExternalWeb/c-products-machines-SmallChamber.xhtml");
+                } else if (selectedMachine.equals("LWI V Flexx")) {
+                    FacesContext.getCurrentInstance().getExternalContext().redirect("/HiYewExternalWeb/c-products-machines-Flexx.xhtml");
+                } else if (selectedMachine.equals("LWI V ERGO")) {
+                    FacesContext.getCurrentInstance().getExternalContext().redirect("/HiYewExternalWeb/c-products-machines-ERGO.xhtml");
+                } else if (selectedMachine.equals("LWI V T-BaseV3")) {
+                    FacesContext.getCurrentInstance().getExternalContext().redirect("/HiYewExternalWeb/c-products-machines-TBaseV3.xhtml");
+                } else if (selectedMachine.equals("LWI V MobileFlexx")) {
+                    FacesContext.getCurrentInstance().getExternalContext().redirect("/HiYewExternalWeb/c-products-machines-MobileFlexx.xhtml");
+                } else if (selectedMachine.equals("LWI V Unixx III")) {
+                    FacesContext.getCurrentInstance().getExternalContext().redirect("/HiYewExternalWeb/c-products-machines-UnixxIII.xhtml");
+                } else if (selectedMachine.equals("LWI V UltraFlexx")) {
+                    FacesContext.getCurrentInstance().getExternalContext().redirect("/HiYewExternalWeb/c-products-machines-UltraFlexx.xhtml");
+                }
             }
+        } else {
+            FacesContext.getCurrentInstance().getExternalContext().redirect("/HiYewExternalWeb/c-products-machines.xhtml");
+        }
+    }
+
+    public void redirectToSelectedMachine(String str) throws IOException {
+        if (str != null) {
+            if (!str.equals("")) {
+                System.out.println("str ===== " + str);
+                if (str.equals("LWI Small Chamber")) {
+                    FacesContext.getCurrentInstance().getExternalContext().redirect("/HiYewExternalWeb/c-products-machines-SmallChamber.xhtml");
+                } else if (str.equals("LWI V Flexx")) {
+                    FacesContext.getCurrentInstance().getExternalContext().redirect("/HiYewExternalWeb/c-products-machines-Flexx.xhtml");
+                } else if (str.equals("LWI V ERGO")) {
+                    FacesContext.getCurrentInstance().getExternalContext().redirect("/HiYewExternalWeb/c-products-machines-ERGO.xhtml");
+                } else if (str.equals("LWI V T-BaseV3")) {
+                    FacesContext.getCurrentInstance().getExternalContext().redirect("/HiYewExternalWeb/c-products-machines-TBaseV3.xhtml");
+                } else if (str.equals("LWI V MobileFlexx")) {
+                    FacesContext.getCurrentInstance().getExternalContext().redirect("/HiYewExternalWeb/c-products-machines-MobileFlexx.xhtml");
+                } else if (str.equals("LWI V Unixx III")) {
+                    FacesContext.getCurrentInstance().getExternalContext().redirect("/HiYewExternalWeb/c-products-machines-UnixxIII.xhtml");
+                } else if (str.equals("LWI V UltraFlexx")) {
+                    FacesContext.getCurrentInstance().getExternalContext().redirect("/HiYewExternalWeb/c-products-machines-UltraFlexx.xhtml");
+                }
+            }
+        } else {
+            FacesContext.getCurrentInstance().getExternalContext().redirect("/HiYewExternalWeb/c-products-machines.xhtml");
         }
     }
 
