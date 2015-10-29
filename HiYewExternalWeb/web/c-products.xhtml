@@ -123,6 +123,31 @@
                     <p:commandButton value="Refresh" actionListener="#{productPurchaseOrderManagedBean.receivedProductPurchaseOrderList()}" update="poMsg poQuote" icon="" style="padding-top: 5px; padding-bottom: 5px; padding-left: 22px; padding-right: 22px" />
                     <br /><br />
                     <p:dataTable filteredValue="#{productQuotationManagedBean.filteredProductList2}" value="#{productPurchaseOrderManagedBean.receivedProductPurchaseOrderList}" var="item" rows="7" id="poQuote" paginator="true" editable="true">
+                        
+                        <p:column headerText="Purchase Order No." width="15%">
+                            <h:outputText value="#{item.productPurchaseOrderCustomerID}"/>
+                        </p:column>
+                        <p:column headerText="Issued Date" sortBy="#{item.productPurchaseOrderDate}" width="10%">
+                            <h:outputText value="#{productQuotationManagedBean.formatDate(item.productPurchaseOrderDate)}"/>
+                        </p:column>
+                        <p:column headerText="Expected Delivery Date" sortBy="#{item.deliveryDate}" width="14%">
+                            <h:outputText value="#{item.deliveryDate != null ? productQuotationManagedBean.formatDate(item.deliveryDate) : 'To be confirmed'}"/>
+                        </p:column>
+                        <p:column headerText="Total Price (SGD)" sortBy="#{item.totalPrice}" width="11%">
+                            <h:outputText value="$ #{productPurchaseOrderManagedBean.formatPrice(item.totalPrice)}"/>
+                        </p:column>
+                        <p:column headerText="Mailing Address" width="15%">
+                            <h:outputText value="#{item.mailingAddr1}, #{item.mailingAddr2}"/>
+                        </p:column>
+
+
+
+
+                        <p:column headerText="Download" width="15%">
+                            <p:commandButton value="Download" update="poQuote" ajax="false" onclick="" icon="ui-icon-arrowthick-1-s">
+                                <p:fileDownload value="#{fileDownloadView.getFile(item, item.productQuotation)}" />
+                            </p:commandButton>
+                        </p:column>
                         <p:column headerText="View" width="4%">
                             <p:panel visible="true" style="border:0px; background: none;">
                                 <p:commandButton id="quoteDescBtn" icon="ui-icon-search" title="View" update="quotationDetailPanel" action="#{productPurchaseOrderManagedBean.retrieveProductQuotationDescriptionList(item.productPurchaseOrderID)}" style="padding-top: 5px; padding-bottom: 5px; padding-left: 20px; padding-right: 20px"/>
@@ -151,30 +176,6 @@
                                     </p:dataTable>
                                 </p:outputPanel>
                             </p:overlayPanel>
-                        </p:column>
-                        <p:column headerText="Purchase Order No." width="15%">
-                            <h:outputText value="#{item.productPurchaseOrderCustomerID}"/>
-                        </p:column>
-                        <p:column headerText="Issued Date" sortBy="#{item.productPurchaseOrderDate}" width="10%">
-                            <h:outputText value="#{productQuotationManagedBean.formatDate(item.productPurchaseOrderDate)}"/>
-                        </p:column>
-                        <p:column headerText="Expected Delivery Date" sortBy="#{item.deliveryDate}" width="14%">
-                            <h:outputText value="#{item.deliveryDate != null ? productQuotationManagedBean.formatDate(item.deliveryDate) : 'To be confirmed'}"/>
-                        </p:column>
-                        <p:column headerText="Total Price (SGD)" sortBy="#{item.totalPrice}" width="11%">
-                            <h:outputText value="$ #{productPurchaseOrderManagedBean.formatPrice(item.totalPrice)}"/>
-                        </p:column>
-                        <p:column headerText="Mailing Address" width="15%">
-                            <h:outputText value="#{item.mailingAddr1}, #{item.mailingAddr2}"/>
-                        </p:column>
-
-
-
-
-                        <p:column headerText="Download" width="15%">
-                            <p:commandButton value="Download" ajax="false" onclick="" icon="ui-icon-arrowthick-1-s">
-                                <p:fileDownload value="#{fileDownloadView.getFile(item, item.productQuotation)}" />
-                            </p:commandButton>
                         </p:column>
                     </p:dataTable>
                 </p:tab>
