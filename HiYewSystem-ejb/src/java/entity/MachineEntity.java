@@ -28,14 +28,15 @@ public class MachineEntity implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     private String machine_name;
-    private String machine_number;
+    private String machine_number; // unique key
+    private String machine_type;
     private Timestamp machine_expiry;
-    private String status;
+    private String status; //Available, Disable, Maintenance, Out of order, In use
     private int extension;
     private String description;
     private Collection<MachineMaintainenceEntity> machineMaintainence = new ArrayList<MachineMaintainenceEntity>();
     private Collection<MachineRepairEntity> machineRepair = new ArrayList<MachineRepairEntity>();
-    private String machine_type;
+  
     
     public MachineEntity() {
 

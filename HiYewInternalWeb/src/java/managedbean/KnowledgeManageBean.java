@@ -17,6 +17,7 @@ import java.util.Vector;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.enterprise.context.RequestScoped;
+import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.inject.Named;
 import javax.faces.view.ViewScoped;
@@ -74,16 +75,23 @@ public class KnowledgeManageBean implements Serializable {
         setFillerChosen(new ArrayList<String>());
         selectedFiller = new FillerComposition();
         selectedMetal = new Metal();
+        if (FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("ItemToPassToComposition") != null) {
+            selectedFiller = knowledgeSystemBean.retrieveFiller((FillerEntity) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("ItemToPassToComposition"));
+        }
 
     }
 
-    public void addNewFillerInfo() {
+    public void addNewFillerInfo() throws IOException {
         if (selectedFiller.getName().isEmpty()) {
 
         } else {
             boolean check = countPercentage(selectedFiller);
             if (check) {
                 knowledgeSystemBean.addNewFiller(selectedFiller);
+                FacesContext.getCurrentInstance().getExternalContext().redirect("/HiYewInternalWeb/kms-filler-knowledge.xhtml");
+            } else {
+                FacesMessage msg = new FacesMessage("Filler Composition does not add up.");
+                FacesContext.getCurrentInstance().addMessage(null, msg);
             }
         }
     }
@@ -110,22 +118,32 @@ public class KnowledgeManageBean implements Serializable {
 
     }
 
-    public void addNewFillerInfoInv() {
+    public void addNewFillerInfoInv() throws IOException {
         boolean check = countPercentage(selectedFiller);
         if (check) {
             FillerEntity filler = (FillerEntity) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("ItemToPassToComposition");
             knowledgeSystemBean.addNewFiller(selectedFiller, filler);
+            FacesContext.getCurrentInstance().getExternalContext().getSessionMap().remove("ItemToPassToComposition");
+            FacesContext.getCurrentInstance().getExternalContext().redirect("/HiYewInternalWeb/ics-view-inventory.xhtml");
+
         } else {
-            System.out.println("percentage not 100");
+            FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Please check for composition total - needs to be 100%", "");
+            FacesContext.getCurrentInstance().addMessage(null, msg);
         }
     }
 
-    public void addNewMetalInfo() {
+    public void addNewMetalInfo() throws IOException {
         if (selectedMetal.getMetalName().isEmpty()) {
 
         } else {
             boolean check = countPercentageM(selectedMetal);
-            knowledgeSystemBean.addNewMetal(selectedMetal);
+            if (check) {
+                knowledgeSystemBean.addNewMetal(selectedMetal);
+                FacesContext.getCurrentInstance().getExternalContext().redirect("/HiYewInternalWeb/kms-metal-knowledge.xhtml");
+            } else {
+                FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Please check for composition total - needs to be 100%", "" );
+                FacesContext.getCurrentInstance().addMessage(null, msg);
+            }
 
         }
     }
@@ -231,13 +249,13 @@ public class KnowledgeManageBean implements Serializable {
     }
 
     public void readFile() throws IOException {
-        setInputFile("C:\\Users\\K.guoxiang\\Desktop\\Book1.xls");
+        setInputFile("C:\\Users\\JustHRJ\\Desktop\\Book1.xls");
         List<Vector> result = read();
         knowledgeSystemBean.addFillers(result);
     }
 
     public void readFile2() throws IOException {
-        setInputFile("C:\\Users\\K.guoxiang\\Desktop\\Book1.xls");
+        setInputFile("C:\\Users\\JustHRJ\\Desktop\\Book1.xls");
         List<Vector> result = read2();
         knowledgeSystemBean.addMetal(result);
     }
@@ -279,7 +297,7 @@ public class KnowledgeManageBean implements Serializable {
     }
 
     public void writeFile() throws IOException, WriteException, BiffException {
-        setInputFile("C:\\Users\\K.guoxiang\\Desktop\\Book1.xls");
+        setInputFile("C:\\Users\\JustHRJ\\Desktop\\Book1.xls");
         write();
     }
 
@@ -305,13 +323,13 @@ public class KnowledgeManageBean implements Serializable {
     }
 
     public void writeFile2() throws IOException, WriteException, BiffException {
-        setInputFile("C:\\Users\\K.guoxiang\\Desktop\\Book1.xls");
+        setInputFile("C:\\Users\\JustHRJ\\Desktop\\Book1.xls");
         fillerList();
         write2();
     }
 
     public void writeFile3() throws IOException, WriteException, BiffException {
-        setInputFile("C:\\Users\\K.guoxiang\\Desktop\\Book1.xls");
+        setInputFile("C:\\Users\\JustHRJ\\Desktop\\Book1.xls");
         metalList();
         write3();
     }
@@ -497,6 +515,11 @@ public class KnowledgeManageBean implements Serializable {
         boolean check = countPercentage(selectedFiller);
         if (check) {
             knowledgeSystemBean.editFiller(selectedFiller);
+            FacesMessage msg = new FacesMessage("Filler is updated");
+            FacesContext.getCurrentInstance().addMessage(null, msg);
+        } else {
+            FacesMessage msg = new FacesMessage("Filler edit is improper");
+            FacesContext.getCurrentInstance().addMessage(null, msg);
         }
     }
 
@@ -644,7 +667,7 @@ public class KnowledgeManageBean implements Serializable {
     }
 
     public void readFile3() throws IOException {
-        setInputFile("C:\\Users\\K.guoxiang\\Desktop\\Book1.xls");
+        setInputFile("C:\\Users\\JustHRJ\\Desktop\\Book1.xls");
         List<Vector> result = read3();
         knowledgeSystemBean.addMatch(result);
     }
@@ -686,7 +709,7 @@ public class KnowledgeManageBean implements Serializable {
     }
 
     public void writeFile4() throws IOException, WriteException, BiffException {
-        setInputFile("C:\\Users\\K.guoxiang\\Desktop\\Book1.xls");
+        setInputFile("C:\\Users\\JustHRJ\\Desktop\\Book1.xls");
         metalMatchingList();
         write4();
     }
@@ -697,7 +720,7 @@ public class KnowledgeManageBean implements Serializable {
         WritableWorkbook copy = Workbook.createWorkbook(new File(inputFile), workbook);
         WritableSheet sheet1 = copy.createSheet("MetalMatching", 2);
 
-        jxl.write.Label number3 = new jxl.write.Label(0, 0, "MetalName");
+        jxl.write.Label number3 = new jxl.write.Label(0, 0, "Metal Name");
         sheet1.addCell(number3);
 
         number3 = new jxl.write.Label(1, 0, "Filler ID");
@@ -709,10 +732,12 @@ public class KnowledgeManageBean implements Serializable {
                 Vector im = result3.get(i - 1);
                 int cols = im.size();
                 System.out.println(cols);
-                jxl.write.Label number4 = new jxl.write.Label(0, 1, im.get(0).toString());
+                System.out.println(im.get(0).toString());
+                jxl.write.Label number4 = new jxl.write.Label(0, i, im.get(0).toString());
                 sheet1.addCell(number4);
                 for (int j = 1; j < cols; j++) {
-                    jxl.write.Number number = new jxl.write.Number(j, i, Integer.parseInt(im.get(j).toString()));
+                    System.out.println(im.get(j).toString());
+                    jxl.write.Label number = new jxl.write.Label(j, i, im.get(j).toString());
                     sheet1.addCell(number);
                 }
 

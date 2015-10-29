@@ -112,6 +112,13 @@
                                     <p:menuitem value ="Check Leave Status" url ="hrms-leave-status.xhtml" />
                                 </p:submenu>
                             </p:column>
+                            <p:column>
+                                <p:submenu label ="Claim Management">
+                                    <p:menuitem value ="Apply for Claims" url ="hrms-apply-claims.xhtml" />
+                                    <p:menuitem value ="Approve Claim" url ="hrms-view-employee-claim.xhtml" rendered ="#{loginControlBean.checkValid1()}"/>
+                                    <p:menuitem value ="Check Claim Status" url ="hrms-view-approved-claim.xhtml" />
+                                </p:submenu>
+                            </p:column>
                         </p:submenu>
                         <p:submenu style="#{loginControlBean.current_page eq 'ICS' ? 'border: 1px solid #a8a8a8;background: #85b2cb -webkit-gradient(linear, left top, left bottom, from(rgba(255,255,255,0.8)), to(rgba(255,255,255,0)));' : ''}" label="Inventory Control System" icon="">
                             <p:column>
@@ -125,7 +132,7 @@
                                 <p:submenu label="Storage Management">
                                     <p:menuitem value="Create Storage" url="ics-create-storage.xhtml" />
                                     <p:menuitem value="Allocate Storage" url="ics-allocate-storage.xhtml" />
-                                    <p:menuitem value="View Storage" url="ics-view-racks.xhtml" />
+                                    <p:menuitem value="View Storage" url="ics-view-racks-version2.xhtml" />
                                 </p:submenu>
                             </p:column>
                         </p:submenu>
@@ -139,6 +146,11 @@
                             <p:column>
                                 <p:submenu label="Filler Knowledge Mgmt.">
                                     <p:menuitem value="Filler Knowledge" url="kms-filler-knowledge.xhtml" />
+                                </p:submenu>
+                            </p:column>
+                            <p:column>
+                                <p:submenu  label ="Add New Knowledge">
+                                    <p:menuitem value ="Add New Knowledge (Metal/Filler)" url ="kms-add-knowledge.xhtml"/>
                                 </p:submenu>
                             </p:column>
                         </p:submenu>
@@ -169,14 +181,14 @@
                                 <p:submenu label="PO Management">
                                     <p:menuitem value="Create Purchase Order" url="/PS/createPO.xhtml" />                   
                                     <p:menuitem value="View Purchase Order" url="/PS/viewPO.xhtml" />
-                                    <p:menuitem value="View Procurement Bid Submitted" url="/PS/viewProcurementBid.xhtml" />
+                                    <p:menuitem value="View Procurement Bid Submitted" url="ps-view-procurement-bid.xhtml" />
                                 </p:submenu>
                             </p:column>
                         </p:submenu>
                         <p:submenu style="#{loginControlBean.current_page eq 'PMS' ? 'border: 1px solid #a8a8a8;background: #85b2cb -webkit-gradient(linear, left top, left bottom, from(rgba(255,255,255,0.8)), to(rgba(255,255,255,0)));' : ''}" label="Project Mgmt. System" icon="">
                             <p:column>
-                                <p:submenu label="Title">
-                                    <p:menuitem value="Page" url="" />
+                                <p:submenu label="Projects">
+                                    <p:menuitem value="Project Timeline" url="pms-project-timeline.xhtml" />
                                 </p:submenu>
                             </p:column>
                         </p:submenu>
@@ -190,6 +202,7 @@
                             <p:column>
                                 <p:submenu label ="Laser Welding Services">
                                     <p:menuitem value ="View RFQ" url ="sms-view-quotations.xhtml"/>
+                                    <p:menuitem value ="View Purchase Order" url ="/SMS/viewEditPurchaseOrders.xhtml"/>
                                 </p:submenu>
                             </p:column>
                         </p:submenu>

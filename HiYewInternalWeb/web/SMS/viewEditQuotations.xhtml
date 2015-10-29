@@ -116,23 +116,40 @@
             <p:messages id="msgs" globalOnly="true" showDetail="false" />
 
             <p:commandButton value="Refresh" actionListener="#{adminQuotationManagedBean.filterByYearAndStatus()}" update="msgs rcvQuote" icon="ui-icon-check"/>
-            <p:dataTable value="#{adminQuotationManagedBean.receivedCustomerNewQuotations}" var="item" rows="5" id="rcvQuote" paginator="true" editable="true">
-
-                <p:column headerText="Quotation No" width="10%">
+            <p:dataTable value="#{adminQuotationManagedBean.receivedCustomerNewQuotations}"  var="item" rows="5" id="rcvQuote" paginator="true" editable="true">
+                <p:ajax event="rowEdit" update="@this" listener="#{adminQuotationManagedBean.onEditRow}" />
+                <p:column headerText="Quotation No" width="12%">
 
                     <p:outputLabel value="#{item.quotationNo}"/>
 
                 </p:column>
-                <p:column headerText="Date (dd/mm/yyyy)" width="15%">
+                <p:column headerText="Date (dd/mm/yyyy)" width="7%">
                     <h:outputText value="#{adminQuotationManagedBean.formatDate(item.date)}"/>
                 </p:column>
-                <p:column headerText="Status" width="15%">
+                <p:column headerText="Client Latest End (dd/mm/yyyy)" width="10%">
+                    <h:outputText value="#{adminQuotationManagedBean.formatDate(item.customerLatestEnd)}"/>
+                </p:column>
+                <p:column headerText="Company Latest End (dd/mm/yyyy)" width="10%">
+                    <p:cellEditor>
+                        <f:facet name="output"><h:outputText style="text-align: left; font-weight: normal" value="#{adminQuotationManagedBean.formatDate(item.companyLatestEnd)}"/></f:facet>
+                                <f:facet name="input">
+                                    <p:calendar id="latestEndDate" value="#{adminQuotationManagedBean.companyLatestEndDate}" mindate="#{item.customerLatestEnd}" pattern ="dd/MM/yyyy" />
+                                       
+                                </f:facet>
+                 </p:cellEditor>
+                                    </p:column>
+               
+                
+                <p:column headerText="Status" width="5%">
                     <h:outputText value="#{item.status}"/>
                 </p:column>
-                <p:column headerText="Payment Terms" width="10%">
+                <p:column headerText="Payment Terms" width="5%">
                     <h:outputText value="#{item.termsOfPayment}"/>
                 </p:column>
-                <p:column style="width:32px;text-align: center">
+                <p:column style="font-weight: bold" headerText="Edit" width="3%">
+                            <p:rowEditor />
+                        </p:column>
+                <p:column style="width:12px;text-align: center">
                     <p:commandButton id="quoteDescBtn" icon="ui-icon-search" title="View" update="quotationDetailPanel" action="#{adminQuotationManagedBean.selectQuotation(item)}"/>
                     <!--<p:dialog  widgetVar="dlg" modal="true" resizable="false" header="Values" showEffect="fade" >-->
                     <p:overlayPanel for="quoteDescBtn" showEffect="fade" hideEffect="fade" dismissable="false" showCloseIcon="true" style="width:1200px">
@@ -140,7 +157,7 @@
                         <p:outputPanel id="quotationDetailPanel" style="text-align:center;" >
                             <p:commandButton value="Update Quotation Details" action="#{adminQuotationManagedBean.updateQuotationPricesAndSample()}" update=":innerForm:msgs " disabled="#{loginControlBean.checkValid()}"  icon="ui-icon-check"/>
                             <p:commandButton value="Forward to Customer" action="#{adminQuotationManagedBean.updateQuotationStatus()}" update=":innerForm:msgs rcvQuote" icon="ui-icon-check" disabled="#{loginControlBean.checkValid()}" />
-
+                            
                             <p:dataTable var="quoteDescItem" value="#{adminQuotationManagedBean.displayQuotationDescriptions}" rows="5" paginator="true">
                                 <p:column headerText="ID" width="5%">
                                     <h:outputText value="#{quoteDescItem.quotationDescNo}" />

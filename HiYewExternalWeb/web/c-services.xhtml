@@ -56,7 +56,7 @@
 
                                 </p:inputText>
                                 <br /><br />
-                                <h:outputLabel style="font-weight: bold" for="WeldingType" value="Welding Type: " />
+                                <h:outputLabel style="font-weight: bold" value="Welding Type: " />
                                 <br />
                                 <div class="form-group">
                                     <p:selectOneMenu value="#{quotationManagedBean.newQuotationDesc.weldingType}" style="width:169px" >
@@ -135,18 +135,26 @@
                         </p:column>
                     </p:dataTable>
                     <br />
+
+                    <p:outputLabel for="latestEndDate" value ="Latest End Date:&nbsp;" />
+                    <p:calendar id="latestEndDate" value="#{quotationManagedBean.latestEndDate}" mindate="#{hiYewManagedBean.getToday()}" pattern ="dd/MM/yyyy" requiredMessage="Please enter latest start date for welding activities." />
+                   <!--<p:inputText style="font-weight: normal; width:169px" id="latestStartDate" value="" />
+                            -->      
+
+                    <br /><br />
                     <p:commandButton value="Send Request" actionListener="#{quotationManagedBean.createQuotation}" update="rfqMsg mydata weldPanel rcvQuote" icon="" style="padding-top: 5px; padding-bottom: 5px; padding-left: 22px; padding-right: 22px">
                     </p:commandButton>
+                    
                 </p:tab>
                 <p:tab title="View Quotations">
                     <p:messages id="qMsg"  showDetail="false" />
                     <p:commandButton value="Refresh" actionListener="#{quotationManagedBean.receivedQuotations()}" update="qMsg rcvQuote" icon="" style="padding-top: 5px; padding-bottom: 5px; padding-left: 22px; padding-right: 22px" />
                     <br /><br />
                     <p:dataTable value="#{quotationManagedBean.receivedQuotations}" var="item" rows="8" id="rcvQuote" paginator="true" editable="true">
-                        <p:column style="font-weight: bold" headerText="Quotation No" width="30%">
+                        <p:column style="font-weight: bold" headerText="Quotation No" width="20%">
                             <h:outputText style="font-weight: normal" value="#{item.quotationNo}"/>
                         </p:column>
-                        <p:column style="font-weight: bold" headerText="Date (dd/mm/yyyy)" width="12%">
+                        <p:column style="font-weight: bold" headerText="Date (dd/mm/yyyy)" width="8%">
                             <h:outputText style="font-weight: normal" value="#{quotationManagedBean.formatDate(item.date)}"/>
                         </p:column>
                         <p:column style="font-weight: bold" headerText="Status" width="7%">
@@ -154,6 +162,12 @@
                         </p:column>
                         <p:column style="font-weight: bold" headerText="Payment Terms" width="11%">
                             <h:outputText style="font-weight: normal" value="#{item.termsOfPayment}"/>
+                        </p:column>
+                        <p:column style="font-weight: bold" headerText="Your latestEnd (dd/mm/yyyy)" width="8%">
+                            <h:outputText style="font-weight: normal" value="#{quotationManagedBean.formatDate(item.customerLatestEnd)}"/>
+                        </p:column>
+                        <p:column style="font-weight: bold" headerText="Company latestEnd (dd/mm/yyyy)" width="8%">
+                            <h:outputText style="font-weight: normal" value="#{quotationManagedBean.formatDate(item.companyLatestEnd)}"/>
                         </p:column>
                         <p:column style="font-weight: bold" headerText="View" width="5%" >
                             <p:panel visible="#{quotationManagedBean.setVisibility(item)}" style="border:0px; background: none;">
@@ -196,7 +210,7 @@
                                 <p:commandLink value="Accept" style="color: green; font-weight: bold; font-family: 'Open Sans'; font-size: 14px;" action="#{pOManagedBean.generatePurchaseOrder(item)}" update="myDialogID" /> &nbsp;|&nbsp;
                                 <p:commandLink value="Reject" style="color: red; font-weight: bold; font-family: 'Open Sans'; font-size: 14px;" action="#{quotationManagedBean.setRejectionStatus(item)}" update="rcvQuote"/>
                             </p:panel>
-                            <p:dialog styleClass="rfq" id="myDialogID" widgetVar="myDialogVar" modal="true" resizable="false" header="Purchase Order" showEffect="fade" width="500px">
+                            <p:dialog styleClass="rfq" id="myDialogID"  widgetVar="myDialogVar" modal="true" resizable="false" header="Purchase Order" showEffect="fade" width="500px">
                                 <p:panelGrid id="display" columns="2" columnClasses="label,value">
                                     <h:outputText value="Purchase No.: " style="width: 10%; font-weight: bolder; vertical-align: middle"/>
 
@@ -211,12 +225,6 @@
 
                                     <h:outputText value="Order Date: " style="width: 10%; font-weight: bolder"/>
                                     <h:outputText id="orderDateId" value="#{pOManagedBean.orderDate}" />
-
-                                    <h:outputText value="Expected Start Date: " style="width: 10%; font-weight: bolder"/>
-                                    <h:outputText id="expectStartDateId" value="#{pOManagedBean.expectedStart}" />
-
-                                    <h:outputText value="Expected End Date: " style="width: 10%; font-weight: bolder"/>
-                                    <h:outputText id="expectEndDateId" value="#{pOManagedBean.expectedEnd}" /> 
 
                                     <h:outputText value="Item Jobs: " style="width: 15%; font-weight: bolder"/>
                                     <h:outputText id="descId" value="#{pOManagedBean.descriptions}" style="white-space: pre-wrap" escape="false"/>
@@ -249,18 +257,15 @@
                     <p:messages id="poMsg"  showDetail="false" />
                     <p:commandButton value="Refresh" actionListener="#{pOManagedBean.receivedCustomerPO}" update="poMsg rcvPO" icon="" style="padding-top: 5px; padding-bottom: 5px; padding-left: 22px; padding-right: 22px" />
                     <br /><br />
-                    <p:dataTable value="#{pOManagedBean.receivedCustomerPO}" var="poItem" id="rcvPO" editable="true">
+                    <p:dataTable value="#{pOManagedBean.receivedCustomerPO}" var="poItem" id="rcvPO" editable="true" emptyMessage="No records">
                         <p:column style="font-weight: bold" headerText="PO No" width="15%">
                             <p:outputLabel style="font-weight: normal" value="#{poItem.customerRefPoNumber}"/>
                         </p:column>
                         <p:column style="font-weight: bold" headerText="PO Date (dd/mm/yyyy)" width="11%">
                             <h:outputText style="font-weight: normal" value="#{pOManagedBean.formatDate(poItem.poDate)}"/>
                         </p:column>
-                        <p:column style="font-weight: bold" headerText="Expected Start (dd/mm/yyyy)" width="11%">
-                            <h:outputText style="font-weight: normal" value="#{pOManagedBean.formatDate(poItem.expectedStartDate)}"/>
-                        </p:column>
-                        <p:column style="font-weight: bold" headerText="Expected End (dd/mm/yyyy)" width="11%">
-                            <h:outputText style="font-weight: normal" value="#{pOManagedBean.formatDate(poItem.expectedEndDate)}"/>
+                        <p:column style="font-weight: bold" headerText="Delivery Date (dd/mm/yyyy)" width="11%">
+                            <h:outputText style="font-weight: normal" value="#{pOManagedBean.formatDate(poItem.deliveryDate)}"/>
                         </p:column>
                         <p:column style="font-weight: bold" headerText="Total Price" width="8%">
                             <h:outputText style="font-weight: normal" value="#{poItem.totalPrice}"/>
@@ -271,9 +276,35 @@
                     </p:dataTable>
                 </p:tab>
                 <p:tab title="Welding Jobs">
+                    
+                    <p:messages id="wjMsg"  showDetail="false" />
+                    <p:commandButton value="Refresh" actionListener="#{pOManagedBean.receivedCustomerWJ()}" update="wjMsg rcvWJ" icon="" style="padding-top: 5px; padding-bottom: 5px; padding-left: 22px; padding-right: 22px" />
+                    <br /><br />
+                    <p:dataTable value="#{pOManagedBean.receivedCustomerWJ}" var="wjItem" id="rcvWJ" editable="true" emptyMessage="No records">
+                        <p:column style="font-weight: bold" headerText="PO No" width="15%">
+                            <p:outputLabel style="font-weight: normal" value="#{wjItem.projectNo}"/>
+                        </p:column>
+                        
+                        <p:column style="font-weight: bold" headerText="Expected Start (dd/mm/yyyy)" width="11%">
+                            <h:outputText style="font-weight: normal" value="#{pOManagedBean.formatDate(wjItem.project.plannedStart)}"/>
+                        </p:column>
+                        <p:column style="font-weight: bold" headerText="Expected End (dd/mm/yyyy)" width="11%">
+                            <h:outputText style="font-weight: normal" value="#{pOManagedBean.formatDate(wjItem.project.plannedEnd)}"/>
+                        </p:column>
+                        <p:column style="font-weight: bold" headerText="Metal1" width="8%">
+                            <h:outputText style="font-weight: normal" value="#{wjItem.metal1}"/>
+                        </p:column>
+                        <p:column style="font-weight: bold" headerText="Metal2" width="8%">
+                            <h:outputText style="font-weight: normal" value="#{wjItem.metal2}"/>
+                        </p:column>
+                        <p:column style="font-weight: bold" headerText="Job man" width="8%">
+                            <h:outputText style="font-weight: normal" value="#{wjItem.empName}"/>
+                        </p:column>
+                    </p:dataTable>
+                    
                 </p:tab>
-                <p:tab title="Invoices">
-                </p:tab>
+               <!-- <p:tab title="Invoices">
+                </p:tab>-->
             </p:tabView>
             <!--</f:ajax>-->
         </h:form>

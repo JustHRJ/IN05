@@ -12,15 +12,16 @@ import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
-import javax.faces.event.ValueChangeEvent;
 import javax.inject.Named;
 import javax.faces.view.ViewScoped;
+import org.primefaces.event.RowEditEvent;
 import session.stateless.QuotationSessionBeanLocal;
 
 /**
@@ -42,6 +43,8 @@ public class AdminQuotationManagedBean implements Serializable {
     private Map<String, String> statuses;
     private Map<String, String> years;
 
+    private Date companyLatestEndDate;
+    
     private Quotation selectedQuotation;
 
     /**
@@ -76,8 +79,21 @@ public class AdminQuotationManagedBean implements Serializable {
     }
 
     public String formatDate(Timestamp t) {
+        if(t != null){
         SimpleDateFormat sd = new SimpleDateFormat("dd/MM/yyyy");
         return sd.format(t.getTime());
+        }
+        return "";
+    }
+    public Timestamp formatDateToTimestamp(Date date){
+        Timestamp t = new Timestamp(date.getTime());
+        return t;
+    }
+    
+    public void onEditRow(RowEditEvent event) {
+        Quotation q = (Quotation)event.getObject();//gives me unedited value
+        q.setCompanyLatestEnd(formatDateToTimestamp(companyLatestEndDate));
+        quotationSessionBean.conductMerge(q);
     }
 
     public void selectQuotation(Quotation q) {
@@ -205,6 +221,20 @@ public class AdminQuotationManagedBean implements Serializable {
      */
     public void setDisplayQuotationDescriptions(ArrayList<QuotationDescription> displayQuotationDescriptions) {
         this.displayQuotationDescriptions = displayQuotationDescriptions;
+    }
+
+    /**
+     * @return the companyLatestEndDate
+     */
+    public Date getCompanyLatestEndDate() {
+        return companyLatestEndDate;
+    }
+
+    /**
+     * @param companyLatestEndDate the companyLatestEndDate to set
+     */
+    public void setCompanyLatestEndDate(Date companyLatestEndDate) {
+        this.companyLatestEndDate = companyLatestEndDate;
     }
 
 }
