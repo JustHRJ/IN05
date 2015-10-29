@@ -106,7 +106,7 @@ public class ViewPBManagedBean implements Serializable{
       
         FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("SelectedBidBatch", this.selectedBidRefNum);
         //  FacesContext.getCurrentInstance().getExternalContext().getFlash().put("SelectedItem", this.selectedItem);
-        return "pbDetails?faces-redirect=true";
+        return "ps-pb-details?faces-redirect=true";
     }
 
     /**
