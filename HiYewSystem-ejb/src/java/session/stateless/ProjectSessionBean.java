@@ -45,6 +45,7 @@ public class ProjectSessionBean implements ProjectSessionBeanLocal {
     public void conductMerge(WeldJob weldJob) {
         em.merge(weldJob);
     }
+    
 
     //return null if there is no available employee
     @Override
@@ -168,7 +169,8 @@ public class ProjectSessionBean implements ProjectSessionBeanLocal {
         return futureDate;
     }
 
-    private static Integer getDifferenceDays(Timestamp t1, Timestamp t2) {
+    @Override
+    public Integer getDifferenceDays(Timestamp t1, Timestamp t2) {
 
         Date d1 = new Date(t1.getTime());
         Date d2 = new Date(t2.getTime());
@@ -197,8 +199,8 @@ public class ProjectSessionBean implements ProjectSessionBeanLocal {
     }
     
     @Override
-    public List <Project> getAllCurrentStartedProjects(){
-        Query query = em.createQuery("Select p FROM Project AS p where p.projectCompletion = false AND p.actualStart <> NULL");
+    public List <Project> getUncompletedProjects(){
+        Query query = em.createQuery("Select p FROM Project AS p where p.projectCompletion = false");
         return query.getResultList();
     }
     

@@ -7,6 +7,7 @@ package managedbean;
 
 import entity.Project;
 import java.io.Serializable;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -17,6 +18,7 @@ import javax.inject.Named;
 import javax.faces.view.ViewScoped;
 import org.primefaces.extensions.model.timeline.TimelineEvent;
 import org.primefaces.extensions.model.timeline.TimelineModel;
+import session.stateless.CustomerSessionBeanLocal;
 import session.stateless.ProjectSessionBeanLocal;
 
 /**
@@ -26,6 +28,9 @@ import session.stateless.ProjectSessionBeanLocal;
 @Named(value = "projectManagedbean")
 @ViewScoped
 public class ProjectTimelineManagedbean implements Serializable {
+
+    @EJB
+    private CustomerSessionBeanLocal customerSessionBean;
 
     @EJB
     private ProjectSessionBeanLocal projectSessionBean;
@@ -49,7 +54,7 @@ public class ProjectTimelineManagedbean implements Serializable {
         cal.setTimeInMillis(now.getTime() + 8 * 60 * 60 * 1000);
         end = cal.getTime();
 
-        curStartedProjects = new ArrayList<>(projectSessionBean.getAllCurrentStartedProjects());
+        curStartedProjects = new ArrayList<>(projectSessionBean.getUncompletedProjects());
 
         if (curStartedProjects != null) {
 
@@ -57,29 +62,60 @@ public class ProjectTimelineManagedbean implements Serializable {
             model = new TimelineModel();
 
             for (Project p : curStartedProjects) {
-                
-                Date actualStart = new Date(p.getActualStart().getTime());
+                long r = 0;
+                Date actualStart;
+                if (p.getActualStart() != null) {
+                    actualStart = new Date(p.getActualStart().getTime());
+
+                    try {
+                        if (convertDateToTimestamp(now).after(p.getPlannedEnd())) {
+                            r = 0;
+                        } else {
+                            if (p.getActualEnd() != null) {
+                                if (p.getActualEnd().before(p.getPlannedEnd())) {
+                                    int diff = projectSessionBean.getDifferenceDays(p.getActualEnd(), p.getPlannedEnd());
+                                    if (diff <= 5) {
+                                        r = 2;
+                                    } else {
+                                        r = 1;
+                                    }
+                                }
+                            }
+                        }
+                    } catch (NullPointerException e) {
+
+                    }
+
+                } else {
+                    actualStart = new Date(p.getPlannedStart().getTime());
+                    r = 3;
+                }
                 Date plannedEnd = new Date(p.getPlannedEnd().getTime());
 
                 //long r = Math.round(Math.random() * 2);
-                long r = 0;
-                try {
-                    Date actualEnd = new Date(p.getActualEnd().getTime());
-                    if (actualEnd.before(plannedEnd)) {
-                        r = 1;
-                    }
-                } catch (NullPointerException e) {
-                    r = 0;
+                String availability = (r == 0 ? "behindSchedule" : (r == 1 ? "aheadSchedule" : (r == 2 ? "scheduleOnTrack" : "notStarted")));
+                String status = "";
+                if (r == 0) {
+                    status = "Behind Schedule";
+                } else if (r == 1) {
+                    status = "Ahead Schedule";
+                } else if (r == 2) {
+                    status = "Schedule On Track";
+                } else if (r == 3) {
+                    status = "Not Started";
                 }
-
-                String availability = (r == 0 ? "Unavailable" : "Available");
-
+                System.out.println("User name " + p.getCustomerKey());
                 // create an event with content, actualStart / PlannedEnd dates, editable flag, group name and custom style class  
-                TimelineEvent event = new TimelineEvent(availability, actualStart, plannedEnd, false, p.getProjectNo(), availability.toLowerCase());
+                TimelineEvent event = new TimelineEvent(status, actualStart, plannedEnd, false, customerSessionBean.getCustomerByUsername(p.getCustomerKey()).getName(), availability.toLowerCase());
                 model.add(event);
 
             }
         }
+    }
+
+    public Timestamp convertDateToTimestamp(Date date) {
+        Timestamp t = new Timestamp(date.getTime());
+        return t;
     }
 
     public TimelineModel getModel() {
