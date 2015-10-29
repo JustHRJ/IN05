@@ -1,0 +1,113 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:head>
+        <title>Facelet Title</title>
+    </h:head>
+    <h:body>
+        <h:form id="formMain">
+            <p:growl id ="msgs" />
+            <p:outputLabel style="font-weight:bold;color:#4f4f4f;" value ="Search Criteria" />
+
+            <p:panelGrid style = "width: 28%" id = "lll">
+                <p:row>
+                    <p:column style="vertical-align: bottom;font-weight:bold">
+                        <p:outputLabel value ="View by Employee"/>
+                    </p:column>
+                    <p:column>
+                        <h:selectOneMenu id ="panelG" value ="#{employeeClaimBean.employeeName}" style = "width: 200px">
+                            <f:selectItem itemValue ="select" itemLabel ="Select"/>
+                            <f:selectItems value ="#{loginControlBean.validateLeaveName()}"/>
+                        </h:selectOneMenu>
+                    </p:column>
+                </p:row>
+                <p:row>
+                    <p:column style="vertical-align: bottom;font-weight:bold">
+                        <p:outputLabel value ="View by Month" />                        
+                    </p:column>
+                    <p:column>
+                        <h:selectOneMenu id = "panelF" value ="#{employeeClaimBean.months}" style="width: 200px" disabled="#{loginControlBean.checkValid()}">
+                            <f:selectItem itemValue ="select" itemLabel = "Select" />
+                            <f:selectItem itemValue ="Jan" itemLabel = "January" />
+                            <f:selectItem itemValue ="Feb" itemLabel = "Feburary" />
+                            <f:selectItem itemValue ="Mar" itemLabel = "March" />
+                            <f:selectItem itemValue ="Apr" itemLabel = "April" />
+                            <f:selectItem itemValue ="May" itemLabel = "May" />
+                            <f:selectItem itemValue ="Jun" itemLabel ="June" />
+                            <f:selectItem itemValue ="Jul" itemLabel = "July" />
+                            <f:selectItem itemValue ="Aug" itemLabel ="August" />
+                            <f:selectItem itemValue ="Sep" itemLabel ="September" />
+                            <f:selectItem itemValue ="Oct" itemLabel ="October" />
+                            <f:selectItem itemValue ="Nov" itemLabel ="November" />
+                            <f:selectItem itemValue ="Dec" itemLabel ="December" />
+                        </h:selectOneMenu>
+                    </p:column>
+                </p:row>
+            </p:panelGrid>
+
+            <br />
+            <p:commandButton value="Search for Approved Claim(s)" id = "btn" update ="basicDT" actionListener="#{employeeClaimBean.search}" >
+            </p:commandButton>
+            <br/><br/>
+            <p:dataTable id="basicDT" var="im" value="#{employeeClaimBean.approvedClaimRecords}" editable="true" selection="#{employeeClaimBean.selectedClaim}" rowKey="#{im.id}">
+                <f:facet name="header">
+                    Approved Claims
+                </f:facet>
+                <p:ajax event="rowEdit" listener="#{employeeClaimBean.updateClaim}" />
+                <p:column selectionMode="single" style="width:16px;text-align:center" disabledSelection="#{im.status eq 'pending'}" />
+
+                <p:column headerText="Employee">
+                    <p:outputLabel value ="#{im.employee.employee_name}"/>
+                </p:column>
+                <p:column headerText="Claim Type">
+                    <p:outputLabel value ="#{im.type}"/>
+                </p:column>
+                <p:column headerText="Claim Date">
+                    <p:cellEditor>
+                        <f:facet name ="output"><p:outputLabel value ="#{hiYewManagedBean.formatDate(im.claimDate)}"/></f:facet>
+                        <f:facet name ="input"><p:calendar value ="#{employeeClaimBean.claimTime}" pattern ="dd/MM/yyyy" /></f:facet>
+                    </p:cellEditor>
+                </p:column>
+                <p:column headerText="Claim Amount">
+                    <p:cellEditor>
+                        <f:facet name ="output"> <p:outputLabel value ="#{hiYewManagedBean.formatCurrency(im.amount)}"/></f:facet>
+                        <f:facet name ="input"><p:inputText value = "#{employeeClaimBean.amount}" /></f:facet>
+                    </p:cellEditor>
+                </p:column>
+                <p:column headerText="Approved Claim Amount">
+                    <p:outputLabel value ="#{hiYewManagedBean.formatCurrency(im.claimAmt)}"/>
+                </p:column>
+                <p:column headerText="Claim status">
+                    <p:outputLabel value ="#{im.status}"/>
+                </p:column>
+                <p:column headerText="Approved Date">
+                    <p:outputLabel value ="#{hiYewManagedBean.formatDate(im.approvedDate)}"/>
+                </p:column>
+                <p:column style="width:32px">
+                    <p:rowEditor rendered="#{im.status eq 'pending'}" />
+                </p:column>
+                <p:column style="width:32px;text-align: center">
+                    <p:commandButton update=":formMain:claimDetail" oncomplete="PF('claimDialog').show()" icon="ui-icon-search" title="View" rendered="#{not empty im.fileDestination}">
+                        <f:setPropertyActionListener value="#{im}" target="#{employeeClaimBean.selectedClaim}" />
+                    </p:commandButton>
+                </p:column> 
+            </p:dataTable>
+            <br />
+            <p:commandButton value ="Delete Claim" action="#{employeeClaimBean.removeClaim()}" update ="basicDT" />
+            <p:dialog header="Claim Info" widgetVar="claimDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="true">
+                <p:outputPanel id="claimDetail" style="text-align:center;">
+                    <p:panelGrid  columns="2" rendered="#{not empty employeeClaimBean.selectedClaim}" columnClasses="label,value">
+                        <f:facet name="header">
+                            <img src = "#{employeeClaimBean.selectedClaim.fileDestination}" /> 
+                        </f:facet>
+                    </p:panelGrid>
+                </p:outputPanel>
+            </p:dialog>
+        </h:form>
+
+    </h:body>
+</html>
+

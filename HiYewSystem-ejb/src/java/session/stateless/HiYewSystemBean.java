@@ -259,11 +259,9 @@ public class HiYewSystemBean implements HiYewSystemBeanLocal {
         List<EmployeeClaimEntity> claimRecords = new ArrayList<EmployeeClaimEntity>();
         for (Object o : q.getResultList()) {
             EmployeeClaimEntity c = (EmployeeClaimEntity) o;
-            if (c.getApprovedDate() != null) {
-                if (format.format(c.getApprovedDate()).equals(months)) {
+                if (format.format(c.getAppliedDate()).equals(months)) {
                     claimRecords.add(c);
-                }
-            }
+                }       
         }
 
         if (claimRecords.isEmpty()) {
