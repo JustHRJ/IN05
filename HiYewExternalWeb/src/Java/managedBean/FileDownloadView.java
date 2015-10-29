@@ -8,19 +8,21 @@ import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.Element;
 import com.itextpdf.text.Font;
-import com.itextpdf.text.ListItem;
 import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.Phrase;
 import com.itextpdf.text.Section;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
+import entity.ProductPurchaseOrder;
+import entity.ProductQuotation;
+import entity.ProductQuotationDescription;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.List;
 import javax.faces.bean.ManagedBean;
 import javax.faces.context.FacesContext;
 import javax.servlet.ServletContext;
@@ -32,21 +34,23 @@ import org.primefaces.model.StreamedContent;
 public class FileDownloadView {
 
     private static String FILE = "c:/temp/FirstPdf.pdf";
-    private static Font catFont = new Font(Font.FontFamily.TIMES_ROMAN, 18,
-            Font.BOLD);
-    private static Font redFont = new Font(Font.FontFamily.TIMES_ROMAN, 12,
-            Font.NORMAL, BaseColor.RED);
-    private static Font subFont = new Font(Font.FontFamily.TIMES_ROMAN, 16,
-            Font.BOLD);
-    private static Font smallBold = new Font(Font.FontFamily.TIMES_ROMAN, 12,
-            Font.BOLD);
+    private static Font catFont = new Font(Font.FontFamily.TIMES_ROMAN, 18, Font.BOLD);
+    private static Font redFont = new Font(Font.FontFamily.TIMES_ROMAN, 12, Font.NORMAL, BaseColor.RED);
+    private static Font subFont = new Font(Font.FontFamily.TIMES_ROMAN, 16, Font.BOLD);
+    private static Font smallBold = new Font(Font.FontFamily.TIMES_ROMAN, 12, Font.BOLD);
+
+    private ProductPurchaseOrder po;
+    private ProductQuotation quotation;
 
     private StreamedContent file;
 
-    public FileDownloadView() throws FileNotFoundException {
+    public FileDownloadView() {
+        po = new ProductPurchaseOrder();
     }
 
-    public StreamedContent getFile() throws FileNotFoundException, IOException, DocumentException {
+    public StreamedContent getFile(ProductPurchaseOrder newPurchaseOrder, ProductQuotation selectedProductionQuotation) throws FileNotFoundException, IOException, DocumentException {
+        po = newPurchaseOrder;
+        quotation = selectedProductionQuotation;
         // step 1
         Document document = new Document();
         // step 2
@@ -54,29 +58,10 @@ public class FileDownloadView {
         // step 3
         document.open();
         // step 4
-        // XMLWorkerHelper.getInstance().parseXHtml(writer, document, new FileInputStream("C:\\Users\\QiWen\\Documents\\NetBeansProjects\\IN05\\HiYewExternalWeb\\web\\newjsf.xhtml"), null);
 
-//        // Left
-//        Paragraph paragraph = new Paragraph("This is right aligned text");
-//        paragraph.setAlignment(Element.ALIGN_RIGHT);
-//        document.add(paragraph);
-//        // Centered
-//        paragraph = new Paragraph("This is centered text");
-//        paragraph.setAlignment(Element.ALIGN_CENTER);
-//        document.add(paragraph);
-//        // Left
-//        paragraph = new Paragraph("This is left aligned text");
-//        paragraph.setAlignment(Element.ALIGN_LEFT);
-//        document.add(paragraph);
-//        // Left with indentation
-//        paragraph = new Paragraph("This is left aligned text with indentation");
-//        paragraph.setAlignment(Element.ALIGN_LEFT);
-//        paragraph.setIndentationLeft(50);
-//        document.add(paragraph);
-        
-        addMetaData(document);
-      addTitlePage(document);
-      addContent(document);
+        //addMetaData(document);
+        addTitlePage(document);
+        //addContent(document);
 
         // step 5
         document.close();
@@ -99,26 +84,43 @@ public class FileDownloadView {
         document.addCreator("Lars Vogel");
     }
 
-    private static void addTitlePage(Document document)
-            throws DocumentException {
+    private void addTitlePage(Document document) throws DocumentException {
+        Date dNow = new Date();
+        SimpleDateFormat ft = new SimpleDateFormat("E yyyy.MM.dd 'at' hh:mm:ss a zzz");
+
+//        System.out.println("Current Date: " + ft.format(dNow));
+        
         Paragraph preface = new Paragraph();
         // We add one empty line
         addEmptyLine(preface, 1);
         // Lets write a big header
-        preface.add(new Paragraph("Title of the document", catFont));
+        preface.add(new Paragraph("Purchase Order: #" + po.getProductPurchaseOrderCustomerID(), catFont));
+        addEmptyLine(preface, 1);
+        preface.add(new Paragraph("Customer Name: " + po.getCustomer().getName(), catFont));
+        addEmptyLine(preface, 1);
+        preface.add(new Paragraph("Delivery Date: " + (po.getDeliveryDate() == null || po.getDeliveryDate().toString().equals("") ? "(We will send you an email update.)" : po.getDeliveryDate()), catFont));
 
+        String desc = "";
+        for (ProductQuotationDescription pqd : quotation.getProductQuotationDescriptionList()) {
+            desc = desc + pqd.getProductQuotationDescNo().toString() + ". " + pqd.getItemName() + " - (Unit price) SGD " + String.format("%.2f", pqd.getQuotedPrice()) + " x " + pqd.getQuantity() + "" + "\r\n";
+        }
+        
+        addEmptyLine(preface, 1);
+        preface.add(new Paragraph("Item(s) details: " + desc, catFont));
+
+        addEmptyLine(preface, 1);
+        preface.add(new Paragraph("Total Price (SGD $): " + po.getTotalPrice(), catFont));
+        
+        addEmptyLine(preface, 1);
+        preface.add(new Paragraph("Mailing Address: " + po.getMailingAddr1() + ", " + po.getMailingAddr2(), catFont));
+        
         addEmptyLine(preface, 1);
         // Will create: Report generated by: _name, _date
         preface.add(new Paragraph("Report generated by: " + System.getProperty("user.name") + ", " + new Date(), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
                 smallBold));
-        addEmptyLine(preface, 3);
-        preface.add(new Paragraph("This document describes something which is very important ",
-                smallBold));
+        addEmptyLine(preface, 1);
 
-        addEmptyLine(preface, 8);
-
-        preface.add(new Paragraph("This document is a preliminary version and not subject to your license agreement or any other agreement with vogella.com ;-).",
-                redFont));
+        preface.add(new Paragraph(ft.format(dNow), redFont));
 
         document.add(preface);
         // Start a new page
@@ -174,7 +176,7 @@ public class FileDownloadView {
             throws BadElementException {
         PdfPTable table = new PdfPTable(3);
 
-    // t.setBorderColor(BaseColor.GRAY);
+        // t.setBorderColor(BaseColor.GRAY);
         // t.setPadding(4);
         // t.setSpacing(4);
         // t.setBorderWidth(1);

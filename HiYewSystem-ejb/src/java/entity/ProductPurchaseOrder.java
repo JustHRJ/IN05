@@ -16,6 +16,7 @@ public class ProductPurchaseOrder implements Serializable {
     @Id
     private String productPurchaseOrderID;
 
+    private String productPurchaseOrderCustomerID;
     private Timestamp productPurchaseOrderDate;
     private Timestamp deliveryDate;
     private String mailingAddr1;
@@ -32,8 +33,9 @@ public class ProductPurchaseOrder implements Serializable {
         productPurchaseOrderDate = new Timestamp(Calendar.getInstance().getTime().getTime());
     }
 
-    public ProductPurchaseOrder(String productPurchaseOrderID, Timestamp deliveryDate, String mailingAddr1, String mailingAddr2, Double totalPrice, ProductQuotation productQuotation, Customer customer) {
+    public ProductPurchaseOrder(String productPurchaseOrderID, String productPurchaseOrderCustomerID, Timestamp deliveryDate, String mailingAddr1, String mailingAddr2, Double totalPrice, ProductQuotation productQuotation, Customer customer) {
         this.productPurchaseOrderID = productPurchaseOrderID;
+        this.productPurchaseOrderCustomerID = productPurchaseOrderCustomerID;
         this.productPurchaseOrderDate = new Timestamp(Calendar.getInstance().getTime().getTime());
         this.deliveryDate = deliveryDate;
         this.mailingAddr1 = mailingAddr1;
@@ -192,6 +194,20 @@ public class ProductPurchaseOrder implements Serializable {
      */
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    /**
+     * @return the productPurchaseOrderCustomerID
+     */
+    public String getProductPurchaseOrderCustomerID() {
+        return productPurchaseOrderCustomerID;
+    }
+
+    /**
+     * @param productPurchaseOrderCustomerID the productPurchaseOrderCustomerID to set
+     */
+    public void setProductPurchaseOrderCustomerID(String productPurchaseOrderCustomerID) {
+        this.productPurchaseOrderCustomerID = productPurchaseOrderCustomerID;
     }
 
 }

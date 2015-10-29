@@ -41,6 +41,9 @@ public class ProductQuotationManagedBean implements Serializable {
     private ProductQuotation newProductQuotation;
     private ProductQuotationDescription newProductQuotationDescription;
 
+    private ArrayList<ProductQuotation> filteredProductList;
+    private ArrayList<ProductQuotation> filteredProductList2;
+    
     private ArrayList<ProductQuotation> receivedProductQuotationList;
     private ArrayList<ProductQuotationDescription> displayProductQuotationDescriptionList;
 
@@ -623,5 +626,33 @@ public class ProductQuotationManagedBean implements Serializable {
      */
     public void setSelectedMachine7(Boolean selectedMachine7) {
         this.selectedMachine7 = selectedMachine7;
+    }
+
+    /**
+     * @return the filteredProductList
+     */
+    public ArrayList<ProductQuotation> getFilteredProductList() {
+        return filteredProductList;
+    }
+
+    /**
+     * @param filteredProductList the filteredProductList to set
+     */
+    public void setFilteredProductList(ArrayList<ProductQuotation> filteredProductList) {
+        this.filteredProductList = filteredProductList;
+    }
+
+    /**
+     * @return the filteredProductList2
+     */
+    public ArrayList<ProductQuotation> getFilteredProductList2() {
+        return filteredProductList2;
+    }
+
+    /**
+     * @param filteredProductList2 the filteredProductList2 to set
+     */
+    public void setFilteredProductList2(ArrayList<ProductQuotation> filteredProductList2) {
+        this.filteredProductList2 = filteredProductList2;
     }
 }

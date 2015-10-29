@@ -1,9 +1,11 @@
 package managedBean;
 
+import com.itextpdf.text.DocumentException;
 import entity.Customer;
 import entity.ProductPurchaseOrder;
 import entity.ProductQuotation;
 import entity.ProductQuotationDescription;
+import java.io.IOException;
 import java.io.Serializable;
 import java.sql.Timestamp;
 import java.text.DecimalFormat;
@@ -39,6 +41,7 @@ public class ProductPurchaseOrderManagedBean implements Serializable {
 
     // Attributes binded to view
     private String purchaseOrderNo = "";
+    private String purchaseOrderCustomerNo = "";
     private String attention = "";
     private String orderDate = "";
     private String deliveryDate = "";
@@ -52,9 +55,11 @@ public class ProductPurchaseOrderManagedBean implements Serializable {
 
     private ArrayList<ProductPurchaseOrder> receivedProductPurchaseOrderList;
     private ArrayList<ProductQuotationDescription> displayProductQuotationDescriptionList;
+    private ProductQuotation selectedProductionQuotation;
 
     public ProductPurchaseOrderManagedBean() {
         newPurchaseOrder = new ProductPurchaseOrder();
+        selectedProductionQuotation = new ProductQuotation();
         receivedProductPurchaseOrderList = new ArrayList<>();
         displayProductQuotationDescriptionList = new ArrayList<>();
     }
@@ -91,16 +96,23 @@ public class ProductPurchaseOrderManagedBean implements Serializable {
         setDisplayProductQuotationDescriptionList(new ArrayList<>(productPurchaseOrderSessionBean.retrieveProductQuotationDescriptionList(purchaseOrderNo)));
     }
 
-    public void createPurchaseOrder(ProductQuotation productQuotation) {
-        productQuotation.setStatus("Accepted");
-        productQuotationSessionBean.conductMerge(productQuotation);
+    public void createPurchaseOrder() throws IOException, DocumentException {
+        selectedProductionQuotation.setStatus("Accepted");
+        productQuotationSessionBean.conductMerge(selectedProductionQuotation);
 
-        newPurchaseOrder.setProductPurchaseOrderID(productQuotation.getProductQuotationNo());
+        newPurchaseOrder.setProductPurchaseOrderCustomerID(this.purchaseOrderCustomerNo);
+        newPurchaseOrder.setProductPurchaseOrderID(selectedProductionQuotation.getProductQuotationNo());
+        newPurchaseOrder.setMailingAddr1(this.mailingAddr1);
+        newPurchaseOrder.setMailingAddr2(this.mailingAddr2);
         newPurchaseOrder.setDeliveryDate(getDeliveryDateTimestamp());
         newPurchaseOrder.setTotalPrice(getTotal());
-        newPurchaseOrder.setCustomer(productQuotation.getCustomer());
-        newPurchaseOrder.setProductQuotation(productQuotation);
+        newPurchaseOrder.setCustomer(selectedProductionQuotation.getCustomer());
+        newPurchaseOrder.setProductQuotation(selectedProductionQuotation);
         newPurchaseOrder.setStatus("Pending");
+
+        System.out.println("before this.purchaseOrderCustomerNo ===== " + this.purchaseOrderCustomerNo);
+        System.out.println("before this.mailingAddr1 ===== " + this.mailingAddr1);
+        System.out.println("before this.mailingAddr2 ===== " + this.mailingAddr2);
 
         System.out.println("before newPurchaseOrder.getMailingAddr1() ===== " + newPurchaseOrder.getMailingAddr1());
         System.out.println("before newPurchaseOrder.getMailingAddr2() ===== " + newPurchaseOrder.getMailingAddr2());
@@ -113,8 +125,8 @@ public class ProductPurchaseOrderManagedBean implements Serializable {
                 newPurchaseOrder.setMailingAddr1(c.getAddress1());
                 newPurchaseOrder.setMailingAddr2(c.getAddress2());
 
-                System.out.println("insde  ===== " + c.getAddress1());
-                System.out.println("inside  ===== " + c.getAddress2());
+                System.out.println("insde get exiting address  ===== " + c.getAddress1());
+                System.out.println("inside get exiting address ===== " + c.getAddress2());
 
             }
         }
@@ -126,18 +138,23 @@ public class ProductPurchaseOrderManagedBean implements Serializable {
         productPurchaseOrderSessionBean.createProductPurchaseOrder(newPurchaseOrder);
 
         // add into product purchase order collection in persistence context
-        customerSessionBean.addProductPurchaseOrder(productQuotation.getCustomer().getUserName(), newPurchaseOrder);
+        customerSessionBean.addProductPurchaseOrder(selectedProductionQuotation.getCustomer().getUserName(), newPurchaseOrder);
 
-        FacesContext.getCurrentInstance().addMessage("qMsg", new FacesMessage(FacesMessage.SEVERITY_INFO, "You have sent a Purchase Order No. " + productQuotation.getProductQuotationNo(), ""));
+        FacesContext.getCurrentInstance().addMessage("qMsg", new FacesMessage(FacesMessage.SEVERITY_INFO, "You have sent a Purchase Order No. " + selectedProductionQuotation.getProductQuotationNo(), ""));
+
+        // generate PDF
+        FileDownloadView fdv = new FileDownloadView();
+        fdv.getFile(newPurchaseOrder, selectedProductionQuotation);
 
         // reinitialise
         setNewPurchaseOrder(new ProductPurchaseOrder());
     }
 
     public void generatePurchaseOrder(ProductQuotation productQuotation) {
-        System.out.println("Customer sent product purchase order!");
+        System.out.println("Customer sent product purchase order!" + productQuotation.getProductQuotationDescriptionList().size());
         setPurchaseOrderNo(productQuotation.getProductQuotationNo());
         setAttention(productQuotation.getCustomer().getName());
+        selectedProductionQuotation = productQuotation;
 
         for (ProductQuotationDescription pqd : productQuotation.getProductQuotationDescriptionList()) {
             setDescription(getDescription() + pqd.getProductQuotationDescNo().toString() + ". " + pqd.getItemName() + " - (Unit price) SGD " + String.format("%.2f", pqd.getQuotedPrice()) + " x " + pqd.getQuantity() + "" + "\r\n");
@@ -369,5 +386,33 @@ public class ProductPurchaseOrderManagedBean implements Serializable {
      */
     public void setMailingAddr2(String mailingAddr2) {
         this.mailingAddr2 = mailingAddr2;
+    }
+
+    /**
+     * @return the purchaseOrderCustomerNo
+     */
+    public String getPurchaseOrderCustomerNo() {
+        return purchaseOrderCustomerNo;
+    }
+
+    /**
+     * @param purchaseOrderCustomerNo the purchaseOrderCustomerNo to set
+     */
+    public void setPurchaseOrderCustomerNo(String purchaseOrderCustomerNo) {
+        this.purchaseOrderCustomerNo = purchaseOrderCustomerNo;
+    }
+
+    /**
+     * @return the selectedProductionQuotation
+     */
+    public ProductQuotation getSelectedProductionQuotation() {
+        return selectedProductionQuotation;
+    }
+
+    /**
+     * @param selectedProductionQuotation the selectedProductionQuotation to set
+     */
+    public void setSelectedProductionQuotation(ProductQuotation selectedProductionQuotation) {
+        this.selectedProductionQuotation = selectedProductionQuotation;
     }
 }

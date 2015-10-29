@@ -10,7 +10,7 @@
     <ui:define name="content">
         <!-- Page header -->
         <div class="page-heading animated fadeInDownBig" style="padding:20px!important;padding-bottom:10px!important;">
-            <h1>Products Quotations <small>Sales Management </small></h1>
+            <h1>Products Quotation <small>Sales Management </small></h1>
         </div>
         <!-- End page header -->
         <div style="padding:20px!important;padding-top:0px!important;">
@@ -27,14 +27,14 @@
 
                 <p:messages style="margin-top:15px;margin-bottom:-15px" id="msgs"  showDetail="false" closable="true" />
                 <br />
-                <p:dataTable sortBy="#{adminProductQuotationManagedBean.formatDate(item.date)}" value="#{adminProductQuotationManagedBean.receivedNewProductQuotationList}" var="item" rows="7" id="rcvQuote" paginator="true" editable="true">
+                <p:dataTable filteredValue="#{adminProductQuotationManagedBean.filteredProductList}" value="#{adminProductQuotationManagedBean.receivedNewProductQuotationList}" var="item" rows="7" id="rcvQuote" paginator="true" editable="true">
                     <p:column headerText="Quotation No." width="70%">
                         <p:outputLabel value="#{item.productQuotationNo}"/>
                     </p:column>
-                    <p:column headerText="Date" width="10%">
+                    <p:column headerText="Date" sortBy="#{item.date}" width="10%">
                         <h:outputText value="#{adminProductQuotationManagedBean.formatDate(item.date)}"/>
                     </p:column>
-                    <p:column headerText="Status" width="10%">
+                    <p:column headerText="Status" sortBy="#{item.status}" width="10%">
                         <h:outputText value="#{item.status}"/>
                     </p:column>
                     <p:column width="10%">
@@ -44,12 +44,13 @@
                                 <br />
                                 <p:commandButton rendered="#{item.status eq 'Pending'}" value="Relay Product RFQ" action="#{adminProductQuotationManagedBean.updateQuotationRelayedStatus(item.productQuotationNo, item.customer.userName)}" update=":innerForm:msgs rcvQuote" icon="ui-icon-check"/>
 
-                                <p:commandButton rendered="#{item.status eq 'Relayed'}" value="Update Quotation Details" action="#{adminProductQuotationManagedBean.updateQuotationPrices(item.productQuotationNo)}" update="inner-msgs" icon="ui-icon-check"/>
-                                <p:commandButton rendered="#{item.status eq 'Relayed'}" value="Send Notification to Customer" action="#{adminProductQuotationManagedBean.updateQuotationStatus(item.productQuotationNo, item.customer.userName)}" update="inner-msgs" icon="ui-icon-check"/>
-                                <br /><br />
+                                <p:commandButton rendered="#{item.status eq 'Relayed'}" value="Update Quotation Details" action="#{adminProductQuotationManagedBean.updateQuotationPrices(item.productQuotationNo)}" update="inner-msgs pqdList" icon="ui-icon-check"/>
+                                <p:commandButton rendered="#{item.status eq 'Relayed'}" value="Send Notification to Customer" action="#{adminProductQuotationManagedBean.updateQuotationStatus(item.productQuotationNo, item.customer.userName)}" update="inner-msgs quotationDetailPanel" icon="ui-icon-check"/>
+                                <br style="#{item.status eq 'Processed' ? 'display:none' : ''}" />
+                                <br style="#{item.status eq 'Processed' ? 'display:none' : ''}" />
 
                                 <p:messages style="margin-top:-13px;margin-bottom:15px" id="inner-msgs" showDetail="false" closable="true" />
-                                <p:dataTable sortBy="#{quoteDescItem.productQuotationDescNo}" var="quoteDescItem" value="#{adminProductQuotationManagedBean.displayProductQuotationDescriptionList}" rows="10" paginator="true">
+                                <p:dataTable id="pqdList" sortBy="#{quoteDescItem.productQuotationDescNo}" var="quoteDescItem" value="#{adminProductQuotationManagedBean.displayProductQuotationDescriptionList}" rows="10" paginator="true">
                                     <p:column headerText="ID" width="3%">
                                         <h:outputText value="#{quoteDescItem.productQuotationDescNo}" />
                                     </p:column>
@@ -71,32 +72,34 @@
                                     </p:column>
 
                                     <p:column rendered="#{item.status != 'Relayed'}" headerText="Quoted Unit Price" width="10%">
-                                        <h:outputText value="#{item.status eq 'Pending' ? 'N.A' : quoteDescItem.unitPrice}" />
+                                        <h:outputText value="#{item.status eq 'Pending' ? '' : '$ '}#{item.status eq 'Pending' ? 'N.A' : quoteDescItem.quotedPrice}" />
                                     </p:column>
 
                                     <p:column rendered="#{item.status eq 'Relayed'}" headerText="Quoted Unit Price" width="10%">
-                                        $&nbsp;<h:inputText value="#{quoteDescItem.unitPrice}" style="width: 90%" maxlength="7" validatorMessage="Quantity must have a value of more than one." converterMessage="The price(s) that you have entered are invalid!">
+                                        $&nbsp;<h:inputText value="#{quoteDescItem.quotedPrice}" style="width: 90%" maxlength="7" validatorMessage="Price must have a value of more than zero." converterMessage="The price(s) that you have entered are invalid!">
                                             <f:validateLongRange minimum="1" />
                                         </h:inputText>
                                     </p:column>
 
                                     <p:column rendered="#{item.status != 'Relayed'}" headerText="Cost" width="10%">
-                                        <h:outputText value="#{item.status eq 'Pending' ? 'N.A' : quoteDescItem.cost}" />
+                                        <h:outputText value="#{item.status eq 'Pending' ? '' : '$ '}#{item.status eq 'Pending' ? 'N.A' : quoteDescItem.costPrice}" />
                                     </p:column>
 
                                     <p:column rendered="#{item.status eq 'Relayed'}" headerText="Cost" width="10%">
-                                        <h:outputText value="#" />
+                                        $&nbsp;<h:inputText value="#{quoteDescItem.costPrice}" style="width: 90%" maxlength="7" validatorMessage="Price must have a value of more than zero." converterMessage="The price(s) that you have entered are invalid!">
+                                            <f:validateLongRange minimum="1" />
+                                        </h:inputText>
                                     </p:column>
-                                    
-                                    
+
+
                                     <p:column rendered="#{item.status != 'Relayed'}" headerText="Profit Margin" width="10%">
-                                        <h:outputText value="#{item.status eq 'Pending' ? 'N.A' : quoteDescItem.profitMargin}" />
+                                        <h:outputText style="color:#{item.status eq 'Pending' ?  'black' : quoteDescItem.profitMargin != null and quoteDescItem.profitMargin > 0 ? 'green' : 'red'}" value="#{item.status eq 'Pending' ? '' : '$ '}#{item.status eq 'Pending' ? 'N.A' : quoteDescItem.profitMargin}" />
                                     </p:column>
 
                                     <p:column rendered="#{item.status eq 'Relayed'}" headerText="Profit Margin" width="10%">
-                                        <h:outputText value="#" />
+                                        <h:outputText style="color:#{quoteDescItem.profitMargin != null and quoteDescItem.profitMargin >= 0 ? 'green' : 'red'}" value="$ #{quoteDescItem.profitMargin = quoteDescItem.quotedPrice - quoteDescItem.costPrice}" />
                                     </p:column>
-                                    
+
                                 </p:dataTable>
                                 <br />
                             </p:outputPanel>

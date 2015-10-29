@@ -1,5 +1,6 @@
 package managedbean;
 
+import com.hoiio.sdk.services.SmsService;
 import entity.Customer;
 import entity.ProductQuotation;
 import entity.ProductQuotationDescription;
@@ -12,6 +13,7 @@ import java.util.HashMap;
 import java.util.Map;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
+import javax.ejb.EJBException;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.inject.Named;
@@ -42,6 +44,8 @@ public class AdminProductQuotationManagedBean implements Serializable {
     private ProductQuotation selectedProductQuotation;
 
     private Boolean correctPrice = true;
+
+    private ArrayList<ProductQuotation> filteredProductList;
 
     public AdminProductQuotationManagedBean() {
         receivedNewProductQuotationList = new ArrayList<>();
@@ -111,7 +115,7 @@ public class AdminProductQuotationManagedBean implements Serializable {
         boolean option = true;
         for (int i = 0; i < displayProductQuotationDescriptionList.size(); i++) {
             ProductQuotationDescription qd = displayProductQuotationDescriptionList.get(i);
-            if (qd.getQuotedPrice()== null) {
+            if (qd.getQuotedPrice() == null) {
                 option = false;
                 correctPrice = false;
                 FacesContext.getCurrentInstance().addMessage("inner-msgs", new FacesMessage(FacesMessage.SEVERITY_WARN, "Quoted price must be quoted for item #" + qd.getProductQuotationDescNo() + "!", ""));
@@ -123,8 +127,8 @@ public class AdminProductQuotationManagedBean implements Serializable {
                     FacesContext.getCurrentInstance().addMessage("inner-msgs", new FacesMessage(FacesMessage.SEVERITY_WARN, "Quoted price must be more than zero for item #" + qd.getProductQuotationDescNo() + "!", ""));
                 }
             }
-            
-            if (qd.getCostPrice()== null) {
+
+            if (qd.getCostPrice() == null) {
                 option = false;
                 correctPrice = false;
                 FacesContext.getCurrentInstance().addMessage("inner-msgs", new FacesMessage(FacesMessage.SEVERITY_WARN, "Cost price must be quoted for item #" + qd.getProductQuotationDescNo() + "!", ""));
@@ -152,7 +156,14 @@ public class AdminProductQuotationManagedBean implements Serializable {
                 emailManager.emailProductQuotationPriceUpdate(customer.getName(), customer.getEmail(), selectedProductQuotation.getProductQuotationNo());
             }
             if (customer.isSubscribeSMS_qPriceUpdates()) {
-
+                // SMS custmer for delivery date update
+//                try {
+//                    SmsService smsService1 = new SmsService("2USsHuRw6nYOlkh4", "Yie0bbxSDekwTT1d");
+//                    smsService1.send("+6592706232", "HiYew: Your quotation # details have been updated! You may go to HiYew Customer Portal to view the updates.", "", "", "");
+//                } catch (Exception e) {
+//                    e.printStackTrace();
+//                    throw new EJBException(e.getMessage());
+//                }
             }
             FacesContext.getCurrentInstance().addMessage("msgs", new FacesMessage(FacesMessage.SEVERITY_INFO, "Update notification for product quotation (#" + productQuotationNo + ") has been sent to customer!", ""));
             selectedProductQuotation = new ProductQuotation();
@@ -273,5 +284,19 @@ public class AdminProductQuotationManagedBean implements Serializable {
      */
     public void setCorrectPrice(Boolean correctPrice) {
         this.correctPrice = correctPrice;
+    }
+
+    /**
+     * @return the filteredProductList
+     */
+    public ArrayList<ProductQuotation> getFilteredProductList() {
+        return filteredProductList;
+    }
+
+    /**
+     * @param filteredProductList the filteredProductList to set
+     */
+    public void setFilteredProductList(ArrayList<ProductQuotation> filteredProductList) {
+        this.filteredProductList = filteredProductList;
     }
 }

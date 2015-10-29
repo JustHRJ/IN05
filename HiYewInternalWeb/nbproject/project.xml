@@ -31,6 +31,10 @@
                     <path-in-war>WEB-INF/lib</path-in-war>
                 </library>
                 <library dirs="200">
+                    <file>${file.reference.hoiio-java-2.0.2.1.jar}</file>
+                    <path-in-war>WEB-INF/lib</path-in-war>
+                </library>
+                <library dirs="200">
                     <file>${file.reference.commons-io-2.4-sources.jar}</file>
                     <path-in-war>WEB-INF/lib</path-in-war>
                 </library>
