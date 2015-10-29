@@ -31,7 +31,7 @@ public class EmployeeEntity implements Serializable {
     private String employee_passNumber;
     private String employee_address;
     private int number_of_leaves;
-    private String employee_account_status;
+    private String employee_account_status; //admin, staff
     private Collection<LeaveEntity> leaveRecords = new ArrayList<LeaveEntity>();
     private Collection<PayrollEntity> payRecords = new ArrayList<PayrollEntity>();
     private String previousPosition;
@@ -48,6 +48,7 @@ public class EmployeeEntity implements Serializable {
     private String optional;
     private String account_status;
     private String emailAddress;
+    private Boolean availability;
     private Collection<EmployeeClaimEntity> claimRecords = new ArrayList<EmployeeClaimEntity>();
     
     public EmployeeEntity() {
@@ -74,7 +75,6 @@ public class EmployeeEntity implements Serializable {
         this.account_status = account_status;
         this.emailAddress = emailAddress;
     }
-    
     
     @OneToMany(cascade ={CascadeType.ALL}, mappedBy ="employee", orphanRemoval=true)
     public Collection<EmployeeClaimEntity> getEmployeeClaims(){
@@ -400,6 +400,20 @@ public class EmployeeEntity implements Serializable {
      */
     public void setSecretAnswer(String secretAnswer) {
         this.secretAnswer = secretAnswer;
+    }
+
+    /**
+     * @return the availability
+     */
+    public Boolean getAvailability() {
+        return availability;
+    }
+
+    /**
+     * @param availability the availability to set
+     */
+    public void setAvailability(Boolean availability) {
+        this.availability = availability;
     }
 
 }

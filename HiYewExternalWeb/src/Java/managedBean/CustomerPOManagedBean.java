@@ -1,8 +1,14 @@
 package managedBean;
 
 import entity.CustomerPO;
+import entity.EmployeeEntity;
+import entity.FillerEntity;
+import entity.MachineEntity;
+import entity.Metal;
+import entity.Project;
 import entity.Quotation;
 import entity.QuotationDescription;
+import entity.WeldJob;
 import java.io.Serializable;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
@@ -18,11 +24,19 @@ import javax.faces.view.ViewScoped;
 import org.primefaces.context.RequestContext;
 import session.stateless.CustomerPOSessionBeanLocal;
 import session.stateless.CustomerSessionBeanLocal;
+import session.stateless.MetalSessionBeanLocal;
+import session.stateless.ProjectSessionBeanLocal;
 import session.stateless.QuotationSessionBeanLocal;
 
 @Named(value = "pOManagedBean")
 @ViewScoped
 public class CustomerPOManagedBean implements Serializable {
+
+    @EJB
+    private MetalSessionBeanLocal metalSessionBean;
+
+    @EJB
+    private ProjectSessionBeanLocal projectSessionBean;
 
     @EJB
     private CustomerPOSessionBeanLocal customerPOSessionBean;
@@ -38,22 +52,22 @@ public class CustomerPOManagedBean implements Serializable {
 
     //Attributes binded to view
     private String purOrderNo = "";
-    
+
     private String attn = "";
     private String paymentTerms = "";
     private String orderDate = "";
-    private String expectedStart = "";
-    private String expectedEnd = "";
+    //private String expectedStart = "";
+    //private String expectedEnd = "";
     private String totalPrice = "";
 
     private String metalName = "";
-    private String weldingType = "";
     private String descriptions;
     private Double total = 0.0;
-    private Timestamp expectedStartDate;
-    private Timestamp expectedEndDate;
+    //private Timestamp expectedStartDate;
+    //private Timestamp expectedEndDate;
 
     private ArrayList<CustomerPO> receivedCustomerPO;
+    private ArrayList<WeldJob> receivedCustomerWJ;
 
     /**
      * Creates a new instance of POManagedBean
@@ -61,6 +75,7 @@ public class CustomerPOManagedBean implements Serializable {
     public CustomerPOManagedBean() {
         newPurOrder = new CustomerPO();
         receivedCustomerPO = new ArrayList<>();
+        receivedCustomerWJ = new ArrayList<>();
     }
 
     @PostConstruct
@@ -74,33 +89,123 @@ public class CustomerPOManagedBean implements Serializable {
         descriptions = "";
         receivedCustomerPO = new ArrayList<>(customerPOSessionBean.receivedCustomerPO(username));
         System.out.println(receivedCustomerPO.size());
+        receivedCustomerWJ = new ArrayList<>(projectSessionBean.receivedWeldJobs(username));
     }
 
     public void receivedCustomerPO() {
         receivedCustomerPO = new ArrayList<>(customerPOSessionBean.receivedCustomerPO(username));
-        FacesContext.getCurrentInstance().addMessage("qMsg",
-                new FacesMessage(FacesMessage.SEVERITY_INFO, "Current quotations are up to date.", ""));
+        FacesContext.getCurrentInstance().addMessage("poMsg",
+                new FacesMessage(FacesMessage.SEVERITY_INFO, "Current purchase order are up to date.", ""));
+    }
+    
+    public void receivedCustomerWJ(){
+        receivedCustomerWJ = new ArrayList<>(projectSessionBean.receivedWeldJobs(username));
+        FacesContext.getCurrentInstance().addMessage("wjMsg",
+                new FacesMessage(FacesMessage.SEVERITY_INFO, "Current weld jobs are up to date.", ""));
     }
 
     public void createPurchaseOrder(Quotation q) {
         q.setStatus("Accepted");
         quotationSessionBean.conductMerge(q);
-        
+
         newPurOrder.setPoId(q.getQuotationNo());
-        newPurOrder.setExpectedStartDate(expectedStartDate);
-        newPurOrder.setExpectedEndDate(expectedEndDate);
+        //newPurOrder.setExpectedStartDate(expectedStartDate);
+        //newPurOrder.setExpectedEndDate(expectedEndDate);
         newPurOrder.setTotalPrice(total);
-        
-        if(newPurOrder.getMailingAddr1().equals("") && newPurOrder.getMailingAddr2().equals("")){
+
+        if (newPurOrder.getMailingAddr1().equals("") && newPurOrder.getMailingAddr2().equals("")) {
             newPurOrder.setMailingAddr1(q.getCustomer().getAddress1());
             newPurOrder.setMailingAddr2(q.getCustomer().getAddress2());
         }
-        
+
         newPurOrder.setCustomer(q.getCustomer());
         newPurOrder.setQuotation(q);
         customerPOSessionBean.createPO(newPurOrder);//persist
         //add into customer purchase order collection in persistence context
         customerSessionBean.addPurchaseOrder(q.getCustomer().getUserName(), newPurOrder);
+        System.out.println("Test 1");
+        //create a new project
+        Project project = new Project();
+        project.setProjectNo(newPurOrder.getPoId());
+        project.setProjectCompletion(false);
+        project.setProjectManager("Han Kiat");
+        //set customer key to project
+        if (FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("username") != null) {
+            String username = FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("username").toString();
+            project.setCustomerKey(username);
+        }
+        System.out.println("Test 2");
+        //set latest End date for project
+        if (q.getCompanyLatestEnd() == null) {
+            project.setLatestEnd(q.getCustomerLatestEnd());
+        } else {
+            project.setLatestEnd(q.getCompanyLatestEnd());
+        }
+        System.out.println("Test 3");
+        //duration
+        Integer days = 0;
+        //create new weldJobs
+        ArrayList<WeldJob> weldJobs = new ArrayList<>();
+        WeldJob newWeldJob = new WeldJob();
+        System.out.println("Size of qd: " + q.getQuotationDescriptions().size());
+        for (int i = 0; i < q.getQuotationDescriptions().size(); i++) {
+            System.out.println("Test 4");
+            newWeldJob.setProjectNo(newPurOrder.getPoId());
+            newWeldJob.setMetal1(q.getQuotationDescriptions().get(i).getMetalName());
+            newWeldJob.setMetal2(q.getQuotationDescriptions().get(i).getMetalName());
+            //set filler
+            Metal m = metalSessionBean.getMetalByName(q.getQuotationDescriptions().get(i).getMetalName());
+            if (m != null && !m.getFillers().isEmpty()) {
+                newWeldJob.setFiller((FillerEntity) new ArrayList(m.getFillers()).get(0));
+            }
+            //check which staff is available
+            EmployeeEntity e = projectSessionBean.getAvailableEmployee();
+            if (e != null) {
+                newWeldJob.setEmpName(e.getEmployee_name());
+            }
+
+            //check which machine can be used for welding type
+            MachineEntity machine = projectSessionBean.getAvailableMachine(q.getQuotationDescriptions().get(i).getWeldingType());
+            if (machine != null) {
+                newWeldJob.setMachine(machine);
+            }
+
+            //check duration(days) from project of same nature
+            String mName = q.getQuotationDescriptions().get(0).getMetalName();
+            if (projectSessionBean.getSimilarPastProjectDuration(mName, mName) > days) {
+                days = projectSessionBean.getSimilarPastProjectDuration(mName, mName); //get the longest duration among diff welding job
+            }
+            System.out.println("days taken: " + days);
+            weldJobs.add(newWeldJob);
+            newWeldJob = new WeldJob();
+        }
+        System.out.println("Test 5");
+        if (days != -1) {
+            //check for any project slack which can accomodate the new project duration
+            Project p = projectSessionBean.getProjectDurationWithSlack(days);
+            if (p != null) {
+                project.setPlannedStart(p.getActualEnd());
+            } else {
+                //if there is no project slack equals new proj dur, then check and take the earliest project expected completion date
+                p = projectSessionBean.getProjectWithEarliestCompletionDate();
+                if (p != null) {
+                    project.setPlannedStart(p.getPlannedEnd());
+                }
+            }
+            //assign plannedEnd
+            if (project.getPlannedStart() != null) {
+                project.setPlannedEnd(projectSessionBean.addDays(project.getPlannedStart(), days));
+            }
+        }
+        System.out.println("Test 6");
+        projectSessionBean.createProject(project);
+        for (WeldJob w : weldJobs) {
+            w.setProject(project);
+            projectSessionBean.createWeldJob(w);
+        }
+        project.setWeldJobs(weldJobs);
+        projectSessionBean.conductMerge(project);
+        
 
         newPurOrder = new CustomerPO();//reinitialise
         FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "RFQ creation must have at least one item job!", ""));
@@ -112,23 +217,25 @@ public class CustomerPOManagedBean implements Serializable {
         attn = q.getCustomer().getName();
         paymentTerms = q.getTermsOfPayment();
         //Will update again when DSS is up. For now, we assume work starts 3 days later and ends in 1 month(30 days)
-        Date now = addDays(new Date(), 3);
-        Timestamp threeDaysLater = new Timestamp(now.getTime());
-        expectedStartDate = threeDaysLater;
-        expectedStart = formatDate(threeDaysLater);
-        now = addDays(new Date(), 30);
-        Timestamp thirtyDaysLater = new Timestamp(now.getTime());
-        expectedEndDate = thirtyDaysLater;
-        expectedEnd = formatDate(thirtyDaysLater);
+        //Date now = addDays(new Date(), 3);
+        //Timestamp threeDaysLater = new Timestamp(now.getTime());
+        //expectedStartDate = threeDaysLater;
+        //expectedStart = formatDate(threeDaysLater);
+        //now = addDays(new Date(), 30);
+        //Timestamp thirtyDaysLater = new Timestamp(now.getTime());
+        //expectedEndDate = thirtyDaysLater;
+       // expectedEnd = formatDate(thirtyDaysLater);
 
         for (QuotationDescription qd : q.getQuotationDescriptions()) {
-            descriptions += qd.getQuotationDescNo().toString() + ". " + qd.getMetalName() + "\r\n   " 
-                    + "Welding Type: " + qd.getWeldingType() + "\r\n   " +
-                    "Instn: " + qd.getItemDesc() + "\r\n   "  + "Price: SGD "
+
+            descriptions += qd.getQuotationDescNo().toString() + ". " + qd.getMetalName() + "\r\n   "
+                    + "Welding Type: " + qd.getWeldingType() + "\r\n   "
+                    + "Instn: " + qd.getItemDesc() + "\r\n   " + "Price: SGD "
                     + String.format("%.2f", qd.getPrice() * qd.getQty()) + "\r\n";
             //compute total price
-            total += qd.getPrice();
+            total += qd.getPrice() * qd.getQty();
         }
+        //System.out.println("total is " + total);
         totalPrice = String.format("%.2f", total);
         //Pop up
         showDialog();
@@ -144,7 +251,7 @@ public class CustomerPOManagedBean implements Serializable {
     public String formatDate(Timestamp t) {
 
         SimpleDateFormat sd = new SimpleDateFormat("dd/MM/yyyy");
-        if(t != null){
+        if (t != null) {
             return sd.format(t.getTime());
         }
         return "";
@@ -226,34 +333,7 @@ public class CustomerPOManagedBean implements Serializable {
         this.orderDate = orderDate;
     }
 
-    /**
-     * @return the expectedStartDate
-     */
-    public Timestamp getExpectedStartDate() {
-        return expectedStartDate;
-    }
-
-    /**
-     * @param expectedStartDate the expectedStartDate to set
-     */
-    public void setExpectedStartDate(Timestamp expectedStartDate) {
-        this.expectedStartDate = expectedStartDate;
-    }
-
-    /**
-     * @return the expectedEndDate
-     */
-    public Timestamp getExpectedEndDate() {
-        return expectedEndDate;
-    }
-
-    /**
-     * @param expectedEndDate the expectedEndDate to set
-     */
-    public void setExpectedEndDate(Timestamp expectedEndDate) {
-        this.expectedEndDate = expectedEndDate;
-    }
-
+   
     /**
      * @return the totalPrice
      */
@@ -268,33 +348,6 @@ public class CustomerPOManagedBean implements Serializable {
         this.totalPrice = totalPrice;
     }
 
-    /**
-     * @return the expectedStart
-     */
-    public String getExpectedStart() {
-        return expectedStart;
-    }
-
-    /**
-     * @param expectedStart the expectedStart to set
-     */
-    public void setExpectedStart(String expectedStart) {
-        this.expectedStart = expectedStart;
-    }
-
-    /**
-     * @return the expectedEnd
-     */
-    public String getExpectedEnd() {
-        return expectedEnd;
-    }
-
-    /**
-     * @param expectedEnd the expectedEnd to set
-     */
-    public void setExpectedEnd(String expectedEnd) {
-        this.expectedEnd = expectedEnd;
-    }
 
     /**
      * @return the descriptions
@@ -367,19 +420,17 @@ public class CustomerPOManagedBean implements Serializable {
     }
 
     /**
-     * @return the weldingType
+     * @return the receivedCustomerWJ
      */
-    public String getWeldingType() {
-        return weldingType;
+    public ArrayList<WeldJob> getReceivedCustomerWJ() {
+        return receivedCustomerWJ;
     }
 
     /**
-     * @param weldingType the weldingType to set
+     * @param receivedCustomerWJ the receivedCustomerWJ to set
      */
-    public void setWeldingType(String weldingType) {
-        this.weldingType = weldingType;
+    public void setReceivedCustomerWJ(ArrayList<WeldJob> receivedCustomerWJ) {
+        this.receivedCustomerWJ = receivedCustomerWJ;
     }
-
-   
 
 }

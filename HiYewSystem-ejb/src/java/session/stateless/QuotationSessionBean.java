@@ -49,7 +49,7 @@ public class QuotationSessionBean implements QuotationSessionBeanLocal {
         return newQuotationNo;
     }
 
-    @Override
+    
     public void conductMerge(Quotation q) {
         em.merge(q);
     }
@@ -70,12 +70,12 @@ public class QuotationSessionBean implements QuotationSessionBeanLocal {
 
         System.out.println("QuotationSessionBean.java receivedQuotations(String username) username ===== " + username);
 
-        Query query = em.createQuery("Select q FROM Quotation AS q where q.date >= :thirtyDaysAgo AND q.customer.userName=:username ");
+        Query query = em.createQuery("Select q FROM Quotation AS q where q.date >= :threeDaysAgo AND q.customer.userName=:username ");
 
-        Date now = addDays(new Date(), -30);
-        Timestamp thirtyDaysAgo = new Timestamp(now.getTime());
+        Date now = addDays(new Date(), -3);
+        Timestamp threeDaysAgo = new Timestamp(now.getTime());
 
-        query.setParameter("thirtyDaysAgo", thirtyDaysAgo);
+        query.setParameter("threeDaysAgo", threeDaysAgo);
         query.setParameter("username", username);
 
         List<Quotation> quotations = query.getResultList();
@@ -89,13 +89,13 @@ public class QuotationSessionBean implements QuotationSessionBeanLocal {
         return cal.getTime();
     }
 
-    private Date getFirstDayOfYear(int year) {
+    public Date getFirstDayOfYear(int year) {
         Calendar cld = Calendar.getInstance();
         cld.set(year, 0, 0);
         return cld.getTime();
     }
 
-    private Date getLastDayOfYear(int year) {
+    public Date getLastDayOfYear(int year) {
         Calendar cld = Calendar.getInstance();
         cld.set(year + 1, 0, -1);
         return cld.getTime();

@@ -35,7 +35,6 @@ public class CustomerSessionBean implements CustomerSessionBeanLocal {
             return c;
         }
     }
-
     @Override
     public String encryptPassword(String password) {
         String encrypted = null;
@@ -49,7 +48,7 @@ public class CustomerSessionBean implements CustomerSessionBeanLocal {
         return encrypted;
     }
 
-    @Override
+    
     public Customer getCustomerByUsername(String username) {
         Customer c = em.find(Customer.class, username);
         if (c != null) {
@@ -101,7 +100,6 @@ public class CustomerSessionBean implements CustomerSessionBeanLocal {
         c.setSubscribeSMS_poDeliveryUpdates(c1.isSubscribeSMS_poDeliveryUpdates());
     }
 
-    @Override
     public String resetCustomerPassword(String username) {
         Customer c = em.find(Customer.class, username);
         SecureRandom random = new SecureRandom();
