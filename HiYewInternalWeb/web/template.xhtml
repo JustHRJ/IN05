@@ -107,9 +107,16 @@
                             </p:column>
                             <p:column>
                                 <p:submenu label ="Leave Management">
-                                    <p:menuitem value ="Apply for Leave" url ="hrms-leave-application.xhtml" />
-                                    <p:menuitem value ="Approve Leave" url ="hrms-approve-leave.xhtml" rendered ="#{loginControlBean.checkValid1()}"/>
-                                    <p:menuitem value ="Check Leave Status" url ="hrms-leave-status.xhtml" />
+                                    <p:menuitem value ="Apply for Claim" url ="hrms-leave-application.xhtml" />
+                                    <p:menuitem value ="Approve Claims" url ="hrms-approve-leave.xhtml" rendered ="#{loginControlBean.checkValid1()}"/>
+                                    <p:menuitem value ="Check Claim Status" url ="hrms-leave-status.xhtml" />
+                                </p:submenu>
+                            </p:column>
+                            <p:column>
+                                <p:submenu label ="Claim Management">
+                                    <p:menuitem value ="Apply for Claims" url ="hrms-apply-claims.xhtml" />
+                                    <p:menuitem value ="Approve Leave" url ="hrms-view-employee-claim.xhtml" rendered ="#{loginControlBean.checkValid1()}"/>
+                                    <p:menuitem value ="Check Leave Status" url ="hrms-view-approved-claim.xhtml" />
                                 </p:submenu>
                             </p:column>
                         </p:submenu>
@@ -257,7 +264,7 @@
         -->
         <!-- Basic Javascripts (Jquery and bootstrap) -->
         <!--<script src="assets/js/jquery.js"></script>-->
-<!--        <script src="assets/js/bootstrap.min.js"></script>-->
+        <!--        <script src="assets/js/bootstrap.min.js"></script>-->
 
         <!-- VENDOR -->
 

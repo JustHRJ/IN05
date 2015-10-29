@@ -214,7 +214,7 @@ public class ProductQuotationManagedBean implements Serializable {
         // System.out.println("ProductQuotationDescriptionList size is " + productQuotation.getProductQuotationDescriptionList().size());
     }
 
-    public void addToCacheList(String productType, String itemName, Integer quantity) {
+    public void addToCacheList(String productType, String itemName, Integer quantity) throws IOException {
         Boolean noSuchItem = true;
         System.out.println("cacheList.size() === " + cacheList.size());
         System.out.println("count === " + count);
@@ -265,6 +265,7 @@ public class ProductQuotationManagedBean implements Serializable {
 
             FacesContext.getCurrentInstance().addMessage("msg", new FacesMessage("Item is added to RFQ list!", ""));
         }
+        FacesContext.getCurrentInstance().getExternalContext().redirect("/HiYewExternalWeb/c-products-machines.xhtml");
     }
 
     public void deleteProductQuotationDescription(ProductQuotationDescription productQuotationDescription) {
