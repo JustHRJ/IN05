@@ -28,6 +28,15 @@
                 <p:panelGrid rendered="#{knowledgeManageBean.fillerAdd}">
                     <p:row>
                         <p:column>
+                            <p:outputLabel value ="Filler ID"/>
+                        </p:column>
+                        <p:column>
+                            <p:inputText value ="#{knowledgeManageBean.selectedFiller.id}"/>
+                        </p:column>
+                    </p:row>
+
+                    <p:row>
+                        <p:column>
                             <p:outputLabel value ="Filler Name"/>
                         </p:column>
                         <p:column>
@@ -120,7 +129,7 @@
                 </p:panelGrid> 
 
                 <p:panelGrid rendered="#{knowledgeManageBean.metalAdd}">
-               
+
                     <p:row>
                         <p:column>
                             <p:outputLabel value ="Metal Name"/>

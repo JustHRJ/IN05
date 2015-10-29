@@ -41,9 +41,11 @@ public class AddItemManagedBean implements Serializable {
     public String createItem() {
         System.out.println("Here");
         if ((hiYewICSSessionBean.getExistingItem(newItem.getFillerCode())) != null) {
+            System.out.println("Exisitng Item Code");
             FacesContext.getCurrentInstance().addMessage("formMain:itemCode", new FacesMessage(FacesMessage.SEVERITY_ERROR, "Unable to add item! Existing Item Code", "Unable to add item! Existing Item Code"));
             return "";
         }else if ((hiYewICSSessionBean.getExistingItemByName(newItem.getFillerName()))!= null){
+            System.out.println("Exisitng Item Name");
             FacesContext.getCurrentInstance().addMessage("formMain:itemName", new FacesMessage(FacesMessage.SEVERITY_ERROR,"Unable to add item! Existing Item Name", "Unable to add item! Existing Item Name"));
             return "";
         }

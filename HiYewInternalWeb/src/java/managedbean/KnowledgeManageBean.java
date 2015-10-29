@@ -81,20 +81,50 @@ public class KnowledgeManageBean implements Serializable {
         if (selectedFiller.getName().isEmpty()) {
 
         } else {
-            knowledgeSystemBean.addNewFiller(selectedFiller);
+            boolean check = countPercentage(selectedFiller);
+            if (check) {
+                knowledgeSystemBean.addNewFiller(selectedFiller);
+            }
         }
     }
 
-    public void addNewFillerInfoInv(){
-         FillerEntity filler = (FillerEntity) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("ItemToPassToComposition");
-         knowledgeSystemBean.addNewFiller(selectedFiller, filler);
+    private boolean countPercentageM(Metal filler) {
+        int sum = 0;
+        sum += filler.getAluminium() + filler.getCarbon() + filler.getChromium() + filler.getCopper() + filler.getIron() + filler.getLead() + filler.getManganese() + filler.getNickel() + filler.getSilicon() + filler.getZinc();
+        if (sum != 100) {
+            return false;
+        } else {
+            return true;
+        }
+
     }
-    
+
+    private boolean countPercentage(FillerComposition filler) {
+        int sum = 0;
+        sum += filler.getAluminium() + filler.getCarbon() + filler.getChromium() + filler.getCopper() + filler.getIron() + filler.getLead() + filler.getManganese() + filler.getNickel() + filler.getSilicon() + filler.getZinc();
+        if (sum != 100) {
+            return false;
+        } else {
+            return true;
+        }
+
+    }
+
+    public void addNewFillerInfoInv() {
+        boolean check = countPercentage(selectedFiller);
+        if (check) {
+            FillerEntity filler = (FillerEntity) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("ItemToPassToComposition");
+            knowledgeSystemBean.addNewFiller(selectedFiller, filler);
+        } else {
+            System.out.println("percentage not 100");
+        }
+    }
+
     public void addNewMetalInfo() {
         if (selectedMetal.getMetalName().isEmpty()) {
 
         } else {
-
+            boolean check = countPercentageM(selectedMetal);
             knowledgeSystemBean.addNewMetal(selectedMetal);
 
         }
@@ -464,12 +494,17 @@ public class KnowledgeManageBean implements Serializable {
 
     public void updateFiller() {
         System.out.println("here");
-
-        knowledgeSystemBean.editFiller(selectedFiller);
+        boolean check = countPercentage(selectedFiller);
+        if (check) {
+            knowledgeSystemBean.editFiller(selectedFiller);
+        }
     }
 
     public void updateMetal() {
-        knowledgeSystemBean.editMetal(selectedMetal);
+        boolean check = countPercentageM(selectedMetal);
+        if (check) {
+            knowledgeSystemBean.editMetal(selectedMetal);
+        }
     }
 
     /**
@@ -510,11 +545,11 @@ public class KnowledgeManageBean implements Serializable {
         return selectedMetal;
     }
 
-    public List<FillerComposition> viewMatch() {
+    public List<FillerEntity> viewMatch() {
         if (selectedMetal != null) {
-            List<FillerComposition> result = new ArrayList<FillerComposition>();
+            List<FillerEntity> result = new ArrayList<FillerEntity>();
             for (Object o : selectedMetal.getFillers()) {
-                FillerComposition f = (FillerComposition) o;
+                FillerEntity f = (FillerEntity) o;
                 result.add(f);
             }
             if (result.isEmpty()) {

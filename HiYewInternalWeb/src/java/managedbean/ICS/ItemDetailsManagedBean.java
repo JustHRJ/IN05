@@ -165,11 +165,12 @@ public class ItemDetailsManagedBean implements Serializable {
             FacesContext.getCurrentInstance().addMessage("upperMessages", new FacesMessage("Item " + selectedItem.getFillerCode() + "'s quantity deleted successfully!"));
             return "ics-view-inventory?faces-redirect=true";
         } else {
-            FacesContext.getCurrentInstance().addMessage("upperMessages", new FacesMessage("Unable to delete!"));
+            FacesContext.getCurrentInstance().addMessage("upperMessages", new FacesMessage(FacesMessage.SEVERITY_ERROR,"Warning!","Unable to delete!"));
             return "";
         }
         }else{
-            FacesContext.getCurrentInstance().addMessage("upperMessages", new FacesMessage("Unable to delete, remove item from shelve before item deletion"));
+            System.out.println("got storage unable to delete");
+            FacesContext.getCurrentInstance().addMessage("upperMessages", new FacesMessage(FacesMessage.SEVERITY_ERROR,"Warning!","Unable to delete, remove item from shelve before item deletion"));
             return "";
         }
     }
@@ -231,12 +232,15 @@ public class ItemDetailsManagedBean implements Serializable {
     }
 
     public void clickEventHandler() {
+        System.out.println("clickEventHandler()");
         showInOuttPanel = false;
         if (activityChoice.equalsIgnoreCase("stockIn")) {
+            System.out.println("Stock in button selected");
             showInPanel = true;
             showOutPanel = false;
 
         } else if (activityChoice.equalsIgnoreCase("stockOut")) {
+            System.out.println("Stock Out button selected");
             showInPanel = false;
             showOutPanel = true;
         }
@@ -316,7 +320,7 @@ public class ItemDetailsManagedBean implements Serializable {
         System.out.println(this.selectedItem.getFillerCode());
         FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("SelectedItem2", this.selectedItem);
         //  FacesContext.getCurrentInstance().getExternalContext().getFlash().put("SelectedItem", this.selectedItem);
-        return "ps-create-procurement-bid?faces-redirect=true";
+        return "/PS/createProcurementBid?faces-redirect=true";
     }
 
 }

@@ -134,7 +134,7 @@ public class ViewPBRequestManagedBean implements Serializable{
          procurementSessionBean.updateAcceptStatus(selectedPB, "Quoted");
          FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Success", "Price Updated!"));     
          pbList = procurementSessionBean.getBidsOpenForSupplier(supplier.getCompanyName());
-         return "viewPBRequest?faces-redirect=true";
+         return "s-view-PB-request?faces-redirect=true";
     }
 
     /**

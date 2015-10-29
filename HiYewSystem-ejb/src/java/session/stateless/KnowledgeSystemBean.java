@@ -85,13 +85,18 @@ public class KnowledgeSystemBean implements KnowledgeSystemBeanLocal {
         }
     }
 
-    
-    public void addNewFiller(FillerComposition fillerC, FillerEntity filler){
-        filler.setFiller(fillerC);
-        em.persist(fillerC);
-        em.merge(filler);
+    public void addNewFiller(FillerComposition fillerC, FillerEntity filler) {
+        FillerComposition c = em.find(FillerComposition.class, filler.getFillerCode());
+        if (c == null) {
+
+            fillerC.setId(filler.getFillerCode());
+            fillerC.setName(filler.getFillerName());
+            em.persist(fillerC);
+            filler.setFiller(fillerC);
+            em.merge(filler);
+        }
     }
-    
+
     public void deleteMetal(Metal metal) {
         if (metal == null) {
             System.out.println("no metal to delete");
@@ -108,11 +113,11 @@ public class KnowledgeSystemBean implements KnowledgeSystemBeanLocal {
     }
 
     public List<String> retrieveFillerNames() {
-        Query q = em.createQuery("select c from FillerComposition c");
+        Query q = em.createQuery("select c from FillerEntity c");
         List<String> results = new ArrayList<String>();
         for (Object o : q.getResultList()) {
-            FillerComposition f = (FillerComposition) o;
-            results.add(f.getName());
+            FillerEntity f = (FillerEntity) o;
+            results.add(f.getFillerName());
         }
         if (results.isEmpty()) {
             return null;
@@ -124,7 +129,10 @@ public class KnowledgeSystemBean implements KnowledgeSystemBeanLocal {
     public void addNewFiller(FillerComposition filler) {
         try {
             if (filler != null) {
-                em.persist(filler);
+                FillerComposition fillerFind = em.find(FillerComposition.class, filler.getId());
+                if (fillerFind == null) {
+                    em.persist(filler);
+                }
             }
         } catch (Exception ex) {
             System.out.println("Filler cannot persist");
@@ -160,7 +168,7 @@ public class KnowledgeSystemBean implements KnowledgeSystemBeanLocal {
 
     public void createPairings(String metal, List<String> fillerChosen) {
         Metal m = new Metal();
-        Collection<FillerComposition> fillers = new ArrayList<FillerComposition>();
+        Collection<FillerEntity> fillers = new ArrayList<FillerEntity>();
         try {
             Query q = em.createQuery("select m from Metal m where m.metalName = :id");
             q.setParameter("id", metal);
@@ -173,10 +181,10 @@ public class KnowledgeSystemBean implements KnowledgeSystemBeanLocal {
             for (Object o : fillerChosen) {
                 String fn = (String) o;
                 System.out.println(fn);
-                FillerComposition f = new FillerComposition();
-                q = em.createQuery("select f from FillerComposition f where f.name =:id");
+                FillerEntity f = new FillerEntity();
+                q = em.createQuery("select f from FillerEntity f where f.fillerName =:id");
                 q.setParameter("id", fn);
-                f = (FillerComposition) q.getSingleResult();
+                f = (FillerEntity) q.getSingleResult();
                 fillers.add(f);
             }
             System.out.println("error here3");
@@ -194,16 +202,16 @@ public class KnowledgeSystemBean implements KnowledgeSystemBeanLocal {
         Metal m = new Metal();
         List<String> result = new ArrayList<String>();
         try {
-            Query q = em.createQuery("select c from FillerComposition c");
+            Query q = em.createQuery("select c from FillerEntity c");
             Query z = em.createQuery("select m from Metal m where m.metalName = :id");
             z.setParameter("id", metalName);
             m = (Metal) z.getSingleResult();
             for (Object o : q.getResultList()) {
-                FillerComposition f = (FillerComposition) o;
+                FillerEntity f = (FillerEntity) o;
                 if (m.getFillers().contains(f)) {
                     System.out.println("should not add: not associated");
                 } else {
-                    result.add(f.getName());
+                    result.add(f.getFillerName());
                 }
             }
             if (result.isEmpty()) {
@@ -222,14 +230,14 @@ public class KnowledgeSystemBean implements KnowledgeSystemBeanLocal {
         Metal m = new Metal();
         List<String> result = new ArrayList<String>();
         try {
-            Query q = em.createQuery("select c from FillerComposition c");
+            Query q = em.createQuery("select c from FillerEntity c");
             Query z = em.createQuery("select m from Metal m where m.metalName = :id");
             z.setParameter("id", metalName);
             m = (Metal) z.getSingleResult();
             for (Object o : q.getResultList()) {
-                FillerComposition f = (FillerComposition) o;
+                FillerEntity f = (FillerEntity) o;
                 if (m.getFillers().contains(f)) {
-                    result.add(f.getName());
+                    result.add(f.getFillerName());
                 } else {
                     System.out.println("should not add: associated");
 
@@ -365,10 +373,9 @@ public class KnowledgeSystemBean implements KnowledgeSystemBeanLocal {
 
     public void deleteFiller(FillerComposition filler) {
         if (filler != null) {
-            Long id = filler.getId();
+            String id = filler.getId();
             FillerComposition f = em.find(FillerComposition.class, id);
-            if (f
-                    == null) {
+            if (f == null) {
                 System.out.println("no filler to delete");
             } else {
                 em.remove(f);
@@ -388,19 +395,17 @@ public class KnowledgeSystemBean implements KnowledgeSystemBeanLocal {
         try {
 
             Metal m = new Metal();
-            FillerComposition f = new FillerComposition();
+            FillerEntity f = new FillerEntity();
 
             for (Object o : results) {
                 Vector im = (Vector) o;
                 String metalN = im.get(0).toString();
-                Long id = Long.parseLong(im.get(1).toString());
-                m
-                        = em.find(Metal.class, metalN);
-                if (m
-                        == null) {
+                String id = im.get(1).toString();
+                m = em.find(Metal.class, metalN);
+                if (m == null) {
                     System.out.println("metal not found");
                 } else {
-                    f = em.find(FillerComposition.class, id);
+                    f = em.find(FillerEntity.class, id);
                     if (f == null) {
                         System.out.println("filler not found");
                     } else {
