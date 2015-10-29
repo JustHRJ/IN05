@@ -26,4 +26,10 @@ public class MetalSessionBean implements MetalSessionBeanLocal {
         Query query = em.createQuery("Select m.metalName FROM Metal AS m where m.metalName LIKE '%"+ str + "%' ");
         return query.getResultList();
     }
+    
+    @Override
+    public Metal getMetalByName(String metalName){
+        Metal metal = em.find(Metal.class, metalName);
+        return metal;
+    }
 }

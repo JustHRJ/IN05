@@ -7,6 +7,7 @@ import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.enterprise.context.SessionScoped;
@@ -21,7 +22,7 @@ import session.stateless.QuotationSessionBeanLocal;
 @Named(value = "quotationManagedBean")
 @SessionScoped
 public class QuotationManagedBean implements Serializable {
-    
+
     @EJB
     private QuotationSessionBeanLocal quotationSessionBean;
     @EJB
@@ -29,13 +30,13 @@ public class QuotationManagedBean implements Serializable {
     @EJB
     private MetalSessionBeanLocal metalSessionBean;
 
-
     private String username = "";
     private String date = "";
     private String quotationNo = "";
     private Integer count;
     private String txt1 = "";
-
+    private Date latestEndDate = null;
+    //private String latestEndDate = "";
     private ArrayList<QuotationDescription> cacheList = new ArrayList<>();
     private Quotation newQuotation;
     private QuotationDescription newQuotationDesc;
@@ -62,21 +63,21 @@ public class QuotationManagedBean implements Serializable {
 
         receivedQuotations = new ArrayList<>(quotationSessionBean.receivedQuotations(username));
     }
-    
-    public void checkToReset(){
-        if(FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("username").toString() == null){
-            
-        }else if(!username.equals(FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("username").toString())){
+
+    public void checkToReset() {
+        if (FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("username").toString() == null) {
+
+        } else if (!username.equals(FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("username").toString())) {
             reset();
         }
     }
-    
+
     public void reset() {
         newQuotation = new Quotation();
         newQuotationDesc = new QuotationDescription();
         receivedQuotations = new ArrayList<>();
         displayQuotationDescriptions = new ArrayList<>();
-        
+
         count = 1;
         if (FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("username") != null) {
             username = FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("username").toString();
@@ -84,7 +85,7 @@ public class QuotationManagedBean implements Serializable {
         }
         date = new SimpleDateFormat("dd/MM/yyyy").format(Calendar.getInstance().getTime());
     }
-    
+
     public ArrayList<String> completeText(String str) {
         ArrayList<String> results = new ArrayList<>(metalSessionBean.getMetalBySubString(str));
         System.out.println("Size of results: " + results.size());
@@ -93,19 +94,22 @@ public class QuotationManagedBean implements Serializable {
 
     public void receivedQuotations() {
         System.out.println("QuotationManagedBean.java receivedQuotations() ===== " + username);
-        
+
         if (!username.equals(FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("username").toString())) {
             System.out.println("QuotationManagedBean.java receivedQuotations() ===== call method reset()");
             reset();
         }
-        
+
         receivedQuotations = new ArrayList<>(quotationSessionBean.receivedQuotations(username));
         FacesContext.getCurrentInstance().addMessage("qMsg", new FacesMessage(FacesMessage.SEVERITY_INFO, "Current quotations are up to date.", ""));
     }
 
     public String formatDate(Timestamp t) {
+        if(t != null){
         SimpleDateFormat sd = new SimpleDateFormat("dd/MM/yyyy");
         return sd.format(t.getTime());
+        }
+        return "";
 
     }
 
@@ -123,7 +127,7 @@ public class QuotationManagedBean implements Serializable {
         if (newQuotationDesc.getMetalName().equals("") || newQuotationDesc.getQty() == null) {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Metal Name or quantity must not be left unfilled!", ""));
         } else {
-            
+
             newQuotationDesc.setQuotationDescNo(count);
             count += 1;
             cacheList.add(newQuotationDesc);
@@ -157,6 +161,25 @@ public class QuotationManagedBean implements Serializable {
             quotationNo = quotationSessionBean.getQuotationNo(username);
             //assign quotation
             newQuotation.setQuotationNo(quotationNo);
+
+            if (latestEndDate != null) {
+            System.out.println("time is " + latestEndDate.getTime());
+              Timestamp t = new Timestamp(latestEndDate.getTime());
+              newQuotation.setCustomerLatestEnd(t);
+            }else{
+              System.out.println("latestStartDate is null");
+            }
+            
+            //try {
+            //    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss.SSS");
+            //    Date parsedDate = dateFormat.parse(latestEndDate);
+            //    Timestamp timestamp = new java.sql.Timestamp(parsedDate.getTime());
+            //    newQuotation.setCustomerLatestStart(timestamp);
+           // } catch (Exception e) {
+//
+           // }
+            //
+
             newQuotation.setCustomer(customerSessionBean.getCustomerByUsername(username));
             //persist quotation
             quotationSessionBean.createQuotation(newQuotation);
@@ -320,17 +343,29 @@ public class QuotationManagedBean implements Serializable {
     }
 
     /**
-     * @return the txt1
+     * @return the latestStartDate
      */
-    public String getTxt1() {
-        return txt1;
-    }
+    //public String getLatestStartDate() {
+    //    return latestEndDate;
+    //}
 
     /**
-     * @param txt1 the txt1 to set
+     * @param latestStartDate the latestStartDate to set
      */
-    public void setTxt1(String txt1) {
-        this.txt1 = txt1;
-    }
+    //public void setLatestStartDate(String latestEndDate) {
+    //    this.latestEndDate = latestEndDate;
+    //}
 
+    /**
+     * @return the latestEndDate
+     */
+    public Date getLatestEndDate() {
+        return latestEndDate;
+     }
+    /**
+     * @param latestEndDate the latestEndDate to set
+     */
+    public void setLatestEndDate(Date latestEndDate) {
+        this.latestEndDate = latestEndDate;
+    }
 }

@@ -1,101 +1,128 @@
 <?xml version='1.0' encoding='UTF-8' ?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:h="http://xmlns.jcp.org/jsf/html"
-      xmlns:p="http://primefaces.org/ui">
-    <h:head>
-        <title>Facelet Title</title>
-    </h:head>
-    <h:body>
-        <h:form>
-            <p:panelGrid >
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                template="./template.xhtml">
 
-                <p:row>
-                    <p:column>
-                        <p:outputLabel value ="Copper "/>
-                    </p:column>
-                    <p:column>
-                        <p:inputText value ="#{knowledgeManageBean.selectedFiller.copper}"/>
-                    </p:column>
-                </p:row>
-                <p:row>
-                    <p:column>
-                        <p:outputLabel value ="Zinc"/>
-                    </p:column>
-                    <p:column>
-                        <p:inputText value ="#{knowledgeManageBean.selectedFiller.zinc}"/>
-                    </p:column>
-                </p:row>
-                <p:row>
-                    <p:column>
-                        <p:outputLabel value ="Filler Iron"/>
-                    </p:column>
-                    <p:column>
-                        <p:inputText value ="#{knowledgeManageBean.selectedFiller.iron}"/>
-                    </p:column>
-                </p:row>
-                <p:row>
-                    <p:column>
-                        <p:outputLabel value ="Lead"/>
-                    </p:column>
-                    <p:column>
-                        <p:inputText value ="#{knowledgeManageBean.selectedFiller.lead}"/>
-                    </p:column>
-                </p:row>
-                <p:row>
-                    <p:column>
-                        <p:outputLabel value ="Aluminium"/>
-                    </p:column>
-                    <p:column>
-                        <p:inputText value ="#{knowledgeManageBean.selectedFiller.aluminium}"/>
-                    </p:column>
-                </p:row>
-                <p:row>
-                    <p:column>
-                        <p:outputLabel value ="Carbon"/>
-                    </p:column>
-                    <p:column>
-                        <p:inputText value ="#{knowledgeManageBean.selectedFiller.carbon}"/>
-                    </p:column>
-                </p:row>
-                <p:row>
-                    <p:column>
-                        <p:outputLabel value ="Nickel"/>
-                    </p:column>
-                    <p:column>
-                        <p:inputText value ="#{knowledgeManageBean.selectedFiller.nickel}"/>
-                    </p:column>
-                </p:row>
-                <p:row>
-                    <p:column>
-                        <p:outputLabel value ="Chromium"/>
-                    </p:column>
-                    <p:column>
-                        <p:inputText value ="#{knowledgeManageBean.selectedFiller.chromium}"/>
-                    </p:column>
-                </p:row>
-                <p:row>
-                    <p:column>
-                        <p:outputLabel value ="Manganese"/>
-                    </p:column>
-                    <p:column>
-                        <p:inputText value ="#{knowledgeManageBean.selectedFiller.manganese}"/>
-                    </p:column>
-                </p:row>
-                <p:row>
-                    <p:column>
-                        <p:outputLabel value ="Silicon"/>
-                    </p:column>
-                    <p:column>
-                        <p:inputText value ="#{knowledgeManageBean.selectedFiller.silicon}"/>
-                    </p:column>
-                </p:row>
+    <ui:define name="content">
+        <!-- Page header -->
+        <div class="page-heading animated fadeInDownBig" style="padding:20px!important;padding-bottom:10px!important;">
+            <h1>Enter Filler Composition Details<small>Knowledge Management</small></h1>
+        </div>
+        <!-- End page header -->
+        <div style="padding:20px!important;padding-top:0px!important;">
+            <h:form id = "formMain">
+                <p:growl id ="msgs" showDetail="false"/>
+                <p:panelGrid >
 
-                <p:commandButton value ="Add Filler Information" action ="#{knowledgeManageBean.addNewFillerInfoInv}" />
+                    <p:row>
+                        <p:column>
+                            <p:outputLabel value ="Copper "/>
+                        </p:column>
+                        <p:column>
+                            <p:inputText value ="#{knowledgeManageBean.selectedFiller.copper}" validatorMessage="Please Enter valid range - Copper"  converterMessage="Please enter valid input - positive integer">
+                                <f:validateDoubleRange minimum="0" maximum="100"/>
+                            </p:inputText>
+                        </p:column>
+                    </p:row>
+                    <p:row>
+                        <p:column>
+                            <p:outputLabel value ="Zinc"/>
+                        </p:column>
+                        <p:column>
+                            <p:inputText value ="#{knowledgeManageBean.selectedFiller.zinc}" validatorMessage="Please Enter valid range - Zinc" converterMessage="Please enter valid input - positive integer">
+                                <f:validateDoubleRange minimum="0" maximum="100"/>
+                            </p:inputText>
+                        </p:column>
+                    </p:row>
+                    <p:row>
+                        <p:column>
+                            <p:outputLabel value ="Iron"/>
+                        </p:column>
+                        <p:column>
+                            <p:inputText value ="#{knowledgeManageBean.selectedFiller.iron}" validatorMessage="Please Enter valid range - Iron"  converterMessage="Please enter valid input - positive integer">
+                                <f:validateDoubleRange minimum="0" maximum="100"/>
+                            </p:inputText>                    
+                        </p:column>
+                    </p:row>
+                    <p:row>
+                        <p:column>
+                            <p:outputLabel value ="Lead"/>
+                        </p:column>
+                        <p:column>
+                            <p:inputText value ="#{knowledgeManageBean.selectedFiller.lead}" validatorMessage="Please Enter valid range - Lead"  converterMessage="Please enter valid input - positive integer">
+                                <f:validateDoubleRange minimum="0" maximum="100"/>
+                            </p:inputText>           
+                        </p:column>
+                    </p:row>
+                    <p:row>
+                        <p:column>
+                            <p:outputLabel value ="Aluminium"/>
+                        </p:column>
+                        <p:column>
+                            <p:inputText value ="#{knowledgeManageBean.selectedFiller.aluminium}" validatorMessage="Please Enter valid range - Aluminium"  converterMessage="Please enter valid input - positive integer">
+                                <f:validateDoubleRange minimum="0" maximum="100"/>
+                            </p:inputText>           
+                        </p:column>
+                    </p:row>
+                    <p:row>
+                        <p:column>
+                            <p:outputLabel value ="Carbon"/>
+                        </p:column>
+                        <p:column>
+                            <p:inputText value ="#{knowledgeManageBean.selectedFiller.carbon}" validatorMessage="Please Enter valid range - Carbon"  converterMessage="Please enter valid input - positive integer">
+                                <f:validateDoubleRange minimum="0" maximum="100"/>
+                            </p:inputText>           
+                        </p:column>
+                    </p:row>
+                    <p:row>
+                        <p:column>
+                            <p:outputLabel value ="Nickel"/>
+                        </p:column>
+                        <p:column>
+                            <p:inputText value ="#{knowledgeManageBean.selectedFiller.nickel}" validatorMessage="Please Enter valid range - Nickel"  converterMessage="Please enter valid input - positive integer">
+                                <f:validateDoubleRange minimum="0" maximum="100"/>
+                            </p:inputText>           
+                        </p:column>
+                    </p:row>
+                    <p:row>
+                        <p:column>
+                            <p:outputLabel value ="Chromium"/>
+                        </p:column>
+                        <p:column>
+                            <p:inputText value ="#{knowledgeManageBean.selectedFiller.chromium}" validatorMessage="Please Enter valid range - Chromium"  converterMessage="Please enter valid input - positive integer">
+                                <f:validateDoubleRange minimum="0" maximum="100"/>
+                            </p:inputText>           
+                        </p:column>
+                    </p:row>
+                    <p:row>
+                        <p:column>
+                            <p:outputLabel value ="Manganese"/>
+                        </p:column>
+                        <p:column>
+                            <p:inputText value ="#{knowledgeManageBean.selectedFiller.manganese}" validatorMessage="Please Enter valid range - Manganese"  converterMessage="Please enter valid input - positive integer">
+                                <f:validateDoubleRange minimum="0" maximum="100"/>
+                            </p:inputText>           
+                        </p:column>
+                    </p:row>
+                    <p:row>
+                        <p:column>
+                            <p:outputLabel value ="Silicon"/>
+                        </p:column>
+                        <p:column>
+                            <p:inputText value ="#{knowledgeManageBean.selectedFiller.silicon}" validatorMessage="Please Enter valid range - Silicon"  converterMessage="Please enter valid input - positive integer">
+                                <f:validateDoubleRange minimum="0" maximum="100"/>
+                            </p:inputText>           
+                        </p:column>
+                    </p:row>
+                </p:panelGrid>  
+                <p:commandButton value ="Add Filler Information" action ="#{knowledgeManageBean.addNewFillerInfoInv}" update =":formMain:msgs" />
+                <p:commandButton value ="Skip" action ="ics-view-inventory.xhtml"  />
+            </h:form>
+        </div>
+    </ui:define>
 
-            </p:panelGrid>     
-        </h:form>
-
-    </h:body>
-</html>
-
+</ui:composition>

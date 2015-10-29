@@ -30,7 +30,7 @@ public class MachineMaintainenceEntity implements Serializable {
     private String ServiceContact;
     private String serviceProvider;
     private MachineEntity machine = new MachineEntity();
-    private String status;
+    private String status; 
 
     public Long getId() {
         return id;

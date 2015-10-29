@@ -17,6 +17,7 @@ import java.util.Vector;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.enterprise.context.RequestScoped;
+import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.inject.Named;
 import javax.faces.view.ViewScoped;
@@ -74,16 +75,23 @@ public class KnowledgeManageBean implements Serializable {
         setFillerChosen(new ArrayList<String>());
         selectedFiller = new FillerComposition();
         selectedMetal = new Metal();
+        if (FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("ItemToPassToComposition") != null) {
+            selectedFiller = knowledgeSystemBean.retrieveFiller((FillerEntity) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("ItemToPassToComposition"));
+        }
 
     }
 
-    public void addNewFillerInfo() {
+    public void addNewFillerInfo() throws IOException {
         if (selectedFiller.getName().isEmpty()) {
 
         } else {
             boolean check = countPercentage(selectedFiller);
             if (check) {
                 knowledgeSystemBean.addNewFiller(selectedFiller);
+                FacesContext.getCurrentInstance().getExternalContext().redirect("/HiYewInternalWeb/kms-filler-knowledge.xhtml");
+            } else {
+                FacesMessage msg = new FacesMessage("Filler Composition does not add up.");
+                FacesContext.getCurrentInstance().addMessage(null, msg);
             }
         }
     }
@@ -110,22 +118,32 @@ public class KnowledgeManageBean implements Serializable {
 
     }
 
-    public void addNewFillerInfoInv() {
+    public void addNewFillerInfoInv() throws IOException {
         boolean check = countPercentage(selectedFiller);
         if (check) {
             FillerEntity filler = (FillerEntity) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("ItemToPassToComposition");
             knowledgeSystemBean.addNewFiller(selectedFiller, filler);
+            FacesContext.getCurrentInstance().getExternalContext().getSessionMap().remove("ItemToPassToComposition");
+            FacesContext.getCurrentInstance().getExternalContext().redirect("/HiYewInternalWeb/ics-view-inventory.xhtml");
+
         } else {
-            System.out.println("percentage not 100");
+            FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Please check for composition total - needs to be 100%", "");
+            FacesContext.getCurrentInstance().addMessage(null, msg);
         }
     }
 
-    public void addNewMetalInfo() {
+    public void addNewMetalInfo() throws IOException {
         if (selectedMetal.getMetalName().isEmpty()) {
 
         } else {
             boolean check = countPercentageM(selectedMetal);
-            knowledgeSystemBean.addNewMetal(selectedMetal);
+            if (check) {
+                knowledgeSystemBean.addNewMetal(selectedMetal);
+                FacesContext.getCurrentInstance().getExternalContext().redirect("/HiYewInternalWeb/kms-metal-knowledge.xhtml");
+            } else {
+                FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Please check for composition total - needs to be 100%", "" );
+                FacesContext.getCurrentInstance().addMessage(null, msg);
+            }
 
         }
     }
@@ -497,6 +515,11 @@ public class KnowledgeManageBean implements Serializable {
         boolean check = countPercentage(selectedFiller);
         if (check) {
             knowledgeSystemBean.editFiller(selectedFiller);
+            FacesMessage msg = new FacesMessage("Filler is updated");
+            FacesContext.getCurrentInstance().addMessage(null, msg);
+        } else {
+            FacesMessage msg = new FacesMessage("Filler edit is improper");
+            FacesContext.getCurrentInstance().addMessage(null, msg);
         }
     }
 

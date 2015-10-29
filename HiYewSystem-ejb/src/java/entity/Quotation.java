@@ -2,6 +2,7 @@ package entity;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -19,10 +20,9 @@ public class Quotation implements Serializable {
     private Timestamp date;
     private String termsOfPayment = "30"; //30, 60, 90 days
     private String status; //Processed, Pending, Accepted, Rejected
+    private Timestamp customerLatestEnd;
+    private Timestamp companyLatestEnd;
     
-    
-    
-
     @OneToMany(mappedBy = "quotation")
     private List<QuotationDescription> quotationDescriptions = new ArrayList<>();
     
@@ -35,14 +35,16 @@ public class Quotation implements Serializable {
         status = "Pending";
         date = new Timestamp(Calendar.getInstance().getTime().getTime());
     }
-
-    public Quotation(String termsOfPayment, String quotationNo, Customer customer, QuotationDescription qd, String status) {
+    
+    public Quotation(String termsOfPayment, String quotationNo, Customer customer, QuotationDescription qd, String status, Timestamp customerLatestStart, Timestamp companyLatestStart) {
 
         this.date = new Timestamp(Calendar.getInstance().getTime().getTime());
         this.termsOfPayment = termsOfPayment;
         this.quotationNo = quotationNo;
         this.customer = customer;
         this.status = status;
+        this.customerLatestEnd = customerLatestStart;
+        this.companyLatestEnd = companyLatestStart;
         //this.quotationDescription = qd;
     }
 
@@ -157,6 +159,41 @@ public class Quotation implements Serializable {
      */
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    /**
+     * @return the customerLatestEnd
+     */
+    public Timestamp getCustomerLatestEnd() {
+        return customerLatestEnd;
+    }
+
+    /**
+     * @param customerLatestEnd the customerLatestEnd to set
+     */
+    public void setCustomerLatestEnd(Timestamp customerLatestEnd) {
+        this.customerLatestEnd = customerLatestEnd;
+    }
+
+    /**
+     * @return the companyLatestEnd
+     */
+    public Timestamp getCompanyLatestEnd() {
+        return companyLatestEnd;
+    }
+
+    /**
+     * @param companyLatestEnd the companyLatestEnd to set
+     */
+    public void setCompanyLatestEnd(Timestamp companyLatestEnd) {
+        this.companyLatestEnd = companyLatestEnd;
+        
+        SimpleDateFormat sd = new SimpleDateFormat("dd/MM/yyyy");
+        if(companyLatestEnd != null){
+        System.out.println("The company latest Start is" + sd.format(companyLatestEnd.getTime()));
+        }else{
+            System.out.println("company latest start is not stored into database");
+        }
     }
 
 }
