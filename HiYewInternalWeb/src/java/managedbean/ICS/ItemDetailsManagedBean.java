@@ -320,7 +320,7 @@ public class ItemDetailsManagedBean implements Serializable {
         System.out.println(this.selectedItem.getFillerCode());
         FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("SelectedItem2", this.selectedItem);
         //  FacesContext.getCurrentInstance().getExternalContext().getFlash().put("SelectedItem", this.selectedItem);
-        return "/PS/createProcurementBid?faces-redirect=true";
+        return "ps-create-procurement-bid?faces-redirect=true";
     }
 
 }
