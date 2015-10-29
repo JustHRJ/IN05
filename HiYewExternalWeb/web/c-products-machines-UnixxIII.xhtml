@@ -34,8 +34,7 @@
                 </h:selectOneMenu>
             </div>
             <div style="height: 15px"></div>
-            <p:messages id="msg"  showDetail="false" />
-            <p:messages id="warnMsg"  showDetail="false" />
+            <p:growl id="growlMsgs" showDetail="false" />
             <!-- Begin thumbnail box -->
             <div class="row" style="display: block">
                 <div class="col-sm-33 col-xs-6">
@@ -44,7 +43,7 @@
                         <h2><strong>LWI V Unixx III</strong></h2>
                         <!-- Additional buttons -->
                         <div class="additional-btn" style="top:15px">
-                            <p:commandButton update="msg" style="border: none; font-weight: normal; font-family: 'Open Sans'; padding-top: 3px; padding-bottom: 4px; padding-left: 10px; padding-right: 10px" styleClass="btn btn-primary2 btn-xs" value="Add to RFQ list" action="#{productQuotationManagedBean.addToCacheList('Machine','LWI Small Chamber Type',1)}" icon="" />
+                            <p:commandButton update="growlMsgs" style="border: none; font-weight: normal; font-family: 'Open Sans'; padding-top: 3px; padding-bottom: 4px; padding-left: 10px; padding-right: 10px" styleClass="btn btn-primary2 btn-xs" value="Add to RFQ list" action="#{productQuotationManagedBean.addToCacheList('Machine','LWI V Unixx III',1)}" icon="" />
                             <a class="additional-icon" href="#" data-toggle="collapse" data-target="#website-statistic"><i class="fa fa-chevron-down"></i></a>
                         </div><!-- End div .additional-button -->
                         <!-- Statistic inner -->

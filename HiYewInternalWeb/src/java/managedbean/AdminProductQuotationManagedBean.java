@@ -41,6 +41,8 @@ public class AdminProductQuotationManagedBean implements Serializable {
 
     private ProductQuotation selectedProductQuotation;
 
+    private Boolean correctPrice = true;
+
     public AdminProductQuotationManagedBean() {
         receivedNewProductQuotationList = new ArrayList<>();
         displayProductQuotationDescriptionList = new ArrayList<>();
@@ -66,7 +68,7 @@ public class AdminProductQuotationManagedBean implements Serializable {
     public void filterByStatus() {
         System.out.println("status ==== " + status);
         receivedNewProductQuotationList = new ArrayList<>(productQuotationSessionBean.receivedCustomerNewProductQuotationList(status));
-        FacesContext.getCurrentInstance().addMessage("msgs", new FacesMessage(FacesMessage.SEVERITY_INFO, "Current list of \"" + status + "\" purchase order(s) are up to date.", ""));
+        FacesContext.getCurrentInstance().addMessage("msgs", new FacesMessage(FacesMessage.SEVERITY_INFO, "The list of status \"" + status + "\" are up to date.", ""));
     }
 
     public String formatDate(Timestamp Ttmestamp) {
@@ -81,12 +83,14 @@ public class AdminProductQuotationManagedBean implements Serializable {
         // System.out.println("productQuotation.getProductQuotationDescriptionList().size() ===== " + productQuotation.getProductQuotationDescriptionList().size());
     }
 
-    public void updateQuotationPrices() {
+    public void updateQuotationPrices(String productQuotationNo) {
+        correctPrice = true;
         productQuotationSessionBean.updateProductQuotationPrices(getDisplayProductQuotationDescriptionList());
-        FacesContext.getCurrentInstance().addMessage("inner-msgs", new FacesMessage(FacesMessage.SEVERITY_INFO, "Product quotation has been updated successfully!", ""));
+        FacesContext.getCurrentInstance().addMessage("inner-msgs", new FacesMessage(FacesMessage.SEVERITY_INFO, "Product quotation (#" + productQuotationNo + ") has been updated successfully!", ""));
     }
 
-    public void updateQuotationRelayedStatus(String username) {
+    public void updateQuotationRelayedStatus(String productQuotationNo, String username) {
+        correctPrice = true;
         productQuotationSessionBean.updateProductQuotationRelayedStatus(selectedProductQuotation);
 
         Customer customer = customerSessionBean.getCustomerByUsername(username);
@@ -96,7 +100,7 @@ public class AdminProductQuotationManagedBean implements Serializable {
         emailManager.emailGermanySupplierToRFQ(selectedProductQuotation.getProductQuotationNo(), this.retrieveEmailProductQuotationDescriptionList(selectedProductQuotation.getProductQuotationNo()));
 
         selectedProductQuotation = new ProductQuotation();
-        FacesContext.getCurrentInstance().addMessage("msgs", new FacesMessage(FacesMessage.SEVERITY_INFO, "Product quotation has been sent to supplier!", ""));
+        FacesContext.getCurrentInstance().addMessage("msgs", new FacesMessage(FacesMessage.SEVERITY_INFO, "Product quotation (#" + productQuotationNo + ") has been sent to supplier!", ""));
     }
 
     public ArrayList<ProductQuotationDescription> retrieveEmailProductQuotationDescriptionList(String quotationNo) {
@@ -107,14 +111,29 @@ public class AdminProductQuotationManagedBean implements Serializable {
         boolean option = true;
         for (int i = 0; i < displayProductQuotationDescriptionList.size(); i++) {
             ProductQuotationDescription qd = displayProductQuotationDescriptionList.get(i);
-            if (qd.getUnitPrice() == null) {
+            if (qd.getQuotedPrice()== null) {
                 option = false;
-                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Price(s) must be quoted!", ""));
-            } else if (qd.getUnitPrice() != null) {
-                if (qd.getUnitPrice() < 0) {
-                    qd.setUnitPrice(null);
+                correctPrice = false;
+                FacesContext.getCurrentInstance().addMessage("inner-msgs", new FacesMessage(FacesMessage.SEVERITY_WARN, "Quoted price must be quoted for item #" + qd.getProductQuotationDescNo() + "!", ""));
+            } else if (qd.getQuotedPrice() != null) {
+                if (qd.getQuotedPrice() < 0) {
+                    qd.setQuotedPrice(null);
                     option = false;
-                    FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Price(s) must be more than zero!", ""));
+                    correctPrice = false;
+                    FacesContext.getCurrentInstance().addMessage("inner-msgs", new FacesMessage(FacesMessage.SEVERITY_WARN, "Quoted price must be more than zero for item #" + qd.getProductQuotationDescNo() + "!", ""));
+                }
+            }
+            
+            if (qd.getCostPrice()== null) {
+                option = false;
+                correctPrice = false;
+                FacesContext.getCurrentInstance().addMessage("inner-msgs", new FacesMessage(FacesMessage.SEVERITY_WARN, "Cost price must be quoted for item #" + qd.getProductQuotationDescNo() + "!", ""));
+            } else if (qd.getCostPrice() != null) {
+                if (qd.getCostPrice() < 0) {
+                    qd.setCostPrice(null);
+                    option = false;
+                    correctPrice = false;
+                    FacesContext.getCurrentInstance().addMessage("inner-msgs", new FacesMessage(FacesMessage.SEVERITY_WARN, "Cost price must be more than zero for item #" + qd.getProductQuotationDescNo() + "!", ""));
                 }
             }
         }
@@ -122,7 +141,8 @@ public class AdminProductQuotationManagedBean implements Serializable {
         return option;
     }
 
-    public void updateQuotationStatus(String username) {
+    public void updateQuotationStatus(String productQuotationNo, String username) {
+        correctPrice = true;
         if (check() == true) {
             productQuotationSessionBean.updateProductQuotationStatus(selectedProductQuotation);
 
@@ -132,8 +152,9 @@ public class AdminProductQuotationManagedBean implements Serializable {
                 emailManager.emailProductQuotationPriceUpdate(customer.getName(), customer.getEmail(), selectedProductQuotation.getProductQuotationNo());
             }
             if (customer.isSubscribeSMS_qPriceUpdates()) {
-                
+
             }
+            FacesContext.getCurrentInstance().addMessage("msgs", new FacesMessage(FacesMessage.SEVERITY_INFO, "Update notification for product quotation (#" + productQuotationNo + ") has been sent to customer!", ""));
             selectedProductQuotation = new ProductQuotation();
         } else {
 
@@ -238,5 +259,19 @@ public class AdminProductQuotationManagedBean implements Serializable {
      */
     public void setSelectedProductQuotation(ProductQuotation selectedProductQuotation) {
         this.selectedProductQuotation = selectedProductQuotation;
+    }
+
+    /**
+     * @return the correctPrice
+     */
+    public Boolean getCorrectPrice() {
+        return correctPrice;
+    }
+
+    /**
+     * @param correctPrice the correctPrice to set
+     */
+    public void setCorrectPrice(Boolean correctPrice) {
+        this.correctPrice = correctPrice;
     }
 }

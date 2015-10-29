@@ -140,9 +140,9 @@ public class ProductPurchaseOrderManagedBean implements Serializable {
         setAttention(productQuotation.getCustomer().getName());
 
         for (ProductQuotationDescription pqd : productQuotation.getProductQuotationDescriptionList()) {
-            setDescription(getDescription() + pqd.getProductQuotationDescNo().toString() + ". " + pqd.getItemName() + " - (Unit price) SGD " + String.format("%.2f", pqd.getUnitPrice()) + " x " + pqd.getQuantity() + "" + "\r\n");
+            setDescription(getDescription() + pqd.getProductQuotationDescNo().toString() + ". " + pqd.getItemName() + " - (Unit price) SGD " + String.format("%.2f", pqd.getQuotedPrice()) + " x " + pqd.getQuantity() + "" + "\r\n");
             // compute total price
-            setTotal((Double) (getTotal() + (pqd.getQuantity() * pqd.getUnitPrice())));
+            setTotal((Double) (getTotal() + (pqd.getQuantity() * pqd.getQuotedPrice())));
         }
         setTotalPrice(String.format("%.2f", getTotal()));
         showDialog();

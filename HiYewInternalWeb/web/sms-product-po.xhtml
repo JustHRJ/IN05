@@ -1,0 +1,108 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                template="./template.xhtml">
+
+    <ui:define name="content">
+        <!-- Page header -->
+        <div class="page-heading animated fadeInDownBig" style="padding:20px!important;padding-bottom:10px!important;">
+            <h1>Products Purchase Order <small>Sales Management</small></h1>
+        </div>
+        <!-- End page header -->
+        <div style="padding:20px!important;padding-top:0px!important;">
+            <h:form id="innerForm">
+                <h:panelGrid columns="3" cellpadding="5">
+                    <p:outputLabel style="font-weight:bold;margin-top:5px;" for="QuotationStatus" value="Status: " />&nbsp;&nbsp;
+                    <h:selectOneMenu id="QuotationStatus" value="#{adminProductPOManagedBean.status}"  style="width:150px">
+                        <p:ajax listener="#{adminProductPOManagedBean.filterByStatusNoMsg()}" update="msgs rcvQuote" /> 
+                        <f:selectItems value="#{adminProductPOManagedBean.statuses}" />
+                    </h:selectOneMenu>
+                </h:panelGrid>
+                <p:messages style="margin-top:15px" id="msgs"  showDetail="false" closable="true" />
+                <br />
+                <p:commandButton value="Refresh" actionListener="#{adminProductPOManagedBean.filterByStatus()}" update="msgs rcvQuote" icon="ui-icon-check"/>
+                <br /><br />
+                <p:dataTable sortBy="#{adminProductPOManagedBean.formatDate(item.productPurchaseOrderDate)}" value="#{adminProductPOManagedBean.receivedNewProductPOList}" var="item" rows="7" id="rcvQuote" paginator="true" editable="true">
+                    <p:column headerText="PO No.">
+                        <p:outputLabel value="#{item.productPurchaseOrderID}"/>
+                    </p:column>
+                    <p:column headerText="Issued Date">
+                        <h:outputText value="#{adminProductPOManagedBean.formatDate(item.productPurchaseOrderDate)}"/>
+                    </p:column>
+                    <p:column headerText="Delivery Date">
+                        <h:outputText value="#{adminProductPOManagedBean.formatDate(item.deliveryDate)}"/>
+                    </p:column>
+                    <p:column headerText="Mailing Address">
+                        <h:outputText value="#{item.mailingAddr1}, #{item.mailingAddr2}"/>
+                    </p:column>
+                    <p:column headerText="Total Price (SGD)">
+                        <h:outputText value="$#{adminProductPOManagedBean.formatPrice(item.totalPrice)}"/>
+                    </p:column>
+                    <p:column headerText="Status">
+                        <h:outputText value="#{item.status}"/>
+                    </p:column>
+
+                    <p:column>
+                        <p:commandButton id="quoteDescBtn" icon="ui-icon-search" title="View" update="quotationDetailPanel" action="#{adminProductPOManagedBean.selectPurchaseOrder(item)}"/>
+                        <p:overlayPanel for="quoteDescBtn" showEffect="fade" hideEffect="fade" dismissable="false" showCloseIcon="true" style="width:1200px">
+                            <p:outputPanel id="quotationDetailPanel">
+                                <br />
+                                <p:commandButton rendered="#{item.status eq 'Pending'}" value="Relay Product PO" action="#{adminProductPOManagedBean.updatePORelayedStatus(item.customer.userName)}" update=":innerForm:msgs rcvQuote" icon="ui-icon-check"/>
+
+                                <p:commandButton rendered="#{item.status eq 'Relayed'}" value="Update PO Details" action="#{adminProductPOManagedBean.updatePODeliveryDate()}" update=":innerForm:msgs rcvQuote" icon="ui-icon-check"/>
+
+                                <p:panel rendered="#{item.status eq 'Relayed'}" style="border: none" ></p:panel>
+                                <p:commandButton rendered="#{item.status eq 'Relayed'}" value="Send Notification to Customer" action="#{adminProductPOManagedBean.updateProductPOStatus(item.customer.userName)}" update=":innerForm:msgs rcvQuote" icon="ui-icon-check"/>
+
+                                <p:panel rendered="#{item.status != 'Processed'}" style="border: none" ></p:panel>
+
+                                <h:outputText rendered="#{item.status eq 'Relayed' and item.deliveryDate != null}" value="Old Delivery Date: " />
+                                <h:outputText rendered="#{item.status eq 'Relayed' and item.deliveryDate != null}" value="#{adminProductPOManagedBean.formatDate(item.deliveryDate)}" />
+
+                                <p:panel rendered="#{item.status eq 'Relayed' and item.deliveryDate != null}" style="border: none"></p:panel>
+
+                                <h:outputText rendered="#{item.status eq 'Relayed'}" value="Set Delivery Date: " />
+                                <p:calendar rendered="#{item.status eq 'Relayed'}" id="cal" value="#{adminProductPOManagedBean.deliveryDate}" placeholder="e.g 01/01/2015" mindate="#{adminProductPOManagedBean.getToday()}" pattern ="dd/MM/yyyy">
+                                </p:calendar>
+
+                                <p:panel rendered="" style="border: none" ></p:panel>
+
+                                <p:dataTable sortBy="#{quoteDescItem.productQuotationDescNo}" var="quoteDescItem" value="#{adminProductPOManagedBean.displayProductQuotationDescriptionList}" rows="5" paginator="true">
+                                    <p:column headerText="ID">
+                                        <h:outputText value="#{quoteDescItem.productQuotationDescNo}" />
+                                    </p:column>
+
+                                    <p:column headerText="Item Type">
+                                        <h:outputText value="#{quoteDescItem.productType}" />
+                                    </p:column>
+
+                                    <p:column headerText="Item Name">
+                                        <h:outputText value="#{quoteDescItem.itemName}" />
+                                    </p:column>
+
+                                    <p:column headerText="Quantity">
+                                        <h:outputText value="#{quoteDescItem.quantity}" />
+                                    </p:column>
+
+                                    <p:column headerText="Remarks">
+                                        <h:outputText value="#{quoteDescItem.remarks}" />
+                                    </p:column>
+
+                                    <p:column headerText="Quoted Unit Price (SGD)">
+                                        <h:outputText value="$#{adminProductPOManagedBean.formatPrice(quoteDescItem.unitPrice)}" />
+                                    </p:column>
+                                </p:dataTable>	
+                                <br />
+                            </p:outputPanel>
+                        </p:overlayPanel>
+                    </p:column>
+                </p:dataTable>
+            </h:form>
+        </div>
+    </ui:define>
+
+</ui:composition>

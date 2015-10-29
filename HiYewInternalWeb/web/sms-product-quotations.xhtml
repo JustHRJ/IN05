@@ -1,0 +1,110 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                template="./template.xhtml">
+
+    <ui:define name="content">
+        <!-- Page header -->
+        <div class="page-heading animated fadeInDownBig" style="padding:20px!important;padding-bottom:10px!important;">
+            <h1>Products Quotations <small>Sales Management </small></h1>
+        </div>
+        <!-- End page header -->
+        <div style="padding:20px!important;padding-top:0px!important;">
+            <h:form id="innerForm">
+                <h:panelGrid columns="3" cellpadding="5">
+                    <p:outputLabel style="font-weight:bold;margin-top:5px;" for="QuotationStatus" value="Status: " />&nbsp;&nbsp;
+                    <h:selectOneMenu id="QuotationStatus" value="#{adminProductQuotationManagedBean.status}"  style="width:150px">
+                        <p:ajax listener="#{adminProductQuotationManagedBean.filterByStatusNoMsg()}" update="msgs rcvQuote" /> 
+                        <f:selectItems value="#{adminProductQuotationManagedBean.statuses}" />
+                    </h:selectOneMenu>
+                </h:panelGrid>
+                <br />
+                <p:commandButton value="Refresh" actionListener="#{adminProductQuotationManagedBean.filterByStatus()}" update="msgs rcvQuote" icon="ui-icon-check"/>
+
+                <p:messages style="margin-top:15px;margin-bottom:-15px" id="msgs"  showDetail="false" closable="true" />
+                <br />
+                <p:dataTable sortBy="#{adminProductQuotationManagedBean.formatDate(item.date)}" value="#{adminProductQuotationManagedBean.receivedNewProductQuotationList}" var="item" rows="7" id="rcvQuote" paginator="true" editable="true">
+                    <p:column headerText="Quotation No." width="70%">
+                        <p:outputLabel value="#{item.productQuotationNo}"/>
+                    </p:column>
+                    <p:column headerText="Date" width="10%">
+                        <h:outputText value="#{adminProductQuotationManagedBean.formatDate(item.date)}"/>
+                    </p:column>
+                    <p:column headerText="Status" width="10%">
+                        <h:outputText value="#{item.status}"/>
+                    </p:column>
+                    <p:column width="10%">
+                        <p:commandButton id="quoteDescBtn" icon="ui-icon-search" title="View" update="quotationDetailPanel" action="#{adminProductQuotationManagedBean.selectQuotation(item)}"/>
+                        <p:overlayPanel for="quoteDescBtn" showEffect="fade" hideEffect="fade" dismissable="false" showCloseIcon="true" style="width:1200px">
+                            <p:outputPanel id="quotationDetailPanel">
+                                <br />
+                                <p:commandButton rendered="#{item.status eq 'Pending'}" value="Relay Product RFQ" action="#{adminProductQuotationManagedBean.updateQuotationRelayedStatus(item.productQuotationNo, item.customer.userName)}" update=":innerForm:msgs rcvQuote" icon="ui-icon-check"/>
+
+                                <p:commandButton rendered="#{item.status eq 'Relayed'}" value="Update Quotation Details" action="#{adminProductQuotationManagedBean.updateQuotationPrices(item.productQuotationNo)}" update="inner-msgs" icon="ui-icon-check"/>
+                                <p:commandButton rendered="#{item.status eq 'Relayed'}" value="Send Notification to Customer" action="#{adminProductQuotationManagedBean.updateQuotationStatus(item.productQuotationNo, item.customer.userName)}" update="inner-msgs" icon="ui-icon-check"/>
+                                <br /><br />
+
+                                <p:messages style="margin-top:-13px;margin-bottom:15px" id="inner-msgs" showDetail="false" closable="true" />
+                                <p:dataTable sortBy="#{quoteDescItem.productQuotationDescNo}" var="quoteDescItem" value="#{adminProductQuotationManagedBean.displayProductQuotationDescriptionList}" rows="10" paginator="true">
+                                    <p:column headerText="ID" width="3%">
+                                        <h:outputText value="#{quoteDescItem.productQuotationDescNo}" />
+                                    </p:column>
+
+                                    <p:column headerText="Item Type" width="7%">
+                                        <h:outputText value="#{quoteDescItem.productType}" />
+                                    </p:column>
+
+                                    <p:column headerText="Item Name" width="20%">
+                                        <h:outputText value="#{quoteDescItem.itemName}" />
+                                    </p:column>
+
+                                    <p:column headerText="Quantity" width="6%">
+                                        <h:outputText value="#{quoteDescItem.quantity}" />
+                                    </p:column>
+
+                                    <p:column headerText="Remarks" width="14%">
+                                        <h:outputText value="#{quoteDescItem.remarks}" />
+                                    </p:column>
+
+                                    <p:column rendered="#{item.status != 'Relayed'}" headerText="Quoted Unit Price" width="10%">
+                                        <h:outputText value="#{item.status eq 'Pending' ? 'N.A' : quoteDescItem.unitPrice}" />
+                                    </p:column>
+
+                                    <p:column rendered="#{item.status eq 'Relayed'}" headerText="Quoted Unit Price" width="10%">
+                                        $&nbsp;<h:inputText value="#{quoteDescItem.unitPrice}" style="width: 90%" maxlength="7" validatorMessage="Quantity must have a value of more than one." converterMessage="The price(s) that you have entered are invalid!">
+                                            <f:validateLongRange minimum="1" />
+                                        </h:inputText>
+                                    </p:column>
+
+                                    <p:column rendered="#{item.status != 'Relayed'}" headerText="Cost" width="10%">
+                                        <h:outputText value="#{item.status eq 'Pending' ? 'N.A' : quoteDescItem.cost}" />
+                                    </p:column>
+
+                                    <p:column rendered="#{item.status eq 'Relayed'}" headerText="Cost" width="10%">
+                                        <h:outputText value="#" />
+                                    </p:column>
+                                    
+                                    
+                                    <p:column rendered="#{item.status != 'Relayed'}" headerText="Profit Margin" width="10%">
+                                        <h:outputText value="#{item.status eq 'Pending' ? 'N.A' : quoteDescItem.profitMargin}" />
+                                    </p:column>
+
+                                    <p:column rendered="#{item.status eq 'Relayed'}" headerText="Profit Margin" width="10%">
+                                        <h:outputText value="#" />
+                                    </p:column>
+                                    
+                                </p:dataTable>
+                                <br />
+                            </p:outputPanel>
+                        </p:overlayPanel>
+                    </p:column>
+                </p:dataTable>
+            </h:form>
+        </div>
+    </ui:define>
+
+</ui:composition>

@@ -16,7 +16,9 @@ public class ProductQuotationDescription implements Serializable {
     private Integer productQuotationDescNo;
     private String productType;
     private String itemName;
-    private Double unitPrice;
+    private Double quotedPrice;
+    private Double costPrice;
+    private Double profitMargin;
     private Integer quantity;
     private String remarks;
 
@@ -28,12 +30,14 @@ public class ProductQuotationDescription implements Serializable {
     public ProductQuotationDescription() {
     }
 
-    public ProductQuotationDescription(Integer productQuotationDescNo, String productType, String itemName, Integer quantity, Double unitPrice, String remarks, ProductQuotation productQuotation) {
+    public ProductQuotationDescription(Integer productQuotationDescNo, String productType, String itemName, Integer quantity, Double costPrice, Double quotedPrice, Double profitMargin, String remarks, ProductQuotation productQuotation) {
         this.productQuotationDescNo = productQuotationDescNo;
         this.productType = productType;
         this.itemName = itemName;
         this.quantity = quantity;
-        this.unitPrice = unitPrice;
+        this.quotedPrice = quotedPrice;
+        this.costPrice = costPrice;
+        this.profitMargin = profitMargin;
         this.remarks = remarks;
         this.productQuotation = productQuotation;
     }
@@ -106,20 +110,6 @@ public class ProductQuotationDescription implements Serializable {
     }
 
     /**
-     * @return the unitPrice
-     */
-    public Double getUnitPrice() {
-        return unitPrice;
-    }
-
-    /**
-     * @param unitPrice the unitPrice to set
-     */
-    public void setUnitPrice(Double unitPrice) {
-        this.unitPrice = unitPrice;
-    }
-
-    /**
      * @return the quantity
      */
     public Integer getQuantity() {
@@ -173,5 +163,47 @@ public class ProductQuotationDescription implements Serializable {
      */
     public void setProductQuotationNo(String productQuotationNo) {
         this.productQuotationNo = productQuotationNo;
+    }
+
+    /**
+     * @return the quotedPrice
+     */
+    public Double getQuotedPrice() {
+        return quotedPrice;
+    }
+
+    /**
+     * @param quotedPrice the quotedPrice to set
+     */
+    public void setQuotedPrice(Double quotedPrice) {
+        this.quotedPrice = quotedPrice;
+    }
+
+    /**
+     * @return the costPrice
+     */
+    public Double getCostPrice() {
+        return costPrice;
+    }
+
+    /**
+     * @param costPrice the costPrice to set
+     */
+    public void setCostPrice(Double costPrice) {
+        this.costPrice = costPrice;
+    }
+
+    /**
+     * @return the profitMargin
+     */
+    public Double getProfitMargin() {
+        return profitMargin;
+    }
+
+    /**
+     * @param profitMargin the profitMargin to set
+     */
+    public void setProfitMargin(Double profitMargin) {
+        this.profitMargin = profitMargin;
     }
 }
