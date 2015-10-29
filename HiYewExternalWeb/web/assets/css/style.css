@@ -89,6 +89,7 @@ body{
 .ui-draggable .ui-dialog-titlebar {
     cursor: move;
     width: 100%;
+    height: 34px;
 }
 
 .ui-tabs .ui-tabs-nav {
@@ -191,7 +192,7 @@ body{
 }
 
 .ui-widget-content .ui-state-default {
-    font-weight: normal;
+    font-weight: bold;
 }
 
 .ui-widget-header .ui-state-default {

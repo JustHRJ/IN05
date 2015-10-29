@@ -720,7 +720,7 @@ public class KnowledgeManageBean implements Serializable {
         WritableWorkbook copy = Workbook.createWorkbook(new File(inputFile), workbook);
         WritableSheet sheet1 = copy.createSheet("MetalMatching", 2);
 
-        jxl.write.Label number3 = new jxl.write.Label(0, 0, "MetalName");
+        jxl.write.Label number3 = new jxl.write.Label(0, 0, "Metal Name");
         sheet1.addCell(number3);
 
         number3 = new jxl.write.Label(1, 0, "Filler ID");
@@ -732,10 +732,12 @@ public class KnowledgeManageBean implements Serializable {
                 Vector im = result3.get(i - 1);
                 int cols = im.size();
                 System.out.println(cols);
-                jxl.write.Label number4 = new jxl.write.Label(0, 1, im.get(0).toString());
+                System.out.println(im.get(0).toString());
+                jxl.write.Label number4 = new jxl.write.Label(0, i, im.get(0).toString());
                 sheet1.addCell(number4);
                 for (int j = 1; j < cols; j++) {
-                    jxl.write.Number number = new jxl.write.Number(j, i, Integer.parseInt(im.get(j).toString()));
+                    System.out.println(im.get(j).toString());
+                    jxl.write.Label number = new jxl.write.Label(j, i, im.get(j).toString());
                     sheet1.addCell(number);
                 }
 

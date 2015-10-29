@@ -41,6 +41,9 @@ public class ProductQuotationManagedBean implements Serializable {
     private ProductQuotation newProductQuotation;
     private ProductQuotationDescription newProductQuotationDescription;
 
+    private ArrayList<ProductQuotation> filteredProductList;
+    private ArrayList<ProductQuotation> filteredProductList2;
+    
     private ArrayList<ProductQuotation> receivedProductQuotationList;
     private ArrayList<ProductQuotationDescription> displayProductQuotationDescriptionList;
 
@@ -103,7 +106,11 @@ public class ProductQuotationManagedBean implements Serializable {
         FacesContext.getCurrentInstance().getExternalContext().redirect("/HiYewExternalWeb/c-products-machines-compare.xhtml");
         return selectedCount;
     }
-    
+
+    public void redirectToSelectedMachineCheck() {
+        selectedMachine = "";
+    }
+
     public void redirectToSelectedMachine() throws IOException {
         if (selectedMachine != null) {
             if (!selectedMachine.equals("")) {
@@ -133,6 +140,7 @@ public class ProductQuotationManagedBean implements Serializable {
         if (str != null) {
             if (!str.equals("")) {
                 System.out.println("str ===== " + str);
+                selectedMachine = str;
                 if (str.equals("LWI Small Chamber")) {
                     FacesContext.getCurrentInstance().getExternalContext().redirect("/HiYewExternalWeb/c-products-machines-SmallChamber.xhtml");
                 } else if (str.equals("LWI V Flexx")) {
@@ -231,7 +239,7 @@ public class ProductQuotationManagedBean implements Serializable {
                     System.out.println("pqd.getItemName() === " + pqd.getItemName());
                     System.out.println("itemName === " + itemName);
                     System.out.println("inside for loop cacheList.size() === " + cacheList.size());
-                    FacesContext.getCurrentInstance().addMessage("warnMsg", new FacesMessage(FacesMessage.SEVERITY_WARN, "Item has been added to RFQ list!", ""));
+                    FacesContext.getCurrentInstance().addMessage("growlMsgs", new FacesMessage(FacesMessage.SEVERITY_WARN, "Item has been added to RFQ list!", ""));
                 } else {
                     // no such item
 
@@ -249,7 +257,7 @@ public class ProductQuotationManagedBean implements Serializable {
                 count += 1;
                 newProductQuotationDescription = new ProductQuotationDescription();
 
-                FacesContext.getCurrentInstance().addMessage("msg", new FacesMessage("Item is added to RFQ list!", ""));
+                FacesContext.getCurrentInstance().addMessage("growlMsgs", new FacesMessage("Item is added to RFQ list!", ""));
             }
 
         } else {
@@ -265,14 +273,19 @@ public class ProductQuotationManagedBean implements Serializable {
 
             FacesContext.getCurrentInstance().addMessage("msg", new FacesMessage("Item is added to RFQ list!", ""));
         }
-        FacesContext.getCurrentInstance().getExternalContext().redirect("/HiYewExternalWeb/c-products-machines.xhtml");
+        //FacesContext.getCurrentInstance().getExternalContext().redirect("/HiYewExternalWeb/c-products-machines.xhtml");
     }
 
     public void deleteProductQuotationDescription(ProductQuotationDescription productQuotationDescription) {
         if (productQuotationDescription != null) {
             getCacheList().remove(productQuotationDescription.getProductQuotationDescNo() - 1);
             reassignQuotationNo();
+            FacesContext.getCurrentInstance().addMessage("msg", new FacesMessage("Item is removed from RFQ list!", ""));
         }
+    }
+
+    public void editRFQ() {
+        FacesContext.getCurrentInstance().addMessage("msg", new FacesMessage("Item has been updated in RFQ list!", ""));
     }
 
     public void reassignQuotationNo() {
@@ -312,7 +325,7 @@ public class ProductQuotationManagedBean implements Serializable {
         // set quotation tab to be selected
         System.out.println("Your request for product price quotation has been sent successfully!");
         //FacesContext.getCurrentInstance().getExternalContext().redirect("/HiYewExternalWeb/c-products.xhtml");
-        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("An RFQ has been sent successfully!", ""));
+        FacesContext.getCurrentInstance().addMessage("rfqMsg", new FacesMessage("An RFQ has been sent successfully!", ""));
     }
 
     public void setRejectionStatus(ProductQuotation productQuotation) {
@@ -614,5 +627,33 @@ public class ProductQuotationManagedBean implements Serializable {
      */
     public void setSelectedMachine7(Boolean selectedMachine7) {
         this.selectedMachine7 = selectedMachine7;
+    }
+
+    /**
+     * @return the filteredProductList
+     */
+    public ArrayList<ProductQuotation> getFilteredProductList() {
+        return filteredProductList;
+    }
+
+    /**
+     * @param filteredProductList the filteredProductList to set
+     */
+    public void setFilteredProductList(ArrayList<ProductQuotation> filteredProductList) {
+        this.filteredProductList = filteredProductList;
+    }
+
+    /**
+     * @return the filteredProductList2
+     */
+    public ArrayList<ProductQuotation> getFilteredProductList2() {
+        return filteredProductList2;
+    }
+
+    /**
+     * @param filteredProductList2 the filteredProductList2 to set
+     */
+    public void setFilteredProductList2(ArrayList<ProductQuotation> filteredProductList2) {
+        this.filteredProductList2 = filteredProductList2;
     }
 }

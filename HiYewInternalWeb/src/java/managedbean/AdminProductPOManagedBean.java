@@ -1,5 +1,6 @@
 package managedbean;
 
+import com.hoiio.sdk.services.SmsService;
 import entity.Customer;
 import entity.ProductPurchaseOrder;
 import entity.ProductQuotationDescription;
@@ -14,6 +15,7 @@ import java.util.HashMap;
 import java.util.Map;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
+import javax.ejb.EJBException;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.inject.Named;
@@ -149,11 +151,18 @@ public class AdminProductPOManagedBean implements Serializable {
         if (customer.isSubscribeEmail_poDeliveryUpdates()) {
             EmailManager emailManager = new EmailManager();
             // Email customer for delivery date update
-            emailManager.emailProductPODeliveryDateUpdate(customer.getName(), customer.getEmail(), selectedProductPO.getProductPurchaseOrderID());
+            emailManager.emailProductPODeliveryDateUpdate(customer.getName(), customer.getEmail(), selectedProductPO.getProductPurchaseOrderCustomerID());
         }
-        
+
         if (customer.isSubscribeSMS_poDeliveryUpdates()) {
-            
+//            // SMS custmer for delivery date update
+//            try {
+//                SmsService smsService1 = new SmsService("2USsHuRw6nYOlkh4", "Yie0bbxSDekwTT1d");
+//                smsService1.send("+6592706232", "HiYew: Your delivery details for purchase order #" + selectedProductPO.getProductPurchaseOrderCustomerID() + " have been updated! You may go to HiYew Customer Portal to view the updates.", "", "", "");
+//            } catch (Exception e) {
+//                e.printStackTrace();
+//                throw new EJBException(e.getMessage());
+//            }
         }
 
         selectedProductPO = new ProductPurchaseOrder();
