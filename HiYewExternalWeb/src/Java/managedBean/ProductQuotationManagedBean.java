@@ -273,7 +273,7 @@ public class ProductQuotationManagedBean implements Serializable {
 
             FacesContext.getCurrentInstance().addMessage("msg", new FacesMessage("Item is added to RFQ list!", ""));
         }
-        FacesContext.getCurrentInstance().getExternalContext().redirect("/HiYewExternalWeb/c-products-machines.xhtml");
+        //FacesContext.getCurrentInstance().getExternalContext().redirect("/HiYewExternalWeb/c-products-machines.xhtml");
     }
 
     public void deleteProductQuotationDescription(ProductQuotationDescription productQuotationDescription) {

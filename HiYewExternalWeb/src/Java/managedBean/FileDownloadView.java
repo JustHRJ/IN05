@@ -54,7 +54,7 @@ public class FileDownloadView {
         // step 1
         Document document = new Document();
         // step 2
-        PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream("C:\\Users\\QiWen\\Documents\\NetBeansProjects\\IN05\\HiYewExternalWeb\\web\\pdf\\pdf_testing1.pdf"));
+        PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream("C:\\Users\\QiWen\\Documents\\NetBeansProjects\\IN05\\HiYewExternalWeb\\web\\pdf\\hiyew_po" + po.getProductPurchaseOrderCustomerID() + ".pdf"));
         // step 3
         document.open();
         // step 4
@@ -68,8 +68,8 @@ public class FileDownloadView {
 
         System.out.println("PDF Created!");
 
-        InputStream stream = ((ServletContext) FacesContext.getCurrentInstance().getExternalContext().getContext()).getResourceAsStream("/pdf/pdf_testing1.pdf");
-        file = new DefaultStreamedContent(stream, "application/pdf", "pdf_testing_outcome_1.pdf");
+        InputStream stream = ((ServletContext) FacesContext.getCurrentInstance().getExternalContext().getContext()).getResourceAsStream("/pdf/hiyew_po" + po.getProductPurchaseOrderCustomerID() + ".pdf");
+        file = new DefaultStreamedContent(stream, "application/pdf", "hiyew_po" + po.getProductPurchaseOrderCustomerID() + ".pdf");
         return file;
     }
 
@@ -98,7 +98,8 @@ public class FileDownloadView {
         addEmptyLine(preface, 1);
         preface.add(new Paragraph("Customer Name: " + po.getCustomer().getName(), catFont));
         addEmptyLine(preface, 1);
-        preface.add(new Paragraph("Delivery Date: " + (po.getDeliveryDate() == null || po.getDeliveryDate().toString().equals("") ? "(We will send you an email update.)" : po.getDeliveryDate()), catFont));
+        System.out.println("po.getDeliveryDate() === " + po.getDeliveryDate());
+        preface.add(new Paragraph("Delivery Date: " + (po.getDeliveryDate() == null ? "(We will send you an email update.)" : po.getDeliveryDate()), catFont));
 
         String desc = "";
         for (ProductQuotationDescription pqd : quotation.getProductQuotationDescriptionList()) {
