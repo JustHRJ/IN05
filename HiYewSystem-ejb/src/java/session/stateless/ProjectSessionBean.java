@@ -42,10 +42,40 @@ public class ProjectSessionBean implements ProjectSessionBeanLocal {
     }
 
     @Override
-    public void conductMerge(WeldJob weldJob) {
+    public void conductWeldJobMerge(WeldJob weldJob) {
         em.merge(weldJob);
     }
     
+    @Override
+    public void conductProjectMerge(Project p) {
+        em.merge(p);
+    }
+    
+    @Override
+    public void conductMachineMerge(MachineEntity m) {
+        em.merge(m);
+    }
+    
+    @Override
+    public void conductEmployeeMerge(EmployeeEntity e) {
+        em.merge(e);
+    }
+    
+    @Override
+    public void setEmployeeAvailability(String name, Boolean availiability){
+        EmployeeEntity e = null;
+        try {
+            Query q = em.createQuery("select e from EmployeeEntity e where e.employee_name = :name ");
+            q.setParameter("name", name);
+            
+            e = (EmployeeEntity) q.getSingleResult();
+            e.setAvailability(availiability);
+            em.merge(e);
+            
+        } catch (Exception ex) {
+            
+        }
+    }
 
     //return null if there is no available employee
     @Override
@@ -217,6 +247,14 @@ public class ProjectSessionBean implements ProjectSessionBeanLocal {
     @Override
     public List <Project> getAllProjects(){
         Query query = em.createQuery("Select p FROM Project AS p");
+        return query.getResultList();
+    }
+    
+    @Override
+    public List <Project> getProjectByProjectNo(String projectNo){
+        Query query = em.createQuery("Select p FROM Project AS p where p.projectNo=:projectNo");
+        query.setParameter("projectNo", projectNo);
+        
         return query.getResultList();
     }
     

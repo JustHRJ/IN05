@@ -215,10 +215,10 @@
                     <p:outputPanel id="matchDetail" style="text-align:center;">
                         <p:dataTable var ="im" value ="#{knowledgeManageBean.viewMatch()}" paginator="true" rows="5" emptyMessage="No Match" scrollable="true" scrollWidth="95%" >
                             <p:column headerText ="ID">
-                                <p:outputLabel value ="#{im.id}"/>
+                                <p:outputLabel value ="#{im.fillerCode}"/>
                             </p:column>
                             <p:column headerText ="Filler name">
-                                <p:outputLabel value ="#{im.name}"/>
+                                <p:outputLabel value ="#{im.fillerName}"/>
                             </p:column>
                         </p:dataTable>
 

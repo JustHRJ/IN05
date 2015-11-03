@@ -47,11 +47,11 @@
                     <p:column headerText="Client Latest End (dd/mm/yyyy)" width="10%">
                         <h:outputText value="#{adminQuotationManagedBean.formatDate(item.customerLatestEnd)}"/>
                     </p:column>
-                    <p:column headerText="Company Latest End (dd/mm/yyyy)" width="10%">
+                    <p:column headerText="Company Earliest End (dd/mm/yyyy)" width="10%">
                         <p:cellEditor>
-                            <f:facet name="output"><h:outputText style="text-align: left; font-weight: normal" value="#{adminQuotationManagedBean.formatDate(item.companyLatestEnd)}"/></f:facet>
+                            <f:facet name="output"><h:outputText style="text-align: left; font-weight: normal" value="#{adminQuotationManagedBean.formatDate(item.companyEarliestEnd)}"/></f:facet>
                             <f:facet name="input">
-                                <p:calendar id="latestEndDate" value="#{adminQuotationManagedBean.companyLatestEndDate}" mindate="#{item.customerLatestEnd}" pattern ="dd/MM/yyyy" />
+                                <p:calendar id="latestEndDate" value="#{adminQuotationManagedBean.companyEarliestEndDate}" mindate="#{item.customerLatestEnd}" pattern ="dd/MM/yyyy" />
 
                             </f:facet>
                         </p:cellEditor>
