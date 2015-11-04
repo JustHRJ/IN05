@@ -1,0 +1,120 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                template="./s-template.xhtml">
+
+    <ui:define name="content">
+        <!-- Page header -->
+        <div class="page-heading animated fadeInDownBig">
+            <h1>Upload New Fillers to Catalogue <small></small></h1>
+            <p style="margin-bottom: 1%"></p>
+        </div>
+        <!-- End page header -->
+
+        <div style="padding:20px!important;padding-top:0px!important;">
+            <h:form id="formMain">
+<!--                <p:panel id ="panel" header="Upload New Filler">-->
+                    <p:messages id="msg" autoUpdate="false" globalOnly="true"/>
+                    <p:panelGrid id="grid">
+                        <p:row style="vertical-align:bottom">
+                            <p:column>
+                                <p:outputLabel for ="fillerCode" style ="font-weight: bold" value ="Filler Code: "/>
+                            </p:column>
+                            <p:column>
+                                <p:inputText style="font-weight:normal;width:100%" id="fillerCode" value="#{uploadNewItemManagedBean.newFiller.fillerCode}" required="true" requiredMessage="Filler Code is required" label="Filler Code"> 
+                                </p:inputText>
+                            </p:column>
+                            <p:column>
+                                <p:message for="fillerCode" />
+                            </p:column>
+                        </p:row>
+                        <p:row style="vertical-align:bottom">   
+                            <p:column>
+                                <p:outputLabel for ="fillerName" style ="font-weight: bold" value ="Filler Name: "/>
+                            </p:column>
+                            <p:column>
+                                <p:inputText style="font-weight:normal;width:100%" id="fillerName" value="#{uploadNewItemManagedBean.newFiller.fillerName}" required="true" requiredMessage="Filler Name is required" label="Filler Name"> 
+                                </p:inputText>
+                            </p:column>
+                            <p:column>
+                                <p:message for="fillerName"/>
+                            </p:column>
+                        </p:row>
+                        
+                        <p:row style="vertical-align:central">   
+                            <p:column>
+                                <p:outputLabel for ="fillerDesc" style ="font-weight: bold" value ="Description(Optional): "/>
+                            </p:column>
+                            <p:column>
+                                <p:inputTextarea style="font-weight:normal;width:100%"  rows="6" cols="33" id="fillerDesc" value="#{uploadNewItemManagedBean.newFiller.description}" label="Filler Desc"> 
+                                </p:inputTextarea>
+                                
+                            </p:column>
+                            <p:column>
+                                <p:message for="fillerDesc"/>
+                            </p:column>
+                        </p:row>
+                        
+                        <p:row style="vertical-align:bottom">   
+                            <p:column>
+                                <p:outputLabel for="fillerGrade" style ="font-weight: bold" value ="Filler Grade"/>
+                            </p:column>
+                            <p:column>
+                                <h:selectOneMenu style="font-weight:normal;width:100%" id="fillerGrade" value="#{uploadNewItemManagedBean.newFiller.fillerGrade}" required="true" requiredMessage="Filler Grade is required, please select one.">
+                                    <f:selectItem itemLabel="Select" itemValue="" />
+                                    <f:selectItem itemLabel="A" itemValue="A" />
+                                    <f:selectItem itemLabel="B" itemValue="B" />
+                                    <f:selectItem itemLabel="C" itemValue="C" />
+                                    <f:selectItem itemLabel="D" itemValue="D" />
+                                    <f:selectItem itemLabel="E" itemValue="E" />
+                                </h:selectOneMenu>
+                            </p:column>
+                            <p:column>
+                                <p:message for ="fillerGrade" />
+                            </p:column>
+                        </p:row>
+              
+             
+                        <p:row style="vertical-align:bottom">
+                            <p:column>
+                                <p:outputLabel value ="Filler Length (cm)" style ="font-weight: bold" for ="fillerLength"/>
+                            </p:column>
+                            <p:column>
+                                <h:selectOneMenu style="font-weight:normal;width:100%" id="fillerLength" value="#{uploadNewItemManagedBean.newFiller.fillerLength}" required="true" requiredMessage="Filler Length is required">
+                                    <f:selectItem itemLabel="Select" itemValue="" />
+                                    <f:selectItem itemLabel="55cm" itemValue="550" />
+                                    <f:selectItem itemLabel="75cm" itemValue="750" />
+                                    <f:selectItem itemLabel="100cm" itemValue="1000" />
+                                </h:selectOneMenu>
+                            </p:column>
+                            <p:column>
+                                <p:message for ="fillerLength"/>
+                            </p:column>
+                        </p:row>
+                        <p:row style="vertical-align:bottom">   
+                            <p:column>
+                                <p:outputLabel for ="fillerDiameter" style ="font-weight: bold" value ="Filler Diameter (mm)"/>
+                            </p:column>
+                            <p:column>
+                                <p:inputText style="font-weight:normal;width:100%" id="fillerDiameter" maxlength="11" value="#{uploadNewItemManagedBean.newFiller.fillerDiameter}" label="Diameter" required="true" requiredMessage="Diameter is required" converterMessage="Invalid Input! Please enter a positive number up to 2 decimal for Filler Diameter. Example: 53.0 or 42.53">
+                                    <f:validateDoubleRange minimum="0.1" />                       
+                                </p:inputText>
+                            </p:column>
+                            <p:column>
+                                <p:message for="fillerDiameter"/>
+                            </p:column>
+                        </p:row>
+                    </p:panelGrid>
+                    <br />
+                    <p:commandButton style="margin-right:10px" value="Upload New Filler" update="grid msg" action="#{uploadNewItemManagedBean.uploadFiller()}" icon="" validateClient="true"/>
+<!--                </p:panel>-->
+            </h:form>
+        </div>
+
+    </ui:define>
+
+</ui:composition>

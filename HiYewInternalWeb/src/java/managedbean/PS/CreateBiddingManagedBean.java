@@ -132,6 +132,11 @@ public class CreateBiddingManagedBean implements Serializable {
         } else {
             byWhenTimeStamp = new Timestamp(byWhen.getTime());
         }
+        if(byWhen.before(bidEnd)){
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,"Unable specify deliver by date earlier than bidding end date!",""));
+            return "";
+        }else{
+
         Timestamp todayCreatedOn = new Timestamp(getToday().getTime());
         int nextBatchRefNum = procurementSessionBean.getNextBatchNo();
         for (int i = 0; i < selectedSuppliers.size(); i++) {
@@ -154,6 +159,7 @@ public class CreateBiddingManagedBean implements Serializable {
                 FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Procurement Quotation Bid created successfully!"));
         //           return "viewInventory?faces-redirect=true";
         return "viewProcurementBid?faces-redirect=true";
+        }
     }
 
     /**

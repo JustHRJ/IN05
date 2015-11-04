@@ -6,6 +6,7 @@
 package session.stateless;
 
 import entity.ProcurementBidEntity;
+import entity.SuppliedFillerEntity;
 import entity.SupplierEntity;
 import java.util.List;
 import javax.ejb.Local;
@@ -48,5 +49,19 @@ public interface ProcurementSessionBeanLocal {
     public void updatePBStatusByBatch(int batchRefNum, String status);
 
     public void updateAllPBStatus();
+
+    public SuppliedFillerEntity getExistingSuppliedFiller(String fillerCode);
+
+    public SuppliedFillerEntity getExistingFillerByName(String fillerName,SupplierEntity supplier);
+
+    public void uploadSuppliedItem(SuppliedFillerEntity suppliedFiller);
+
+    public List<SuppliedFillerEntity> getAllSuppliedFillers(SupplierEntity supplier);
+
+    public void updateFillerDetails(SuppliedFillerEntity item);
+
+    public void deleteFiller(SuppliedFillerEntity filler);
+
+    public List<SuppliedFillerEntity> getAllSuppliedFillers();
 
 }

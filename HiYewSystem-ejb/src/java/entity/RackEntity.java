@@ -27,11 +27,11 @@ public class RackEntity implements Serializable {
 
     private String location;
 
-    @Digits(integer = 9, fraction = 1, message = "Invalid input! Note: only up to 9 integers and 1 decimal places. Example: 1234.3")
+    @Digits(integer = 9, fraction = 2, message = "Invalid input! Note: only up to 9 integers and 1 decimal places. Example: 1234.3")
     private double length;
-    @Digits(integer = 9, fraction = 1, message = "Invalid input! Note: only up to 9 integers and 1 decimal places. Example: 1234.3")
+    @Digits(integer = 9, fraction = 2, message = "Invalid input! Note: only up to 9 integers and 1 decimal places. Example: 1234.3")
     private double width;
-    @Digits(integer = 9, fraction = 1, message = "Invalid input! Note: only up to 9 integers and 1 decimal places. Example: 1234.3")
+    @Digits(integer = 9, fraction = 2, message = "Invalid input! Note: only up to 9 integers and 1 decimal places. Example: 1234.3")
     private double height;
 
     private String status;

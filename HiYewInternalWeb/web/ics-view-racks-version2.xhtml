@@ -48,7 +48,7 @@
                     </p:column>
 
                     <p:column  headerText="Rack's Size (LxWxH)" style="text-align:center">
-                        <h:outputText value="#{rack.length}cm x #{rack.width}cm x #{rack.height}cm">
+                        <h:outputText value="#{rack.length/100}m x #{rack.width/100}m x #{rack.height/100}m">
                         </h:outputText>
                     </p:column>
 
@@ -122,7 +122,7 @@
                         </p:column>
 
                         <p:column  headerText="Shelve's Size(LxWxH)" style="text-align:center">
-                            <h:outputText value="#{shelve.shelveLength}cm x #{shelve.width}cm x #{shelve.height}cm">
+                            <h:outputText value="#{shelve.shelveLength/100}m x #{shelve.width/100}m x #{shelve.height/100}m">
                             </h:outputText>
                         </p:column>
 
@@ -155,8 +155,8 @@
 
                         </p:column>
 
-                        <p:column  headerText="Available Capacity(cm3)" style="text-align:center">
-                            <h:outputText value="#{viewRacksManagedBean.getAvailCapac(shelve)}">
+                        <p:column  headerText="Available Capacity (m3)" style="text-align:center">
+                            <h:outputText value="#{viewRacksManagedBean.round(viewRacksManagedBean.getAvailCapac(shelve)/1000000, 4)}">
                             </h:outputText>
                         </p:column>
 

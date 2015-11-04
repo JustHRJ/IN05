@@ -7,8 +7,12 @@ package entity;
 
 //import util.enumeration.SupplierStatusEnum;
 import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Objects;
+import java.util.Set;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import util.enumeration.SupplierStatusEnum;
 //import javax.persistence.OneToMany;
 
@@ -45,6 +49,9 @@ public class SupplierEntity implements Serializable {
     //@OneToMany(mappedBy = "supplier")
     //private List<SupplierPurchaseOrder> purcOrder = new ArrayList<>();
     
+    @OneToMany(mappedBy = "supplier")
+    private Set<SuppliedFillerEntity> suppliedItems = new HashSet<SuppliedFillerEntity>();
+    
     public SupplierEntity() {
         supplierStatusEnum = SupplierStatusEnum.ACTIVE;
     }
@@ -62,26 +69,32 @@ public class SupplierEntity implements Serializable {
         this.supplierStatusEnum = supplierStatusEnum;
         //this.purcOrder = purcOrder;
     }
-   
+
     @Override
     public int hashCode() {
-        int hash = 0;
-        hash += (getUserName() != null ? getUserName().hashCode() : 0);
+        int hash = 3;
+        hash = 23 * hash + Objects.hashCode(this.userName);
         return hash;
     }
 
     @Override
-    public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof SupplierEntity)) {
+    public boolean equals(Object obj) {
+        if (obj == null) {
             return false;
         }
-        SupplierEntity other = (SupplierEntity) object;
-        if ((this.getUserName() == null && other.getUserName() != null) || (this.getUserName() != null && !this.userName.equals(other.userName))) {
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final SupplierEntity other = (SupplierEntity) obj;
+        if (!Objects.equals(this.userName, other.userName)) {
             return false;
         }
         return true;
     }
+    
+    
+   
+  
 
     @Override
     public String toString() {
@@ -310,6 +323,20 @@ public class SupplierEntity implements Serializable {
      */
     public void setSubscribeSMS_poDeliveryUpdates(boolean subscribeSMS_poDeliveryUpdates) {
         this.subscribeSMS_poDeliveryUpdates = subscribeSMS_poDeliveryUpdates;
+    }
+
+    /**
+     * @return the suppliedItems
+     */
+    public Set<SuppliedFillerEntity> getSuppliedItems() {
+        return suppliedItems;
+    }
+
+    /**
+     * @param suppliedItems the suppliedItems to set
+     */
+    public void setSuppliedItems(Set<SuppliedFillerEntity> suppliedItems) {
+        this.suppliedItems = suppliedItems;
     }
     /**
      * @return the purcOrder

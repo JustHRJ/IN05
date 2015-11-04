@@ -151,10 +151,15 @@
                             </p:column>
                             <p:column styleClass="itemDetails">
                                 <p:inplace id="wireLength" editor="true">
-                                    <p:ajax event="save" update="itemDetailsPanel"/>
-                                    <p:inputText style="font-weight:bold" id="wireLength1" value="#{itemDetailsManagedBean.selectedItem.wireLength}"  maxlength="11" label="text" converterMessage="Invalid Input! Please enter a positive number up to 2 decimal for length. Example: 53.0 or 42.53">
-                                        <f:validateDoubleRange minimum="1.0"  />
-                                    </p:inputText>
+                                    <p:ajax  event="save" update="itemDetailsPanel"/>
+                                    <h:selectOneMenu id="wireLength1" value="#{itemDetailsManagedBean.selectedItem.wireLength}" required="true" requiredMessage="Filler Length is required, please select one.">
+                                        <f:selectItem itemLabel="Select One" itemValue="" />
+                                        <f:selectItem itemLabel="55cm" itemValue="550" />
+                                        <f:selectItem itemLabel="75cm" itemValue="750" />
+                                        <f:selectItem itemLabel="100cm" itemValue="1000" />
+
+                                    </h:selectOneMenu>
+
                                 </p:inplace>
                             </p:column>
                             <p:column>
@@ -218,7 +223,7 @@
                 <p:messages id="lowerMessages" showDetail="false" autoUpdate="false" closable="true" />
                 <p:panel id="stockInOutPanel" header="Stock In/Out" toggleable="true" toggleSpeed="500" closeSpeed="500" style="margin-bottom:20px"  collapsed="#{itemDetailsManagedBean.showInOuttPanel}">
                     <h:panelGrid id= "stockInOutGrid" columns="1" cellpadding="10">
-                        
+
                         <p:panel id="activityPanel" style="border:none">
                             <h:panelGrid id= "activityPanelGrid" columns="3" cellpadding="10">
                                 <h:outputLabel for="action" value="Choose an activity: " style="font-weight:bold"/>
