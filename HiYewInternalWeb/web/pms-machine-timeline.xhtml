@@ -49,25 +49,22 @@
                 padding: 5px;  
                 text-shadow: none;  
             }  
-
-            div.behindSchedule {  
-                background: #F03030 none !important;  /* red */  
-                border-color: #bd2828 !important;     /* red */  
-            }  
-
-            div.aheadSchedule {  
+            
+            div.started {  
                 background: #1AA11A none !important;  /* green */  
                 border-color: #136e13 !important;     /* green */  
-            }  
+            }
 
-            div.scheduleOnTrack {  
-                background: #FFA500 none !important;  /* orange */  
-                border-color: #cc8100 !important;     /* orange */  
-            }  
+            
             div.notStarted {  
                 background: #e3e3e3 none !important;  /* light grey */  
                 border-color: #e3e3e3 !important;     /* light grey */  
             } 
+            
+            div.noJob {  
+                background: #E85344 none !important;  
+                border-color: #E85344 !important;     
+            }
 
             div.timeline-event-selected {  
                 background: #BECEFE none !important;  
@@ -76,27 +73,23 @@
         </style>
         <!-- Page header -->
         <div class="page-heading animated fadeInDownBig" style="padding:20px!important;padding-bottom:10px!important;">
-            <h1>Ongoing Project Timeline<small>Project System</small></h1>
+            <h1>Machine Schedule<small>Project Management</small></h1>
         </div>
         <!-- End page header -->
         <div style="padding:20px!important;padding-top:0px!important;">
             <h:form id="form">
                 <p:growl id="growl" showSummary="true" showDetail="true" autoUpdate="true"/>  
-                <h3 align="center"><i>Ongoing Project Timeline By Welding Progress</i></h3>
+                <h3 align="center"><i>Machine Schedule By Projects</i></h3>
 
-                <pe:timeline id="timeline" value="#{projectManagedbean.model}"
+                <pe:timeline id="timeline" value="#{machineScheduleManagedBean.model}"
                              editable="false" eventMargin="10" eventMarginAxis="10"
-                             locale="#{projectManagedbean.locale}"
-                             start="#{projectManagedbean.start}"
-                             end="#{projectManagedbean.end}"
+                             locale="#{machineScheduleManagedBean.locale}"
+                             start="#{machineScheduleManagedBean.start}"
+                             end="#{machineScheduleManagedBean.end}"
                              showNavigation="true" showButtonNew="false"
                              axisOnTop="true" stackEvents="true"/>
 
-                <p ><b>Green Flag:</b> Ahead of Schedule<br />
-                    <b>Red Flag:</b> Behind Schedule<br />
-                    <b>Orange Flag:</b> Schedule On Track<br />
-                    <b>Grey Flag:</b> Projects not started<br />
-                </p>
+                
             </h:form>
         </div>
     </ui:define>

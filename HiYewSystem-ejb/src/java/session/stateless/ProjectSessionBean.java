@@ -268,5 +268,6 @@ public class ProjectSessionBean implements ProjectSessionBeanLocal {
     public void conductMerge(Project p) {
         em.merge(p);
     }
+    
 
 }

@@ -87,9 +87,14 @@ public class CustomerPOManagedBean implements Serializable {
 
         orderDate = new SimpleDateFormat("dd/MM/yyyy").format(Calendar.getInstance().getTime());
         descriptions = "";
-        receivedCustomerPO = new ArrayList<>(customerPOSessionBean.receivedCustomerPO(username));
-        System.out.println(receivedCustomerPO.size());
-        receivedCustomerWJ = new ArrayList<>(projectSessionBean.receivedWeldJobs(username));
+        if(customerPOSessionBean.receivedCustomerPO(username) != null){
+            receivedCustomerPO = new ArrayList<>(customerPOSessionBean.receivedCustomerPO(username));
+        }
+        if(projectSessionBean.receivedWeldJobs(username) != null){
+            receivedCustomerWJ = new ArrayList<>(projectSessionBean.receivedWeldJobs(username));
+        }
+        
+        
     }
 
     public void receivedCustomerPO() {
