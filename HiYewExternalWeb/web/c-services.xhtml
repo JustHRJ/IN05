@@ -163,11 +163,11 @@
                         <p:column style="font-weight: bold" headerText="Payment Terms" width="11%">
                             <h:outputText style="font-weight: normal" value="#{item.termsOfPayment}"/>
                         </p:column>
-                        <p:column style="font-weight: bold" headerText="Your latestEnd (dd/mm/yyyy)" width="8%">
+                        <p:column style="font-weight: bold" headerText="Your Latest End (dd/mm/yyyy)" width="8%">
                             <h:outputText style="font-weight: normal" value="#{quotationManagedBean.formatDate(item.customerLatestEnd)}"/>
                         </p:column>
-                        <p:column style="font-weight: bold" headerText="Company latestEnd (dd/mm/yyyy)" width="8%">
-                            <h:outputText style="font-weight: normal" value="#{quotationManagedBean.formatDate(item.companyLatestEnd)}"/>
+                        <p:column style="font-weight: bold" headerText="Company Earliest End (dd/mm/yyyy)" width="8%">
+                            <h:outputText style="font-weight: normal" value="#{quotationManagedBean.formatDate(item.companyEarliestEnd)}"/>
                         </p:column>
                         <p:column style="font-weight: bold" headerText="View" width="5%" >
                             <p:panel visible="#{quotationManagedBean.setVisibility(item)}" style="border:0px; background: none;">

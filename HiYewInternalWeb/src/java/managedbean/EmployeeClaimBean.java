@@ -42,7 +42,7 @@ public class EmployeeClaimBean implements Serializable {
     private Date claimTime = null;
     private double amount = 0.00;
     private UploadedFile file;
-    private String destination = "C:\\Users\\User\\Desktop\\SouceTreeRepo\\IN05\\HiYewInternalWeb\\web\\images\\receipts\\";
+    private String destination = "C:\\Users\\User\\Desktop\\SouceTreeRepo\\IN05\\HiYewInternalWeb\\web\\image\\receipts\\";
     private EmployeeClaimEntity selectedClaim;
     private String months = "";
     private String employeeName = "";
@@ -114,12 +114,13 @@ public class EmployeeClaimBean implements Serializable {
     public void applyForClaim() throws IOException {
         Timestamp time = new Timestamp(claimTime.getTime());
         employeeClaim.setClaimDate(time);
-        String destinations = "../image/receipts/";
+        String destinations = "/image/receipts/";
 
         if (FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("filename") == null) {
-            destination = "";
+            destinations = "";
         } else {
-            destination += FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("filename").toString();
+            destinations += FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("filename").toString();
+            System.out.println("filename is " + FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("filename").toString());
         }
 
         boolean check = hiYewSystemBean.applyClaim(employee.getEmployee_name(), employeeClaim, destinations);
@@ -208,14 +209,10 @@ public class EmployeeClaimBean implements Serializable {
         return employeeClaimEntities;
     }
 
-    public void search(ActionEvent event) {
-        if (("select").equals(months) && !("select").equals(employeeName)) {
+    public void search() {
+        if (!("select").equals(employeeName)) {
             employeeClaimEntities = hiYewSystemBean.approvedClaimRecords(employeeName);
-        } else if ("select".equals(employeeName) && !("select".equals(months))) {
-            employeeClaimEntities = hiYewSystemBean.approvedClaimRecordsM(months);
-        } else {
-            employeeClaimEntities = hiYewSystemBean.approvedClaimRecordsA(employeeName, months);
-        }
+        } 
     }
 
     /**

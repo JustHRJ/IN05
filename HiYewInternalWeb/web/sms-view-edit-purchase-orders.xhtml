@@ -1,0 +1,71 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                template="./template.xhtml">
+
+    <ui:define name="content">
+        <!-- Page header -->
+        <div class="page-heading animated fadeInDownBig" style="padding:20px!important;padding-bottom:10px!important;">
+            <h1>Service Purchase Order<small>Knowledge Management</small></h1>
+        </div>
+        <!-- End page header -->
+        <div style="padding:20px!important;padding-top:0px!important;">
+            <h:form id="innerForm">
+            <h:panelGrid columns="2" cellpadding="5">
+                <p:outputLabel for="year" value="Year: " />
+                <p:selectOneMenu id="year" value="#{adminPOManagedBean.year}" style="width:150px">
+                    <p:ajax listener="#{adminPOManagedBean.filterByYear()}" update="rcvQuote" />         
+
+                    <f:selectItem itemLabel="Select year" itemValue="" noSelectionOption="true" />
+                    <f:selectItems value="#{adminPOManagedBean.years}" />
+                </p:selectOneMenu>
+                
+            </h:panelGrid>
+            <p:messages id="msgs" globalOnly="true" showDetail="false" />
+
+            <p:commandButton value="Refresh" actionListener="#{adminPOManagedBean.filterByYear()}" update="msgs rcvQuote" icon="ui-icon-check"/>
+            <p:dataTable value="#{adminPOManagedBean.customerPOs}" var="item" rows="5" id="rcvQuote" paginator="true" editable="true">
+                <p:ajax event="rowEdit" update="@this" listener="#{adminPOManagedBean.onEditRow}" />
+                <p:column headerText="PO No" width="12%">
+
+                    <p:outputLabel value="#{item.customerRefPoNumber}"/>
+
+                </p:column>
+                <p:column headerText="PO Date (dd/mm/yyyy)" width="7%">
+                    <h:outputText value="#{adminPOManagedBean.formatDate(item.poDate)}"/>
+                </p:column>
+                
+                <p:column headerText="Mailing Address1" width="10%">
+                    <h:outputText value="#{item.mailingAddr1}"/>
+                </p:column>
+                <p:column headerText="Mailing Address2" width="10%">
+                    <h:outputText value="#{item.mailingAddr2}"/>
+                </p:column>
+                <p:column headerText="Delivery Date" width="7%">
+                    <p:cellEditor>
+                        <f:facet name="output"><h:outputText style="text-align: left; font-weight: normal" value="#{adminPOManagedBean.formatDate(item.deliveryDate)}"/></f:facet>
+                                <f:facet name="input">
+                                    <p:calendar id="deliveryDate" value="#{adminPOManagedBean.deliveryDate}" mindate="#{item.poDate}" pattern ="dd/MM/yyyy" />
+                                     
+                                </f:facet>
+                 </p:cellEditor>
+                                    </p:column>
+               
+                
+                 <p:column headerText="Total Price (SGD)" width="10%">
+                     <h:outputText value="#{item.totalPrice}"/>
+                </p:column>
+                
+                <p:column style="font-weight: bold" headerText="Edit" width="3%">
+                            <p:rowEditor />
+                        </p:column>
+            </p:dataTable>
+        </h:form>
+        </div>
+    </ui:define>
+
+</ui:composition>

@@ -87,9 +87,14 @@ public class CustomerPOManagedBean implements Serializable {
 
         orderDate = new SimpleDateFormat("dd/MM/yyyy").format(Calendar.getInstance().getTime());
         descriptions = "";
-        receivedCustomerPO = new ArrayList<>(customerPOSessionBean.receivedCustomerPO(username));
-        System.out.println(receivedCustomerPO.size());
-        receivedCustomerWJ = new ArrayList<>(projectSessionBean.receivedWeldJobs(username));
+        if(customerPOSessionBean.receivedCustomerPO(username) != null){
+            receivedCustomerPO = new ArrayList<>(customerPOSessionBean.receivedCustomerPO(username));
+        }
+        if(projectSessionBean.receivedWeldJobs(username) != null){
+            receivedCustomerWJ = new ArrayList<>(projectSessionBean.receivedWeldJobs(username));
+        }
+        
+        
     }
 
     public void receivedCustomerPO() {
@@ -136,10 +141,10 @@ public class CustomerPOManagedBean implements Serializable {
         }
         System.out.println("Test 2");
         //set latest End date for project
-        if (q.getCompanyLatestEnd() == null) {
+        if (q.getCompanyEarliestEnd() == null) {
             project.setLatestEnd(q.getCustomerLatestEnd());
         } else {
-            project.setLatestEnd(q.getCompanyLatestEnd());
+            project.setLatestEnd(q.getCompanyEarliestEnd());
         }
         System.out.println("Test 3");
         //duration

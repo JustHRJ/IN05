@@ -22,7 +22,7 @@ public class WeldJob implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer weldJobId;
+    private Integer weldJobId; 
     private String projectNo; // id from project
     private String empName; // 
     //private Integer machineId; // id from machine

@@ -17,7 +17,6 @@
         <filter-name>PrimeFaces FileUpload Filter</filter-name>
         <servlet-name>Faces Servlet</servlet-name>
     </filter-mapping>
-    
     <context-param>
         <param-name>primefaces.PUBLIC_CAPTCHA_KEY</param-name>
         <param-value>6LdcbA0TAAAAAPUgCvcUoSfsq7P2g8I3d5JA_JYp</param-value>
@@ -38,4 +37,16 @@
     <welcome-file-list>
         <welcome-file>firstSignUp.xhtml</welcome-file>
     </welcome-file-list>
+    <ejb-local-ref>
+        <ejb-ref-name>ProjectSessionBean</ejb-ref-name>
+        <ejb-ref-type>Session</ejb-ref-type>
+        <local>session.stateless.ProjectSessionBeanLocal</local>
+        <ejb-link>HiYewSystem-ejb.jar#ProjectSessionBean</ejb-link>
+    </ejb-local-ref>
+    <ejb-local-ref>
+        <ejb-ref-name>ProjectSessionBean1</ejb-ref-name>
+        <ejb-ref-type>Session</ejb-ref-type>
+        <local>session.stateless.ProjectSessionBeanLocal</local>
+        <ejb-link>HiYewSystem-ejb.jar#ProjectSessionBean</ejb-link>
+    </ejb-local-ref>
 </web-app>
