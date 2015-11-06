@@ -163,11 +163,13 @@ public class CustomerPOManagedBean implements Serializable {
             newWeldJob.setProjectNo(newPurOrder.getPoId());
             newWeldJob.setMetal1(q.getQuotationDescriptions().get(i).getMetalName());
             newWeldJob.setMetal2(q.getQuotationDescriptions().get(i).getMetalName());
+            
             //set filler
-            Metal m = metalSessionBean.getMetalByName(q.getQuotationDescriptions().get(i).getMetalName());
-            if (m != null && !m.getFillers().isEmpty()) {
-                newWeldJob.setFiller((FillerEntity) new ArrayList(m.getFillers()).get(0));
-            }
+            //Metal m = metalSessionBean.getMetalByName(q.getQuotationDescriptions().get(i).getMetalName());
+            //if (m != null && !m.getFillers().isEmpty()) {
+            //    newWeldJob.setFiller((FillerEntity) new ArrayList(m.getFillers()).get(0));
+            //}
+            
             //check which staff is available
             EmployeeEntity e = projectSessionBean.getAvailableEmployee();
             if (e != null) {
