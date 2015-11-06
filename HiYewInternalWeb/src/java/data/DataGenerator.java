@@ -47,6 +47,7 @@ public class DataGenerator {
     }
     
     public void createMachines(){
+        //
         MachineEntity m1 = new MachineEntity();
     }
 
