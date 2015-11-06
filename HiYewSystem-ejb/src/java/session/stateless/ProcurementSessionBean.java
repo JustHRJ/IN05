@@ -5,7 +5,9 @@
  */
 package session.stateless;
 
+import entity.FillerEntity;
 import entity.ProcurementBidEntity;
+import entity.SuppliedFillerEntity;
 import entity.SupplierEntity;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -217,7 +219,77 @@ public class ProcurementSessionBean implements ProcurementSessionBeanLocal {
 
         return calendar.getTime();
     }
+    
+    @Override
+    public void uploadSuppliedItem(SuppliedFillerEntity suppliedFiller){
+        em.persist(suppliedFiller);
+    }
+    
+    @Override
+    public SuppliedFillerEntity getExistingSuppliedFiller(String fillerCode) {
+        try {
+            Query q = em.createQuery("Select i FROM SuppliedFillerEntity i WHERE i.fillerCode=:fillerCode");
+            q.setParameter("fillerCode", fillerCode);
 
-    // Add business logic below. (Right-click in editor and choose
-    // "Insert Code > Add Business Method")
+            return (SuppliedFillerEntity) q.getSingleResult();
+        } catch (NoResultException e) {
+            return null;
+        }
+    }
+    
+    @Override
+    public SuppliedFillerEntity getExistingFillerByName(String fillerName,SupplierEntity supplier) {
+        try {
+            System.out.println("getExistingItemByName1 name =" + fillerName);
+            Query q = em.createQuery("Select i FROM SuppliedFillerEntity i WHERE i.fillerName=:fillerName AND i.supplier=:supplier");
+            q.setParameter("fillerName", fillerName);
+             q.setParameter("supplier", supplier);
+            return (SuppliedFillerEntity) q.getSingleResult();
+        } catch (NoResultException e) {
+            System.out.println("getExistingItemByName2");
+            return null;
+        }
+    }
+    
+    @Override
+    public List<SuppliedFillerEntity> getAllSuppliedFillers(SupplierEntity supplier){
+         try {
+            Query q = em.createQuery("SELECT sf FROM SuppliedFillerEntity sf WHERE sf.supplier = :supplier");
+            q.setParameter("supplier", supplier);
+            return q.getResultList();
+        } catch (NoResultException e) {
+            return null;
+        }
+    }
+    
+    @Override
+    public List<SuppliedFillerEntity> getAllSuppliedFillers(){
+         try {
+            Query q = em.createQuery("SELECT sf FROM SuppliedFillerEntity sf");
+ 
+            return q.getResultList();
+        } catch (NoResultException e) {
+            return null;
+        }
+    }
+    
+      @Override
+    public void deleteFiller(SuppliedFillerEntity filler) {
+        System.out.println("Deleting item: " + filler.getFillerCode());
+        Query query = em.createQuery("DELETE FROM SuppliedFillerEntity i WHERE i.fillerCode = :fillerCode");
+        query.setParameter("fillerCode", filler.getFillerCode()).executeUpdate();
+    }
+    
+    @Override
+    public void updateFillerDetails(SuppliedFillerEntity item) {
+        System.out.println("Update item: " + item.getFillerCode());
+        SuppliedFillerEntity i = em.find(SuppliedFillerEntity.class, item.getFillerCode());
+        i.setFillerName(item.getFillerName());
+        i.setFillerGrade(item.getFillerGrade());
+        i.setDescription(item.getDescription());
+        i.setFillerLength(item.getFillerLength());
+        i.setFillerDiameter(item.getFillerDiameter());
+    }
+
+ 
 }

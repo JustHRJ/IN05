@@ -10,19 +10,70 @@
     <ui:define name="content">
         <!-- Page header -->
         <div class="page-heading animated fadeInDownBig">
-            <h1>View Catalogue <small></small></h1>
+            <h1>View Supplied Fillers Catalogue <small></small></h1>
             <p style="margin-bottom: 1%"></p>
         </div>
         <!-- End page header -->
-        <h3>PDF 1</h3>
+        <h:form id="formMain">
+            <p:growl id="msgs" showDetail="true"/>
 
-        <object type="application/pdf" data="\web\pdf\pdf_testing1.pdf" height="500px" width="100%">
-        </object>
+            <p:dataTable var="filler" value="#{viewSuppliedFillersManagedBean.sfList}" widgetVar="fillersTable" 
+                         emptyMessage="No items found with given criteria" filteredValue="#{viewSuppliedFillersManagedBean.filteredSFList}" 
+                         rows="10"
+                         paginator="true"
+                         paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                         rowsPerPageTemplate="5,10,15">
 
-    
+
+                <f:facet name="header">
+                    Catalogue
+                    <p:outputPanel style="text-align:right;">
+                        <h:outputText value="Search all fields: " />
+                        <p:inputText id="globalFilter" onkeyup="PF('fillersTable').filter()" style="width:150px;font-weight:normal;font-family:'Open Sans';font-size:14px;" placeholder="Enter keyword"/>
+                    </p:outputPanel>
+                </f:facet>
+                <p:column width="100" filterBy="#{filler.fillerCode}" sortBy="#{filler.fillerCode}" headerText="FillerCode" footerText="contains" filterMatchMode="contains">
+                    <h:outputText value="#{filler.fillerCode}" />
+                </p:column>
+
+                <p:column width="100" filterBy="#{filler.fillerName}" sortBy="#{filler.fillerName}" headerText="FillerName" footerText="contains" filterMatchMode="contains">
+                    <h:outputText value="#{filler.fillerName}" />
+                </p:column>
+
+             
+
+                <p:column width="100" filterBy="#{filler.fillerGrade}" headerText="Grade" footerText="equals" filterMatchMode="equals">
+                    <f:facet name="filter">
+                        <h:selectOneMenu style="font-weight:normal;font-family:'Open Sans';font-size:14px;width:100%" onchange="PF('fillersTable').filter()">
+                            <f:selectItem itemLabel="All" itemValue="" />
+                            <f:selectItem itemLabel="A" itemValue="A" />
+                            <f:selectItem itemLabel="B" itemValue="B" />
+                            <f:selectItem itemLabel="C" itemValue="C" />
+                            <f:selectItem itemLabel="D" itemValue="D" />
+                            <f:selectItem itemLabel="E" itemValue="E" />
+                        </h:selectOneMenu>
+                    </f:facet>
+                    <h:outputText value="#{filler.fillerGrade}" />
+                </p:column>
 
 
+                <p:column width="110" headerText="Filler Length(mm)" >
+                    <h:outputText value="#{filler.fillerLength}">
+                    </h:outputText>
+                </p:column>
 
+                <p:column width="110" filterBy="#{filler.fillerDiameter}" sortBy="#{filler.fillerDiameter}" headerText="Diameter(mm)" footerText="equal" filterMatchMode="exact">                  
+                    <h:outputText value="#{filler.fillerDiameter}" />
+                </p:column>
+
+                <p:column style="width:32px;text-align: center">
+                    <p:commandButton  action="#{viewSuppliedFillersManagedBean.passSelectedItemToNext()}" icon="ui-icon-search" title="View/Update">
+                        <f:setPropertyActionListener value="#{filler}" target="#{viewSuppliedFillersManagedBean.selectedSuppliedFiller}" />
+                    </p:commandButton>
+                </p:column>
+            </p:dataTable>
+
+        </h:form>
 
     </ui:define>
 

@@ -57,7 +57,7 @@ public class CreateStorageManagedBean implements Serializable {
         newRack.setStatus("Not Full");
         newRack.setLocation("Level " + rackLocationLevel + ", " + rackZone);
         newRack.setFilledCapac(0.0);
-       // ArrayList<ShelveEntity> shelves = new ArrayList<ShelveEntity>();
+       //ArrayList<ShelveEntity> shelves = new ArrayList<ShelveEntity>();
          hiYewICSSessionBean.createRack(newRack);
         double avgHeightPerShelve = Math.floor((newRack.getHeight() - (3 * numOfShelvesForRack)) / numOfShelvesForRack);
         double rackRemainingHeight = newRack.getHeight() - (3 * numOfShelvesForRack);

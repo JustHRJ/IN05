@@ -285,7 +285,7 @@ public class ViewRacksManagedBean implements Serializable {
         this.progressBarStyle = progressBarStyle;
     }
 
-    private double round(double value, int places) {
+    public double round(double value, int places) {
         if (places < 0) {
             throw new IllegalArgumentException();
         }

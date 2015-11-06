@@ -22,17 +22,19 @@ import javax.validation.constraints.Size;
 @Entity
 public class FillerEntity implements Serializable {
 
-    private FillerComposition filler;
+    
     private static final long serialVersionUID = 1L;
     @Id
     private String fillerCode;
-
+    private FillerComposition filler;
     @Size(min = 3, message = "Please enter item name more than 2 characters!")
     private String fillerName;
     private String wireGrade;
 
 //     @Digits(integer=6,fraction=0, message = "Invalid input! Note: only up to 6 digits integer. Example: 1234")
     private int quantity;
+    
+    private int bookedQuantity;
 
     @Digits(integer = 9, fraction = 2, message = "Invalid input! Note: only up to 9 integers and 2 decimal places. Example: 1234.32")
     private double cost;
@@ -78,11 +80,13 @@ public class FillerEntity implements Serializable {
         this.averageWeight = averageWeight;
     }
 
-    public FillerEntity(String fillerCode, String fillerName, String wireGrade, int quantity, double cost, double sellingPrice, int reorderPoint, double averageWeight, double wireLength, double diameter) {
+    public FillerEntity(String fillerCode, FillerComposition filler, String fillerName, String wireGrade, int quantity, int bookedQuantity, double cost, double sellingPrice, int reorderPoint, double averageWeight, double wireLength, double diameter) {
         this.fillerCode = fillerCode;
+        this.filler = filler;
         this.fillerName = fillerName;
         this.wireGrade = wireGrade;
         this.quantity = quantity;
+        this.bookedQuantity = bookedQuantity;
         this.cost = cost;
         this.sellingPrice = sellingPrice;
         this.reorderPoint = reorderPoint;
@@ -90,6 +94,8 @@ public class FillerEntity implements Serializable {
         this.wireLength = wireLength;
         this.diameter = diameter;
     }
+
+    
     
     
 
@@ -256,6 +262,20 @@ public class FillerEntity implements Serializable {
      */
     public void setDiameter(double diameter) {
         this.diameter = diameter;
+    }
+
+    /**
+     * @return the bookedQuantity
+     */
+    public int getBookedQuantity() {
+        return bookedQuantity;
+    }
+
+    /**
+     * @param bookedQuantity the bookedQuantity to set
+     */
+    public void setBookedQuantity(int bookedQuantity) {
+        this.bookedQuantity = bookedQuantity;
     }
 
     /**
