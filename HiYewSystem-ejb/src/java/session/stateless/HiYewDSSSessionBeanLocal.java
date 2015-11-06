@@ -7,6 +7,9 @@ package session.stateless;
 
 import entity.FillerEntity;
 import entity.Metal;
+import entity.WeldJob;
+import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.Local;
 
@@ -28,5 +31,11 @@ public interface HiYewDSSSessionBeanLocal {
     public int quantityNeeded(FillerEntity filler, double surfaceAreaToweld,int qty);
 
     public FillerEntity getExistingItem(String fillerCode);
+
+    public List<WeldJob> getSimilarPastProjects(String metal1, String metal2, String weldingType);
+
+    public Integer getDifferenceDays(Timestamp t1, Timestamp t2);
+
+    public Integer deriveAverageDuration(ArrayList<WeldJob> similarWeldJobs);
     
 }

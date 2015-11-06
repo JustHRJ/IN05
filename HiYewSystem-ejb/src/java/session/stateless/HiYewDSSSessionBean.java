@@ -7,10 +7,14 @@ package session.stateless;
 
 import entity.FillerEntity;
 import entity.Metal;
+import entity.WeldJob;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
@@ -89,6 +93,63 @@ final double pi = 3.142;
         BigDecimal bd = new BigDecimal(value);
         bd = bd.setScale(places, RoundingMode.CEILING);
         return bd.doubleValue();
+    }
+    
+      @Override
+    public List<WeldJob> getSimilarPastProjects(String metal1, String metal2, String weldingType) {
+        System.out.println("getSimilarPastProjectDuration: Start");
+        Integer days = -1;
+        //find weldJobs with two similar metals for welding 
+        Query query = em.createQuery("Select w FROM WeldJob AS w where w.project.projectCompletion = true AND "
+                + "( (w.metal1=:metal1 OR w.metal1=:metal2) AND (w.metal2=:metal1 OR w.metal2=:metal2) AND (w.weldingType = :weldingType) ) ");
+        query.setParameter("metal1", metal1);
+        query.setParameter("metal2", metal2);
+        query.setParameter("weldingType", weldingType);
+
+        List<WeldJob> weldJobs = query.getResultList();
+        //if not, find weldJobs with one similar metal for welding
+        if (weldJobs.isEmpty()) {
+            query = em.createQuery("Select w FROM WeldJob AS w where w.project.projectCompletion = true AND (w.weldingType = :weldingType) AND "
+                    + "( (w.metal1=:metal1 OR w.metal1=:metal2) OR (w.metal2=:metal1 OR w.metal2=:metal2) ) ");
+
+            query.setParameter("metal1", metal1);
+            query.setParameter("metal2", metal2);
+            query.setParameter("weldingType", weldingType);
+
+            weldJobs = query.getResultList();
+        }
+        return weldJobs;
+    }
+    
+    
+    
+    
+     @Override
+    public Integer deriveAverageDuration(ArrayList<WeldJob> similarWeldJobs) {
+      
+        double totalMins = 0;
+        if((similarWeldJobs==null)||(similarWeldJobs.size()<1)){
+            return -1;
+        }else{
+            for (int i = 0; i < similarWeldJobs.size(); i++) {
+                int totalQtyWelded = similarWeldJobs.get(i).getQuantityWelded();
+                double surfaceArea = similarWeldJobs.get(i).getSurfaceArea();
+                int daysTook = similarWeldJobs.get(i).getDuration();
+                double weldingDurationPerCm3 = (totalQtyWelded*surfaceArea)/(daysTook * 60 * 60); //go by minutes
+                totalMins += weldingDurationPerCm3;             
+            }
+            return (int)roundUp(((totalMins/similarWeldJobs.size())*60*60),0);
+        }
+
+    }
+    
+    @Override
+    public Integer getDifferenceDays(Timestamp t1, Timestamp t2) {
+
+        Date d1 = new Date(t1.getTime());
+        Date d2 = new Date(t2.getTime());
+        long diff = d2.getTime() - d1.getTime();
+        return (int) (TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS));
     }
 
 }

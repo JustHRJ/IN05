@@ -7,8 +7,10 @@ package managedbean;
 
 import entity.FillerEntity;
 import entity.Metal;
+import entity.Project;
 import entity.Quotation;
 import entity.QuotationDescription;
+import entity.WeldJob;
 import java.io.Serializable;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
@@ -25,6 +27,7 @@ import javax.inject.Named;
 import javax.faces.view.ViewScoped;
 import org.primefaces.event.RowEditEvent;
 import session.stateless.HiYewDSSSessionBeanLocal;
+import session.stateless.ProjectSessionBeanLocal;
 import session.stateless.QuotationSessionBeanLocal;
 
 /**
@@ -35,10 +38,15 @@ import session.stateless.QuotationSessionBeanLocal;
 @ViewScoped
 public class AdminQuotationManagedBean implements Serializable {
     @EJB
+    private ProjectSessionBeanLocal projectSessionBean;
+    
+    @EJB
     private HiYewDSSSessionBeanLocal hiYewDSSSessionBean;
 
     @EJB
     private QuotationSessionBeanLocal quotationSessionBean;
+    
+    
     
     
 
@@ -59,6 +67,14 @@ public class AdminQuotationManagedBean implements Serializable {
     private double surfaceAreaToWeld;
     
     private ArrayList<FillerEntity> matchedFillers;
+    
+    private FillerEntity selectedFillerForWeld;
+    
+    private ArrayList<WeldJob> similarWeldJobs;
+    
+    private String secondMetalName;
+    
+    private int weldJobAvgDuration;
 
     /**
      * Creates a new instance of AdminQuotationManagedBean
@@ -68,6 +84,7 @@ public class AdminQuotationManagedBean implements Serializable {
         receivedCustomerNewQuotations = new ArrayList<>();
         displayQuotationDescriptions = new ArrayList<>();
         matchedFillers = new ArrayList<FillerEntity>();
+        similarWeldJobs = new ArrayList<WeldJob>();
 
         statuses = new HashMap<>();
         years = new HashMap<>();
@@ -293,11 +310,17 @@ public class AdminQuotationManagedBean implements Serializable {
     }
     
     public void generateATP() {
+        if((this.getSecondMetalName()==null)||(this.getSecondMetalName().length()==0)){
+            this.setSecondMetalName(this.selectedQuotationDescription.getMetalName());
+        }
         matchedFillers.clear();
         Metal m = hiYewDSSSessionBean.getExistingMetal(this.selectedQuotationDescription.getMetalName());
         if(m!=null){
         matchedFillers.addAll(hiYewDSSSessionBean.getListOfMatchedFillers(m));
         }
+        getSimilarWeldJobs().clear();
+        getSimilarWeldJobs().addAll(hiYewDSSSessionBean.getSimilarPastProjects(this.selectedQuotationDescription.getMetalName(), this.getSecondMetalName(), this.getSelectedQuotationDescription().getWeldingType()));
+        getWeldJobEstimatedDuration();
        
     }
     
@@ -319,5 +342,120 @@ public class AdminQuotationManagedBean implements Serializable {
     public void setMatchedFillers(ArrayList<FillerEntity> matchedFillers) {
         this.matchedFillers = matchedFillers;
     }
+
+    /**
+     * @return the selectedFillerForWeld
+     */
+    public FillerEntity getSelectedFillerForWeld() {
+        return selectedFillerForWeld;
+    }
+
+    /**
+     * @param selectedFillerForWeld the selectedFillerForWeld to set
+     */
+    public void setSelectedFillerForWeld(FillerEntity selectedFillerForWeld) {
+        this.selectedFillerForWeld = selectedFillerForWeld;
+    }
+    
+    public double getFillerTotalCost(){
+        if(selectedFillerForWeld!=null){
+        int amountRequired = hiYewDSSSessionBean.quantityNeeded(selectedFillerForWeld, surfaceAreaToWeld, selectedQuotationDescription.getQty());
+        return amountRequired*selectedFillerForWeld.getCost();
+        }else{
+            return 0;
+        }
+    }
+
+
+
+    /**
+     * @return the secondMetalName
+     */
+    public String getSecondMetalName() {
+        return secondMetalName;
+    }
+
+    /**
+     * @param secondMetalName the secondMetalName to set
+     */
+    public void setSecondMetalName(String secondMetalName) {
+        this.secondMetalName = secondMetalName;
+    }
+
+    /**
+     * @return the similarWeldJobs
+     */
+    public ArrayList<WeldJob> getSimilarWeldJobs() {
+        return similarWeldJobs;
+    }
+
+    /**
+     * @param similarWeldJobs the similarWeldJobs to set
+     */
+    public void setSimilarWeldJobs(ArrayList<WeldJob> similarWeldJobs) {
+        this.similarWeldJobs = similarWeldJobs;
+    }
+    
+   public void getWeldJobEstimatedDuration(){
+       this.setWeldJobAvgDuration(hiYewDSSSessionBean.deriveAverageDuration(similarWeldJobs));
+   }
+
+    /**
+     * @return the weldJobAvgDuration
+     */
+    public int getWeldJobAvgDuration() {
+        return weldJobAvgDuration;
+    }
+
+    /**
+     * @param weldJobAvgDuration the weldJobAvgDuration to set
+     */
+    public void setWeldJobAvgDuration(int weldJobAvgDuration) {
+        this.weldJobAvgDuration = weldJobAvgDuration;
+    }
+    
+        public Timestamp getPlannedEnd(int days) {
+        Timestamp planStart = null;
+        Project p2 = projectSessionBean.getProjectWithEarliestCompletionDate();
+        if (days != -1) {
+            //check for any project slack which can accomodate the new project duration
+            Project p1 = projectSessionBean.getProjectDurationWithSlack(days);
+
+            if (p1 != null) {
+                //compare and get earliest between proj slack and earliest proj completion date
+                if (p2 != null) {
+                    planStart = getEarliestTimeStamp(p1.getActualEnd(), p2.getPlannedEnd());
+                } else {
+                    planStart = p1.getActualEnd();
+                }
+            } else {
+                //if there is no project slack equals new proj dur, then check and take the earliest project expected completion date
+
+                if (p2 != null) {
+                    planStart = p2.getPlannedEnd();
+                }
+            }
+            //assign plannedEnd
+            if (planStart != null) {
+                return projectSessionBean.addDays(planStart, days);
+            }
+        } 
+        
+       return planStart;
+        
+    }
+
+    public Timestamp getEarliestTimeStamp(Timestamp a, Timestamp b) {
+        if (a != null && b != null) {
+            if (a.after(b)) {
+                return b;
+            } else {
+                return a;
+            }
+        }
+        return null;
+    }
+    
+   
 
 }
