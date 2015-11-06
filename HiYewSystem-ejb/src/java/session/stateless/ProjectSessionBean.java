@@ -11,6 +11,8 @@ import entity.MachineEntity;
 import entity.Project;
 import entity.WeldJob;
 import java.io.File;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -35,6 +37,7 @@ public class ProjectSessionBean implements ProjectSessionBeanLocal {
 
     @Override
     public void createProject(Project project) {
+        //initialise document entity for new project
         DocumentControlEntity d = new DocumentControlEntity();
         em.persist(d);
         String folderName = project.getProjectNo();
@@ -45,6 +48,7 @@ public class ProjectSessionBean implements ProjectSessionBeanLocal {
             System.out.println("folder has not been created");
         }
         project.setDocuments(d);
+        //create project
         em.persist(project);
     }
 
@@ -159,6 +163,62 @@ public class ProjectSessionBean implements ProjectSessionBeanLocal {
         }
         System.out.println("Average days is " + avgDays);
         return avgDays;
+    }
+
+    private double roundUp(double value, int places) {
+        if (places < 0) {
+            throw new IllegalArgumentException();
+        }
+
+        BigDecimal bd = new BigDecimal(value);
+        bd = bd.setScale(places, RoundingMode.CEILING);
+        return bd.doubleValue();
+    }
+
+    @Override
+    public List<WeldJob> getSimilarPastProjects(String metal1, String metal2, String weldingType) {
+        System.out.println("getSimilarPastProjectDuration: Start");
+        Integer days = -1;
+        //find weldJobs with two similar metals for welding 
+        Query query = em.createQuery("Select w FROM WeldJob AS w where w.project.projectCompletion = true AND "
+                + "( (w.metal1=:metal1 OR w.metal1=:metal2) AND (w.metal2=:metal1 OR w.metal2=:metal2) AND (w.weldingType = :weldingType) ) ");
+        query.setParameter("metal1", metal1);
+        query.setParameter("metal2", metal2);
+        query.setParameter("weldingType", weldingType);
+
+        List<WeldJob> weldJobs = query.getResultList();
+        //if not, find weldJobs with one similar metal for welding
+        if (weldJobs.isEmpty()) {
+            query = em.createQuery("Select w FROM WeldJob AS w where w.project.projectCompletion = true AND (w.weldingType = :weldingType) AND "
+                    + "( (w.metal1=:metal1 OR w.metal1=:metal2) OR (w.metal2=:metal1 OR w.metal2=:metal2) ) ");
+
+            query.setParameter("metal1", metal1);
+            query.setParameter("metal2", metal2);
+            query.setParameter("weldingType", weldingType);
+
+            weldJobs = query.getResultList();
+        }
+        return weldJobs;
+    }
+
+    //return -1 if there is no weld job references
+    @Override
+    public Integer deriveAverageDuration(ArrayList<WeldJob> similarWeldJobs) {
+
+        double totalMins = 0;
+        if (similarWeldJobs == null || similarWeldJobs.isEmpty()) {
+            return -1;
+        } else {
+            for (int i = 0; i < similarWeldJobs.size(); i++) {
+                int totalQtyWelded = similarWeldJobs.get(i).getQuantityWelded();
+                double surfaceArea = similarWeldJobs.get(i).getSurfaceArea();
+                int daysTook = similarWeldJobs.get(i).getDuration();
+                double weldingDurationPerCm3 = (totalQtyWelded * surfaceArea) / (daysTook * 60 * 60); //go by minutes
+                totalMins += weldingDurationPerCm3;
+            }
+            return (int) roundUp(((totalMins / similarWeldJobs.size()) * 60 * 60), 0);
+        }
+
     }
 
     //get project with earliest completion date
@@ -281,11 +341,11 @@ public class ProjectSessionBean implements ProjectSessionBeanLocal {
     }
 
     @Override
-    public List <Project> getUncompletedStartedProjects(){
+    public List<Project> getUncompletedStartedProjects() {
         Query query = em.createQuery("Select p FROM Project AS p where p.projectCompletion=false AND p.actualStart IS NOT NULL");
         return query.getResultList();
     }
-    
+
     @Override
     public void conductMerge(Project p) {
         em.merge(p);
