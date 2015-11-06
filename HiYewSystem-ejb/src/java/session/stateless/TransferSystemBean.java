@@ -192,7 +192,7 @@ public class TransferSystemBean implements TransferSystemBeanLocal {
                     w.setMachine(m);
                 }
                 w.setTotalQuantity(Integer.parseInt(im.get(8).toString()));
-                w.setQuantityWeilded(Integer.parseInt(im.get(9).toString()));
+                w.setQuantityWelded(Integer.parseInt(im.get(9).toString()));
                 w.setWeldingType(im.get(10).toString());
 
                 String projectID = w.getProjectNo();
