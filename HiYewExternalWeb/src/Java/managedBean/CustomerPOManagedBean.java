@@ -240,37 +240,6 @@ public class CustomerPOManagedBean implements Serializable {
         FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "RFQ creation must have at least one item job!", ""));
     }
 
-    public Timestamp getPlannedEnd(int days) {
-        Timestamp planStart = null;
-        Project p2 = projectSessionBean.getProjectWithEarliestCompletionDate();
-        if (days != -1) {
-            //check for any project slack which can accomodate the new project duration
-            Project p1 = projectSessionBean.getProjectDurationWithSlack(days);
-
-            if (p1 != null) {
-                //compare and get earliest between proj slack and earliest proj completion date
-                if (p2 != null) {
-                    planStart = getEarliestTimeStamp(p1.getActualEnd(), p2.getPlannedEnd());
-                } else {
-                    planStart = p1.getActualEnd();
-                }
-            } else {
-                //if there is no project slack equals new proj dur, then check and take the earliest project expected completion date
-
-                if (p2 != null) {
-                    planStart = p2.getPlannedEnd();
-                }
-            }
-            //assign plannedEnd
-            if (planStart != null) {
-                return projectSessionBean.addDays(planStart, days);
-            }
-        } 
-        
-       return planStart;
-        
-    }
-
     public Timestamp getEarliestTimeStamp(Timestamp a, Timestamp b) {
         if (a != null && b != null) {
             if (a.after(b)) {
