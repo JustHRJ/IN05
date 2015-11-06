@@ -5,6 +5,8 @@
  */
 package managedbean;
 
+import entity.FillerEntity;
+import entity.Metal;
 import entity.Quotation;
 import entity.QuotationDescription;
 import java.io.Serializable;
@@ -22,6 +24,7 @@ import javax.faces.context.FacesContext;
 import javax.inject.Named;
 import javax.faces.view.ViewScoped;
 import org.primefaces.event.RowEditEvent;
+import session.stateless.HiYewDSSSessionBeanLocal;
 import session.stateless.QuotationSessionBeanLocal;
 
 /**
@@ -31,9 +34,13 @@ import session.stateless.QuotationSessionBeanLocal;
 @Named(value = "adminQuotationManagedBean")
 @ViewScoped
 public class AdminQuotationManagedBean implements Serializable {
+    @EJB
+    private HiYewDSSSessionBeanLocal hiYewDSSSessionBean;
 
     @EJB
     private QuotationSessionBeanLocal quotationSessionBean;
+    
+    
 
     private String status = "Pending";
     private Integer year = Calendar.getInstance().get(Calendar.YEAR); //by default, get current year quotations
@@ -44,8 +51,14 @@ public class AdminQuotationManagedBean implements Serializable {
     private Map<String, String> years;
 
     private Date companyEarliestEndDate;
-    
+
     private Quotation selectedQuotation;
+
+    private QuotationDescription selectedQuotationDescription;
+    
+    private double surfaceAreaToWeld;
+    
+    private ArrayList<FillerEntity> matchedFillers;
 
     /**
      * Creates a new instance of AdminQuotationManagedBean
@@ -54,10 +67,13 @@ public class AdminQuotationManagedBean implements Serializable {
 
         receivedCustomerNewQuotations = new ArrayList<>();
         displayQuotationDescriptions = new ArrayList<>();
+        matchedFillers = new ArrayList<FillerEntity>();
 
         statuses = new HashMap<>();
         years = new HashMap<>();
         selectedQuotation = new Quotation();
+        
+        
     }
 
     @PostConstruct
@@ -79,19 +95,20 @@ public class AdminQuotationManagedBean implements Serializable {
     }
 
     public String formatDate(Timestamp t) {
-        if(t != null){
-        SimpleDateFormat sd = new SimpleDateFormat("dd/MM/yyyy");
-        return sd.format(t.getTime());
+        if (t != null) {
+            SimpleDateFormat sd = new SimpleDateFormat("dd/MM/yyyy");
+            return sd.format(t.getTime());
         }
         return "";
     }
-    public Timestamp formatDateToTimestamp(Date date){
+
+    public Timestamp formatDateToTimestamp(Date date) {
         Timestamp t = new Timestamp(date.getTime());
         return t;
     }
-    
+
     public void onEditRow(RowEditEvent event) {
-        Quotation q = (Quotation)event.getObject();//gives me unedited value
+        Quotation q = (Quotation) event.getObject();//gives me unedited value
         q.setCompanyEarliestEnd(formatDateToTimestamp(companyEarliestEndDate));
         quotationSessionBean.conductMerge(q);
     }
@@ -105,14 +122,13 @@ public class AdminQuotationManagedBean implements Serializable {
     }
 
     public void updateQuotationPricesAndSample() {
-       
+
         quotationSessionBean.updateQuotationPrices(displayQuotationDescriptions);
         FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Quotations updated successfully", ""));
 
     }
 
     //Only if req for metal is yes, then price can be null 
-
     public boolean check() {
         boolean option = true;
         for (int i = 0; i < displayQuotationDescriptions.size(); i++) {
@@ -125,17 +141,16 @@ public class AdminQuotationManagedBean implements Serializable {
         }
         return option;
     }
-    
+
     public void updateQuotationStatus() {
         if (check() == true) {
             quotationSessionBean.updateQuotationStatus(selectedQuotation);
             selectedQuotation = new Quotation();
-        }else{
+        } else {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Prices must be quoted if we are not requesting for metal sample", ""));
         }
-        
-    }
 
+    }
 
     /**
      * @return the status
@@ -235,6 +250,74 @@ public class AdminQuotationManagedBean implements Serializable {
      */
     public void setCompanyEarliestEndDate(Date companyEarliestEndDate) {
         this.companyEarliestEndDate = companyEarliestEndDate;
+    }
+
+    public String clickPerformATP() {
+//        System.out.println(this.selectedItem.getFillerCode());
+//       FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("SelectedQuotationDescription", this.selectedQuotationDescription);
+//       FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("SelectedQuotation", this.selectedQuotation);
+//        //  FacesContext.getCurrentInstance().getExternalContext().getFlash().put("SelectedItem", this.selectedItem);
+//        System.out.println("here2");
+//        return "ics-item-details?faces-redirect=true";
+        matchedFillers.clear();
+        return "";
+    }
+
+    /**
+     * @return the selectedQuotationDescription
+     */
+    public QuotationDescription getSelectedQuotationDescription() {
+        return selectedQuotationDescription;
+    }
+
+    /**
+     * @param selectedQuotationDescription the selectedQuotationDescription to
+     * set
+     */
+    public void setSelectedQuotationDescription(QuotationDescription selectedQuotationDescription) {
+        this.selectedQuotationDescription = selectedQuotationDescription;
+    }
+
+    /**
+     * @return the surfaceAreaToWeld
+     */
+    public double getSurfaceAreaToWeld() {
+        return surfaceAreaToWeld;
+    }
+
+    /**
+     * @param surfaceAreaToWeld the surfaceAreaToWeld to set
+     */
+    public void setSurfaceAreaToWeld(double surfaceAreaToWeld) {
+        this.surfaceAreaToWeld = surfaceAreaToWeld;
+    }
+    
+    public void generateATP() {
+        matchedFillers.clear();
+        Metal m = hiYewDSSSessionBean.getExistingMetal(this.selectedQuotationDescription.getMetalName());
+        if(m!=null){
+        matchedFillers.addAll(hiYewDSSSessionBean.getListOfMatchedFillers(m));
+        }
+       
+    }
+    
+    public int numOfFillersNeeded(String itemCode){
+        FillerEntity f = hiYewDSSSessionBean.getExistingItem(itemCode);
+        return hiYewDSSSessionBean.quantityNeeded(f, this.surfaceAreaToWeld,this.selectedQuotationDescription.getQty());
+    }
+
+    /**
+     * @return the matchedFillers
+     */
+    public ArrayList<FillerEntity> getMatchedFillers() {
+        return matchedFillers;
+    }
+
+    /**
+     * @param matchedFillers the matchedFillers to set
+     */
+    public void setMatchedFillers(ArrayList<FillerEntity> matchedFillers) {
+        this.matchedFillers = matchedFillers;
     }
 
 }

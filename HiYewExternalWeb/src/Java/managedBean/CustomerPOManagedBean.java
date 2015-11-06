@@ -83,13 +83,21 @@ public class CustomerPOManagedBean implements Serializable {
         if (FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("username") != null) {
             username = FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("username").toString();
             System.out.println("Q: Username is " + username);
+            
+            
         }
 
         orderDate = new SimpleDateFormat("dd/MM/yyyy").format(Calendar.getInstance().getTime());
         descriptions = "";
-        receivedCustomerPO = new ArrayList<>(customerPOSessionBean.receivedCustomerPO(username));
-        System.out.println(receivedCustomerPO.size());
-        receivedCustomerWJ = new ArrayList<>(projectSessionBean.receivedWeldJobs(username));
+        if(customerPOSessionBean.receivedCustomerPO(username) != null){
+            receivedCustomerPO = new ArrayList<>(customerPOSessionBean.receivedCustomerPO(username));
+        }
+        if(projectSessionBean.receivedWeldJobs(username) != null){
+            receivedCustomerWJ = new ArrayList<>(projectSessionBean.receivedWeldJobs(username));
+        }
+        
+        //System.out.println(receivedCustomerPO.size());
+        
     }
 
     public void receivedCustomerPO() {

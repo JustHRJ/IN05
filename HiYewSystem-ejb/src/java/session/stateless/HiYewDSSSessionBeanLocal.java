@@ -20,5 +20,13 @@ public interface HiYewDSSSessionBeanLocal {
     public List<FillerEntity> getListOfMatchedFillers(Metal metal);
 
     public int getAvailableQty(FillerEntity filler);
+
+    public Metal getExistingMetal(String metalName);
+
+    public double getWireVolume(FillerEntity item);
+
+    public int quantityNeeded(FillerEntity filler, double surfaceAreaToweld,int qty);
+
+    public FillerEntity getExistingItem(String fillerCode);
     
 }

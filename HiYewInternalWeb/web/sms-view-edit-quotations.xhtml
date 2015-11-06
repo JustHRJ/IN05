@@ -8,6 +8,14 @@
                 template="./template.xhtml">
 
     <ui:define name="content">
+         <style>
+            .highlight1 {
+                background: green;
+            }
+            .highlight2 {
+
+            }
+             </style>
         <!-- Page header -->
         <div class="page-heading animated fadeInDownBig" style="padding:20px!important;padding-bottom:10px!important;">
             <h1>Service Quotation<small> Sales Management</small></h1>
@@ -83,14 +91,14 @@
                                     <p:column headerText="Metal" width="15%">
                                         <h:outputText value="#{quoteDescItem.metalName}" />
                                     </p:column>
-                                    <p:column headerText="Instructions" width="40%">
+                                    <p:column headerText="Instructions" width="36%">
                                         <h:outputText value="#{quoteDescItem.itemDesc}" />
                                     </p:column>
 
-                                    <p:column headerText="Qty" width="10%">
+                                    <p:column headerText="Qty" width="6%">
                                         <h:outputText value="#{quoteDescItem.qty}" />
                                     </p:column>
-                                    <p:column headerText="Welding Type" width="13%">
+                                    <p:column headerText="Welding Type" width="9%">
                                         <h:outputText value="#{quoteDescItem.weldingType}" />
                                     </p:column>
                                     <p:column headerText="Quoted Price Per Piece (SGD)" width="15%">
@@ -110,6 +118,13 @@
                                         <h:inputText value="#{quoteDescItem.remarksToCustomer}" style="width: 95%"/>
                                     </p:column>
 
+                                    <p:column style="width:12%;text-align: center">
+                                        <p:commandButton  id="atpBtn" update=":innerForm:atpDetail" value="Perform ATP" action="#{adminQuotationManagedBean.clickPerformATP()}" oncomplete="PF('atpDialog').show()" icon="ui-icon-search" title="ATP">
+                                            <f:setPropertyActionListener value="#{quoteDescItem}" target="#{adminQuotationManagedBean.selectedQuotationDescription}" />
+                                        </p:commandButton>
+
+                                    </p:column>
+
                                 </p:dataTable>
 
                             </p:outputPanel>
@@ -119,6 +134,98 @@
                     </p:column>
 
                 </p:dataTable>
+
+                <p:dialog  header="(DSS)Available-to-Promise Result" widgetVar="atpDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false">
+
+                    <p:panel id="atpDetail" style="text-align:center;">
+                        <p:panelGrid id="grid" style="border:none;margin-bottom:5px">
+                            <p:row style="vertical-align:bottom">
+                                <p:column style="vertical-align:bottom">
+                                    <p:outputLabel for ="metalToWeld" style ="font-weight: bold" value ="Metal to Weld "/>
+                                </p:column>
+                                <p:column style="vertical-align:top">
+                                    <h:outputText style="font-weight:bold;width:100%" id="metalToWeld" value="#{adminQuotationManagedBean.selectedQuotationDescription.metalName}" />
+                                </p:column>
+                                <p:column>
+                                    <p:message for="metalToWeld" />
+                                </p:column>
+                            </p:row>
+                            <p:row style="vertical-align:bottom">
+                                <p:column style="vertical-align:bottom">
+                                    <p:outputLabel for ="qtyToWeld" style ="font-weight: bold" value ="Quantity to Weld "/>
+                                </p:column>
+                                <p:column style="vertical-align:top">
+                                    <h:outputText style="font-weight:bold;width:100%" id="qtyToWeld" value="#{adminQuotationManagedBean.selectedQuotationDescription.qty}" />
+                                </p:column>
+                                <p:column>
+                                    <p:message for="qtyToWeld" />
+                                </p:column>
+                            </p:row>
+                            <p:row style="vertical-align:bottom">
+                                <p:column style="vertical-align:bottom">
+                                    <p:outputLabel for ="saToWeld" style ="font-weight: bold" value ="Surface Area to Weld(cm3) "/>
+                                </p:column>
+                                <p:column style="vertical-align:top">
+                                    <p:inputText style="font-weight:normal;width:100%" id="saToWeld" maxlength="11" value="#{adminQuotationManagedBean.surfaceAreaToWeld}" label="SurfaceArea" required="true" requiredMessage="Surface Area Volume is required" converterMessage="Invalid Input! Please enter a positive number(up to 2 decimal)">
+                                        <f:validateDoubleRange minimum="0" /> 
+                                    </p:inputText>
+                                </p:column>
+                                <p:column>
+                                    <p:message for="saToWeld" />
+                                </p:column>
+                            </p:row>
+
+                        </p:panelGrid>
+                        <p:commandButton value="Generate"  update="atpDetail kmsSection icsSection " actionListener="#{adminQuotationManagedBean.generateATP}" icon="ui-icon-check" validateClient="true" style="margin-bottom:20px" />
+                        <p:panel id="kmsSection" header="Matching Fillers Result" toggleable="true" toggleSpeed="500" closeSpeed="500" collapsed="false" style="margin-bottom:20px">
+                            <h:panelGrid columns="1" cellpadding="10">
+
+                                <p:dataTable var="matchedFiller" value="#{adminQuotationManagedBean.matchedFillers}" widgetVar="matchedFillersTable" 
+                                             rowStyleClass="#{adminQuotationManagedBean.selectedQuotationDescription.qty le (matchedFiller.quantity-matchedFiller.bookedQuantity) ? 'highlight1' : 'highlight2'}" emptyMessage="No matched filler in KMS! Please request for sample!" >
+
+
+                                    <p:column width="100"   headerText="FillerCode">
+                                        <h:outputText value="#{matchedFiller.fillerCode}" />
+                                    </p:column>
+
+                                    <p:column width="100"  headerText="FillerName">
+                                        <h:outputText value="#{matchedFiller.fillerName}" />
+                                    </p:column>
+
+                                    <p:column width="100"  headerText="Quantity Required">
+                                        <h:outputText value="#{adminQuotationManagedBean.numOfFillersNeeded(matchedFiller.fillerCode)}" />
+                                    </p:column>
+
+
+                                    <p:column width="85"  sortBy="#{matchedFiller.cost * adminQuotationManagedBean.numOfFillersNeeded(matchedFiller.fillerCode)}" headerText="Total Filler Cost" >
+                                        <h:outputText value="#{matchedFiller.cost * adminQuotationManagedBean.numOfFillersNeeded(matchedFiller.fillerCode)}">
+                                        </h:outputText>
+                                    </p:column>
+
+                                    <p:column width="100"  headerText="Quantity Available">
+                                        <h:outputText value="#{matchedFiller.quantity - matchedFiller.bookedQuantity}">
+                                        </h:outputText>
+                                    </p:column>
+
+                                    <!--                                    <p:column style="width:32px;text-align: center">
+                                                                            <p:commandButton  action="#{viewInventoryManagedBean.passSelectedItemToNext()}" icon="ui-icon-search" title="View/Update">
+                                                                                <f:setPropertyActionListener value="#{item}" target="#{viewInventoryManagedBean.selectedItem}" />
+                                                                            </p:commandButton>
+                                                                        </p:column>-->
+                                </p:dataTable>
+                            </h:panelGrid>
+                        </p:panel>
+
+
+                        <p:panel id="icsSection" header="Result from ICS" toggleable="true" toggleSpeed="500" closeSpeed="500" collapsed="false" style="margin-bottom:20px">
+                            <h:panelGrid columns="1" cellpadding="10">
+
+                                <h:outputText
+                                    value="The story begins as Don Vito Corleone..." />
+                            </h:panelGrid>
+                        </p:panel>
+                    </p:panel>
+                </p:dialog>
 
             </h:form>
         </div>
