@@ -15,6 +15,11 @@ body{
 
 }
 
+.ui-dialog .ui-dialog-title {
+    float: left;
+    margin: 0; 
+}
+
 .ui-messages-info-detail, .ui-messages-warn-detail, .ui-messages-error-detail, .ui-messages-fatal-detail, .ui-message-info-detail, .ui-message-warn-detail, .ui-message-error-detail, .ui-message-fatal-detail {
     font-size: 14px;
     margin-left: 5px;
@@ -122,6 +127,7 @@ body{
     border-style: none; 
     border-color: inherit;
     padding: 4px 10px;
+    vertical-align: top;
 }
 
 .ui-tabs {

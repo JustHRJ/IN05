@@ -1,6 +1,7 @@
 package managedBean;
 
 import entity.CustomerPO;
+import entity.DocumentControlEntity;
 import entity.EmployeeEntity;
 import entity.FillerEntity;
 import entity.MachineEntity;
@@ -15,6 +16,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
@@ -83,8 +85,6 @@ public class CustomerPOManagedBean implements Serializable {
         if (FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("username") != null) {
             username = FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("username").toString();
             System.out.println("Q: Username is " + username);
-            
-            
         }
 
         orderDate = new SimpleDateFormat("dd/MM/yyyy").format(Calendar.getInstance().getTime());
@@ -96,7 +96,6 @@ public class CustomerPOManagedBean implements Serializable {
             receivedCustomerWJ = new ArrayList<>(projectSessionBean.receivedWeldJobs(username));
         }
         
-        //System.out.println(receivedCustomerPO.size());
         
     }
 

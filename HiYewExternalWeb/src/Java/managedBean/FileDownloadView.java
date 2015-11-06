@@ -22,9 +22,12 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import javax.faces.bean.ManagedBean;
+import javax.faces.context.FacesContext;
+import javax.servlet.ServletContext;
 import org.primefaces.model.DefaultStreamedContent;
 import org.primefaces.model.StreamedContent;
 
@@ -67,7 +70,7 @@ public class FileDownloadView {
 
         // step 5
         document.close();
-       // writer.close();
+        // writer.close();
 
 //        try{
 //            Thread.sleep(1000);
@@ -75,9 +78,11 @@ public class FileDownloadView {
 //            System.out.println("sleeping....");
 //        }
         System.out.println("PDF Created!");
-
-     //   InputStream stream = ((ServletContext) FacesContext.getCurrentInstance().getExternalContext().getContext()).getResourceAsStream("/pdf/pdf_testing1.pdf");
-        InputStream stream = new FileInputStream("C:\\Users\\User\\Desktop\\SouceTreeRepo\\IN05\\HiYewExternalWeb\\web\\pdf\\pdf_testing1.pdf");
+        //  InputStream stream = ((ServletContext) FacesContext.getCurrentInstance().getExternalContext().getContext()).getResourceAsStream("/pdf/pdf_testing1.pdf");
+      InputStream stream = new FileInputStream("C:\\Users\\QiWen\\Documents\\NetBeansProjects\\IN05\\HiYewExternalWeb\\web\\pdf\\pdf_testing1.pdf");
+        //InputStream stream = new FileInputStream("../../../web/pdf/pdf_testing1.pdf");
+       // InputStream stream = new FileInputStream("\\web\\pdf\\pdf_testing1.pdf");
+      //  InputStream stream = new FileInputStream("/pdf/pdf_testing1.pdf");
         file = new DefaultStreamedContent(stream, "application/pdf", "pdf_testing_outcome_1.pdf");
 
         return file;

@@ -1,0 +1,69 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                template="./template.xhtml">
+
+    <ui:define name="content">
+        <!-- Page header -->
+        <div class="page-heading animated fadeInDownBig" style="padding:20px!important;padding-bottom:10px!important;">
+            <h1>Project Dashboard<small>Project Management</small></h1>
+        </div>
+        <!-- End page header -->
+        <div style="padding:20px!important;padding-top:0px!important;">
+            <h:form id="formMain">
+
+
+
+
+
+                <div class="ui-grid ui-grid-responsive">
+                    <div class="ui-grid-row">
+                        <div class="ui-grid-col-1" style="width:700px;">
+                            <p:chart type="bar" model="#{projectDashBoardManagedBean.horizontalBarModel}" style="height:350px">
+                            </p:chart>
+                            
+                        </div>
+                        <div class="ui-grid-col-1" style="width:50px;"></div>
+                        <div class="ui-grid-col-1" style="width:400px;">
+                            <p:chart type="pie" model="#{projectDashBoardManagedBean.pieModel1}" style="width:400px;height:350px">
+                            </p:chart>
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="ui-grid ui-grid-responsive">
+                    <div class="ui-grid-row">
+                        <div class="ui-grid-col-2"></div>
+                        <div class="ui-grid-col-2"></div>
+
+                    </div>
+                </div>
+
+                <div class="ui-grid ui-grid-responsive">
+                    <div class="ui-grid-row">
+                        <div class="ui-grid-col-3"></div>
+                        <div class="ui-grid-col-3"></div>
+                        <div class="ui-grid-col-3"></div>
+                        <div class="ui-grid-col-3"></div>
+                    </div>
+                </div>
+
+
+
+
+ 
+
+
+
+
+            </h:form>
+        </div>
+    </ui:define>
+
+</ui:composition>
+
