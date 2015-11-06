@@ -36,7 +36,7 @@ public interface ProjectSessionBeanLocal {
 
     public void createWeldJob(WeldJob weldJob);
 
-    public void conductMerge(WeldJob weldJob);
+    public void conductWeldJobMerge(WeldJob weldJob);
 
     public List<WeldJob> receivedWeldJobs(String username);
 
@@ -49,5 +49,15 @@ public interface ProjectSessionBeanLocal {
     public List<Project> getUncompletedProjects();
 
     public List<WeldJob> getWeldJobs(Project p);
+
+    public List<Project> getProjectByProjectNo(String projectNo);
+
+    public void conductMachineMerge(MachineEntity m);
+
+    public void conductEmployeeMerge(EmployeeEntity e);
+
+    public void conductProjectMerge(Project p);
+
+    public void setEmployeeAvailability(String name, Boolean availiability);
     
 }

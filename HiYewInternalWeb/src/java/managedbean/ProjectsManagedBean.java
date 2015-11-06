@@ -12,10 +12,12 @@ import java.io.Serializable;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
+import javax.faces.context.FacesContext;
 import javax.inject.Named;
 import javax.faces.view.ViewScoped;
 import session.stateless.CustomerSessionBeanLocal;
@@ -38,8 +40,20 @@ public class ProjectsManagedBean implements Serializable {
     private Map<String, String> projectStatuses;
     private ArrayList<Project> receivedProjects;
     private ArrayList<Project> filteredProj;
-    
-    private ArrayList <WeldJob> receivedWeldJobs;
+
+    private ArrayList<WeldJob> receivedWeldJobs;
+
+    //for project initiation and closure
+    private ArrayList<Project> receivedProjectByProjectNo;
+    private Map<String, String> ongoingProjectNos;
+    private String selectedProjectNo = "";
+    private Project selectedProject;
+    private Boolean actualStartVisibility;
+    private Boolean actualEndVisibility;
+    private Boolean updateBtnVisibility;
+    private Date today = new Date();
+    private Date actualStart;
+    private Date actualEnd;
 
     /**
      * Creates a new instance of ProjectsManagedBean
@@ -47,8 +61,10 @@ public class ProjectsManagedBean implements Serializable {
     public ProjectsManagedBean() {
         projects = new ArrayList<>();
         projectStatuses = new HashMap<>();
+        ongoingProjectNos = new HashMap<>();
         receivedProjects = new ArrayList<>();
         receivedWeldJobs = new ArrayList<>();
+        selectedProject = new Project();
     }
 
     @PostConstruct
@@ -56,7 +72,78 @@ public class ProjectsManagedBean implements Serializable {
         projectStatuses.put("Starting", "Starting");
         projectStatuses.put("Ongoing", "Ongoing");
         projectStatuses.put("Completed", "Completed");
+
         receivedProjects = new ArrayList<>(projectSessionBean.getAllProjects());
+        //for project initiation and closure
+        for (Project p : projectSessionBean.getUncompletedProjects()) {
+            ongoingProjectNos.put(p.getProjectNo(), p.getProjectNo());
+        }
+        actualStartVisibility = false;
+        actualEndVisibility = false;
+        updateBtnVisibility = (actualEndVisibility == false) ? actualStartVisibility : actualEndVisibility;
+
+    }
+
+    public void filterByProjectNo() {
+        receivedProjectByProjectNo = new ArrayList<>(projectSessionBean.getProjectByProjectNo(selectedProjectNo));
+        if (!receivedProjectByProjectNo.isEmpty()) {
+            selectedProject = receivedProjectByProjectNo.get(0);
+
+            //set visibility
+            if (selectedProject.getActualStart() == null) {
+                actualStartVisibility = true;
+                actualEndVisibility = false;
+            } else {
+                actualStartVisibility = false;
+                actualEndVisibility = true;
+            }
+
+        } else {
+            actualStartVisibility = false;
+            actualEndVisibility = false;
+        }
+        updateBtnVisibility = (actualEndVisibility == false) ? actualStartVisibility : actualEndVisibility;
+    }
+ 
+    public void updateProjectActualDate() {
+        if(actualStart != null){
+            selectedProject.setActualStart(new Timestamp(actualStart.getTime()));
+            selectedProject.setProjectProgress(100);
+            actualStart = null;
+            actualStartVisibility = false;
+        }
+        if(actualEnd != null){
+            selectedProject.setActualEnd(new Timestamp(actualEnd.getTime()));
+            selectedProject.setProjectCompletion(true);
+            actualEnd = null;
+            actualEndVisibility = false;
+        }
+        updateBtnVisibility = false;
+        projectSessionBean.conductProjectMerge(selectedProject);
+
+        String str = "";
+        if (selectedProject.getActualEnd() == null) {
+            for (int i = 0; i < selectedProject.getWeldJobs().size(); i++) {
+                str += selectedProject.getWeldJobs().get(i).getEmpName() + " has been attached to a welding job using Machine ";
+                str += selectedProject.getWeldJobs().get(i).getMachine().getMachine_number() + "\r\n";
+                
+                
+                projectSessionBean.setEmployeeAvailability(selectedProject.getWeldJobs().get(i).getEmpName(), false);
+                selectedProject.getWeldJobs().get(i).getMachine().setStatus("In use");
+            }
+            
+            
+        } else {
+            for (int i = 0; i < selectedProject.getWeldJobs().size(); i++) {
+                str += selectedProject.getWeldJobs().get(i).getEmpName() + " are currently ready for new welding job assignment.\r\n";
+                str += "Machine " + selectedProject.getWeldJobs().get(i).getMachine().getMachine_number() + " are currently available for use.\r\n";
+                
+                projectSessionBean.setEmployeeAvailability(selectedProject.getWeldJobs().get(i).getEmpName(), true);
+                selectedProject.getWeldJobs().get(i).getMachine().setStatus("Available");
+            }
+        }
+        FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("resourceAvailabilityMessage", str);
+        FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("msgColor", "orange");
     }
 
     public void getAllProjects() {
@@ -131,24 +218,163 @@ public class ProjectsManagedBean implements Serializable {
         }
         return 1;
     }
-    
-    public void selectProject(Project p){
-        receivedWeldJobs = new ArrayList <> (projectSessionBean.getWeldJobs(p));
+
+    public void selectProject(Project p) {
+        receivedWeldJobs = new ArrayList<>(projectSessionBean.getWeldJobs(p));
     }
 
     /**
      * @return the receivedWeldJobs
      */
-    public ArrayList <WeldJob> getReceivedWeldJobs() {
+    public ArrayList<WeldJob> getReceivedWeldJobs() {
         return receivedWeldJobs;
     }
 
     /**
      * @param receivedWeldJobs the receivedWeldJobs to set
      */
-    public void setReceivedWeldJobs(ArrayList <WeldJob> receivedWeldJobs) {
+    public void setReceivedWeldJobs(ArrayList<WeldJob> receivedWeldJobs) {
         this.receivedWeldJobs = receivedWeldJobs;
     }
 
+    /**
+     * @return the ongoingProjectNos
+     */
+    public Map<String, String> getOngoingProjectNos() {
+        return ongoingProjectNos;
+    }
+
+    /**
+     * @param ongoingProjectNos the ongoingProjectNos to set
+     */
+    public void setOngoingProjectNos(Map<String, String> ongoingProjectNos) {
+        this.ongoingProjectNos = ongoingProjectNos;
+    }
+
+    /**
+     * @return the selectedProjectNo
+     */
+    public String getSelectedProjectNo() {
+        return selectedProjectNo;
+    }
+
+    /**
+     * @param selectedProjectNo the selectedProjectNo to set
+     */
+    public void setSelectedProjectNo(String selectedProjectNo) {
+        this.selectedProjectNo = selectedProjectNo;
+    }
+
+    /**
+     * @return the receivedProjectByProjectNo
+     */
+    public ArrayList<Project> getReceivedProjectByProjectNo() {
+        return receivedProjectByProjectNo;
+    }
+
+    /**
+     * @param receivedProjectByProjectNo the receivedProjectByProjectNo to set
+     */
+    public void setReceivedProjectByProjectNo(ArrayList<Project> receivedProjectByProjectNo) {
+        this.receivedProjectByProjectNo = receivedProjectByProjectNo;
+    }
+
+    /**
+     * @return the actualStartVisibility
+     */
+    public Boolean getActualStartVisibility() {
+        return actualStartVisibility;
+    }
+
+    /**
+     * @param actualStartVisibility the actualStartVisibility to set
+     */
+    public void setActualStartVisibility(Boolean actualStartVisibility) {
+        this.actualStartVisibility = actualStartVisibility;
+    }
+
+    /**
+     * @return the actualEndVisibility
+     */
+    public Boolean getActualEndVisibility() {
+        return actualEndVisibility;
+    }
+
+    /**
+     * @param actualEndVisibility the actualEndVisibility to set
+     */
+    public void setActualEndVisibility(Boolean actualEndVisibility) {
+        this.actualEndVisibility = actualEndVisibility;
+    }
+
+    /**
+     * @return the selectedProject
+     */
+    public Project getSelectedProject() {
+        return selectedProject;
+    }
+
+    /**
+     * @param selectedProject the selectedProject to set
+     */
+    public void setSelectedProject(Project selectedProject) {
+        this.selectedProject = selectedProject;
+    }
+
+    /**
+     * @return the today
+     */
+    public Date getToday() {
+        return today;
+    }
+
+    /**
+     * @param today the today to set
+     */
+    public void setToday(Date today) {
+        this.today = today;
+    }
+
+    /**
+     * @return the updateBtnVisibility
+     */
+    public Boolean getUpdateBtnVisibility() {
+        return updateBtnVisibility;
+    }
+
+    /**
+     * @param updateBtnVisibility the updateBtnVisibility to set
+     */
+    public void setUpdateBtnVisibility(Boolean updateBtnVisibility) {
+        this.updateBtnVisibility = updateBtnVisibility;
+    }
+
+    /**
+     * @return the actualStart
+     */
+    public Date getActualStart() {
+        return actualStart;
+    }
+
+    /**
+     * @param actualStart the actualStart to set
+     */
+    public void setActualStart(Date actualStart) {
+        this.actualStart = actualStart;
+    }
+
+    /**
+     * @return the actualEnd
+     */
+    public Date getActualEnd() {
+        return actualEnd;
+    }
+
+    /**
+     * @param actualEnd the actualEnd to set
+     */
+    public void setActualEnd(Date actualEnd) {
+        this.actualEnd = actualEnd;
+    }
 
 }

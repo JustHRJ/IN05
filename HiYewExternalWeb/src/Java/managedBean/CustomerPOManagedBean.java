@@ -136,10 +136,10 @@ public class CustomerPOManagedBean implements Serializable {
         }
         System.out.println("Test 2");
         //set latest End date for project
-        if (q.getCompanyLatestEnd() == null) {
+        if (q.getCompanyEarliestEnd() == null) {
             project.setLatestEnd(q.getCustomerLatestEnd());
         } else {
-            project.setLatestEnd(q.getCompanyLatestEnd());
+            project.setLatestEnd(q.getCompanyEarliestEnd());
         }
         System.out.println("Test 3");
         //duration

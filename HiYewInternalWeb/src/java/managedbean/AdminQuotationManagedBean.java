@@ -43,7 +43,7 @@ public class AdminQuotationManagedBean implements Serializable {
     private Map<String, String> statuses;
     private Map<String, String> years;
 
-    private Date companyLatestEndDate;
+    private Date companyEarliestEndDate;
     
     private Quotation selectedQuotation;
 
@@ -92,7 +92,7 @@ public class AdminQuotationManagedBean implements Serializable {
     
     public void onEditRow(RowEditEvent event) {
         Quotation q = (Quotation)event.getObject();//gives me unedited value
-        q.setCompanyLatestEnd(formatDateToTimestamp(companyLatestEndDate));
+        q.setCompanyEarliestEnd(formatDateToTimestamp(companyEarliestEndDate));
         quotationSessionBean.conductMerge(q);
     }
 
@@ -224,17 +224,17 @@ public class AdminQuotationManagedBean implements Serializable {
     }
 
     /**
-     * @return the companyLatestEndDate
+     * @return the companyEarliestEndDate
      */
-    public Date getCompanyLatestEndDate() {
-        return companyLatestEndDate;
+    public Date getCompanyEarliestEndDate() {
+        return companyEarliestEndDate;
     }
 
     /**
-     * @param companyLatestEndDate the companyLatestEndDate to set
+     * @param companyEarliestEndDate the companyEarliestEndDate to set
      */
-    public void setCompanyLatestEndDate(Date companyLatestEndDate) {
-        this.companyLatestEndDate = companyLatestEndDate;
+    public void setCompanyEarliestEndDate(Date companyEarliestEndDate) {
+        this.companyEarliestEndDate = companyEarliestEndDate;
     }
 
 }

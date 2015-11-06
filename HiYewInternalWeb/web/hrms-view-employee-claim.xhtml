@@ -51,7 +51,7 @@
                     <p:outputPanel id="claimDetail" style="text-align:center;">
                         <p:panelGrid  columns="2" rendered="#{not empty employeeClaimBean.selectedClaim}" columnClasses="label,value">
                             <f:facet name="header">
-                                <img src = "#{employeeClaimBean.selectedClaim.fileDestination}"  /> 
+                                <p:graphicImage url = "#{employeeClaimBean.selectedClaim.fileDestination}"  /> 
                             </f:facet>
                         </p:panelGrid>
                     </p:outputPanel>
