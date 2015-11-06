@@ -281,6 +281,12 @@ public class ProjectSessionBean implements ProjectSessionBeanLocal {
     }
 
     @Override
+    public List <Project> getUncompletedStartedProjects(){
+        Query query = em.createQuery("Select p FROM Project AS p where p.projectCompletion=false AND p.actualStart IS NOT NULL");
+        return query.getResultList();
+    }
+    
+    @Override
     public void conductMerge(Project p) {
         em.merge(p);
     }

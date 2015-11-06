@@ -59,5 +59,7 @@ public interface ProjectSessionBeanLocal {
     public void conductProjectMerge(Project p);
 
     public void setEmployeeAvailability(String name, Boolean availiability);
+
+    public List<Project> getUncompletedStartedProjects();
     
 }

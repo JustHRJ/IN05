@@ -30,20 +30,17 @@ public class WeldJob implements Serializable {
     private String metal2; // id from metal entity
     //private String fillerCode; //id from filler entity
     private Double surfaceArea;
-    private Integer totalQuantity;
-    private Integer quantityWelded;
-    private String weldingType;
-    private Integer duration;
+    
+    private Integer totalQuantity; // indicated by customer
+    private Integer quantityWelded; // quantity welded till date
+    private String weldingType; 
+    private Integer duration; // duration of individual weld job
 
-    //Design the association after justin and gx have linked up itementity and filler entity
-    //change itemEntity to filler and fillerentity to fillerComposition
-    //@gx: change your itemCode to fillerCode
-    //I am waiting; It's a simple job don't drag; update the report too
     @ManyToOne
     private Project project;
     @OneToOne
     private MachineEntity machine;
-    @OneToOne()
+    @OneToOne
     private FillerEntity filler;
 
     public WeldJob() {
@@ -223,17 +220,17 @@ public class WeldJob implements Serializable {
     }
 
     /**
-     * @return the quantityWeilded
+     * @return the quantityWelded
      */
-    public Integer getQuantityWeilded() {
+    public Integer getQuantityWelded() {
         return quantityWelded;
     }
 
     /**
-     * @param quantityWeilded the quantityWeilded to set
+     * @param quantityWelded the quantityWelded to set
      */
-    public void setQuantityWeilded(Integer quantityWeilded) {
-        this.quantityWelded = quantityWeilded;
+    public void setQuantityWelded(Integer quantityWelded) {
+        this.quantityWelded = quantityWelded;
     }
 
     /**
