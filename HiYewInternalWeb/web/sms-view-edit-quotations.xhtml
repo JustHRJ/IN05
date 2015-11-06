@@ -91,12 +91,15 @@
                                     <p:column headerText="Metal" width="15%">
                                         <h:outputText value="#{quoteDescItem.metalName}" />
                                     </p:column>
-                                    <p:column headerText="Instructions" width="36%">
+                                    <p:column headerText="Instructions" width="30%">
                                         <h:outputText value="#{quoteDescItem.itemDesc}" />
                                     </p:column>
 
                                     <p:column headerText="Qty" width="6%">
                                         <h:outputText value="#{quoteDescItem.qty}" />
+                                    </p:column>
+                                    <p:column headerText="Surface Vol(cm3)" width="6%">
+                                        <h:outputText value="#{quoteDescItem.surfaceVol}" />
                                     </p:column>
                                     <p:column headerText="Welding Type" width="9%">
                                         <h:outputText value="#{quoteDescItem.weldingType}" />
@@ -180,9 +183,10 @@
                                         <p:outputLabel for ="saToWeld" style ="font-weight: bold" value ="Surface Area to Weld(cm3) "/>
                                     </p:column>
                                     <p:column style="vertical-align:top">
-                                        <p:inputText style="font-weight:normal;width:100%" id="saToWeld" maxlength="11" value="#{adminQuotationManagedBean.surfaceAreaToWeld}" label="SurfaceArea" required="true" requiredMessage="Surface Area Volume is required" converterMessage="Invalid Input! Please enter a positive number(up to 2 decimal)">
+<!--                                        <p:inputText style="font-weight:normal;width:100%" id="saToWeld" maxlength="11" value="#{adminQuotationManagedBean.surfaceAreaToWeld}" label="SurfaceArea" required="true" requiredMessage="Surface Area Volume is required" converterMessage="Invalid Input! Please enter a positive number(up to 2 decimal)">
                                             <f:validateDoubleRange minimum="0" /> 
-                                        </p:inputText>
+                                        </p:inputText>-->
+                                        <h:outputText style="font-weight:bold;width:100%" id="saToWeld" value="#{adminQuotationManagedBean.selectedQuotationDescription.surfaceVol}" />
                                     </p:column>
                                     <p:column>
                                         <p:message for="saToWeld" />

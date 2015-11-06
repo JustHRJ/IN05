@@ -10,6 +10,8 @@ import entity.Quotation;
 import entity.QuotationDescription;
 import entity.WeldJob;
 import java.io.Serializable;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -174,18 +176,22 @@ public class CustomerPOManagedBean implements Serializable {
             EmployeeEntity e = projectSessionBean.getAvailableEmployee();
             if (e != null) {
                 newWeldJob.setEmpName(e.getEmployee_name());
+                e.setAvailability(false);
+                projectSessionBean.conductEmployeeMerge(e);
             }
 
             //check which machine can be used for welding type
             MachineEntity machine = projectSessionBean.getAvailableMachine(q.getQuotationDescriptions().get(i).getWeldingType());
             if (machine != null) {
                 newWeldJob.setMachine(machine);
+                machine.setStatus("In use");
+                projectSessionBean.conductMachineMerge(machine);
             }
 //-----------
             //check duration(days) from project of same nature
             String mName = q.getQuotationDescriptions().get(0).getMetalName();
-            ArrayList<WeldJob> weldJobList = new ArrayList<>(projectSessionBean.getSimilarPastProjects(mName, mName, q.getQuotationDescriptions().get(0).getWeldingType()));
-            int dur = projectSessionBean.deriveAverageDuration(weldJobList); //get the average duration among diff welding job
+            ArrayList<WeldJob> weldJobList = new ArrayList<>(projectSessionBean.getSimilarPastProjects(mName, mName, q.getQuotationDescriptions().get(i).getWeldingType()));
+            int dur = (int)round((projectSessionBean.deriveAverageDuration(weldJobList) * q.getQuotationDescriptions().get(i).getQty() * q.getQuotationDescriptions().get(i).getSurfaceVol()),0); //get the average duration among diff welding job
 
             days += dur;
 
@@ -196,7 +202,7 @@ public class CustomerPOManagedBean implements Serializable {
         }
         System.out.println("Test 5");
         Project p2 = projectSessionBean.getProjectWithEarliestCompletionDate();
-        if (days != -1) {
+        if (days >= 0) {
             //check for any project slack which can accomodate the new project duration
             Project p1 = projectSessionBean.getProjectDurationWithSlack(days);
 
@@ -217,14 +223,19 @@ public class CustomerPOManagedBean implements Serializable {
             //assign plannedEnd
             if (project.getPlannedStart() != null) {
                 project.setPlannedEnd(projectSessionBean.addDays(project.getPlannedStart(), days));
+            }else{ // in the case when there is no running proj
+                Timestamp today = new Timestamp(new Date().getTime());
+                project.setPlannedStart(today);
+                project.setPlannedEnd(projectSessionBean.addDays(project.getPlannedStart(), days));
             }
-        } else // if days = 0 means no proj reference
-        {
+        } else // if days < 0 means no proj reference
+        { System.out.println("p1 and p2 is null");
             if (p2 != null) {
                 project.setPlannedStart(p2.getPlannedEnd());
             } else {
                 Timestamp today = new Timestamp(new Date().getTime());
                 project.setPlannedStart(today);
+                System.out.println("today date is set");
             }
 
         }
@@ -251,6 +262,15 @@ public class CustomerPOManagedBean implements Serializable {
             }
         }
         return null;
+    }
+     private double round(double value, int places) {
+        if (places < 0) {
+            throw new IllegalArgumentException();
+        }
+
+        BigDecimal bd = new BigDecimal(value);
+        bd = bd.setScale(places, RoundingMode.CEILING);
+        return bd.doubleValue();
     }
 
     public void generatePurchaseOrder(Quotation q) {

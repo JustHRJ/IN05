@@ -98,7 +98,7 @@ final double pi = 3.142;
       @Override
     public List<WeldJob> getSimilarPastProjects(String metal1, String metal2, String weldingType) {
         System.out.println("getSimilarPastProjectDuration: Start");
-        Integer days = -1;
+ 
         //find weldJobs with two similar metals for welding 
         Query query = em.createQuery("Select w FROM WeldJob AS w where w.project.projectCompletion = true AND "
                 + "( (w.metal1=:metal1 OR w.metal1=:metal2) AND (w.metal2=:metal1 OR w.metal2=:metal2) AND (w.weldingType = :weldingType) ) ");
@@ -107,6 +107,7 @@ final double pi = 3.142;
         query.setParameter("weldingType", weldingType);
 
         List<WeldJob> weldJobs = query.getResultList();
+        System.out.println("As getSimilarPastProjects Session Bean: Weld Jobs: "+ weldJobs.size() );
         //if not, find weldJobs with one similar metal for welding
         if (weldJobs.isEmpty()) {
             query = em.createQuery("Select w FROM WeldJob AS w where w.project.projectCompletion = true AND (w.weldingType = :weldingType) AND "
@@ -131,14 +132,23 @@ final double pi = 3.142;
         if((similarWeldJobs==null)||(similarWeldJobs.size()<1)){
             return -1;
         }else{
+            System.out.println("List Size"+ similarWeldJobs.size());
             for (int i = 0; i < similarWeldJobs.size(); i++) {
-                int totalQtyWelded = similarWeldJobs.get(i).getQuantityWelded();
+                System.out.println();
+                int totalQtyWelded = similarWeldJobs.get(i).getTotalQuantity();
                 double surfaceArea = similarWeldJobs.get(i).getSurfaceArea();
                 int daysTook = similarWeldJobs.get(i).getDuration();
-                double weldingDurationPerCm3 = (totalQtyWelded*surfaceArea)/(daysTook * 60 * 60); //go by minutes
-                totalMins += weldingDurationPerCm3;             
+                double weldingDurationPerCm3 = (daysTook * 60 * 60)/(totalQtyWelded*surfaceArea); //go by minutes
+                 System.out.println("Total Mins used for 1 cm3 for WeldJob"+ similarWeldJobs.get(i).getWeldJobId() + ": "+ weldingDurationPerCm3);
+                totalMins += weldingDurationPerCm3;    
+                System.out.print("Days took:" + daysTook);
+                System.out.print("Qty:" + totalQtyWelded);
+                System.out.print("surfaceArea:" + surfaceArea);
             }
-            return (int)roundUp(((totalMins/similarWeldJobs.size())*60*60),0);
+             
+       System.out.print("Total Mins:" + totalMins);
+            System.out.print((int)roundUp(((totalMins/similarWeldJobs.size())/60/60),0));
+            return (int)roundUp(((totalMins/similarWeldJobs.size())/60/60),0);
         }
 
     }

@@ -210,13 +210,13 @@ public class ProjectSessionBean implements ProjectSessionBeanLocal {
             return -1;
         } else {
             for (int i = 0; i < similarWeldJobs.size(); i++) {
-                int totalQtyWelded = similarWeldJobs.get(i).getQuantityWelded();
+                int totalQtyWelded = similarWeldJobs.get(i).getTotalQuantity();
                 double surfaceArea = similarWeldJobs.get(i).getSurfaceArea();
                 int daysTook = similarWeldJobs.get(i).getDuration();
-                double weldingDurationPerCm3 = (totalQtyWelded * surfaceArea) / (daysTook * 60 * 60); //go by minutes
+                 double weldingDurationPerCm3 = (daysTook * 60 * 60)/(totalQtyWelded*surfaceArea); //go by minutes
                 totalMins += weldingDurationPerCm3;
             }
-            return (int) roundUp(((totalMins / similarWeldJobs.size()) * 60 * 60), 0);
+            return (int) roundUp(((totalMins / similarWeldJobs.size()) / 60 / 60), 0);
         }
 
     }
