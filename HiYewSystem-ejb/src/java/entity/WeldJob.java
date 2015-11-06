@@ -30,6 +30,10 @@ public class WeldJob implements Serializable {
     private String metal2; // id from metal entity
     //private String fillerCode; //id from filler entity
     private Double surfaceArea;
+    private Integer totalQuantity;
+    private Integer quantityWelded;
+    private String weldingType;
+    private Integer duration;
 
     //Design the association after justin and gx have linked up itementity and filler entity
     //change itemEntity to filler and fillerentity to fillerComposition
@@ -202,6 +206,62 @@ public class WeldJob implements Serializable {
      */
     public void setMachine(MachineEntity machine) {
         this.machine = machine;
+    }
+
+    /**
+     * @return the totalQuantity
+     */
+    public Integer getTotalQuantity() {
+        return totalQuantity;
+    }
+
+    /**
+     * @param totalQuantity the totalQuantity to set
+     */
+    public void setTotalQuantity(Integer totalQuantity) {
+        this.totalQuantity = totalQuantity;
+    }
+
+    /**
+     * @return the quantityWeilded
+     */
+    public Integer getQuantityWeilded() {
+        return quantityWelded;
+    }
+
+    /**
+     * @param quantityWeilded the quantityWeilded to set
+     */
+    public void setQuantityWeilded(Integer quantityWeilded) {
+        this.quantityWelded = quantityWeilded;
+    }
+
+    /**
+     * @return the weldingType
+     */
+    public String getWeldingType() {
+        return weldingType;
+    }
+
+    /**
+     * @param weldingType the weldingType to set
+     */
+    public void setWeldingType(String weldingType) {
+        this.weldingType = weldingType;
+    }
+
+    /**
+     * @return the duration
+     */
+    public Integer getDuration() {
+        return duration;
+    }
+
+    /**
+     * @param duration the duration to set
+     */
+    public void setDuration(Integer duration) {
+        this.duration = duration;
     }
     
 }
