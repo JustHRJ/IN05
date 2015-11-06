@@ -1,6 +1,7 @@
 package managedBean;
 
 import entity.CustomerPO;
+import entity.DocumentControlEntity;
 import entity.EmployeeEntity;
 import entity.FillerEntity;
 import entity.MachineEntity;
@@ -15,6 +16,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;

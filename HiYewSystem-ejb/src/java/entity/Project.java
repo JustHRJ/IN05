@@ -12,6 +12,7 @@ import java.util.List;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 
 /**
  *
@@ -41,6 +42,10 @@ public class Project implements Serializable {
     //private Integer daysDiffFromActualAndPlannedEnd;
             
     private String projectManager; //if applicable
+    
+    
+    @OneToOne
+    private DocumentControlEntity documents = new DocumentControlEntity();
     
     @OneToMany(mappedBy = "project")
     private List <WeldJob> weldJobs = new ArrayList<>();
@@ -250,6 +255,20 @@ public class Project implements Serializable {
      */
     public void setProjectProgress(Integer projectProgress) {
         this.projectProgress = projectProgress;
+    }
+
+    /**
+     * @return the documents
+     */
+    public DocumentControlEntity getDocuments() {
+        return documents;
+    }
+
+    /**
+     * @param documents the documents to set
+     */
+    public void setDocuments(DocumentControlEntity documents) {
+        this.documents = documents;
     }
     
 }
