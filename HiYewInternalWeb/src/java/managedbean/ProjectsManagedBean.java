@@ -120,6 +120,10 @@ public class ProjectsManagedBean implements Serializable {
         }
         updateBtnVisibility = false;
         projectSessionBean.conductProjectMerge(selectedProject);
+        
+        for(int i=0; i<receivedWeldJobs.size(); i++){
+            projectSessionBean.conductWeldJobMerge(receivedWeldJobs.get(i));
+        }
 
         String str = "";
         if (selectedProject.getActualEnd() == null) {

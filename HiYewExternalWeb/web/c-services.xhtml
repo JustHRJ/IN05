@@ -56,6 +56,13 @@
 
                                 </p:inputText>
                                 <br /><br />
+                                 <h:outputLabel style="font-weight: bold" for="SV" value="Surface Vol(cm3): " />
+                                <br />
+                                <p:inputText style="font-weight: normal; width:169px" id="SV" value="#{quotationManagedBean.newQuotationDesc.surfaceVol}" maxlength="10" converterMessage="Surface Vol must contains only decimal numbers." validatorMessage="Surface Vol must have a value of more than 0.1.">
+                                    <f:validateDoubleRange minimum="0.1" />
+
+                                </p:inputText>
+                                <br /><br />
                                 <h:outputLabel style="font-weight: bold" value="Welding Type: " />
                                 <br />
                                 <div class="form-group">
@@ -113,6 +120,18 @@
                                         <f:validateLongRange minimum="1" />
                                         <p:ajax update=":mainForm:msgs" />
                                     </p:inputText>
+                                </f:facet>
+                            </p:cellEditor>
+                        </p:column>
+                        <p:column style="font-weight: bold" headerText="Surface Vol" width="15%">
+                            <p:cellEditor>
+                                <f:facet name="output"><h:outputText value="#{item.surfaceVol}" style="font-weight: normal" /></f:facet>
+                                <f:facet name="input">
+                                    <p:inputText style="width:169px" value="#{item.surfaceVol}" converterMessage="Surface Vol must contains only decimal numbers." validatorMessage="Surface Vol must have a value of more than 0.1.">
+                                        <f:validateDoubleRange minimum="0.1" />
+                                        
+                                    </p:inputText>
+                                    
                                 </f:facet>
                             </p:cellEditor>
                         </p:column>

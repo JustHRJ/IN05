@@ -1,0 +1,83 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                template="./template.xhtml">
+
+    <ui:define name="content">
+        <!-- Page header -->
+        <div class="page-heading animated fadeInDownBig" style="padding:20px!important;padding-bottom:10px!important;">
+            <h1>View Suppliers Fillers <small>Supplier Management</small></h1>
+        </div>
+        <!-- End page header -->
+        <div style="padding:20px!important;padding-top:0px!important;">
+            <h:form id="formMain">
+                <p:growl id="msgs" showDetail="true"/>
+                <p:dataTable var="filler" value="#{viewSupplierFillersManagedBean.sfList}" widgetVar="fillersTable" 
+                             emptyMessage="No items found with given criteria" filteredValue="#{viewSupplierFillersManagedBean.filteredSFList}" 
+                             rows="10"
+                             paginator="true"
+                             paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                             rowsPerPageTemplate="5,10,15">
+
+
+                    <f:facet name="header">
+                        Suppliers Fillers Catalogue
+                        <p:outputPanel style="text-align:right;">
+                            <h:outputText value="Search all fields: " />
+                            <p:inputText id="globalFilter" onkeyup="PF('fillersTable').filter()" style="width:150px;font-weight:normal;font-family:'Open Sans';font-size:14px;" placeholder="Enter keyword"/>
+                        </p:outputPanel>
+                    </f:facet>
+                    <p:column width="100" filterBy="#{filler.fillerCode}" sortBy="#{filler.fillerCode}" headerText="FillerCode" footerText="contains" filterMatchMode="contains">
+                        <h:outputText value="#{filler.fillerCode}" />
+                    </p:column>
+
+                    <p:column width="100" filterBy="#{filler.fillerName}" sortBy="#{filler.fillerName}" headerText="FillerName" footerText="contains" filterMatchMode="contains">
+                        <h:outputText value="#{filler.fillerName}" />
+                    </p:column>
+                    
+                    <p:column width="100"  headerText="Description" >
+                        <h:outputText value="#{filler.description}" />
+                    </p:column>
+
+
+
+                    <p:column width="100" filterBy="#{filler.fillerGrade}" headerText="Grade" footerText="equals" filterMatchMode="equals">
+                        <f:facet name="filter">
+                            <h:selectOneMenu style="font-weight:normal;font-family:'Open Sans';font-size:14px;width:100%" onchange="PF('fillersTable').filter()">
+                                <f:selectItem itemLabel="All" itemValue="" />
+                                <f:selectItem itemLabel="A" itemValue="A" />
+                                <f:selectItem itemLabel="B" itemValue="B" />
+                                <f:selectItem itemLabel="C" itemValue="C" />
+                                <f:selectItem itemLabel="D" itemValue="D" />
+                                <f:selectItem itemLabel="E" itemValue="E" />
+                            </h:selectOneMenu>
+                        </f:facet>
+                        <h:outputText value="#{filler.fillerGrade}" />
+                    </p:column>
+
+
+                    <p:column width="110" headerText="Filler Length(mm)" >
+                        <h:outputText value="#{filler.fillerLength}">
+                        </h:outputText>
+                    </p:column>
+
+                    <p:column width="110" filterBy="#{filler.fillerDiameter}" sortBy="#{filler.fillerDiameter}" headerText="Diameter(mm)" footerText="equal" filterMatchMode="exact">                  
+                        <h:outputText value="#{filler.fillerDiameter}" />
+                    </p:column>
+                    
+                    <p:column width="100"  headerText="Supplied By" sortBy="#{filler.supplier.companyName}" filterBy="#{filler.supplier.companyName}" filterMatchMode="exact" footerText="equal">
+                        <h:outputText value="#{filler.supplier.companyName}" />
+                    </p:column>
+
+
+                </p:dataTable>
+
+            </h:form>
+        </div>
+    </ui:define>
+
+</ui:composition>

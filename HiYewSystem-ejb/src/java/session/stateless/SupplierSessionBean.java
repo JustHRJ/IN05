@@ -47,7 +47,7 @@ public class SupplierSessionBean implements SupplierSessionBeanLocal {
 
     /*@Override
     public void addQuotation(String username, Quotation quotation) {
-        SupplierEntity c = em.find(SupplierEntity.class, username);
+        String c = em.find(String.class, username);
         if (c == null) {
             System.out.println("Supplier is null");
         } else {
@@ -57,7 +57,7 @@ public class SupplierSessionBean implements SupplierSessionBeanLocal {
     
     /*@Override
     public void addPurchaseOrder(String username, SupplierPO cpo){
-        SupplierEntity c = em.find(SupplierEntity.class, username);
+        String c = em.find(String.class, username);
         if (c == null) {
             System.out.println("Supplier is null");
         } else {

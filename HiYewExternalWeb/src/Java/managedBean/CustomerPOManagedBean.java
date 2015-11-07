@@ -1,7 +1,6 @@
 package managedBean;
 
 import entity.CustomerPO;
-import entity.DocumentControlEntity;
 import entity.EmployeeEntity;
 import entity.FillerEntity;
 import entity.MachineEntity;
@@ -11,12 +10,13 @@ import entity.Quotation;
 import entity.QuotationDescription;
 import entity.WeldJob;
 import java.io.Serializable;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
@@ -89,14 +89,13 @@ public class CustomerPOManagedBean implements Serializable {
 
         orderDate = new SimpleDateFormat("dd/MM/yyyy").format(Calendar.getInstance().getTime());
         descriptions = "";
-        if(customerPOSessionBean.receivedCustomerPO(username) != null){
+        if (customerPOSessionBean.receivedCustomerPO(username) != null) {
             receivedCustomerPO = new ArrayList<>(customerPOSessionBean.receivedCustomerPO(username));
         }
-        if(projectSessionBean.receivedWeldJobs(username) != null){
+        if (projectSessionBean.receivedWeldJobs(username) != null) {
             receivedCustomerWJ = new ArrayList<>(projectSessionBean.receivedWeldJobs(username));
         }
-        
-        
+
     }
 
     public void receivedCustomerPO() {
@@ -104,8 +103,8 @@ public class CustomerPOManagedBean implements Serializable {
         FacesContext.getCurrentInstance().addMessage("poMsg",
                 new FacesMessage(FacesMessage.SEVERITY_INFO, "Current purchase order are up to date.", ""));
     }
-    
-    public void receivedCustomerWJ(){
+
+    public void receivedCustomerWJ() {
         receivedCustomerWJ = new ArrayList<>(projectSessionBean.receivedWeldJobs(username));
         FacesContext.getCurrentInstance().addMessage("wjMsg",
                 new FacesMessage(FacesMessage.SEVERITY_INFO, "Current weld jobs are up to date.", ""));
@@ -149,62 +148,99 @@ public class CustomerPOManagedBean implements Serializable {
             project.setLatestEnd(q.getCompanyEarliestEnd());
         }
         System.out.println("Test 3");
-        //duration
+        //total duration
         Integer days = 0;
         //create new weldJobs
         ArrayList<WeldJob> weldJobs = new ArrayList<>();
         WeldJob newWeldJob = new WeldJob();
         System.out.println("Size of qd: " + q.getQuotationDescriptions().size());
         for (int i = 0; i < q.getQuotationDescriptions().size(); i++) {
+
+            //set total qty
+            newWeldJob.setTotalQuantity(q.getQuotationDescriptions().get(i).getQty());
+            //set welding type
+            newWeldJob.setWeldingType(q.getQuotationDescriptions().get(i).getWeldingType());
+
             System.out.println("Test 4");
             newWeldJob.setProjectNo(newPurOrder.getPoId());
             newWeldJob.setMetal1(q.getQuotationDescriptions().get(i).getMetalName());
             newWeldJob.setMetal2(q.getQuotationDescriptions().get(i).getMetalName());
+            
             //set filler
-            Metal m = metalSessionBean.getMetalByName(q.getQuotationDescriptions().get(i).getMetalName());
-            if (m != null && !m.getFillers().isEmpty()) {
-                newWeldJob.setFiller((FillerEntity) new ArrayList(m.getFillers()).get(0));
-            }
+            //Metal m = metalSessionBean.getMetalByName(q.getQuotationDescriptions().get(i).getMetalName());
+            //if (m != null && !m.getFillers().isEmpty()) {
+            //    newWeldJob.setFiller((FillerEntity) new ArrayList(m.getFillers()).get(0));
+            //}
+            
             //check which staff is available
             EmployeeEntity e = projectSessionBean.getAvailableEmployee();
             if (e != null) {
                 newWeldJob.setEmpName(e.getEmployee_name());
+                e.setAvailability(false);
+                projectSessionBean.conductEmployeeMerge(e);
             }
 
             //check which machine can be used for welding type
             MachineEntity machine = projectSessionBean.getAvailableMachine(q.getQuotationDescriptions().get(i).getWeldingType());
             if (machine != null) {
                 newWeldJob.setMachine(machine);
+                machine.setStatus("In use");
+                projectSessionBean.conductMachineMerge(machine);
             }
-
+//-----------
             //check duration(days) from project of same nature
             String mName = q.getQuotationDescriptions().get(0).getMetalName();
-            if (projectSessionBean.getSimilarPastProjectDuration(mName, mName) > days) {
-                days = projectSessionBean.getSimilarPastProjectDuration(mName, mName); //get the longest duration among diff welding job
-            }
+            ArrayList<WeldJob> weldJobList = new ArrayList<>(projectSessionBean.getSimilarPastProjects(mName, mName, q.getQuotationDescriptions().get(i).getWeldingType()));
+            int dur = (int)round((projectSessionBean.deriveAverageDuration(weldJobList) * q.getQuotationDescriptions().get(i).getQty() * q.getQuotationDescriptions().get(i).getSurfaceVol()),0); //get the average duration among diff welding job
+
+            days += dur;
+
             System.out.println("days taken: " + days);
+            newWeldJob.setDuration(dur);
             weldJobs.add(newWeldJob);
             newWeldJob = new WeldJob();
         }
         System.out.println("Test 5");
-        if (days != -1) {
+        Project p2 = projectSessionBean.getProjectWithEarliestCompletionDate();
+        if (days >= 0) {
             //check for any project slack which can accomodate the new project duration
-            Project p = projectSessionBean.getProjectDurationWithSlack(days);
-            if (p != null) {
-                project.setPlannedStart(p.getActualEnd());
+            Project p1 = projectSessionBean.getProjectDurationWithSlack(days);
+
+            if (p1 != null) {
+                //compare and get earliest between proj slack and earliest proj completion date
+                if (p2 != null) {
+                    project.setPlannedStart(getEarliestTimeStamp(p1.getActualEnd(), p2.getPlannedEnd()));
+                } else {
+                    project.setPlannedStart(p1.getActualEnd());
+                }
             } else {
                 //if there is no project slack equals new proj dur, then check and take the earliest project expected completion date
-                p = projectSessionBean.getProjectWithEarliestCompletionDate();
-                if (p != null) {
-                    project.setPlannedStart(p.getPlannedEnd());
+
+                if (p2 != null) {
+                    project.setPlannedStart(p2.getPlannedEnd());
                 }
             }
             //assign plannedEnd
             if (project.getPlannedStart() != null) {
                 project.setPlannedEnd(projectSessionBean.addDays(project.getPlannedStart(), days));
+            }else{ // in the case when there is no running proj
+                Timestamp today = new Timestamp(new Date().getTime());
+                project.setPlannedStart(today);
+                project.setPlannedEnd(projectSessionBean.addDays(project.getPlannedStart(), days));
             }
+        } else // if days < 0 means no proj reference
+        { System.out.println("p1 and p2 is null");
+            if (p2 != null) {
+                project.setPlannedStart(p2.getPlannedEnd());
+            } else {
+                Timestamp today = new Timestamp(new Date().getTime());
+                project.setPlannedStart(today);
+                System.out.println("today date is set");
+            }
+
         }
         System.out.println("Test 6");
+
         projectSessionBean.createProject(project);
         for (WeldJob w : weldJobs) {
             w.setProject(project);
@@ -212,10 +248,29 @@ public class CustomerPOManagedBean implements Serializable {
         }
         project.setWeldJobs(weldJobs);
         projectSessionBean.conductMerge(project);
-        
 
         newPurOrder = new CustomerPO();//reinitialise
         FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "RFQ creation must have at least one item job!", ""));
+    }
+
+    public Timestamp getEarliestTimeStamp(Timestamp a, Timestamp b) {
+        if (a != null && b != null) {
+            if (a.after(b)) {
+                return b;
+            } else {
+                return a;
+            }
+        }
+        return null;
+    }
+     private double round(double value, int places) {
+        if (places < 0) {
+            throw new IllegalArgumentException();
+        }
+
+        BigDecimal bd = new BigDecimal(value);
+        bd = bd.setScale(places, RoundingMode.CEILING);
+        return bd.doubleValue();
     }
 
     public void generatePurchaseOrder(Quotation q) {
@@ -231,7 +286,7 @@ public class CustomerPOManagedBean implements Serializable {
         //now = addDays(new Date(), 30);
         //Timestamp thirtyDaysLater = new Timestamp(now.getTime());
         //expectedEndDate = thirtyDaysLater;
-       // expectedEnd = formatDate(thirtyDaysLater);
+        // expectedEnd = formatDate(thirtyDaysLater);
 
         for (QuotationDescription qd : q.getQuotationDescriptions()) {
 
@@ -340,7 +395,6 @@ public class CustomerPOManagedBean implements Serializable {
         this.orderDate = orderDate;
     }
 
-   
     /**
      * @return the totalPrice
      */
@@ -354,7 +408,6 @@ public class CustomerPOManagedBean implements Serializable {
     public void setTotalPrice(String totalPrice) {
         this.totalPrice = totalPrice;
     }
-
 
     /**
      * @return the descriptions

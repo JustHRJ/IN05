@@ -8,6 +8,7 @@ import javax.persistence.Id;
 import javax.persistence.IdClass;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
+import javax.validation.constraints.Digits;
 
 @IdClass(CompositeQuotationDescKey.class)
 @Entity
@@ -24,6 +25,9 @@ public class QuotationDescription implements Serializable {
     private String weldingType;
     private String metalName;
     private String remarksToCustomer;
+    
+    @Digits(integer = 7, fraction = 2, message = "Invalid input! Note: only up to 7 integers and 2 decimal places. Example: 1234.32")
+    private Double surfaceVol;
     
 
     @ManyToOne
@@ -210,6 +214,20 @@ public class QuotationDescription implements Serializable {
      */
     public void setRemarksToCustomer(String remarksToCustomer) {
         this.remarksToCustomer = remarksToCustomer;
+    }
+
+    /**
+     * @return the surfaceVol
+     */
+    public Double getSurfaceVol() {
+        return surfaceVol;
+    }
+
+    /**
+     * @param surfaceVol the surfaceVol to set
+     */
+    public void setSurfaceVol(Double surfaceVol) {
+        this.surfaceVol = surfaceVol;
     }
 
 }
