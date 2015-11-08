@@ -33,14 +33,14 @@ public class Project implements Serializable {
     private Integer projectProgress; //determine by the amt of job welded to the expected amt of metal to be welded
     
     private Boolean projectCompletion;
-    
-    //private Boolean projectOverrun; 
-    //private Integer projectDaysExceed;
-    //private String causeOfDelay;
-    //private String takeAway;
-    //private Integer daysDiffFromActualAndPlannedStart;
-    //private Integer daysDiffFromActualAndPlannedEnd;
-            
+//    
+    private Boolean projectOverrun; 
+    private Integer projectDaysExceed;
+    private String causeOfDelay;
+//    private String takeAway;
+//    private Integer daysDiffFromActualAndPlannedStart;
+//    private Integer daysDiffFromActualAndPlannedEnd;
+//            
     private String projectManager; //if applicable
     
     
@@ -269,6 +269,48 @@ public class Project implements Serializable {
      */
     public void setDocuments(DocumentControlEntity documents) {
         this.documents = documents;
+    }
+
+    /**
+     * @return the projectOverrun
+     */
+    public Boolean getProjectOverrun() {
+        return projectOverrun;
+    }
+
+    /**
+     * @param projectOverrun the projectOverrun to set
+     */
+    public void setProjectOverrun(Boolean projectOverrun) {
+        this.projectOverrun = projectOverrun;
+    }
+
+    /**
+     * @return the projectDaysExceed
+     */
+    public Integer getProjectDaysExceed() {
+        return projectDaysExceed;
+    }
+
+    /**
+     * @param projectDaysExceed the projectDaysExceed to set
+     */
+    public void setProjectDaysExceed(Integer projectDaysExceed) {
+        this.projectDaysExceed = projectDaysExceed;
+    }
+
+    /**
+     * @return the causeOfDelay
+     */
+    public String getCauseOfDelay() {
+        return causeOfDelay;
+    }
+
+    /**
+     * @param causeOfDelay the causeOfDelay to set
+     */
+    public void setCauseOfDelay(String causeOfDelay) {
+        this.causeOfDelay = causeOfDelay;
     }
     
 }
