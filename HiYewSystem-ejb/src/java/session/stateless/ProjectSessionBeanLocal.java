@@ -65,6 +65,6 @@ public interface ProjectSessionBeanLocal {
 
     public List<WeldJob> getSimilarPastProjects(String metal1, String metal2, String weldingType);
 
-    public Integer deriveAverageDuration(ArrayList<WeldJob> similarWeldJobs);
+    public Double deriveAverageDuration(ArrayList<WeldJob> similarWeldJobs);
     
 }

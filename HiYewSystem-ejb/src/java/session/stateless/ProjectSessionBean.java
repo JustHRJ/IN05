@@ -203,20 +203,20 @@ public class ProjectSessionBean implements ProjectSessionBeanLocal {
 
     //return -1 if there is no weld job references
     @Override
-    public Integer deriveAverageDuration(ArrayList<WeldJob> similarWeldJobs) {
+    public Double deriveAverageDuration(ArrayList<WeldJob> similarWeldJobs) {
 
         double totalMins = 0;
         if (similarWeldJobs == null || similarWeldJobs.isEmpty()) {
-            return -1;
+            return (double)-1;
         } else {
             for (int i = 0; i < similarWeldJobs.size(); i++) {
                 int totalQtyWelded = similarWeldJobs.get(i).getTotalQuantity();
                 double surfaceArea = similarWeldJobs.get(i).getSurfaceArea();
                 int daysTook = similarWeldJobs.get(i).getDuration();
-                 double weldingDurationPerCm3 = (daysTook * 60 * 60)/(totalQtyWelded*surfaceArea); //go by minutes
+                 double weldingDurationPerCm3 = (daysTook * 24 * 60)/(totalQtyWelded*surfaceArea); //go by minutes
                 totalMins += weldingDurationPerCm3;
             }
-            return (int) roundUp(((totalMins / similarWeldJobs.size()) / 60 / 60), 0);
+            return ((totalMins / similarWeldJobs.size()) / 24 / 60);
         }
 
     }
