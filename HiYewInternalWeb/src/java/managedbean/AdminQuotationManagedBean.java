@@ -318,15 +318,19 @@ public class AdminQuotationManagedBean implements Serializable {
         if(m!=null){
         matchedFillers.addAll(hiYewDSSSessionBean.getListOfMatchedFillers(m));
         }
-        getSimilarWeldJobs().clear();
-        getSimilarWeldJobs().addAll(hiYewDSSSessionBean.getSimilarPastProjects(this.selectedQuotationDescription.getMetalName(), this.getSecondMetalName(), this.getSelectedQuotationDescription().getWeldingType()));
+        similarWeldJobs.clear();
+        System.out.println("Metal 1 " + this.selectedQuotationDescription.getMetalName());
+        System.out.println("Metal 2 " + this.getSecondMetalName());
+        System.out.println("Weld Type " + this.getSelectedQuotationDescription().getWeldingType());
+        similarWeldJobs.addAll(hiYewDSSSessionBean.getSimilarPastProjects(this.selectedQuotationDescription.getMetalName(), this.getSecondMetalName(), this.getSelectedQuotationDescription().getWeldingType()));
+        System.out.println("Size of Similar Weld Jobs " + similarWeldJobs.size());
         getWeldJobEstimatedDuration();
        
     }
     
     public int numOfFillersNeeded(String itemCode){
         FillerEntity f = hiYewDSSSessionBean.getExistingItem(itemCode);
-        return hiYewDSSSessionBean.quantityNeeded(f, this.surfaceAreaToWeld,this.selectedQuotationDescription.getQty());
+        return hiYewDSSSessionBean.quantityNeeded(f, this.selectedQuotationDescription.getSurfaceVol(),this.selectedQuotationDescription.getQty());
     }
 
     /**

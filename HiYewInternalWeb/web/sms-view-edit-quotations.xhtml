@@ -91,12 +91,15 @@
                                     <p:column headerText="Metal" width="15%">
                                         <h:outputText value="#{quoteDescItem.metalName}" />
                                     </p:column>
-                                    <p:column headerText="Instructions" width="36%">
+                                    <p:column headerText="Instructions" width="30%">
                                         <h:outputText value="#{quoteDescItem.itemDesc}" />
                                     </p:column>
 
                                     <p:column headerText="Qty" width="6%">
                                         <h:outputText value="#{quoteDescItem.qty}" />
+                                    </p:column>
+                                    <p:column headerText="Surface Vol(cm3)" width="6%">
+                                        <h:outputText value="#{quoteDescItem.surfaceVol}" />
                                     </p:column>
                                     <p:column headerText="Welding Type" width="9%">
                                         <h:outputText value="#{quoteDescItem.weldingType}" />
@@ -135,163 +138,170 @@
 
                 </p:dataTable>
 
-                <p:dialog  header="(DSS)Available-to-Promise Result" widgetVar="atpDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false">
-
-                    <p:panel id="atpDetail" style="text-align:center;">
-                        <p:panelGrid id="grid" style="border:none;margin-bottom:5px">
-                            <p:row style="vertical-align:bottom">
-                                <p:column style="vertical-align:bottom">
-                                    <p:outputLabel for ="metalToWeld" style ="font-weight: bold" value ="Metal to Weld "/>
-                                </p:column>
-                                <p:column style="vertical-align:top">
-                                    <h:outputText style="font-weight:bold;width:100%" id="metalToWeld" value="#{adminQuotationManagedBean.selectedQuotationDescription.metalName}" />
-                                </p:column>
-                                <p:column>
-                                    <p:message for="metalToWeld" />
-                                </p:column>
-                            </p:row>
-
-                            <p:row style="vertical-align:bottom">
-                                <p:column style="vertical-align:bottom">
-                                    <p:outputLabel for ="qtyToWeld" style ="font-weight: bold" value ="Quantity to Weld "/>
-                                </p:column>
-                                <p:column style="vertical-align:top">
-                                    <h:outputText style="font-weight:bold;width:100%" id="qtyToWeld" value="#{adminQuotationManagedBean.selectedQuotationDescription.qty}" />
-                                </p:column>
-                                <p:column>
-                                    <p:message for="qtyToWeld" />
-                                </p:column>
-                            </p:row>
-
-                            <p:row style="vertical-align:bottom">
-                                <p:column style="vertical-align:bottom">
-                                    <p:outputLabel for ="secondMetalToWeld" style ="font-weight: bold" value ="Include Addition Metal(Optional): "/>
-                                </p:column>
-                                <p:inputText style="font-weight:normal;width:100%" id="secondMetalToWeld"  value="#{adminQuotationManagedBean.secondMetalName}" label="SecondMetalToWeld" >
-
-                                </p:inputText>
-                                <p:column>
-                                    <p:message for="secondMetalToWeld" />
-                                </p:column>
-                            </p:row>
-
-                            <p:row style="vertical-align:bottom">
-                                <p:column style="vertical-align:bottom">
-                                    <p:outputLabel for ="saToWeld" style ="font-weight: bold" value ="Surface Area to Weld(cm3) "/>
-                                </p:column>
-                                <p:column style="vertical-align:top">
-                                    <p:inputText style="font-weight:normal;width:100%" id="saToWeld" maxlength="11" value="#{adminQuotationManagedBean.surfaceAreaToWeld}" label="SurfaceArea" required="true" requiredMessage="Surface Area Volume is required" converterMessage="Invalid Input! Please enter a positive number(up to 2 decimal)">
-                                        <f:validateDoubleRange minimum="0" /> 
-                                    </p:inputText>
-                                </p:column>
-                                <p:column>
-                                    <p:message for="saToWeld" />
-                                </p:column>
-                            </p:row>
-
-                        </p:panelGrid>
-                        <p:commandButton value="Generate"  update="atpDetail kmsSection projectsSection " actionListener="#{adminQuotationManagedBean.generateATP}" icon="ui-icon-check" validateClient="true" style="margin-bottom:20px" />
-                        <p:panel id="kmsSection" header="Matching Fillers Result" toggleable="true" toggleSpeed="500" closeSpeed="500" collapsed="false" style="margin-bottom:20px">
-                            <h:panelGrid columns="1" cellpadding="10">
-
-                                <p:dataTable id="matchingFillersTable" var="matchedFiller" value="#{adminQuotationManagedBean.matchedFillers}" widgetVar="matchedFillersTable" selection="#{adminQuotationManagedBean.selectedFillerForWeld}" rowKey="#{matchedFiller.fillerCode}"
-                                             rowStyleClass="#{adminQuotationManagedBean.selectedQuotationDescription.qty le (matchedFiller.quantity-matchedFiller.bookedQuantity) ? 'highlight1' : 'highlight2'}" emptyMessage="No matched filler in KMS! Please request for sample!" >
-
-                                    <p:column selectionMode="single"  style="width:16px;text-align:center"/>
-
-                                    <p:column width="100"   headerText="FillerCode">
-                                        <h:outputText value="#{matchedFiller.fillerCode}" />
-                                    </p:column>
-
-                                    <p:column width="100"  headerText="FillerName">
-                                        <h:outputText value="#{matchedFiller.fillerName}" />
-                                    </p:column>
-
-                                    <p:column width="100"  headerText="Quantity Required">
-                                        <h:outputText value="#{adminQuotationManagedBean.numOfFillersNeeded(matchedFiller.fillerCode)}" />
-                                    </p:column>
-
-
-                                    <p:column width="85"  sortBy="#{matchedFiller.cost * adminQuotationManagedBean.numOfFillersNeeded(matchedFiller.fillerCode)}" headerText="Total Filler Cost" >
-                                        <h:outputText value="#{matchedFiller.cost * adminQuotationManagedBean.numOfFillersNeeded(matchedFiller.fillerCode)}">
-                                        </h:outputText>
-                                    </p:column>
-
-                                    <p:column width="100"  headerText="Quantity Available">
-                                        <h:outputText value="#{matchedFiller.quantity - matchedFiller.bookedQuantity}">
-                                        </h:outputText>
-                                    </p:column>
-
-                                    <f:facet name="footer">
-                                        <p:commandButton process="matchingFillersTable" update="innerForm:costSection" icon="ui-icon-search" value="Use for Calculation"/>
-                                    </f:facet>
-                                </p:dataTable>
-                            </h:panelGrid>
-                        </p:panel>
-
-
-                        <p:panel id="projectsSection" header="List of Similar Past Projects" toggleable="true" toggleSpeed="500" closeSpeed="500" collapsed="false" style="margin-bottom:20px">
-                            <h:panelGrid columns="1" cellpadding="10">
-                                <p:dataTable id="similarProjectsTable" var="similarProject" value="#{adminQuotationManagedBean.similarWeldJobs}" widgetVar="similarProjectsWidTable" 
-                                             emptyMessage="No Similar Projects Found!" >
-
-                                    <p:column width="100"   headerText="Project Number">
-                                        <h:outputText value="#{similarProject.projectNo}" />
-                                    </p:column>
-
-                                    <p:column width="100"  headerText="Weld Job ID">
-                                        <h:outputText value="#{similarProject.weldJobId}" />
-                                    </p:column>
-
-                                    <p:column width="100"  headerText="Metal 1">
-                                        <h:outputText value="#{similarProject.metal1}" />
-                                    </p:column>
-
-                                    <p:column width="100"  headerText="Metal 2">
-                                        <h:outputText value="#{similarProject.metal2}" />
-                                    </p:column>
-                                    
-                                    <p:column width="100"  headerText="Welding Surface Area">
-                                        <h:outputText value="#{similarProject.surfaceArea}" />
-                                    </p:column>
-
-                                    <p:column width="100"  headerText="Welding Type">
-                                        <h:outputText value="#{similarProject.weldingType}" />
-                                    </p:column>
-
-                                    <p:column width="100"  headerText="Quantity Welded">
-                                        <h:outputText value="#{similarProject.quantityWelded}" />
-                                    </p:column>
-                                    
-                                    <p:column width="100"  headerText="Duration" sortBy="#{similarProject.duration}">
-                                         <h:outputText value="#{similarProject.duration}" />
-                                    </p:column>
-                                    
-                                      <f:facet name="footer">
-                                          <h:outputText value="Estimated Average Duration Derived: #{adminQuotationManagedBean.weldJobAvgDuration} days" />
-                                    </f:facet>
-
-                                </p:dataTable>
-                            </h:panelGrid>
-                        </p:panel>
-
-                        <p:panel id="costSection" header="Cost Summary" toggleable="true" toggleSpeed="500" closeSpeed="500" collapsed="false" style="margin-bottom:20px">
-                            <h:panelGrid columns="3" cellpadding="10">
+                <p:dialog header="(DSS)Available-to-Promise Result" widgetVar="atpDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false" style="max-height:900px">
+                    <p:scrollPanel mode="native" style="max-height:1200px">
+                        <p:panel id="atpDetail" style="text-align:center;">
+                            <p:panelGrid id="grid" style="border:none;margin-bottom:5px">
                                 <p:row style="vertical-align:bottom">
                                     <p:column style="vertical-align:bottom">
-                                        <p:outputLabel for ="fillerTotalCost" style ="font-weight: bold" value ="Total Material Cost: "/>
+                                        <p:outputLabel for ="metalToWeld" style ="font-weight: bold" value ="Metal to Weld "/>
                                     </p:column>
                                     <p:column style="vertical-align:top">
-                                        <h:outputText style="font-weight:bold;width:100%" id="fillerTotalCost" value="#{adminQuotationManagedBean.fillerTotalCost}" />
+                                        <h:outputText style="font-weight:bold;width:100%" id="metalToWeld" value="#{adminQuotationManagedBean.selectedQuotationDescription.metalName}" />
                                     </p:column>
                                     <p:column>
-                                        <p:message for="fillerTotalCost" />
+                                        <p:message for="metalToWeld" />
                                     </p:column>
                                 </p:row>
-                            </h:panelGrid>
-                        </p:panel>
 
-                    </p:panel>
+                                <p:row style="vertical-align:bottom">
+                                    <p:column style="vertical-align:bottom">
+                                        <p:outputLabel for ="qtyToWeld" style ="font-weight: bold" value ="Quantity to Weld "/>
+                                    </p:column>
+                                    <p:column style="vertical-align:top">
+                                        <h:outputText style="font-weight:bold;width:100%" id="qtyToWeld" value="#{adminQuotationManagedBean.selectedQuotationDescription.qty}" />
+                                    </p:column>
+                                    <p:column>
+                                        <p:message for="qtyToWeld" />
+                                    </p:column>
+                                </p:row>
+
+                                <!--                            <p:row style="vertical-align:bottom">
+                                                                <p:column style="vertical-align:bottom">
+                                                                    <p:outputLabel for ="secondMetalToWeld" style ="font-weight: bold" value ="Include Addition Metal(Optional): "/>
+                                                                </p:column>
+                                                                <p:inputText style="font-weight:normal;width:100%" id="secondMetalToWeld"  value="#{adminQuotationManagedBean.secondMetalName}" label="SecondMetalToWeld" >
+                                
+                                                                </p:inputText>
+                                                                <p:column>
+                                                                    <p:message for="secondMetalToWeld" />
+                                                                </p:column>
+                                                            </p:row>-->
+
+                                <p:row style="vertical-align:bottom">
+                                    <p:column style="vertical-align:bottom">
+                                        <p:outputLabel for ="saToWeld" style ="font-weight: bold" value ="Surface Area to Weld(cm3) "/>
+                                    </p:column>
+                                    <p:column style="vertical-align:top">
+<!--                                        <p:inputText style="font-weight:normal;width:100%" id="saToWeld" maxlength="11" value="#{adminQuotationManagedBean.surfaceAreaToWeld}" label="SurfaceArea" required="true" requiredMessage="Surface Area Volume is required" converterMessage="Invalid Input! Please enter a positive number(up to 2 decimal)">
+                                            <f:validateDoubleRange minimum="0" /> 
+                                        </p:inputText>-->
+                                        <h:outputText style="font-weight:bold;width:100%" id="saToWeld" value="#{adminQuotationManagedBean.selectedQuotationDescription.surfaceVol}" />
+                                    </p:column>
+                                    <p:column>
+                                        <p:message for="saToWeld" />
+                                    </p:column>
+                                </p:row>
+                                <p:row style="vertical-align:bottom">
+                                    <p:column>
+                                        <p:commandButton value="Generate"  update="atpDetail kmsSection projectsSection " actionListener="#{adminQuotationManagedBean.generateATP}" icon="ui-icon-check" validateClient="true" style="margin-bottom:20px;float: left" />
+                                    </p:column>
+                                </p:row>
+                            </p:panelGrid>
+
+                            <p:panel id="kmsSection" header="Matching Fillers Result" toggleable="true" toggleSpeed="500" closeSpeed="500" collapsed="false" style="margin-bottom:20px">
+                                <h:panelGrid columns="1" cellpadding="10">
+
+                                    <p:dataTable id="matchingFillersTable" var="matchedFiller" value="#{adminQuotationManagedBean.matchedFillers}" widgetVar="matchedFillersTable" selection="#{adminQuotationManagedBean.selectedFillerForWeld}" rowKey="#{matchedFiller.fillerCode}"
+                                                 rowStyleClass="#{adminQuotationManagedBean.selectedQuotationDescription.qty le (matchedFiller.quantity-matchedFiller.bookedQuantity) ? 'highlight1' : 'highlight2'}" emptyMessage="No matched filler in KMS! Please request for sample!" >
+
+                                        <p:column selectionMode="single"  style="width:16px;text-align:center"/>
+
+                                        <p:column width="100"   headerText="FillerCode">
+                                            <h:outputText value="#{matchedFiller.fillerCode}" />
+                                        </p:column>
+
+                                        <p:column width="100"  headerText="FillerName">
+                                            <h:outputText value="#{matchedFiller.fillerName}" />
+                                        </p:column>
+
+                                        <p:column width="100"  headerText="Quantity Required">
+                                            <h:outputText value="#{adminQuotationManagedBean.numOfFillersNeeded(matchedFiller.fillerCode)}" />
+                                        </p:column>
+
+
+                                        <p:column width="85"  sortBy="#{matchedFiller.cost * adminQuotationManagedBean.numOfFillersNeeded(matchedFiller.fillerCode)}" headerText="Total Filler Cost" >
+                                            <h:outputText value="#{matchedFiller.cost * adminQuotationManagedBean.numOfFillersNeeded(matchedFiller.fillerCode)}">
+                                            </h:outputText>
+                                        </p:column>
+
+                                        <p:column width="100"  headerText="Quantity Available">
+                                            <h:outputText value="#{matchedFiller.quantity - matchedFiller.bookedQuantity}">
+                                            </h:outputText>
+                                        </p:column>
+
+                                        <f:facet name="footer">
+                                            <p:commandButton process="matchingFillersTable" update="innerForm:costSection" icon="ui-icon-search" value="Use for Calculation"/>
+                                        </f:facet>
+                                    </p:dataTable>
+                                </h:panelGrid>
+                            </p:panel>
+
+
+                            <p:panel id="projectsSection" header="List of Similar Past Projects" toggleable="true" toggleSpeed="500" closeSpeed="500" collapsed="false" style="margin-bottom:20px">
+                                <h:panelGrid columns="1" cellpadding="10">
+                                    <p:dataTable id="similarProjectsTable" var="similarProject" value="#{adminQuotationManagedBean.similarWeldJobs}" widgetVar="similarProjectsWidTable" 
+                                                 emptyMessage="No Similar Projects Found!" >
+
+                                        <p:column width="100"   headerText="Project Number">
+                                            <h:outputText value="#{similarProject.projectNo}" />
+                                        </p:column>
+
+                                        <p:column width="100"  headerText="Weld Job ID">
+                                            <h:outputText value="#{similarProject.weldJobId}" />
+                                        </p:column>
+
+                                        <p:column width="100"  headerText="Metal 1">
+                                            <h:outputText value="#{similarProject.metal1}" />
+                                        </p:column>
+
+                                        <p:column width="100"  headerText="Metal 2">
+                                            <h:outputText value="#{similarProject.metal2}" />
+                                        </p:column>
+
+                                        <p:column width="100"  headerText="Welding Surface Area">
+                                            <h:outputText value="#{similarProject.surfaceArea}" />
+                                        </p:column>
+
+                                        <p:column width="100"  headerText="Welding Type">
+                                            <h:outputText value="#{similarProject.weldingType}" />
+                                        </p:column>
+
+                                        <p:column width="100"  headerText="Quantity Welded">
+                                            <h:outputText value="#{similarProject.quantityWelded}" />
+                                        </p:column>
+
+                                        <p:column width="100"  headerText="Duration" sortBy="#{similarProject.duration}">
+                                            <h:outputText value="#{similarProject.duration}" />
+                                        </p:column>
+
+                                        <f:facet name="footer">
+                                            <h:outputText value = "Estimated Average Days Required: #{adminQuotationManagedBean.weldJobAvgDuration ge 0 ? adminQuotationManagedBean.weldJobAvgDuration  : 'Unable to derive'}" />
+
+                                        </f:facet>
+
+                                    </p:dataTable>
+                                </h:panelGrid>
+                            </p:panel>
+
+                            <p:panel id="costSection" header="Cost Summary" toggleable="true" toggleSpeed="500" closeSpeed="500" collapsed="false" style="margin-bottom:20px">
+                                <h:panelGrid columns="3" cellpadding="10">
+                                    <p:row style="vertical-align:bottom">
+                                        <p:column style="vertical-align:bottom">
+                                            <p:outputLabel for ="fillerTotalCost" style ="font-weight: bold" value ="Total Material Cost: "/>
+                                        </p:column>
+                                        <p:column style="vertical-align:top">
+                                            <h:outputText style="font-weight:bold;width:100%" id="fillerTotalCost" value="#{adminQuotationManagedBean.fillerTotalCost}" />
+                                        </p:column>
+                                        <p:column>
+                                            <p:message for="fillerTotalCost" />
+                                        </p:column>
+                                    </p:row>
+                                </h:panelGrid>
+                            </p:panel>
+
+                        </p:panel>
+                    </p:scrollPanel>
                 </p:dialog>
             </h:form>
         </div>
