@@ -115,7 +115,7 @@ public class DocumentManageBean implements Serializable {
             if (document.getServiceReport() == null) {
                 return "ui-icon-notice";
             }
-            return "ui-icon-check";
+            return "ui-icon-script";
         } else {
             if (document.getComDeliveyOrder() == null) {
                 return "ui-icon-script";
