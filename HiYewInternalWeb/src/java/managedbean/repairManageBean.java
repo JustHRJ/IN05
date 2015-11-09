@@ -13,6 +13,7 @@ import javax.ejb.EJB;
 import javax.inject.Named;
 import javax.enterprise.context.RequestScoped;
 import session.stateless.HiYewSystemBeanLocal;
+import session.stateless.MachineSystemBeanLocal;
 
 /**
  *
@@ -21,9 +22,11 @@ import session.stateless.HiYewSystemBeanLocal;
 @Named(value = "repairManageBean")
 @RequestScoped
 public class repairManageBean {
-
+    
     @EJB
-    private HiYewSystemBeanLocal hiYewSystemBean;
+    private MachineSystemBeanLocal machineSystemBean;
+
+
     private MachineRepairEntity machine = new MachineRepairEntity();
     private Date repairDate;
     private MachineEntity selectedMachine = new MachineEntity();
@@ -38,11 +41,11 @@ public class repairManageBean {
 
     
     public List<MachineRepairEntity> getRetrieveRepairs(){
-        return hiYewSystemBean.repairList(selectedMachine);
+        return machineSystemBean.repairList(selectedMachine);
     }
     
     public void createRepair(){
-        hiYewSystemBean.createRepair(machine, repairDate, machineName);
+        machineSystemBean.createRepair(machine, repairDate, machineName);
     }
     
     

@@ -219,6 +219,9 @@ public class KnowledgeSystemBean implements KnowledgeSystemBeanLocal, KnowledgeS
     }
 
     public List<String> FillersNotAssociated(String metalName) {
+        if(metalName == null || metalName.isEmpty()){
+             return new ArrayList<String>();
+        }
         Metal m = new Metal();
         List<String> result = new ArrayList<String>();
         try {
@@ -413,6 +416,9 @@ public class KnowledgeSystemBean implements KnowledgeSystemBeanLocal, KnowledgeS
     }
 
     public boolean checkFillerID(String id) {
+        if(id == null || ("").equals(id)){
+            return false;
+        }
         FillerComposition f = em.find(FillerComposition.class, id);
         if (f == null) {
             return false;
@@ -431,6 +437,9 @@ public class KnowledgeSystemBean implements KnowledgeSystemBeanLocal, KnowledgeS
     }
 
     public boolean checkFillerName(String id) {
+        if(id == null || id.equals("")){
+            return false;
+        }
         FillerComposition f = new FillerComposition();
         try {
             Query q = em.createQuery("select f from FillerComposition f where f.name = :id");
