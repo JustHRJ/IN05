@@ -42,6 +42,53 @@ public class HiYewSystemTimer {
     private final Logger log = Logger
             .getLogger(HiYewSystemTimer.class.getName());
 
+    
+    // this method activates every beginning of the year, and checks for all "approved" leave, so that all the leaves that has been accumulated has been replaced in the new year
+    @Schedule(dayOfMonth = "1", month = "1", year = "*")
+    public void resetLeaves() {
+        EmployeeEntity e = new EmployeeEntity();
+        SimpleDateFormat format = new SimpleDateFormat("yyyy");
+        Query q = em.createQuery("Select c from EmployeeEntity c");
+        Calendar c = Calendar.getInstance();
+        // to set the test for 2015
+        // c.add(Calendar.YEAR, -1); <-- by right
+        c.set(Calendar.YEAR, 2015);
+        Date cd = c.getTime();
+        String pastYear = format.format(cd);
+        System.out.println(pastYear);
+
+        for (Object o : q.getResultList()) {
+            e = (EmployeeEntity) o;
+            Collection<LeaveEntity> leaves = e.getLeaveRecords();
+            int leaveSum = 0;
+            for (Object w : leaves) {
+                LeaveEntity l = (LeaveEntity) w;
+                if (l.getApprovedTime() != null && l.getType().equals("paid") && l.getStatus().equals("approved")) {
+                    Timestamp leaveTime = l.getApprovedTime();
+                    Date leaveTimeD = new Date(leaveTime.getTime());
+                    String approveYear = format.format(leaveTimeD);
+                    System.out.println(approveYear);
+                    if (approveYear.equals(pastYear)) {
+                        leaveSum += l.getNumber_of_leave();
+                        l.setStatus("approved (Archived)");
+                    }
+                    em.merge(l);
+                }
+                if(l.getType().equals("paid") && l.getStatus().equals("pending")){
+                    String appliedYear = format.format(new Date(l.getAppliedTime().getTime()));
+                    if(appliedYear.equals(pastYear)){
+                        l.setStatus("rejected");
+                        l.setRemarks("Notice - past overdue leave application");
+                        em.merge(l);
+                    }
+                }
+            }
+            e.setNumber_of_leaves(leaveSum + e.getNumber_of_leaves());
+            
+            em.merge(e);
+        }
+    }
+
     @Schedule(dayOfMonth = "1")
     public void runEveryMonth() {
         Query q = em.createQuery("select c from EmployeeEntity c");
@@ -96,7 +143,7 @@ public class HiYewSystemTimer {
                 em.remove(code);
             }
         }
-          log.log(Level.INFO,
+        log.log(Level.INFO,
                 "running every hour.. now it's: " + new Date().toString());
     }
 
@@ -306,4 +353,5 @@ public class HiYewSystemTimer {
         }
         return total;
     }
+
 }

@@ -45,7 +45,7 @@
                                 <p:outputLabel value ="Filler Name"/>
                             </p:column>
                             <p:column>
-                                <p:inputText value ="#{knowledgeManageBean.selectedFiller.name}" required="true" requiredMessage="Please input Filler Name" validator="#{knowledgeValidator.fillerName}" validatorMessage="Filler Name has been taken" />
+                                <p:inputText value ="#{knowledgeManageBean.selectedFiller.name}" required="true" requiredMessage="Please input Filler Name" validator="#{knowledgeValidator.fillerName}" validatorMessage="Filler Name has been taken" /> 
                             </p:column>
                         </p:row>
                         <p:row>
@@ -53,7 +53,7 @@
                                 <p:outputLabel value ="Copper "/>
                             </p:column>
                             <p:column>
-                                <p:inputText value ="#{knowledgeManageBean.selectedFiller.copper}" validatorMessage="Please input valid amount - Copper " >
+                                <p:inputText value ="#{knowledgeManageBean.selectedFiller.copper}" validatorMessage="Please input valid amount - Copper " > %
                                     <f:validateDoubleRange minimum="0" maximum="100"/>
                                 </p:inputText>
                             </p:column>
@@ -63,17 +63,17 @@
                                 <p:outputLabel value ="Zinc"/>
                             </p:column>
                             <p:column>
-                                <p:inputText value ="#{knowledgeManageBean.selectedFiller.zinc}" validatorMessage="Please input valid amount - Zinc " >
+                                <p:inputText value ="#{knowledgeManageBean.selectedFiller.zinc}" validatorMessage="Please input valid amount - Zinc " > %
                                     <f:validateDoubleRange minimum="0" maximum="100"/>
                                 </p:inputText>
                             </p:column>
                         </p:row>
                         <p:row>
                             <p:column>
-                                <p:outputLabel value ="Filler Iron"/>
+                                <p:outputLabel value ="Iron"/>
                             </p:column>
                             <p:column>
-                                <p:inputText value ="#{knowledgeManageBean.selectedFiller.iron}" validatorMessage="Please input valid amount - Iron " >
+                                <p:inputText value ="#{knowledgeManageBean.selectedFiller.iron}" validatorMessage="Please input valid amount - Iron " > %
                                     <f:validateDoubleRange minimum="0" maximum="100"/>
                                 </p:inputText>
                             </p:column>
@@ -83,7 +83,7 @@
                                 <p:outputLabel value ="Lead"/>
                             </p:column>
                             <p:column>
-                                <p:inputText value ="#{knowledgeManageBean.selectedFiller.lead}" validatorMessage="Please input valid amount - Lead " >
+                                <p:inputText value ="#{knowledgeManageBean.selectedFiller.lead}" validatorMessage="Please input valid amount - Lead " > %
                                     <f:validateDoubleRange minimum="0" maximum="100"/>
                                 </p:inputText>
                             </p:column>
@@ -93,7 +93,7 @@
                                 <p:outputLabel value ="Aluminium"/>
                             </p:column>
                             <p:column>
-                                <p:inputText value ="#{knowledgeManageBean.selectedFiller.aluminium}" validatorMessage="Please input valid amount - Aluminium " >
+                                <p:inputText value ="#{knowledgeManageBean.selectedFiller.aluminium}" validatorMessage="Please input valid amount - Aluminium " > %
                                     <f:validateDoubleRange minimum="0" maximum="100"/>
                                 </p:inputText>
                             </p:column>
@@ -103,7 +103,7 @@
                                 <p:outputLabel value ="Carbon"/>
                             </p:column>
                             <p:column>
-                                <p:inputText value ="#{knowledgeManageBean.selectedFiller.carbon}" validatorMessage="Please input valid amount - Carbon " >
+                                <p:inputText value ="#{knowledgeManageBean.selectedFiller.carbon}" validatorMessage="Please input valid amount - Carbon " > %
                                     <f:validateDoubleRange minimum="0" maximum="100"/>
                                 </p:inputText>
                             </p:column>
@@ -113,7 +113,7 @@
                                 <p:outputLabel value ="Nickel"/>
                             </p:column>
                             <p:column>
-                                <p:inputText value ="#{knowledgeManageBean.selectedFiller.nickel}" validatorMessage="Please input valid amount - Nickel " >
+                                <p:inputText value ="#{knowledgeManageBean.selectedFiller.nickel}" validatorMessage="Please input valid amount - Nickel " > %
                                     <f:validateDoubleRange minimum="0" maximum="100"/>
                                 </p:inputText>
                             </p:column>
@@ -123,7 +123,7 @@
                                 <p:outputLabel value ="Chromium"/>
                             </p:column>
                             <p:column>
-                                <p:inputText value ="#{knowledgeManageBean.selectedFiller.chromium}" validatorMessage="Please input valid amount - Chromium  " >
+                                <p:inputText value ="#{knowledgeManageBean.selectedFiller.chromium}" validatorMessage="Please input valid amount - Chromium  " > %
                                     <f:validateDoubleRange minimum="0" maximum="100"/>
                                 </p:inputText>
                             </p:column>
@@ -133,7 +133,7 @@
                                 <p:outputLabel value ="Manganese"/>
                             </p:column>
                             <p:column>
-                                <p:inputText value ="#{knowledgeManageBean.selectedFiller.manganese}" validatorMessage="Please input valid amount - Manganese  " >
+                                <p:inputText value ="#{knowledgeManageBean.selectedFiller.manganese}" validatorMessage="Please input valid amount - Manganese  " > %
                                     <f:validateDoubleRange minimum="0" maximum="100"/>
                                 </p:inputText>
                             </p:column>
@@ -143,7 +143,7 @@
                                 <p:outputLabel value ="Silicon"/>
                             </p:column>
                             <p:column>
-                                <p:inputText value ="#{knowledgeManageBean.selectedFiller.silicon}" validatorMessage="Please input valid amount - Silicon " >
+                                <p:inputText value ="#{knowledgeManageBean.selectedFiller.silicon}" validatorMessage="Please input valid amount - Silicon " > %
                                     <f:validateDoubleRange minimum="0" maximum="100"/>
                                 </p:inputText>
                             </p:column>
@@ -168,7 +168,7 @@
                                 <p:outputLabel value ="Copper "/>
                             </p:column>
                             <p:column>
-                                <p:inputText value ="#{knowledgeManageBean.selectedMetal.copper}" validatorMessage="Please input valid amount - Copper " >
+                                <p:inputText value ="#{knowledgeManageBean.selectedMetal.copper}" validatorMessage="Please input valid amount - Copper " > %
                                     <f:validateDoubleRange minimum="0" maximum="100"/>
                                 </p:inputText>
                             </p:column>
@@ -178,7 +178,7 @@
                                 <p:outputLabel value ="Zinc"/>
                             </p:column>
                             <p:column>
-                                <p:inputText value ="#{knowledgeManageBean.selectedMetal.zinc}" validatorMessage="Please input valid amount - Zinc " >
+                                <p:inputText value ="#{knowledgeManageBean.selectedMetal.zinc}" validatorMessage="Please input valid amount - Zinc " > %
                                     <f:validateDoubleRange minimum="0" maximum="100"/>
                                 </p:inputText>
                             </p:column>
@@ -188,7 +188,7 @@
                                 <p:outputLabel value ="Filler Iron"/>
                             </p:column>
                             <p:column>
-                                <p:inputText value ="#{knowledgeManageBean.selectedMetal.iron}" validatorMessage="Please input valid amount - Iron  " >
+                                <p:inputText value ="#{knowledgeManageBean.selectedMetal.iron}" validatorMessage="Please input valid amount - Iron  " > %
                                     <f:validateDoubleRange minimum="0" maximum="100"/>
                                 </p:inputText>
                             </p:column>
@@ -198,7 +198,7 @@
                                 <p:outputLabel value ="Lead"/>
                             </p:column>
                             <p:column>
-                                <p:inputText value ="#{knowledgeManageBean.selectedMetal.lead}" validatorMessage="Please input valid amount - Lead  " >
+                                <p:inputText value ="#{knowledgeManageBean.selectedMetal.lead}" validatorMessage="Please input valid amount - Lead  " > %
                                     <f:validateDoubleRange minimum="0" maximum="100"/>
                                 </p:inputText>
                             </p:column>
@@ -208,7 +208,7 @@
                                 <p:outputLabel value ="Aluminium"/>
                             </p:column>
                             <p:column>
-                                <p:inputText value ="#{knowledgeManageBean.selectedMetal.aluminium}" validatorMessage="Please input valid amount - Aluminium  " >
+                                <p:inputText value ="#{knowledgeManageBean.selectedMetal.aluminium}" validatorMessage="Please input valid amount - Aluminium  " > %
                                     <f:validateDoubleRange minimum="0" maximum="100"/>
                                 </p:inputText>
                             </p:column>
@@ -218,7 +218,7 @@
                                 <p:outputLabel value ="Carbon"/>
                             </p:column>
                             <p:column>
-                                <p:inputText value ="#{knowledgeManageBean.selectedMetal.carbon}" validatorMessage="Please input valid amount - Carbon " >
+                                <p:inputText value ="#{knowledgeManageBean.selectedMetal.carbon}" validatorMessage="Please input valid amount - Carbon " > %
                                     <f:validateDoubleRange minimum="0" maximum="100"/>
                                 </p:inputText>
                             </p:column>
@@ -228,7 +228,7 @@
                                 <p:outputLabel value ="Nickel"/>
                             </p:column>
                             <p:column>
-                                <p:inputText value ="#{knowledgeManageBean.selectedMetal.nickel}" validatorMessage="Please input valid amount - Nickel " >
+                                <p:inputText value ="#{knowledgeManageBean.selectedMetal.nickel}" validatorMessage="Please input valid amount - Nickel " > %
                                     <f:validateDoubleRange minimum="0" maximum="100"/>
                                 </p:inputText>
                             </p:column>
@@ -238,7 +238,7 @@
                                 <p:outputLabel value ="Chromium"/>
                             </p:column>
                             <p:column>
-                                <p:inputText value ="#{knowledgeManageBean.selectedMetal.chromium}" validatorMessage="Please input valid amount - Chromium " >
+                                <p:inputText value ="#{knowledgeManageBean.selectedMetal.chromium}" validatorMessage="Please input valid amount - Chromium " > %
                                     <f:validateDoubleRange minimum="0" maximum="100"/>
                                 </p:inputText>
                             </p:column>
@@ -248,7 +248,7 @@
                                 <p:outputLabel value ="Manganese"/>
                             </p:column>
                             <p:column>
-                                <p:inputText value ="#{knowledgeManageBean.selectedMetal.manganese}" validatorMessage="Please input valid amount - Manganese " >
+                                <p:inputText value ="#{knowledgeManageBean.selectedMetal.manganese}" validatorMessage="Please input valid amount - Manganese " > %
                                     <f:validateDoubleRange minimum="0" maximum="100"/>
                                 </p:inputText>
                             </p:column>
@@ -258,7 +258,7 @@
                                 <p:outputLabel value ="Silicon"/>
                             </p:column>
                             <p:column>
-                                <p:inputText value ="#{knowledgeManageBean.selectedMetal.silicon}" validatorMessage="Please input valid amount - Silicon " >
+                                <p:inputText value ="#{knowledgeManageBean.selectedMetal.silicon}" validatorMessage="Please input valid amount - Silicon " > %
                                     <f:validateDoubleRange minimum="0" maximum="100"/>
                                 </p:inputText>
                             </p:column>

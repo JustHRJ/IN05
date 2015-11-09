@@ -22,7 +22,7 @@ import javax.persistence.Query;
  * @author JustHRJ
  */
 @Stateless
-public class KnowledgeSystemBean implements KnowledgeSystemBeanLocal {
+public class KnowledgeSystemBean implements KnowledgeSystemBeanLocal, KnowledgeSystemBeanRemoteInterface {
 
     // Add business logic below. (Right-click in editor and choose
     // "Insert Code > Add Business Method")
@@ -117,9 +117,12 @@ public class KnowledgeSystemBean implements KnowledgeSystemBeanLocal {
     }
 
     public FillerComposition retrieveFiller(FillerEntity filler) {
+        if (filler == null) {
+            return new FillerComposition();
+        }
         String id = filler.getFillerCode();
-        FillerComposition f = em.find(FillerComposition.class, id);
 
+        FillerComposition f = em.find(FillerComposition.class, id);
         if (f == null) {
             return new FillerComposition();
         } else {
@@ -182,7 +185,7 @@ public class KnowledgeSystemBean implements KnowledgeSystemBeanLocal {
         }
     }
 
-    public void createPairings(String metal, List<String> fillerChosen) {
+    public boolean createPairings(String metal, List<String> fillerChosen) {
         Metal m = new Metal();
         Collection<FillerEntity> fillers = new ArrayList<FillerEntity>();
         try {
@@ -208,9 +211,10 @@ public class KnowledgeSystemBean implements KnowledgeSystemBeanLocal {
             System.out.println("error here4");
             em.merge(m);
             System.out.println("Pairing created");
-
+            return true;
         } catch (Exception ex) {
             System.out.println("error occured");
+            return false;
         }
     }
 

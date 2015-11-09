@@ -28,7 +28,7 @@
                 Fillers Not associated &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; Fillers Associated<br/>
                 <p:pickList id="pickList" value="#{knowledgeManageBean.fillerDisplay}" var="im" itemLabel="#{im}" itemValue="#{im}" />
 
-                <p:commandButton value ="Set Pairings" action ="#{knowledgeManageBean.createPairings()}"/>
+                <p:commandButton value ="Set Pairings" action ="#{knowledgeManageBean.createPairings()}" update = ":formMain:msgs" />
                 <br/><br/>
                 <p:commandButton value ="Import Matching from Excel File" action ="#{knowledgeManageBean.readFile3()}" update =":formMain:msgs"/>
                 <br/>
