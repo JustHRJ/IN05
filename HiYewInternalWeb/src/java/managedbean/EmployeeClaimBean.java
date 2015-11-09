@@ -42,7 +42,7 @@ public class EmployeeClaimBean implements Serializable {
     private Date claimTime = null;
     private double amount = 0.00;
     private UploadedFile file;
-    private String destination = "C:\\Users\\User\\Desktop\\SouceTreeRepo\\IN05\\HiYewInternalWeb\\web\\image\\receipts\\";
+    private String destination = "C:\\Users\\JustHRJ\\Desktop\\IN05\\HiYewInternalWeb\\web\\image\\receipts\\";
     private EmployeeClaimEntity selectedClaim;
     private String months = "";
     private String employeeName = "";

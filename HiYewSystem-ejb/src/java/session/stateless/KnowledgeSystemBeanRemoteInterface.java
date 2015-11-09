@@ -11,13 +11,14 @@ import entity.Metal;
 import java.util.List;
 import java.util.Vector;
 import javax.ejb.Local;
+import javax.ejb.Remote;
 
 /**
  *
  * @author JustHRJ
  */
-@Local
-public interface KnowledgeSystemBeanLocal {
+@Remote
+public interface KnowledgeSystemBeanRemoteInterface {
 
     public void addMetal(List<Vector> metals);
 

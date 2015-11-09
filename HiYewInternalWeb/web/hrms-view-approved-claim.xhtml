@@ -88,7 +88,8 @@
                     <p:outputPanel id="claimDetail" style="text-align:center;">
                         <p:panelGrid  columns="2" rendered="#{not empty employeeClaimBean.selectedClaim}" columnClasses="label,value">
                             <f:facet name="header">
-                                <p:graphicImage url = "#{employeeClaimBean.selectedClaim.fileDestination}" /> 
+                                <p:graphicImage id = "img" url = "#{employeeClaimBean.selectedClaim.fileDestination}" /> 
+                                <p:resizable for="img" minWidth="200" maxWidth="400" minHeight="100" maxHeight="200" />
                             </f:facet>
                         </p:panelGrid>
                     </p:outputPanel>

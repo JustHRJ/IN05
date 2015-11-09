@@ -139,6 +139,14 @@ public class HiYewManagedBean {
         }
     }
 
+    
+    public void resetLeaves(){
+        hiYewSystemTimer.resetLeaves();
+        System.out.println("leaves should be reset");
+    }
+    
+    
+    
 //    public void sendPO() {
 //        boolean check = hiYewSystemBean.updateSupPoStatus("Sent", selectedList);
 //        if (check) {

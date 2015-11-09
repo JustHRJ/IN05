@@ -19,6 +19,7 @@ import javax.ejb.EJB;
 import javax.inject.Named;
 import javax.faces.view.ViewScoped;
 import org.primefaces.extensions.model.timeline.TimelineEvent;
+
 import org.primefaces.extensions.model.timeline.TimelineModel;
 import session.stateless.MachineSystemBeanLocal;
 import session.stateless.ProjectSessionBeanLocal;
