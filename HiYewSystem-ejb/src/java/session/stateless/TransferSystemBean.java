@@ -153,7 +153,7 @@ public class TransferSystemBean implements TransferSystemBeanLocal {
                     check = false;
                 }
                 String folderName = p.getProjectNo();
-                new File("C:\\Users\\JustHRJ\\Desktop\\IN05\\HiYewInternalWeb\\web\\projectDocuments\\" + folderName).mkdir();
+                new File("D:\\Users\\K.guoxiang\\Documents\\NetBeansProjects\\IN05\\HiYewInternalWeb\\web\\projectDocuments\\" + folderName).mkdir();
 
                 DocumentControlEntity d = new DocumentControlEntity();
                 em.persist(d);
