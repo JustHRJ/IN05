@@ -8,6 +8,18 @@
                 template="./template.xhtml">
 
     <ui:define name="content">
+        
+        <script type="text/javascript">
+            function pieExtender() {
+                this.cfg.highlighter = {
+                    show: true,
+                    tooltipLocation: 'n',
+                    useAxesFormatters: false,
+                    formatString: '%s = %d'
+                };
+            }
+        </script>
+        
         <!-- Page header -->
         <div class="page-heading animated fadeInDownBig" style="padding:20px!important;padding-bottom:10px!important;">
             <h1>Project Dashboard<small>Project Management</small></h1>
@@ -15,21 +27,21 @@
         <!-- End page header -->
         <div style="padding:20px!important;padding-top:0px!important;">
             <h:form id="formMain">
-
-
-
-
+                <p:growl id="growl" showDetail="true" />
 
                 <div class="ui-grid ui-grid-responsive">
                     <div class="ui-grid-row">
                         <div class="ui-grid-col-1" style="width:700px;">
-                            <p:chart type="bar" model="#{projectDashBoardManagedBean.horizontalBarModel}" style="height:350px">
+                            <p:chart type="bar" model="#{projectDashBoardManagedBean.horizontalBarModel}" style="height:360px">
                             </p:chart>
                             
                         </div>
-                        <div class="ui-grid-col-1" style="width:50px;"></div>
+                        <div class="ui-grid-col-1" style="width:90px;"></div>
                         <div class="ui-grid-col-1" style="width:400px;">
-                            <p:chart type="pie" model="#{projectDashBoardManagedBean.pieModel1}" style="width:400px;height:350px">
+                            <p:commandButton style="border: none; font-size: 14px; width: 90px; font-family: 'Open Sans'" class=" btn btn-success btn-block" action="#{projectDashBoardManagedBean.createPieModel1()}" value="Reset" ajax="false" update="pieChartId"></p:commandButton>
+
+                            <p:chart type="pie" model="#{projectDashBoardManagedBean.pieModel1}" style="width:400px;height:360px" id="pieChartId">
+                                <p:ajax event="itemSelect" listener="#{projectDashBoardManagedBean.itemSelect}" update="pieChartId"/>
                             </p:chart>
                         </div>
 
@@ -52,13 +64,6 @@
                         <div class="ui-grid-col-3"></div>
                     </div>
                 </div>
-
-
-
-
- 
-
-
 
 
             </h:form>

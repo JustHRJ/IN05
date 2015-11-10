@@ -218,7 +218,6 @@ public class ProjectSessionBean implements ProjectSessionBeanLocal {
             }
             return ((totalMins / similarWeldJobs.size()) / 24 / 60);
         }
-
     }
 
     //get project with earliest completion date
@@ -350,5 +349,13 @@ public class ProjectSessionBean implements ProjectSessionBeanLocal {
     public void conductMerge(Project p) {
         em.merge(p);
     }
+    
+    @Override
+    public List <Project> getCompletedProjects(){
+        Query query = em.createQuery("Select p FROM Project AS p where p.projectCompletion=true");
+        return query.getResultList();
+    }
+    
+    
 
 }

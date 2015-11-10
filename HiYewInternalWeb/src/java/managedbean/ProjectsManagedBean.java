@@ -6,6 +6,7 @@
 package managedbean;
 
 import entity.Customer;
+import entity.FillerEntity;
 import entity.Project;
 import entity.WeldJob;
 import java.io.Serializable;
@@ -20,7 +21,9 @@ import javax.ejb.EJB;
 import javax.faces.context.FacesContext;
 import javax.inject.Named;
 import javax.faces.view.ViewScoped;
+import org.primefaces.event.RowEditEvent;
 import session.stateless.CustomerSessionBeanLocal;
+import session.stateless.HiYewICSSessionBeanLocal;
 import session.stateless.ProjectSessionBeanLocal;
 
 /**
@@ -30,6 +33,8 @@ import session.stateless.ProjectSessionBeanLocal;
 @Named(value = "projManagedBean")
 @ViewScoped
 public class ProjectsManagedBean implements Serializable {
+    @EJB
+    private HiYewICSSessionBeanLocal hiYewICSSessionBean;
 
     @EJB
     private CustomerSessionBeanLocal customerSessionBean;
@@ -54,6 +59,8 @@ public class ProjectsManagedBean implements Serializable {
     private Date today = new Date();
     private Date actualStart;
     private Date actualEnd;
+    
+    private String fillerCode = "";
 
     /**
      * Creates a new instance of ProjectsManagedBean
@@ -88,7 +95,7 @@ public class ProjectsManagedBean implements Serializable {
         receivedProjectByProjectNo = new ArrayList<>(projectSessionBean.getProjectByProjectNo(selectedProjectNo));
         if (!receivedProjectByProjectNo.isEmpty()) {
             selectedProject = receivedProjectByProjectNo.get(0);
-
+            receivedWeldJobs = new ArrayList <>(selectedProject.getWeldJobs());
             //set visibility
             if (selectedProject.getActualStart() == null) {
                 actualStartVisibility = true;
@@ -126,7 +133,7 @@ public class ProjectsManagedBean implements Serializable {
         }
 
         String str = "";
-        if (selectedProject.getActualEnd() == null) {
+        if (selectedProject.getActualEnd() == null) { //after setting start date
             for (int i = 0; i < selectedProject.getWeldJobs().size(); i++) {
                 str += selectedProject.getWeldJobs().get(i).getEmpName() + " has been attached to a welding job using Machine ";
                 str += selectedProject.getWeldJobs().get(i).getMachine().getMachine_number() + "\r\n";
@@ -136,8 +143,7 @@ public class ProjectsManagedBean implements Serializable {
                 selectedProject.getWeldJobs().get(i).getMachine().setStatus("In use");
             }
             
-            
-        } else {
+        } else { // after setting ending date
             for (int i = 0; i < selectedProject.getWeldJobs().size(); i++) {
                 str += selectedProject.getWeldJobs().get(i).getEmpName() + " are currently ready for new welding job assignment.\r\n";
                 str += "Machine " + selectedProject.getWeldJobs().get(i).getMachine().getMachine_number() + " are currently available for use.\r\n";
@@ -148,6 +154,14 @@ public class ProjectsManagedBean implements Serializable {
         }
         FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("resourceAvailabilityMessage", str);
         FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("msgColor", "orange");
+    }
+    
+    public void onEditRow(RowEditEvent event) {
+        WeldJob w = (WeldJob) event.getObject();//gives me unedited value
+        FillerEntity f = hiYewICSSessionBean.getExistingItem(fillerCode);
+        
+        w.setFiller(f);
+        projectSessionBean.conductWeldJobMerge(w);
     }
 
     public void getAllProjects() {
@@ -184,6 +198,8 @@ public class ProjectsManagedBean implements Serializable {
         }
         return dur;
     }
+    
+    
 
     public String getProjectStatus(Boolean completion) {
         String status = "Y";
@@ -379,6 +395,20 @@ public class ProjectsManagedBean implements Serializable {
      */
     public void setActualEnd(Date actualEnd) {
         this.actualEnd = actualEnd;
+    }
+
+    /**
+     * @return the fillerCode
+     */
+    public String getFillerCode() {
+        return fillerCode;
+    }
+
+    /**
+     * @param fillerCode the fillerCode to set
+     */
+    public void setFillerCode(String fillerCode) {
+        this.fillerCode = fillerCode;
     }
 
 }

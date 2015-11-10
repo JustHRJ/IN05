@@ -133,7 +133,7 @@ public class TransferSystemBean implements TransferSystemBeanLocal {
                 c = Calendar.getInstance();
                 year = Integer.parseInt(record1.substring(0, 4));
                 System.out.println(year);
-                month = Integer.parseInt(record1.substring(5, 7))- 1;
+                month = Integer.parseInt(record1.substring(5, 7)) - 1;
                 System.out.println(month);
                 date = Integer.parseInt(record1.substring(8));
                 System.out.println(date);
@@ -153,7 +153,7 @@ public class TransferSystemBean implements TransferSystemBeanLocal {
                     check = false;
                 }
                 String folderName = p.getProjectNo();
-                new File("C:\\Users\\JustHRJ\\Desktop\\IN05\\HiYewInternalWeb\\web\\projectDocuments\\" + folderName).mkdir();
+                new File("C:\\Users\\User\\Desktop\\SouceTreeRepo\\IN05\\HiYewInternalWeb\\web\\projectDocuments\\" + folderName).mkdir();
 
                 DocumentControlEntity d = new DocumentControlEntity();
                 em.persist(d);
@@ -161,6 +161,18 @@ public class TransferSystemBean implements TransferSystemBeanLocal {
                 p.setProjectCompletion(check);
                 p.setProjectManager(im.get(9).toString());
                 p.setProjectProgress(Integer.parseInt(im.get(10).toString()));
+                String checkBoolean = im.get(11).toString();
+                if (checkBoolean.equals("true")) {
+                    p.setProjectOverrun(true);
+                } else {
+                    p.setProjectOverrun(false);
+                }
+                p.setProjectDaysExceed(Integer.parseInt(im.get(12).toString()));
+                if (im.get(13).toString().equals("0")) {
+                    p.setCauseOfDelay(null);
+                } else {
+                    p.setCauseOfDelay(im.get(13).toString());
+                }
                 em.persist(p);
             }
         }
