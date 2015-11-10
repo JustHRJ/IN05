@@ -9,7 +9,7 @@
 
     <h:head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-        <title>Singapore Welding | SgWeld.com | Welding Service in Singapore | Welding</title>
+        <title>External Customer Portal | Singapore Welding | SgWeld.com | Welding Service in Singapore | Welding</title>
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -109,75 +109,75 @@
                     <button class="button-menu-mobile show-sidebar">
                         <i class="fa fa-bars"></i>
                     </button>
- <h:form id="notiForm">
-                    <!-- BEGIN NAVBAR CONTENT-->				
-                    <div class="navbar navbar-default" role="navigation">
-                        <div class="container">
-                            <!-- Navbar header -->
-                            <div class="navbar-header">
-                                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                                    <i class="fa fa-angle-double-down"></i>
-                                </button>
-                            </div><!-- End div .navbar-header -->
+                    <h:form id="notiForm">
+                        <!-- BEGIN NAVBAR CONTENT-->				
+                        <div class="navbar navbar-default" role="navigation">
+                            <div class="container">
+                                <!-- Navbar header -->
+                                <div class="navbar-header">
+                                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                                        <i class="fa fa-angle-double-down"></i>
+                                    </button>
+                                </div><!-- End div .navbar-header -->
 
-                           
-                            <!-- Navbar collapse -->	
-                            <div class="navbar-collapse collapse">
 
-                                <!-- Right navbar -->
-                                <ul class="nav navbar-nav navbar-right top-navbar">
+                                <!-- Navbar collapse -->	
+                                <div class="navbar-collapse collapse">
 
-                                    <!-- Dropdown notifications -->
-                                    <li class="dropdown">
-                                        <a href="" class="dropdown-toggle" data-toggle="dropdown"><i style="padding-top:3px" class="fa fa-bell"></i><span class="label label-danger absolute"><h:outputLabel style="margin-bottom: 0px;" value="#{productQuotationManagedBean.cacheList.size()+quotationManagedBean.cacheList.size()}" /></span></a>
-                                        <c:if test="#{(productQuotationManagedBean.cacheList.size()+quotationManagedBean.cacheList.size()) >= 1}">
-                                            <ul class="dropdown-menu dropdown-message animated half flipInX">
-                                                <!-- Dropdown notification header -->
-                                                <li class="dropdown-header notif-header">New Notifications</li>
-                                                <li class="divider"></li>
-                                                <!-- Dropdown notification body -->
-                                                <c:if test="#{productQuotationManagedBean.cacheList.size() >= 1}">
-                                                    <li class="unread">
-                                                        <a href="c-products.xhtml">
-                                                            <p><strong><h:outputLabel value="#{productQuotationManagedBean.cacheList.size()}" /></strong> laser welding product(s)<br /><strong><i>(Pending)</i> Request for Quotation</strong>
-                                                            </p>
-                                                        </a>
-                                                    </li>
-                                                </c:if>
-                                                <c:if test="#{quotationManagedBean.cacheList.size() >= 1}">
-                                                    <li class="unread">
-                                                        <a href="c-products.xhtml">
-                                                            <p><strong><h:outputLabel value="#{quotationManagedBean.cacheList.size()}" /></strong> metal welding job(s)<br /><strong><i>(Pending)</i> Request for Quotation</strong>
-                                                            </p>
-                                                        </a>
-                                                    </li>
-                                                </c:if>
-                                                <!-- Dropdown notification footer -->
-                                                <!--<li class="dropdown-footer"><a href=""><i class="fa fa-refresh"></i> Refresh</a></li>-->
+                                    <!-- Right navbar -->
+                                    <ul class="nav navbar-nav navbar-right top-navbar">
+
+                                        <!-- Dropdown notifications -->
+                                        <li class="dropdown">
+                                            <a href="" class="dropdown-toggle" data-toggle="dropdown"><i style="padding-top:3px" class="fa fa-bell"></i><span class="label label-danger absolute"><h:outputLabel style="margin-bottom: 0px;" value="#{productQuotationManagedBean.cacheList.size()+quotationManagedBean.cacheList.size()}" /></span></a>
+                                            <c:if test="#{(productQuotationManagedBean.cacheList.size()+quotationManagedBean.cacheList.size()) >= 1}">
+                                                <ul class="dropdown-menu dropdown-message animated half flipInX">
+                                                    <!-- Dropdown notification header -->
+                                                    <li class="dropdown-header notif-header">New Notifications</li>
+                                                    <li class="divider"></li>
+                                                    <!-- Dropdown notification body -->
+                                                    <c:if test="#{productQuotationManagedBean.cacheList.size() >= 1}">
+                                                        <li class="unread">
+                                                            <a href="c-products.xhtml">
+                                                                <p><strong><h:outputLabel value="#{productQuotationManagedBean.cacheList.size()}" /></strong> laser welding product(s)<br /><strong><i>(Pending)</i> Request for Quotation</strong>
+                                                                </p>
+                                                            </a>
+                                                        </li>
+                                                    </c:if>
+                                                    <c:if test="#{quotationManagedBean.cacheList.size() >= 1}">
+                                                        <li class="unread">
+                                                            <a href="c-products.xhtml">
+                                                                <p><strong><h:outputLabel value="#{quotationManagedBean.cacheList.size()}" /></strong> laser welding job(s)<br /><strong><i>(Pending)</i> Request for Quotation</strong>
+                                                                </p>
+                                                            </a>
+                                                        </li>
+                                                    </c:if>
+                                                    <!-- Dropdown notification footer -->
+                                                    <!--<li class="dropdown-footer"><a href=""><i class="fa fa-refresh"></i> Refresh</a></li>-->
+                                                </ul>
+                                            </c:if>
+                                        </li>
+                                        <!-- End Dropdown notifications -->
+
+                                        <!-- Dropdown User session -->
+                                        <li class="dropdown">
+                                            <a href="" class="dropdown-toggle" data-toggle="dropdown">Hi customer, <strong><h:outputText value="#{customerManagedBean.customer.name}" style=""/></strong> <i class="fa fa-chevron-down i-xs"></i></a>
+                                            <ul class="dropdown-menu animated half flipInX">
+                                                <li><a href="c-user-profile.xhtml">Account Settings</a></li>
+                                                <!--                                            <li class="divider"></li>
+                                                                                            <li class="dropdown-header">Another action</li>-->
+                                                <!--<li><a href="c-lock-screen.xhtml">Lock me</a></li>-->
+                                                <li><a class="md-trigger" data-modal="logout-modal">Logout</a></li>
                                             </ul>
-                                        </c:if>
-                                    </li>
-                                    <!-- End Dropdown notifications -->
+                                        </li>
+                                        <!-- End Dropdown User session -->
+                                    </ul>
+                                </div><!-- End div .navbar-collapse -->
 
-                                    <!-- Dropdown User session -->
-                                    <li class="dropdown">
-                                        <a href="" class="dropdown-toggle" data-toggle="dropdown">Hi customer, <strong><h:outputText value="#{customerManagedBean.customer.name}" style=""/></strong> <i class="fa fa-chevron-down i-xs"></i></a>
-                                        <ul class="dropdown-menu animated half flipInX">
-                                            <li><a href="c-user-profile.xhtml">Account Settings</a></li>
-                                            <!--                                            <li class="divider"></li>
-                                                                                        <li class="dropdown-header">Another action</li>-->
-                                            <!--<li><a href="c-lock-screen.xhtml">Lock me</a></li>-->
-                                            <li><a class="md-trigger" data-modal="logout-modal">Logout</a></li>
-                                        </ul>
-                                    </li>
-                                    <!-- End Dropdown User session -->
-                                </ul>
-                            </div><!-- End div .navbar-collapse -->
-                        
-                        </div><!-- End div .container -->
-                    </div>
-                    <!-- END NAVBAR CONTENT-->
-                        </h:form>
+                            </div><!-- End div .container -->
+                        </div>
+                        <!-- END NAVBAR CONTENT-->
+                    </h:form>
                 </div>
                 <!-- END CONTENT HEADER -->
 
@@ -211,34 +211,60 @@
             <!-- Modal Logout Primary -->
             <div class="md-modal md-just-me" id="logout-modal">
                 <div class="md-content">
-                    <h3><strong>Logout</strong> Confirmation</h3>
-                    <div style="padding: 15px 40px 5px;">
-                        <p class="text-center">Are you sure want to logout from this system?</p>
-                        <h:form id="logoutForm">
+                    <h:form id="logoutForm">
+                        <h3><strong>Logout</strong> Confirmation</h3>
+
+                        <p class="text-center" style="color:red;#{productQuotationManagedBean.cacheList.size() > 0 or quotationManagedBean.cacheList.size() > 0 ? '' : 'display:none'}">
+                            <img src="images/warning.png" style="width:22px;height:20px" alt=""/> You still have
+                            <br />
+                            <span style="#{productQuotationManagedBean.cacheList.size() > 0 or quotationManagedBean.cacheList.size() > 0 ? '' : 'display:none'}"><strong><h:outputLabel value="#{productQuotationManagedBean.cacheList.size()}" /></strong> laser welding product(s)</span>
+                            <br style="#{quotationManagedBean.cacheList.size() > 0 ? '' : 'display:none'}" />
+                            <span style="#{quotationManagedBean.cacheList.size() > 0 ? '' : 'display:none'}"><strong><h:outputLabel value="#{quotationManagedBean.cacheList.size()}" /></strong> laser welding job(s)</span>
+                            <br style="#{productQuotationManagedBean.cacheList.size() > 0 or quotationManagedBean.cacheList.size() > 0 ? '' : 'display:none'}" />
+                            <i>(Pending)</i> Request for Quotation
+                        </p>
+
+                        <div style="padding: 0px 40px 15px;">
+                            <p class="text-center">Are you sure want to logout from this system?</p>
+                            <br />
                             <p class="text-center">
                                 <button style="padding-top: 3px; padding-left: 24px; padding-right: 24px; font-family: 'Open Sans'; height: 30px" class="btn btn-danger md-close">Nope!</button>
                                 &nbsp;&nbsp;
                                 <p:commandButton  style="padding-top: 1px; padding-left: 24px; padding-right: 24px; font-family: 'Open Sans'; height: 30px" value="Yeah, I'm sure" styleClass="btn btn-success md-close" action="#{loginManagedBean.logout()}" />
                             </p>
-                        </h:form>
-                    </div>
+
+                        </div>
+                    </h:form>
                 </div>
             </div><!-- End .md-modal -->
 
             <!-- Modal Logout Alternatif -->
             <div class="md-modal md-3d-slit" id="logout-modal-alt">
                 <div class="md-content">
-                    <h3><strong>Logout</strong> Confirmation</h3>
-                    <div style="padding: 15px 40px 5px;">
-                        <p class="text-center">Are you sure want to logout from this system?</p>
-                        <h:form id="logoutForm2">
+                    <h:form id="logoutForm2">
+                        <h3><strong>Logout</strong> Confirmation</h3>
+
+                        <p class="text-center" style="color:red;#{productQuotationManagedBean.cacheList.size() > 0 or quotationManagedBean.cacheList.size() > 0 ? '' : 'display:none'}">
+                            <img src="images/warning.png" style="width:22px;height:20px" alt=""/> You still have
+                            <br />
+                            <span style="#{productQuotationManagedBean.cacheList.size() > 0 or quotationManagedBean.cacheList.size() > 0 ? '' : 'display:none'}"><strong><h:outputLabel value="#{productQuotationManagedBean.cacheList.size()}" /></strong> laser welding product(s)</span>
+                            <br style="#{quotationManagedBean.cacheList.size() > 0 ? '' : 'display:none'}" />
+                            <span style="#{quotationManagedBean.cacheList.size() > 0 ? '' : 'display:none'}"><strong><h:outputLabel value="#{quotationManagedBean.cacheList.size()}" /></strong> laser welding job(s)</span>
+                            <br style="#{productQuotationManagedBean.cacheList.size() > 0 or quotationManagedBean.cacheList.size() > 0 ? '' : 'display:none'}" />
+                            <i>(Pending)</i> Request for Quotation
+                        </p>
+
+                        <div style="padding: 0px 40px 15px;">
+                            <p class="text-center">Are you sure want to logout from this system?</p>
+                            <br />
                             <p class="text-center">
                                 <button style="padding-top: 3px; padding-left: 24px; padding-right: 24px; font-family: 'Open Sans'; height: 30px" class="btn btn-danger md-close">Nope!</button>
                                 &nbsp;&nbsp;
                                 <p:commandButton  style="padding-top: 1px; padding-left: 24px; padding-right: 24px; font-family: 'Open Sans'; height: 30px" value="Yeah, I'm sure" styleClass="btn btn-success md-close" action="#{loginManagedBean.logout()}" />
                             </p>
-                        </h:form>
-                    </div>
+
+                        </div>
+                    </h:form>
                 </div>
             </div><!-- End .md-modal -->
 

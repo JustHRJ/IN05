@@ -10,6 +10,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Iterator;
+import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.enterprise.context.SessionScoped;
@@ -34,6 +35,9 @@ public class ProductQuotationManagedBean implements Serializable {
     private String productQuotationNo = "";
     private Integer count;
 
+    private Double totalQuotedPrice = 0.0;
+    private Integer totalQuantity = 0;
+
     private String selectedMachine = "";
 
     private ArrayList<ProductQuotationDescription> cacheList = new ArrayList<>();
@@ -43,7 +47,7 @@ public class ProductQuotationManagedBean implements Serializable {
 
     private ArrayList<ProductQuotation> filteredProductList;
     private ArrayList<ProductQuotation> filteredProductList2;
-    
+
     private ArrayList<ProductQuotation> receivedProductQuotationList;
     private ArrayList<ProductQuotationDescription> displayProductQuotationDescriptionList;
 
@@ -76,6 +80,10 @@ public class ProductQuotationManagedBean implements Serializable {
         date = new SimpleDateFormat("dd/MM/yyyy").format(Calendar.getInstance().getTime());
 
         receivedProductQuotationList = new ArrayList<>(productQuotationSessionBean.receivedProductQuotationList(username));
+    }
+
+    public List<String> getFilterStatusesArr() {
+        return newProductQuotation.getFilterStatusesArr();
     }
 
     public Integer doCount() throws IOException {
@@ -325,7 +333,7 @@ public class ProductQuotationManagedBean implements Serializable {
         // set quotation tab to be selected
         System.out.println("Your request for product price quotation has been sent successfully!");
         //FacesContext.getCurrentInstance().getExternalContext().redirect("/HiYewExternalWeb/c-products.xhtml");
-        FacesContext.getCurrentInstance().addMessage("rfqMsg", new FacesMessage("An RFQ has been sent successfully!", ""));
+        FacesContext.getCurrentInstance().addMessage("rfqMsg", new FacesMessage("A RFQ has been sent successfully!", ""));
     }
 
     public void setRejectionStatus(ProductQuotation productQuotation) {
@@ -492,6 +500,14 @@ public class ProductQuotationManagedBean implements Serializable {
      * @return the displayProductQuotationDescriptionList
      */
     public ArrayList<ProductQuotationDescription> getDisplayProductQuotationDescriptionList() {
+        totalQuotedPrice = 0.0;
+        totalQuantity = 0;
+        for (ProductQuotationDescription pqd : displayProductQuotationDescriptionList) {
+            if (pqd.getQuotedPrice() != null) {
+                totalQuotedPrice = totalQuotedPrice + pqd.getQuotedPrice();
+            }
+            totalQuantity = totalQuantity + pqd.getQuantity();
+        }
         return displayProductQuotationDescriptionList;
     }
 
@@ -655,5 +671,33 @@ public class ProductQuotationManagedBean implements Serializable {
      */
     public void setFilteredProductList2(ArrayList<ProductQuotation> filteredProductList2) {
         this.filteredProductList2 = filteredProductList2;
+    }
+
+    /**
+     * @return the totalQuotedPrice
+     */
+    public Double getTotalQuotedPrice() {
+        return totalQuotedPrice;
+    }
+
+    /**
+     * @param totalQuotedPrice the totalQuotedPrice to set
+     */
+    public void setTotalQuotedPrice(Double totalQuotedPrice) {
+        this.totalQuotedPrice = totalQuotedPrice;
+    }
+
+    /**
+     * @return the totalQuantity
+     */
+    public Integer getTotalQuantity() {
+        return totalQuantity;
+    }
+
+    /**
+     * @param totalQuantity the totalQuantity to set
+     */
+    public void setTotalQuantity(Integer totalQuantity) {
+        this.totalQuantity = totalQuantity;
     }
 }

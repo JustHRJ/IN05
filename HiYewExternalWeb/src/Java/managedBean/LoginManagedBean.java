@@ -248,11 +248,11 @@ public class LoginManagedBean implements Serializable {
                     ExternalContext externalContext = facesCtx.getExternalContext();
                     externalContext.redirect("/HiYewExternalWeb/login.xhtml");
                 } else {
-                    FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("loginMessage", "Your password and confirmation password do not match.");
+                    FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("registerMessage", "Your password and confirmation password do not match.");
                     FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("msgColor", "red");
                 }
             } else {
-                FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("loginMessage", "This username has been taken by someone else. Please choose a different username.");
+                FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("registerMessage", "This username has been taken by someone else. Please choose a different username.");
                 FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("msgColor", "red");
             }
         } else { //create supplier

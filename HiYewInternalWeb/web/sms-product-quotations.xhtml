@@ -16,7 +16,7 @@
         <div style="padding:20px!important;padding-top:0px!important;">
             <h:form id="innerForm">
                 <h:panelGrid columns="3" cellpadding="5">
-                    <p:outputLabel style="font-weight:bold;margin-top:5px;" for="QuotationStatus" value="Status: " />&nbsp;&nbsp;
+                    <p:outputLabel style="font-weight:bold;margin-top:5px;" for="QuotationStatus" value="Sort: " />&nbsp;&nbsp;
                     <h:selectOneMenu id="QuotationStatus" value="#{adminProductQuotationManagedBean.status}"  style="width:150px">
                         <p:ajax listener="#{adminProductQuotationManagedBean.filterByStatusNoMsg()}" update="msgs rcvQuote" /> 
                         <f:selectItems value="#{adminProductQuotationManagedBean.statuses}" />
@@ -24,33 +24,64 @@
                 </h:panelGrid>
                 <br />
                 <p:commandButton value="Refresh" actionListener="#{adminProductQuotationManagedBean.filterByStatus()}" update="msgs rcvQuote" icon="ui-icon-check"/>
-
                 <p:messages style="margin-top:15px;margin-bottom:-15px" id="msgs"  showDetail="false" closable="true" />
                 <br />
-                <p:dataTable filteredValue="#{adminProductQuotationManagedBean.filteredProductList}" value="#{adminProductQuotationManagedBean.receivedNewProductQuotationList}" var="item" rows="7" id="rcvQuote" paginator="true" editable="true">
-                    <p:column headerText="Quotation No." width="70%">
+                <p:dataTable sortBy="#{item.productQuotationNo}" sortOrder="descending" filteredValue="#{adminProductQuotationManagedBean.filteredProductList}" 
+                             value="#{adminProductQuotationManagedBean.receivedNewProductQuotationList}" 
+                             var="item" 
+                             rows="10" 
+                             id="rcvQuote" 
+                             paginator="true" 
+                             editable="true"
+                             widgetVar="itemsTable" 
+                             emptyMessage="No item(s) found with given criteria."
+                             rowsPerPageTemplate="5,10,15">
+
+                    <f:facet name="header">
+                        <p:outputPanel style="text-align:left">
+                            <h:outputText value="Search all fields: " />
+                            <p:inputText id="globalFilter" onkeyup="PF('itemsTable').filter()" style="background:white!important;color:black;width:150px;font-weight:normal;font-family:'Open Sans';font-size:14px;" placeholder="Enter keyword"/>
+                        </p:outputPanel>
+                    </f:facet>
+
+                    <p:column headerText="Quotation No." width="70%" filterBy="#{item.productQuotationNo}" filterMatchMode="contains">
                         <p:outputLabel value="#{item.productQuotationNo}"/>
                     </p:column>
-                    <p:column headerText="Date" sortBy="#{item.date}" width="10%">
+                    <p:column headerText="Date" sortBy="#{item.date}" width="10%" filterBy="#{item.date}" filterMatchMode="contains">
                         <h:outputText value="#{adminProductQuotationManagedBean.formatDate(item.date)}"/>
                     </p:column>
-                    <p:column headerText="Status" sortBy="#{item.status}" width="10%">
+                    <p:column id="idStatus" headerText="Status" sortBy="#{item.status}" width="10%" filterBy="#{item.status}" filterMatchMode="equals">
+                        <f:facet name="filter">
+                            <h:selectOneMenu onchange="PF('itemsTable').filter()" >
+                                <f:selectItem itemLabel="Select One" itemValue="#{null}" noSelectionOption="true" />
+                                <f:selectItems value="#{adminProductQuotationManagedBean.status eq 'Settled' ? adminProductQuotationManagedBean.filterSettledArr : adminProductQuotationManagedBean.filterUnsettledArr}" />
+                            </h:selectOneMenu>
+                        </f:facet>
                         <h:outputText value="#{item.status}"/>
                     </p:column>
-                    <p:column width="10%">
+                    <p:column headerText="View" width="7%">
                         <p:commandButton id="quoteDescBtn" icon="ui-icon-search" title="View" update="quotationDetailPanel" action="#{adminProductQuotationManagedBean.selectQuotation(item)}"/>
-                        <p:overlayPanel for="quoteDescBtn" showEffect="fade" hideEffect="fade" dismissable="false" showCloseIcon="true" style="width:1200px">
+                        <p:overlayPanel id="quotationDetailOuterPanel" for="quoteDescBtn" showEffect="fade" hideEffect="fade" dismissable="false" showCloseIcon="true" style="width:1200px">
                             <p:outputPanel id="quotationDetailPanel">
                                 <br />
-                                <p:commandButton rendered="#{item.status eq 'Pending'}" value="Relay Product RFQ" action="#{adminProductQuotationManagedBean.updateQuotationRelayedStatus(item.productQuotationNo, item.customer.userName)}" update=":innerForm:msgs rcvQuote" icon="ui-icon-check"/>
+                                <p:commandButton rendered="#{item.status eq 'Pending'}" value="Relay This Product RFQ" action="#{adminProductQuotationManagedBean.updateQuotationRelayedStatus(item.productQuotationNo, item.customer.userName)}" update=":innerForm:msgs rcvQuote" icon="ui-icon-check"/>
 
                                 <p:commandButton rendered="#{item.status eq 'Relayed'}" value="Update Quotation Details" action="#{adminProductQuotationManagedBean.updateQuotationPrices(item.productQuotationNo)}" update="inner-msgs pqdList" icon="ui-icon-check"/>
-                                <p:commandButton rendered="#{item.status eq 'Relayed'}" value="Send Notification to Customer" action="#{adminProductQuotationManagedBean.updateQuotationStatus(item.productQuotationNo, item.customer.userName)}" update="inner-msgs quotationDetailPanel" icon="ui-icon-check"/>
-                                <br style="#{item.status eq 'Processed' ? 'display:none' : ''}" />
-                                <br style="#{item.status eq 'Processed' ? 'display:none' : ''}" />
+                                <p:commandButton rendered="#{item.status eq 'Relayed'}" value="Send Update to Customer" action="#{adminProductQuotationManagedBean.updateQuotationStatus(item.productQuotationNo, item.customer.userName)}" update=":innerForm:msgs rcvQuote" icon="ui-icon-check"/>
+                                <br style="#{item.status eq 'Pending' or item.status eq 'Relayed' ? '' : 'display:none'}" />
+                                <br style="#{item.status eq 'Pending' or item.status eq 'Relayed' ? '' : 'display:none'}" />
 
                                 <p:messages style="margin-top:-13px;margin-bottom:15px" id="inner-msgs" showDetail="false" closable="true" />
                                 <p:dataTable id="pqdList" sortBy="#{quoteDescItem.productQuotationDescNo}" var="quoteDescItem" value="#{adminProductQuotationManagedBean.displayProductQuotationDescriptionList}" rows="10" paginator="true">
+                                    <f:facet name="header">
+                                        <p:outputPanel style="text-align:left;height:#{item.status eq 'Accepted' or item.status eq 'Rejected' or item.status eq 'Processed' ? '62px' : '44px'};margin-top: 5px;">
+                                            <h:outputText value="Quotation No. ##{item.productQuotationNo}" />
+                                            <br />
+                                            <h:outputText value="Total Number of Items: #{adminProductQuotationManagedBean.totalQuantity}" />
+                                            <br style="#{item.status eq 'Accepted' or item.status eq 'Rejected' or item.status eq 'Processed' ? '' : 'display:none'}" />
+                                            <h:outputText style="#{item.status eq 'Accepted' or item.status eq 'Rejected' or item.status eq 'Processed' ? '' : 'display:none'}" value="Total Price (SGD): $ #{adminProductQuotationManagedBean.formatPrice(adminProductQuotationManagedBean.totalQuotedPrice)}" />
+                                        </p:outputPanel>
+                                    </f:facet>
                                     <p:column headerText="ID" width="3%">
                                         <h:outputText value="#{quoteDescItem.productQuotationDescNo}" />
                                     </p:column>
@@ -72,32 +103,77 @@
                                     </p:column>
 
                                     <p:column rendered="#{item.status != 'Relayed'}" headerText="Quoted Unit Price" width="10%">
-                                        <h:outputText value="#{item.status eq 'Pending' ? '' : '$ '}#{item.status eq 'Pending' ? 'N.A' : quoteDescItem.quotedPrice}" />
+                                        <h:outputText value="#{item.status eq 'Pending' ? '' : '$ '}#{item.status eq 'Pending' ? 'N.A' : adminProductQuotationManagedBean.formatPrice(quoteDescItem.quotedPrice)}" />
                                     </p:column>
 
                                     <p:column rendered="#{item.status eq 'Relayed'}" headerText="Quoted Unit Price" width="10%">
-                                        $&nbsp;<h:inputText value="#{quoteDescItem.quotedPrice}" style="width: 90%" maxlength="7" validatorMessage="Price must have a value of more than zero." converterMessage="The price(s) that you have entered are invalid!">
-                                            <f:validateLongRange minimum="1" />
-                                        </h:inputText>
+                                        <h:outputText value="$ #{adminProductQuotationManagedBean.formatPrice(quoteDescItem.quotedPrice = quoteDescItem.costPrice + (quoteDescItem.costPrice * quoteDescItem.profitPercentage))}" />
                                     </p:column>
 
                                     <p:column rendered="#{item.status != 'Relayed'}" headerText="Cost" width="10%">
-                                        <h:outputText value="#{item.status eq 'Pending' ? '' : '$ '}#{item.status eq 'Pending' ? 'N.A' : quoteDescItem.costPrice}" />
+                                        <h:outputText value="#{item.status eq 'Pending' ? '' : '$ '}#{item.status eq 'Pending' ? 'N.A' : adminProductQuotationManagedBean.formatPrice(quoteDescItem.costPrice)}" />
                                     </p:column>
 
                                     <p:column rendered="#{item.status eq 'Relayed'}" headerText="Cost" width="10%">
                                         $&nbsp;<h:inputText value="#{quoteDescItem.costPrice}" style="width: 90%" maxlength="7" validatorMessage="Price must have a value of more than zero." converterMessage="The price(s) that you have entered are invalid!">
+                                            <f:converter converterId="javax.faces.Integer" />
                                             <f:validateLongRange minimum="1" />
+                                            <p:ajax update="pqdList" /> 
                                         </h:inputText>
                                     </p:column>
 
-
                                     <p:column rendered="#{item.status != 'Relayed'}" headerText="Profit Margin" width="10%">
-                                        <h:outputText style="color:#{item.status eq 'Pending' ?  'black' : quoteDescItem.profitMargin != null and quoteDescItem.profitMargin > 0 ? 'green' : 'red'}" value="#{item.status eq 'Pending' ? '' : '$ '}#{item.status eq 'Pending' ? 'N.A' : quoteDescItem.profitMargin}" />
+                                        <h:outputText style="color:#{item.status eq 'Pending' ?  'black' : quoteDescItem.profitMargin != null and quoteDescItem.profitMargin > 0 ? 'green' : 'red'}" value="#{item.status eq 'Pending' ? '' : '$ '}#{item.status eq 'Pending' ? 'N.A' : adminProductQuotationManagedBean.formatPrice(quoteDescItem.profitMargin)}" />
                                     </p:column>
-
+                                    #{quoteDescItem.profitMargin = quoteDescItem.quotedPrice - quoteDescItem.costPrice}
                                     <p:column rendered="#{item.status eq 'Relayed'}" headerText="Profit Margin" width="10%">
-                                        <h:outputText style="color:#{quoteDescItem.profitMargin != null and quoteDescItem.profitMargin >= 0 ? 'green' : 'red'}" value="$ #{quoteDescItem.profitMargin = quoteDescItem.quotedPrice - quoteDescItem.costPrice}" />
+                                        <h:selectOneMenu value="#{quoteDescItem.profitPercentage}" style="width:120px">
+                                            <p:ajax update="pqdList" /> 
+                                            <f:selectItem itemValue="0.0" itemLabel="-" />
+                                            <f:selectItem itemValue="3.0" itemLabel="300%" />
+                                            <f:selectItem itemValue="2.9" itemLabel="290%" />
+                                            <f:selectItem itemValue="2.8" itemLabel="280%" />
+                                            <f:selectItem itemValue="2.7" itemLabel="270%" />
+                                            <f:selectItem itemValue="2.6" itemLabel="260%" />
+                                            <f:selectItem itemValue="2.5" itemLabel="250%" />
+                                            <f:selectItem itemValue="2.4" itemLabel="240%" />
+                                            <f:selectItem itemValue="2.3" itemLabel="230%" />
+                                            <f:selectItem itemValue="2.2" itemLabel="220%" />
+                                            <f:selectItem itemValue="2.1" itemLabel="210%" />
+                                            <f:selectItem itemValue="2.0" itemLabel="200%" />
+                                            <f:selectItem itemValue="1.9" itemLabel="190%" />
+                                            <f:selectItem itemValue="1.8" itemLabel="180%" />
+                                            <f:selectItem itemValue="1.7" itemLabel="170%" />
+                                            <f:selectItem itemValue="1.6" itemLabel="160%" />
+                                            <f:selectItem itemValue="1.5" itemLabel="150%" />
+                                            <f:selectItem itemValue="1.4" itemLabel="140%" />
+                                            <f:selectItem itemValue="1.3" itemLabel="130%" />
+                                            <f:selectItem itemValue="1.2" itemLabel="120%" />
+                                            <f:selectItem itemValue="1.1" itemLabel="110%" />
+                                            <f:selectItem itemValue="1.0" itemLabel="100%" />
+                                            <f:selectItem itemValue="0.9" itemLabel="90%" />
+                                            <f:selectItem itemValue="0.8" itemLabel="80%" />
+                                            <f:selectItem itemValue="0.7" itemLabel="70%" />
+                                            <f:selectItem itemValue="0.6" itemLabel="60%" />
+                                            <f:selectItem itemValue="0.5" itemLabel="50%" />
+                                            <f:selectItem itemValue="0.4" itemLabel="40%" />
+                                            <f:selectItem itemValue="0.3" itemLabel="30%" />
+                                            <f:selectItem itemValue="0.2" itemLabel="20%" />
+                                            <f:selectItem itemValue="0.1" itemLabel="10%" />
+                                            <f:selectItem itemValue="0" itemLabel="0%" />
+                                            <f:selectItem itemValue="-0.1" itemLabel="-10%" />
+                                            <f:selectItem itemValue="-0.2" itemLabel="-20%" />
+                                            <f:selectItem itemValue="-0.3" itemLabel="-30%" />
+                                            <f:selectItem itemValue="-0.4" itemLabel="-40%" />
+                                            <f:selectItem itemValue="-0.5" itemLabel="-50%" />
+                                            <f:selectItem itemValue="-0.6" itemLabel="-60%" />
+                                            <f:selectItem itemValue="-0.7" itemLabel="-70%" />
+                                            <f:selectItem itemValue="-0.8" itemLabel="-80%" />
+                                            <f:selectItem itemValue="-0.9" itemLabel="-90%" />
+                                            <f:selectItem itemValue="-1.0" itemLabel="-100%" />
+                                        </h:selectOneMenu>
+                                        <br />
+                                        <h:outputText style="color:#{quoteDescItem.profitMargin != null and quoteDescItem.profitMargin >= 0 ? 'green' : 'red'}" value="$ #{adminProductQuotationManagedBean.formatPrice(quoteDescItem.profitMargin = quoteDescItem.quotedPrice - quoteDescItem.costPrice)}" />
                                     </p:column>
 
                                 </p:dataTable>

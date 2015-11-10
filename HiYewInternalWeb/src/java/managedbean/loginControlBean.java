@@ -349,7 +349,6 @@ public class loginControlBean implements Serializable {
      * @return the current_page
      */
     public String getCurrent_page() {
-        System.out.println("====================================== getCurrent_page() = " + current_page);
         return current_page;
     }
 

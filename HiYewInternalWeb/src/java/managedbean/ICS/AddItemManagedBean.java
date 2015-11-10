@@ -54,7 +54,7 @@ public class AddItemManagedBean implements Serializable {
           FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("ItemToPassToComposition", this.newItem);
           newItem = new FillerEntity(); //To reinitialise and create new customer
            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Item added to inventory successfully!"));
-             return "ics-add-newItem-Composite?faces-redirect=true";
+             return "ics-add-new-item-composite?faces-redirect=true";
         }
     }
 

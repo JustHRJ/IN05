@@ -15,14 +15,28 @@ body{
 
 }
 
+.ui-widget-header {
+    color: #4f4f4f!important;
+}
+
 .ui-selectcheckboxmenu .ui-selectcheckboxmenu-trigger .ui-icon {
     margin-top: 5px;
-    margin-left: -4;
+    margin-left: -4px;
 }
 
 .ui-messages-info-detail, .ui-messages-warn-detail, .ui-messages-error-detail, .ui-messages-fatal-detail, .ui-message-info-detail, .ui-message-warn-detail, .ui-message-error-detail, .ui-message-fatal-detail {
     font-size: 14px;
     margin-left: 5px;
+}
+
+.ui-inputfield {
+    background: white!important;
+    -moz-box-shadow: inset 0 2px 2px #8f8f8f;
+    -webkit-box-shadow: none; //inset 0 2px 2px #8f8f8f
+    box-shadow: none; //inset 0 2px 2px #8f8f8f 
+    border-color: #ddd;
+    color: black;
+    font-weight:normal!important;
 }
 
 .itemDetails .ui-inputfield {
@@ -147,7 +161,8 @@ body{
 }
 
 .ui-menubar .ui-menuitem-link:hover {
-    border: 1px solid #a8a8a8;background: #c4c4c4 -webkit-gradient(linear, left top, left bottom, from(rgba(255,255,255,0.8)), to(rgba(255,255,255,0)));
+    border: 1px solid #a8a8a8;
+    background: #c4c4c4 -webkit-gradient(linear, left top, left bottom, from(rgba(255,255,255,0.8)), to(rgba(255,255,255,0)));
     width: auto;
     padding: 0.4em 0.3em;
     padding-left: 5px;
@@ -232,7 +247,11 @@ body{
 }
 
 .ui-button-text-icon-left .ui-button-text {
-    padding: .3em 1em;
+    font-size: 14px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    padding-left: 22px;
+    padding-right: 22px;
     font-weight: bold;
 }
 
@@ -249,6 +268,15 @@ body{
 .ui-state-default {
     text-shadow: none; 
 }
+
+.ui-widget-header .ui-state-default, 
+.ui-state-hover, .ui-widget-content .ui-state-hover, 
+.ui-state-header .ui-state-hover, .ui-state-focus, 
+.ui-widget-content .ui-state-focus, .ui-state-header .ui-state-focus {
+    background: #c4c4c4 -webkit-gradient(linear, left top, left bottom, from(rgba(255,255,255,0.8)), to(rgba(255,255,255,0)))!important;
+}
+
+
 
 .ui-state-highlight, .ui-widget-content .ui-state-highlight, .ui-widget-header .ui-state-highlight {
     border: 1px solid #666666;

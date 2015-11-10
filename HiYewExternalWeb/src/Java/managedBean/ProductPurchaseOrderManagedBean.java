@@ -12,6 +12,7 @@ import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
@@ -48,6 +49,9 @@ public class ProductPurchaseOrderManagedBean implements Serializable {
     private String totalPrice = "";
     private String mailingAddr1 = "";
     private String mailingAddr2 = "";
+    
+    private Double totalQuotedPrice = 0.0;
+    private Integer totalQuantity = 0;
 
     private String description;
     private Double total = 0.0;
@@ -68,22 +72,26 @@ public class ProductPurchaseOrderManagedBean implements Serializable {
     public void init() {
         if (FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("username") != null) {
             setUsername(FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("username").toString());
-            System.out.println("ProductPurchaseOrderManagedBean.java: Username is " + getUsername());
+            //System.out.println("ProductPurchaseOrderManagedBean.java: Username is " + getUsername());
         }
         setOrderDate(new SimpleDateFormat("dd/MM/yyyy").format(Calendar.getInstance().getTime()));
         setDescription("");
         setReceivedProductPurchaseOrderList(new ArrayList<>(productPurchaseOrderSessionBean.receivedProductPurchaseOrder(getUsername())));
-        System.out.println("receivedProductPurchaseOrderList.size() ==== " + getReceivedProductPurchaseOrderList().size());
+        //System.out.println("receivedProductPurchaseOrderList.size() ==== " + getReceivedProductPurchaseOrderList().size());
+    }
+
+    public List<String> getFilterStatusesArr() {
+        return newPurchaseOrder.getFilterStatusesArr();
     }
 
     public String formatPrice(Double input) {
         DecimalFormat df = new DecimalFormat("0.00");
-        System.out.println("formatPrice() ===== " + df.format(input));
+        //System.out.println("formatPrice() ===== " + df.format(input));
         return df.format(input);
     }
 
     public void receivedProductPurchaseOrderList() {
-        System.out.println("ProductPurchaseOrderManagedBean.java receivedProductPurchaseOrderList() ===== " + username);
+        //System.out.println("ProductPurchaseOrderManagedBean.java receivedProductPurchaseOrderList() ===== " + username);
 
         receivedProductPurchaseOrderList = new ArrayList<>(productPurchaseOrderSessionBean.receivedProductPurchaseOrder(getUsername()));
 
@@ -91,7 +99,7 @@ public class ProductPurchaseOrderManagedBean implements Serializable {
     }
 
     public void retrieveProductQuotationDescriptionList(String purchaseOrderNo) {
-        System.out.println("ProductPurchaseOrderManagedBean.java retrieveProductQuotationDescriptionList() purchaseOrderNo ===== " + purchaseOrderNo);
+        //System.out.println("ProductPurchaseOrderManagedBean.java retrieveProductQuotationDescriptionList() purchaseOrderNo ===== " + purchaseOrderNo);
 
         setDisplayProductQuotationDescriptionList(new ArrayList<>(productPurchaseOrderSessionBean.retrieveProductQuotationDescriptionList(purchaseOrderNo)));
     }
@@ -110,14 +118,14 @@ public class ProductPurchaseOrderManagedBean implements Serializable {
         newPurchaseOrder.setProductQuotation(selectedProductionQuotation);
         newPurchaseOrder.setStatus("Pending");
 
-        System.out.println("before this.purchaseOrderCustomerNo ===== " + this.purchaseOrderCustomerNo);
-        System.out.println("before this.mailingAddr1 ===== " + this.mailingAddr1);
-        System.out.println("before this.mailingAddr2 ===== " + this.mailingAddr2);
+        //System.out.println("before this.purchaseOrderCustomerNo ===== " + this.purchaseOrderCustomerNo);
+        //System.out.println("before this.mailingAddr1 ===== " + this.mailingAddr1);
+        //System.out.println("before this.mailingAddr2 ===== " + this.mailingAddr2);
 
-        System.out.println("before newPurchaseOrder.getMailingAddr1() ===== " + newPurchaseOrder.getMailingAddr1());
-        System.out.println("before newPurchaseOrder.getMailingAddr2() ===== " + newPurchaseOrder.getMailingAddr2());
+        //System.out.println("before newPurchaseOrder.getMailingAddr1() ===== " + newPurchaseOrder.getMailingAddr1());
+        //System.out.println("before newPurchaseOrder.getMailingAddr2() ===== " + newPurchaseOrder.getMailingAddr2());
 
-        System.out.println("before username ===== " + username);
+        //System.out.println("before username ===== " + username);
 
         if ((newPurchaseOrder.getMailingAddr1() == null && newPurchaseOrder.getMailingAddr2() == null) || (newPurchaseOrder.getMailingAddr1().equals("") && newPurchaseOrder.getMailingAddr2().equals(""))) {
             Customer c = customerSessionBean.findCustomer(username);
@@ -125,14 +133,14 @@ public class ProductPurchaseOrderManagedBean implements Serializable {
                 newPurchaseOrder.setMailingAddr1(c.getAddress1());
                 newPurchaseOrder.setMailingAddr2(c.getAddress2());
 
-                System.out.println("insde get exiting address  ===== " + c.getAddress1());
-                System.out.println("inside get exiting address ===== " + c.getAddress2());
+                //System.out.println("insde get exiting address  ===== " + c.getAddress1());
+                //System.out.println("inside get exiting address ===== " + c.getAddress2());
 
             }
         }
 
-        System.out.println("after newPurchaseOrder.getMailingAddr1() ===== " + newPurchaseOrder.getMailingAddr1());
-        System.out.println("after newPurchaseOrder.getMailingAddr2() ===== " + newPurchaseOrder.getMailingAddr2());
+        //System.out.println("after newPurchaseOrder.getMailingAddr1() ===== " + newPurchaseOrder.getMailingAddr1());
+        //System.out.println("after newPurchaseOrder.getMailingAddr2() ===== " + newPurchaseOrder.getMailingAddr2());
 
         // persist
         productPurchaseOrderSessionBean.createProductPurchaseOrder(newPurchaseOrder);
@@ -143,24 +151,27 @@ public class ProductPurchaseOrderManagedBean implements Serializable {
         FacesContext.getCurrentInstance().addMessage("qMsg", new FacesMessage(FacesMessage.SEVERITY_INFO, "You have sent a Purchase Order No. " + selectedProductionQuotation.getProductQuotationNo(), ""));
 
         // generate PDF
-        FileDownloadView fdv = new FileDownloadView();
-        fdv.getFile(newPurchaseOrder, selectedProductionQuotation);
+        //FileDownloadView fdv = new FileDownloadView();
+        //fdv.getFile(newPurchaseOrder, selectedProductionQuotation);
 
         // reinitialise
         setNewPurchaseOrder(new ProductPurchaseOrder());
     }
 
     public void generatePurchaseOrder(ProductQuotation productQuotation) {
-        System.out.println("Customer sent product purchase order!" + productQuotation.getProductQuotationDescriptionList().size());
+        //System.out.println("Customer sent product purchase order!" + productQuotation.getProductQuotationDescriptionList().size());
         setPurchaseOrderNo(productQuotation.getProductQuotationNo());
         setAttention(productQuotation.getCustomer().getName());
         selectedProductionQuotation = productQuotation;
-
+        description = "";
+        total = 0.0;
         for (ProductQuotationDescription pqd : productQuotation.getProductQuotationDescriptionList()) {
-            setDescription(getDescription() + pqd.getProductQuotationDescNo().toString() + ". " + pqd.getItemName() + " - (Unit price) SGD " + String.format("%.2f", pqd.getQuotedPrice()) + " x " + pqd.getQuantity() + "" + "\r\n");
+            description = description + pqd.getProductQuotationDescNo().toString() + ". " + pqd.getItemName() + " - SGD " + String.format("%.2f", pqd.getQuotedPrice()) + " x " + pqd.getQuantity() + "" + "\r\n";
             // compute total price
-            setTotal((Double) (getTotal() + (pqd.getQuantity() * pqd.getQuotedPrice())));
+            total = (Double) (getTotal() + (pqd.getQuantity() * pqd.getQuotedPrice()));
         }
+        description = description + "\n* All price(s) stated are price per unit.\n* Final price is including delivery charge.\n* Paid orders are processed and dispatched from\n&nbsp;&nbsp;&nbsp;our warehouse within 1 to 3 working days.";
+        
         setTotalPrice(String.format("%.2f", getTotal()));
         showDialog();
     }
@@ -171,7 +182,7 @@ public class ProductPurchaseOrderManagedBean implements Serializable {
     }
 
     public void showDialog() {
-        System.out.println("Show Dialog - AFTER Customer sent product purchase order!");
+        //System.out.println("Show Dialog - AFTER Customer sent product purchase order!");
         RequestContext context = RequestContext.getCurrentInstance();
         context.execute("PF('myDialogVar').show();");
     }
@@ -349,6 +360,14 @@ public class ProductPurchaseOrderManagedBean implements Serializable {
      * @return the displayProductQuotationDescriptionList
      */
     public ArrayList<ProductQuotationDescription> getDisplayProductQuotationDescriptionList() {
+        totalQuotedPrice = 0.0;
+        totalQuantity = 0;
+        for (ProductQuotationDescription pqd : displayProductQuotationDescriptionList) {
+            if (pqd.getQuotedPrice() != null) {
+                totalQuotedPrice = totalQuotedPrice + pqd.getQuotedPrice();
+            }
+            totalQuantity = totalQuantity + pqd.getQuantity();
+        }
         return displayProductQuotationDescriptionList;
     }
 
@@ -414,5 +433,33 @@ public class ProductPurchaseOrderManagedBean implements Serializable {
      */
     public void setSelectedProductionQuotation(ProductQuotation selectedProductionQuotation) {
         this.selectedProductionQuotation = selectedProductionQuotation;
+    }
+
+    /**
+     * @return the totalQuotedPrice
+     */
+    public Double getTotalQuotedPrice() {
+        return totalQuotedPrice;
+    }
+
+    /**
+     * @param totalQuotedPrice the totalQuotedPrice to set
+     */
+    public void setTotalQuotedPrice(Double totalQuotedPrice) {
+        this.totalQuotedPrice = totalQuotedPrice;
+    }
+
+    /**
+     * @return the totalQuantity
+     */
+    public Integer getTotalQuantity() {
+        return totalQuantity;
+    }
+
+    /**
+     * @param totalQuantity the totalQuantity to set
+     */
+    public void setTotalQuantity(Integer totalQuantity) {
+        this.totalQuantity = totalQuantity;
     }
 }
