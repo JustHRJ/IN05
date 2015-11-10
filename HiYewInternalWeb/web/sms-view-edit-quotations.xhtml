@@ -203,7 +203,7 @@
                                 <h:panelGrid columns="1" cellpadding="10">
 
                                     <p:dataTable id="matchingFillersTable" var="matchedFiller" value="#{adminQuotationManagedBean.matchedFillers}" widgetVar="matchedFillersTable" selection="#{adminQuotationManagedBean.selectedFillerForWeld}" rowKey="#{matchedFiller.fillerCode}"
-                                                 emptyMessage="No matched filler in KMS! Please request for sample!" >
+                                                 emptyMessage="No matched filler in KMS! Please request for sample!" rowStyleClass="#{matchedFiller eq adminQuotationManagedBean.recommendedFiller ? 'highlight1'  : 'highlight2'}">
 
                                         <p:column selectionMode="single"  style="width:16px;text-align:center"/>
 

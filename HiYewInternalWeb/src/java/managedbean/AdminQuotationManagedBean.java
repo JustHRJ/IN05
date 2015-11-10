@@ -87,6 +87,8 @@ public class AdminQuotationManagedBean implements Serializable {
     private HashMap projectDaysMap;
     private int numOfTimesConductedATP;
     private HashMap projectNumOfATPResult;
+    
+    private FillerEntity recommendedFiller;
 
     /**
      * Creates a new instance of AdminQuotationManagedBean
@@ -302,6 +304,7 @@ public class AdminQuotationManagedBean implements Serializable {
         weldJobPriceToQuotePerQty = 0;
         profitMargin = 0;
         numOfTimesConductedATP=0;
+        recommendedFiller = new FillerEntity();
         
         
 
@@ -346,6 +349,7 @@ public class AdminQuotationManagedBean implements Serializable {
         if (m != null) {
             matchedFillers.addAll(hiYewDSSSessionBean.getListOfMatchedFillers(m));
         }
+        recommendedFiller = deriveRecommended(matchedFillers);
         similarWeldJobs.clear();
         System.out.println("Metal 1 " + this.selectedQuotationDescription.getMetalName());
         System.out.println("Metal 2 " + this.getSecondMetalName());
@@ -358,6 +362,33 @@ public class AdminQuotationManagedBean implements Serializable {
         deriveWeldJobTotalPrice();
         pricePerUnit();
 
+    }
+    
+    public FillerEntity deriveRecommended(ArrayList<FillerEntity> returnedFillers){
+        FillerEntity recommendedFiller = new FillerEntity();
+        double lowestPrice = 999999;
+    
+        
+        for(int i=0;i<returnedFillers.size();i++){
+            int numNeeded = numOfFillersNeeded(returnedFillers.get(i).getFillerCode());
+            double fillerPrice =  numNeeded * returnedFillers.get(i).getCost();
+            int qtyLeft = (returnedFillers.get(i).getQuantity() - returnedFillers.get(i).getBookedQuantity()) - numNeeded;
+            System.out.println("@@@@@@@@@@@@@ " + returnedFillers.get(i).getFillerCode());
+            System.out.println("@@@@@@@@@@@@@ " + numNeeded);
+            System.out.println("@@@@@@@@@@@@@ " + qtyLeft);
+            if(qtyLeft>=0){
+                System.out.println("*************************enuff qty");
+                //check whish has the lowest price...
+                if(fillerPrice<lowestPrice){
+                    System.out.println("*************************price lower");
+                lowestPrice = fillerPrice;
+                recommendedFiller = returnedFillers.get(i);
+            }
+                
+            }
+        }
+        System.out.println("###########################################Recommeded Filler: " +recommendedFiller.getFillerCode() );
+        return recommendedFiller;
     }
 
     public int numOfFillersNeeded(String itemCode) {
@@ -774,6 +805,20 @@ public class AdminQuotationManagedBean implements Serializable {
      */
     public void setProjectNumOfATPResult(HashMap projectNumOfATPResult) {
         this.projectNumOfATPResult = projectNumOfATPResult;
+    }
+
+    /**
+     * @return the recommendedFiller
+     */
+    public FillerEntity getRecommendedFiller() {
+        return recommendedFiller;
+    }
+
+    /**
+     * @param recommendedFiller the recommendedFiller to set
+     */
+    public void setRecommendedFiller(FillerEntity recommendedFiller) {
+        this.recommendedFiller = recommendedFiller;
     }
 
 }
