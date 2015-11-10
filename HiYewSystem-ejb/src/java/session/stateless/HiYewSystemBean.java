@@ -64,6 +64,8 @@ public class HiYewSystemBean implements HiYewSystemBeanLocal {
             return claimRecords;
         }
     }
+    
+ 
 
     public List<TrainingScheduleEntity> pastEmployeeTraining(EmployeeEntity employee) {
         Query q = em.createQuery("select c from TrainingScheduleEntity c");

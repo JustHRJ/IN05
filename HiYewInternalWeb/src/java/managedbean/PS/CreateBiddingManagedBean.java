@@ -7,6 +7,7 @@ package managedbean.PS;
 
 import entity.FillerEntity;
 import entity.ProcurementBidEntity;
+import entity.SupplierEntity;
 import java.io.Serializable;
 import java.sql.Timestamp;
 import java.text.ParseException;
@@ -22,6 +23,7 @@ import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 import javax.inject.Named;
 import javax.faces.view.ViewScoped;
+import manager.EmailManager;
 import org.primefaces.event.SelectEvent;
 import session.stateless.ProcurementSessionBeanLocal;
 
@@ -132,9 +134,16 @@ public class CreateBiddingManagedBean implements Serializable {
         } else {
             byWhenTimeStamp = new Timestamp(byWhen.getTime());
         }
+        if(byWhen.before(bidEnd)){
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,"Unable specify deliver by date earlier than bidding end date!",""));
+            return "";
+        }else{
+            EmailManager emailManager = new EmailManager();
         Timestamp todayCreatedOn = new Timestamp(getToday().getTime());
         int nextBatchRefNum = procurementSessionBean.getNextBatchNo();
         for (int i = 0; i < selectedSuppliers.size(); i++) {
+           SupplierEntity supplier = new SupplierEntity();
+           supplier = procurementSessionBean.getSupplierByCompanyname(selectedSuppliers.get(i));
             newPB.setCompanyName(selectedSuppliers.get(i));
             newPB.setBidRefNum(nextBatchRefNum);
             newPB.setStatus("Open");
@@ -148,12 +157,17 @@ public class CreateBiddingManagedBean implements Serializable {
             newPB.setBidEnd(bidEndTimeStamp);
             newPB.setByWhen(byWhenTimeStamp);
             procurementSessionBean.createProcurementBid(newPB);
+            emailManager.emailPBSent(supplier.getCompanyName(), supplier.getEmail());
+            
         }
      //   FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Procurement Quotation Bidding Created and Sent Successfully!"));
         newPB = new ProcurementBidEntity();
                 FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Procurement Quotation Bid created successfully!"));
         //           return "viewInventory?faces-redirect=true";
+                 
+                
         return "viewProcurementBid?faces-redirect=true";
+        }
     }
 
     /**

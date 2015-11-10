@@ -128,12 +128,15 @@
                         </p:row>
                         <p:row style="vertical-align:bottom">
                             <p:column>
-                                <p:outputLabel value ="Filler Length (mm)" style ="font-weight: bold" for ="fillerLength"/>
+                                <p:outputLabel value ="Filler Length (cm)" style ="font-weight: bold" for ="fillerLength"/>
                             </p:column>
                             <p:column>
-                                <p:inputText style="font-weight:normal;width:100%" id="fillerLength" maxlength="11" value="#{addItemManagedBean.newItem.wireLength}" label="Filler Length"  required="true" requiredMessage="Filler Length is required" converterMessage="Invalid Input! Please enter a positive number up to 2 decimal for Filler Length. Example: 53.0 or 42.53">
-                                    <f:validateDoubleRange minimum="0.1" />                       
-                                </p:inputText>
+                                 <h:selectOneMenu style="font-weight:normal;width:100%" id="fillerLength" value="#{addItemManagedBean.newItem.wireLength}" required="true" requiredMessage="Filler Length is required">
+                                    <f:selectItem itemLabel="Select" itemValue="" />
+                                    <f:selectItem itemLabel="55cm" itemValue="550" />
+                                    <f:selectItem itemLabel="75cm" itemValue="750" />
+                                    <f:selectItem itemLabel="100cm" itemValue="1000" />
+                                </h:selectOneMenu>
                             </p:column>
                             <p:column>
                                 <p:message for ="fillerLength"/>

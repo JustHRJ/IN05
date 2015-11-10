@@ -5,10 +5,14 @@
  */
 package session.stateless;
 
+import entity.DocumentControlEntity;
 import entity.EmployeeEntity;
 import entity.MachineEntity;
 import entity.Project;
 import entity.WeldJob;
+import java.io.File;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -33,6 +37,18 @@ public class ProjectSessionBean implements ProjectSessionBeanLocal {
 
     @Override
     public void createProject(Project project) {
+        //initialise document entity for new project
+        DocumentControlEntity d = new DocumentControlEntity();
+        em.persist(d);
+        String folderName = project.getProjectNo();
+        boolean check = new File("C:\\Users\\JustHRJ\\Desktop\\IN05\\HiYewInternalWeb\\web\\projectDocuments\\" + folderName).mkdir();
+        if (check) {
+            System.out.println("folder has been created");
+        } else {
+            System.out.println("folder has not been created");
+        }
+        project.setDocuments(d);
+        //create project
         em.persist(project);
     }
 
@@ -45,35 +61,35 @@ public class ProjectSessionBean implements ProjectSessionBeanLocal {
     public void conductWeldJobMerge(WeldJob weldJob) {
         em.merge(weldJob);
     }
-    
+
     @Override
     public void conductProjectMerge(Project p) {
         em.merge(p);
     }
-    
+
     @Override
     public void conductMachineMerge(MachineEntity m) {
         em.merge(m);
     }
-    
+
     @Override
     public void conductEmployeeMerge(EmployeeEntity e) {
         em.merge(e);
     }
-    
+
     @Override
-    public void setEmployeeAvailability(String name, Boolean availiability){
+    public void setEmployeeAvailability(String name, Boolean availiability) {
         EmployeeEntity e = null;
         try {
             Query q = em.createQuery("select e from EmployeeEntity e where e.employee_name = :name ");
             q.setParameter("name", name);
-            
+
             e = (EmployeeEntity) q.getSingleResult();
             e.setAvailability(availiability);
             em.merge(e);
-            
+
         } catch (Exception ex) {
-            
+
         }
     }
 
@@ -119,7 +135,7 @@ public class ProjectSessionBean implements ProjectSessionBeanLocal {
         //if not, find weldJobs with one similar metal for welding
         if (weldJobs.isEmpty()) {
             query = em.createQuery("Select w FROM WeldJob AS w where w.project.projectCompletion = true AND "
-                + "( (w.metal1=:metal1 OR w.metal1=:metal2) OR (w.metal2=:metal1 OR w.metal2=:metal2) ) ");
+                    + "( (w.metal1=:metal1 OR w.metal1=:metal2) OR (w.metal2=:metal1 OR w.metal2=:metal2) ) ");
 
             query.setParameter("metal1", metal1);
             query.setParameter("metal2", metal2);
@@ -132,7 +148,7 @@ public class ProjectSessionBean implements ProjectSessionBeanLocal {
         if (!weldJobs.isEmpty()) {
             //get the average duration from these weldJobs (ActualEnd - ActualStart)
             days = 0;
-            for (int i=0; i<weldJobs.size(); i++) {
+            for (int i = 0; i < weldJobs.size(); i++) {
                 //if (days == -1) {
                 //    days = getDifferenceDays(p.getActualStart(), p.getActualEnd());
                 //}
@@ -142,24 +158,83 @@ public class ProjectSessionBean implements ProjectSessionBeanLocal {
                 days += getDifferenceDays(weldJobs.get(i).getProject().getActualStart(), weldJobs.get(i).getProject().getActualEnd());
             }
         }
-        if(days != -1 && !weldJobs.isEmpty()){
+        if (days != -1 && !weldJobs.isEmpty()) {
             avgDays = days / weldJobs.size();
-        }System.out.println("Average days is " + avgDays);
+        }
+        System.out.println("Average days is " + avgDays);
         return avgDays;
+    }
+
+    private double roundUp(double value, int places) {
+        if (places < 0) {
+            throw new IllegalArgumentException();
+        }
+
+        BigDecimal bd = new BigDecimal(value);
+        bd = bd.setScale(places, RoundingMode.CEILING);
+        return bd.doubleValue();
+    }
+
+    @Override
+    public List<WeldJob> getSimilarPastProjects(String metal1, String metal2, String weldingType) {
+        System.out.println("getSimilarPastProjectDuration: Start");
+        Integer days = -1;
+        //find weldJobs with two similar metals for welding 
+        Query query = em.createQuery("Select w FROM WeldJob AS w where w.project.projectCompletion = true AND "
+                + "( (w.metal1=:metal1 OR w.metal1=:metal2) AND (w.metal2=:metal1 OR w.metal2=:metal2) AND (w.weldingType = :weldingType) ) ");
+        query.setParameter("metal1", metal1);
+        query.setParameter("metal2", metal2);
+        query.setParameter("weldingType", weldingType);
+
+        List<WeldJob> weldJobs = query.getResultList();
+        //if not, find weldJobs with one similar metal for welding
+        if (weldJobs.isEmpty()) {
+            query = em.createQuery("Select w FROM WeldJob AS w where w.project.projectCompletion = true AND (w.weldingType = :weldingType) AND "
+                    + "( (w.metal1=:metal1 OR w.metal1=:metal2) OR (w.metal2=:metal1 OR w.metal2=:metal2) ) ");
+
+            query.setParameter("metal1", metal1);
+            query.setParameter("metal2", metal2);
+            query.setParameter("weldingType", weldingType);
+
+            weldJobs = query.getResultList();
+        }
+        return weldJobs;
+    }
+
+    //return -1 if there is no weld job references
+    @Override
+    public Integer deriveAverageDuration(ArrayList<WeldJob> similarWeldJobs) {
+
+        double totalMins = 0;
+        if (similarWeldJobs == null || similarWeldJobs.isEmpty()) {
+            return -1;
+        } else {
+            for (int i = 0; i < similarWeldJobs.size(); i++) {
+                int totalQtyWelded = similarWeldJobs.get(i).getTotalQuantity();
+                double surfaceArea = similarWeldJobs.get(i).getSurfaceArea();
+                int daysTook = similarWeldJobs.get(i).getDuration();
+                 double weldingDurationPerCm3 = (daysTook * 60 * 60)/(totalQtyWelded*surfaceArea); //go by minutes
+                totalMins += weldingDurationPerCm3;
+            }
+            return (int) roundUp(((totalMins / similarWeldJobs.size()) / 60 / 60), 0);
+        }
+
     }
 
     //get project with earliest completion date
     @Override
     public Project getProjectWithEarliestCompletionDate() {
         System.out.println("getProjectWithEarliestCompletionDate: Start");
-        Query query = em.createQuery("Select p FROM Project AS p where p.plannedEnd = "
+        Query query = em.createQuery("Select p FROM Project AS p where p.actualStart IS NOT NULL AND p.plannedEnd = "
                 + "(Select min(p.plannedEnd) FROM Project AS p where p.projectCompletion = false )");
 
         try {
-            Project p = (Project) query.getSingleResult(); System.out.println("getProjectWithEarliestCompletionDate: End; - A");
-            return p; 
-        } catch (NoResultException e) { System.out.println("getProjectWithEarliestCompletionDate: End - B");
-            return null; 
+            Project p = (Project) query.getSingleResult();
+            System.out.println("getProjectWithEarliestCompletionDate: End; - A");
+            return p;
+        } catch (NoResultException e) {
+            System.out.println("getProjectWithEarliestCompletionDate: End - B");
+            return null;
         }
     }
 
@@ -167,7 +242,7 @@ public class ProjectSessionBean implements ProjectSessionBeanLocal {
     @Override
     public Project getProjectDurationWithSlack(Integer days) {
         System.out.println("getProjectDurationWithSlack: Start");
-        Query query = em.createQuery("Select p FROM Project AS p where p.projectCompletion = false AND p.plannedEnd > p.actualEnd");
+        Query query = em.createQuery("Select p FROM Project AS p where p.actualEnd IS NOT NULL and p.projectCompletion = true AND p.plannedEnd > p.actualEnd AND p.plannedEnd > CURRENT_TIMESTAMP");
         List<Project> projects = query.getResultList();
 
         int diff = 0;
@@ -187,9 +262,11 @@ public class ProjectSessionBean implements ProjectSessionBeanLocal {
                         chosenProjectIndex = i;
                     }
                 }
-            } System.out.println("getProjectDurationWithSlack: End - A");
+            }
+            System.out.println("getProjectDurationWithSlack: End - A");
             return projects.get(chosenProjectIndex);
-        } else { System.out.println("getProjectDurationWithSlack: End - B");
+        } else {
+            System.out.println("getProjectDurationWithSlack: End - B");
             return null; //no project with project slack
         }
     }
@@ -229,45 +306,49 @@ public class ProjectSessionBean implements ProjectSessionBeanLocal {
                     weldJobs.add(projects.get(i).getWeldJobs().get(j));
                 }
             }//System.out.println("receivedWeldJobs - size: " + weldJobs.size() + " " + weldJobs.get(0).getProjectNo());
-            return weldJobs; 
+            return weldJobs;
         } else {
             return null;
         }
     }
-    
+
     @Override
-    public List <WeldJob> getWeldJobs(Project p){
+    public List<WeldJob> getWeldJobs(Project p) {
         Query query = em.createQuery("Select w FROM WeldJob AS w where w.projectNo=:projectNo");
         query.setParameter("projectNo", p.getProjectNo());
-        
+
         return query.getResultList();
     }
-    
-    
+
     @Override
-    public List <Project> getAllProjects(){
+    public List<Project> getAllProjects() {
         Query query = em.createQuery("Select p FROM Project AS p");
         return query.getResultList();
     }
-    
+
     @Override
-    public List <Project> getProjectByProjectNo(String projectNo){
+    public List<Project> getProjectByProjectNo(String projectNo) {
         Query query = em.createQuery("Select p FROM Project AS p where p.projectNo=:projectNo");
         query.setParameter("projectNo", projectNo);
-        
+
         return query.getResultList();
     }
-    
+
     @Override
-    public List <Project> getUncompletedProjects(){
+    public List<Project> getUncompletedProjects() {
         Query query = em.createQuery("Select p FROM Project AS p where p.projectCompletion=false");
         return query.getResultList();
     }
-    
+
+    @Override
+    public List<Project> getUncompletedStartedProjects() {
+        Query query = em.createQuery("Select p FROM Project AS p where p.projectCompletion=false AND p.actualStart IS NOT NULL");
+        return query.getResultList();
+    }
+
     @Override
     public void conductMerge(Project p) {
         em.merge(p);
     }
-    
 
 }

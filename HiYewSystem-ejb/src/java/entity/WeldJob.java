@@ -30,16 +30,17 @@ public class WeldJob implements Serializable {
     private String metal2; // id from metal entity
     //private String fillerCode; //id from filler entity
     private Double surfaceArea;
+    
+    private Integer totalQuantity; // indicated by customer
+    private Integer quantityWelded; // quantity welded till date
+    private String weldingType; 
+    private Integer duration; // duration of individual weld job
 
-    //Design the association after justin and gx have linked up itementity and filler entity
-    //change itemEntity to filler and fillerentity to fillerComposition
-    //@gx: change your itemCode to fillerCode
-    //I am waiting; It's a simple job don't drag; update the report too
     @ManyToOne
     private Project project;
     @OneToOne
     private MachineEntity machine;
-    @OneToOne()
+    @OneToOne
     private FillerEntity filler;
 
     public WeldJob() {
@@ -202,6 +203,62 @@ public class WeldJob implements Serializable {
      */
     public void setMachine(MachineEntity machine) {
         this.machine = machine;
+    }
+
+    /**
+     * @return the totalQuantity
+     */
+    public Integer getTotalQuantity() {
+        return totalQuantity;
+    }
+
+    /**
+     * @param totalQuantity the totalQuantity to set
+     */
+    public void setTotalQuantity(Integer totalQuantity) {
+        this.totalQuantity = totalQuantity;
+    }
+
+    /**
+     * @return the quantityWelded
+     */
+    public Integer getQuantityWelded() {
+        return quantityWelded;
+    }
+
+    /**
+     * @param quantityWelded the quantityWelded to set
+     */
+    public void setQuantityWelded(Integer quantityWelded) {
+        this.quantityWelded = quantityWelded;
+    }
+
+    /**
+     * @return the weldingType
+     */
+    public String getWeldingType() {
+        return weldingType;
+    }
+
+    /**
+     * @param weldingType the weldingType to set
+     */
+    public void setWeldingType(String weldingType) {
+        this.weldingType = weldingType;
+    }
+
+    /**
+     * @return the duration
+     */
+    public Integer getDuration() {
+        return duration;
+    }
+
+    /**
+     * @param duration the duration to set
+     */
+    public void setDuration(Integer duration) {
+        this.duration = duration;
     }
     
 }

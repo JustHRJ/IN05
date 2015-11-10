@@ -10,6 +10,7 @@ import entity.MachineEntity;
 import entity.Project;
 import entity.WeldJob;
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.Local;
 
@@ -59,5 +60,11 @@ public interface ProjectSessionBeanLocal {
     public void conductProjectMerge(Project p);
 
     public void setEmployeeAvailability(String name, Boolean availiability);
+
+    public List<Project> getUncompletedStartedProjects();
+
+    public List<WeldJob> getSimilarPastProjects(String metal1, String metal2, String weldingType);
+
+    public Integer deriveAverageDuration(ArrayList<WeldJob> similarWeldJobs);
     
 }

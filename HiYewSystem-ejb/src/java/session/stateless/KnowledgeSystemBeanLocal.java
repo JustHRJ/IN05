@@ -31,7 +31,7 @@ public interface KnowledgeSystemBeanLocal {
 
     public List<String> metalNames();
 
-    public void createPairings(String metal, List<String> fillerChosen);
+    public boolean createPairings(String metal, List<String> fillerChosen);
 
     public List<String> FillersNotAssociated(String metalName);
 

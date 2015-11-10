@@ -5,16 +5,24 @@
  */
 package managedbean;
 
+import entity.FillerEntity;
+import entity.Metal;
+import entity.Project;
 import entity.Quotation;
 import entity.QuotationDescription;
+import entity.WeldJob;
 import java.io.Serializable;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
+import java.util.Set;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
@@ -22,6 +30,8 @@ import javax.faces.context.FacesContext;
 import javax.inject.Named;
 import javax.faces.view.ViewScoped;
 import org.primefaces.event.RowEditEvent;
+import session.stateless.HiYewDSSSessionBeanLocal;
+import session.stateless.ProjectSessionBeanLocal;
 import session.stateless.QuotationSessionBeanLocal;
 
 /**
@@ -31,6 +41,12 @@ import session.stateless.QuotationSessionBeanLocal;
 @Named(value = "adminQuotationManagedBean")
 @ViewScoped
 public class AdminQuotationManagedBean implements Serializable {
+
+    @EJB
+    private ProjectSessionBeanLocal projectSessionBean;
+
+    @EJB
+    private HiYewDSSSessionBeanLocal hiYewDSSSessionBean;
 
     @EJB
     private QuotationSessionBeanLocal quotationSessionBean;
@@ -44,8 +60,35 @@ public class AdminQuotationManagedBean implements Serializable {
     private Map<String, String> years;
 
     private Date companyEarliestEndDate;
-    
+
     private Quotation selectedQuotation;
+
+    private QuotationDescription selectedQuotationDescription;
+
+    private double surfaceAreaToWeld;
+
+    private ArrayList<FillerEntity> matchedFillers;
+
+    private FillerEntity selectedFillerForWeld;
+
+    private ArrayList<WeldJob> similarWeldJobs;
+
+    private String secondMetalName;
+
+    private int weldJobAvgDuration;
+
+    private double weldJobMaterialCost;
+    private double weldJobManpowerCost;
+
+    private int profitMargin;
+    private double weldJobPriceToQuote;
+    private double weldJobPriceToQuotePerQty;
+    private double materialPlusManpowerCost;
+    private HashMap projectDaysMap;
+    private int numOfTimesConductedATP;
+    private HashMap projectNumOfATPResult;
+    
+    private FillerEntity recommendedFiller;
 
     /**
      * Creates a new instance of AdminQuotationManagedBean
@@ -54,10 +97,17 @@ public class AdminQuotationManagedBean implements Serializable {
 
         receivedCustomerNewQuotations = new ArrayList<>();
         displayQuotationDescriptions = new ArrayList<>();
+        matchedFillers = new ArrayList<FillerEntity>();
+        similarWeldJobs = new ArrayList<WeldJob>();
+        projectDaysMap = new HashMap();
+        projectNumOfATPResult = new HashMap();
 
         statuses = new HashMap<>();
         years = new HashMap<>();
         selectedQuotation = new Quotation();
+        
+       
+
     }
 
     @PostConstruct
@@ -79,19 +129,20 @@ public class AdminQuotationManagedBean implements Serializable {
     }
 
     public String formatDate(Timestamp t) {
-        if(t != null){
-        SimpleDateFormat sd = new SimpleDateFormat("dd/MM/yyyy");
-        return sd.format(t.getTime());
+        if (t != null) {
+            SimpleDateFormat sd = new SimpleDateFormat("dd/MM/yyyy");
+            return sd.format(t.getTime());
         }
         return "";
     }
-    public Timestamp formatDateToTimestamp(Date date){
+
+    public Timestamp formatDateToTimestamp(Date date) {
         Timestamp t = new Timestamp(date.getTime());
         return t;
     }
-    
+
     public void onEditRow(RowEditEvent event) {
-        Quotation q = (Quotation)event.getObject();//gives me unedited value
+        Quotation q = (Quotation) event.getObject();//gives me unedited value
         q.setCompanyEarliestEnd(formatDateToTimestamp(companyEarliestEndDate));
         quotationSessionBean.conductMerge(q);
     }
@@ -105,14 +156,13 @@ public class AdminQuotationManagedBean implements Serializable {
     }
 
     public void updateQuotationPricesAndSample() {
-       
+
         quotationSessionBean.updateQuotationPrices(displayQuotationDescriptions);
         FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Quotations updated successfully", ""));
 
     }
 
     //Only if req for metal is yes, then price can be null 
-
     public boolean check() {
         boolean option = true;
         for (int i = 0; i < displayQuotationDescriptions.size(); i++) {
@@ -125,17 +175,16 @@ public class AdminQuotationManagedBean implements Serializable {
         }
         return option;
     }
-    
+
     public void updateQuotationStatus() {
         if (check() == true) {
             quotationSessionBean.updateQuotationStatus(selectedQuotation);
             selectedQuotation = new Quotation();
-        }else{
+        } else {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Prices must be quoted if we are not requesting for metal sample", ""));
         }
-        
-    }
 
+    }
 
     /**
      * @return the status
@@ -235,6 +284,541 @@ public class AdminQuotationManagedBean implements Serializable {
      */
     public void setCompanyEarliestEndDate(Date companyEarliestEndDate) {
         this.companyEarliestEndDate = companyEarliestEndDate;
+    }
+
+    public String clickPerformATP() {
+//        System.out.println(this.selectedItem.getFillerCode());
+//       FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("SelectedQuotationDescription", this.selectedQuotationDescription);
+//       FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("SelectedQuotation", this.selectedQuotation);
+//        //  FacesContext.getCurrentInstance().getExternalContext().getFlash().put("SelectedItem", this.selectedItem);
+//        System.out.println("here2");
+//        return "ics-item-details?faces-redirect=true";
+        matchedFillers.clear();
+        similarWeldJobs.clear();
+        this.setSecondMetalName(null);
+        selectedFillerForWeld = new FillerEntity();
+        weldJobAvgDuration = 0;
+        weldJobManpowerCost = 0;
+        weldJobMaterialCost = 0;
+        weldJobPriceToQuote = 0;
+        weldJobPriceToQuotePerQty = 0;
+        profitMargin = 0;
+        numOfTimesConductedATP=0;
+        recommendedFiller = new FillerEntity();
+        
+        
+
+        return "";
+    }
+
+    /**
+     * @return the selectedQuotationDescription
+     */
+    public QuotationDescription getSelectedQuotationDescription() {
+        return selectedQuotationDescription;
+    }
+
+    /**
+     * @param selectedQuotationDescription the selectedQuotationDescription to
+     * set
+     */
+    public void setSelectedQuotationDescription(QuotationDescription selectedQuotationDescription) {
+        this.selectedQuotationDescription = selectedQuotationDescription;
+    }
+
+    /**
+     * @return the surfaceAreaToWeld
+     */
+    public double getSurfaceAreaToWeld() {
+        return surfaceAreaToWeld;
+    }
+
+    /**
+     * @param surfaceAreaToWeld the surfaceAreaToWeld to set
+     */
+    public void setSurfaceAreaToWeld(double surfaceAreaToWeld) {
+        this.surfaceAreaToWeld = surfaceAreaToWeld;
+    }
+
+    public void generateATP() {
+        if ((this.getSecondMetalName() == null) || (this.getSecondMetalName().length() == 0)) {
+            this.setSecondMetalName(this.selectedQuotationDescription.getMetalName());
+        }
+        matchedFillers.clear();
+        Metal m = hiYewDSSSessionBean.getExistingMetal(this.selectedQuotationDescription.getMetalName());
+        if (m != null) {
+            matchedFillers.addAll(hiYewDSSSessionBean.getListOfMatchedFillers(m));
+        }
+        recommendedFiller = deriveRecommended(matchedFillers);
+        similarWeldJobs.clear();
+        System.out.println("Metal 1 " + this.selectedQuotationDescription.getMetalName());
+        System.out.println("Metal 2 " + this.getSecondMetalName());
+        System.out.println("Weld Type " + this.getSelectedQuotationDescription().getWeldingType());
+        similarWeldJobs.addAll(hiYewDSSSessionBean.getSimilarPastProjects(this.selectedQuotationDescription.getMetalName(), this.getSecondMetalName(), this.getSelectedQuotationDescription().getWeldingType()));
+        System.out.println("Size of Similar Weld Jobs " + similarWeldJobs.size());
+        getFillerTotalCost();
+        getWeldJobEstimatedDuration();
+        deriveManpowerCost(weldJobAvgDuration);
+        deriveWeldJobTotalPrice();
+        pricePerUnit();
+
+    }
+    
+    public FillerEntity deriveRecommended(ArrayList<FillerEntity> returnedFillers){
+        FillerEntity recommendedFiller = new FillerEntity();
+        double lowestPrice = 999999;
+    
+        
+        for(int i=0;i<returnedFillers.size();i++){
+            int numNeeded = numOfFillersNeeded(returnedFillers.get(i).getFillerCode());
+            double fillerPrice =  numNeeded * returnedFillers.get(i).getCost();
+            int qtyLeft = (returnedFillers.get(i).getQuantity() - returnedFillers.get(i).getBookedQuantity()) - numNeeded;
+            System.out.println("@@@@@@@@@@@@@ " + returnedFillers.get(i).getFillerCode());
+            System.out.println("@@@@@@@@@@@@@ " + numNeeded);
+            System.out.println("@@@@@@@@@@@@@ " + qtyLeft);
+            if(qtyLeft>=0){
+                System.out.println("*************************enuff qty");
+                //check whish has the lowest price...
+                if(fillerPrice<lowestPrice){
+                    System.out.println("*************************price lower");
+                lowestPrice = fillerPrice;
+                recommendedFiller = returnedFillers.get(i);
+            }
+                
+            }
+        }
+        System.out.println("###########################################Recommeded Filler: " +recommendedFiller.getFillerCode() );
+        return recommendedFiller;
+    }
+
+    public int numOfFillersNeeded(String itemCode) {
+
+        FillerEntity f = hiYewDSSSessionBean.getExistingItem(itemCode);
+        return hiYewDSSSessionBean.quantityNeeded(f, this.selectedQuotationDescription.getSurfaceVol(), this.selectedQuotationDescription.getQty());
+
+    }
+
+    /**
+     * @return the matchedFillers
+     */
+    public ArrayList<FillerEntity> getMatchedFillers() {
+        return matchedFillers;
+    }
+
+    /**
+     * @param matchedFillers the matchedFillers to set
+     */
+    public void setMatchedFillers(ArrayList<FillerEntity> matchedFillers) {
+        this.matchedFillers = matchedFillers;
+    }
+
+    /**
+     * @return the selectedFillerForWeld
+     */
+    public FillerEntity getSelectedFillerForWeld() {
+        return selectedFillerForWeld;
+    }
+
+    /**
+     * @param selectedFillerForWeld the selectedFillerForWeld to set
+     */
+    public void setSelectedFillerForWeld(FillerEntity selectedFillerForWeld) {
+        this.selectedFillerForWeld = selectedFillerForWeld;
+    }
+
+    public double getFillerTotalCost() {
+        if (selectedFillerForWeld != null) {
+            int amountRequired = hiYewDSSSessionBean.quantityNeeded(selectedFillerForWeld, this.selectedQuotationDescription.getSurfaceVol(), selectedQuotationDescription.getQty());
+            this.setWeldJobMaterialCost(amountRequired * selectedFillerForWeld.getCost());
+            return amountRequired * selectedFillerForWeld.getCost();
+
+        } else {
+            System.out.println("selected filler is null");
+            return 0;
+        }
+    }
+
+    /**
+     * @return the secondMetalName
+     */
+    public String getSecondMetalName() {
+        return secondMetalName;
+    }
+
+    /**
+     * @param secondMetalName the secondMetalName to set
+     */
+    public void setSecondMetalName(String secondMetalName) {
+        this.secondMetalName = secondMetalName;
+    }
+
+    /**
+     * @return the similarWeldJobs
+     */
+    public ArrayList<WeldJob> getSimilarWeldJobs() {
+        return similarWeldJobs;
+    }
+
+    /**
+     * @param similarWeldJobs the similarWeldJobs to set
+     */
+    public void setSimilarWeldJobs(ArrayList<WeldJob> similarWeldJobs) {
+        this.similarWeldJobs = similarWeldJobs;
+    }
+
+    public void getWeldJobEstimatedDuration() {
+        this.setWeldJobAvgDuration(hiYewDSSSessionBean.deriveAverageDaysNeededForWeldJob(similarWeldJobs, this.getSelectedQuotationDescription().getSurfaceVol(), this.getSelectedQuotationDescription().getQty()));
+    }
+
+    /**
+     * @return the weldJobAvgDuration
+     */
+    public int getWeldJobAvgDuration() {
+        return weldJobAvgDuration;
+    }
+
+    /**
+     * @param weldJobAvgDuration the weldJobAvgDuration to set
+     */
+    public void setWeldJobAvgDuration(int weldJobAvgDuration) {
+        this.weldJobAvgDuration = weldJobAvgDuration;
+    }
+
+    public Timestamp getPlannedEnd(int days) {
+        Timestamp planStart = null;
+        Project p2 = projectSessionBean.getProjectWithEarliestCompletionDate();
+        if (days >= 0) {
+            //check for any project slack which can accomodate the new project duration
+            Project p1 = projectSessionBean.getProjectDurationWithSlack(days);
+
+            if (p1 != null) {
+                //compare and get earliest between proj slack and earliest proj completion date
+                if (p2 != null) {
+                    planStart = getEarliestTimeStamp(p1.getActualEnd(), p2.getPlannedEnd());System.out.println("A");
+                } else {
+                    planStart = p1.getActualEnd();System.out.println("B");
+                }
+            } else {
+                //if there is no project slack equals new proj dur, then check and take the earliest project expected completion date
+
+                if (p2 != null) {
+                    planStart = p2.getPlannedEnd();System.out.println("C");
+                }
+            }
+            //assign plannedEnd
+            if (planStart != null) {System.out.println("D");
+                System.out.println("Plan Start+++++++++++++++" + planStart);
+                return projectSessionBean.addDays(planStart, days);
+            } else { // in the case when there is no running proj
+                System.out.println("getPlannedEnd() = no running project");
+                Timestamp today = new Timestamp(new Date().getTime());
+                planStart = today;System.out.println("E");
+                return projectSessionBean.addDays(planStart, days);
+            }
+        } else // if days < 0 means no proj reference
+        {System.out.println("F");
+            return null;
+        }
+
+    }
+
+    public Timestamp getEarliestTimeStamp(Timestamp a, Timestamp b) {
+        if (a != null && b != null) {
+            if (a.after(b)) {
+                return b;
+            } else {
+                return a;
+            }
+        }
+        return null;
+    }
+
+    public void deriveManpowerCost(int days) {
+        if (days >= 0) {
+            this.setWeldJobManpowerCost(hiYewDSSSessionBean.getAvgManpowerCostPerDay() * days);
+        } else {
+            this.setWeldJobManpowerCost(0);
+        }
+        // return hiYewDSSSessionBean.getAvgManpowerCostPerDay() * days;
+    }
+
+    /**
+     * @return the weldJobMaterialCost
+     */
+    public double getWeldJobMaterialCost() {
+        return weldJobMaterialCost;
+    }
+
+    /**
+     * @param weldJobMaterialCost the weldJobMaterialCost to set
+     */
+    public void setWeldJobMaterialCost(double weldJobMaterialCost) {
+        this.weldJobMaterialCost = weldJobMaterialCost;
+    }
+
+    /**
+     * @return the weldJobManpowerCost
+     */
+    public double getWeldJobManpowerCost() {
+        return weldJobManpowerCost;
+    }
+
+    /**
+     * @param weldJobManpowerCost the weldJobManpowerCost to set
+     */
+    public void setWeldJobManpowerCost(double weldJobManpowerCost) {
+        this.weldJobManpowerCost = weldJobManpowerCost;
+    }
+
+    /**
+     * @return the profitMargin
+     */
+    public int getProfitMargin() {
+        return profitMargin;
+    }
+
+    /**
+     * @param profitMargin the profitMargin to set
+     */
+    public void setProfitMargin(int profitMargin) {
+        this.profitMargin = profitMargin;
+    }
+
+    /**
+     * @return the weldJobPriceToQuote
+     */
+    public double getWeldJobPriceToQuote() {
+        return weldJobPriceToQuote;
+    }
+
+    /**
+     * @param weldJobPriceToQuote the weldJobPriceToQuote to set
+     */
+    public void setWeldJobPriceToQuote(double weldJobPriceToQuote) {
+        this.weldJobPriceToQuote = weldJobPriceToQuote;
+    }
+
+    /**
+     * @return the weldJobPriceToQuotePerQty
+     */
+    public double getWeldJobPriceToQuotePerQty() {
+        return weldJobPriceToQuotePerQty;
+    }
+
+    /**
+     * @param weldJobPriceToQuotePerQty the weldJobPriceToQuotePerQty to set
+     */
+    public void setWeldJobPriceToQuotePerQty(double weldJobPriceToQuotePerQty) {
+        this.weldJobPriceToQuotePerQty = weldJobPriceToQuotePerQty;
+    }
+
+    public void handleKeyEvent() {
+        System.out.println("Change!profit Margin:" + this.profitMargin);
+        deriveWeldJobTotalPrice();
+        pricePerUnit();
+        System.out.println("Change!weldjobTotalPrice():" + this.weldJobPriceToQuote);
+        System.out.println("Change!pricePerUnit():" + this.weldJobPriceToQuotePerQty);
+    }
+
+    public void deriveWeldJobTotalPrice() {
+        System.out.println("deriveWeldJobTotalPrice() weldJobMaterialCost" + weldJobMaterialCost);
+        System.out.println("deriveWeldJobTotalPrice() weldJobManpowerCost" + weldJobManpowerCost);
+        if (weldJobMaterialCost >= 0) {
+//            System.out.println("deriveWeldJobTotalPrice()!profitMargin:" + this.profitMargin);
+//            System.out.println("deriveWeldJobTotalPrice()!weldJobMaterialCost:" + this.weldJobMaterialCost);
+//            System.out.println("deriveWeldJobTotalPrice()!weldJobManpowerCost:" + this.weldJobManpowerCost);
+            double baseCost = this.weldJobMaterialCost + this.weldJobManpowerCost;
+            double marginCost = baseCost * (this.profitMargin / 100.0);
+            double totalPrice = baseCost + marginCost;
+//            System.out.println("Base Cost: " + baseCost);
+//            System.out.println("Margin Cost: " + marginCost);
+//            System.out.println("Number to set in weldJobPriceToQuote: " + totalPrice);
+//            System.out.println("Number to set in weldJobPriceToQuote: " + totalPrice);
+            this.setWeldJobPriceToQuote(totalPrice);
+
+        } else {
+            double baseCost = this.weldJobMaterialCost + 1 + this.weldJobManpowerCost;
+            double marginCost = baseCost * (this.profitMargin / 100.0);
+            double totalPrice = baseCost + marginCost;
+            this.setWeldJobPriceToQuote(totalPrice);
+        }
+    }
+
+    public void pricePerUnit() {
+        if ((this.selectedQuotationDescription != null)) {
+            this.setWeldJobPriceToQuotePerQty(round(this.weldJobPriceToQuote / this.selectedQuotationDescription.getQty(), 2));
+            //   return this.weldJobPriceToQuotePerQty;
+        } else {
+            this.setWeldJobPriceToQuotePerQty(0);
+        }
+    }
+
+    private double round(double value, int places) {
+        if (places < 0) {
+            throw new IllegalArgumentException();
+        }
+
+        BigDecimal bd = new BigDecimal(value);
+        bd = bd.setScale(places, RoundingMode.HALF_UP);
+        return bd.doubleValue();
+    }
+
+    /**
+     * @return the materialPlusManpowerCost
+     */
+    public double getMaterialPlusManpowerCost() {
+        return materialPlusManpowerCost;
+    }
+
+    /**
+     * @param materialPlusManpowerCost the materialPlusManpowerCost to set
+     */
+    public void setMaterialPlusManpowerCost(double materialPlusManpowerCost) {
+        this.materialPlusManpowerCost = materialPlusManpowerCost;
+    }
+
+    public void clickUseForCalculation() {
+        System.out.println("CLICK USE FOR CALCULATION");
+        getFillerTotalCost();
+        deriveWeldJobTotalPrice();
+        pricePerUnit();
+    }
+
+    public void clickTransfer() {
+
+        if (matchedFillers.size() > 0) {
+            if ((matchedFillers.size() > 0) && (similarWeldJobs.size() > 0)) {
+                this.selectedQuotationDescription.setPrice(this.weldJobPriceToQuotePerQty);               
+                if (getProjectDaysMap().get(this.selectedQuotation) != null) {
+                    int duration = (int) getProjectDaysMap().get(this.selectedQuotation);
+                    getProjectDaysMap().put(this.selectedQuotation, duration + this.weldJobAvgDuration);
+                } else {
+                    getProjectDaysMap().put(this.selectedQuotation, this.weldJobAvgDuration);
+                }
+               if(getProjectNumOfATPResult().get(this.selectedQuotation)==null){
+                numOfTimesConductedATP++;
+                getProjectNumOfATPResult().put(this.selectedQuotation, numOfTimesConductedATP);
+               }else{
+                   int prevNum = (int)getProjectNumOfATPResult().get(this.selectedQuotation);
+                   prevNum++;
+                getProjectNumOfATPResult().put(this.selectedQuotation, prevNum);   
+               }
+                        
+                setCompanyEarliestDate();
+            }
+
+            this.selectedQuotationDescription.setRequestForMetalSample("No");
+
+        } else {
+            this.selectedQuotationDescription.setRequestForMetalSample("Yes");
+        }
+
+    }
+
+    public void setCompanyEarliestDate() {
+        for (int i = 0; i < this.receivedCustomerNewQuotations.size(); i++) {
+            
+            System.out.println("setCompanyEarliestDate() quotaion: " +this.receivedCustomerNewQuotations.get(i).getQuotationNo() );
+            // Get a set of the entries
+            Date planEndDate = new Date();
+            int  numOfAtp = 0;
+            Set set = projectDaysMap.entrySet();
+            Set set2 = projectNumOfATPResult.entrySet();
+            // Get an iterator
+            Iterator it = set.iterator();
+            Iterator it2 = set2.iterator();
+            // Display elements
+            while (it.hasNext()) {
+                Map.Entry me = (Map.Entry) it.next();
+                if (me.getKey() == (this.receivedCustomerNewQuotations.get(i))) {
+                    int duration = (int) me.getValue();
+                    System.out.println("setCompanyEarliestDate() days: " + duration);
+                    planEndDate = this.getPlannedEnd(duration);
+                }
+            }
+            
+            while (it2.hasNext()) {
+                Map.Entry me = (Map.Entry) it2.next();
+                if (me.getKey() == (this.receivedCustomerNewQuotations.get(i))) {
+                   numOfAtp = (int) me.getValue();
+                   
+                }
+            }
+            System.out.println("setCompanyEarliestDate() planEndDate: " + planEndDate);
+            System.out.println("setCompanyEarliestDate() numofatp: " + numOfAtp);
+
+            Timestamp planEndTimeStamp = new Timestamp(planEndDate.getTime());
+            //earliest date company can deliver is later than clients
+            if ((planEndTimeStamp != null) && (this.receivedCustomerNewQuotations.get(i).getCustomerLatestEnd() != null)) {
+                if (this.getEarliestTimeStamp(planEndTimeStamp, this.receivedCustomerNewQuotations.get(i).getCustomerLatestEnd()) == this.receivedCustomerNewQuotations.get(i).getCustomerLatestEnd()) {
+                   if(numOfAtp==this.receivedCustomerNewQuotations.get(i).getQuotationDescriptions().size()){
+                    this.receivedCustomerNewQuotations.get(i).setCompanyEarliestEnd(planEndTimeStamp);
+                
+                   }
+                }
+            } else if(planEndTimeStamp != null) {
+                   if(numOfAtp==this.receivedCustomerNewQuotations.get(i).getQuotationDescriptions().size()){
+                    this.receivedCustomerNewQuotations.get(i).setCompanyEarliestEnd(planEndTimeStamp);
+                   }
+            }
+            quotationSessionBean.conductMerge(this.receivedCustomerNewQuotations.get(i));
+        }
+    }
+
+    /**
+     * @return the projectDaysMap
+     */
+    public HashMap getProjectDaysMap() {
+        return projectDaysMap;
+    }
+
+    /**
+     * @param projectDaysMap the projectDaysMap to set
+     */
+    public void setProjectDaysMap(HashMap projectDaysMap) {
+        this.projectDaysMap = projectDaysMap;
+    }
+
+    /**
+     * @return the numOfTimesConductedATP
+     */
+    public int getNumOfTimesConductedATP() {
+        return numOfTimesConductedATP;
+    }
+
+    /**
+     * @param numOfTimesConductedATP the numOfTimesConductedATP to set
+     */
+    public void setNumOfTimesConductedATP(int numOfTimesConductedATP) {
+        this.numOfTimesConductedATP = numOfTimesConductedATP;
+    }
+
+    /**
+     * @return the projectNumOfATPResult
+     */
+    public HashMap getProjectNumOfATPResult() {
+        return projectNumOfATPResult;
+    }
+
+    /**
+     * @param projectNumOfATPResult the projectNumOfATPResult to set
+     */
+    public void setProjectNumOfATPResult(HashMap projectNumOfATPResult) {
+        this.projectNumOfATPResult = projectNumOfATPResult;
+    }
+
+    /**
+     * @return the recommendedFiller
+     */
+    public FillerEntity getRecommendedFiller() {
+        return recommendedFiller;
+    }
+
+    /**
+     * @param recommendedFiller the recommendedFiller to set
+     */
+    public void setRecommendedFiller(FillerEntity recommendedFiller) {
+        this.recommendedFiller = recommendedFiller;
     }
 
 }

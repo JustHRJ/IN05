@@ -1,0 +1,121 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:pe="http://primefaces.org/ui/extensions"
+                template="./template.xhtml">
+
+    <ui:define name="content">
+        <!-- Page header -->
+        <div class="page-heading animated fadeInDownBig" style="padding:20px!important;padding-bottom:10px!important;">
+            <h1>Document Management Editing<small>  Project Management System</small></h1>
+        </div>
+        <!-- End page header -->
+        <div style="padding:20px!important;padding-top:0px!important;">
+
+            <h3>Editing for: #{documentManageBean.retrieveProjectName()}</h3>
+
+            <h:form id ="form2" >
+                <p:panelGrid>
+                    <p:row rendered="#{documentManageBean.checkForNull(documentManageBean.document.requestForm)}">
+                        <p:column>
+                            <p:outputLabel value ="Request For Quotation" />
+                        </p:column>
+                        <p:column >
+                            <p:commandButton value ="view" action ="#{documentManageBean.sendURL(documentManageBean.document.requestForm)}" update ="form3"/>
+                        </p:column>
+                        <p:column>
+                            <p:fileUpload fileUploadListener="#{documentManageBean.uploadRequestForm}"   />
+                        </p:column>
+                    </p:row>
+                    <p:row rendered="#{documentManageBean.checkForNull(documentManageBean.document.purchaseOrder)}" >
+                        <p:column>
+                            <p:outputLabel value ="Purchase Order" />
+                        </p:column>
+                        <p:column>
+                            <p:commandButton value ="view" action ="#{documentManageBean.sendURL(documentManageBean.document.purchaseOrder)}" update ="form3"/>
+                        </p:column>
+                        <p:column>
+                            <p:fileUpload fileUploadListener="#{documentManageBean.uploadPO}" />
+                        </p:column> 
+
+                    </p:row>
+                    <p:row  rendered="#{documentManageBean.checkForNull(documentManageBean.document.custDeliveryOrder)}">
+                        <p:column>
+                            <p:outputLabel value ="Customer Delivery Order" />
+                        </p:column>
+                        <p:column>
+                            <p:commandButton value ="view" action ="#{documentManageBean.sendURL(documentManageBean.document.custDeliveryOrder)}" update ="form3"/>
+                        </p:column>
+                        <p:column>
+                            <p:fileUpload fileUploadListener="#{documentManageBean.uploadCustDO}"   />
+                        </p:column>
+                    </p:row>
+
+                    <p:row rendered="#{documentManageBean.checkForNull(documentManageBean.document.productWeldSheet)}" >
+                        <p:column>
+                            <p:outputLabel value ="Production Weld Sheet" />
+                        </p:column>
+                        <p:column >
+                            <p:commandButton value ="view" action ="#{documentManageBean.sendURL(documentManageBean.document.productWeldSheet)}" update ="form3"/>
+                        </p:column>
+                        <p:column>
+                            <p:fileUpload fileUploadListener="#{documentManageBean.uploadPWS}"   />
+                        </p:column>
+
+                    </p:row>
+
+                    <p:row rendered="#{documentManageBean.checkForNull(documentManageBean.document.serviceReport)}" >
+                        <p:column>
+                            <p:outputLabel value ="Service Report" />
+                        </p:column>
+
+                        <p:column>
+                            <p:commandButton value ="view" action ="#{documentManageBean.sendURL(documentManageBean.document.serviceReport)}" update ="form3"/>
+                        </p:column>
+                        <p:column>
+                            <p:fileUpload fileUploadListener="#{documentManageBean.uploadServiceReport}"  />
+                        </p:column>
+                    </p:row>
+
+                    <p:row rendered="#{documentManageBean.checkForNull(documentManageBean.document.comDeliveyOrder)}">
+                        <p:column>
+                            <p:outputLabel value ="Company Delivery Order" />
+                        </p:column>
+                        <p:column >
+                            <p:commandButton value ="view" action ="#{documentManageBean.sendURL(documentManageBean.document.comDeliveyOrder)}" update ="form3"/>
+                        </p:column>
+                        <p:column>
+                            <p:fileUpload fileUploadListener="#{documentManageBean.uploadComDO}"  />
+                        </p:column>
+                    </p:row>
+
+                    <p:row rendered="#{documentManageBean.checkForNull(documentManageBean.document.invoice)}">
+                        <p:column>
+                            <p:outputLabel value ="Invoice" />
+                        </p:column>
+                        <p:column>
+                            <p:commandButton value ="view" action ="#{documentManageBean.sendURL(documentManageBean.document.invoice)}" update ="form3"/>
+                        </p:column>
+                        <p:column>
+                            <p:fileUpload fileUploadListener="#{documentManageBean.uploadInvoice}" />
+                        </p:column>
+
+                    </p:row>
+
+
+                </p:panelGrid>
+            </h:form>
+
+            <h:form id ="form3">
+                <pe:documentViewer height ="600" url ="#{documentManageBean.retrievePDF()}" rendered="#{documentManageBean.checkPDFRender}" />
+            </h:form>
+
+
+        </div>
+    </ui:define>
+
+</ui:composition>
