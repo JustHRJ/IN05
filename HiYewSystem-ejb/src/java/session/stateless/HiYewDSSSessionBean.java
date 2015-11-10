@@ -47,6 +47,7 @@ public class HiYewDSSSessionBean implements HiYewDSSSessionBeanLocal {
 
     @Override
     public Metal getExistingMetal(String metalName) {
+        //sadasdsa
         try {
             Query q = em.createQuery("Select i FROM Metal i WHERE i.metalName=:metalName");
             q.setParameter("metalName", metalName);

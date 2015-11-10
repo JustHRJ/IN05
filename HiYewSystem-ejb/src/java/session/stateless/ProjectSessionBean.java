@@ -38,6 +38,7 @@ public class ProjectSessionBean implements ProjectSessionBeanLocal {
     @Override
     public void createProject(Project project) {
         //initialise document entity for new project
+        //asasdad
         DocumentControlEntity d = new DocumentControlEntity();
         em.persist(d);
         String folderName = project.getProjectNo();
