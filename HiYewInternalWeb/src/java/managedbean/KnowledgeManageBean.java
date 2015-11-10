@@ -672,7 +672,14 @@ public class KnowledgeManageBean implements Serializable {
 
     public void createPairings() {
         fillerChosen = fillerDisplay.getTarget();
-        knowledgeSystemBean.createPairings(metalName, fillerChosen);
+        boolean check = knowledgeSystemBean.createPairings(metalName, fillerChosen);
+        if (check) {
+            FacesMessage msg = new FacesMessage("Matched Metals and Fillers have been updated");
+            FacesContext.getCurrentInstance().addMessage(null, msg);
+        } else{
+             FacesMessage msg = new FacesMessage("Something went wrong try again");
+            FacesContext.getCurrentInstance().addMessage(null, msg);
+        }
     }
 
     public void readFile3() throws IOException {

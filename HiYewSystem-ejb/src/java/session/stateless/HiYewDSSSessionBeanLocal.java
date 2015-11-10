@@ -36,6 +36,8 @@ public interface HiYewDSSSessionBeanLocal {
 
     public Integer getDifferenceDays(Timestamp t1, Timestamp t2);
 
-    public Integer deriveAverageDuration(ArrayList<WeldJob> similarWeldJobs);
+    public Integer deriveAverageDaysNeededForWeldJob(ArrayList<WeldJob> similarWeldJobs, double surfaceVolToWeld, int qtyToWeld);
+
+    public double getAvgManpowerCostPerDay();
     
 }
