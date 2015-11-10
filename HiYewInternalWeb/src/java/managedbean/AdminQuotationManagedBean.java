@@ -367,7 +367,7 @@ public class AdminQuotationManagedBean implements Serializable {
     public FillerEntity deriveRecommended(ArrayList<FillerEntity> returnedFillers){
         FillerEntity recommendedFiller = new FillerEntity();
         double lowestPrice = 999999;
-    
+    //sdasdadas
         
         for(int i=0;i<returnedFillers.size();i++){
             int numNeeded = numOfFillersNeeded(returnedFillers.get(i).getFillerCode());

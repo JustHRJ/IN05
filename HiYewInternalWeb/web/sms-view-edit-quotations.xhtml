@@ -125,7 +125,6 @@
                                         <p:commandButton  id="atpBtn" update=":innerForm:atpDetail :innerForm:costSection" value="Perform ATP" action="#{adminQuotationManagedBean.clickPerformATP()}" oncomplete="PF('atpDialog').show()" icon="ui-icon-search" title="ATP">
                                             <f:setPropertyActionListener value="#{quoteDescItem}" target="#{adminQuotationManagedBean.selectedQuotationDescription}" />
                                         </p:commandButton>
-
                                     </p:column>
 
                                 </p:dataTable>
