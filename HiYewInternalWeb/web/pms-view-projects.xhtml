@@ -30,7 +30,7 @@
                 <br /><br />
                 <p:dataTable value="#{projManagedBean.receivedProjects}"  widgetVar="projsTable" var="pItem" id="rcvProject" rows="6" paginator="true" editable="true" emptyMessage="No records" filteredValue="#{projManagedBean.filteredProj}" 
                              rowStyleClass="#{projManagedBean.compareActualEndAndPlannedEnd(pItem.projectCompletion, pItem.actualEnd, pItem.plannedEnd) lt 0 ? 'highlight1' : 'highlight2'}">
-                    <p:column style="font-weight: bold"  headerText="Project No" width="8%" filterBy="#{pItem.projectNo}">
+                    <p:column style="font-weight: bold"  headerText="Project No" width="10%" filterBy="#{pItem.projectNo}">
                         <p:outputLabel style="font-weight: normal" value="#{pItem.projectNo}"/>
                     </p:column>
                     <p:column style="font-weight: bold" sortBy="#{projManagedBean.formatDate(pItem.actualStart)}" headerText="Actual Start Date (dd/mm/yyyy)" width="8%">
@@ -58,7 +58,7 @@
                         </f:facet>
                         <h:outputText style="font-weight: normal" value="#{projManagedBean.getProjectStatus(pItem.projectCompletion)}"/>
                     </p:column>
-                    <p:column style="font-weight: bold" headerText="Progress (%)" width="6%">
+                    <p:column style="font-weight: bold" headerText="Progress (%)" width="4%">
                         <h:outputText style="font-weight: normal" value="#{pItem.projectProgress}"/>
                     </p:column>
                     <p:column style="font-weight: bold" headerText="Dur (days)" width="4%">

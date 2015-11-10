@@ -96,6 +96,12 @@ public class ProjectsManagedBean implements Serializable {
         if (!receivedProjectByProjectNo.isEmpty()) {
             selectedProject = receivedProjectByProjectNo.get(0);
             receivedWeldJobs = new ArrayList <>(selectedProject.getWeldJobs());
+            
+            
+            //////do here
+            //for
+            
+            
             //set visibility
             if (selectedProject.getActualStart() == null) {
                 actualStartVisibility = true;
@@ -110,6 +116,8 @@ public class ProjectsManagedBean implements Serializable {
             actualEndVisibility = false;
         }
         updateBtnVisibility = (actualEndVisibility == false) ? actualStartVisibility : actualEndVisibility;
+        
+        
     }
  
     public void updateProjectActualDate() {
@@ -410,5 +418,8 @@ public class ProjectsManagedBean implements Serializable {
     public void setFillerCode(String fillerCode) {
         this.fillerCode = fillerCode;
     }
+    
+    
+    
 
 }
