@@ -194,7 +194,7 @@
                                 </p:row>
                                 <p:row style="vertical-align:bottom">
                                     <p:column>
-                                        <p:commandButton value="Generate"  update="atpDetail kmsSection projectsSection costSection" actionListener="#{adminQuotationManagedBean.generateATP}" icon="ui-icon-check" validateClient="true" style="margin-bottom:20px;float: left" />
+                                        <p:commandButton value="Generate"  update="atpDetail kmsSection projectsSection costSection" actionListener="#{adminQuotationManagedBean.generateATP}" icon="ui-icon-check" validateClient="true" style="background-color: #529DDE;margin-bottom:20px;float: left" />
                                     </p:column>
                                 </p:row>
                             </p:panelGrid>
@@ -231,7 +231,7 @@
                                         </p:column>
 
                                         <f:facet name="footer">
-                                            <p:commandButton process="matchingFillersTable" update="innerForm:costSection" action="#{adminQuotationManagedBean.clickUseForCalculation}" icon="ui-icon-search" value="Use for Calculation"/>
+                                            <p:commandButton process="matchingFillersTable" update="innerForm:costSection" action="#{adminQuotationManagedBean.clickUseForCalculation}" icon="ui-icon-search" value="Use for Calculation" style="background-color: #529DDE;"/>
                                         </f:facet>
                                     </p:dataTable>
                                 </h:panelGrid>
@@ -370,7 +370,7 @@
 
                                     <p:row style="vertical-align:bottom">
                                         <p:column style="vertical-align:bottom">
-                                            <p:commandButton value="Use Findings" update="rcvQuote"  icon="ui-icon-check" action="#{adminQuotationManagedBean.clickTransfer()}" style="margin-bottom:20px;margin-right:20px;margin-left:40px;float: left">                      
+                                            <p:commandButton value="Use Findings" update="rcvQuote"  icon="ui-icon-check" action="#{adminQuotationManagedBean.clickTransfer()}" style="background-color: #529DDE;margin-bottom:20px;margin-right:20px;margin-left:40px;float: left">                      
 <!--                                               <f:ajax event="click" onevent="atpDialog.hide()" />-->
                                             </p:commandButton>
                                         </p:column>

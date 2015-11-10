@@ -64,4 +64,6 @@ public interface ProcurementSessionBeanLocal {
 
     public List<SuppliedFillerEntity> getAllSuppliedFillers();
 
+    public SupplierEntity getSupplierByCompanyname(String companyName);
+
 }

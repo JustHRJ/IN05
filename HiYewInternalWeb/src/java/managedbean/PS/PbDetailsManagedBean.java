@@ -7,6 +7,7 @@ package managedbean.PS;
 
 import entity.FillerEntity;
 import entity.ProcurementBidEntity;
+import entity.SupplierEntity;
 import java.io.Serializable;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
@@ -20,6 +21,7 @@ import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.inject.Named;
 import javax.faces.view.ViewScoped;
+import manager.EmailManager;
 import session.stateless.ProcurementSessionBeanLocal;
 
 /**
@@ -151,6 +153,7 @@ public class PbDetailsManagedBean implements Serializable{
     }
     
     public void acceptPB(ProcurementBidEntity pb){
+        EmailManager email = new EmailManager();
         System.out.println(pb.getId());
         if(getToday().before(pb.getBidEnd())){
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("You are unable to accpet a bid before the session ends!"));
@@ -159,6 +162,9 @@ public class PbDetailsManagedBean implements Serializable{
                 ProcurementBidEntity pbInList = pbList.get(i);
                 if(pbInList.equals(pb)){
                     procurementSessionBean.updateAcceptStatus(pbInList, "Accepted");
+                    SupplierEntity acceptedSupplier = new SupplierEntity();
+                    acceptedSupplier = procurementSessionBean.getSupplierByCompanyname(pb.getCompanyName());
+                    email.emailPBResult(acceptedSupplier.getCompanyName(), acceptedSupplier.getEmail());
                 }
                 else{
                     procurementSessionBean.updateAcceptStatus(pbInList, "Rejected");

@@ -126,4 +126,7 @@ public class EmailManager {
             throw new EJBException(e.getMessage());
         }
     }
+    
+    
+     
 }
