@@ -88,12 +88,16 @@
                     </p:column>
                 </p:dataTable>
                 
-                <p:commandButton style="border: none; font-size: 14px; width: 90px; font-family: 'Open Sans'" class=" btn btn-success btn-block" action="#{projManagedBean.updateProjectActualDate()}" value="Update" ajax="false" update="formMain"
+                <p:commandButton style="border: none; font-size: 14px; width: 90px; font-family: 'Open Sans'" class=" btn btn-success btn-block" action="#{projManagedBean.updateProjectActualDate()}"  value="Update" ajax="false" update="formMain"
                                  rendered="#{projManagedBean.updateBtnVisibility}"></p:commandButton>
 
                 <br /><br />
                 <h:outputText value="#{resourceAvailabilityMessage}" id="loginOutputId" style="font-weight: bold; color: #{msgColor}; margin-bottom: 100%; white-space: pre-wrap" escape="false"/>
-
+                <h:outputText value="#{fillerPickUpGuideMessage}" id="pickUpGuideID" style="font-weight: bold; color: #{msgColor}; margin-bottom: 100%; white-space: pre-wrap" escape="false"/>
+                
+               
+                    
+              
             </h:form>
         </div>
     </ui:define>

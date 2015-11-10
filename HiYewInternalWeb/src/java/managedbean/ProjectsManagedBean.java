@@ -7,7 +7,9 @@ package managedbean;
 
 import entity.Customer;
 import entity.FillerEntity;
+import entity.Metal;
 import entity.Project;
+import entity.ShelveEntity;
 import entity.WeldJob;
 import java.io.Serializable;
 import java.sql.Timestamp;
@@ -15,7 +17,9 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
+import java.util.Set;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.context.FacesContext;
@@ -23,6 +27,7 @@ import javax.inject.Named;
 import javax.faces.view.ViewScoped;
 import org.primefaces.event.RowEditEvent;
 import session.stateless.CustomerSessionBeanLocal;
+import session.stateless.HiYewDSSSessionBeanLocal;
 import session.stateless.HiYewICSSessionBeanLocal;
 import session.stateless.ProjectSessionBeanLocal;
 
@@ -33,6 +38,9 @@ import session.stateless.ProjectSessionBeanLocal;
 @Named(value = "projManagedBean")
 @ViewScoped
 public class ProjectsManagedBean implements Serializable {
+
+    @EJB
+    private HiYewDSSSessionBeanLocal hiYewDSSSessionBean;
     @EJB
     private HiYewICSSessionBeanLocal hiYewICSSessionBean;
 
@@ -59,8 +67,10 @@ public class ProjectsManagedBean implements Serializable {
     private Date today = new Date();
     private Date actualStart;
     private Date actualEnd;
-    
+
     private String fillerCode = "";
+    private HashMap map;
+    private ArrayList<String> toPickFrom;
 
     /**
      * Creates a new instance of ProjectsManagedBean
@@ -72,6 +82,9 @@ public class ProjectsManagedBean implements Serializable {
         receivedProjects = new ArrayList<>();
         receivedWeldJobs = new ArrayList<>();
         selectedProject = new Project();
+        map = new HashMap();
+        
+        
     }
 
     @PostConstruct
@@ -79,6 +92,7 @@ public class ProjectsManagedBean implements Serializable {
         projectStatuses.put("Starting", "Starting");
         projectStatuses.put("Ongoing", "Ongoing");
         projectStatuses.put("Completed", "Completed");
+
 
         receivedProjects = new ArrayList<>(projectSessionBean.getAllProjects());
         //for project initiation and closure
@@ -92,16 +106,75 @@ public class ProjectsManagedBean implements Serializable {
     }
 
     public void filterByProjectNo() {
+        toPickFrom = new ArrayList<String>();
         receivedProjectByProjectNo = new ArrayList<>(projectSessionBean.getProjectByProjectNo(selectedProjectNo));
         if (!receivedProjectByProjectNo.isEmpty()) {
             selectedProject = receivedProjectByProjectNo.get(0);
-            receivedWeldJobs = new ArrayList <>(selectedProject.getWeldJobs());
-            
-            
+            receivedWeldJobs = new ArrayList<>(selectedProject.getWeldJobs());
+
             //////do here
-            //for
-            
-            
+            if (selectedProject.getActualStart() == null) {
+                System.out.print("hereeeee1######################numOfWeldJobs: " + receivedWeldJobs.size());
+                for (int i = 0; i < receivedWeldJobs.size(); i++) {
+
+                    WeldJob wj = receivedWeldJobs.get(i);
+                    double surfaceAreaToWeld = wj.getSurfaceArea();
+                    int qtyToweld = wj.getTotalQuantity();
+                    Metal m = hiYewDSSSessionBean.getExistingMetal(wj.getMetal1());
+                    Metal m2 = hiYewDSSSessionBean.getExistingMetal(wj.getMetal2());
+                    FillerEntity recommendedFiller = new FillerEntity();
+                    double lowestPrice = 999999;
+                    if ((m != null) || (m2 != null)) {
+                        System.out.print("hereeeee1######################");
+                        ArrayList<FillerEntity> listOfMatchingFillers = new ArrayList<FillerEntity>();
+
+                        if ((m != null) && (m.equals(m2))) {
+                            System.out.print("hereeeee1######################both metal same");
+                            listOfMatchingFillers.addAll(hiYewDSSSessionBean.getListOfMatchedFillers(m));
+                        } else if ((m != null) && (m2 == null)) {
+                            System.out.print("hereeeee1######################no metal 2");
+                            listOfMatchingFillers.addAll(hiYewDSSSessionBean.getListOfMatchedFillers(m));
+                        } else if ((m == null) && (m2 != null)) {
+                            System.out.print("hereeeee1######################no metal 1");
+                            listOfMatchingFillers.addAll(hiYewDSSSessionBean.getListOfMatchedFillers(m2));
+                        } else {
+                            System.out.print("hereeeee1######################metal not same");
+                            listOfMatchingFillers.addAll(hiYewDSSSessionBean.getListOfMatchedFillers(m));
+                            listOfMatchingFillers.addAll(hiYewDSSSessionBean.getListOfMatchedFillers(m2));
+                        }
+                        System.out.print("hereeeee1######################matching fillers size " + listOfMatchingFillers.size());
+                        for (int j = 0; j < listOfMatchingFillers.size(); j++) {
+                            FillerEntity f = listOfMatchingFillers.get(i);
+                            int numNeeded = hiYewDSSSessionBean.quantityNeeded(f, surfaceAreaToWeld, qtyToweld);
+                            double fillerPrice = numNeeded * listOfMatchingFillers.get(i).getCost();
+                            int qtyLeft = (listOfMatchingFillers.get(i).getQuantity() - listOfMatchingFillers.get(i).getBookedQuantity()) - numNeeded;
+                            if (qtyLeft >= 0) {
+                                System.out.println("*************************enuff qty");
+                                //check whish has the lowest price...
+                                if (fillerPrice < lowestPrice) {
+                                    System.out.println("*************************price lower");
+                                    lowestPrice = fillerPrice;
+                                    recommendedFiller = listOfMatchingFillers.get(i);
+                                }
+
+                            }
+
+                        }
+                        System.out.print("hereeeee1######################recommended filler is " + recommendedFiller.getFillerCode());
+                        if (recommendedFiller.getFillerCode() != null) {
+                            System.out.print("hereeeee1######################set filler");
+                            wj.setFiller(recommendedFiller);
+                            projectSessionBean.conductWeldJobMerge(wj);
+                        }
+                    } else {
+                        System.out.print("hereeeee1######################both metal null");
+                    }
+
+                    //else if either 1 metal is null
+                }
+
+            }
+
             //set visibility
             if (selectedProject.getActualStart() == null) {
                 actualStartVisibility = true;
@@ -116,18 +189,46 @@ public class ProjectsManagedBean implements Serializable {
             actualEndVisibility = false;
         }
         updateBtnVisibility = (actualEndVisibility == false) ? actualStartVisibility : actualEndVisibility;
-        
-        
+
     }
- 
+
     public void updateProjectActualDate() {
-        if(actualStart != null){
+        if (actualStart != null) {
+            System.out.println("For haven started project........");
             selectedProject.setActualStart(new Timestamp(actualStart.getTime()));
             selectedProject.setProjectProgress(100);
             actualStart = null;
             actualStartVisibility = false;
+
+            //should be do here
+            ArrayList<WeldJob> jobList = new ArrayList<WeldJob>();
+            jobList.addAll(selectedProject.getWeldJobs());
+            for (int i = 0; i < jobList.size(); i++) {
+                if (jobList.get(i).getFiller() != null) {
+                    FillerEntity f = jobList.get(i).getFiller();
+                    map = hiYewDSSSessionBean.whichShelveToTake(f, hiYewDSSSessionBean.quantityNeeded(f, jobList.get(i).getSurfaceArea(), jobList.get(i).getTotalQuantity()));
+                    // Get a set of the entries
+                    Set set = map.entrySet();
+                    // Get an iterator
+                    Iterator it = set.iterator();
+                    // Display elements
+                    while (it.hasNext()) {
+                        Map.Entry me = (Map.Entry) it.next();
+                        ShelveEntity shelveToTakeFrom = (ShelveEntity)me.getKey();
+                        int qtyToTake = (int)me.getValue();
+                        hiYewICSSessionBean.reduceStorageQty(f, shelveToTakeFrom, qtyToTake);
+                        toPickFrom.add("Please retrieve "+qtyToTake+" of " +f.getFillerCode() +" from Shelf" + shelveToTakeFrom.getShelveID());
+                    }
+                    hiYewICSSessionBean.stockDown(f, jobList.get(i).getTotalQuantity());
+                }
+            }
+            String pickGuide = "";
+            for(int i =0;i<toPickFrom.size();i++){
+                pickGuide = String.format(toPickFrom.get(i) + "%n");
+            }
+            FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("fillerPickUpGuideMessage", pickGuide);
         }
-        if(actualEnd != null){
+        if (actualEnd != null) {
             selectedProject.setActualEnd(new Timestamp(actualEnd.getTime()));
             selectedProject.setProjectCompletion(true);
             actualEnd = null;
@@ -135,8 +236,8 @@ public class ProjectsManagedBean implements Serializable {
         }
         updateBtnVisibility = false;
         projectSessionBean.conductProjectMerge(selectedProject);
-        
-        for(int i=0; i<receivedWeldJobs.size(); i++){
+
+        for (int i = 0; i < receivedWeldJobs.size(); i++) {
             projectSessionBean.conductWeldJobMerge(receivedWeldJobs.get(i));
         }
 
@@ -145,17 +246,16 @@ public class ProjectsManagedBean implements Serializable {
             for (int i = 0; i < selectedProject.getWeldJobs().size(); i++) {
                 str += selectedProject.getWeldJobs().get(i).getEmpName() + " has been attached to a welding job using Machine ";
                 str += selectedProject.getWeldJobs().get(i).getMachine().getMachine_number() + "\r\n";
-                
-                
+
                 projectSessionBean.setEmployeeAvailability(selectedProject.getWeldJobs().get(i).getEmpName(), false);
                 selectedProject.getWeldJobs().get(i).getMachine().setStatus("In use");
             }
-            
+
         } else { // after setting ending date
             for (int i = 0; i < selectedProject.getWeldJobs().size(); i++) {
                 str += selectedProject.getWeldJobs().get(i).getEmpName() + " are currently ready for new welding job assignment.\r\n";
                 str += "Machine " + selectedProject.getWeldJobs().get(i).getMachine().getMachine_number() + " are currently available for use.\r\n";
-                
+
                 projectSessionBean.setEmployeeAvailability(selectedProject.getWeldJobs().get(i).getEmpName(), true);
                 selectedProject.getWeldJobs().get(i).getMachine().setStatus("Available");
             }
@@ -163,11 +263,11 @@ public class ProjectsManagedBean implements Serializable {
         FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("resourceAvailabilityMessage", str);
         FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("msgColor", "orange");
     }
-    
+
     public void onEditRow(RowEditEvent event) {
         WeldJob w = (WeldJob) event.getObject();//gives me unedited value
         FillerEntity f = hiYewICSSessionBean.getExistingItem(fillerCode);
-        
+
         w.setFiller(f);
         projectSessionBean.conductWeldJobMerge(w);
     }
@@ -206,8 +306,6 @@ public class ProjectsManagedBean implements Serializable {
         }
         return dur;
     }
-    
-    
 
     public String getProjectStatus(Boolean completion) {
         String status = "Y";
@@ -418,8 +516,19 @@ public class ProjectsManagedBean implements Serializable {
     public void setFillerCode(String fillerCode) {
         this.fillerCode = fillerCode;
     }
-    
-    
-    
+
+    /**
+     * @return the toPickFrom
+     */
+    public ArrayList<String> getToPickFrom() {
+        return toPickFrom;
+    }
+
+    /**
+     * @param toPickFrom the toPickFrom to set
+     */
+    public void setToPickFrom(ArrayList<String> toPickFrom) {
+        this.toPickFrom = toPickFrom;
+    }
 
 }
