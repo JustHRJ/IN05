@@ -39,7 +39,7 @@
                             <p:cellEditor>
                                 <f:facet name="output"><h:outputText value="#{item.quantity}"/></f:facet>
                                 <f:facet name="input">
-                                    <p:spinner value="#{item.quantity}" converterMessage="Quantity must contains only numbers." validatorMessage="Quantity must be a value between 1 to 5." styleClass="year-spinner" size="1">
+                                    <p:spinner onkeypress="return false" value="#{item.quantity}" converterMessage="Quantity must contains only numbers." validatorMessage="Quantity must be a value between 1 to 5." styleClass="year-spinner" size="1">
                                         <f:converter converterId="javax.faces.Integer" />
                                         <f:validateLongRange minimum="1" />
                                         <p:ajax update=":mainForm:msgs" />
@@ -250,46 +250,47 @@
 
         </h:form>
 
-        <p:dialog styleClass="rfq" id="myDialogID" widgetVar="myDialogVar" modal="true" resizable="false" header="Purchase Order" showEffect="fade" width="700px">
-            <h:form>
-                <br />
-                <p:panelGrid id="display" columns="2" columnClasses="value,value" style="width:100%;vertical-align:top">
+        <p:dialog styleClass="rfq" id="myDialogID" widgetVar="myDialogVar" modal="true" resizable="false" header="Purchase Order" showEffect="fade" width="700px" style="max-height:10000px">
+            <p:scrollPanel mode="native" style="max-height:500px">
+                <h:form>
+                    <br />
+                    <p:panelGrid id="display" columns="2" columnClasses="value,value" style="width:100%;vertical-align:top">
 
-                    <h:outputText value="Purchase Order No.: " style="text-align:left;width: 50%; font-weight: bolder; vertical-align: middle;color:black;"/>
-                    <p:inputText style="width: 330px; margin-top: 1px;font-weight: normal; font-size: 14px; font-family: 'Open Sans';" placeholder="" value="#{productPurchaseOrderManagedBean.purchaseOrderCustomerNo}" id="poId"  />
+                        <h:outputText value="Purchase Order No.: " style="text-align:left;width: 50%; font-weight: bolder; vertical-align: middle;color:black;"/>
+                        <p:inputText style="width: 330px; margin-top: 1px;font-weight: normal; font-size: 14px; font-family: 'Open Sans';" placeholder="" value="#{productPurchaseOrderManagedBean.purchaseOrderCustomerNo}" id="poId"  />
 
-                    <h:outputText value="Attention: " style="text-align:left;width: 10%; font-weight: bolder; vertical-align: middle;color:black;"/>
-                    <h:outputText id="attnId" value="#{productPurchaseOrderManagedBean.attention}" />
+                        <h:outputText value="Attention: " style="text-align:left;width: 10%; font-weight: bolder; vertical-align: middle;color:black;"/>
+                        <h:outputText id="attnId" value="#{productPurchaseOrderManagedBean.attention}" />
 
-                    <h:outputText value="Order Date: " style="text-align:left;width: 10%; font-weight: bolder;color:black;"/>
-                    <h:outputText id="orderDateId" value="#{productPurchaseOrderManagedBean.orderDate}" />
+                        <h:outputText value="Order Date: " style="text-align:left;width: 10%; font-weight: bolder;color:black;"/>
+                        <h:outputText id="orderDateId" value="#{productPurchaseOrderManagedBean.orderDate}" />
 
-                    <h:outputText value="Delivery Date: " style="text-align:left;width:10%; font-weight: bolder;color:black;"/>
-                    <h:outputText style="font-style:italic" id="deliveryDateId" value="(We will send you an email update)" />
+                        <h:outputText value="Delivery Date: " style="text-align:left;width:10%; font-weight: bolder;color:black;"/>
+                        <h:outputText style="font-style:italic" id="deliveryDateId" value="(We will send you an email update)" />
 
-                    <h:outputText value="Item(s) Name: " style="text-align:left;width: 10%; font-weight: bolder;color:black;vertical-align:top"/>
-                    <h:outputText id="descId" value="#{productPurchaseOrderManagedBean.description}" style="white-space: pre-wrap" escape="false"/>
+                        <h:outputText value="Item(s) Name: " style="text-align:left;width: 10%; font-weight: bolder;color:black;vertical-align:top"/>
+                        <h:outputText id="descId" value="#{productPurchaseOrderManagedBean.description}" style="white-space: pre-wrap" escape="false"/>
 
-                    <h:outputText value="Total Price: " style="text-align:left;width: 10%; font-weight: bolder;color:black;"/>
-                    <h:outputText id="totalPriceId" value="SGD #{productPurchaseOrderManagedBean.totalPrice}" />
-                    <p:column>
-                        <h:outputText value="Mailing Address:" style="text-align:left;width: 10%; font-weight: bolder;color:black;"/>
-                        <br />
-                        <h:outputText value="*Please do not fill in if the mailing address is " style="text-align:left;font-size: 85%;color: red" />
-                        <br />
-                        <h:outputText value="the same as your home address." style="text-align:left;font-size: 85%;color: red" />
-                    </p:column>
-                    <p:column>
-                        <p:inputText style="width: 330px; margin-top: 1px;font-weight: normal; font-size: 14px; font-family: 'Open Sans';" placeholder="e.g. Beach Road" value="#{productPurchaseOrderManagedBean.mailingAddr1}" id="mailingAddr1"  />
-                        <br />
-                        <p:inputText style="width: 330px; margin-top: 5px; font-weight: normal; font-size: 14px; font-family: 'Open Sans';" placeholder="e.g. 12, #01-02" value="#{productPurchaseOrderManagedBean.mailingAddr2}" id="mailingAddr2"  />
-                        <br />
-                    </p:column>
-                </p:panelGrid>
-                <br />
-                <p:commandButton icon="" value="Send Purchase Order" action="#{productPurchaseOrderManagedBean.createPurchaseOrder()}" update=":mainForm:mainTab:rcvQuote myDialogID" style="padding-top: 5px; padding-bottom: 5px; padding-left: 22px; padding-right: 22px" />
-
-            </h:form>
+                        <h:outputText value="Total Price: " style="text-align:left;width: 10%; font-weight: bolder;color:black;"/>
+                        <h:outputText id="totalPriceId" value="SGD #{productPurchaseOrderManagedBean.totalPrice}" />
+                        <p:column>
+                            <h:outputText value="Mailing Address:" style="text-align:left;width: 10%; font-weight: bolder;color:black;"/>
+                            <br />
+                            <h:outputText value="*Please do not fill in if the mailing address is " style="text-align:left;font-size: 85%;color: red" />
+                            <br />
+                            <h:outputText value="the same as your home address." style="text-align:left;font-size: 85%;color: red" />
+                        </p:column>
+                        <p:column>
+                            <p:inputText style="width: 330px; margin-top: 1px;font-weight: normal; font-size: 14px; font-family: 'Open Sans';" placeholder="e.g. Beach Road" value="#{productPurchaseOrderManagedBean.mailingAddr1}" id="mailingAddr1"  />
+                            <br />
+                            <p:inputText style="width: 330px; margin-top: 5px; font-weight: normal; font-size: 14px; font-family: 'Open Sans';" placeholder="e.g. 12, #01-02" value="#{productPurchaseOrderManagedBean.mailingAddr2}" id="mailingAddr2"  />
+                            <br />
+                        </p:column>
+                    </p:panelGrid>
+                    <br />
+                    <p:commandButton icon="" value="Send Purchase Order" action="#{productPurchaseOrderManagedBean.createPurchaseOrder()}" update=":mainForm:mainTab:rcvQuote myDialogID" style="padding-top: 5px; padding-bottom: 5px; padding-left: 22px; padding-right: 22px" />
+                </h:form>
+            </p:scrollPanel>
         </p:dialog>
     </ui:define>
 </ui:composition>
