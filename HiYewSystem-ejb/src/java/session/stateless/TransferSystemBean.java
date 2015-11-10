@@ -46,7 +46,7 @@ public class TransferSystemBean implements TransferSystemBeanLocal {
                     Calendar c = Calendar.getInstance();
                     int year = Integer.parseInt(record1.substring(0, 4));
                     System.out.println(year);
-                    int month = Integer.parseInt(record1.substring(5, 7));
+                    int month = Integer.parseInt(record1.substring(5, 7)) - 1;
                     System.out.println(month);
                     int date = Integer.parseInt(record1.substring(8));
                     System.out.println(date);
@@ -66,7 +66,7 @@ public class TransferSystemBean implements TransferSystemBeanLocal {
                     Calendar c = Calendar.getInstance();
                     int year = Integer.parseInt(record1.substring(0, 4));
                     System.out.println(year);
-                    int month = Integer.parseInt(record1.substring(5, 7));
+                    int month = Integer.parseInt(record1.substring(5, 7)) - 1;
                     System.out.println(month);
                     int date = Integer.parseInt(record1.substring(8));
                     System.out.println(date);
@@ -85,7 +85,7 @@ public class TransferSystemBean implements TransferSystemBeanLocal {
                 Calendar c = Calendar.getInstance();
                 int year = Integer.parseInt(record1.substring(0, 4));
                 System.out.println(year);
-                int month = Integer.parseInt(record1.substring(5, 7));
+                int month = Integer.parseInt(record1.substring(5, 7)) - 1;
                 System.out.println(month);
                 int date = Integer.parseInt(record1.substring(8));
                 System.out.println(date);
@@ -101,7 +101,7 @@ public class TransferSystemBean implements TransferSystemBeanLocal {
                 c = Calendar.getInstance();
                 year = Integer.parseInt(record1.substring(0, 4));
                 System.out.println(year);
-                month = Integer.parseInt(record1.substring(5, 7));
+                month = Integer.parseInt(record1.substring(5, 7)) - 1;
                 System.out.println(month);
                 date = Integer.parseInt(record1.substring(8));
                 System.out.println(date);
@@ -113,11 +113,11 @@ public class TransferSystemBean implements TransferSystemBeanLocal {
 
                 p.setLatestStart(new Timestamp(c.getTime().getTime()));
 
-                record1 = im.get(5).toString();
+                record1 = im.get(6).toString();
                 c = Calendar.getInstance();
                 year = Integer.parseInt(record1.substring(0, 4));
                 System.out.println(year);
-                month = Integer.parseInt(record1.substring(5, 7));
+                month = Integer.parseInt(record1.substring(5, 7)) - 1;
                 System.out.println(month);
                 date = Integer.parseInt(record1.substring(8));
                 System.out.println(date);
@@ -129,11 +129,11 @@ public class TransferSystemBean implements TransferSystemBeanLocal {
 
                 p.setPlannedEnd(new Timestamp(c.getTime().getTime()));
 
-                record1 = im.get(5).toString();
+                record1 = im.get(7).toString();
                 c = Calendar.getInstance();
                 year = Integer.parseInt(record1.substring(0, 4));
                 System.out.println(year);
-                month = Integer.parseInt(record1.substring(5, 7));
+                month = Integer.parseInt(record1.substring(5, 7))- 1;
                 System.out.println(month);
                 date = Integer.parseInt(record1.substring(8));
                 System.out.println(date);
@@ -194,7 +194,11 @@ public class TransferSystemBean implements TransferSystemBeanLocal {
                 w.setTotalQuantity(Integer.parseInt(im.get(8).toString()));
                 w.setQuantityWelded(Integer.parseInt(im.get(9).toString()));
                 w.setWeldingType(im.get(10).toString());
+                if (im.get(11).toString().equals("null")) {
 
+                } else {
+                    w.setDuration(Integer.parseInt(im.get(11).toString()));
+                }
                 String projectID = w.getProjectNo();
                 Project p = em.find(Project.class, projectID);
                 if (p == null) {

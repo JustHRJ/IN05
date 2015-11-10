@@ -16,6 +16,7 @@ import javax.faces.validator.ValidatorException;
 import javax.mail.internet.InternetAddress;
 import session.stateless.HiYewSystemBeanLocal;
 import java.util.regex.*;
+import session.stateless.MachineSystemBeanLocal;
 
 /**
  *
@@ -24,9 +25,10 @@ import java.util.regex.*;
 @Named(value = "machineValidator")
 @RequestScoped
 public class MachineValidator implements Validator {
-
     @EJB
-    private HiYewSystemBeanLocal hiYewSystemBean;
+    private MachineSystemBeanLocal machineSystemBean;
+
+
 
     /**
      * Creates a new instance of machineValidator
@@ -68,7 +70,7 @@ public class MachineValidator implements Validator {
             return; // Let required="true" or @NotNull handle it.
         }
 
-        if (hiYewSystemBean.existMachineName(username)) {
+        if (machineSystemBean.existMachineName(username)) {
             throw new ValidatorException(new FacesMessage("Machine Name already in use, choose another."));
         }
     }
@@ -111,7 +113,7 @@ public class MachineValidator implements Validator {
             return; // Let required="true" or @NotNull handle it.
         }
 
-        if (hiYewSystemBean.notExistMachine(name)) {
+        if (machineSystemBean.notExistMachine(name)) {
             throw new ValidatorException(new FacesMessage("Machine not existent. Please check."));
         }
     }

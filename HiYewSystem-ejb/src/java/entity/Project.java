@@ -33,14 +33,14 @@ public class Project implements Serializable {
     private Integer projectProgress; //determine by the amt of job welded to the expected amt of metal to be welded
     
     private Boolean projectCompletion;
-    
+//    
     private Boolean projectOverrun; 
     private Integer projectDaysExceed;
     private String causeOfDelay;
-    private String takeAway;
-    //private Integer daysDiffFromActualAndPlannedStart;
-    //private Integer daysDiffFromActualAndPlannedEnd;
-            
+//    private String takeAway;
+//    private Integer daysDiffFromActualAndPlannedStart;
+//    private Integer daysDiffFromActualAndPlannedEnd;
+//            
     private String projectManager; //if applicable
     
     
@@ -313,18 +313,5 @@ public class Project implements Serializable {
         this.causeOfDelay = causeOfDelay;
     }
 
-    /**
-     * @return the takeAway
-     */
-    public String getTakeAway() {
-        return takeAway;
-    }
-
-    /**
-     * @param takeAway the takeAway to set
-     */
-    public void setTakeAway(String takeAway) {
-        this.takeAway = takeAway;
-    }
     
 }
