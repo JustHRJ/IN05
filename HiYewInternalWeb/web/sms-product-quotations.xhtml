@@ -107,7 +107,7 @@
                                     </p:column>
 
                                     <p:column rendered="#{item.status eq 'Relayed'}" headerText="Quoted Unit Price" width="10%">
-                                        <h:outputText value="$ #{adminProductQuotationManagedBean.formatPrice(quoteDescItem.quotedPrice = quoteDescItem.costPrice + (quoteDescItem.costPrice * quoteDescItem.profitPercentage))}" />
+                                        <h:outputText value="$ #{adminProductQuotationManagedBean.formatPrice(quoteDescItem.quotedPrice = quoteDescItem.costPrice + (quoteDescItem.costPrice * (quoteDescItem.profitPercentage/100)))}" />
                                     </p:column>
 
                                     <p:column rendered="#{item.status != 'Relayed'}" headerText="Cost" width="10%">
@@ -121,12 +121,11 @@
                                             <p:ajax update="pqdList" /> 
                                         </h:inputText>
                                     </p:column>
-
                                     <p:column rendered="#{item.status != 'Relayed'}" headerText="Profit Margin" width="10%">
                                         <h:outputText style="color:#{item.status eq 'Pending' ?  'black' : quoteDescItem.profitMargin != null and quoteDescItem.profitMargin > 0 ? 'green' : 'red'}" value="#{item.status eq 'Pending' ? '' : '$ '}#{item.status eq 'Pending' ? 'N.A' : adminProductQuotationManagedBean.formatPrice(quoteDescItem.profitMargin)}" />
                                     </p:column>
                                     #{quoteDescItem.profitMargin = quoteDescItem.quotedPrice - quoteDescItem.costPrice}
-                                    <p:column rendered="#{item.status eq 'Relayed'}" headerText="Profit Margin" width="10%">
+                                    <p:column styleClass="profitMargin"  rendered="#{item.status eq 'Relayed'}" headerText="Profit Margin" width="10%">
                                         <p:spinner onkeypress="return false" id="profitMargin" value="#{quoteDescItem.profitPercentage}" min="-100" max="300" suffix="%" stepFactor="5">
                                             <p:ajax update="pqdList" /> 
                                         </p:spinner>

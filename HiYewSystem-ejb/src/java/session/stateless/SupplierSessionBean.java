@@ -5,7 +5,9 @@ import entity.SupplierPurchaseOrder;
 //import entity.Quotation;
 import java.math.BigInteger;
 import java.security.MessageDigest;
+import java.security.SecureRandom;
 import java.util.List;
+import java.util.function.Supplier;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -87,6 +89,12 @@ public class SupplierSessionBean implements SupplierSessionBeanLocal {
 
     @Override
     public String resetSupplierPassword(String username) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        SupplierEntity s = em.find(SupplierEntity.class, username);
+        SecureRandom random = new SecureRandom();
+        String newPassword = new BigInteger(50, random).toString(32);
+        s.setPw(encryptPassword(newPassword));
+        em.persist(s);
+        em.flush();
+        return s.getCompanyName()+ ":" + newPassword + ":" + s.getEmail();
     }
 }

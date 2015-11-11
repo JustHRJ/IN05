@@ -114,7 +114,7 @@ public class AdminProductQuotationManagedBean implements Serializable {
         try {
             for (ProductQuotationDescription pqd : displayProductQuotationDescriptionList) {
                 pqd.setProfitMargin(pqd.getQuotedPrice() - pqd.getCostPrice());
-                pqd.setQuotedPrice(pqd.getCostPrice() + (pqd.getCostPrice() * pqd.getProfitPercentage()));
+                pqd.setQuotedPrice(pqd.getCostPrice() + (pqd.getCostPrice() * (pqd.getProfitPercentage() / 100)));
             }
             productQuotationSessionBean.updateProductQuotationPrices(displayProductQuotationDescriptionList);
             FacesContext.getCurrentInstance().addMessage("inner-msgs", new FacesMessage(FacesMessage.SEVERITY_INFO, "Product quotation (#" + productQuotationNo + ") has been updated successfully!", ""));
@@ -130,6 +130,8 @@ public class AdminProductQuotationManagedBean implements Serializable {
         productQuotationSessionBean.updateProductQuotationRelayedStatus(selectedProductQuotation);
 
         Customer customer = customerSessionBean.getCustomerByUsername(username);
+
+        receivedNewProductQuotationList = new ArrayList<>(productQuotationSessionBean.receivedCustomerNewProductQuotationList(status));
 
         // Email Germany supplier for purchasing products
         EmailManager emailManager = new EmailManager();
@@ -183,6 +185,9 @@ public class AdminProductQuotationManagedBean implements Serializable {
             productQuotationSessionBean.updateProductQuotationStatus(selectedProductQuotation);
 
             Customer customer = customerSessionBean.getCustomerByUsername(username);
+
+            receivedNewProductQuotationList = new ArrayList<>(productQuotationSessionBean.receivedCustomerNewProductQuotationList(status));
+
             if (customer.isSubscribeEmail_qPriceUpdates()) {
                 EmailManager emailManager = new EmailManager();
                 emailManager.emailProductQuotationPriceUpdate(customer.getName(), customer.getEmail(), selectedProductQuotation.getProductQuotationNo());

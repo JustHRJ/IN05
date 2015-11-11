@@ -135,12 +135,16 @@ public class AdminProductPOManagedBean implements Serializable {
             selectedProductPO.setDeliveryDate(new Timestamp(deliveryDate.getTime()));
             productPurchaseOrderSessionBean.updatePODeliveryDate(selectedProductPO);
             FacesContext.getCurrentInstance().addMessage("inner-msgs", new FacesMessage(FacesMessage.SEVERITY_INFO, "Product PO (#" + selectedProductPO.getProductPurchaseOrderID() + ") delivery date has been updated successfully!", ""));
+
+            receivedNewProductPOList = new ArrayList<>(productPurchaseOrderSessionBean.receivedCustomerNewProductPOList(status));
             selectedProductPO = new ProductPurchaseOrder();
             deliveryDate = null;
         } else if (productPurchaseOrder.getDeliveryDate() != null) {
             selectedProductPO.setDeliveryDate(new Timestamp(productPurchaseOrder.getDeliveryDate().getTime()));
             productPurchaseOrderSessionBean.updatePODeliveryDate(selectedProductPO);
             FacesContext.getCurrentInstance().addMessage("inner-msgs", new FacesMessage(FacesMessage.SEVERITY_INFO, "Product PO (#" + selectedProductPO.getProductPurchaseOrderID() + ") delivery date has been updated successfully!", ""));
+
+            receivedNewProductPOList = new ArrayList<>(productPurchaseOrderSessionBean.receivedCustomerNewProductPOList(status));
             selectedProductPO = new ProductPurchaseOrder();
             deliveryDate = null;
         } else {
@@ -152,6 +156,7 @@ public class AdminProductPOManagedBean implements Serializable {
     public void updatePODeliveredStatus() {
         productPurchaseOrderSessionBean.updateProductPODeliveredStatus(selectedProductPO);
 
+        receivedNewProductPOList = new ArrayList<>(productPurchaseOrderSessionBean.receivedCustomerNewProductPOList(status));
         FacesContext.getCurrentInstance().addMessage("inner-msgs", new FacesMessage(FacesMessage.SEVERITY_INFO, "Product PO (#" + selectedProductPO.getProductPurchaseOrderID() + ") has been delivered to customer successfully!", ""));
         selectedProductPO = new ProductPurchaseOrder();
     }
@@ -164,7 +169,9 @@ public class AdminProductPOManagedBean implements Serializable {
         EmailManager emailManager = new EmailManager();
         emailManager.emailGermanySupplierToPurchase(selectedProductPO.getProductPurchaseOrderID(), this.retrieveEmailProductQuotationDescriptionList(selectedProductPO.getProductPurchaseOrderID()));
 
+        receivedNewProductPOList = new ArrayList<>(productPurchaseOrderSessionBean.receivedCustomerNewProductPOList(status));
         selectedProductPO = new ProductPurchaseOrder();
+
         FacesContext.getCurrentInstance().addMessage("msgs", new FacesMessage(FacesMessage.SEVERITY_INFO, "Product PO (#" + selectedProductPO.getProductPurchaseOrderID() + ") has been sent to supplier!", ""));
     }
 
@@ -174,7 +181,7 @@ public class AdminProductPOManagedBean implements Serializable {
 
     public void updateProductPOStatus(String username) {
         productPurchaseOrderSessionBean.updateProductPOStatus(selectedProductPO);
-
+        receivedNewProductPOList = new ArrayList<>(productPurchaseOrderSessionBean.receivedCustomerNewProductPOList(status));
         Customer customer = customerSessionBean.getCustomerByUsername(username);
         if (customer.isSubscribeEmail_poDeliveryUpdates()) {
             EmailManager emailManager = new EmailManager();

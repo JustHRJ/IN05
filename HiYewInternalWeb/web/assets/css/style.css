@@ -66,6 +66,11 @@ body{
     width: 90px!important;
 }
 
+.profitMargin .ui-inputfield {
+    font-weight: normal!important;
+    width: 120px!important;
+}
+
 .lowStock .ui-inputfield {
     font-weight: normal!important;
     width: 70px!important;

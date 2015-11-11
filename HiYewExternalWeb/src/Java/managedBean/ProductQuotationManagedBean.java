@@ -316,6 +316,7 @@ public class ProductQuotationManagedBean implements Serializable {
         for (ProductQuotationDescription pqd : getCacheList()) {
             pqd.setProductQuotationNo(getProductQuotationNo());
             pqd.setProductQuotation(getNewProductQuotation());
+            pqd.setProfitPercentage(0);
             getNewProductQuotation().addProductQuotationDescriptionList(pqd);
             getProductQuotationSessionBean().createProductQuotationDesciption(pqd);//persist qd
         }

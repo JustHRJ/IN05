@@ -19,7 +19,7 @@ public class ProductQuotationDescription implements Serializable {
     private Double quotedPrice;
     private Double costPrice;
     private Double profitMargin;
-    private Double profitPercentage;
+    private Integer profitPercentage;
     private Integer quantity;
     private String remarks;
 
@@ -211,14 +211,14 @@ public class ProductQuotationDescription implements Serializable {
     /**
      * @return the profitPercentage
      */
-    public Double getProfitPercentage() {
+    public Integer getProfitPercentage() {
         return profitPercentage;
     }
 
     /**
      * @param profitPercentage the profitPercentage to set
      */
-    public void setProfitPercentage(Double profitPercentage) {
+    public void setProfitPercentage(Integer profitPercentage) {
         this.profitPercentage = profitPercentage;
     }
 }
