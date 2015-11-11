@@ -105,7 +105,7 @@
                                     <p:column rendered="#{item.status != 'Relayed'}" headerText="Quoted Unit Price" width="10%">
                                         <h:outputText value="#{item.status eq 'Pending' ? '' : '$ '}#{item.status eq 'Pending' ? 'N.A' : adminProductQuotationManagedBean.formatPrice(quoteDescItem.quotedPrice)}" />
                                     </p:column>
-
+                                    #{quoteDescItem.quotedPrice = quoteDescItem.costPrice + (quoteDescItem.costPrice * (quoteDescItem.profitPercentage/100))}
                                     <p:column rendered="#{item.status eq 'Relayed'}" headerText="Quoted Unit Price" width="10%">
                                         <h:outputText value="$ #{adminProductQuotationManagedBean.formatPrice(quoteDescItem.quotedPrice = quoteDescItem.costPrice + (quoteDescItem.costPrice * (quoteDescItem.profitPercentage/100)))}" />
                                     </p:column>

@@ -113,8 +113,13 @@ public class AdminProductQuotationManagedBean implements Serializable {
 
         try {
             for (ProductQuotationDescription pqd : displayProductQuotationDescriptionList) {
+//                System.out.println("pqd.getQuotedPrice() === " + pqd.getQuotedPrice());
+//                System.out.println("pqd.getCostPrice() === " + pqd.getCostPrice());
+//                System.out.println("pqd.getProfitPercentage() === " + pqd.getProfitPercentage());
+//                System.out.println("pqd.getCostPrice() + (pqd.getCostPrice() * (pqd.getProfitPercentage() / 100)) === " + pqd.getCostPrice() + (pqd.getCostPrice() * (pqd.getProfitPercentage() / 100)));
+                
                 pqd.setProfitMargin(pqd.getQuotedPrice() - pqd.getCostPrice());
-                pqd.setQuotedPrice(pqd.getCostPrice() + (pqd.getCostPrice() * (pqd.getProfitPercentage() / 100)));
+//                pqd.setQuotedPrice(pqd.getCostPrice() + (pqd.getCostPrice() * (pqd.getProfitPercentage() / 100)));
             }
             productQuotationSessionBean.updateProductQuotationPrices(displayProductQuotationDescriptionList);
             FacesContext.getCurrentInstance().addMessage("inner-msgs", new FacesMessage(FacesMessage.SEVERITY_INFO, "Product quotation (#" + productQuotationNo + ") has been updated successfully!", ""));

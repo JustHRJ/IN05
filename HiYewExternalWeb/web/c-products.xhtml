@@ -135,7 +135,7 @@
                         <p:column headerText="Date" sortBy="#{item.date}" width="10%" filterBy="#{item.date}" filterMatchMode="contains">
                             <h:outputText value="#{productQuotationManagedBean.formatDate(item.date)}"/>
                         </p:column>
-                        <p:column headerText="Status" sortBy="#{item.date}" width="10%" filterBy="#{item.status}" filterMatchMode="equals">
+                        <p:column headerText="Status" sortBy="#{item.status}" width="10%" filterBy="#{item.status}" filterMatchMode="equals">
                             <f:facet name="filter">
                                 <h:selectOneMenu onchange="PF('itemsTable').filter()" >
                                     <f:selectItem itemLabel="Select One" itemValue="#{null}" noSelectionOption="true" />
@@ -268,7 +268,7 @@
                         <h:outputText value="Delivery Date: " style="text-align:left;width:10%; font-weight: bolder;color:black;"/>
                         <h:outputText style="font-style:italic" id="deliveryDateId" value="(We will send you an email update)" />
 
-                        <h:outputText value="Item(s) Name: " style="text-align:left;width: 10%; font-weight: bolder;color:black;vertical-align:top"/>
+                        <h:outputText value="Item(s): " style="text-align:left;width: 10%; font-weight: bolder;color:black;vertical-align:top"/>
                         <h:outputText id="descId" value="#{productPurchaseOrderManagedBean.description}" style="white-space: pre-wrap" escape="false"/>
 
                         <h:outputText value="Total Price: " style="text-align:left;width: 10%; font-weight: bolder;color:black;"/>

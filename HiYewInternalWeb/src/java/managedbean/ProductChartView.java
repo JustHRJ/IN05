@@ -119,9 +119,9 @@ public class ProductChartView implements Serializable {
 
         Axis yAxisYear = barChart_AnnualRevPLPerYear.getAxis(AxisType.Y);
         yAxisYear.setLabel("Number of thousands (Revenue $)");
-        yAxisYear.setMin(-500000);
-        yAxisYear.setMax(500000);
-        yAxisYear.setTickInterval("100000");
+        yAxisYear.setMin(-1000000);
+        yAxisYear.setMax(1000000);
+        yAxisYear.setTickInterval("500000");
 
         Axis xAxisYear = barChart_AnnualRevPLPerYear.getAxis(AxisType.X);
         xAxisYear.setLabel("Years");
@@ -175,9 +175,9 @@ public class ProductChartView implements Serializable {
 
         Axis yAxisMonth = barChartMonth_all.getAxis(AxisType.Y);
         yAxisMonth.setLabel("Number of thousands (Revenue $)");
-        yAxisMonth.setMin(0);
-        yAxisMonth.setMax(100000);
-        yAxisMonth.setTickInterval("10000");
+        yAxisMonth.setMin(-50000);
+        yAxisMonth.setMax(50000);
+        yAxisMonth.setTickInterval("5000");
 
         Axis xAxisMonth = barChartMonth_all.getAxis(AxisType.X);
         xAxisMonth.setLabel("Months");
@@ -267,8 +267,9 @@ public class ProductChartView implements Serializable {
 
         Axis yAxis = combinedModel_all.getAxis(AxisType.Y);
         yAxis.setLabel("Number of thousands (Revenue $)");
-        yAxis.setMin(0);
-        yAxis.setMax(200000);
+        yAxis.setMin(-100000);
+        yAxis.setMax(100000);
+        yAxis.setTickInterval("10000");
     }
 
     private void createCombinedModel(Integer item, Integer series) {
@@ -316,8 +317,9 @@ public class ProductChartView implements Serializable {
 
         Axis yAxis = combinedModel.getAxis(AxisType.Y);
         yAxis.setLabel("Number of thousands (Revenue $)");
-        yAxis.setMin(0);
-        yAxis.setMax(200000);
+        yAxis.setMin(-80000);
+        yAxis.setMax(80000);
+        yAxis.setTickInterval("25000");
     }
 
     private void createAnimatedModelMonth(Integer item, Integer series) {
@@ -362,9 +364,9 @@ public class ProductChartView implements Serializable {
 
         Axis yAxisMonth = barChartMonth.getAxis(AxisType.Y);
         yAxisMonth.setLabel("Number of thousands (Revenue $)");
-        yAxisMonth.setMin(0);
-        yAxisMonth.setMax(100000);
-        yAxisMonth.setTickInterval("10000");
+        yAxisMonth.setMin(-25000);
+        yAxisMonth.setMax(25000);
+        yAxisMonth.setTickInterval("5000");
 
         Axis xAxisMonth = barChartMonth.getAxis(AxisType.X);
         xAxisMonth.setLabel("Months");

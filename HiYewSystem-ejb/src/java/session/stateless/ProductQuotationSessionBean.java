@@ -1,6 +1,7 @@
 package session.stateless;
 
 import entity.Customer;
+import entity.ProductPurchaseOrder;
 import entity.ProductQuotation;
 import entity.ProductQuotationDescription;
 import java.sql.Timestamp;
@@ -110,6 +111,15 @@ public class ProductQuotationSessionBean implements ProductQuotationSessionBeanL
         productQuotation.setStatus("Processed");
     }
 
+    public List<ProductPurchaseOrder> retrieveProductQuotationPO(String quotationNo) {
+        Query query = em.createQuery("SELECT po FROM ProductPurchaseOrder AS po WHERE po.productQuotation.productQuotationNo=:quotationNo");
+
+        query.setParameter("quotationNo", quotationNo);
+
+        List<ProductPurchaseOrder> productQuotationPO = query.getResultList();
+        return productQuotationPO;
+    }
+
     public List<List<List<String>>> deriveRevenueGraph_Year() {
         List<List<String>> machine1 = new ArrayList<List<String>>();
         List<List<String>> machine2 = new ArrayList<List<String>>();
@@ -159,12 +169,18 @@ public class ProductQuotationSessionBean implements ProductQuotationSessionBeanL
                 // for each pd
                 for (ProductQuotation pq : productQuotationList) {
                     List<ProductQuotationDescription> pqdList = pq.getProductQuotationDescriptionList();
+                    List<ProductPurchaseOrder> poList = retrieveProductQuotationPO(pq.getProductQuotationNo());
+//                    System.out.println("poList size ==== " + poList.size());
                     // for each pqd
                     for (ProductQuotationDescription pqd : pqdList) {
                         if (pqd.getItemName().equals(machine)) {
-                            if (formatDate_toYear(pq.getDate()).equals(year)) {
-                                revenue = revenue + ((pqd.getQuotedPrice() == null) ? 0 : pqd.getQuotedPrice());
-                                profitLoss = profitLoss + ((pqd.getProfitMargin() == null) ? 0 : pqd.getProfitMargin());
+                            if (poList.size() > 0) {
+                                if (formatDate_toYear(poList.get(0).getProductPurchaseOrderDate()).equals(year)) {
+                                    if (pq.getStatus().equals("Accepted")) {
+                                        revenue = revenue + ((pqd.getQuotedPrice() == null) ? 0 : pqd.getQuotedPrice());
+                                        profitLoss = profitLoss + ((pqd.getProfitMargin() == null) ? 0 : pqd.getProfitMargin());
+                                    }
+                                }
                             }
                         }
                     } // end for each pqd
@@ -252,13 +268,18 @@ public class ProductQuotationSessionBean implements ProductQuotationSessionBeanL
                     // for each pd
                     for (ProductQuotation pq : productQuotationList) {
                         List<ProductQuotationDescription> pqdList = pq.getProductQuotationDescriptionList();
+                        List<ProductPurchaseOrder> poList = retrieveProductQuotationPO(pq.getProductQuotationNo());
                         // for each pqd
                         for (ProductQuotationDescription pqd : pqdList) {
                             if (pqd.getItemName().equals(machine)) {
                                 if (formatDate_toYear(pq.getDate()).equals(year)) {
-                                    if (formatDate_toMonth(pq.getDate()).equals(month)) {
-                                        revenue = revenue + ((pqd.getQuotedPrice() == null) ? 0 : pqd.getQuotedPrice());
-                                        profitLoss = profitLoss + ((pqd.getProfitMargin() == null) ? 0 : pqd.getProfitMargin());
+                                    if (poList.size() > 0) {
+                                        if (formatDate_toMonth(poList.get(0).getProductPurchaseOrderDate()).equals(month)) {
+                                            if (pq.getStatus().equals("Accepted")) {
+                                                revenue = revenue + ((pqd.getQuotedPrice() == null) ? 0 : pqd.getQuotedPrice());
+                                                profitLoss = profitLoss + ((pqd.getProfitMargin() == null) ? 0 : pqd.getProfitMargin());
+                                            }
+                                        }
                                     }
                                 }
                             }
@@ -358,13 +379,18 @@ public class ProductQuotationSessionBean implements ProductQuotationSessionBeanL
                     // for each pd
                     for (ProductQuotation pq : productQuotationList) {
                         List<ProductQuotationDescription> pqdList = pq.getProductQuotationDescriptionList();
+                        List<ProductPurchaseOrder> poList = retrieveProductQuotationPO(pq.getProductQuotationNo());
                         // for each pqd
                         for (ProductQuotationDescription pqd : pqdList) {
                             if (pqd.getItemName().equals(machine)) {
                                 if (formatDate_toYear(pq.getDate()).equals(year)) {
-                                    if (formatDate_toMonth(pq.getDate()).equals(month)) {
-                                        revenue = revenue + ((pqd.getQuotedPrice() == null) ? 0 : pqd.getQuotedPrice());
-                                        profitLoss = profitLoss + ((pqd.getProfitMargin() == null) ? 0 : pqd.getProfitMargin());
+                                    if (poList.size() > 0) {
+                                        if (formatDate_toMonth(poList.get(0).getProductPurchaseOrderDate()).equals(month)) {
+                                            if (pq.getStatus().equals("Accepted")) {
+                                                revenue = revenue + ((pqd.getQuotedPrice() == null) ? 0 : pqd.getQuotedPrice());
+                                                profitLoss = profitLoss + ((pqd.getProfitMargin() == null) ? 0 : pqd.getProfitMargin());
+                                            }
+                                        }
                                     }
                                 }
                             }

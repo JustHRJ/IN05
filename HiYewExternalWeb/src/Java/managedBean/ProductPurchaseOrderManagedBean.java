@@ -49,7 +49,7 @@ public class ProductPurchaseOrderManagedBean implements Serializable {
     private String totalPrice = "";
     private String mailingAddr1 = "";
     private String mailingAddr2 = "";
-    
+
     private Double totalQuotedPrice = 0.0;
     private Integer totalQuantity = 0;
 
@@ -121,12 +121,9 @@ public class ProductPurchaseOrderManagedBean implements Serializable {
         //System.out.println("before this.purchaseOrderCustomerNo ===== " + this.purchaseOrderCustomerNo);
         //System.out.println("before this.mailingAddr1 ===== " + this.mailingAddr1);
         //System.out.println("before this.mailingAddr2 ===== " + this.mailingAddr2);
-
         //System.out.println("before newPurchaseOrder.getMailingAddr1() ===== " + newPurchaseOrder.getMailingAddr1());
         //System.out.println("before newPurchaseOrder.getMailingAddr2() ===== " + newPurchaseOrder.getMailingAddr2());
-
         //System.out.println("before username ===== " + username);
-
         if ((newPurchaseOrder.getMailingAddr1() == null && newPurchaseOrder.getMailingAddr2() == null) || (newPurchaseOrder.getMailingAddr1().equals("") && newPurchaseOrder.getMailingAddr2().equals(""))) {
             Customer c = customerSessionBean.findCustomer(username);
             if (c != null) {
@@ -135,25 +132,22 @@ public class ProductPurchaseOrderManagedBean implements Serializable {
 
                 //System.out.println("insde get exiting address  ===== " + c.getAddress1());
                 //System.out.println("inside get exiting address ===== " + c.getAddress2());
-
             }
         }
 
         //System.out.println("after newPurchaseOrder.getMailingAddr1() ===== " + newPurchaseOrder.getMailingAddr1());
         //System.out.println("after newPurchaseOrder.getMailingAddr2() ===== " + newPurchaseOrder.getMailingAddr2());
-
         // persist
         productPurchaseOrderSessionBean.createProductPurchaseOrder(newPurchaseOrder);
 
         // add into product purchase order collection in persistence context
         customerSessionBean.addProductPurchaseOrder(selectedProductionQuotation.getCustomer().getUserName(), newPurchaseOrder);
-
+        this.purchaseOrderCustomerNo = "";
         FacesContext.getCurrentInstance().addMessage("qMsg", new FacesMessage(FacesMessage.SEVERITY_INFO, "You have sent a Purchase Order No. " + selectedProductionQuotation.getProductQuotationNo(), ""));
 
         // generate PDF
         //FileDownloadView fdv = new FileDownloadView();
         //fdv.getFile(newPurchaseOrder, selectedProductionQuotation);
-
         // reinitialise
         setNewPurchaseOrder(new ProductPurchaseOrder());
     }
@@ -166,12 +160,13 @@ public class ProductPurchaseOrderManagedBean implements Serializable {
         description = "";
         total = 0.0;
         for (ProductQuotationDescription pqd : productQuotation.getProductQuotationDescriptionList()) {
+            System.out.println("description === " + description);
             description = description + pqd.getProductQuotationDescNo().toString() + ". " + pqd.getItemName() + " - SGD " + String.format("%.2f", pqd.getQuotedPrice()) + " x " + pqd.getQuantity() + "" + "\r\n";
             // compute total price
             total = (Double) (getTotal() + (pqd.getQuantity() * pqd.getQuotedPrice()));
         }
         description = description + "\n* All price(s) stated are price per unit.\n* Final price is including delivery charge.\n* Paid orders are processed and dispatched from\n&nbsp;&nbsp;&nbsp;our warehouse within 1 to 3 working days.";
-        
+
         setTotalPrice(String.format("%.2f", getTotal()));
         showDialog();
     }
