@@ -28,5 +28,10 @@ public interface ProductQuotationSessionBeanLocal {
     public void updateProductQuotationRelayedStatus(ProductQuotation productQuotation);
     
     public void updateProductQuotationStatus(ProductQuotation productQuotation);
-
+    
+    public List<List<List<String>>> deriveRevenueGraph_Year();
+    
+    public List<List<List<List<String>>>> deriveRevenueGraph_Quarter();
+    
+    public List<List<List<List<String>>>> deriveRevenueGraph_Month();
 }

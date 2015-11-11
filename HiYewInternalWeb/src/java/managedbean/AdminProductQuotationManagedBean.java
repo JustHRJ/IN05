@@ -6,10 +6,12 @@ import entity.ProductQuotation;
 import entity.ProductQuotationDescription;
 import java.io.Serializable;
 import java.sql.Timestamp;
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
@@ -31,7 +33,7 @@ public class AdminProductQuotationManagedBean implements Serializable {
     @EJB
     private CustomerSessionBeanLocal customerSessionBean;
 
-    private String status = "Pending";
+    private String status = "Unsettled";
 
     // get current year quotations by default
     private Integer year = Calendar.getInstance().get(Calendar.YEAR);
@@ -44,6 +46,9 @@ public class AdminProductQuotationManagedBean implements Serializable {
     private ProductQuotation selectedProductQuotation;
 
     private Boolean correctPrice = true;
+
+    private Double totalQuotedPrice = 0.0;
+    private Integer totalQuantity = 0;
 
     private ArrayList<ProductQuotation> filteredProductList;
 
@@ -59,10 +64,26 @@ public class AdminProductQuotationManagedBean implements Serializable {
     @PostConstruct
     public void init() {
         setReceivedNewProductQuotationList(new ArrayList<>(productQuotationSessionBean.receivedCustomerNewProductQuotationList(getStatus())));
-        getStatuses().put("Pending", "Pending");
-        getStatuses().put("Processed", "Processed");
-        getStatuses().put("Relayed", "Relayed");
-        getYears().put("2015", "2015");
+        getStatuses().put("Settled", "Settled");
+        getStatuses().put("Unsettled", "Unsettled");
+    }
+
+    public String formatPrice(Double input) {
+        DecimalFormat df = new DecimalFormat("0.00");
+        // System.out.println("formatPrice() ===== " + df.format(input));
+        try {
+            return df.format(input);
+        } catch (Exception ex) {
+            return "";
+        }
+    }
+
+    public List<String> getFilterSettledArr() {
+        return selectedProductQuotation.getFilterSettledArr();
+    }
+
+    public List<String> getFilterUnsettledArr() {
+        return selectedProductQuotation.getFilterUnsettledArr();
     }
 
     public void filterByStatusNoMsg() {
@@ -72,7 +93,7 @@ public class AdminProductQuotationManagedBean implements Serializable {
     public void filterByStatus() {
         System.out.println("status ==== " + status);
         receivedNewProductQuotationList = new ArrayList<>(productQuotationSessionBean.receivedCustomerNewProductQuotationList(status));
-        FacesContext.getCurrentInstance().addMessage("msgs", new FacesMessage(FacesMessage.SEVERITY_INFO, "The list of status \"" + status + "\" are up to date.", ""));
+        FacesContext.getCurrentInstance().addMessage("msgs", new FacesMessage(FacesMessage.SEVERITY_INFO, "Current list of \"" + status + "\" product quotation(s) are up to date.", ""));
     }
 
     public String formatDate(Timestamp Ttmestamp) {
@@ -89,8 +110,19 @@ public class AdminProductQuotationManagedBean implements Serializable {
 
     public void updateQuotationPrices(String productQuotationNo) {
         correctPrice = true;
-        productQuotationSessionBean.updateProductQuotationPrices(getDisplayProductQuotationDescriptionList());
-        FacesContext.getCurrentInstance().addMessage("inner-msgs", new FacesMessage(FacesMessage.SEVERITY_INFO, "Product quotation (#" + productQuotationNo + ") has been updated successfully!", ""));
+
+        try {
+            for (ProductQuotationDescription pqd : displayProductQuotationDescriptionList) {
+                pqd.setProfitMargin(pqd.getQuotedPrice() - pqd.getCostPrice());
+                pqd.setQuotedPrice(pqd.getCostPrice() + (pqd.getCostPrice() * (pqd.getProfitPercentage() / 100)));
+            }
+            productQuotationSessionBean.updateProductQuotationPrices(displayProductQuotationDescriptionList);
+            FacesContext.getCurrentInstance().addMessage("inner-msgs", new FacesMessage(FacesMessage.SEVERITY_INFO, "Product quotation (#" + productQuotationNo + ") has been updated successfully!", ""));
+
+        } catch (Exception e) {
+            FacesContext.getCurrentInstance().addMessage("inner-msgs", new FacesMessage(FacesMessage.SEVERITY_ERROR, "Price must have a value of more than zero.", ""));
+        }
+
     }
 
     public void updateQuotationRelayedStatus(String productQuotationNo, String username) {
@@ -98,6 +130,8 @@ public class AdminProductQuotationManagedBean implements Serializable {
         productQuotationSessionBean.updateProductQuotationRelayedStatus(selectedProductQuotation);
 
         Customer customer = customerSessionBean.getCustomerByUsername(username);
+
+        receivedNewProductQuotationList = new ArrayList<>(productQuotationSessionBean.receivedCustomerNewProductQuotationList(status));
 
         // Email Germany supplier for purchasing products
         EmailManager emailManager = new EmailManager();
@@ -151,21 +185,24 @@ public class AdminProductQuotationManagedBean implements Serializable {
             productQuotationSessionBean.updateProductQuotationStatus(selectedProductQuotation);
 
             Customer customer = customerSessionBean.getCustomerByUsername(username);
+
+            receivedNewProductQuotationList = new ArrayList<>(productQuotationSessionBean.receivedCustomerNewProductQuotationList(status));
+
             if (customer.isSubscribeEmail_qPriceUpdates()) {
                 EmailManager emailManager = new EmailManager();
                 emailManager.emailProductQuotationPriceUpdate(customer.getName(), customer.getEmail(), selectedProductQuotation.getProductQuotationNo());
             }
             if (customer.isSubscribeSMS_qPriceUpdates()) {
                 // SMS custmer for delivery date update
-//                try {
-//                    SmsService smsService1 = new SmsService("2USsHuRw6nYOlkh4", "Yie0bbxSDekwTT1d");
-//                    smsService1.send("+6592706232", "HiYew: Your quotation # details have been updated! You may go to HiYew Customer Portal to view the updates.", "", "", "");
-//                } catch (Exception e) {
-//                    e.printStackTrace();
-//                    throw new EJBException(e.getMessage());
-//                }
+                try {
+                    SmsService smsService1 = new SmsService("2USsHuRw6nYOlkh4", "Yie0bbxSDekwTT1d");
+                    smsService1.send("+65" + customer.getPhone(), "HiYew: We have updated the quoted unit price for your item(s) for Product Quotation # " + selectedProductQuotation.getProductQuotationNo() + ". You may go to HiYew Customer Portal to view the updates.", "", "", "");
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    throw new EJBException(e.getMessage());
+                }
             }
-            FacesContext.getCurrentInstance().addMessage("msgs", new FacesMessage(FacesMessage.SEVERITY_INFO, "Update notification for product quotation (#" + productQuotationNo + ") has been sent to customer!", ""));
+            FacesContext.getCurrentInstance().addMessage("msgs", new FacesMessage(FacesMessage.SEVERITY_INFO, "Update notification for Product Quotation #" + productQuotationNo + " has been sent to customer successfully!", ""));
             selectedProductQuotation = new ProductQuotation();
         } else {
 
@@ -219,6 +256,14 @@ public class AdminProductQuotationManagedBean implements Serializable {
      * @return the displayProductQuotationDescriptionList
      */
     public ArrayList<ProductQuotationDescription> getDisplayProductQuotationDescriptionList() {
+        totalQuotedPrice = 0.0;
+        totalQuantity = 0;
+        for (ProductQuotationDescription pqd : displayProductQuotationDescriptionList) {
+            if (pqd.getQuotedPrice() != null) {
+                totalQuotedPrice = totalQuotedPrice + pqd.getQuotedPrice();
+            }
+            totalQuantity = totalQuantity + pqd.getQuantity();
+        }
         return displayProductQuotationDescriptionList;
     }
 
@@ -298,5 +343,33 @@ public class AdminProductQuotationManagedBean implements Serializable {
      */
     public void setFilteredProductList(ArrayList<ProductQuotation> filteredProductList) {
         this.filteredProductList = filteredProductList;
+    }
+
+    /**
+     * @return the totalQuotedPrice
+     */
+    public Double getTotalQuotedPrice() {
+        return totalQuotedPrice;
+    }
+
+    /**
+     * @param totalQuotedPrice the totalQuotedPrice to set
+     */
+    public void setTotalQuotedPrice(Double totalQuotedPrice) {
+        this.totalQuotedPrice = totalQuotedPrice;
+    }
+
+    /**
+     * @return the totalQuantity
+     */
+    public Integer getTotalQuantity() {
+        return totalQuantity;
+    }
+
+    /**
+     * @param totalQuantity the totalQuantity to set
+     */
+    public void setTotalQuantity(Integer totalQuantity) {
+        this.totalQuantity = totalQuantity;
     }
 }

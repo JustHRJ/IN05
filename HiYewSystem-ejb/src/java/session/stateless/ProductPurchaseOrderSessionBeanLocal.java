@@ -20,6 +20,8 @@ public interface ProductPurchaseOrderSessionBeanLocal {
     
     public void updateProductPORelayedStatus(ProductPurchaseOrder inProductPurchaseOrder);
     
+    public void updateProductPODeliveredStatus(ProductPurchaseOrder inProductPurchaseOrder);
+    
     public void updateProductPOStatus(ProductPurchaseOrder inProductPurchaseOrder);
     
     public void updatePODeliveryDate(ProductPurchaseOrder inProductPurchaseOrder);

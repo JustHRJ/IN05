@@ -27,7 +27,7 @@
                         Inventory
                         <p:outputPanel style="text-align:right;">
                             <h:outputText value="Search all fields: " />
-                            <p:inputText style="font-weight:normal;font-family:'Open Sans';font-size:14px;width:150px" id="globalFilter" onkeyup="PF('itemsTable').filter()" placeholder="Enter keyword"/>
+                            <p:inputText style="background:white!important;font-weight:normal;font-family:'Open Sans';font-size:14px;width:150px" id="globalFilter" onkeyup="PF('itemsTable').filter()" placeholder="Enter keyword"/>
                         </p:outputPanel>
                     </f:facet>
                     <p:column width="100" filterBy="#{item.fillerCode}" sortBy="#{item.fillerCode}" headerText="WireCode" footerText="contains" filterMatchMode="contains">

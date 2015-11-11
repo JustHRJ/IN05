@@ -20,7 +20,7 @@
         <h:form id="mainForm">
             <p:growl id="msgs" showDetail="false" />
 
-            <p:tabView dynamic="false" cache="false" id="mainTab">
+            <p:tabView dynamic="false" cache="false" id="mainTab" >
                 <p:tab title="Request for Quotation">
                     <p:messages id="rfqMsg"  showDetail="false" closable="true" />
                     <p:dataTable value="#{productQuotationManagedBean.cacheList}" var="item" id="mydata" editable="true">
@@ -31,17 +31,19 @@
                         <p:column  styleClass="rfq" headerText="Item Type" width="10%">
                             <h:outputText value="#{item.productType}"/>
                         </p:column>
-                        <p:column  styleClass="rfq" headerText="Item Description" width="44%">
+                        <p:column  styleClass="rfq" headerText="Item Description" width="42%">
                             <h:outputText value="#{item.itemName}"/>
                         </p:column>
-                        <p:column headerText="Quantity" width="8%">
+                        <p:column headerText="Quantity" width="8%" styleClass="qty">
 
                             <p:cellEditor>
                                 <f:facet name="output"><h:outputText value="#{item.quantity}"/></f:facet>
-                                <f:facet name="input"><p:inputText value="#{item.quantity}" style="width:83px" converterMessage="Quantity must contains only numbers." validatorMessage="Quantity must have a value of more than zero.">
+                                <f:facet name="input">
+                                    <p:spinner onkeypress="return false" value="#{item.quantity}" converterMessage="Quantity must contains only numbers." validatorMessage="Quantity must be a value between 1 to 5." styleClass="year-spinner" size="1">
+                                        <f:converter converterId="javax.faces.Integer" />
                                         <f:validateLongRange minimum="1" />
                                         <p:ajax update=":mainForm:msgs" />
-                                    </p:inputText>
+                                    </p:spinner>
                                 </f:facet>
                             </p:cellEditor>
                         </p:column>
@@ -49,7 +51,7 @@
                             <p:cellEditor>
                                 <f:facet name="output"><h:outputText style="text-align: left" value="#{item.remarks}"/></f:facet>
                                 <f:facet name="input">
-                                    <p:inputTextarea autoResize="false" placeholder="You can add remarks here" value="#{item.remarks}" rows="6" cols="68" />
+                                    <p:inputTextarea style="text-align: left;font-weight:normal;color:black" autoResize="false" placeholder="You can add remarks here" value="#{item.remarks}" rows="10" cols="68" />
                                 </f:facet>
                             </p:cellEditor>
                         </p:column>
@@ -57,26 +59,53 @@
                         <p:column headerText="Edit" width="6%">
                             <p:rowEditor />
                         </p:column>
-                        <p:column headerText="Delete" width="6%">
-                            <p:commandLink update=":mainForm:msgs mydata" id="deleteLink" styleClass="ui-icon ui-icon-trash" action="#{productQuotationManagedBean.deleteProductQuotationDescription(item)}" />
+                        <p:column headerText="Delete" width="7%">
+                            <p:commandLink update=":notiForm :logoutForm :logoutForm2 :mainForm:msgs mydata" id="deleteLink" styleClass="ui-icon ui-icon-trash" action="#{productQuotationManagedBean.deleteProductQuotationDescription(item)}" />
                         </p:column>
                     </p:dataTable>
                     <br />
-                    <p:commandButton rendered="#{productQuotationManagedBean.cacheList.size() >= 1}" value="Send Request" actionListener="#{productQuotationManagedBean.createProductQuotation}" update="rfqMsg mydata" icon="" style="padding-top: 5px; padding-bottom: 5px; padding-left: 22px; padding-right: 22px">
+                    <p:commandButton rendered="#{productQuotationManagedBean.cacheList.size() >= 1}" value="Send Request" actionListener="#{productQuotationManagedBean.createProductQuotation}" update=":notiForm :logoutForm :logoutForm2 rfqMsg mydata" icon="" style="padding-top: 5px; padding-bottom: 5px; padding-left: 22px; padding-right: 22px">
                     </p:commandButton>
                 </p:tab>
                 <p:tab title="View Quotations">
                     <p:messages style="margin-top:-8px;margin-bottom:15px" id="qMsg"  showDetail="false" closable="true" />
                     <p:commandButton value="Refresh" actionListener="#{productQuotationManagedBean.receivedProductQuotations()}" update="qMsg rcvQuote" icon="" style="padding-top: 5px; padding-bottom: 5px; padding-left: 22px; padding-right: 22px" />
                     <br /><br />
-                    <p:dataTable filteredValue="#{productQuotationManagedBean.filteredProductList}" value="#{productQuotationManagedBean.receivedProductQuotationList}" var="item" rows="7" id="rcvQuote" paginator="true" editable="true">
+                    <p:dataTable filteredValue="#{productQuotationManagedBean.filteredProductList}" 
+                                 value="#{productQuotationManagedBean.receivedProductQuotationList}" 
+                                 sortBy="#{item.productQuotationNo}" sortOrder="descending"
+                                 var="item" 
+                                 rows="10" 
+                                 id="rcvQuote" 
+                                 paginator="true" 
+                                 editable="true" 
+                                 widgetVar="itemsTable" 
+                                 emptyMessage="No item(s) found with given criteria."
+                                 rowsPerPageTemplate="5,10,15">
+
+                        <f:facet name="header">
+                            <p:outputPanel style="text-align:left">
+                                <h:outputText value="Search all fields: " />
+                                <p:inputText id="globalFilter" onkeyup="PF('itemsTable').filter()" style="background:white;color:black;width:150px;font-weight:normal;font-family:'Open Sans';font-size:14px;" placeholder="Enter keyword"/>
+                            </p:outputPanel>
+                        </f:facet>
+
                         <p:column headerText="View" width="5%" >
                             <p:panel visible="true" style="border:0px; background: none;">
                                 <p:commandButton id="quoteDescBtn" icon="ui-icon-search" title="View" update="quotationDetailPanel" action="#{productQuotationManagedBean.selectProductQuotation(item)}" style="padding-top: 0px; padding-bottom: 0px; padding-left: 0px; padding-right: 0px"/>
                             </p:panel>
                             <p:overlayPanel for="quoteDescBtn" showEffect="fade" hideEffect="fade" dismissable="false" showCloseIcon="true" style="width:1050px">
                                 <p:outputPanel id="quotationDetailPanel" style="text-align:center;" >
-                                    <p:dataTable sortBy="#{quoteDescItem.productQuotationDescNo}" var="quoteDescItem" value="#{productQuotationManagedBean.displayProductQuotationDescriptionList}" rows="6" paginator="true">
+                                    <p:dataTable sortBy="#{quoteDescItem.productQuotationDescNo}" var="quoteDescItem" value="#{productQuotationManagedBean.displayProductQuotationDescriptionList}" rows="10" paginator="true">
+                                        <f:facet name="header">
+                                            <p:outputPanel style="text-align:left;height:56px;margin-top: 5px;">
+                                                <h:outputText value="Quotation No. ##{item.productQuotationNo}" />
+                                                <br />
+                                                <h:outputText value="Total Number of Items: #{productQuotationManagedBean.totalQuantity}" />
+                                                <br />
+                                                <h:outputText value="Total Price (SGD): $ #{productQuotationManagedBean.formatPrice(productQuotationManagedBean.totalQuotedPrice)}" />
+                                            </p:outputPanel>
+                                        </f:facet>
                                         <p:column headerText="ID" width="4%">
                                             <h:outputText value="#{quoteDescItem.productQuotationDescNo}" />
                                         </p:column>
@@ -100,13 +129,19 @@
                                 </p:outputPanel>
                             </p:overlayPanel>
                         </p:column>
-                        <p:column headerText="Quotation No." width="48%">
+                        <p:column headerText="Quotation No." width="48%" filterBy="#{item.productQuotationNo}" filterMatchMode="contains">
                             <h:outputText value="#{item.productQuotationNo}"/>
                         </p:column>
-                        <p:column headerText="Date" sortBy="#{item.date}" width="9%">
+                        <p:column headerText="Date" sortBy="#{item.date}" width="10%" filterBy="#{item.date}" filterMatchMode="contains">
                             <h:outputText value="#{productQuotationManagedBean.formatDate(item.date)}"/>
                         </p:column>
-                        <p:column headerText="Status" sortBy="#{item.date}" width="9%">
+                        <p:column headerText="Status" sortBy="#{item.date}" width="10%" filterBy="#{item.status}" filterMatchMode="equals">
+                            <f:facet name="filter">
+                                <h:selectOneMenu onchange="PF('itemsTable').filter()" >
+                                    <f:selectItem itemLabel="Select One" itemValue="#{null}" noSelectionOption="true" />
+                                    <f:selectItems value="#{productQuotationManagedBean.filterStatusesArr}" />
+                                </h:selectOneMenu>
+                            </f:facet>
                             <h:outputText style="text-align: center" value="#{item.status}"/>
                         </p:column>
                         <p:column headerText="Action" width="13%" >
@@ -122,39 +157,41 @@
                     <p:messages style="margin-top:-8px;margin-bottom:15px" id="poMsg"  showDetail="false" closable="true" />
                     <p:commandButton value="Refresh" actionListener="#{productPurchaseOrderManagedBean.receivedProductPurchaseOrderList()}" update="poMsg poQuote" icon="" style="padding-top: 5px; padding-bottom: 5px; padding-left: 22px; padding-right: 22px" />
                     <br /><br />
-                    <p:dataTable filteredValue="#{productQuotationManagedBean.filteredProductList2}" value="#{productPurchaseOrderManagedBean.receivedProductPurchaseOrderList}" var="item" rows="7" id="poQuote" paginator="true" editable="true">
+                    <p:dataTable filteredValue="#{productQuotationManagedBean.filteredProductList2}" 
+                                 value="#{productPurchaseOrderManagedBean.receivedProductPurchaseOrderList}" 
+                                 sortBy="#{item.productPurchaseOrderCustomerID}" sortOrder="descending"
+                                 var="item" 
+                                 rows="10" 
+                                 id="poQuote" 
+                                 paginator="true" 
+                                 editable="true"
+                                 widgetVar="itemsTable" 
+                                 emptyMessage="No item(s) found with given criteria."
+                                 rowsPerPageTemplate="5,10,15">
 
-                        <p:column headerText="Purchase Order No." width="15%">
-                            <h:outputText value="#{item.productPurchaseOrderCustomerID}"/>
-                        </p:column>
-                        <p:column headerText="Issued Date" sortBy="#{item.productPurchaseOrderDate}" width="10%">
-                            <h:outputText value="#{productQuotationManagedBean.formatDate(item.productPurchaseOrderDate)}"/>
-                        </p:column>
-                        <p:column headerText="Expected Delivery Date" sortBy="#{item.deliveryDate}" width="14%">
-                            <h:outputText value="#{item.deliveryDate != null ? productQuotationManagedBean.formatDate(item.deliveryDate) : 'To be confirmed'}"/>
-                        </p:column>
-                        <p:column headerText="Total Price (SGD)" sortBy="#{item.totalPrice}" width="11%">
-                            <h:outputText value="$ #{productPurchaseOrderManagedBean.formatPrice(item.totalPrice)}"/>
-                        </p:column>
-                        <p:column headerText="Mailing Address" width="15%">
-                            <h:outputText value="#{item.mailingAddr1}, #{item.mailingAddr2}"/>
-                        </p:column>
+                        <f:facet name="header">
+                            <p:outputPanel style="text-align:left">
+                                <h:outputText value="Search all fields: " />
+                                <p:inputText id="globalFilter" onkeyup="PF('itemsTable').filter()" style="background:white;color:black;width:150px;font-weight:normal;font-family:'Open Sans';font-size:14px;" placeholder="Enter keyword"/>
+                            </p:outputPanel>
+                        </f:facet>
 
-
-
-
-                        <p:column headerText="Download" width="15%">
-                            <p:commandButton value="Download" update="poQuote" ajax="false" onclick="" icon="ui-icon-arrowthick-1-s">
-                                <p:fileDownload value="#{fileDownloadView.getFile(item, item.productQuotation)}" />
-                            </p:commandButton>
-                        </p:column>
-                        <p:column headerText="View" width="4%">
+                        <p:column headerText="View" width="5%">
                             <p:panel visible="true" style="border:0px; background: none;">
                                 <p:commandButton id="quoteDescBtn" icon="ui-icon-search" title="View" update="quotationDetailPanel" action="#{productPurchaseOrderManagedBean.retrieveProductQuotationDescriptionList(item.productPurchaseOrderID)}" style="padding-top: 5px; padding-bottom: 5px; padding-left: 20px; padding-right: 20px"/>
                             </p:panel>
                             <p:overlayPanel for="quoteDescBtn" showEffect="fade" hideEffect="fade" dismissable="false" showCloseIcon="true" style="width:1050px">
                                 <p:outputPanel id="quotationDetailPanel" style="text-align:center;" >
-                                    <p:dataTable sortBy="#{quoteDescItem.productQuotationDescNo}" var="quoteDescItem" value="#{productPurchaseOrderManagedBean.displayProductQuotationDescriptionList}" rows="7" paginator="true">
+                                    <p:dataTable sortBy="#{quoteDescItem.productQuotationDescNo}" var="quoteDescItem" value="#{productPurchaseOrderManagedBean.displayProductQuotationDescriptionList}" rows="10" paginator="true">
+                                        <f:facet name="header">
+                                            <p:outputPanel style="text-align:left;height:56px;margin-top: 5px;">
+                                                <h:outputText value="Purchase Order No. ##{item.productPurchaseOrderCustomerID}" />
+                                                <br />
+                                                <h:outputText value="Total Number of Items: #{productPurchaseOrderManagedBean.totalQuantity}" />
+                                                <br />
+                                                <h:outputText value="Total Price (SGD): $ #{productPurchaseOrderManagedBean.formatPrice(item.totalPrice)}" />
+                                            </p:outputPanel>
+                                        </f:facet>
                                         <p:column headerText="ID" width="4%">
                                             <h:outputText value="#{quoteDescItem.productQuotationDescNo}" />
                                         </p:column>
@@ -177,52 +214,83 @@
                                 </p:outputPanel>
                             </p:overlayPanel>
                         </p:column>
+
+                        <p:column headerText="Purchase Order No." width="13%"  filterBy="#{item.productPurchaseOrderCustomerID}" filterMatchMode="contains">
+                            <h:outputText value="#{item.productPurchaseOrderCustomerID}"/>
+                        </p:column>
+                        <p:column headerText="Issued Date" sortBy="#{item.productPurchaseOrderDate}" width="10%" filterBy="#{item.productPurchaseOrderDate}" filterMatchMode="contains">
+                            <h:outputText value="#{productQuotationManagedBean.formatDate(item.productPurchaseOrderDate)}"/>
+                        </p:column>
+                        <p:column headerText="Expcd. Delivery Date" sortBy="#{item.deliveryDate}" width="14%" filterBy="#{item.deliveryDate}" filterMatchMode="contains">
+                            <h:outputText value="#{item.deliveryDate != null ? productQuotationManagedBean.formatDate(item.deliveryDate) : 'To be confirmed'}"/>
+                        </p:column>
+                        <p:column headerText="Total Price (SGD)" sortBy="#{item.totalPrice}" width="8%">
+                            <h:outputText value="$ #{productPurchaseOrderManagedBean.formatPrice(item.totalPrice)}"/>
+                        </p:column>
+                        <p:column headerText="Mailing Addr." width="10%">
+                            <h:outputText value="#{item.mailingAddr1}, #{item.mailingAddr2}"/>
+                        </p:column>
+                        <p:column headerText="Status" sortBy="#{item.date}" width="9%" filterBy="#{item.status}" filterMatchMode="equals">
+                            <f:facet name="filter">
+                                <h:selectOneMenu onchange="PF('itemsTable').filter()" >
+                                    <f:selectItem itemLabel="Select One" itemValue="#{null}" noSelectionOption="true" />
+                                    <f:selectItems value="#{productPurchaseOrderManagedBean.filterStatusesArr}" />
+                                </h:selectOneMenu>
+                            </f:facet>
+                            <h:outputText style="text-align: center" value="#{item.status}"/>
+                        </p:column>
+                        <p:column headerText="Download" width="10%">
+                            <p:commandButton style="padding: .3em 1em .3em 2.1em;" styleClass="fileDownload" value="Download" update="poQuote" ajax="false" onclick="" icon="ui-icon-arrowthick-1-s">
+                                <p:fileDownload value="#{fileDownloadView.getFile(item, item.productQuotation)}" />
+                            </p:commandButton>
+                        </p:column>
                     </p:dataTable>
                 </p:tab>
             </p:tabView>
 
         </h:form>
 
-        <p:dialog styleClass="rfq" id="myDialogID" widgetVar="myDialogVar" modal="true" resizable="false" header="Purchase Order" showEffect="fade" width="700px">
-            <h:form>
-                <br />
-                <p:panelGrid id="display" columns="2" columnClasses="value,value" style="width:100%;vertical-align:top">
+        <p:dialog styleClass="rfq" id="myDialogID" widgetVar="myDialogVar" modal="true" resizable="false" header="Purchase Order" showEffect="fade" width="700px" style="max-height:10000px">
+            <p:scrollPanel mode="native" style="max-height:500px;border:none">
+                <h:form>
+                    <br />
+                    <p:panelGrid id="display" columns="2" columnClasses="value,value" style="width:100%;vertical-align:top">
 
-                    <h:outputText value="Purchase Order No.: " style="text-align:left;width: 10%; font-weight: bolder; vertical-align: middle;color:black;"/>
-                    <p:inputText style="width: 330px; margin-top: 1px;font-weight: normal; font-size: 14px; font-family: 'Open Sans';" placeholder="" value="#{productPurchaseOrderManagedBean.purchaseOrderCustomerNo}" id="poId"  />
+                        <h:outputText value="Purchase Order No.: " style="text-align:left;width: 50%; font-weight: bolder; vertical-align: middle;color:black;"/>
+                        <p:inputText style="width: 330px; margin-top: 1px;font-weight: normal; font-size: 14px; font-family: 'Open Sans';" placeholder="" value="#{productPurchaseOrderManagedBean.purchaseOrderCustomerNo}" id="poId"  />
 
-                    <h:outputText value="Attention: " style="text-align:left;width: 10%; font-weight: bolder; vertical-align: middle;color:black;"/>
-                    <h:outputText id="attnId" value="#{productPurchaseOrderManagedBean.attention}" />
+                        <h:outputText value="Attention: " style="text-align:left;width: 10%; font-weight: bolder; vertical-align: middle;color:black;"/>
+                        <h:outputText id="attnId" value="#{productPurchaseOrderManagedBean.attention}" />
 
-                    <h:outputText value="Order Date: " style="text-align:left;width: 10%; font-weight: bolder;color:black;"/>
-                    <h:outputText id="orderDateId" value="#{productPurchaseOrderManagedBean.orderDate}" />
+                        <h:outputText value="Order Date: " style="text-align:left;width: 10%; font-weight: bolder;color:black;"/>
+                        <h:outputText id="orderDateId" value="#{productPurchaseOrderManagedBean.orderDate}" />
 
-                    <h:outputText value="Delivery Date: " style="text-align:left;width:10%; font-weight: bolder;color:black;"/>
-                    <h:outputText style="font-style:italic" id="deliveryDateId" value="(We will send you an email update)" />
+                        <h:outputText value="Delivery Date: " style="text-align:left;width:10%; font-weight: bolder;color:black;"/>
+                        <h:outputText style="font-style:italic" id="deliveryDateId" value="(We will send you an email update)" />
 
-                    <h:outputText value="Item Name: " style="text-align:left;width: 10%; font-weight: bolder;color:black;vertical-align:top"/>
-                    <h:outputText id="descId" value="#{productPurchaseOrderManagedBean.description}" style="white-space: pre-wrap" escape="false"/>
+                        <h:outputText value="Item(s) Name: " style="text-align:left;width: 10%; font-weight: bolder;color:black;vertical-align:top"/>
+                        <h:outputText id="descId" value="#{productPurchaseOrderManagedBean.description}" style="white-space: pre-wrap" escape="false"/>
 
-                    <h:outputText value="Total Price: " style="text-align:left;width: 10%; font-weight: bolder;color:black;"/>
-                    <h:outputText id="totalPriceId" value="SGD #{productPurchaseOrderManagedBean.totalPrice}" />
-                    <p:column>
-                        <h:outputText value="Mailing Address:" style="text-align:left;width: 10%; font-weight: bolder;color:black;"/>
-                        <br />
-                        <h:outputText value="*Please do not fill in if the mailing address is " style="text-align:left;font-size: 85%;color: red" />
-                        <br />
-                        <h:outputText value="the same as your home address." style="text-align:left;font-size: 85%;color: red" />
-                    </p:column>
-                    <p:column>
-                        <p:inputText style="width: 330px; margin-top: 1px;font-weight: normal; font-size: 14px; font-family: 'Open Sans';" placeholder="e.g. Beach Road" value="#{productPurchaseOrderManagedBean.mailingAddr1}" id="mailingAddr1"  />
-                        <br />
-                        <p:inputText style="width: 330px; margin-top: 5px; font-weight: normal; font-size: 14px; font-family: 'Open Sans';" placeholder="e.g. 12, #01-02" value="#{productPurchaseOrderManagedBean.mailingAddr2}" id="mailingAddr2"  />
-                        <br />
-                    </p:column>
-                </p:panelGrid>
-                <br />
-                <p:commandButton icon="" value="Send Purchase Order" action="#{productPurchaseOrderManagedBean.createPurchaseOrder()}" update=":mainForm:mainTab:rcvQuote myDialogID" style="padding-top: 5px; padding-bottom: 5px; padding-left: 22px; padding-right: 22px" />
-
-            </h:form>
+                        <h:outputText value="Total Price: " style="text-align:left;width: 10%; font-weight: bolder;color:black;"/>
+                        <h:outputText id="totalPriceId" value="SGD #{productPurchaseOrderManagedBean.totalPrice}" />
+                        <p:column>
+                            <h:outputText value="Mailing Address:" style="text-align:left;width: 10%; font-weight: bolder;color:black;"/>
+                            <br />
+                            <h:outputText value="*Please do not fill in if the mailing address is " style="text-align:left;font-size: 85%;color: red" />
+                            <br />
+                            <h:outputText value="the same as your home address." style="text-align:left;font-size: 85%;color: red" />
+                        </p:column>
+                        <p:column>
+                            <p:inputText style="width: 330px; margin-top: 1px;font-weight: normal; font-size: 14px; font-family: 'Open Sans';" placeholder="e.g. Beach Road" value="#{productPurchaseOrderManagedBean.mailingAddr1}" id="mailingAddr1"  />
+                            <br />
+                            <p:inputText style="width: 330px; margin-top: 5px; font-weight: normal; font-size: 14px; font-family: 'Open Sans';" placeholder="e.g. 12, #01-02" value="#{productPurchaseOrderManagedBean.mailingAddr2}" id="mailingAddr2"  />
+                            <br />
+                        </p:column>
+                    </p:panelGrid>
+                    <br />
+                    <p:commandButton icon="" value="Send Purchase Order" action="#{productPurchaseOrderManagedBean.createPurchaseOrder()}" update=":mainForm:mainTab:rcvQuote myDialogID" style="padding-top: 5px; padding-bottom: 5px; padding-left: 22px; padding-right: 22px" />
+                </h:form>
+            </p:scrollPanel>
         </p:dialog>
     </ui:define>
 </ui:composition>

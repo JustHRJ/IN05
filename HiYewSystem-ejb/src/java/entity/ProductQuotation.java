@@ -3,6 +3,7 @@ package entity;
 import java.io.Serializable;
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
 import javax.persistence.Entity;
@@ -14,10 +15,39 @@ import javax.persistence.OneToMany;
 public class ProductQuotation implements Serializable {
 
     private static final long serialVersionUID = 1L;
+
+    /**
+     * @return the statusesArr
+     */
+    public static String[] getStatusesArr() {
+        return statusesArr;
+    }
     @Id
     private String productQuotationNo;
     private Timestamp date;
     private String status; // Relayed, Processed, Pending, Accepted, Rejected
+
+    private final static String[] settledArr;
+    private final static String[] unsettledArr;
+    private final static String[] statusesArr;
+
+    static {
+        settledArr = new String[2];
+        settledArr[0] = "Accepted";
+        settledArr[1] = "Rejected";
+
+        unsettledArr = new String[3];
+        unsettledArr[0] = "Pending";
+        unsettledArr[1] = "Processed";
+        unsettledArr[2] = "Relayed";
+
+        statusesArr = new String[5];
+        statusesArr[0] = "Accepted";
+        statusesArr[1] = "Pending";
+        statusesArr[2] = "Processed";
+        statusesArr[3] = "Rejected";
+        statusesArr[4] = "Relayed";
+    }
 
     @OneToMany(mappedBy = "productQuotation")
     private List<ProductQuotationDescription> productQuotationDescriptionList = new ArrayList<>();
@@ -59,6 +89,18 @@ public class ProductQuotation implements Serializable {
     @Override
     public String toString() {
         return "ProductQuotation entity [ID =" + getProductQuotationNo() + "]";
+    }
+
+    public List<String> getFilterSettledArr() {
+        return Arrays.asList(settledArr);
+    }
+
+    public List<String> getFilterUnsettledArr() {
+        return Arrays.asList(unsettledArr);
+    }
+
+    public List<String> getFilterStatusesArr() {
+        return Arrays.asList(statusesArr);
     }
 
     /**

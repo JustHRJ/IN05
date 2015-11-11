@@ -48,13 +48,13 @@ public class AddItemManagedBean implements Serializable {
             System.out.println("Exisitng Item Name");
             FacesContext.getCurrentInstance().addMessage("formMain:itemName", new FacesMessage(FacesMessage.SEVERITY_ERROR, "Unable to add item! Existing Item Name", "Unable to add item! Existing Item Name"));
             return "";
-        } else {
-            newItem.setBookedQuantity(0);
-            hiYewICSSessionBean.createItem(newItem);
-            FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("ItemToPassToComposition", this.newItem);
-            newItem = new FillerEntity(); //To reinitialise and create new customer
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Item added to inventory successfully!"));
-            return "ics-add-newItem-Composite?faces-redirect=true";
+        }
+        else{
+          hiYewICSSessionBean.createItem(newItem);
+          FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("ItemToPassToComposition", this.newItem);
+          newItem = new FillerEntity(); //To reinitialise and create new customer
+           FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Item added to inventory successfully!"));
+             return "ics-add-new-item-composite?faces-redirect=true";
         }
     }
 

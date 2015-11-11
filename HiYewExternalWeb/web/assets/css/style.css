@@ -12,7 +12,18 @@ body{
 //////////////////////////////////////////////////////////////////////
 
 .ab{
+}
 
+.fileDownload .ui-button-text-icon-left .ui-button-text {
+    font-weight: bold;
+}
+
+.qty .ui-inputfield {
+    width: 85px!important;
+}
+
+.ui-widget-header {
+    color: #4f4f4f!important;
 }
 
 .ui-dialog .ui-dialog-title {
@@ -35,12 +46,13 @@ body{
 }
 
 .ui-inputfield {
-    background: white;
+    background: white!important;
     -moz-box-shadow: inset 0 2px 2px #8f8f8f;
     -webkit-box-shadow: none; //inset 0 2px 2px #8f8f8f
     box-shadow: none; //inset 0 2px 2px #8f8f8f 
     border-color: #ddd;
-    color: #313131;
+    color: black;
+    font-weight:normal!important;
 }
 
 .ui-selectonemenu .ui-selectonemenu-trigger .ui-icon {

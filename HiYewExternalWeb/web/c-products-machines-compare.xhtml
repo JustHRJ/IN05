@@ -20,12 +20,6 @@
             <b style="color:#428bca"><i class="fa fa-search overlay"></i>&nbsp;&nbsp;Select two models for a more detailed comparison.</b>
             <br />
             <br />
-<!--            <div style="height:30px;background:#2a6496;padding:5px;display: #{productQuotationManagedBean.selectedCount eq 0 ? 'none' : 'block'}">
-    <h:outputText value="#{compareMsg}" style="font-weight: bold; color: #eee; margin-bottom: 100%" />
-</div>-->
-
-<!--<br style="display: #{productQuotationManagedBean.selectedCount eq 0 ? 'none' : 'block'}" />-->
-
             <h:panelGrid columns="14" style="margin-bottom:10px" cellpadding="5">
                 <h:outputText style="font-weight:bold" value="LWI Small Chamber " />
                 <p:selectBooleanCheckbox value="#{productQuotationManagedBean.selectedMachine1}" disabled="#{(productQuotationManagedBean.selectedCount >= 2) ? (productQuotationManagedBean.selectedMachine1 eq true) ? 'false' : 'true' : 'false'}">
@@ -85,43 +79,43 @@
                                     <h2 style="font-size:20px;border:none;"><i><strong>LWI Small Chamber</strong></i></h2>
                                     <p:commandButton update="growlMsgs" style="border: none; font-weight: normal; font-family: 'Open Sans'; padding-top: 3px; padding-bottom: 4px; padding-left: 10px; padding-right: 10px" styleClass="btn btn-primary btn-xs" value="View" action="#{productQuotationManagedBean.redirectToSelectedMachine('LWI Small Chamber')}" icon="" />
                                     &nbsp;&nbsp;
-                                    <p:commandButton update="growlMsgs" style="border: none; font-weight: normal; font-family: 'Open Sans'; padding-top: 3px; padding-bottom: 4px; padding-left: 10px; padding-right: 10px" styleClass="btn btn-primary2 btn-xs" value="Add" action="#{productQuotationManagedBean.addToCacheList('Machine','LWI Small Chamber',1)}" icon="" />
+                                    <p:commandButton update=":notiForm :logoutForm :logoutForm2 growlMsgs" style="border: none; font-weight: normal; font-family: 'Open Sans'; padding-top: 3px; padding-bottom: 4px; padding-left: 10px; padding-right: 10px" styleClass="btn btn-primary2 btn-xs" value="Add" action="#{productQuotationManagedBean.addToCacheList('Machine','LWI Small Chamber',1)}" icon="" />
                                 </td>
                                 <td style="#{productQuotationManagedBean.selectedMachine2 eq true ? '' : 'display:none'}">
                                     <h2 style="font-size:20px;border:none"><i><strong>LWI V Flexx</strong></i></h2>
                                     <p:commandButton update="growlMsgs" style="border: none; font-weight: normal; font-family: 'Open Sans'; padding-top: 3px; padding-bottom: 4px; padding-left: 10px; padding-right: 10px" styleClass="btn btn-primary btn-xs" value="View" action="#{productQuotationManagedBean.redirectToSelectedMachine('LWI V Flexx')}" icon="" />
                                     &nbsp;&nbsp;
-                                    <p:commandButton update="growlMsgs" style="border: none; font-weight: normal; font-family: 'Open Sans'; padding-top: 3px; padding-bottom: 4px; padding-left: 10px; padding-right: 10px" styleClass="btn btn-primary2 btn-xs" value="Add" action="#{productQuotationManagedBean.addToCacheList('Machine','LWI V Flexx',1)}" icon="" />
+                                    <p:commandButton update=":notiForm :logoutForm :logoutForm2 growlMsgs" style="border: none; font-weight: normal; font-family: 'Open Sans'; padding-top: 3px; padding-bottom: 4px; padding-left: 10px; padding-right: 10px" styleClass="btn btn-primary2 btn-xs" value="Add" action="#{productQuotationManagedBean.addToCacheList('Machine','LWI V Flexx',1)}" icon="" />
                                 </td>
                                 <td style="#{productQuotationManagedBean.selectedMachine3 eq true ? '' : 'display:none'}">
                                     <h2 style="font-size:20px;border:none"><i><strong>LWI V ERGO</strong></i></h2>
                                     <p:commandButton update="growlMsgs" style="border: none; font-weight: normal; font-family: 'Open Sans'; padding-top: 3px; padding-bottom: 4px; padding-left: 10px; padding-right: 10px" styleClass="btn btn-primary btn-xs" value="View" action="#{productQuotationManagedBean.redirectToSelectedMachine('LWI V ERGO')}" icon="" />
                                     &nbsp;&nbsp;
-                                    <p:commandButton update="growlMsgs" style="border: none; font-weight: normal; font-family: 'Open Sans'; padding-top: 3px; padding-bottom: 4px; padding-left: 10px; padding-right: 10px" styleClass="btn btn-primary2 btn-xs" value="Add" action="#{productQuotationManagedBean.addToCacheList('Machine','LWI V ERGO',1)}" icon="" />
+                                    <p:commandButton update=":notiForm :logoutForm :logoutForm2 growlMsgs" style="border: none; font-weight: normal; font-family: 'Open Sans'; padding-top: 3px; padding-bottom: 4px; padding-left: 10px; padding-right: 10px" styleClass="btn btn-primary2 btn-xs" value="Add" action="#{productQuotationManagedBean.addToCacheList('Machine','LWI V ERGO',1)}" icon="" />
                                 </td>
                                 <td style="#{productQuotationManagedBean.selectedMachine4 eq true ? '' : 'display:none'}">
                                     <h2 style="font-size:20px;border:none"><i><strong>LWI V T-BaseV3</strong></i></h2>
                                     <p:commandButton update="growlMsgs" style="border: none; font-weight: normal; font-family: 'Open Sans'; padding-top: 3px; padding-bottom: 4px; padding-left: 10px; padding-right: 10px" styleClass="btn btn-primary btn-xs" value="View" action="#{productQuotationManagedBean.redirectToSelectedMachine('LWI V T-BaseV3')}" icon="" />
                                     &nbsp;&nbsp;
-                                    <p:commandButton update="growlMsgs" style="border: none; font-weight: normal; font-family: 'Open Sans'; padding-top: 3px; padding-bottom: 4px; padding-left: 10px; padding-right: 10px" styleClass="btn btn-primary2 btn-xs" value="Add" action="#{productQuotationManagedBean.addToCacheList('Machine','LWI V T-BaseV3',1)}" icon="" />
+                                    <p:commandButton update=":notiForm :logoutForm :logoutForm2 growlMsgs" style="border: none; font-weight: normal; font-family: 'Open Sans'; padding-top: 3px; padding-bottom: 4px; padding-left: 10px; padding-right: 10px" styleClass="btn btn-primary2 btn-xs" value="Add" action="#{productQuotationManagedBean.addToCacheList('Machine','LWI V T-BaseV3',1)}" icon="" />
                                 </td>
                                 <td style="#{productQuotationManagedBean.selectedMachine5 eq true ? '' : 'display:none'}">
                                     <h2 style="font-size:20px;border:none"><i><strong>LWI V MobileFlexx</strong></i></h2>
                                     <p:commandButton update="growlMsgs" style="border: none; font-weight: normal; font-family: 'Open Sans'; padding-top: 3px; padding-bottom: 4px; padding-left: 10px; padding-right: 10px" styleClass="btn btn-primary btn-xs" value="View" action="#{productQuotationManagedBean.redirectToSelectedMachine('LWI V MobileFlexx')}" icon="" />
                                     &nbsp;&nbsp;
-                                    <p:commandButton update="growlMsgs" style="border: none; font-weight: normal; font-family: 'Open Sans'; padding-top: 3px; padding-bottom: 4px; padding-left: 10px; padding-right: 10px" styleClass="btn btn-primary2 btn-xs" value="Add" action="#{productQuotationManagedBean.addToCacheList('Machine','LWI V MobileFlexx',1)}" icon="" />
+                                    <p:commandButton update=":notiForm :logoutForm :logoutForm2 growlMsgs" style="border: none; font-weight: normal; font-family: 'Open Sans'; padding-top: 3px; padding-bottom: 4px; padding-left: 10px; padding-right: 10px" styleClass="btn btn-primary2 btn-xs" value="Add" action="#{productQuotationManagedBean.addToCacheList('Machine','LWI V MobileFlexx',1)}" icon="" />
                                 </td>
                                 <td style="#{productQuotationManagedBean.selectedMachine6 eq true ? '' : 'display:none'}">
                                     <h2 style="font-size:20px;border:none"><i><strong>LWI V Unixx III</strong></i></h2>
                                     <p:commandButton update="growlMsgs" style="border: none; font-weight: normal; font-family: 'Open Sans'; padding-top: 3px; padding-bottom: 4px; padding-left: 10px; padding-right: 10px" styleClass="btn btn-primary btn-xs" value="View" action="#{productQuotationManagedBean.redirectToSelectedMachine('LWI V Unixx III')}" icon="" />
                                     &nbsp;&nbsp;
-                                    <p:commandButton update="growlMsgs" style="border: none; font-weight: normal; font-family: 'Open Sans'; padding-top: 3px; padding-bottom: 4px; padding-left: 10px; padding-right: 10px" styleClass="btn btn-primary2 btn-xs" value="Add" action="#{productQuotationManagedBean.addToCacheList('Machine','LWI V Unixx III',1)}" icon="" />
+                                    <p:commandButton update=":notiForm :logoutForm :logoutForm2 growlMsgs" style="border: none; font-weight: normal; font-family: 'Open Sans'; padding-top: 3px; padding-bottom: 4px; padding-left: 10px; padding-right: 10px" styleClass="btn btn-primary2 btn-xs" value="Add" action="#{productQuotationManagedBean.addToCacheList('Machine','LWI V Unixx III',1)}" icon="" />
                                 </td>
                                 <td style="#{productQuotationManagedBean.selectedMachine7 eq true ? '' : 'display:none'}">
                                     <h2 style="font-size:20px;border:none"><i><strong>LWI V UltraFlexx</strong></i></h2>
                                     <p:commandButton update="growlMsgs" style="border: none; font-weight: normal; font-family: 'Open Sans'; padding-top: 3px; padding-bottom: 4px; padding-left: 10px; padding-right: 10px" styleClass="btn btn-primary btn-xs" value="View" action="#{productQuotationManagedBean.redirectToSelectedMachine('LWI V UltraFlexx')}" icon="" />
                                     &nbsp;&nbsp;
-                                    <p:commandButton update="growlMsgs" style="border: none; font-weight: normal; font-family: 'Open Sans'; padding-top: 3px; padding-bottom: 4px; padding-left: 10px; padding-right: 10px" styleClass="btn btn-primary2 btn-xs" value="Add" action="#{productQuotationManagedBean.addToCacheList('Machine','LWI V UltraFlexx',1)}" icon="" />
+                                    <p:commandButton update=":notiForm :logoutForm :logoutForm2 growlMsgs" style="border: none; font-weight: normal; font-family: 'Open Sans'; padding-top: 3px; padding-bottom: 4px; padding-left: 10px; padding-right: 10px" styleClass="btn btn-primary2 btn-xs" value="Add" action="#{productQuotationManagedBean.addToCacheList('Machine','LWI V UltraFlexx',1)}" icon="" />
                                 </td>
                             </tr>
                             <tr valign="top">
@@ -1248,7 +1242,7 @@
                                                             </tr>
                                                             <tr>
                                                                 <td style="font-weight: bold; border-right: 1px solid #ddd">Cooling option</td>
-                                                                <td>-</td>
+                                                                <td>-<br /><br /></td>
                                                             </tr>
                                                             <tr>
                                                                 <td style="font-weight: bold; border-right: 1px solid #ddd">Electrical supply</td>
@@ -1367,7 +1361,7 @@
                                                             </tr>
                                                             <tr>
                                                                 <td style="font-weight: bold; border-right: 1px solid #ddd">Cooling option</td>
-                                                                <td>-</td>
+                                                                <td>-<br /><br /></td>
                                                             </tr>
                                                             <tr>
                                                                 <td style="font-weight: bold; border-right: 1px solid #ddd">Electrical supply</td>
@@ -1394,10 +1388,10 @@
                                     <div class="box-info full">
                                         <!-- Nav tab -->
                                         <ul class="nav nav-tabs nav-justified">
-                                            <li class="active"><a href="#1" data-toggle="tab">120W Nd:YAG</a></li>
-                                            <li><a href="#2" data-toggle="tab">150W Nd:YAG</a></li>
-                                            <li><a href="#3" data-toggle="tab">200W Nd:YAG</a></li>
-                                            <li><a href="#4" data-toggle="tab">300W Nd:YAG</a></li>
+                                            <li class="active"><a href="#1" data-toggle="tab">120W <br />Nd:YAG</a></li>
+                                            <li><a href="#2" data-toggle="tab">150W <br />Nd:YAG</a></li>
+                                            <li><a href="#3" data-toggle="tab">200W <br />Nd:YAG</a></li>
+                                            <li><a href="#4" data-toggle="tab">300W <br />Nd:YAG</a></li>
                                             <li><a href="#5" data-toggle="tab">150W <br />FSS</a></li>
                                             <li><a href="#6" data-toggle="tab">300W <br />FSS</a></li>
                                         </ul>
@@ -1742,7 +1736,7 @@
                                                             </tr>
                                                             <tr>
                                                                 <td style="font-weight: bold; border-right: 1px solid #ddd">Cooling option</td>
-                                                                <td>external cooling required</td>
+                                                                <td>External cooling required</td>
                                                             </tr>
                                                             <tr>
                                                                 <td style="font-weight: bold; border-right: 1px solid #ddd">Electrical supply</td>
@@ -1980,7 +1974,7 @@
                                                             </tr>
                                                             <tr>
                                                                 <td style="font-weight: bold; border-right: 1px solid #ddd">Cooling option</td>
-                                                                <td>-</td>
+                                                                <td>-<br /><br /></td>
                                                             </tr>
                                                             <tr>
                                                                 <td style="font-weight: bold; border-right: 1px solid #ddd">Electrical supply</td>
@@ -2099,7 +2093,7 @@
                                                             </tr>
                                                             <tr>
                                                                 <td style="font-weight: bold; border-right: 1px solid #ddd">Cooling option</td>
-                                                                <td>-</td>
+                                                                <td>-<br /><br /></td>
                                                             </tr>
                                                             <tr>
                                                                 <td style="font-weight: bold; border-right: 1px solid #ddd">Electrical supply</td>
@@ -2472,7 +2466,7 @@
                                                             </tr>
                                                             <tr>
                                                                 <td style="font-weight: bold; border-right: 1px solid #ddd">Cooling option</td>
-                                                                <td>-</td>
+                                                                <td>-<br /><br /></td>
                                                             </tr>
                                                             <tr>
                                                                 <td style="font-weight: bold; border-right: 1px solid #ddd">Electrical supply</td>
@@ -2591,7 +2585,7 @@
                                                             </tr>
                                                             <tr>
                                                                 <td style="font-weight: bold; border-right: 1px solid #ddd">Cooling option</td>
-                                                                <td>-</td>
+                                                                <td>-<br /><br /></td>
                                                             </tr>
                                                             <tr>
                                                                 <td style="font-weight: bold; border-right: 1px solid #ddd">Electrical supply</td>
@@ -2966,7 +2960,7 @@
                                                             </tr>
                                                             <tr>
                                                                 <td style="font-weight: bold; border-right: 1px solid #ddd">Cooling option</td>
-                                                                <td>external cooling required</td>
+                                                                <td>External cooling required</td>
                                                             </tr>
                                                             <tr>
                                                                 <td style="font-weight: bold; border-right: 1px solid #ddd">Electrical supply</td>
@@ -3204,7 +3198,7 @@
                                                             </tr>
                                                             <tr>
                                                                 <td style="font-weight: bold; border-right: 1px solid #ddd">Cooling option</td>
-                                                                <td>-</td>
+                                                                <td>-<br /><br /></td>
                                                             </tr>
                                                             <tr>
                                                                 <td style="font-weight: bold; border-right: 1px solid #ddd">Electrical supply</td>
@@ -3323,7 +3317,7 @@
                                                             </tr>
                                                             <tr>
                                                                 <td style="font-weight: bold; border-right: 1px solid #ddd">Cooling option</td>
-                                                                <td>-</td>
+                                                                <td>-<br /><br /></td>
                                                             </tr>
                                                             <tr>
                                                                 <td style="font-weight: bold; border-right: 1px solid #ddd">Electrical supply</td>
@@ -3698,7 +3692,7 @@
                                                             </tr>
                                                             <tr>
                                                                 <td style="font-weight: bold; border-right: 1px solid #ddd">Cooling option</td>
-                                                                <td>external cooling required</td>
+                                                                <td>External cooling required</td>
                                                             </tr>
                                                             <tr>
                                                                 <td style="font-weight: bold; border-right: 1px solid #ddd">Electrical supply</td>
@@ -3936,7 +3930,7 @@
                                                             </tr>
                                                             <tr>
                                                                 <td style="font-weight: bold; border-right: 1px solid #ddd">Cooling option</td>
-                                                                <td>-</td>
+                                                                <td>-<br /><br /></td>
                                                             </tr>
                                                             <tr>
                                                                 <td style="font-weight: bold; border-right: 1px solid #ddd">Electrical supply</td>
@@ -4055,7 +4049,7 @@
                                                             </tr>
                                                             <tr>
                                                                 <td style="font-weight: bold; border-right: 1px solid #ddd">Cooling option</td>
-                                                                <td>-</td>
+                                                                <td>-<br /><br /></td>
                                                             </tr>
                                                             <tr>
                                                                 <td style="font-weight: bold; border-right: 1px solid #ddd">Electrical supply</td>
@@ -4430,7 +4424,7 @@
                                                             </tr>
                                                             <tr>
                                                                 <td style="font-weight: bold; border-right: 1px solid #ddd">Cooling option</td>
-                                                                <td>external cooling required</td>
+                                                                <td>External cooling required</td>
                                                             </tr>
                                                             <tr>
                                                                 <td style="font-weight: bold; border-right: 1px solid #ddd">Electrical supply</td>
@@ -4668,7 +4662,7 @@
                                                             </tr>
                                                             <tr>
                                                                 <td style="font-weight: bold; border-right: 1px solid #ddd">Cooling option</td>
-                                                                <td>-</td>
+                                                                <td>-<br /><br /></td>
                                                             </tr>
                                                             <tr>
                                                                 <td style="font-weight: bold; border-right: 1px solid #ddd">Electrical supply</td>
@@ -4787,7 +4781,7 @@
                                                             </tr>
                                                             <tr>
                                                                 <td style="font-weight: bold; border-right: 1px solid #ddd">Cooling option</td>
-                                                                <td>-</td>
+                                                                <td>-<br /><br /></td>
                                                             </tr>
                                                             <tr>
                                                                 <td style="font-weight: bold; border-right: 1px solid #ddd">Electrical supply</td>
@@ -4814,8 +4808,8 @@
                                     <div class="box-info full">
                                         <!-- Nav tab -->
                                         <ul class="nav nav-tabs nav-justified">
-                                            <li class="active"><a href="#9" data-toggle="tab">150W FSS</a></li>
-                                            <li><a href="#0" data-toggle="tab">300W FSS</a></li>
+                                            <li class="active"><a href="#9" data-toggle="tab">150W<br />FSS</a></li>
+                                            <li><a href="#0" data-toggle="tab">300W<br />FSS</a></li>
                                         </ul>
                                         <!-- End nav tab -->
 
@@ -4921,7 +4915,7 @@
                                                             </tr>
                                                             <tr>
                                                                 <td style="font-weight: bold; border-right: 1px solid #ddd">Cooling option</td>
-                                                                <td>-</td>
+                                                                <td>-<br /><br /></td>
                                                             </tr>
                                                             <tr>
                                                                 <td style="font-weight: bold; border-right: 1px solid #ddd">Electrical supply</td>
@@ -5040,7 +5034,7 @@
                                                             </tr>
                                                             <tr>
                                                                 <td style="font-weight: bold; border-right: 1px solid #ddd">Cooling option</td>
-                                                                <td>-</td>
+                                                                <td>-<br /><br /></td>
                                                             </tr>
                                                             <tr>
                                                                 <td style="font-weight: bold; border-right: 1px solid #ddd">Electrical supply</td>

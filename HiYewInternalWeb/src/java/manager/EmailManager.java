@@ -104,8 +104,8 @@ public class EmailManager {
 
                 String message = "<div class=\"text\">";
                 message = message + "Dear <b>" + name + "</b>,<br /><br />";
-                message = message + "We have updated the quoted unit price for your item(s) for Quotation No. <b>#" + productQuotationNo + "</b>.<br/>";
-                message = message + "Please log in and check it out on our website!<br /><br />";
+                message = message + "We have updated the quoted unit price for your item(s) for Product Quotation <b>#" + productQuotationNo + "</b>.<br/>";
+                message = message + "You may go to HiYew Customer Portal to view the updates.<br /><br />";
                 message = message + "Thank you!<br /><br />";
                 message = message + "Best Regards,<br />";
                 message = message + "HiYew Team";
@@ -142,23 +142,23 @@ public class EmailManager {
             if (msg != null) {
                 msg.setFrom(InternetAddress.parse(emailFromAddress, false)[0]);
                 msg.setRecipients(Message.RecipientType.TO, InternetAddress.parse("hiyewgersup@gmail.com", false));
-                msg.setSubject("HiYew - Product Quotation No. #" + qNo);
+                msg.setSubject("HiYew - Product Quotation #" + qNo);
 
                 Multipart multipart = new MimeMultipart("related");
                 BodyPart htmlPart = new MimeBodyPart();
 
                 String message = "<div class=\"text\">";
                 message = message + "Hi there,<br /><br />";
-                message = message + "We would like to request for quotation for the following item(s).<br/><br/>";
+                message = message + "We would like to request for price quotation for the following item(s).<br/><br/>";
 
                 for (ProductQuotationDescription pdq : pqdList) {
-                    message = message + "(" + pdq.getProductQuotationDescNo() + ")<br />";
+                    message = message + "Item #" + pdq.getProductQuotationDescNo() + "<br />";
                     message = message + "Item Type: <b>" + pdq.getProductType() + "</b><br />";
                     message = message + "Item Name: <b>" + pdq.getItemName() + "</b><br />";
                     message = message + "Quantity: <b>" + pdq.getQuantity() + "</b><br /><br />";
                 }
 
-                message = message + "Thank you!<br /><br />";
+                message = message + "Please do not hesitate to email us should you need any further clarification. Thank you!<br /><br />";
                 message = message + "Best Regards,<br />";
                 message = message + "HiYew Team";
                 message = message + "</div>";
@@ -201,8 +201,8 @@ public class EmailManager {
 
                 String message = "<div class=\"text\">";
                 message = message + "Dear <b>" + name + "</b>,<br /><br />";
-                message = message + "We have updated the delivery date for your item(s) for Purchase Order No. <b>#" + productPONo + "</b>.<br/>";
-                message = message + "Please log in and check it out on our website!<br /><br />";
+                message = message + "We have updated the delivery date for your item(s) for Product Purchase Order <b>#" + productPONo + "</b>.<br/>";
+                message = message + "You may go to HiYew Customer Portal to view the updates.<br /><br />";
                 message = message + "Thank you!<br /><br />";
                 message = message + "Best Regards,<br />";
                 message = message + "HiYew Team";
@@ -239,23 +239,23 @@ public class EmailManager {
             if (msg != null) {
                 msg.setFrom(InternetAddress.parse(emailFromAddress, false)[0]);
                 msg.setRecipients(Message.RecipientType.TO, InternetAddress.parse("hiyewgersup@gmail.com", false));
-                msg.setSubject("HiYew - Product Purchase Order No. #" + poNumber);
+                msg.setSubject("HiYew - Product Purchase Order #" + poNumber);
 
                 Multipart multipart = new MimeMultipart("related");
                 BodyPart htmlPart = new MimeBodyPart();
 
                 String message = "<div class=\"text\">";
                 message = message + "Hi there,<br /><br />";
-                message = message + "We would like to purchase the following item(s).<br/><br/>";
+                message = message + "We would like to purchase the following item(s) from your company.<br/><br/>";
 
                 for (ProductQuotationDescription pdq : pqdList) {
-                    message = message + "(" + pdq.getProductQuotationDescNo() + ")<br />";
+                    message = message + "Item #" + pdq.getProductQuotationDescNo() + "<br />";
                     message = message + "Item Type: <b>" + pdq.getProductType() + "</b><br />";
                     message = message + "Item Name: <b>" + pdq.getItemName() + "</b><br />";
                     message = message + "Quantity: <b>" + pdq.getQuantity() + "</b><br /><br />";
                 }
 
-                message = message + "Thank you!<br /><br />";
+                message = message + "Please do not hesitate to email us should you need any further clarification. Thank you!<br /><br />";
                 message = message + "Best Regards,<br />";
                 message = message + "HiYew Team";
                 message = message + "</div>";

@@ -19,7 +19,7 @@
 
         <div class="row">
             <div class="col-sm-8">
-                <div class="box-info full">
+                <div class="box-info full" style="padding-left:0px;padding-right:0px;">
                     <!-- Nav tab -->
                     <ul class="nav nav-tabs nav-justified">
                         <li class="active"><a href="#about" data-toggle="tab"><i class="fa fa-user"></i>&nbsp;&nbsp;About</a></li>
@@ -36,28 +36,30 @@
                             <div class="user-profile-content">
                                 <div class="row">
                                     <div class="col-sm-6">
-                                        <address>
-                                            <strong>Name</strong><br />
-                                            <abbr style="cursor: default" title="Name"><h:outputText value="#{customerManagedBean.customer.name}" /></abbr>
-                                        </address>
-                                        <address>
-                                            <strong>Address</strong><br />
-                                            <abbr style="cursor: default" title="Address"><h:outputText value="#{customerManagedBean.customer.address1}" /></abbr>
-                                            <br />
-                                            <abbr style="cursor: default" title="Postal Code"><h:outputText value="#{customerManagedBean.customer.address2}" /></abbr>
-                                        </address>
-                                        <address>
-                                            <strong>Postal Code</strong><br />
-                                            <abbr style="cursor: default" title="Postal Code"><h:outputText value="#{customerManagedBean.customer.postalCode}" /></abbr>
-                                        </address>
-                                        <address>
-                                            <strong>Phone</strong><br />
-                                            <abbr style="cursor: default" title="Phone"><h:outputText value="#{customerManagedBean.customer.phone}" /></abbr>
-                                        </address>
-                                        <address>
-                                            <strong>Email</strong><br />
-                                            <abbr style="cursor: default" title="Email"><h:outputText value="#{customerManagedBean.customer.email}" /></abbr>
-                                        </address>
+                                        <h:form id="displayProfileForm">
+                                            <address>
+                                                <strong>Name</strong><br />
+                                                <abbr style="cursor: default" title="Name"><h:outputText value="#{customerManagedBean.customer.name}" /></abbr>
+                                            </address>
+                                            <address>
+                                                <strong>Address</strong><br />
+                                                <abbr style="cursor: default" title="Address"><h:outputText value="#{customerManagedBean.customer.address1}" /></abbr>
+                                                <br />
+                                                <abbr style="cursor: default" title="Postal Code"><h:outputText value="#{customerManagedBean.customer.address2}" /></abbr>
+                                            </address>
+                                            <address>
+                                                <strong>Postal Code</strong><br />
+                                                <abbr style="cursor: default" title="Postal Code"><h:outputText value="#{customerManagedBean.customer.postalCode}" /></abbr>
+                                            </address>
+                                            <address>
+                                                <strong>Phone</strong><br />
+                                                <abbr style="cursor: default" title="Phone"><h:outputText value="#{customerManagedBean.customer.phone}" /></abbr>
+                                            </address>
+                                            <address>
+                                                <strong>Email</strong><br />
+                                                <abbr style="cursor: default" title="Email"><h:outputText value="#{customerManagedBean.customer.email}" /></abbr>
+                                            </address>
+                                        </h:form>
                                     </div>
                                 </div><!-- End div .row -->
                             </div><!-- End div .user-profile-content -->
@@ -69,6 +71,7 @@
                             <div class="user-profile-content">
                                 <h:form id="editProfileForm">
                                     <p:growl id="msgs" showDetail="false" />
+                                    <p:messages id="profileMsg"  showDetail="false" closable="true" />
                                     <div class="form-group">
                                         <label for="">Name</label>
                                         <p:inputText class="form-control text-input" value="#{customerManagedBean.customer.name}" required="true" requiredMessage="Name is required." />
@@ -98,7 +101,7 @@
                                             <f:validateRegex pattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$" />
                                         </p:inputText>
                                     </div>
-                                    <p:commandButton style="border: none; font-weight: normal; font-family: 'Open Sans'; padding-top: 6px; padding-bottom: 7px; padding-left: 22px; padding-right: 22px" styleClass="btn btn-primary" value="Update" action="#{customerManagedBean.handleSave()}" update=":changePasswordForm:msgs " icon=""/>
+                                    <p:commandButton style="border: none; font-weight: normal; font-family: 'Open Sans'; padding-top: 6px; padding-bottom: 7px; padding-left: 22px; padding-right: 22px" styleClass="btn btn-primary" value="Update" action="#{customerManagedBean.handleSave()}" update="displayProfileForm editProfileForm profileMsg" icon=""/>
                                 </h:form>
                             </div><!-- End div .user-profile-content -->
                         </div><!-- End div .tab-pane -->
@@ -108,6 +111,7 @@
                         <div class="tab-pane animated fadeInRight" id="change-password">
                             <div class="user-profile-content">
                                 <h:form id="changePasswordForm">
+                                    <p:messages id="pwdMsg"  showDetail="false" closable="true" />
                                     <p:growl id="msgs" showDetail="false" />
                                     <div class="form-group">
                                         <label for="">Current Password</label>
@@ -121,7 +125,7 @@
                                         <label for="">Re-Password</label>
                                         <p:password style="font-family: 'Open Sans';" styleClass="form-control" placeholder="At least 8 alphanumeric characters." value="#{customerManagedBean.rePassword}"  inline="true" requiredMessage="Re-Password is required." id="Re-Password"  />
                                     </div>
-                                    <p:commandButton style="border: none; font-weight: normal; font-family: 'Open Sans'; padding-top: 6px; padding-bottom: 7px; padding-left: 22px; padding-right: 22px" styleClass="btn btn-primary" value="Update" action="#{customerManagedBean.changePassword()}" update=":changePasswordForm:msgs " icon=""/>
+                                    <p:commandButton style="border: none; font-weight: normal; font-family: 'Open Sans'; padding-top: 6px; padding-bottom: 7px; padding-left: 22px; padding-right: 22px" styleClass="btn btn-primary" value="Update" action="#{customerManagedBean.changePassword()}" update="changePasswordForm pwdMsg" icon=""/>
                                 </h:form>
                             </div><!-- End div .scroll-user-widget -->
                         </div><!-- End div .tab-pane -->
@@ -132,12 +136,12 @@
                             <div class="user-profile-content">
                                 <h:form id="changeSubscriptionForm">
                                     <p:growl id="msgs" showDetail="false" />
-                                    <p:messages id="emailMsg"  showDetail="false" />
+                                    <p:messages id="emailMsg"  showDetail="false" closable="true" />
                                     <h:outputText style="font-weight: bold;" value="Subscriptions" />
                                     <br />
                                     <div style="height: 8px"></div>
                                     Subscribe to receive notifications on any changes on updates. 
-                                    If you do not wish to receive any notifications, please unsubscribe from the tools.
+                                    If you do not wish to receive any notifications, please un-subscribe from the tools.
                                     <br />
                                     <!-- Sales report -->
                                     <table data-sortable="" class="table table-striped">
@@ -168,13 +172,14 @@
                                 <h:form id="supplierApplicationForm">
                                     <div class="form-group">
                                         <br />
+                                        <p:messages id="supplierMsg"  showDetail="false" closable="true" />
                                         <h:outputText style="font-weight: bold;" value="Application for a Joint Supplier Account" />
                                         <br />
                                         <div style="height: 8px"></div>
                                         <p:inputText class="form-control text-input"  placeholder="Your supplier's code" value="#{loginManagedBean.supplierCodeWord}" required="true" requiredMessage="A supplier's codeword is required." >
                                         </p:inputText>
                                     </div>
-                                    <p:commandButton style="border: none; font-weight: normal; font-family: 'Open Sans'; padding-top: 6px; padding-bottom: 7px; padding-left: 22px; padding-right: 22px" styleClass="btn btn-primary" value="Submit" action="#{loginManagedBean.createSupplierFromExistingCustomerAcct(customerManagedBean.customer.userName)}" update=":changePasswordForm:msgs " icon=""/>
+                                    <p:commandButton style="border: none; font-weight: normal; font-family: 'Open Sans'; padding-top: 6px; padding-bottom: 7px; padding-left: 22px; padding-right: 22px" styleClass="btn btn-primary" value="Submit" action="#{loginManagedBean.createSupplierFromExistingCustomerAcct(customerManagedBean.customer.userName)}" update="supplierApplicationForm supplierMsg" icon=""/>
 
                                 </h:form>
                             </div><!-- End div .scroll-user-widget -->

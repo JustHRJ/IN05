@@ -1,0 +1,138 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                template="./template.xhtml">
+
+    <ui:define name="content">
+        <script type="text/javascript">
+            function pieExtender() {
+                this.cfg.highlighter = {
+                    show: true,
+                    tooltipLocation: 'n',
+                    useAxesFormatters: true,
+                    tooltipAxes: 'y'
+                }
+            }
+            function pieExtender_pie() {
+                this.cfg.highlighter = {
+                    show: true,
+                    tooltipLocation: 'n',
+                    useAxesFormatters: false,
+                    formatString: '%s = %d'
+                }
+            }
+        </script>
+        <!-- Page header -->
+        <div class="page-heading animated fadeInDownBig" style="padding:20px!important;padding-bottom:10px!important;">
+            <h1>Sales Dashboard <small>Sales Management</small></h1>
+        </div>
+        <!-- End page header -->
+        <div style="padding:20px!important;padding-top:0px!important;">
+            <div style="height:500px">
+                <h:form id="formMain">
+                    <p:growl id="msgs" showDetail="true" />
+                    <div class="ui-grid ui-grid-responsive">
+                        <div class="ui-grid-row">
+                            <p:fieldset id="chartView" legend="Products" style="width:100%">
+                                <div class="ui-grid-col-6">
+                                    <center>
+                                        <h:panelGrid rendered="#{productChartView.visibility_First}" columns="1" cellpadding="5">
+                                            <p:chart type="bar" model="#{productChartView.barChart_AnnualRevPLPerYear}" style="width:635px;height:520px">
+                                                <p:ajax event="itemSelect" listener="#{productChartView.itemSelect_FirstLeft}" update="msgs chartView" />
+                                            </p:chart>
+                                        </h:panelGrid>
+                                    </center>
+                                </div>
+                                <div class="ui-grid-col-6">
+                                    <center>
+                                        <h:panelGrid rendered="#{productChartView.visibility_First}" columns="1" cellpadding="5">
+                                            <p:chart type="line" model="#{productChartView.lineChart_AnnualRevPLPerYearByProduct}" style="width:635px;height:520px">
+                                                <p:ajax event="itemSelect" listener="#{productChartView.itemSelect_FirstRight}" update="msgs chartView" />
+                                            </p:chart>
+                                        </h:panelGrid>
+                                    </center>
+                                </div>
+                                <div class="ui-grid-col-2">
+                                    <center>
+                                        <h:panelGrid rendered="#{productChartView.visibility_FirstRight}" columns="1" cellpadding="5">
+                                            <p:chart type="pie" model="#{productChartView.pieChartQuarter}" style="width:250px;height:250px">
+                                            </p:chart>
+                                            <p:chart type="pie" model="#{productChartView.pieChartQuarter_PL}" style="width:250px;height:250px">
+                                            </p:chart>
+                                        </h:panelGrid>
+                                    </center>
+                                </div>
+                                <div class="ui-grid-col-4">
+                                    <h:panelGrid style="margin-left:55px" rendered="#{productChartView.visibility_FirstRight}" columns="1" cellpadding="5">
+                                        <p:chart type="bar" model="#{productChartView.combinedModel}" style="width:380px;height:493px" />
+                                    </h:panelGrid>
+                                </div>
+                                <div class="ui-grid-col-6">
+                                    <center>
+                                        <h:panelGrid style="margin-left:15px" rendered="#{productChartView.visibility_FirstRight}" columns="1" cellpadding="5">
+                                            <p:chart type="bar" model="#{productChartView.barChartMonth}" style="width:630px;height:520px">
+                                            </p:chart>
+                                            <p:commandButton style="float:right" value="Back" actionListener="#{productChartView.itemSelectBack_First}" update="msgs chartView" />
+                                        </h:panelGrid>
+                                    </center>
+                                </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                <div class="ui-grid-col-2">
+                                    <center>
+                                        <h:panelGrid rendered="#{productChartView.visibility_FirstLeft}" columns="1" cellpadding="5">
+                                            <p:chart type="pie" model="#{productChartView.pieChartQuarter_all}" style="width:250px;height:250px">
+                                            </p:chart>
+                                            <p:chart type="pie" model="#{productChartView.pieChartQuarter_PL_all}" style="width:250px;height:250px">
+                                            </p:chart>
+                                        </h:panelGrid>
+                                    </center>
+                                </div>
+                                <div class="ui-grid-col-4">
+                                    <h:panelGrid style="margin-left:55px" rendered="#{productChartView.visibility_FirstLeft}" columns="1" cellpadding="5">
+                                        <p:chart type="bar" model="#{productChartView.combinedModel_all}" style="width:380px;height:493px" />
+                                    </h:panelGrid>
+                                </div>
+                                <div class="ui-grid-col-6">
+                                    <center>
+                                        <h:panelGrid style="margin-left:15px" rendered="#{productChartView.visibility_FirstLeft}" columns="1" cellpadding="5">
+                                            <p:chart type="bar" model="#{productChartView.barChartMonth_all}" style="width:630px;height:520px">
+                                            </p:chart>
+                                            <p:commandButton style="float:right" value="Back" actionListener="#{productChartView.itemSelectBack_First}" update="msgs chartView" />
+                                        </h:panelGrid>
+                                    </center>
+                                </div>
+                            </p:fieldset>
+                        </div>
+                    </div>
+                </h:form>
+            </div>
+        </div>
+        <br /><br /><br /><br />
+    </ui:define>
+
+</ui:composition>
