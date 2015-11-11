@@ -5,6 +5,7 @@
  */
 package session.stateless;
 
+import entity.Customer;
 import java.util.List;
 import java.util.Vector;
 import javax.ejb.Local;
@@ -21,5 +22,7 @@ public interface TransferSystemBeanLocal {
     public void addWelds(List<Vector> result);
 
     public void connectProjectWelds(List<Vector> result);
+
+
     
 }

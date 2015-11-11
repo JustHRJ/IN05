@@ -67,6 +67,7 @@ public class KnowledgeSystemBeanRemoteInterfaceTest {
         System.out.println("metalRecords  Test case - Size of Metal Records");
         List<Metal> metals = KnowledgeSystemBeanInterface.metalRecords();
         assertEquals(metals.size(), 26);
+        System.out.println("testMetalRecords ---------------------------------------------------- Done");
     }
     //how to test for empty cases
 
@@ -77,8 +78,7 @@ public class KnowledgeSystemBeanRemoteInterfaceTest {
 //    public void testEditMetal() {
 //        System.out.println("editMetal");
 //        Metal metal = null;
-//        KnowledgeSystemBeanInterface.editMetal(metal);
-//        
+//        KnowledgeSystemBeanInterface.editMetal(metal);    
 //    }
 //
 //    /**
@@ -103,21 +103,21 @@ public class KnowledgeSystemBeanRemoteInterfaceTest {
         System.out.println("retrieveFillerNames - Size of Filler Records ");
         List<String> result = KnowledgeSystemBeanInterface.retrieveFillerNames();
         assertEquals(result.size(), 5);
+        System.out.println("testRetrieveFillerNames ---------------------------------------------------- Done");
     }
 //
 //    /**
 //     * Test of metalNames method, of class KnowledgeSystemBeanRemoteInterface.
 //     */
-//    @Test
-//    public void testMetalNames() {
-//        System.out.println("metalNames");
-//        KnowledgeSystemBeanRemoteInterface instance = new KnowledgeSystemBeanRemoteInterfaceImpl();
-//        List<String> expResult = null;
-//        List<String> result = instance.metalNames();
-//        assertEquals(expResult, result);
-//        // TODO review the generated test code and remove the default call to fail.
-//        fail("The test case is a prototype.");
-//    }
+
+    @Test
+    public void testMetalNames() {
+        System.out.println("metalNames - Metal has records");
+        List<String> result = KnowledgeSystemBeanInterface.metalNames();
+        assertEquals(result.size(), 26);
+        System.out.println("testMetalNames ---------------------------------------------------- Done");
+        // TODO review the generated test code and remove the default call to fail.
+    }
 //
 //    /**
 //     * Test of createPairings method, of class
@@ -146,6 +146,7 @@ public class KnowledgeSystemBeanRemoteInterfaceTest {
         List<String> result = KnowledgeSystemBeanInterface.FillersNotAssociated(metalName);
         ArrayList<String> results = new ArrayList<String>();
         assertEquals(result, results);
+        System.out.println("testFillersNotAssociated ---------------------------------------------------- Done");
     }
 
     @Test
@@ -155,6 +156,7 @@ public class KnowledgeSystemBeanRemoteInterfaceTest {
         List<String> result = KnowledgeSystemBeanInterface.FillersNotAssociated(metalName);
         ArrayList<String> results = new ArrayList<String>();
         assertEquals(result, results);
+        System.out.println("testFillersNotAssociated2 ---------------------------------------------------- Done");
     }
 
     @Test
@@ -164,13 +166,24 @@ public class KnowledgeSystemBeanRemoteInterfaceTest {
         List<String> result = KnowledgeSystemBeanInterface.FillersNotAssociated(metalName);
 
         assertEquals(result.size(), 4);
+        System.out.println("testFillersNotAssociated3 ---------------------------------------------------- Done");
     }
+
+    @Test
+    public void testFillersNotAssociated4() {
+        System.out.println("FillersNotAssociated - Metal not exist (not associated)");
+        String metalName = "Metal AB";
+        List<String> result = KnowledgeSystemBeanInterface.FillersNotAssociated(metalName);
+        ArrayList<String> results = new ArrayList<String>();
+        assertEquals(result, results);
+        System.out.println("testFillersNotAssociated4 ---------------------------------------------------- Done");
+    }
+
 //
 //    /**
 //     * Test of FillersAssociated method, of class
 //     * KnowledgeSystemBeanRemoteInterface.
 //     */
-
     @Test
     public void testFillersAssociated() {
         System.out.println("FillersAssociated - metalName = ''");
@@ -178,6 +191,7 @@ public class KnowledgeSystemBeanRemoteInterfaceTest {
         List<String> result = KnowledgeSystemBeanInterface.FillersAssociated(metalName);
         ArrayList<String> results = new ArrayList<String>();
         assertEquals(result, results);
+        System.out.println("testFillersAssociated ---------------------------------------------------- Done");
     }
 
     @Test
@@ -187,6 +201,7 @@ public class KnowledgeSystemBeanRemoteInterfaceTest {
         List<String> result = KnowledgeSystemBeanInterface.FillersAssociated(metalName);
         ArrayList<String> results = new ArrayList<String>();
         assertEquals(result, results);
+        System.out.println("testFillersAssociated2 ---------------------------------------------------- Done");
     }
 
     @Test
@@ -196,6 +211,17 @@ public class KnowledgeSystemBeanRemoteInterfaceTest {
         List<String> result = KnowledgeSystemBeanInterface.FillersAssociated(metalName);
 
         assertEquals(result.size(), 1);
+        System.out.println("testFillersAssociated3 ---------------------------------------------------- Done");
+    }
+
+    @Test
+    public void testFillersAssociated4() {
+        System.out.println("FillersAssociated - metal does not exist (Associated)");
+        String metalName = "Metal AB";
+        List<String> result = KnowledgeSystemBeanInterface.FillersAssociated(metalName);
+        ArrayList<String> results = new ArrayList<String>();
+        assertEquals(result, results);
+        System.out.println("testFillersAssociated4 ---------------------------------------------------- Done");
     }
 //
 //    /**
@@ -215,45 +241,61 @@ public class KnowledgeSystemBeanRemoteInterfaceTest {
 //     * Test of transferFillerInfo method, of class
 //     * KnowledgeSystemBeanRemoteInterface.
 //     */
-//    @Test
-//    public void testTransferFillerInfo() {
-//        System.out.println("transferFillerInfo");
-//        KnowledgeSystemBeanRemoteInterface instance = new KnowledgeSystemBeanRemoteInterfaceImpl();
-//        List<Vector> expResult = null;
-//        List<Vector> result = instance.transferFillerInfo();
-//        assertEquals(expResult, result);
-//        // TODO review the generated test code and remove the default call to fail.
-//        fail("The test case is a prototype.");
-//    }
+
+    @Test
+    public void testTransferFillerInfo() {
+        System.out.println("transferFillerInfo - Filler has information");
+        List<Vector> result = KnowledgeSystemBeanInterface.transferFillerInfo();
+        assertEquals(result.size(), 5);
+        System.out.println("testTransferFillerInfo ---------------------------------------------------- Done");
+        // TODO review the generated test code and remove the default call to fail.
+
+    }
 //
 //    /**
 //     * Test of transferMetalInfo method, of class
 //     * KnowledgeSystemBeanRemoteInterface.
 //     */
+
+    @Test
+    public void testTransferMetalInfo() {
+        System.out.println("transferMetalInfo - Table have records");
+        List<Vector> result = KnowledgeSystemBeanInterface.transferMetalInfo();
+        assertEquals(result.size(), 26);
+        System.out.println("testTransferMetalInfo ---------------------------------------------------- Done");
+    }
+//
 //    @Test
-//    public void testTransferMetalInfo() {
-//        System.out.println("transferMetalInfo");
-//        KnowledgeSystemBeanRemoteInterface instance = new KnowledgeSystemBeanRemoteInterfaceImpl();
-//        List<Vector> expResult = null;
-//        List<Vector> result = instance.transferMetalInfo();
-//        assertEquals(expResult, result);
-//        // TODO review the generated test code and remove the default call to fail.
-//        fail("The test case is a prototype.");
+//    public void testTransferMetalInfo2() {
+//        System.out.println("transferMetalInfo - Table have records");
+//        List<Vector> result = KnowledgeSystemBeanInterface.transferMetalInfo();
+//        assertNull(result);
+//        System.out.println("testTransferMetalInfo2 ---------------------------------------------------- Done");
 //    }
+
 //
 //    /**
 //     * Test of fillerRecords method, of class
 //     * KnowledgeSystemBeanRemoteInterface.
 //     */
-
     @Test
     public void testFillerRecords() {
         System.out.println("fillerRecords - FillerComposition have records");
         List<FillerComposition> result = KnowledgeSystemBeanInterface.fillerRecords();
         assertEquals(result.size(), 5);
+        System.out.println("testFillerRecords ---------------------------------------------------- Done");
         // TODO review the generated test code and remove the default call to fail.
-
     }
+
+//    @Test
+//    public void testFillerRecords2() {
+//        System.out.println("fillerRecords - FillerComposition have records");
+//        List<FillerComposition> result = KnowledgeSystemBeanInterface.fillerRecords();
+//        assertNull(result);
+//        System.out.println("testFillerRecords2 ---------------------------------------------------- Done");
+//        // TODO review the generated test code and remove the default call to fail.
+//    }
+    // 
 //
 //    /**
 //     * Test of deleteFiller method, of class KnowledgeSystemBeanRemoteInterface.
@@ -353,13 +395,13 @@ public class KnowledgeSystemBeanRemoteInterfaceTest {
 //     * Test of retrieveFiller method, of class
 //     * KnowledgeSystemBeanRemoteInterface.
 //     */
-
     @Test
     public void testRetrieveFiller() {
         System.out.println("retrieveFiller Test 1 - null case");
         FillerComposition filler = new FillerComposition();
         FillerComposition filler1 = KnowledgeSystemBeanInterface.retrieveFiller(null);
         assertEquals(filler1, filler);
+        System.out.println("testRetrieveFiller ---------------------------------------------------- Done");
     }
 
     @Test
@@ -371,6 +413,7 @@ public class KnowledgeSystemBeanRemoteInterfaceTest {
         filler.setName("Filler A");
         FillerComposition filler1 = KnowledgeSystemBeanInterface.retrieveFiller(filler2);
         assertEquals(filler.getName(), filler1.getName());
+        System.out.println("testRetrieveFiller2 ---------------------------------------------------- Done");
     }
 
     @Test
@@ -382,6 +425,7 @@ public class KnowledgeSystemBeanRemoteInterfaceTest {
         filler.setName("Filler Z");
         FillerComposition filler1 = KnowledgeSystemBeanInterface.retrieveFiller(filler2);
         assertEquals(filler1, filler);
+        System.out.println("testRetrieveFiller3 ---------------------------------------------------- Done");
     }
 //
 //    /**
@@ -395,6 +439,7 @@ public class KnowledgeSystemBeanRemoteInterfaceTest {
         String id = "Filler A";
         boolean result = KnowledgeSystemBeanInterface.checkFillerID(id);
         assertTrue(result);
+        System.out.println("testCheckFillerID ---------------------------------------------------- Done");
         // TODO review the generated test code and remove the default call to fail.
 
     }
@@ -405,6 +450,7 @@ public class KnowledgeSystemBeanRemoteInterfaceTest {
         String id = "";
         boolean result = KnowledgeSystemBeanInterface.checkFillerID(id);
         assertFalse(result);
+        System.out.println("testCheckFillerID2 ---------------------------------------------------- Done");
         // TODO review the generated test code and remove the default call to fail.
 
     }
@@ -415,6 +461,7 @@ public class KnowledgeSystemBeanRemoteInterfaceTest {
         String id = null;
         boolean result = KnowledgeSystemBeanInterface.checkFillerID(id);
         assertFalse(result);
+        System.out.println("testCheckFillerID3 ---------------------------------------------------- Done");
         // TODO review the generated test code and remove the default call to fail.
 
     }
@@ -425,6 +472,7 @@ public class KnowledgeSystemBeanRemoteInterfaceTest {
         String id = "Filler AB";
         boolean result = KnowledgeSystemBeanInterface.checkFillerID(id);
         assertFalse(result);
+        System.out.println("testCheckFillerID4 ---------------------------------------------------- Done");
         // TODO review the generated test code and remove the default call to fail.
 
     }
@@ -440,6 +488,7 @@ public class KnowledgeSystemBeanRemoteInterfaceTest {
         String id = "Filler A";
         boolean result = KnowledgeSystemBeanInterface.checkFillerName(id);
         assertTrue(result);
+        System.out.println("testCheckFillerName ---------------------------------------------------- Done");
         // TODO review the generated test code and remove the default call to fail.
     }
 
@@ -449,6 +498,7 @@ public class KnowledgeSystemBeanRemoteInterfaceTest {
         String id = "";
         boolean result = KnowledgeSystemBeanInterface.checkFillerName(id);
         assertFalse(result);
+        System.out.println("testCheckFillerName2 ---------------------------------------------------- Done");
         // TODO review the generated test code and remove the default call to fail.
     }
 
@@ -458,6 +508,7 @@ public class KnowledgeSystemBeanRemoteInterfaceTest {
         String id = null;
         boolean result = KnowledgeSystemBeanInterface.checkFillerName(id);
         assertFalse(result);
+        System.out.println("testCheckFillerName3 ---------------------------------------------------- Done");
         // TODO review the generated test code and remove the default call to fail.
     }
 
@@ -467,6 +518,7 @@ public class KnowledgeSystemBeanRemoteInterfaceTest {
         String id = "Filler AB";
         boolean result = KnowledgeSystemBeanInterface.checkFillerName(id);
         assertFalse(result);
+        System.out.println("testCheckFillerName4 ---------------------------------------------------- Done");
         // TODO review the generated test code and remove the default call to fail.
     }
 //
@@ -474,17 +526,49 @@ public class KnowledgeSystemBeanRemoteInterfaceTest {
 //     * Test of checkMetalName method, of class
 //     * KnowledgeSystemBeanRemoteInterface.
 //     */
-//    @Test
-//    public void testCheckMetalName() {
-//        System.out.println("checkMetalName");
-//        String id = "";
-//        KnowledgeSystemBeanRemoteInterface instance = new KnowledgeSystemBeanRemoteInterfaceImpl();
-//        boolean expResult = false;
-//        boolean result = instance.checkMetalName(id);
-//        assertEquals(expResult, result);
-//        // TODO review the generated test code and remove the default call to fail.
-//        fail("The test case is a prototype.");
-//    }
+
+    @Test
+    public void testCheckMetalName() {
+        System.out.println("checkMetalName - MetalName do not Exist");
+        String id = "Metal AB";
+        boolean result = KnowledgeSystemBeanInterface.checkMetalName(id);
+        assertFalse(result);
+        System.out.println("testCheckMetalName ---------------------------------------------------- Done");
+        // TODO review the generated test code and remove the default call to fail.
+
+    }
+
+    @Test
+    public void testCheckMetalName2() {
+        System.out.println("checkMetalName - MetalName Exist");
+        String id = "Metal A";
+        boolean result = KnowledgeSystemBeanInterface.checkMetalName(id);
+        assertTrue(result);
+        System.out.println("testCheckMetalName2 ---------------------------------------------------- Done");
+        // TODO review the generated test code and remove the default call to fail.
+
+    }
+
+    @Test
+    public void testCheckMetalName3() {
+        System.out.println("checkMetalName - MetalName is ''");
+        String id = "";
+        boolean result = KnowledgeSystemBeanInterface.checkMetalName(id);
+        assertFalse(result);
+        System.out.println("testCheckMetalName3 ---------------------------------------------------- Done");
+        // TODO review the generated test code and remove the default call to fail.
+    }
+
+    @Test
+    public void testCheckMetalName4() {
+        System.out.println("checkMetalName - MetalName is null");
+        String id = null;
+        boolean result = KnowledgeSystemBeanInterface.checkMetalName(id);
+        assertFalse(result);
+        System.out.println("testCheckMetalName4 ---------------------------------------------------- Done");
+        // TODO review the generated test code and remove the default call to fail.
+
+    }
 
     public class KnowledgeSystemBeanRemoteInterfaceImpl implements KnowledgeSystemBeanRemoteInterface {
 

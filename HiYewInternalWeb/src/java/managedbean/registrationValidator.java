@@ -16,6 +16,7 @@ import javax.faces.validator.ValidatorException;
 import javax.mail.internet.InternetAddress;
 import session.stateless.HiYewSystemBeanLocal;
 import java.util.regex.*;
+import session.stateless.MachineSystemBeanLocal;
 
 /**
  *
@@ -24,10 +25,11 @@ import java.util.regex.*;
 @Named(value = "registrationValidator")
 @RequestScoped
 public class registrationValidator implements Validator {
-
     @EJB
     private HiYewSystemBeanLocal hiYewSystemBean;
-
+   
+    
+    
     /**
      * Creates a new instance of registrationValidator
      */
@@ -210,17 +212,7 @@ public class registrationValidator implements Validator {
         }
     }
 
-    public void validateMachineName(FacesContext context, UIComponent component, Object submittedAndConvertedValue) throws ValidatorException {
-        String username = (String) submittedAndConvertedValue;
 
-        if (username == null || username.isEmpty()) {
-            return; // Let required="true" or @NotNull handle it.
-        }
-
-        if (hiYewSystemBean.existMachineName(username)) {
-            throw new ValidatorException(new FacesMessage("Machine Name already in use, choose another."));
-        }
-    }
 
     public void validateExpiredName(FacesContext context, UIComponent component, Object submittedAndConvertedValue) throws ValidatorException {
         String name = (String) submittedAndConvertedValue;
@@ -231,18 +223,6 @@ public class registrationValidator implements Validator {
 
         if (hiYewSystemBean.notExistExpiredName(name)) {
             throw new ValidatorException(new FacesMessage("Employee not existent. Please check."));
-        }
-    }
-
-    public void validateMachineExpiry(FacesContext context, UIComponent component, Object submittedAndConvertedValue) throws ValidatorException {
-        String name = (String) submittedAndConvertedValue;
-
-        if (name == null || name.isEmpty()) {
-            return; // Let required="true" or @NotNull handle it.
-        }
-
-        if (hiYewSystemBean.notExistMachine(name)) {
-            throw new ValidatorException(new FacesMessage("Machine not existent. Please check."));
         }
     }
 

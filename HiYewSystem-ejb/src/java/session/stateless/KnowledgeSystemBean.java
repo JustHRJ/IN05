@@ -428,6 +428,9 @@ public class KnowledgeSystemBean implements KnowledgeSystemBeanLocal, KnowledgeS
     }
 
     public boolean checkMetalName(String id) {
+        if(id == null || id.equals("")){
+            return false;
+        }
         Metal f = em.find(Metal.class, id);
         if (f == null) {
             return false;

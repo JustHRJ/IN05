@@ -5,6 +5,7 @@
  */
 package session.stateless;
 
+import entity.Customer;
 import entity.DocumentControlEntity;
 import entity.FillerEntity;
 import entity.MachineEntity;
@@ -162,13 +163,19 @@ public class TransferSystemBean implements TransferSystemBeanLocal {
                 p.setProjectManager(im.get(9).toString());
                 p.setProjectProgress(Integer.parseInt(im.get(10).toString()));
                 String checkBoolean = im.get(11).toString();
-                if (checkBoolean.equals("true")) {
+                if (checkBoolean.equals("null")) {
+                    p.setProjectOverrun(null);
+                } else if (checkBoolean.equals("true")) {
                     p.setProjectOverrun(true);
                 } else {
                     p.setProjectOverrun(false);
                 }
+                if (im.get(12).toString().equals("null")) {
+                    p.setProjectDaysExceed(null);
+                } else {
+                    p.setProjectDaysExceed(Integer.parseInt(im.get(12).toString()));
+                }
 
-                p.setProjectDaysExceed(Integer.parseInt(im.get(12).toString()));
                 if (im.get(13).toString().equals("0")) {
                     p.setCauseOfDelay(null);
                 } else {
@@ -179,6 +186,9 @@ public class TransferSystemBean implements TransferSystemBeanLocal {
         }
     }
 
+
+    
+    
     public void addWelds(List<Vector> result) {
         if (result != null) {
             for (Object o : result) {
@@ -192,35 +202,41 @@ public class TransferSystemBean implements TransferSystemBeanLocal {
                 w.setSurfaceArea(Double.parseDouble(im.get(5).toString()));
                 String fillerCode = im.get(6).toString();
                 FillerEntity f = em.find(FillerEntity.class, fillerCode);
-                if (f == null) {
+                if (f
+                        == null) {
                     w.setFiller(null);
                 } else {
                     w.setFiller(f);
                 }
                 Long machineId = Long.parseLong(im.get(7).toString());
                 MachineEntity m = em.find(MachineEntity.class, machineId);
-                if (m == null) {
+                if (m
+                        == null) {
                     w.setMachine(null);
                 } else {
                     w.setMachine(m);
                 }
+
                 w.setTotalQuantity(Integer.parseInt(im.get(8).toString()));
                 w.setQuantityWelded(Integer.parseInt(im.get(9).toString()));
                 w.setWeldingType(im.get(10).toString());
-                if (im.get(11).toString().equals("null")) {
+                if (im.get(
+                        11).toString().equals("null")) {
 
                 } else {
                     w.setDuration(Integer.parseInt(im.get(11).toString()));
                 }
                 String projectID = w.getProjectNo();
                 Project p = em.find(Project.class, projectID);
-                if (p == null) {
+                if (p
+                        == null) {
                     w.setProject(null);
                 } else {
                     w.setProject(p);
                     p.getWeldJobs().add(w);
                     em.merge(p);
                 }
+
                 em.persist(w);
             }
         }

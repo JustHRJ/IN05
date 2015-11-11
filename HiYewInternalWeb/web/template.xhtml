@@ -159,13 +159,12 @@
                                 <p:submenu label = "Machine Management" >
                                     <p:menuitem value ="Add Machinery" url ="mms-add-machine.xhtml" />
                                     <p:menuitem value ="View Machinery" url ="mms-view-machine.xhtml" />
-                                    <p:menuitem value ="Alert Machinery" url ="mms-alert-machine.xhtml" />
                                     <p:menuitem value ="Repair Machinery" url ="mms-repair-machine.xhtml" />
                                 </p:submenu>
                             </p:column>
                             <p:column>
                                 <p:submenu label ="Machine Maintenance">
-                                    <p:menuitem value ="#{hiYewManagedBean.getMAlert()}" url ="mms-alert-machine.xhtml" />
+                                    <p:menuitem value ="#{machineManageBean.getMAlert()}" url ="mms-alert-machine.xhtml" />
                                     <p:menuitem value ="Add Maint. Schedule" url ="mms-add-maintenence-schedule.xhtml"/>
                                     <p:menuitem value ="View Maint. Schedule" url ="mms-view-maintenence-schedule.xhtml" />
                                 </p:submenu>

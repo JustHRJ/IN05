@@ -676,8 +676,8 @@ public class KnowledgeManageBean implements Serializable {
         if (check) {
             FacesMessage msg = new FacesMessage("Matched Metals and Fillers have been updated");
             FacesContext.getCurrentInstance().addMessage(null, msg);
-        } else{
-             FacesMessage msg = new FacesMessage("Something went wrong try again");
+        } else {
+            FacesMessage msg = new FacesMessage("Something went wrong try again");
             FacesContext.getCurrentInstance().addMessage(null, msg);
         }
     }
@@ -690,7 +690,7 @@ public class KnowledgeManageBean implements Serializable {
         FacesContext.getCurrentInstance().addMessage(null, msg);
     }
 
-    public List<Vector> read3() throws IOException {
+    private List<Vector> read3() throws IOException {
         File inputWorkbook = new File(inputFile);
         List<Vector> results = new ArrayList<Vector>();
         Workbook w;
