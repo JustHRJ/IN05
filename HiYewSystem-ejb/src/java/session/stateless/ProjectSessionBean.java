@@ -96,7 +96,8 @@ public class ProjectSessionBean implements ProjectSessionBeanLocal {
     //return null if there is no available employee
     @Override
     public EmployeeEntity getAvailableEmployee() {
-        Query query = em.createQuery("Select e FROM EmployeeEntity AS e where e.availability=true");
+        Query query = em.createQuery("Select e FROM EmployeeEntity AS e where e.availability=true AND e.employee_account_status=:status");
+        query.setParameter("status", "staff");
         List<EmployeeEntity> employees = query.getResultList();
         if (employees.isEmpty()) {
             return null;
