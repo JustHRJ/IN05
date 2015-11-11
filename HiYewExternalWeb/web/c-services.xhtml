@@ -155,7 +155,7 @@
                     <br />
 
                     <p:outputLabel style="font-weight:bold" for="latestEndDate" value ="Latest End Date:&nbsp;" />
-                    <p:calendar id="latestEndDate" value="#{quotationManagedBean.latestEndDate}" mindate="#{hiYewManagedBean.getToday()}" pattern ="dd/MM/yyyy" requiredMessage="Please enter latest start date for welding activities." />
+                    <p:calendar id="latestEndDate" value="#{quotationManagedBean.latestEndDate}" mindate="#{quotationManagedBean.today}" pattern ="dd/MM/yyyy" requiredMessage="Please enter latest start date for welding activities." />
                     <!--<p:inputText style="font-weight: normal; width:169px" id="latestStartDate" value="" />
                     -->      
 
