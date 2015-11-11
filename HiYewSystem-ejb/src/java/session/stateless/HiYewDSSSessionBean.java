@@ -205,31 +205,40 @@ public class HiYewDSSSessionBean implements HiYewDSSSessionBeanLocal {
         return q.getResultList();
     }
 
+    @Override
     public HashMap whichShelveToTake(FillerEntity fillerToTake, int qtyToTake) {
+        System.out.println("*************whichShelveToTake qtyNeeded:" + qtyToTake );
         HashMap map = new HashMap();
         ArrayList<StorageInfoEntity> itemStorages = new ArrayList<StorageInfoEntity>();
         ShelveEntity shelveToTakeFrom = new ShelveEntity();
         Query q = em.createQuery("SELECT si FROM StorageInfoEntity si WHERE si.item = :item");
         q.setParameter("item", fillerToTake);
         itemStorages.addAll(q.getResultList());
+        System.out.println("*************whichShelveToTake itemStorages:" + itemStorages.size() );
         for (int i = 0; i < itemStorages.size(); i++) {
             int qtyStoredInThatShelve = itemStorages.get(i).getStoredQty();
+            System.out.println("*************whichShelveToTake qtyStoredInThatShelve:" + qtyStoredInThatShelve);
             if (qtyStoredInThatShelve >= qtyToTake) {
                 shelveToTakeFrom = itemStorages.get(i).getShelve();
+                System.out.println("*************whichShelveToTake one shot get all:" + shelveToTakeFrom.getShelveID());
                 break;
             }
         }
         //need take from multiple shelve
-        if (shelveToTakeFrom != null) {
+        if (shelveToTakeFrom.getShelveID() != null) {
             map.put(shelveToTakeFrom, qtyToTake);
+             System.out.println("*************whichShelveToTake put 1 shot get all result in map");
         } else {
+              System.out.println("*************whichShelveToTake cannot 1 shot get all");
             int qty = qtyToTake;
             for (int i = 0; i < itemStorages.size(); i++) {
                 int qtyStoredInThatShelve = itemStorages.get(i).getStoredQty();
                 if (qtyStoredInThatShelve < qty) {
+                    System.out.println("*************whichShelveToTake: not enuff in: "+ itemStorages.get(i).getShelve() + "it has: " + qtyStoredInThatShelve);
                     map.put(itemStorages.get(i).getShelve(), qtyStoredInThatShelve);
                     qty = qty - qtyStoredInThatShelve;
                 } else {
+                    System.out.println("*************whichShelveToTake: not enuff in: last draw"+ itemStorages.get(i).getShelve() + "it has: " + qty);
                     map.put(itemStorages.get(i).getShelve(), qty);
                     break;
                 }

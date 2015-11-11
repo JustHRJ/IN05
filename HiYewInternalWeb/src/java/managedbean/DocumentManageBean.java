@@ -43,7 +43,7 @@ public class DocumentManageBean implements Serializable {
     private boolean check = false;
     private boolean checkPDFRender = false;
     private String projID;
-    private String destination = "C:\\Users\\User\\Desktop\\SouceTreeRepo\\IN05\\HiYewInternalWeb\\web\\projectDocuments\\";
+    private String destination = "C:\\Users\\JustHRJ\\Desktop\\IN05\\HiYewInternalWeb\\web\\projectDocuments\\";
     private String destinations = "/projectDocuments/";
     private String pdfURL = "";
 

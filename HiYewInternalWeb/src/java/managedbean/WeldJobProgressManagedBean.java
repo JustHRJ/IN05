@@ -35,8 +35,6 @@ public class WeldJobProgressManagedBean implements Serializable {
     private ArrayList<Project> receivedProjectByProjectNo;
     private Project selectedProject;
 
-    private int quantityWelded;
-
     /**
      * Creates a new instance of WeldJobProgressManagedBean
      */
@@ -64,11 +62,11 @@ public class WeldJobProgressManagedBean implements Serializable {
         receivedProjectByProjectNo = new ArrayList<>(projectSessionBean.getProjectByProjectNo(selectedProjectNo));
         if (!receivedProjectByProjectNo.isEmpty()) {
             selectedProject = receivedProjectByProjectNo.get(0);
-
+            
         }
 
     }
-
+    
     public Integer getProgress(Integer totalQty, Integer qtyWelded) {
         if (qtyWelded == null) {
             qtyWelded = 0;
@@ -79,7 +77,7 @@ public class WeldJobProgressManagedBean implements Serializable {
 
     public void onEditRow(RowEditEvent event) {
         WeldJob w = (WeldJob) event.getObject();//gives me unedited value
-        w.setQuantityWelded(quantityWelded);
+        //w.setQuantityWelded(quantityWelded);
         projectSessionBean.conductWeldJobMerge(w);
         
         Project p = projectSessionBean.getProjectByProjectNo(w.getProjectNo()).get(0);
@@ -163,18 +161,5 @@ public class WeldJobProgressManagedBean implements Serializable {
         this.selectedProject = selectedProject;
     }
 
-    /**
-     * @return the quantityWelded
-     */
-    public int getQuantityWelded() {
-        return quantityWelded;
-    }
-
-    /**
-     * @param quantityWelded the quantityWelded to set
-     */
-    public void setQuantityWelded(int quantityWelded) {
-        this.quantityWelded = quantityWelded;
-    }
-
+    
 }
