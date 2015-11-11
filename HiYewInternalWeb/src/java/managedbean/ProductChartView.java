@@ -153,16 +153,10 @@ public class ProductChartView implements Serializable {
     private void createAnimatedModelMonth_all(Integer item, Integer series) {
         String year = "";
         if (item == 0) {
-            year = "2010";
-        } else if (item == 1) {
-            year = "2011";
-        } else if (item == 2) {
-            year = "2012";
-        } else if (item == 3) {
             year = "2013";
-        } else if (item == 4) {
+        } else if (item == 1) {
             year = "2014";
-        } else if (item == 5) {
+        } else if (item == 2) {
             year = "2015";
         }
 
@@ -186,16 +180,10 @@ public class ProductChartView implements Serializable {
     private void createAnimatedModelQuarter_all(Integer item, Integer series) {
         String year = "";
         if (item == 0) {
-            year = "2010";
-        } else if (item == 1) {
-            year = "2011";
-        } else if (item == 2) {
-            year = "2012";
-        } else if (item == 3) {
             year = "2013";
-        } else if (item == 4) {
+        } else if (item == 1) {
             year = "2014";
-        } else if (item == 5) {
+        } else if (item == 2) {
             year = "2015";
         }
 
@@ -214,16 +202,10 @@ public class ProductChartView implements Serializable {
     private void createAnimatedModelQuarter_PL_all(Integer item, Integer series) {
         String year = "";
         if (item == 0) {
-            year = "2010";
-        } else if (item == 1) {
-            year = "2011";
-        } else if (item == 2) {
-            year = "2012";
-        } else if (item == 3) {
             year = "2013";
-        } else if (item == 4) {
+        } else if (item == 1) {
             year = "2014";
-        } else if (item == 5) {
+        } else if (item == 2) {
             year = "2015";
         }
 
@@ -242,16 +224,10 @@ public class ProductChartView implements Serializable {
     private void createCombinedModel_all(Integer item, Integer series) {
         String year = "";
         if (item == 0) {
-            year = "2010";
-        } else if (item == 1) {
-            year = "2011";
-        } else if (item == 2) {
-            year = "2012";
-        } else if (item == 3) {
             year = "2013";
-        } else if (item == 4) {
+        } else if (item == 1) {
             year = "2014";
-        } else if (item == 5) {
+        } else if (item == 2) {
             year = "2015";
         }
 
@@ -292,16 +268,10 @@ public class ProductChartView implements Serializable {
 
         String year = "";
         if (item == 0) {
-            year = "2010";
-        } else if (item == 1) {
-            year = "2011";
-        } else if (item == 2) {
-            year = "2012";
-        } else if (item == 3) {
             year = "2013";
-        } else if (item == 4) {
+        } else if (item == 1) {
             year = "2014";
-        } else if (item == 5) {
+        } else if (item == 2) {
             year = "2015";
         }
 
@@ -342,16 +312,10 @@ public class ProductChartView implements Serializable {
 
         String year = "";
         if (item == 0) {
-            year = "2010";
-        } else if (item == 1) {
-            year = "2011";
-        } else if (item == 2) {
-            year = "2012";
-        } else if (item == 3) {
             year = "2013";
-        } else if (item == 4) {
+        } else if (item == 1) {
             year = "2014";
-        } else if (item == 5) {
+        } else if (item == 2) {
             year = "2015";
         }
 
@@ -501,16 +465,16 @@ public class ProductChartView implements Serializable {
             }
         }
 
-        series1.set(2010, revenue_year[0]);
-        series1.set(2011, revenue_year[1]);
-        series1.set(2012, revenue_year[2]);
+//        series1.set(2010, revenue_year[0]);
+//        series1.set(2011, revenue_year[1]);
+//        series1.set(2012, revenue_year[2]);
         series1.set(2013, revenue_year[3]);
         series1.set(2014, revenue_year[4]);
         series1.set(2015, revenue_year[5]);
 
-        series2.set(2010, profitLoss_year[0]);
-        series2.set(2011, profitLoss_year[1]);
-        series2.set(2012, profitLoss_year[2]);
+//        series2.set(2010, profitLoss_year[0]);
+//        series2.set(2011, profitLoss_year[1]);
+//        series2.set(2012, profitLoss_year[2]);
         series2.set(2013, profitLoss_year[3]);
         series2.set(2014, profitLoss_year[4]);
         series2.set(2015, profitLoss_year[5]);

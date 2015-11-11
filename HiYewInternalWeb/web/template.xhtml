@@ -75,14 +75,7 @@
                 <!-- ============================================================== -->
                 <div class="body content rows scroll-y">
                     <p:megaMenu orientation="horizontal" styleClass="menu" style="width:100%!important;">
-                        <p:submenu style="#{loginControlBean.current_page eq 'DSS' ? 'border: 1px solid #a8a8a8;background: #85b2cb -webkit-gradient(linear, left top, left bottom, from(rgba(255,255,255,0.8)), to(rgba(255,255,255,0)));' : ''}" label="Decision Support System" icon="">
-                            <p:column>
-                                <p:submenu label="Title">
-                                    <p:menuitem value="Page" url="" />
-                                </p:submenu>
-                            </p:column>
-                        </p:submenu>
-                        <p:submenu style="#{loginControlBean.current_page eq 'HRMS' ? 'border: 1px solid #a8a8a8;background: #85b2cb -webkit-gradient(linear, left top, left bottom, from(rgba(255,255,255,0.8)), to(rgba(255,255,255,0)));' : ''}" label ="HR Mgmt. System" icon ="">
+                        <p:submenu style="#{loginControlBean.current_page eq 'HRMS' ? 'border: 1px solid #a8a8a8;background: #85b2cb -webkit-gradient(linear, left top, left bottom, from(rgba(255,255,255,0.8)), to(rgba(255,255,255,0)));' : ''}" label ="HR Management System" icon ="">
                             <p:column>
                                 <p:submenu label ="Employee Management">
                                     <p:menuitem value ="Register Employee" url ="hrms-employee-registration.xhtml" rendered ="#{loginControlBean.checkValid1()}"/>
@@ -131,12 +124,11 @@
                             <p:column>
                                 <p:submenu label="Storage Management">
                                     <p:menuitem value="Create Storage" url="ics-create-storage.xhtml" />
-                                    <p:menuitem value="Allocate Storage" url="ics-allocate-storage.xhtml" />
                                     <p:menuitem value="View Storage" url="ics-view-racks-version2.xhtml" />
                                 </p:submenu>
                             </p:column>
                         </p:submenu>
-                        <p:submenu style="#{loginControlBean.current_page eq 'KMS' ? 'border: 1px solid #a8a8a8;background: #85b2cb -webkit-gradient(linear, left top, left bottom, from(rgba(255,255,255,0.8)), to(rgba(255,255,255,0)));' : ''}" label="Knowledge Mgmt. System" icon="">
+                        <p:submenu style="#{loginControlBean.current_page eq 'KMS' ? 'border: 1px solid #a8a8a8;background: #85b2cb -webkit-gradient(linear, left top, left bottom, from(rgba(255,255,255,0.8)), to(rgba(255,255,255,0)));' : ''}" label="Knowledge Management System" icon="">
                             <p:column>
                                 <p:submenu label="Metal Knowledge Mgmt.">
                                     <p:menuitem value="Metal Knowledge" url="kms-metal-knowledge.xhtml" />
@@ -154,7 +146,7 @@
                                 </p:submenu>
                             </p:column>
                         </p:submenu>
-                        <p:submenu style="#{loginControlBean.current_page eq 'MMS' ? 'border: 1px solid #a8a8a8;background: #85b2cb -webkit-gradient(linear, left top, left bottom, from(rgba(255,255,255,0.8)), to(rgba(255,255,255,0)));' : ''}" label ="Machine Mgmt. System" icon ="">
+                        <p:submenu style="#{loginControlBean.current_page eq 'MMS' ? 'border: 1px solid #a8a8a8;background: #85b2cb -webkit-gradient(linear, left top, left bottom, from(rgba(255,255,255,0.8)), to(rgba(255,255,255,0)));' : ''}" label ="Machine Management System" icon ="">
                             <p:column>
                                 <p:submenu label = "Machine Management" >
                                     <p:menuitem value ="Add Machinery" url ="mms-add-machine.xhtml" />
@@ -186,7 +178,7 @@
                                 </p:submenu>
                             </p:column>
                         </p:submenu>
-                        <p:submenu style="#{loginControlBean.current_page eq 'PMS' ? 'border: 1px solid #a8a8a8;background: #85b2cb -webkit-gradient(linear, left top, left bottom, from(rgba(255,255,255,0.8)), to(rgba(255,255,255,0)));' : ''}" label="Project Mgmt. System" icon="">
+                        <p:submenu style="#{loginControlBean.current_page eq 'PMS' ? 'border: 1px solid #a8a8a8;background: #85b2cb -webkit-gradient(linear, left top, left bottom, from(rgba(255,255,255,0.8)), to(rgba(255,255,255,0)));' : ''}" label="Project Management System" icon="">
                             <p:column>
                                 <p:submenu label="Project Management">
                                     <p:menuitem value="Project Timeline" url="pms-project-timeline.xhtml" />
@@ -204,7 +196,7 @@
                                 </p:submenu>
                             </p:column>
                         </p:submenu>
-                        <p:submenu style="#{loginControlBean.current_page eq 'SMS' ? 'border: 1px solid #a8a8a8;background: #85b2cb -webkit-gradient(linear, left top, left bottom, from(rgba(255,255,255,0.8)), to(rgba(255,255,255,0)));' : ''}" label ="Sales Mgmt. System" icon ="">
+                        <p:submenu style="#{loginControlBean.current_page eq 'SMS' ? 'border: 1px solid #a8a8a8;background: #85b2cb -webkit-gradient(linear, left top, left bottom, from(rgba(255,255,255,0.8)), to(rgba(255,255,255,0)));' : ''}" label ="Sales Management System" icon ="">
                             <p:column>
                                 <p:submenu label ="Laser Welding Products">
                                     <p:menuitem value ="View RFQ" url ="sms-product-quotations.xhtml" />
