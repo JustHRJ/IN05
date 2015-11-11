@@ -9,6 +9,7 @@ import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
 import javax.inject.Named;
+import manager.EmailManager;
 import session.stateless.CustomerSessionBeanLocal;
 
 @Named(value = "customerManagedBean")
@@ -40,44 +41,45 @@ public class CustomerManagedBean implements Serializable {
             System.out.println("CustomerManagedBean.java init() ===== Username is " + username);
         }
     }
-    
+
     // update customer
     public void handleSave() throws IOException {
         customerSessionBean.updateCustomer(customer);
-        FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("popupMessage", "Profile has been updated successfully!");
-        FacesContext.getCurrentInstance().getExternalContext().redirect("/HiYewExternalWeb/c-user-profile.xhtml");
+        FacesContext.getCurrentInstance().addMessage("profileMsg", new FacesMessage(FacesMessage.SEVERITY_INFO, "Profile has been updated successfully!", ""));
     }
 
     public void changeSubscription() throws IOException {
-        //sSystem.out.println("this.subscribeEmail = " + customer.getSubscribeEmail());
-        //FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("popupMessage", "Subcription has been updated successfully!");
         customerSessionBean.updateCustomer(customer);
         FacesContext.getCurrentInstance().addMessage("emailMsg", new FacesMessage(FacesMessage.SEVERITY_INFO, "Subcriptions have been updated successfully!", ""));
-        // FacesContext.getCurrentInstance().getExternalContext().redirect("/HiYewExternalWeb/c-user-profile.xhtml");
     }
 
     public void changePassword() throws IOException {
 
         if (changePasswordInput.equals("") || newPassword.equals("") || rePassword.equals("")) {
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Changing password requires all password fields to be filled!", ""));
+            FacesContext.getCurrentInstance().addMessage("pwdMsg", new FacesMessage(FacesMessage.SEVERITY_ERROR, "Changing password requires all password fields to be filled!", ""));
         } else {
             String encryptedPassword = customer.getPw();
             if (encryptedPassword.equals(customerSessionBean.encryptPassword(changePasswordInput))) {
                 if (customerSessionBean.encryptPassword(newPassword).equals(encryptedPassword)) {
-                    FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "New Password and current password should not be same.", ""));
+                    FacesContext.getCurrentInstance().addMessage("pwdMsg", new FacesMessage(FacesMessage.SEVERITY_ERROR, "New Password and current password should not be same.", ""));
                 } else {
                     if (newPassword.equals(rePassword)) {
                         customer.setPw(customerSessionBean.encryptPassword(newPassword));
-                        handleSave();
-                        //FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Password has been changed successfully!", ""));
-                        FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("popupMessage", "Password has been changed successfully!");
-                        FacesContext.getCurrentInstance().getExternalContext().redirect("/HiYewExternalWeb/c-user-profile.xhtml");
+                        changePasswordInput = "";
+                        newPassword = "";
+                        rePassword = "";
+
+                        EmailManager emailManager = new EmailManager();
+                        emailManager.emailSupplierPasswordChanged(customer.getName(), customer.getEmail());
+
+                        customerSessionBean.updateCustomer(customer);
+                        FacesContext.getCurrentInstance().addMessage("pwdMsg", new FacesMessage("Password has been changed successfully!", ""));
                     } else {
-                        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Password mismatch!", ""));
+                        FacesContext.getCurrentInstance().addMessage("pwdMsg", new FacesMessage(FacesMessage.SEVERITY_ERROR, "Password mismatch!", ""));
                     }
                 }
             } else {
-                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Incorrect current password!", ""));
+                FacesContext.getCurrentInstance().addMessage("pwdMsg", new FacesMessage(FacesMessage.SEVERITY_ERROR, "Incorrect current password!", ""));
             }
         }
     }
@@ -161,7 +163,8 @@ public class CustomerManagedBean implements Serializable {
     }
 
     /**
-     * @param subscribeEmail_qPriceUpdates the subscribeEmail_qPriceUpdates to set
+     * @param subscribeEmail_qPriceUpdates the subscribeEmail_qPriceUpdates to
+     * set
      */
     public void setSubscribeEmail_qPriceUpdates(boolean subscribeEmail_qPriceUpdates) {
         this.subscribeEmail_qPriceUpdates = subscribeEmail_qPriceUpdates;
@@ -189,7 +192,8 @@ public class CustomerManagedBean implements Serializable {
     }
 
     /**
-     * @param subscribeEmail_poDeliveryUpdates the subscribeEmail_poDeliveryUpdates to set
+     * @param subscribeEmail_poDeliveryUpdates the
+     * subscribeEmail_poDeliveryUpdates to set
      */
     public void setSubscribeEmail_poDeliveryUpdates(boolean subscribeEmail_poDeliveryUpdates) {
         this.subscribeEmail_poDeliveryUpdates = subscribeEmail_poDeliveryUpdates;
@@ -203,7 +207,8 @@ public class CustomerManagedBean implements Serializable {
     }
 
     /**
-     * @param subscribeSMS_poDeliveryUpdates the subscribeSMS_poDeliveryUpdates to set
+     * @param subscribeSMS_poDeliveryUpdates the subscribeSMS_poDeliveryUpdates
+     * to set
      */
     public void setSubscribeSMS_poDeliveryUpdates(boolean subscribeSMS_poDeliveryUpdates) {
         this.subscribeSMS_poDeliveryUpdates = subscribeSMS_poDeliveryUpdates;

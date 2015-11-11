@@ -25,15 +25,14 @@
                 <div class="form-group login-input">
 
                     <h:outputText style="text-align: left; font-weight: normal" value="Project Start Date:&nbsp;" rendered="#{projManagedBean.actualStartVisibility}"/>
-                    <p:calendar id="actualStart" value="#{projManagedBean.actualStart}" mindate="#{projManagedBean.today}" pattern ="dd/MM/yyyy" rendered="#{projManagedBean.actualStartVisibility}" requiredMessage="Start date is required."/>
+                    <p:calendar id="actualStart" value="#{projManagedBean.actualStart}" mindate="#{projManagedBean.today}" pattern ="dd/MM/yyyy" required="true" rendered="#{projManagedBean.actualStartVisibility}" requiredMessage="Start date is required."/>
 
                     <p:message for="actualStart" />
 
                     <h:outputText style="text-align: left; font-weight: normal" value="Project End Date:&nbsp;" rendered="#{projManagedBean.actualEndVisibility}"/>
-                    <p:calendar id="actualEnd" value="#{projManagedBean.actualEnd}" mindate="#{projManagedBean.today}" pattern ="dd/MM/yyyy" rendered="#{projManagedBean.actualEndVisibility}" requiredMessage="End date is required."/>
+                    <p:calendar id="actualEnd" value="#{projManagedBean.actualEnd}" mindate="#{projManagedBean.today}" required="true" pattern ="dd/MM/yyyy" rendered="#{projManagedBean.actualEndVisibility}" requiredMessage="End date is required."/>
                     <p:message for="actualEnd" />
                 </div>
-
                 
                 <br />
                 <p:dataTable value="#{projManagedBean.receivedProjectByProjectNo}"  widgetVar="projsTable" var="pItem" id="rcvProject" editable="true" emptyMessage="No records" filteredValue="#{projManagedBean.filteredProj}">
@@ -60,16 +59,10 @@
                         <h:outputText style="font-weight: normal" value="#{projManagedBean.getProjectStatus(pItem.projectCompletion)}"/>
                     </p:column>
 
-                    <p:column style="font-weight: bold" headerText="View" width="5%" >
-
-                        <p:commandButton id="weldJobBtn" icon="ui-icon-search" title="View" update="rcvJob" action="#{projManagedBean.selectProject(pItem)}" style="padding-top: 5px; padding-bottom: 5px; padding-left: 5px; padding-right: 5px"/>
-                    </p:column>
-
-
                 </p:dataTable>
 
-                <p:dataTable var="wItem" value="#{projManagedBean.receivedWeldJobs}" id="rcvJob" rows="5" paginator="true">
-
+                <p:dataTable var="wItem" value="#{projManagedBean.receivedWeldJobs}" id="rcvJob" rows="5" paginator="true" editable="true">
+                    <p:ajax event="rowEdit" update="@this" listener="#{projManagedBean.onEditRow}" />
                     <p:column headerText="Metal 1" width="15%">
                         <h:outputText value="#{wItem.metal1}" />
                     </p:column>
@@ -80,31 +73,31 @@
                     <p:column headerText="Weld. Job Engineer" width="25%">
                         <h:outputText value="#{wItem.empName}" />
                     </p:column>
-                    <p:column headerText="Weld. Job Engineer" width="25%">
-                        <h:outputText value="#{wItem.filler}" />
-                    </p:column>
 
                     <p:column headerText="Filler Used" width="10%">
                         <p:cellEditor>
-                            <f:facet name="output"><h:outputText style="text-align: left; font-weight: normal" value="#{wItem.filler}"/></f:facet>
+                            <f:facet name="output"><h:outputText style="text-align: left; font-weight: normal" value="#{wItem.filler.fillerCode}"/></f:facet>
                             <f:facet name="input">
-                                <h:inputText style="width:200px" value="#{wItem.filler}" />
+                                <h:inputText style="width:200px" value="#{projManagedBean.fillerCode}" />
                             </f:facet> 
                         </p:cellEditor>
                     </p:column>
-
 
                     <p:column style="font-weight: bold" headerText="Edit" width="3%">
                         <p:rowEditor />
                     </p:column>
                 </p:dataTable>
                 
-                <p:commandButton style="border: none; font-size: 14px; width: 90px; font-family: 'Open Sans'" class=" btn btn-success btn-block" action="#{projManagedBean.updateProjectActualDate()}" value="Update" ajax="false" update="formMain"
+                <p:commandButton style="border: none; font-size: 14px; width: 90px; font-family: 'Open Sans'" class=" btn btn-success btn-block" action="#{projManagedBean.updateProjectActualDate()}"  value="Update" ajax="false" update="formMain"
                                  rendered="#{projManagedBean.updateBtnVisibility}"></p:commandButton>
 
                 <br /><br />
                 <h:outputText value="#{resourceAvailabilityMessage}" id="loginOutputId" style="font-weight: bold; color: #{msgColor}; margin-bottom: 100%; white-space: pre-wrap" escape="false"/>
-
+                <h:outputText value="#{fillerPickUpGuideMessage}" id="pickUpGuideID" style="font-weight: bold; color: #{msgColor}; margin-bottom: 100%; white-space: pre-wrap" escape="false"/>
+                
+               
+                    
+              
             </h:form>
         </div>
     </ui:define>

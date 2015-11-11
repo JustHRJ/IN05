@@ -2,7 +2,9 @@ package entity;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
+import java.util.Arrays;
 import java.util.Calendar;
+import java.util.List;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
@@ -12,6 +14,13 @@ import javax.persistence.OneToOne;
 public class ProductPurchaseOrder implements Serializable {
 
     private static long serialVersionUID = 1L;
+
+    /**
+     * @return the statusesArr
+     */
+    public static String[] getStatusesArr() {
+        return statusesArr;
+    }
 
     @Id
     private String productPurchaseOrderID;
@@ -23,6 +32,26 @@ public class ProductPurchaseOrder implements Serializable {
     private String mailingAddr2;
     private Double totalPrice;
     private String status; // Relayed, Processed, Pending, Accepted, Rejected
+
+    private final static String[] settledArr;
+    private final static String[] unsettledArr;
+    private final static String[] statusesArr;
+
+    static {
+        settledArr = new String[1];
+        settledArr[0] = "Delivered";
+
+        unsettledArr = new String[3];
+        unsettledArr[0] = "Pending";
+        unsettledArr[1] = "Processed";
+        unsettledArr[2] = "Relayed";
+
+        statusesArr = new String[4];
+        statusesArr[0] = "Delivered";
+        statusesArr[1] = "Pending";
+        statusesArr[2] = "Processed";
+        statusesArr[3] = "Relayed";
+    }
 
     @OneToOne
     private ProductQuotation productQuotation;
@@ -68,6 +97,18 @@ public class ProductPurchaseOrder implements Serializable {
     @Override
     public String toString() {
         return "ProductPurchaseOrder entity [ID=" + getProductPurchaseOrderID() + "]";
+    }
+    
+    public List<String> getFilterSettledArr() {
+        return Arrays.asList(settledArr);
+    }
+     
+    public List<String> getFilterUnsettledArr() {
+        return Arrays.asList(unsettledArr);
+    }
+     
+    public List<String> getFilterStatusesArr() {
+        return Arrays.asList(getStatusesArr());
     }
 
     /**
@@ -204,10 +245,24 @@ public class ProductPurchaseOrder implements Serializable {
     }
 
     /**
-     * @param productPurchaseOrderCustomerID the productPurchaseOrderCustomerID to set
+     * @param productPurchaseOrderCustomerID the productPurchaseOrderCustomerID
+     * to set
      */
     public void setProductPurchaseOrderCustomerID(String productPurchaseOrderCustomerID) {
         this.productPurchaseOrderCustomerID = productPurchaseOrderCustomerID;
     }
 
+    /**
+     * @return the settledArr
+     */
+    public static String[] getSettledArr() {
+        return settledArr;
+    }
+
+    /**
+     * @return the unsettledArr
+     */
+    public static String[] getUnsettledArr() {
+        return unsettledArr;
+    }
 }

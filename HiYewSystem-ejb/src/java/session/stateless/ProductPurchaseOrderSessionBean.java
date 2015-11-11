@@ -29,9 +29,16 @@ public class ProductPurchaseOrderSessionBean implements ProductPurchaseOrderSess
     }
 
     public List<ProductPurchaseOrder> receivedCustomerNewProductPOList(String status) {
-        Query query = em.createQuery("SELECT po FROM ProductPurchaseOrder AS po where po.status= :status");
-
-        query.setParameter("status", status);
+        Query query;
+        if (status.equals("Settled")) {
+            query = em.createQuery("SELECT q FROM ProductPurchaseOrder AS q where q.status='Delivered'");
+        } else {
+            query = em.createQuery("SELECT q FROM ProductPurchaseOrder AS q where q.status='Pending' or q.status='Processed' or q.status='Relayed'");
+        }
+        
+//        Query query = em.createQuery("SELECT po FROM ProductPurchaseOrder AS po where po.status= :status");
+//
+//        query.setParameter("status", status);
 
         List<ProductPurchaseOrder> productPOList = query.getResultList();
         System.out.println("productPOList.size() ===== " + productPOList.size());
@@ -51,6 +58,11 @@ public class ProductPurchaseOrderSessionBean implements ProductPurchaseOrderSess
 
     public void updatePODeliveryDate(ProductPurchaseOrder inProductPurchaseOrder) {
         em.merge(inProductPurchaseOrder);
+    }
+
+    public void updateProductPODeliveredStatus(ProductPurchaseOrder inProductPurchaseOrder) {
+        ProductPurchaseOrder ppo = em.find(ProductPurchaseOrder.class, inProductPurchaseOrder.getProductPurchaseOrderID());
+        ppo.setStatus("Delivered");
     }
 
     public void updateProductPORelayedStatus(ProductPurchaseOrder inProductPurchaseOrder) {

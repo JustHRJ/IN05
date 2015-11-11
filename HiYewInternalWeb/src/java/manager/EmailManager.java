@@ -154,8 +154,8 @@ public class EmailManager {
 
                 String message = "<div class=\"text\">";
                 message = message + "Dear <b>" + name + "</b>,<br /><br />";
-                message = message + "We have updated the quoted unit price for your item(s) for Quotation No. <b>#" + productQuotationNo + "</b>.<br/>";
-                message = message + "Please log in and check it out on our website!<br /><br />";
+                message = message + "We have updated the quoted unit price for your item(s) for Product Quotation <b>#" + productQuotationNo + "</b>.<br/>";
+                message = message + "You may go to HiYew Customer Portal to view the updates.<br /><br />";
                 message = message + "Thank you!<br /><br />";
                 message = message + "Best Regards,<br />";
                 message = message + "HiYew Team";
@@ -192,23 +192,23 @@ public class EmailManager {
             if (msg != null) {
                 msg.setFrom(InternetAddress.parse(emailFromAddress, false)[0]);
                 msg.setRecipients(Message.RecipientType.TO, InternetAddress.parse("hiyewgersup@gmail.com", false));
-                msg.setSubject("HiYew - Product Quotation No. #" + qNo);
+                msg.setSubject("HiYew - Product Quotation #" + qNo);
 
                 Multipart multipart = new MimeMultipart("related");
                 BodyPart htmlPart = new MimeBodyPart();
 
                 String message = "<div class=\"text\">";
                 message = message + "Hi there,<br /><br />";
-                message = message + "We would like to request for quotation for the following item(s).<br/><br/>";
+                message = message + "We would like to request for price quotation for the following item(s).<br/><br/>";
 
                 for (ProductQuotationDescription pdq : pqdList) {
-                    message = message + "(" + pdq.getProductQuotationDescNo() + ")<br />";
+                    message = message + "Item #" + pdq.getProductQuotationDescNo() + "<br />";
                     message = message + "Item Type: <b>" + pdq.getProductType() + "</b><br />";
                     message = message + "Item Name: <b>" + pdq.getItemName() + "</b><br />";
                     message = message + "Quantity: <b>" + pdq.getQuantity() + "</b><br /><br />";
                 }
 
-                message = message + "Thank you!<br /><br />";
+                message = message + "Please do not hesitate to email us should you need any further clarification. Thank you!<br /><br />";
                 message = message + "Best Regards,<br />";
                 message = message + "HiYew Team";
                 message = message + "</div>";
@@ -251,8 +251,8 @@ public class EmailManager {
 
                 String message = "<div class=\"text\">";
                 message = message + "Dear <b>" + name + "</b>,<br /><br />";
-                message = message + "We have updated the delivery date for your item(s) for Purchase Order No. <b>#" + productPONo + "</b>.<br/>";
-                message = message + "Please log in and check it out on our website!<br /><br />";
+                message = message + "We have updated the delivery date for your item(s) for Product Purchase Order <b>#" + productPONo + "</b>.<br/>";
+                message = message + "You may go to HiYew Customer Portal to view the updates.<br /><br />";
                 message = message + "Thank you!<br /><br />";
                 message = message + "Best Regards,<br />";
                 message = message + "HiYew Team";
@@ -289,23 +289,23 @@ public class EmailManager {
             if (msg != null) {
                 msg.setFrom(InternetAddress.parse(emailFromAddress, false)[0]);
                 msg.setRecipients(Message.RecipientType.TO, InternetAddress.parse("hiyewgersup@gmail.com", false));
-                msg.setSubject("HiYew - Product Purchase Order No. #" + poNumber);
+                msg.setSubject("HiYew - Product Purchase Order #" + poNumber);
 
                 Multipart multipart = new MimeMultipart("related");
                 BodyPart htmlPart = new MimeBodyPart();
 
                 String message = "<div class=\"text\">";
                 message = message + "Hi there,<br /><br />";
-                message = message + "We would like to purchase the following item(s).<br/><br/>";
+                message = message + "We would like to purchase the following item(s) from your company.<br/><br/>";
 
                 for (ProductQuotationDescription pdq : pqdList) {
-                    message = message + "(" + pdq.getProductQuotationDescNo() + ")<br />";
+                    message = message + "Item #" + pdq.getProductQuotationDescNo() + "<br />";
                     message = message + "Item Type: <b>" + pdq.getProductType() + "</b><br />";
                     message = message + "Item Name: <b>" + pdq.getItemName() + "</b><br />";
                     message = message + "Quantity: <b>" + pdq.getQuantity() + "</b><br /><br />";
                 }
 
-                message = message + "Thank you!<br /><br />";
+                message = message + "Please do not hesitate to email us should you need any further clarification. Thank you!<br /><br />";
                 message = message + "Best Regards,<br />";
                 message = message + "HiYew Team";
                 message = message + "</div>";
@@ -369,4 +369,95 @@ public class EmailManager {
             throw new EJBException(e.getMessage());
         }
     }
+    
+    public void emailPBSent(String companyName, String email) {
+        try {
+            Properties props = new Properties();
+            props.put("mail.transport.protocol", "smtp");
+            props.put("mail.smtp.host", emailServerName);
+            props.put("mail.smtp.port", "25");
+            props.put("mail.smtp.auth", "true");
+            props.put("mail.smtp.starttls.enable", "true");
+            props.put("mail.smtp.debug", "true");
+            javax.mail.Authenticator auth = new SMTPAuthenticator();
+            Session session = Session.getInstance(props, auth);
+            session.setDebug(true);
+            Message msg = new MimeMessage(session);
+            if (msg != null) {
+                msg.setFrom(InternetAddress.parse(emailFromAddress, false)[0]);
+                msg.setRecipients(Message.RecipientType.TO, InternetAddress.parse(companyName + "<" + email + ">", false));
+                msg.setSubject("Invitation to Bid!");
+
+                Multipart multipart = new MimeMultipart("related");
+                BodyPart htmlPart = new MimeBodyPart();
+
+                String message = "<div class=\"text\">";
+                message = message + "Dear <b>" + companyName + "</b>,<br /><br />";
+                message = message + "This is to notify that there is a new bidding open to"+ companyName + ".<br /><br />";
+                message = message + "Please log in to Hi-Yew External Portal for more details.<br /><br />";
+     
+                message = message + "Best Regards,<br />";
+                message = message + "HiYew Team";
+                message = message + "</div>";
+                message = "<html><body>" + message + "</body></html>";
+
+                htmlPart.setContent(message, "text/html");
+                multipart.addBodyPart(htmlPart);
+                msg.setContent(multipart);
+                msg.setHeader("X-Mailer", mailer);
+                Date timeStamp = new Date();
+                msg.setSentDate(timeStamp);
+                Transport.send(msg);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new EJBException(e.getMessage());
+        }
+    }
+    
+     public void emailPBResult(String companyName, String email) {
+        try {
+            Properties props = new Properties();
+            props.put("mail.transport.protocol", "smtp");
+            props.put("mail.smtp.host", emailServerName);
+            props.put("mail.smtp.port", "25");
+            props.put("mail.smtp.auth", "true");
+            props.put("mail.smtp.starttls.enable", "true");
+            props.put("mail.smtp.debug", "true");
+            javax.mail.Authenticator auth = new SMTPAuthenticator();
+            Session session = Session.getInstance(props, auth);
+            session.setDebug(true);
+            Message msg = new MimeMessage(session);
+            if (msg != null) {
+                msg.setFrom(InternetAddress.parse(emailFromAddress, false)[0]);
+                msg.setRecipients(Message.RecipientType.TO, InternetAddress.parse(companyName + "<" + email + ">", false));
+                msg.setSubject("Congratulations! Your bid has been accepted!");
+
+                Multipart multipart = new MimeMultipart("related");
+                BodyPart htmlPart = new MimeBodyPart();
+
+                String message = "<div class=\"text\">";
+                message = message + "Dear <b>" + companyName + "</b>,<br /><br />";
+                message = message + "Congratulations!This is to notify that your bid has been accepted!<br /><br />";
+                message = message + "Please log in to Hi-Yew External Portal for more details and proceed to fulfil the request!<br /><br />";
+     
+                message = message + "Best Regards,<br />";
+                message = message + "HiYew Team";
+                message = message + "</div>";
+                message = "<html><body>" + message + "</body></html>";
+
+                htmlPart.setContent(message, "text/html");
+                multipart.addBodyPart(htmlPart);
+                msg.setContent(multipart);
+                msg.setHeader("X-Mailer", mailer);
+                Date timeStamp = new Date();
+                msg.setSentDate(timeStamp);
+                Transport.send(msg);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new EJBException(e.getMessage());
+        }
+    }
+    
 }

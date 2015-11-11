@@ -46,17 +46,16 @@
 
                                 <h:outputLabel style="font-weight: bold;" for="metalType" value="Material Type: " />
                                 <br />
-
-                                <p:autoComplete style="font-weight: normal;" id="metalType" value="#{quotationManagedBean.newQuotationDesc.metalName}" completeMethod="#{quotationManagedBean.completeText}" />
+                                <p:autoComplete style="font-weight: normal" id="metalType" value="#{quotationManagedBean.newQuotationDesc.metalName}" completeMethod="#{quotationManagedBean.completeText}" />
                                 <br /><br />
                                 <h:outputLabel style="font-weight: bold" for="Quantity" value="Quantity: " />
                                 <br />
-                                <p:inputText style="font-weight: normal; width:169px" id="Quantity" value="#{quotationManagedBean.newQuotationDesc.qty}" maxlength="5" converterMessage="Quantity must contains only numbers." validatorMessage="Quantity must have a value of more than one.">
+                                <p:inputText style="font-weight: normal; width:170px;" id="Quantity" value="#{quotationManagedBean.newQuotationDesc.qty}" maxlength="5" converterMessage="Quantity must contains only numbers." validatorMessage="Quantity must have a value of more than one.">
                                     <f:validateLongRange minimum="1" />
 
                                 </p:inputText>
                                 <br /><br />
-                                 <h:outputLabel style="font-weight: bold" for="SV" value="Surface Vol(cm3): " />
+                                <h:outputLabel style="font-weight: bold" for="SV" value="Surface Area(cm2): " />
                                 <br />
                                 <p:inputText style="font-weight: normal; width:169px" id="SV" value="#{quotationManagedBean.newQuotationDesc.surfaceVol}" maxlength="10" converterMessage="Surface Vol must contains only decimal numbers." validatorMessage="Surface Vol must have a value of more than 0.1.">
                                     <f:validateDoubleRange minimum="0.1" />
@@ -66,12 +65,12 @@
                                 <h:outputLabel style="font-weight: bold" value="Welding Type: " />
                                 <br />
                                 <div class="form-group">
-                                    <p:selectOneMenu value="#{quotationManagedBean.newQuotationDesc.weldingType}" style="width:169px" >
+                                    <h:selectOneMenu value="#{quotationManagedBean.newQuotationDesc.weldingType}" style="width:170px" >
                                         <f:selectItem itemValue="T.I.G" itemLabel="T.I.G" />
                                         <f:selectItem itemValue="Laser" itemLabel="Laser" />
-                                    </p:selectOneMenu>
+                                    </h:selectOneMenu>
                                 </div>
-                                <p:commandButton value="Add" actionListener="#{quotationManagedBean.addToCacheList}" update=":mainForm:msgs mydata weldPanel" icon="" style="padding-top: 5px; padding-bottom: 5px; padding-left: 22px; padding-right: 22px">
+                                <p:commandButton value="Add" actionListener="#{quotationManagedBean.addToCacheList}" update=":notiForm :logoutForm :logoutForm2 :mainForm:msgs mydata weldPanel" icon="" style="padding-top: 5px; padding-bottom: 5px; padding-left: 22px; padding-right: 22px">
                                 </p:commandButton>
                             </p:column>
                         </p:row>
@@ -84,7 +83,7 @@
                                 <p:inputTextarea style="font-weight: normal" id="Description" autoResize="false" placeholder="Include material code/name and welding instruction(s_" value="#{quotationManagedBean.newQuotationDesc.itemDesc}" rows="5" cols="60" />
                                 <br /><br />
 
-                                <br /><br /><br /><br /><br /><br />
+                                <br /><br /><br /><br />
                             </p:column>
                         </p:row>
 
@@ -99,7 +98,7 @@
                             <p:cellEditor>
                                 <f:facet name="output"><h:outputText style="text-align: left; font-weight: normal" value="#{item.metalName}"/></f:facet>
                                 <f:facet name="input">
-                                    <p:autoComplete style="width:300px" id="metalType" value="#{item.metalName}" completeMethod="#{quotationManagedBean.completeText}" />
+                                    <p:autoComplete style="width:190px;text-align: left; font-weight: normal" id="metalType" value="#{item.metalName}" completeMethod="#{quotationManagedBean.completeText}" />
 
                                 </f:facet>
                             </p:cellEditor>
@@ -108,30 +107,30 @@
                             <p:cellEditor>
                                 <f:facet name="output"><h:outputText style="text-align: left;font-weight: normal" value="#{item.itemDesc}"/></f:facet>
                                 <f:facet name="input">
-                                    <p:inputTextarea id="Description" autoResize="false" placeholder="Can include material code/name and welding instruction(s)" value="#{item.itemDesc}" rows="6" cols="68" />
+                                    <p:inputTextarea id="Description" style="font-weight:normal;color:black" autoResize="false" placeholder="Can include material code/name and welding instruction(s)" value="#{item.itemDesc}" rows="6" cols="54" />
                                 </f:facet>
                             </p:cellEditor>
                         </p:column>
-                        <p:column style="font-weight: bold" headerText="Quantity" width="15%">
+                        <p:column style="font-weight: bold" headerText="Quantity" width="10%">
                             <p:cellEditor>
                                 <f:facet name="output"><h:outputText value="#{item.qty}" style="font-weight: normal" /></f:facet>
                                 <f:facet name="input">
-                                    <p:inputText style="width:154px" value="#{item.qty}" converterMessage="Quantity must contains only numbers." validatorMessage="Quantity must have a value of more than one.">
+                                    <p:inputText style="width:100px;font-weight:normal;color:black" value="#{item.qty}" converterMessage="Quantity must contains only numbers." validatorMessage="Quantity must have a value of more than one.">
                                         <f:validateLongRange minimum="1" />
                                         <p:ajax update=":mainForm:msgs" />
                                     </p:inputText>
                                 </f:facet>
                             </p:cellEditor>
                         </p:column>
-                        <p:column style="font-weight: bold" headerText="Surface Vol" width="15%">
+                        <p:column style="font-weight: bold" headerText="Surface Area(cm2)" width="15%">
                             <p:cellEditor>
                                 <f:facet name="output"><h:outputText value="#{item.surfaceVol}" style="font-weight: normal" /></f:facet>
                                 <f:facet name="input">
                                     <p:inputText style="width:169px" value="#{item.surfaceVol}" converterMessage="Surface Vol must contains only decimal numbers." validatorMessage="Surface Vol must have a value of more than 0.1.">
                                         <f:validateDoubleRange minimum="0.1" />
-                                        
+
                                     </p:inputText>
-                                    
+
                                 </f:facet>
                             </p:cellEditor>
                         </p:column>
@@ -139,31 +138,31 @@
                             <p:cellEditor>
                                 <f:facet name="output"><h:outputText style="font-weight: normal" value="#{item.weldingType}"/></f:facet>
                                 <f:facet name="input">
-                                    <p:selectOneMenu value="#{item.weldingType}" style="width:154px" >
+                                    <h:selectOneMenu value="#{item.weldingType}" style="width:150px;font-weight:normal" >
                                         <f:selectItem itemValue="T.I.G" itemLabel="T.I.G" />
                                         <f:selectItem itemValue="Laser" itemLabel="Laser" />
-                                    </p:selectOneMenu>
+                                    </h:selectOneMenu>
                                 </f:facet>
                             </p:cellEditor>
                         </p:column>
-                        <p:column style="font-weight: bold" headerText="Edit" width="10%">
+                        <p:column style="font-weight: bold" headerText="Edit" width="7%">
                             <p:rowEditor />
                         </p:column>
-                        <p:column style="font-weight: bold" headerText="Delete" width="10%">
-                            <p:commandLink update="mydata" id="deleteLink" styleClass="ui-icon ui-icon-trash" action="#{quotationManagedBean.deleteQuotationDescription(item)}"/>
+                        <p:column style="font-weight: bold" headerText="Delete" width="7%">
+                            <p:commandLink update=":notiForm :logoutForm :logoutForm2 mydata" id="deleteLink" styleClass="ui-icon ui-icon-trash" action="#{quotationManagedBean.deleteQuotationDescription(item)}"/>
                         </p:column>
                     </p:dataTable>
                     <br />
 
-                    <p:outputLabel for="latestEndDate" value ="Latest End Date:&nbsp;" />
-                    <p:calendar id="latestEndDate" value="#{quotationManagedBean.latestEndDate}" mindate="#{hiYewManagedBean.getToday()}" pattern ="dd/MM/yyyy" requiredMessage="Please enter latest start date for welding activities." />
-                   <!--<p:inputText style="font-weight: normal; width:169px" id="latestStartDate" value="" />
-                            -->      
+                    <p:outputLabel style="font-weight:bold" for="latestEndDate" value ="Latest End Date:&nbsp;" />
+                    <p:calendar id="latestEndDate" value="#{quotationManagedBean.latestEndDate}" mindate="#{quotationManagedBean.today}" pattern ="dd/MM/yyyy" requiredMessage="Please enter latest start date for welding activities." />
+                    <!--<p:inputText style="font-weight: normal; width:169px" id="latestStartDate" value="" />
+                    -->      
 
                     <br /><br />
-                    <p:commandButton value="Send Request" actionListener="#{quotationManagedBean.createQuotation}" update="rfqMsg mydata weldPanel rcvQuote" icon="" style="padding-top: 5px; padding-bottom: 5px; padding-left: 22px; padding-right: 22px">
+                    <p:commandButton value="Send Request" actionListener="#{quotationManagedBean.createQuotation}" update=":notiForm :logoutForm :logoutForm2 rfqMsg mydata weldPanel rcvQuote latestEndDate" icon="" style="padding-top: 5px; padding-bottom: 5px; padding-left: 22px; padding-right: 22px">
                     </p:commandButton>
-                    
+
                 </p:tab>
                 <p:tab title="View Quotations">
                     <p:messages id="qMsg"  showDetail="false" />
@@ -192,7 +191,7 @@
                             <p:panel visible="#{quotationManagedBean.setVisibility(item)}" style="border:0px; background: none;">
                                 <p:commandButton id="quoteDescBtn" icon="ui-icon-search" title="View" update="quotationDetailPanel" action="#{quotationManagedBean.selectQuotation(item)}" style="padding-top: 5px; padding-bottom: 5px; padding-left: 5px; padding-right: 5px"/>
                             </p:panel>
-                            <p:overlayPanel for="quoteDescBtn" showEffect="fade" hideEffect="fade" dismissable="false" showCloseIcon="true" style="width:800px">
+                            <p:overlayPanel for="quoteDescBtn" showEffect="fade" hideEffect="fade" dismissable="false" showCloseIcon="true" style="width:900px">
                                 <p:outputPanel id="quotationDetailPanel" style="text-align:center;" >
                                     <p:dataTable var="quoteDescItem" value="#{quotationManagedBean.displayQuotationDescriptions}" rows="5" paginator="true">
                                         <p:column headerText="ID" width="5%">
@@ -229,45 +228,50 @@
                                 <p:commandLink value="Accept" style="color: green; font-weight: bold; font-family: 'Open Sans'; font-size: 14px;" action="#{pOManagedBean.generatePurchaseOrder(item)}" update="myDialogID" /> &nbsp;|&nbsp;
                                 <p:commandLink value="Reject" style="color: red; font-weight: bold; font-family: 'Open Sans'; font-size: 14px;" action="#{quotationManagedBean.setRejectionStatus(item)}" update="rcvQuote"/>
                             </p:panel>
-                            <p:dialog styleClass="rfq" id="myDialogID"  widgetVar="myDialogVar" modal="true" resizable="false" header="Purchase Order" showEffect="fade" width="500px">
-                                <p:panelGrid id="display" columns="2" columnClasses="label,value">
-                                    <h:outputText value="Purchase No.: " style="width: 10%; font-weight: bolder; vertical-align: middle"/>
+                            <p:dialog style="max-height:2000px" styleClass="rfq" id="myDialogID"  widgetVar="myDialogVar" modal="true" resizable="false" header="Purchase Order" showEffect="fade" width="500px">
+                                <p:scrollPanel mode="native" style="max-height:500px">
 
-                                    <p:inputText style="width: 210px; margin-top: 1px;font-weight: normal; font-size: 14px; font-family: 'Open Sans';"  value="#{pOManagedBean.newPurOrder.customerRefPoNumber}" id="customerRefPoId"  />
+                                    <p:panelGrid id="display" columns="2" columnClasses="label,value">
+                                        <h:outputText value="Purchase No.: " style="width: 10%; font-weight: bolder; vertical-align: middle"/>
+
+                                        <p:inputText style="width: 210px; margin-top: 1px;font-weight: normal; font-size: 14px; font-family: 'Open Sans';" requiredMessage="PO number must be filled in!"  value="#{pOManagedBean.newPurOrder.customerRefPoNumber}" id="customerRefPoId"  />
 
 
-                                    <h:outputText value="Attention: " style="width: 10%; font-weight: bolder; vertical-align: middle"/>
-                                    <h:outputText id="attnId" value="#{pOManagedBean.attn}" />
+                                        <h:outputText value="Attention: " style="width: 10%; font-weight: bolder; vertical-align: middle"/>
+                                        <h:outputText id="attnId" value="#{pOManagedBean.attn}" />
 
-                                    <h:outputText value="Terms of Payment: " style="width: 10%; font-weight: bolder; vertical-align: middle" />
-                                    <h:outputText id="topID" value="#{pOManagedBean.paymentTerms}" />
+                                        <h:outputText value="Terms of Payment: " style="width: 10%; font-weight: bolder; vertical-align: middle" />
+                                        <h:outputText id="topID" value="#{pOManagedBean.paymentTerms}" />
 
-                                    <h:outputText value="Order Date: " style="width: 10%; font-weight: bolder"/>
-                                    <h:outputText id="orderDateId" value="#{pOManagedBean.orderDate}" />
+                                        <h:outputText value="Order Date: " style="width: 10%; font-weight: bolder"/>
+                                        <h:outputText id="orderDateId" value="#{pOManagedBean.orderDate}" />
 
-                                    <h:outputText value="Item Jobs: " style="width: 15%; font-weight: bolder"/>
-                                    <h:outputText id="descId" value="#{pOManagedBean.descriptions}" style="white-space: pre-wrap" escape="false"/>
+                                        <h:outputText value="Item Jobs: " style="width: 15%; font-weight: bolder"/>
+                                        <h:outputText id="descId" value="#{pOManagedBean.descriptions}" style="white-space: pre-wrap" escape="false"/>
 
-                                    <h:outputText value="Total Price (SGD): " style="width: 10%; font-weight: bolder"/>
-                                    <h:outputText id="totalPriceId" value="#{pOManagedBean.totalPrice}" />
+                                        <h:outputText value="Total Price (SGD): " style="width: 10%; font-weight: bolder"/>
+                                        <h:outputText id="totalPriceId" value="#{pOManagedBean.totalPrice}" />
 
-                                    <p:column>
-                                        <p:outputLabel for="mailingAddr1" value="Mailing Address:" style="width: 10%; font-weight: bolder"/>
-                                        <br />
-                                        <p:outputLabel value="*Please do not fill in if the mailing address is " style="font-size: 80%;color: red" />
-                                        <br />
-                                        <p:outputLabel value="the same as your home address." style="font-size: 80%;color: red" />
-                                    </p:column>
-                                    <p:column>
-                                        <p:inputText style="width: 210px; margin-top: 1px;font-weight: normal; font-size: 14px; font-family: 'Open Sans';" placeholder="e.g. Beach Road" value="#{pOManagedBean.newPurOrder.mailingAddr1}" id="mailingAddr1"  />
-                                        <br />
-                                        <p:inputText style="width: 210px; margin-top: 5px; font-weight: normal; font-size: 14px; font-family: 'Open Sans';" placeholder="e.g. 12, #01-02" value="#{pOManagedBean.newPurOrder.mailingAddr2}" id="mailingAddr2"  />
-                                        <br />
-                                    </p:column>
-                                </p:panelGrid>
-                                <br />
-                                <p:commandButton icon="" value="Send Purchase Order" action="#{pOManagedBean.createPurchaseOrder(item)}" update="rcvQuote" style="padding-top: 5px; padding-bottom: 5px; padding-left: 22px; padding-right: 22px" />
-                                <br /><br />
+                                        <p:column>
+                                            <p:outputLabel for="mailingAddr1" value="Mailing Address:" style="width: 10%; font-weight: bolder"/>
+                                            <br />
+                                            <p:outputLabel value="*Please do not fill in if the mailing address is " style="font-size: 80%;color: red" />
+                                            <br />
+                                            <p:outputLabel value="the same as your home address." style="font-size: 80%;color: red" />
+                                        </p:column>
+                                        <p:column>
+                                            <p:inputText style="width: 210px; margin-top: 1px;font-weight: normal; font-size: 14px; font-family: 'Open Sans';" placeholder="e.g. Beach Road" value="#{pOManagedBean.newPurOrder.mailingAddr1}" id="mailingAddr1"  />
+                                            <br />
+                                            <p:inputText style="width: 210px; margin-top: 5px; font-weight: normal; font-size: 14px; font-family: 'Open Sans';" placeholder="e.g. 12, #01-02" value="#{pOManagedBean.newPurOrder.mailingAddr2}" id="mailingAddr2"  />
+                                            <br />
+                                        </p:column>
+                                    </p:panelGrid>
+                                    <br />
+                                    <p:commandButton icon="" value="Send Purchase Order" action="#{pOManagedBean.createPurchaseOrder(item)}" update="rcvQuote" style="padding-top: 5px; padding-bottom: 5px; padding-left: 22px; padding-right: 22px" />
+                                    <br /><br />
+
+                                </p:scrollPanel>
+
                             </p:dialog>
                         </p:column>
                     </p:dataTable>
@@ -295,7 +299,7 @@
                     </p:dataTable>
                 </p:tab>
                 <p:tab title="Welding Jobs">
-                    
+
                     <p:messages id="wjMsg"  showDetail="false" />
                     <p:commandButton value="Refresh" actionListener="#{pOManagedBean.receivedCustomerWJ()}" update="wjMsg rcvWJ" icon="" style="padding-top: 5px; padding-bottom: 5px; padding-left: 22px; padding-right: 22px" />
                     <br /><br />
@@ -303,7 +307,7 @@
                         <p:column style="font-weight: bold" headerText="PO No" width="15%">
                             <p:outputLabel style="font-weight: normal" value="#{wjItem.projectNo}"/>
                         </p:column>
-                        
+
                         <p:column style="font-weight: bold" headerText="Expected Start (dd/mm/yyyy)" width="11%">
                             <h:outputText style="font-weight: normal" value="#{pOManagedBean.formatDate(wjItem.project.plannedStart)}"/>
                         </p:column>
@@ -320,10 +324,10 @@
                             <h:outputText style="font-weight: normal" value="#{wjItem.empName}"/>
                         </p:column>
                     </p:dataTable>
-                    
+
                 </p:tab>
-               <!-- <p:tab title="Invoices">
-                </p:tab>-->
+                <!-- <p:tab title="Invoices">
+                 </p:tab>-->
             </p:tabView>
             <!--</f:ajax>-->
         </h:form>

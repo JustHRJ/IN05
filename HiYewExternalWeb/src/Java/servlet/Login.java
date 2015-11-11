@@ -32,13 +32,13 @@ public class Login extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-                    try {
-                SmsService smsService1 = new SmsService("2USsHuRw6nYOlkh4", "Yie0bbxSDekwTT1d");
-                smsService1.send("+6583997580", "HiYew: Your delivery details for purchase order have been updated! You may go to HiYew Customer Portal to view the updates.", "", "", "");
-            } catch (Exception e) {
-                e.printStackTrace();
-                throw new EJBException(e.getMessage());
-            }
+//        try {
+//            SmsService smsService1 = new SmsService("2USsHuRw6nYOlkh4", "Yie0bbxSDekwTT1d");
+//            smsService1.send("+6583997580", "HiYew: Your delivery details for purchase order have been updated! You may go to HiYew Customer Portal to view the updates.", "", "", "");
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//            throw new EJBException(e.getMessage());
+//        }
         response.sendRedirect("/HiYewExternalWeb/login.xhtml");
     }
 

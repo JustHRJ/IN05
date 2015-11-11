@@ -44,6 +44,8 @@ public class QuotationManagedBean implements Serializable {
     private ArrayList<Quotation> receivedQuotations;
     private ArrayList<QuotationDescription> displayQuotationDescriptions;
 
+    private Date today = new Date();
+    
     public QuotationManagedBean() {
         System.out.println("QuotationManagedBean.java QuotationManagedBean()");
         newQuotation = new Quotation();
@@ -203,6 +205,7 @@ public class QuotationManagedBean implements Serializable {
             newQuotationDesc = new QuotationDescription();
             //set quotation tab to be selected
             //System.out.println("Your RFQ has been sent successfully!");
+            latestEndDate = null;
             FacesContext.getCurrentInstance().addMessage("msg", new FacesMessage("Your RFQ has been sent successfully!", ""));
         }
     }
@@ -367,5 +370,19 @@ public class QuotationManagedBean implements Serializable {
      */
     public void setLatestEndDate(Date latestEndDate) {
         this.latestEndDate = latestEndDate;
+    }
+
+    /**
+     * @return the today
+     */
+    public Date getToday() {
+        return today;
+    }
+
+    /**
+     * @param today the today to set
+     */
+    public void setToday(Date today) {
+        this.today = today;
     }
 }

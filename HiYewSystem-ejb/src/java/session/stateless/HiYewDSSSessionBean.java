@@ -5,14 +5,18 @@
  */
 package session.stateless;
 
+import entity.EmployeeEntity;
 import entity.FillerEntity;
 import entity.Metal;
+import entity.ShelveEntity;
+import entity.StorageInfoEntity;
 import entity.WeldJob;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 import javax.ejb.Stateless;
@@ -27,25 +31,26 @@ import javax.persistence.Query;
  */
 @Stateless
 public class HiYewDSSSessionBean implements HiYewDSSSessionBeanLocal {
-    
+
     @PersistenceContext(unitName = "HiYewSystem-ejbPU")
     private EntityManager em;
-final double pi = 3.142;
-    
+    final double pi = 3.142;
+
     @Override
-    public List<FillerEntity> getListOfMatchedFillers(Metal metal){
+    public List<FillerEntity> getListOfMatchedFillers(Metal metal) {
         ArrayList<FillerEntity> matchedFillers = new ArrayList<FillerEntity>();
         matchedFillers.addAll(metal.getFillers());
         return matchedFillers;
     }
-    
+
     @Override
-    public int getAvailableQty(FillerEntity filler){
+    public int getAvailableQty(FillerEntity filler) {
         return filler.getQuantity() - filler.getBookedQuantity();
     }
-    
+
     @Override
     public Metal getExistingMetal(String metalName) {
+        //sadasdsa
         try {
             Query q = em.createQuery("Select i FROM Metal i WHERE i.metalName=:metalName");
             q.setParameter("metalName", metalName);
@@ -54,16 +59,16 @@ final double pi = 3.142;
             return null;
         }
     }
-    
+
     @Override
-    public int quantityNeeded(FillerEntity filler, double surfaceAreaToweld,int qty){
+    public int quantityNeeded(FillerEntity filler, double surfaceAreaToweld, int qty) {
         double fillerVolume = getWireVolume(filler);
-        System.out.println("Surface Area = "+surfaceAreaToweld);
-        System.out.println("Filler Volume = "+fillerVolume);
-        int qtyNeeded = (int)roundUp(((surfaceAreaToweld*qty)/fillerVolume),0);
+        System.out.println("Surface Area = " + surfaceAreaToweld);
+        System.out.println("Filler Volume = " + fillerVolume);
+        int qtyNeeded = (int) roundUp(((surfaceAreaToweld * qty) / fillerVolume), 0);
         return qtyNeeded;
     }
-    
+
     @Override
     public FillerEntity getExistingItem(String fillerCode) {
         try {
@@ -94,11 +99,21 @@ final double pi = 3.142;
         bd = bd.setScale(places, RoundingMode.CEILING);
         return bd.doubleValue();
     }
-    
-      @Override
+
+    private double round(double value, int places) {
+        if (places < 0) {
+            throw new IllegalArgumentException();
+        }
+
+        BigDecimal bd = new BigDecimal(value);
+        bd = bd.setScale(places, RoundingMode.HALF_UP);
+        return bd.doubleValue();
+    }
+
+    @Override
     public List<WeldJob> getSimilarPastProjects(String metal1, String metal2, String weldingType) {
         System.out.println("getSimilarPastProjectDuration: Start");
- 
+
         //find weldJobs with two similar metals for welding 
         Query query = em.createQuery("Select w FROM WeldJob AS w where w.project.projectCompletion = true AND "
                 + "( (w.metal1=:metal1 OR w.metal1=:metal2) AND (w.metal2=:metal1 OR w.metal2=:metal2) AND (w.weldingType = :weldingType) ) ");
@@ -107,7 +122,7 @@ final double pi = 3.142;
         query.setParameter("weldingType", weldingType);
 
         List<WeldJob> weldJobs = query.getResultList();
-        System.out.println("As getSimilarPastProjects Session Bean: Weld Jobs: "+ weldJobs.size() );
+        System.out.println("As getSimilarPastProjects Session Bean: Weld Jobs: " + weldJobs.size());
         //if not, find weldJobs with one similar metal for welding
         if (weldJobs.isEmpty()) {
             query = em.createQuery("Select w FROM WeldJob AS w where w.project.projectCompletion = true AND (w.weldingType = :weldingType) AND "
@@ -121,38 +136,45 @@ final double pi = 3.142;
         }
         return weldJobs;
     }
-    
-    
-    
-    
-     @Override
-    public Integer deriveAverageDuration(ArrayList<WeldJob> similarWeldJobs) {
-      
+
+    @Override
+    public Integer deriveAverageDaysNeededForWeldJob(ArrayList<WeldJob> similarWeldJobs, double surfaceVolToWeld, int qtyToWeld) {
+
         double totalMins = 0;
-        if((similarWeldJobs==null)||(similarWeldJobs.size()<1)){
+        double avgMinsPerCm3 = 0;
+
+        double totalCm3ToWeld;
+        if ((surfaceVolToWeld > 0) && (qtyToWeld > 0)) {
+            totalCm3ToWeld = surfaceVolToWeld * qtyToWeld;
+        } else {
             return -1;
-        }else{
-            System.out.println("List Size"+ similarWeldJobs.size());
+        }
+
+        if ((similarWeldJobs == null) || (similarWeldJobs.size() < 1)) {
+            return -1;
+        } else {
+            System.out.println("List Size" + similarWeldJobs.size());
             for (int i = 0; i < similarWeldJobs.size(); i++) {
                 System.out.println();
                 int totalQtyWelded = similarWeldJobs.get(i).getTotalQuantity();
                 double surfaceArea = similarWeldJobs.get(i).getSurfaceArea();
                 int daysTook = similarWeldJobs.get(i).getDuration();
-                double weldingDurationPerCm3 = (daysTook * 60 * 60)/(totalQtyWelded*surfaceArea); //go by minutes
-                 System.out.println("Total Mins used for 1 cm3 for WeldJob"+ similarWeldJobs.get(i).getWeldJobId() + ": "+ weldingDurationPerCm3);
-                totalMins += weldingDurationPerCm3;    
+                double weldingDurationPerCm3 = (daysTook * 24 * 60) / (totalQtyWelded * surfaceArea); //go by minutes
+                System.out.println("Total Mins used for 1 cm3 for WeldJob" + similarWeldJobs.get(i).getWeldJobId() + ": " + weldingDurationPerCm3);
+                totalMins += weldingDurationPerCm3;
                 System.out.print("Days took:" + daysTook);
                 System.out.print("Qty:" + totalQtyWelded);
                 System.out.print("surfaceArea:" + surfaceArea);
             }
-             
-       System.out.print("Total Mins:" + totalMins);
-            System.out.print((int)roundUp(((totalMins/similarWeldJobs.size())/60/60),0));
-            return (int)roundUp(((totalMins/similarWeldJobs.size())/60/60),0);
+
+            System.out.print("Total Mins:" + totalMins);
+            avgMinsPerCm3 = totalMins / similarWeldJobs.size();
+            double numberOfMinsNeeded = totalCm3ToWeld * avgMinsPerCm3;
+            return (int) roundUp(((numberOfMinsNeeded / 60) / 24), 0);
         }
 
     }
-    
+
     @Override
     public Integer getDifferenceDays(Timestamp t1, Timestamp t2) {
 
@@ -162,4 +184,57 @@ final double pi = 3.142;
         return (int) (TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS));
     }
 
+    @Override
+    public double getAvgManpowerCostPerDay() {
+        ArrayList<EmployeeEntity> allEmployees = new ArrayList<EmployeeEntity>();
+        allEmployees.addAll(getAllEngineers());
+        double total = 0;
+        for (int i = 0; i < allEmployees.size(); i++) {
+            total += allEmployees.get(i).getEmployee_basic();
+        }
+        if (allEmployees.size() > 0) {
+            return (int) roundUp((total / allEmployees.size()) / 22, 2);
+        } else {
+            return -1;
+        }
+    }
+
+    private List<EmployeeEntity> getAllEngineers() {
+        Query q = em.createQuery("select c from EmployeeEntity c where c.employee_account_status = :role");
+        q.setParameter("role", "staff");
+        return q.getResultList();
+    }
+
+    public HashMap whichShelveToTake(FillerEntity fillerToTake, int qtyToTake) {
+        HashMap map = new HashMap();
+        ArrayList<StorageInfoEntity> itemStorages = new ArrayList<StorageInfoEntity>();
+        ShelveEntity shelveToTakeFrom = new ShelveEntity();
+        Query q = em.createQuery("SELECT si FROM StorageInfoEntity si WHERE si.item = :item");
+        q.setParameter("item", fillerToTake);
+        itemStorages.addAll(q.getResultList());
+        for (int i = 0; i < itemStorages.size(); i++) {
+            int qtyStoredInThatShelve = itemStorages.get(i).getStoredQty();
+            if (qtyStoredInThatShelve >= qtyToTake) {
+                shelveToTakeFrom = itemStorages.get(i).getShelve();
+                break;
+            }
+        }
+        //need take from multiple shelve
+        if (shelveToTakeFrom != null) {
+            map.put(shelveToTakeFrom, qtyToTake);
+        } else {
+            int qty = qtyToTake;
+            for (int i = 0; i < itemStorages.size(); i++) {
+                int qtyStoredInThatShelve = itemStorages.get(i).getStoredQty();
+                if (qtyStoredInThatShelve < qty) {
+                    map.put(itemStorages.get(i).getShelve(), qtyStoredInThatShelve);
+                    qty = qty - qtyStoredInThatShelve;
+                } else {
+                    map.put(itemStorages.get(i).getShelve(), qty);
+                    break;
+                }
+            }
+        }
+        return map;
+    }
 }

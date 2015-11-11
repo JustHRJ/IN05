@@ -170,6 +170,18 @@ public class ProcurementSessionBean implements ProcurementSessionBeanLocal {
         SupplierEntity c = em.find(SupplierEntity.class, username);
         return c;
     }
+    
+    @Override
+    public SupplierEntity getSupplierByCompanyname(String companyName) {
+         try {
+       Query q = em.createQuery("SELECT s FROM SupplierEntity s WHERE s.companyName=:companyName");
+       q.setParameter("companyName", companyName);
+       return (SupplierEntity)q.getSingleResult();
+         }catch (NoResultException e) {
+             return null;
+        }
+       
+    }
 
     @Override
     public int getNextBatchNo() {

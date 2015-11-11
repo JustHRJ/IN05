@@ -36,7 +36,7 @@ public class Project implements Serializable {
 //    
     private Boolean projectOverrun; 
     private Integer projectDaysExceed;
-    private String causeOfDelay;
+    private String causeOfDelay; // Manpower, Machine, Rework, Filler, Others
 //    private String takeAway;
 //    private Integer daysDiffFromActualAndPlannedStart;
 //    private Integer daysDiffFromActualAndPlannedEnd;
@@ -312,5 +312,6 @@ public class Project implements Serializable {
     public void setCauseOfDelay(String causeOfDelay) {
         this.causeOfDelay = causeOfDelay;
     }
+
     
 }

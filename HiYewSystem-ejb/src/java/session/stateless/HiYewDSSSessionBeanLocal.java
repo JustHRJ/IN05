@@ -10,6 +10,7 @@ import entity.Metal;
 import entity.WeldJob;
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import javax.ejb.Local;
 
@@ -36,6 +37,10 @@ public interface HiYewDSSSessionBeanLocal {
 
     public Integer getDifferenceDays(Timestamp t1, Timestamp t2);
 
-    public Integer deriveAverageDuration(ArrayList<WeldJob> similarWeldJobs);
+    public Integer deriveAverageDaysNeededForWeldJob(ArrayList<WeldJob> similarWeldJobs, double surfaceVolToWeld, int qtyToWeld);
+
+    public double getAvgManpowerCostPerDay();
+
+    public HashMap whichShelveToTake(FillerEntity fillerToTake, int qtyToTake);
     
 }

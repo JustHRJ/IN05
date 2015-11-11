@@ -1,6 +1,5 @@
 package managedBean;
 
-
 import entity.SupplierEntity;
 import java.io.IOException;
 import java.io.Serializable;
@@ -10,6 +9,7 @@ import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
 import javax.inject.Named;
+import manager.EmailManager;
 import session.stateless.SupplierSessionBeanLocal;
 
 @Named(value = "supplierManagedBean")
@@ -23,7 +23,6 @@ public class SupplierManagedBean implements Serializable {
     private String rePassword = "";
     private String changePasswordInput = "";
     private String newPassword = "";
-    private String subscribeEmail = "";
 
     public SupplierManagedBean() {
         FacesContext.getCurrentInstance().getExternalContext().getSessionMap().remove("popupMessage");
@@ -42,54 +41,41 @@ public class SupplierManagedBean implements Serializable {
     // update supplier
     public void handleSave() throws IOException {
         supplierSessionBean.updateSupplier(supplier);
-        FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("popupMessage", "Profile has been updated successfully!");
-        FacesContext.getCurrentInstance().getExternalContext().redirect("/HiYewExternalWeb/s-home.xhtml");
+        FacesContext.getCurrentInstance().addMessage("profileMsg", new FacesMessage(FacesMessage.SEVERITY_INFO, "Profile has been updated successfully!", ""));
     }
 
     public void changeSubscribeEmail() throws IOException {
-        //System.out.println("this.subscribeEmail = " + supplier.getSubscribeEmail());
-        FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("popupMessage", "Subcription has been updated successfully!");
-        supplierSessionBean.updateSupplier(supplier);
+
     }
 
     public void changePassword() throws IOException {
 
         if (changePasswordInput.equals("") || newPassword.equals("") || rePassword.equals("")) {
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Changing password requires all password fields to be filled!", ""));
+            FacesContext.getCurrentInstance().addMessage("pwdMsg", new FacesMessage(FacesMessage.SEVERITY_ERROR, "Changing password requires all password fields to be filled!", ""));
         } else {
             String encryptedPassword = supplier.getPw();
             if (encryptedPassword.equals(supplierSessionBean.encryptPassword(changePasswordInput))) {
                 if (supplierSessionBean.encryptPassword(newPassword).equals(encryptedPassword)) {
-                    FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "New Password and current password should not be same.", ""));
+                    FacesContext.getCurrentInstance().addMessage("pwdMsg", new FacesMessage(FacesMessage.SEVERITY_ERROR, "New Password and current password should not be same.", ""));
                 } else {
                     if (newPassword.equals(rePassword)) {
                         supplier.setPw(supplierSessionBean.encryptPassword(newPassword));
-                        handleSave();
-                        //FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Password has been changed successfully!", ""));
-                        FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("popupMessage", "Password has been changed successfully!");
-                        FacesContext.getCurrentInstance().getExternalContext().redirect("/HiYewExternalWeb/user-profile.xhtml");
+                        rePassword = "";
+                        changePasswordInput = "";
+                        newPassword = "";
+                        EmailManager emailManager = new EmailManager();
+                        emailManager.emailSupplierPasswordChanged(supplier.getCompanyName(), supplier.getEmail());
+
+                        supplierSessionBean.updateSupplier(supplier);
+                        FacesContext.getCurrentInstance().addMessage("pwdMsg", new FacesMessage("Password has been changed successfully!", ""));
                     } else {
-                        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Password mismatch!", ""));
+                        FacesContext.getCurrentInstance().addMessage("pwdMsg", new FacesMessage(FacesMessage.SEVERITY_ERROR, "Password mismatch!", ""));
                     }
                 }
             } else {
-                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Incorrect current password!", ""));
+                FacesContext.getCurrentInstance().addMessage("pwdMsg", new FacesMessage(FacesMessage.SEVERITY_ERROR, "Incorrect current password!", ""));
             }
         }
-    }
-
-    /**
-     * @return the subscribeEmail
-     */
-    public String getSubscribeEmail() {
-        return subscribeEmail;
-    }
-
-    /**
-     * @param subscribeEmail the subscribeEmail to set
-     */
-    public void setSubscribeEmail(String subscribeEmail) {
-        this.subscribeEmail = subscribeEmail;
     }
 
     /**
@@ -120,7 +106,7 @@ public class SupplierManagedBean implements Serializable {
     public void setSupplier(SupplierEntity supplier) {
         this.supplier = supplier;
     }
-    
+
     /**
      * @return the rePassword
      */
@@ -162,5 +148,4 @@ public class SupplierManagedBean implements Serializable {
     public void setNewPassword(String newPassword) {
         this.newPassword = newPassword;
     }
-
 }

@@ -299,8 +299,8 @@ public class HiYewSystemBeanRemoteInterfaceTest {
         int days = 1;
         String remarks = "";
 
-        Date start = new Date("11/11/2015");
-        Date end = new Date("11/11/2015");
+        Date start = new Date("11/12/2015");
+        Date end = new Date("11/12/2015");
         String type = "paid";
         String expResult = "applied";
         String result = HiYewSystemBeanInterface.applyLeave(employee, days, remarks, start, end, type);
@@ -316,8 +316,8 @@ public class HiYewSystemBeanRemoteInterfaceTest {
         int days = 1;
         String remarks = "";
 
-        Date start = new Date("11/11/2015");
-        Date end = new Date("11/11/2015");
+        Date start = new Date("11/12/2015");
+        Date end = new Date("11/12/2015");
         String type = "paid";
         String expResult = "Earlier leave has been applied";
         String result = HiYewSystemBeanInterface.applyLeave(employee, days, remarks, start, end, type);
@@ -387,8 +387,8 @@ public class HiYewSystemBeanRemoteInterfaceTest {
         int days = 1;
         String remarks = "";
 
-        Date start = new Date("11/11/2015");
-        Date end = new Date("11/11/2015");
+        Date start = new Date("11/12/2015");
+        Date end = new Date("11/12/2015");
         String type = "paid";
         String expResult = "No such Employee";
         String result = HiYewSystemBeanInterface.applyLeave(employee, days, remarks, start, end, type);
@@ -398,8 +398,8 @@ public class HiYewSystemBeanRemoteInterfaceTest {
         days = 1;
         remarks = "";
 
-        start = new Date("11/11/2015");
-        end = new Date("11/11/2015");
+        start = new Date("11/12/2015");
+        end = new Date("11/12/2015");
         type = "paid";
         expResult = "No such Employee";
         result = HiYewSystemBeanInterface.applyLeave(employee, days, remarks, start, end, type);
@@ -424,8 +424,8 @@ public class HiYewSystemBeanRemoteInterfaceTest {
         days = 1;
         remarks = "";
 
-        start = new Date("11/11/2015");
-        end = new Date("11/11/2015");
+        start = new Date("11/12/2015");
+        end = new Date("11/12/2015");
         type = "paid";
         expResult = "No such Employee";
         result = HiYewSystemBeanInterface.applyLeave(employee, days, remarks, start, end, type);
@@ -439,8 +439,8 @@ public class HiYewSystemBeanRemoteInterfaceTest {
         int days = 1;
         String remarks = "";
 
-        Date start = new Date("11/11/2015");
-        Date end = new Date("11/11/2015");
+        Date start = new Date("11/12/2015");
+        Date end = new Date("11/12/2015");
         String type = "paid";
         String expResult = "Employee is disabled";
         String result = HiYewSystemBeanInterface.applyLeave(employee, days, remarks, start, end, type);
@@ -490,8 +490,8 @@ public class HiYewSystemBeanRemoteInterfaceTest {
         int days = 1;
         String remarks = "";
 
-        Date start = new Date("11/11/2015");
-        Date end = new Date("11/11/2015");
+        Date start = new Date("11/12/2015");
+        Date end = new Date("11/12/2015");
         String type = "paid";
         String expResult = "Cannot apply leave before employed Date";
         String result = HiYewSystemBeanInterface.applyLeave(employee, days, remarks, start, end, type);

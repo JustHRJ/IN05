@@ -2,9 +2,7 @@ package managedBean;
 
 import entity.CustomerPO;
 import entity.EmployeeEntity;
-import entity.FillerEntity;
 import entity.MachineEntity;
-import entity.Metal;
 import entity.Project;
 import entity.Quotation;
 import entity.QuotationDescription;
@@ -123,9 +121,10 @@ public class CustomerPOManagedBean implements Serializable {
             newPurOrder.setMailingAddr1(q.getCustomer().getAddress1());
             newPurOrder.setMailingAddr2(q.getCustomer().getAddress2());
         }
-
+        
         newPurOrder.setCustomer(q.getCustomer());
         newPurOrder.setQuotation(q);
+        System.out.println("TEST " + newPurOrder.getCustomerRefPoNumber());
         customerPOSessionBean.createPO(newPurOrder);//persist
         //add into customer purchase order collection in persistence context
         customerSessionBean.addPurchaseOrder(q.getCustomer().getUserName(), newPurOrder);
@@ -135,6 +134,8 @@ public class CustomerPOManagedBean implements Serializable {
         project.setProjectNo(newPurOrder.getPoId());
         project.setProjectCompletion(false);
         project.setProjectManager("Han Kiat");
+        project.setProjectOverrun(false);
+        project.setProjectDaysExceed(0);
         //set customer key to project
         if (FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("username") != null) {
             String username = FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("username").toString();
@@ -165,7 +166,7 @@ public class CustomerPOManagedBean implements Serializable {
             newWeldJob.setProjectNo(newPurOrder.getPoId());
             newWeldJob.setMetal1(q.getQuotationDescriptions().get(i).getMetalName());
             newWeldJob.setMetal2(q.getQuotationDescriptions().get(i).getMetalName());
-            
+            newWeldJob.setSurfaceArea(q.getQuotationDescriptions().get(i).getSurfaceVol());
             //set filler
             //Metal m = metalSessionBean.getMetalByName(q.getQuotationDescriptions().get(i).getMetalName());
             //if (m != null && !m.getFillers().isEmpty()) {
@@ -202,6 +203,7 @@ public class CustomerPOManagedBean implements Serializable {
         }
         System.out.println("Test 5");
         Project p2 = projectSessionBean.getProjectWithEarliestCompletionDate();
+        
         if (days >= 0) {
             //check for any project slack which can accomodate the new project duration
             Project p1 = projectSessionBean.getProjectDurationWithSlack(days);
@@ -293,7 +295,7 @@ public class CustomerPOManagedBean implements Serializable {
             descriptions += qd.getQuotationDescNo().toString() + ". " + qd.getMetalName() + "\r\n   "
                     + "Welding Type: " + qd.getWeldingType() + "\r\n   "
                     + "Instn: " + qd.getItemDesc() + "\r\n   " + "Price: SGD "
-                    + String.format("%.2f", qd.getPrice() * qd.getQty()) + "\r\n";
+                    + String.format("%.2f", round( qd.getPrice() * qd.getQty(),2) ) + "\r\n";
             //compute total price
             total += qd.getPrice() * qd.getQty();
         }
@@ -302,6 +304,7 @@ public class CustomerPOManagedBean implements Serializable {
         //Pop up
         showDialog();
     }
+    
 
     public Date addDays(Date date, int days) {
         Calendar cal = Calendar.getInstance();

@@ -146,7 +146,7 @@ public class LoginManagedBean implements Serializable {
             System.out.println("Logout Success");
         }
     }
-    
+
     public void errorLogout() throws IOException {
 
         String serverName = FacesContext.getCurrentInstance().getExternalContext().getRequestServerName();
@@ -185,7 +185,25 @@ public class LoginManagedBean implements Serializable {
                 FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("msgColor", "red");
             }
         } else { // if user is supplier
-            return "login?faces-redirect=true";
+            supplier = supplierSessionBean.getSupplierByUsername(username);
+            if (this.supplier != null) {
+                if (supplier.getSecretQuestion().equals(secretQn) && supplier.getSecretAnswer().equals(secretAns)) {
+                    FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("loginMessage", "Your password has been reset successfully! Please check your email.");
+                    FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("msgColor", "green");
+                    String output[] = supplierSessionBean.resetSupplierPassword(supplier.getUserName()).split(":");
+                    EmailManager emailManager = new EmailManager();
+                    emailManager.emailPassword(output[0], output[1], output[2]);
+                    FacesContext facesCtx = FacesContext.getCurrentInstance();
+                    ExternalContext externalContext = facesCtx.getExternalContext();
+                    externalContext.redirect("/HiYewExternalWeb/login.xhtml");
+                } else {
+                    FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("forgotMessage", "Invalid secret question or answer!");
+                    FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("msgColor", "red");
+                }
+            } else {
+                FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("forgotMessage", "Username does not exist!");
+                FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("msgColor", "red");
+            }
         }
         return "";
     }
@@ -214,13 +232,15 @@ public class LoginManagedBean implements Serializable {
 
             EmailManager emailManager = new EmailManager();
             emailManager.emailSuccessfulRegistration(newSupplier.getCompanyName(), newSupplier.getUserName(), newSupplier.getPw(), newSupplier.getEmail());
-
-            FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("loginMessage", "Supplier account has been created succesfully!");
-            FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("msgColor", "green");
+            supplierCodeWord = "";
+            FacesContext.getCurrentInstance().addMessage("supplierMsg", new FacesMessage(FacesMessage.SEVERITY_INFO, "Supplier account has been created succesfully!", ""));
+//            FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("loginMessage", "Supplier account has been created succesfully!");
+//            FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("msgColor", "green");
             hiYewSystemBean.deleteActivationCode(supplierCodeWord);
         } else {
-            FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("registerMessage", "The supplier's code provided is invalid!");
-            FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("msgColor", "red");
+            FacesContext.getCurrentInstance().addMessage("supplierMsg", new FacesMessage(FacesMessage.SEVERITY_ERROR, "The supplier's code provided is invalid!", ""));
+//            FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("registerMessage", "The supplier's code provided is invalid!");
+//            FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("msgColor", "red");
         }
     }
 
@@ -248,11 +268,11 @@ public class LoginManagedBean implements Serializable {
                     ExternalContext externalContext = facesCtx.getExternalContext();
                     externalContext.redirect("/HiYewExternalWeb/login.xhtml");
                 } else {
-                    FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("loginMessage", "Your password and confirmation password do not match.");
+                    FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("registerMessage", "Your password and confirmation password do not match.");
                     FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("msgColor", "red");
                 }
             } else {
-                FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("loginMessage", "This username has been taken by someone else. Please choose a different username.");
+                FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("registerMessage", "This username has been taken by someone else. Please choose a different username.");
                 FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("msgColor", "red");
             }
         } else { //create supplier
