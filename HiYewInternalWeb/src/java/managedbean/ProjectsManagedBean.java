@@ -83,8 +83,6 @@ public class ProjectsManagedBean implements Serializable {
         receivedWeldJobs = new ArrayList<>();
         selectedProject = new Project();
         map = new HashMap();
-        
-        
     }
 
     @PostConstruct
@@ -217,7 +215,7 @@ public class ProjectsManagedBean implements Serializable {
                         ShelveEntity shelveToTakeFrom = (ShelveEntity)me.getKey();
                         int qtyToTake = (int)me.getValue();
                         hiYewICSSessionBean.reduceStorageQty(f, shelveToTakeFrom, qtyToTake);
-                        toPickFrom.add("Please retrieve "+qtyToTake+" of " +f.getFillerCode() +" from Shelf" + shelveToTakeFrom.getShelveID());
+                        toPickFrom.add("Please retrieve "+qtyToTake+" of " +f.getFillerCode() +" from Shelf " + shelveToTakeFrom.getShelveID());
                     }
                     hiYewICSSessionBean.stockDown(f, jobList.get(i).getTotalQuantity());
                 }

@@ -12,7 +12,10 @@ import java.io.Serializable;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
+import java.util.List;
 import java.util.TimeZone;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
@@ -30,7 +33,7 @@ import session.stateless.ProjectSessionBeanLocal;
  */
 @Named(value = "machineScheduleManagedBean")
 @ViewScoped
-public class MachineScheduleManagedBean implements Serializable{
+public class MachineScheduleManagedBean implements Serializable {
 
     @EJB
     private MachineSystemBeanLocal machineSystemBean;
@@ -45,8 +48,20 @@ public class MachineScheduleManagedBean implements Serializable{
 
     @PostConstruct
     protected void initialize() {
+        List<MachineEntity> mList = machineSystemBean.getAllMachine();
 
-        ArrayList<MachineEntity> machines = new ArrayList<>(machineSystemBean.getAllMachine());
+//        Collections.sort(mList, new Comparator<MachineEntity>() {
+//            public int compare(MachineEntity m1, MachineEntity m2) {
+//                return m1.getMachine_number().compareTo(m2.getMachine_number());
+//            }
+//        });
+
+        
+        ArrayList<MachineEntity> machines = new ArrayList<>(bubbleSort(mList));
+        for(int i =0;i<machines.size();i++){
+            //System.out.println(machines.get(i).getMachine_number());
+        }
+        
 
         // set initial actualStart / PlannedEnd dates for the axis of the timeline  
         Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
@@ -69,6 +84,7 @@ public class MachineScheduleManagedBean implements Serializable{
         curStartedProjects = new ArrayList<>(projectSessionBean.getUncompletedProjects());
 
         for (int i = 0; i < machines.size(); i++) {
+            System.out.println("#################"+ machines.get(i).getMachine_number());
             hasJob = false;
             if (curStartedProjects != null) {
 
@@ -133,6 +149,8 @@ public class MachineScheduleManagedBean implements Serializable{
             plannedEnd = new Date();
             r = -1;
         }
+        //Collections.sort(model.getEvents(),new TimelineEventCompare());
+
     }
 
     public Timestamp convertDateToTimestamp(Date date) {
@@ -160,4 +178,53 @@ public class MachineScheduleManagedBean implements Serializable{
         return end;
     }
 
+    private static List<MachineEntity> bubbleSort(List<MachineEntity> mList) {
+
+        List<MachineEntity> result = new ArrayList<MachineEntity>();
+        int n = mList.size();
+        MachineEntity m = new MachineEntity();
+        int counterToHit = n;
+        
+        while(mList.size()>0){
+        for(int i = 0;i<mList.size();i++){
+            m = mList.get(i);
+            int numOfSmallThan = 0;
+            for(int j = 0;j<mList.size();j++){
+                int num1 = Integer.parseInt(m.getMachine_number());
+                int num2 = Integer.parseInt(mList.get(j).getMachine_number());
+                if(num1<=num2){
+                    numOfSmallThan++;
+                }
+            }
+            if(numOfSmallThan==counterToHit){
+                counterToHit = counterToHit -1;
+                result.add(m);
+                mList.remove(i);
+            }
+        }
+        }
+        return result;
+
+}
+
+
+
+}
+
+class TimelineEventCompare implements Comparator<TimelineEvent> {
+
+    @Override
+    public int compare(TimelineEvent o1, TimelineEvent o2) {
+        // write comparison logic here like below , it's just a sample
+        return o1.getGroup().compareTo(o2.getGroup());
+    }
+}
+
+class MachineCompare implements Comparator<MachineEntity> {
+
+    @Override
+    public int compare(MachineEntity o1, MachineEntity o2) {
+        // write comparison logic here like below , it's just a sample
+        return o1.getMachine_number().compareTo(o2.getMachine_number());
+    }
 }

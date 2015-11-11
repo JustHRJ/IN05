@@ -125,6 +125,7 @@ public class ProjectDashBoardManagedBean implements Serializable {
         horizontalBarModel.setTitle("Project Progress");
         horizontalBarModel.setLegendPosition("e");
         horizontalBarModel.setStacked(true);
+        horizontalBarModel.setAnimate(true);
 
         Axis xAxis = horizontalBarModel.getAxis(AxisType.X);
         xAxis.setLabel("% Project Completion");
@@ -179,6 +180,7 @@ public class ProjectDashBoardManagedBean implements Serializable {
         pieModel1.setTitle("Reasons for Project Delays");
         pieModel1.setLegendPosition("w");
         pieModel1.setExtender("pieExtender");
+        pieModel1.setShadow(true);
         
         drillDown = true;
     }
@@ -232,18 +234,17 @@ public class ProjectDashBoardManagedBean implements Serializable {
             }
         }
 
-        pieModel1.set("&le; 5%", tier1);
-        pieModel1.set("(6 - 10) %", tier2);
-        pieModel1.set("11-15%", tier3);
-        pieModel1.set("> 15%", tier4);
+        pieModel1.set(" &le; 5%", tier1);
+        pieModel1.set(" 6 - 10%", tier2);
+        pieModel1.set(" 11 - 15%", tier3);
+        pieModel1.set(" > 15%", tier4);
 
         pieModel1.setShowDataLabels(true);
         pieModel1.setDataLabelFormatString("%.2f%%");
         pieModel1.setTitle("Extent of Delays (" + category + ")");
         pieModel1.setLegendPosition("w");
-        pieModel1.setExtender("pieExtender");
-        
-        
+        pieModel1.setExtender("pieExtender");  
+        pieModel1.setShadow(true);
     }
 
     public void itemSelect(ItemSelectEvent event) {
