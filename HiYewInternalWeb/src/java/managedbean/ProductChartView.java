@@ -125,7 +125,7 @@ public class ProductChartView implements Serializable {
 
         Axis xAxisYear = barChart_AnnualRevPLPerYear.getAxis(AxisType.X);
         xAxisYear.setLabel("Years");
-        xAxisYear.setMin(2010);
+        xAxisYear.setMin(2013);
         xAxisYear.setMax(2015);
         xAxisYear.setTickInterval("1");
     }
@@ -145,7 +145,7 @@ public class ProductChartView implements Serializable {
 
         Axis xAxisYear = lineChart_AnnualRevPLPerYearByProduct.getAxis(AxisType.X);
         xAxisYear.setLabel("Years");
-        xAxisYear.setMin(2010);
+        xAxisYear.setMin(2013);
         xAxisYear.setMax(2015);
         xAxisYear.setTickInterval("1");
     }
@@ -465,16 +465,10 @@ public class ProductChartView implements Serializable {
             }
         }
 
-//        series1.set(2010, revenue_year[0]);
-//        series1.set(2011, revenue_year[1]);
-//        series1.set(2012, revenue_year[2]);
         series1.set(2013, revenue_year[3]);
         series1.set(2014, revenue_year[4]);
         series1.set(2015, revenue_year[5]);
 
-//        series2.set(2010, profitLoss_year[0]);
-//        series2.set(2011, profitLoss_year[1]);
-//        series2.set(2012, profitLoss_year[2]);
         series2.set(2013, profitLoss_year[3]);
         series2.set(2014, profitLoss_year[4]);
         series2.set(2015, profitLoss_year[5]);

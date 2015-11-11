@@ -122,7 +122,7 @@
                                 </f:facet>
                             </p:cellEditor>
                         </p:column>
-                        <p:column style="font-weight: bold" headerText="Surface Vol" width="15%">
+                        <p:column style="font-weight: bold" headerText="Surface Area(cm2)" width="15%">
                             <p:cellEditor>
                                 <f:facet name="output"><h:outputText value="#{item.surfaceVol}" style="font-weight: normal" /></f:facet>
                                 <f:facet name="input">
@@ -160,7 +160,7 @@
                     -->      
 
                     <br /><br />
-                    <p:commandButton value="Send Request" actionListener="#{quotationManagedBean.createQuotation}" update=":notiForm :logoutForm :logoutForm2 rfqMsg mydata weldPanel rcvQuote" icon="" style="padding-top: 5px; padding-bottom: 5px; padding-left: 22px; padding-right: 22px">
+                    <p:commandButton value="Send Request" actionListener="#{quotationManagedBean.createQuotation}" update=":notiForm :logoutForm :logoutForm2 rfqMsg mydata weldPanel rcvQuote latestEndDate" icon="" style="padding-top: 5px; padding-bottom: 5px; padding-left: 22px; padding-right: 22px">
                     </p:commandButton>
 
                 </p:tab>
@@ -191,7 +191,7 @@
                             <p:panel visible="#{quotationManagedBean.setVisibility(item)}" style="border:0px; background: none;">
                                 <p:commandButton id="quoteDescBtn" icon="ui-icon-search" title="View" update="quotationDetailPanel" action="#{quotationManagedBean.selectQuotation(item)}" style="padding-top: 5px; padding-bottom: 5px; padding-left: 5px; padding-right: 5px"/>
                             </p:panel>
-                            <p:overlayPanel for="quoteDescBtn" showEffect="fade" hideEffect="fade" dismissable="false" showCloseIcon="true" style="width:800px">
+                            <p:overlayPanel for="quoteDescBtn" showEffect="fade" hideEffect="fade" dismissable="false" showCloseIcon="true" style="width:900px">
                                 <p:outputPanel id="quotationDetailPanel" style="text-align:center;" >
                                     <p:dataTable var="quoteDescItem" value="#{quotationManagedBean.displayQuotationDescriptions}" rows="5" paginator="true">
                                         <p:column headerText="ID" width="5%">

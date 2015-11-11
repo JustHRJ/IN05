@@ -258,7 +258,7 @@
                                             <h:outputText value="#{similarProject.metal2}" />
                                         </p:column>
 
-                                        <p:column width="100"  headerText="Welding Surface Area">
+                                        <p:column width="100"  headerText="Welding Surface Area (cm2)">
                                             <h:outputText value="#{similarProject.surfaceArea}" />
                                         </p:column>
 
@@ -270,7 +270,7 @@
                                             <h:outputText value="#{similarProject.totalQuantity}" />
                                         </p:column>
 
-                                        <p:column width="100"  headerText="Duration" sortBy="#{similarProject.duration}">
+                                        <p:column width="100"  headerText="Dur (days)" sortBy="#{similarProject.duration}">
                                             <h:outputText value="#{similarProject.duration}" />
                                         </p:column>
 
@@ -284,7 +284,7 @@
 
                                     <p:row style="vertical-align:bottom;">
                                         <p:column style="vertical-align:bottom;">
-                                            <p:outputLabel for ="totalEstimatedDurations" style ="font-weight: bold" value ="Estimated Duration for Weld Job (days):  "/>
+                                            <p:outputLabel for ="totalEstimatedDurations" style ="font-weight: bold" value ="Estimated Duration for Weld Job (days):&nbsp;"/>
                                         </p:column>
                                         <p:column style="vertical-align:top">
                                             <h:outputText style="font-weight:bold;width:100%" id="totalEstimatedDurations" value="#{adminQuotationManagedBean.weldJobAvgDuration ge 0 ? adminQuotationManagedBean.weldJobAvgDuration  : 'Unable to derive'}" />
@@ -296,7 +296,7 @@
 
                                     <p:row style="vertical-align:bottom">
                                         <p:column style="vertical-align:bottom">
-                                            <p:outputLabel for ="fillerTotalCost" style ="font-weight: bold" value ="Material Cost:  "/>
+                                            <p:outputLabel for ="fillerTotalCost" style ="font-weight: bold" value ="Material Cost:&nbsp;"/>
                                         </p:column>
                                         <p:column style="vertical-align:top">
                                             <h:outputText style="font-weight: bold;width:100%" id="fillerTotalCost" value="#{adminQuotationManagedBean.weldJobMaterialCost gt 0 ? adminQuotationManagedBean.weldJobMaterialCost  : 'Unable to derive'}" />
@@ -307,7 +307,7 @@
                                     </p:row>
                                     <p:row style="vertical-align:bottom">
                                         <p:column style="vertical-align:bottom">
-                                            <p:outputLabel for ="manpowerCost" style ="font-weight: bold" value ="Manpower Cost:  "/>
+                                            <p:outputLabel for ="manpowerCost" style ="font-weight: bold" value ="Manpower Cost:&nbsp;"/>
                                         </p:column>
                                         <p:column style="vertical-align:top">
                                             <h:outputText style="font-weight: bold;width:100%" id="manpowerCost" value="#{adminQuotationManagedBean.weldJobManpowerCost gt 0 ? adminQuotationManagedBean.weldJobManpowerCost  : 'Unable to derive'}" />
@@ -319,7 +319,7 @@
 
                                     <p:row style="vertical-align:bottom">
                                         <p:column style="vertical-align:bottom">
-                                            <p:outputLabel for ="totalCost" style ="font-weight: bold" value ="Total Cost:  "/>
+                                            <p:outputLabel for ="totalCost" style ="font-weight: bold" value ="Total Cost:&nbsp;"/>
                                         </p:column>
                                         <p:column style="vertical-align:top">
                                             <h:outputText style="font-weight:bold;width:100%" id="totalCost" value="#{adminQuotationManagedBean.weldJobMaterialCost ge 0 ? (adminQuotationManagedBean.weldJobMaterialCost + adminQuotationManagedBean.weldJobManpowerCost) : (adminQuotationManagedBean.weldJobMaterialCost + 1 + adminQuotationManagedBean.weldJobManpowerCost)}" />
@@ -331,7 +331,7 @@
 
                                     <p:row style="vertical-align:bottom">
                                         <p:column style="vertical-align:bottom">
-                                            <p:outputLabel for ="profitMargin" style ="font-weight: bold" value ="Profit Margin:  "/>
+                                            <p:outputLabel for ="profitMargin" style ="font-weight: bold" value ="Profit Margin:&nbsp;"/>
                                         </p:column>
                                         <p:column style="vertical-align:top">
                                             <p:spinner onkeypress="return false" id="profitMargin" value="#{adminQuotationManagedBean.profitMargin}" min="-100" max="300" suffix="%" stepFactor="5">
@@ -345,7 +345,7 @@
 
                                     <p:row style="vertical-align:bottom">
                                         <p:column style="vertical-align:bottom">
-                                            <p:outputLabel for ="totalPriceToQuote" style ="font-weight: bold" value ="Weld Job Price to Quote:  "/>
+                                            <p:outputLabel for ="totalPriceToQuote" style ="font-weight: bold" value ="Weld Job Price to Quote:&nbsp;"/>
                                         </p:column>
                                         <p:column style="vertical-align:top">
                                             <h:outputText style="font-weight:bold;width:100%" id="totalPriceToQuote" value="#{adminQuotationManagedBean.weldJobPriceToQuote}" />
@@ -357,7 +357,7 @@
 
                                     <p:row style="vertical-align:bottom">
                                         <p:column style="vertical-align:bottom">
-                                            <p:outputLabel for ="priceToQuotePerUnit" style ="font-weight: bold" value ="Price to Quote Per Unit:  "/>
+                                            <p:outputLabel for ="priceToQuotePerUnit" style ="font-weight: bold" value ="Price to Quote Per Unit:&nbsp;"/>
                                         </p:column>
                                         <p:column style="vertical-align:top">
                                             <h:outputText style="font-weight:bold;width:100%" id="priceToQuotePerUnit" value="#{adminQuotationManagedBean.weldJobPriceToQuotePerQty}" />

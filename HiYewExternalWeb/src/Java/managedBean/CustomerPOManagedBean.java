@@ -121,9 +121,10 @@ public class CustomerPOManagedBean implements Serializable {
             newPurOrder.setMailingAddr1(q.getCustomer().getAddress1());
             newPurOrder.setMailingAddr2(q.getCustomer().getAddress2());
         }
-
+        
         newPurOrder.setCustomer(q.getCustomer());
         newPurOrder.setQuotation(q);
+        System.out.println("TEST " + newPurOrder.getCustomerRefPoNumber());
         customerPOSessionBean.createPO(newPurOrder);//persist
         //add into customer purchase order collection in persistence context
         customerSessionBean.addPurchaseOrder(q.getCustomer().getUserName(), newPurOrder);

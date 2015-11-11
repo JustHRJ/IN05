@@ -44,9 +44,14 @@
                         </p:outputPanel>
                     </f:facet>
 
-                    <p:column headerText="Quotation No." width="70%" filterBy="#{item.productQuotationNo}" filterMatchMode="contains">
+                    <p:column headerText="Company Name" width="20%" filterBy="#{item.customer.name}" filterMatchMode="contains">
+                        <p:outputLabel value="#{item.customer.name}"/>
+                    </p:column>
+
+                    <p:column headerText="Quotation No." width="50%" filterBy="#{item.productQuotationNo}" filterMatchMode="contains">
                         <p:outputLabel value="#{item.productQuotationNo}"/>
                     </p:column>
+
                     <p:column headerText="Date" sortBy="#{item.date}" width="10%" filterBy="#{item.date}" filterMatchMode="contains">
                         <h:outputText value="#{adminProductQuotationManagedBean.formatDate(item.date)}"/>
                     </p:column>

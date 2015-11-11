@@ -44,6 +44,10 @@
                         </p:outputPanel>
                     </f:facet>
 
+                    <p:column headerText="Company Name" filterBy="#{item.customer.name}" filterMatchMode="contains">
+                        <p:outputLabel value="#{item.customer.name}"/>
+                    </p:column>
+
                     <p:column headerText="PO No." filterBy="#{item.productPurchaseOrderID}" filterMatchMode="contains">
                         <p:outputLabel value="#{item.productPurchaseOrderID}"/>
                     </p:column>
@@ -53,7 +57,7 @@
                     <p:column headerText="Delivery Date" sortBy="#{item.deliveryDate}" filterBy="#{item.deliveryDate}" filterMatchMode="contains">
                         <h:outputText value="#{adminProductPOManagedBean.formatDate(item.deliveryDate)}"/>
                     </p:column>
-                    <p:column headerText="Mailing Address">
+                    <p:column headerText="Mailing Address" width="18%">
                         <h:outputText value="#{item.mailingAddr1}, #{item.mailingAddr2}"/>
                     </p:column>
                     <p:column headerText="Total Price (SGD)" sortBy="#{item.totalPrice}" filterBy="#{item.totalPrice}" filterMatchMode="contains">
