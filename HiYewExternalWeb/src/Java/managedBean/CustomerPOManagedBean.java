@@ -202,6 +202,7 @@ public class CustomerPOManagedBean implements Serializable {
         }
         System.out.println("Test 5");
         Project p2 = projectSessionBean.getProjectWithEarliestCompletionDate();
+        
         if (days >= 0) {
             //check for any project slack which can accomodate the new project duration
             Project p1 = projectSessionBean.getProjectDurationWithSlack(days);

@@ -28,27 +28,27 @@
                 <p:messages id="pMsg"  showDetail="false" />
                 <p:commandButton value="Refresh" action="#{projManagedBean.receivedProjects}"  update="pMsg rcvProject" icon="" style="padding-top: 5px; padding-bottom: 5px; padding-left: 22px; padding-right: 22px" />
                 <br /><br />
-                <p:dataTable value="#{projManagedBean.receivedProjects}"  widgetVar="projsTable" var="pItem" id="rcvProject" editable="true" emptyMessage="No records" filteredValue="#{projManagedBean.filteredProj}" 
+                <p:dataTable value="#{projManagedBean.receivedProjects}"  widgetVar="projsTable" var="pItem" id="rcvProject" rows="6" paginator="true" editable="true" emptyMessage="No records" filteredValue="#{projManagedBean.filteredProj}" 
                              rowStyleClass="#{projManagedBean.compareActualEndAndPlannedEnd(pItem.projectCompletion, pItem.actualEnd, pItem.plannedEnd) lt 0 ? 'highlight1' : 'highlight2'}">
-                    <p:column style="font-weight: bold"  headerText="Project No" width="15%">
+                    <p:column style="font-weight: bold"  headerText="Project No" width="10%" filterBy="#{pItem.projectNo}">
                         <p:outputLabel style="font-weight: normal" value="#{pItem.projectNo}"/>
                     </p:column>
-                    <p:column style="font-weight: bold" sortBy="#{projManagedBean.formatDate(pItem.actualStart)}" headerText="Actual Start Date (dd/mm/yyyy)" width="11%">
+                    <p:column style="font-weight: bold" sortBy="#{projManagedBean.formatDate(pItem.actualStart)}" headerText="Actual Start Date (dd/mm/yyyy)" width="8%">
                         <h:outputText style="font-weight: normal" value="#{projManagedBean.formatDate(pItem.actualStart) eq '' ? 'N.A' : projManagedBean.formatDate(pItem.actualStart)}"/>
                     </p:column>
-                    <p:column style="font-weight: bold" sortBy="#{projManagedBean.formatDate(pItem.actualEnd)}" headerText="Actual End Date (dd/mm/yyyy)" width="11%">
+                    <p:column style="font-weight: bold" sortBy="#{projManagedBean.formatDate(pItem.actualEnd)}" headerText="Actual End Date (dd/mm/yyyy)" width="8%">
                         <h:outputText style="font-weight: normal" value="#{projManagedBean.formatDate(pItem.actualEnd) eq '' ? 'N.A' :  projManagedBean.formatDate(pItem.actualEnd)}"/>
                     </p:column>
-                    <p:column style="font-weight: bold" sortBy="#{projManagedBean.formatDate(pItem.plannedStart)}" headerText="Planned Start Date (dd/mm/yyyy)" width="11%">
+                    <p:column style="font-weight: bold" sortBy="#{projManagedBean.formatDate(pItem.plannedStart)}" headerText="Planned Start Date (dd/mm/yyyy)" width="9%">
                         <h:outputText style="font-weight: normal" value="#{projManagedBean.formatDate(pItem.plannedStart)}"/>
                     </p:column>
-                    <p:column style="font-weight: bold" sortBy="#{projManagedBean.formatDate(pItem.plannedEnd)}" headerText="Planned End Date (dd/mm/yyyy)" width="11%">
+                    <p:column style="font-weight: bold" sortBy="#{projManagedBean.formatDate(pItem.plannedEnd)}" headerText="Planned End Date (dd/mm/yyyy)" width="8%">
                         <h:outputText style="font-weight: normal" value="#{projManagedBean.formatDate(pItem.plannedEnd)}"/>
                     </p:column>
-                    <p:column style="font-weight: bold" headerText="Customer Name" width="8%">
+                    <p:column style="font-weight: bold" headerText="Customer Name" width="8%" filterBy="#{projManagedBean.getCustomerName(pItem.customerKey)}">
                         <h:outputText style="font-weight: normal" value="#{projManagedBean.getCustomerName(pItem.customerKey)}"/>
                     </p:column>
-                    <p:column style="font-weight: bold" filterBy="#{projManagedBean.getProjectStatus(pItem.projectCompletion)}" headerText="Project Completion" width="10%">
+                    <p:column style="font-weight: bold" filterBy="#{projManagedBean.getProjectStatus(pItem.projectCompletion)}" headerText="Project Completion" width="9%">
                         <f:facet name="filter">
                             <p:selectOneButton onchange="PF('projsTable').filter()">
                                 <f:selectItem itemLabel="All" itemValue="" />
@@ -58,35 +58,50 @@
                         </f:facet>
                         <h:outputText style="font-weight: normal" value="#{projManagedBean.getProjectStatus(pItem.projectCompletion)}"/>
                     </p:column>
-                    <p:column style="font-weight: bold" headerText="Duration (days)" width="8%">
+                    <p:column style="font-weight: bold" headerText="Progress (%)" width="4%">
+                        <h:outputText style="font-weight: normal" value="#{pItem.projectProgress}"/>
+                    </p:column>
+                    <p:column style="font-weight: bold" headerText="Dur (days)" width="4%">
                         <h:outputText style="font-weight: normal" value="#{projManagedBean.getDurationForCompletedProjects(pItem.projectCompletion,pItem.actualStart,pItem.actualEnd)}"/>
                     </p:column>
 
 
-                    <p:column style="font-weight: bold" headerText="View" width="5%" >
+                    <p:column style="font-weight: bold" headerText="View" width="3%" >
 
                         <p:commandButton id="weldJobBtn" icon="ui-icon-search" title="View" update="WeldJobPanel" action="#{projManagedBean.selectProject(pItem)}" style="padding-top: 5px; padding-bottom: 5px; padding-left: 5px; padding-right: 5px"/>
 
-                        <p:overlayPanel for="weldJobBtn" showEffect="fade" hideEffect="fade" dismissable="false" showCloseIcon="true" style="width:800px">
+                        <p:overlayPanel for="weldJobBtn" showEffect="fade" hideEffect="fade" dismissable="false" showCloseIcon="true" style="width:1000px">
                             <p:outputPanel id="WeldJobPanel" style="text-align:center;" >
                                 <p:dataTable var="wItem" value="#{projManagedBean.receivedWeldJobs}" rows="5" paginator="true">
 
-                                    <p:column headerText="Metal 1" width="15%">
+                                    <p:column headerText="Metal 1" width="12%">
                                         <h:outputText value="#{wItem.metal1}" />
                                     </p:column>
 
-                                    <p:column headerText="Metal 2" width="15%">
+                                    <p:column headerText="Metal 2" width="12%">
                                         <h:outputText value="#{wItem.metal2}" />
                                     </p:column>
-                                    <p:column headerText="Weld. Job Engineer" width="25%">
+                                    <p:column headerText="Weld. Job Engineer" width="14%">
                                         <h:outputText value="#{wItem.empName}" />
+                                    </p:column>
+                                    <p:column headerText= "Filler" width="9%">
+                                        <h:outputText value="#{wItem.filler.fillerName}" />
+                                    </p:column>
+                                    <p:column headerText= "Qty" width="6%">
+                                        <h:outputText value="#{wItem.totalQuantity}" />
+                                    </p:column>
+                                    <p:column headerText= "Welding Type" width="11%">
+                                        <h:outputText value="#{wItem.weldingType}" />
+                                    </p:column>
+                                    <p:column headerText= "Dur (days)" width="8%">
+                                        <h:outputText value="#{wItem.duration}" />
                                     </p:column>
                                 </p:dataTable>
                             </p:outputPanel>
                         </p:overlayPanel>
                     </p:column>
 
-                    <p:column style="width:32px;text-align: center" headerText="Documents">
+                    <p:column style="text-align: center" headerText="D" width="3%">
                         <p:commandButton update=":formMain:matchDetail" oncomplete="PF('matchDialog').show()" icon="#{documentManageBean.checkFullSubmit(pItem)}" title="View">
                             <f:setPropertyActionListener value="#{pItem}" target="#{documentManageBean.selectedProject}" />
                         </p:commandButton>

@@ -8,12 +8,15 @@ package session.stateless;
 import entity.EmployeeEntity;
 import entity.FillerEntity;
 import entity.Metal;
+import entity.ShelveEntity;
+import entity.StorageInfoEntity;
 import entity.WeldJob;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 import javax.ejb.Stateless;
@@ -182,23 +185,56 @@ public class HiYewDSSSessionBean implements HiYewDSSSessionBeanLocal {
     }
 
     @Override
-    public double getAvgManpowerCostPerDay(){
+    public double getAvgManpowerCostPerDay() {
         ArrayList<EmployeeEntity> allEmployees = new ArrayList<EmployeeEntity>();
         allEmployees.addAll(getAllEngineers());
         double total = 0;
-        for(int i=0;i<allEmployees.size();i++){
+        for (int i = 0; i < allEmployees.size(); i++) {
             total += allEmployees.get(i).getEmployee_basic();
         }
-        if(allEmployees.size()>0){
-         return (int) roundUp((total/allEmployees.size())/22, 2);
-        }else{
+        if (allEmployees.size() > 0) {
+            return (int) roundUp((total / allEmployees.size()) / 22, 2);
+        } else {
             return -1;
         }
     }
-    
+
     private List<EmployeeEntity> getAllEngineers() {
         Query q = em.createQuery("select c from EmployeeEntity c where c.employee_account_status = :role");
         q.setParameter("role", "staff");
         return q.getResultList();
+    }
+
+    public HashMap whichShelveToTake(FillerEntity fillerToTake, int qtyToTake) {
+        HashMap map = new HashMap();
+        ArrayList<StorageInfoEntity> itemStorages = new ArrayList<StorageInfoEntity>();
+        ShelveEntity shelveToTakeFrom = new ShelveEntity();
+        Query q = em.createQuery("SELECT si FROM StorageInfoEntity si WHERE si.item = :item");
+        q.setParameter("item", fillerToTake);
+        itemStorages.addAll(q.getResultList());
+        for (int i = 0; i < itemStorages.size(); i++) {
+            int qtyStoredInThatShelve = itemStorages.get(i).getStoredQty();
+            if (qtyStoredInThatShelve >= qtyToTake) {
+                shelveToTakeFrom = itemStorages.get(i).getShelve();
+                break;
+            }
+        }
+        //need take from multiple shelve
+        if (shelveToTakeFrom != null) {
+            map.put(shelveToTakeFrom, qtyToTake);
+        } else {
+            int qty = qtyToTake;
+            for (int i = 0; i < itemStorages.size(); i++) {
+                int qtyStoredInThatShelve = itemStorages.get(i).getStoredQty();
+                if (qtyStoredInThatShelve < qty) {
+                    map.put(itemStorages.get(i).getShelve(), qtyStoredInThatShelve);
+                    qty = qty - qtyStoredInThatShelve;
+                } else {
+                    map.put(itemStorages.get(i).getShelve(), qty);
+                    break;
+                }
+            }
+        }
+        return map;
     }
 }

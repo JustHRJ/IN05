@@ -38,7 +38,6 @@ public class ProjectSessionBean implements ProjectSessionBeanLocal {
     @Override
     public void createProject(Project project) {
         //initialise document entity for new project
-        //asasdad
         DocumentControlEntity d = new DocumentControlEntity();
         em.persist(d);
         String folderName = project.getProjectNo();
@@ -204,25 +203,24 @@ public class ProjectSessionBean implements ProjectSessionBeanLocal {
 
     //return -1 if there is no weld job references
     @Override
-    public Integer deriveAverageDuration(ArrayList<WeldJob> similarWeldJobs) {
+    public Double deriveAverageDuration(ArrayList<WeldJob> similarWeldJobs) {
 
         double totalMins = 0;
         if (similarWeldJobs == null || similarWeldJobs.isEmpty()) {
-            return -1;
+            return (double)-1;
         } else {
             for (int i = 0; i < similarWeldJobs.size(); i++) {
                 int totalQtyWelded = similarWeldJobs.get(i).getTotalQuantity();
                 double surfaceArea = similarWeldJobs.get(i).getSurfaceArea();
                 int daysTook = similarWeldJobs.get(i).getDuration();
-                 double weldingDurationPerCm3 = (daysTook * 60 * 60)/(totalQtyWelded*surfaceArea); //go by minutes
+                 double weldingDurationPerCm3 = (daysTook * 24 * 60)/(totalQtyWelded*surfaceArea); //go by minutes
                 totalMins += weldingDurationPerCm3;
             }
-            return (int) roundUp(((totalMins / similarWeldJobs.size()) / 60 / 60), 0);
+            return ((totalMins / similarWeldJobs.size()) / 24 / 60);
         }
-
     }
 
-    //get project with earliest completion date
+    
     @Override
     public Project getProjectWithEarliestCompletionDate() {
         System.out.println("getProjectWithEarliestCompletionDate: Start");
@@ -238,8 +236,10 @@ public class ProjectSessionBean implements ProjectSessionBeanLocal {
             return null;
         }
     }
-
-    //get project with project slacks which can accomodate the durations of new weldJobs
+    
+    
+    
+     //get project with project slacks which can accomodate the durations of new weldJobs
     @Override
     public Project getProjectDurationWithSlack(Integer days) {
         System.out.println("getProjectDurationWithSlack: Start");
@@ -271,6 +271,7 @@ public class ProjectSessionBean implements ProjectSessionBeanLocal {
             return null; //no project with project slack
         }
     }
+    
 
     @Override
     public Timestamp addDays(Timestamp stamp, int days) {
@@ -351,5 +352,13 @@ public class ProjectSessionBean implements ProjectSessionBeanLocal {
     public void conductMerge(Project p) {
         em.merge(p);
     }
+    
+    @Override
+    public List <Project> getCompletedProjects(){
+        Query query = em.createQuery("Select p FROM Project AS p where p.projectCompletion=true");
+        return query.getResultList();
+    }
+    
+    
 
 }

@@ -42,7 +42,7 @@ public class TransfermanageBean {
 
     public void readFile() throws IOException {
         System.out.println("system got into here");
-        setInputFile("C:\\Users\\K.guoxiang\\Desktop\\ProjectData.xls");
+        setInputFile("C:\\Users\\User\\Desktop\\ProjectData.xls");
         List<Vector> result = readProjects();
         TransferSystemBean.addProjects(result);
         System.out.println("new Projects data have been added");
