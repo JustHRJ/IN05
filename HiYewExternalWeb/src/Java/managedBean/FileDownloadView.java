@@ -64,9 +64,9 @@ public class FileDownloadView {
         document.open();
         // step 4
 
-        //addMetaData(document);
+        addMetaData(document);
         addTitlePage(document);
-        //addContent(document);
+        addContent(document);
 
         // step 5
         document.close();
@@ -125,7 +125,6 @@ public class FileDownloadView {
         addEmptyLine(preface, 1);
         preface.add(new Paragraph("Total Price (SGD $): " + po.getTotalPrice(), catFont));
 
-        System.out.println("aaaaaaa" + po.getMailingAddr1());
         addEmptyLine(preface, 1);
         preface.add(new Paragraph("Mailing Address: " + po.getMailingAddr1() + ", " + po.getMailingAddr2(), catFont));
 

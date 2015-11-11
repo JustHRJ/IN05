@@ -70,14 +70,14 @@
                             <div>
                                 <p>NAME</p>
                                 <span>
-                                    <p:inputText class="textbox" value="" required="true" requiredMessage="Name is required." id="name"/>
+                                    <p:inputText class="textbox" value="#{emailManager.name}" required="true" requiredMessage="Name is required." id="name"/>
                                     <p:message for="name" />
                                 </span>
                             </div>
                             <div>
                                 <p>E-MAIL</p>
                                 <span>
-                                    <p:inputText class="textbox" value="" required="true" requiredMessage="Email is required." id="Email" validatorMessage="[Email] Invalid email format. e.g. your_email@gmail.com" >
+                                    <p:inputText class="textbox" value="#{emailManager.email}" required="true" requiredMessage="Email is required." id="Email" validatorMessage="[Email] Invalid email format. e.g. your_email@gmail.com" >
                                         <f:validateRegex pattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$" />
                                     </p:inputText>
                                     <p:message for="Email" />
@@ -86,7 +86,7 @@
                             <div>
                                 <p>MOBILE</p>
                                 <span>
-                                    <p:inputText class="textbox" value="" required="true" requiredMessage="Mobile is required." maxlength="8" id="Phone" validatorMessage="[Mobile] Please enter only 8 digits starting with 6, 8 and 9.">
+                                    <p:inputText class="textbox" value="#{emailManager.mobile}" required="true" requiredMessage="Mobile is required." maxlength="8" id="Phone" validatorMessage="[Mobile] Please enter only 8 digits starting with 6, 8 and 9.">
                                         <f:validateRegex pattern="(^[6,8,9]{1}[0-9]{7}$)"/>
                                     </p:inputText>
                                     <p:message for="Phone" />
@@ -95,12 +95,12 @@
                             <div>
                                 <p>SUBJECT</p>
                                 <span>
-                                    <p:inputTextarea id="subject" class="textbox" autoResize="false" value="" rows="10" cols="68" required="true" requiredMessage="Subject is required." />
+                                    <p:inputTextarea id="subject" class="textbox" autoResize="false" value="#{emailManager.subject}" rows="10" cols="68" required="true" requiredMessage="Subject is required." />
                                     <p:message for="subject" />
                                 </span>
                             </div>
                             <div>
-                                <p:commandButton style="border:none;padding-top: 3px; padding-left: 20px; padding-right: 24px; font-family: 'Open Sans'; height: 34px;width:115px;font-size:0.8em;margin:0px" value="SUBMIT" styleClass="btn btn-success btn-block md-close" ajax="false" update="mainForm msgsGrowl" />
+                                <p:commandButton action="#{emailManager.emailContact}" style="border:none;padding-top: 3px; padding-left: 20px; padding-right: 24px; font-family: 'Open Sans'; height: 34px;width:115px;font-size:0.8em;margin:0px" value="SUBMIT" styleClass="btn btn-success btn-block md-close" ajax="false" update="mainForm msgsGrowl" />
                             </div>
                         </h:form>
                     </div>
