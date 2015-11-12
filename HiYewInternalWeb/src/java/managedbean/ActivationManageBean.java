@@ -43,6 +43,7 @@ public class ActivationManageBean {
                 FacesContext.getCurrentInstance().addMessage("msg", new FacesMessage(FacesMessage.SEVERITY_INFO, "Supplier Code has been sent.", ""));
                 EmailManager emailManager = new EmailManager();
                 emailManager.emailActivation(check, email);
+                email = "";
 //            FacesContext facesCtx = FacesContext.getCurrentInstance();
 //            ExternalContext externalContext = facesCtx.getExternalContext();
 //            externalContext.redirect("/HiYewInternalWeb/ps-activation.xhtml");
