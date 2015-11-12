@@ -45,7 +45,7 @@ public class EngineerScheduleManagedBean implements Serializable {
     @PostConstruct
     protected void initialize() {
 
-        ArrayList<EmployeeEntity> employees = new ArrayList<>(hiYewSystemBean.viewAllEmployee());
+        ArrayList<EmployeeEntity> employees = new ArrayList<>(projectSessionBean.getAllEmployees());
 
         // set initial actualStart / PlannedEnd dates for the axis of the timeline  
         Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("UTC"));

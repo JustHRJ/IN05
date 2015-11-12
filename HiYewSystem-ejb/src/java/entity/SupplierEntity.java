@@ -23,7 +23,7 @@ import util.enumeration.SupplierStatusEnum;
 @Entity
 public class SupplierEntity implements Serializable {
     
-    private static long serialVersionUID = 1L;
+    private final static long serialVersionUID = 1L;
  
     @Id
     private String userName;

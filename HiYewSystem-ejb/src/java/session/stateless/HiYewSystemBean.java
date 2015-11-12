@@ -252,6 +252,12 @@ public class HiYewSystemBean implements HiYewSystemBeanLocal, HiYewSystemBeanRem
     }
 
     public boolean applyClaim(String employeeName, EmployeeClaimEntity claim, String destination) {
+        if(claim == null){
+            return false;
+        } 
+        if(employeeName == null || employeeName.isEmpty()){
+            return false;
+        }
         EmployeeEntity employee = new EmployeeEntity();
         try {
             Query q = em.createQuery("Select employee from EmployeeEntity employee where employee.employee_name = :id");

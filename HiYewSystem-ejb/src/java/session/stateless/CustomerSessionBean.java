@@ -15,7 +15,7 @@ import javax.persistence.Query;
 import java.security.SecureRandom;
 
 @Stateless
-public class CustomerSessionBean implements CustomerSessionBeanLocal {
+public class CustomerSessionBean implements CustomerSessionBeanLocal, CustomerSessionBeanRemoteInterface {
 
     @PersistenceContext(unitName = "HiYewSystem-ejbPU")
     private EntityManager em;

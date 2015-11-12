@@ -12,13 +12,14 @@ import java.sql.Timestamp;
 import java.util.Date;
 import java.util.List;
 import javax.ejb.Local;
+import javax.ejb.Remote;
 
 /**
  *
  * @author JustHRJ
  */
-@Local
-public interface MachineSystemBeanLocal {
+@Remote
+public interface MachineSystemBeanRemoteInterface {
 
     public List<MachineRepairEntity> repairList(MachineEntity machine);
 

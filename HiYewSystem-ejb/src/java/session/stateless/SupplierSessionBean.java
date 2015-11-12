@@ -14,7 +14,7 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
 @Stateless
-public class SupplierSessionBean implements SupplierSessionBeanLocal {
+public class SupplierSessionBean implements SupplierSessionBeanLocal, SupplierSessionBeanRemoteInterface {
 
     @PersistenceContext(unitName = "HiYewSystem-ejbPU")
     private EntityManager em;

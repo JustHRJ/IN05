@@ -16,6 +16,7 @@ import java.util.Date;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
@@ -24,7 +25,7 @@ import javax.persistence.Query;
  * @author JustHRJ
  */
 @Stateless
-public class MachineSystemBean implements MachineSystemBeanLocal {
+public class MachineSystemBean implements MachineSystemBeanLocal, MachineSystemBeanRemoteInterface {
 
     // Add business logic below. (Right-click in editor and choose
     // "Insert Code > Add Business Method")
@@ -347,10 +348,15 @@ public class MachineSystemBean implements MachineSystemBeanLocal {
     }
 
     public boolean updateMachine(String machineName, MachineEntity machine, String status, Date machineMaint) {
+
+        if (machine == null) {
+            return false;
+        }
         try {
             boolean check = false;
             if (!(machineName.isEmpty())) {
                 machine.setMachine_name(machineName);
+                check = true;
             }
             if (!(status.isEmpty())) {
                 if (!(machine.getStatus().equals(status))) {
@@ -452,7 +458,20 @@ public class MachineSystemBean implements MachineSystemBeanLocal {
     }
 
     public List<MachineRepairEntity> repairList(MachineEntity machine) {
-        Collection<MachineRepairEntity> records = machine.getMachineRepair();
+        //machine.getMachineRepair().size();
+        String machineName = machine.getMachine_name();
+        MachineEntity machine1 = new MachineEntity();
+        
+        try {
+            Query q = em.createQuery("Select m FROM MachineEntity m WHERE m.machine_name = :machineName");
+            q.setParameter("machineName", machineName);
+            machine1 = (MachineEntity)q.getSingleResult();
+        } catch(NoResultException e){
+            
+        }
+        
+        ArrayList<MachineRepairEntity> records = new ArrayList<MachineRepairEntity>();
+        records.addAll(machine1.getMachineRepair());
 
         List<MachineRepairEntity> results = new ArrayList<MachineRepairEntity>();
 
@@ -465,6 +484,22 @@ public class MachineSystemBean implements MachineSystemBeanLocal {
         } else {
             return results;
         }
+    }
+
+    
+
+    public MachineEntity getMachine(String machineName) {
+        MachineEntity m = new MachineEntity();
+
+        try {
+            Query q = em.createQuery("SELECT m FROM MachineEntity m WHERE m.machine_name =:machineName");
+            q.setParameter("machineName", machineName);
+            m = (MachineEntity) q.getSingleResult();
+            return m;
+        } catch (NoResultException e) {
+            return null;
+        }
+
     }
 
 }

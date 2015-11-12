@@ -2006,18 +2006,18 @@ public class HiYewSystemBeanRemoteInterfaceTest {
     //     * Test of employeeTrainingName method, of class
     //     * HiYewSystemBeanRemoteInterface.
     //     */
-        @Test
-        public void testEmployeeTrainingName() {
-            System.out.println("employeeTrainingName - have entry");
-            List<TrainingScheduleEntity> list = HiYewSystemBeanInterface.trainingSchedueList();
-            TrainingScheduleEntity schedule = list.get(0);
-          
-           
-            List<String> result = HiYewSystemBeanInterface.employeeTrainingName(schedule);
-            assertEquals(result.size(), 1);
-            // TODO review the generated test code and remove the default call to fail.
-           
-        }
+    @Test
+    public void testEmployeeTrainingName() {
+        System.out.println("employeeTrainingName - have entry");
+        List<TrainingScheduleEntity> list = HiYewSystemBeanInterface.trainingSchedueList();
+        TrainingScheduleEntity schedule = list.get(0);
+
+        List<String> result = HiYewSystemBeanInterface.employeeTrainingName(schedule);
+        assertEquals(result.size(), 1);
+        // TODO review the generated test code and remove the default call to fail.
+
+    }
+
     //
     //    /**
     //     * Test of updateTraining method, of class HiYewSystemBeanRemoteInterface.
@@ -2270,19 +2270,67 @@ public class HiYewSystemBeanRemoteInterfaceTest {
     //    /**
     //     * Test of applyClaim method, of class HiYewSystemBeanRemoteInterface.
     //     */
-    //    @Test
-    //    public void testApplyClaim() {
-    //        System.out.println("applyClaim");
-    //        String employeeName = "";
-    //        EmployeeClaimEntity claim = null;
-    //        String destination = "";
-    //        HiYewSystemBeanRemoteInterface instance = new HiYewSystemBeanRemoteInterfaceImpl();
-    //        boolean expResult = false;
-    //        boolean result = instance.applyClaim(employeeName, claim, destination);
-    //        assertEquals(expResult, result);
-    //        // TODO review the generated test code and remove the default call to fail.
-    //        fail("The test case is a prototype.");
-    //    }
+    @Test
+    public void testApplyClaim() {
+        System.out.println("applyClaim - Normal Case");
+        String employeeName = "Justin";
+        EmployeeClaimEntity claim = new EmployeeClaimEntity();
+        claim.setAmount(10.0);
+        claim.setAppliedDate(new Timestamp(new Date().getTime()));
+
+        claim.setType("taxi");
+        claim.setClaimDate(new Timestamp(new Date().getTime()));
+        String destination = "";
+
+        boolean result = HiYewSystemBeanInterface.applyClaim(employeeName, claim, destination);
+        assertTrue(result);
+        // TODO review the generated test code and remove the default call to fail.
+
+    }
+
+    @Test
+    public void testApplyClaim2() {
+        System.out.println("applyClaim - Null claim Case");
+        String employeeName = "Justin";
+        EmployeeClaimEntity claim = null;
+
+        String destination = "";
+
+        boolean result = HiYewSystemBeanInterface.applyClaim(employeeName, claim, destination);
+        assertFalse(result);
+        // TODO review the generated test code and remove the default call to fail.
+
+    }
+
+    @Test
+    public void testApplyClaim3() {
+        System.out.println("applyClaim - Null or '' employeeName Case");
+        String employeeName = null;
+        EmployeeClaimEntity claim = new EmployeeClaimEntity();
+        claim.setAmount(10.0);
+        claim.setAppliedDate(new Timestamp(new Date().getTime()));
+
+        claim.setType("taxi");
+        claim.setClaimDate(new Timestamp(new Date().getTime()));
+        String destination = "";
+
+        boolean result = HiYewSystemBeanInterface.applyClaim(employeeName, claim, destination);
+        assertFalse(result);
+
+        employeeName = "";
+        claim = new EmployeeClaimEntity();
+        claim.setAmount(10.0);
+        claim.setAppliedDate(new Timestamp(new Date().getTime()));
+
+        claim.setType("taxi");
+        claim.setClaimDate(new Timestamp(new Date().getTime()));
+        destination = "";
+
+        result = HiYewSystemBeanInterface.applyClaim(employeeName, claim, destination);
+        assertFalse(result);
+        // TODO review the generated test code and remove the default call to fail.
+
+    }
     //
     //    /**
     //     * Test of attachDocument method, of class HiYewSystemBeanRemoteInterface.

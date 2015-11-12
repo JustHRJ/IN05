@@ -68,5 +68,7 @@ public interface ProjectSessionBeanLocal {
     public Double deriveAverageDuration(ArrayList<WeldJob> similarWeldJobs);
 
     public List<Project> getCompletedProjects();
+
+    public List<EmployeeEntity> getAllEmployees();
     
 }
