@@ -131,13 +131,14 @@ public class AdminProductPOManagedBean implements Serializable {
     }
 
     public void updatePODeliveryDate(ProductPurchaseOrder productPurchaseOrder) {
+
         if (deliveryDate != null) {
             selectedProductPO.setDeliveryDate(new Timestamp(deliveryDate.getTime()));
             productPurchaseOrderSessionBean.updatePODeliveryDate(selectedProductPO);
             FacesContext.getCurrentInstance().addMessage("inner-msgs", new FacesMessage(FacesMessage.SEVERITY_INFO, "Product PO (#" + selectedProductPO.getProductPurchaseOrderID() + ") delivery date has been updated successfully!", ""));
 
             receivedNewProductPOList = new ArrayList<>(productPurchaseOrderSessionBean.receivedCustomerNewProductPOList(status));
-            selectedProductPO = new ProductPurchaseOrder();
+            //selectedProductPO = new ProductPurchaseOrder();
             deliveryDate = null;
         } else if (productPurchaseOrder.getDeliveryDate() != null) {
             selectedProductPO.setDeliveryDate(new Timestamp(productPurchaseOrder.getDeliveryDate().getTime()));
@@ -145,7 +146,7 @@ public class AdminProductPOManagedBean implements Serializable {
             FacesContext.getCurrentInstance().addMessage("inner-msgs", new FacesMessage(FacesMessage.SEVERITY_INFO, "Product PO (#" + selectedProductPO.getProductPurchaseOrderID() + ") delivery date has been updated successfully!", ""));
 
             receivedNewProductPOList = new ArrayList<>(productPurchaseOrderSessionBean.receivedCustomerNewProductPOList(status));
-            selectedProductPO = new ProductPurchaseOrder();
+            //selectedProductPO = new ProductPurchaseOrder();
             deliveryDate = null;
         } else {
             FacesContext.getCurrentInstance().addMessage("inner-msgs", new FacesMessage(FacesMessage.SEVERITY_ERROR, "Please input delivery date!", ""));
@@ -154,11 +155,12 @@ public class AdminProductPOManagedBean implements Serializable {
     }
 
     public void updatePODeliveredStatus() {
+        System.out.println("sadsdsaasdasd" + this.selectedProductPO.getProductPurchaseOrderID());
         productPurchaseOrderSessionBean.updateProductPODeliveredStatus(selectedProductPO);
 
         receivedNewProductPOList = new ArrayList<>(productPurchaseOrderSessionBean.receivedCustomerNewProductPOList(status));
         FacesContext.getCurrentInstance().addMessage("inner-msgs", new FacesMessage(FacesMessage.SEVERITY_INFO, "Product PO (#" + selectedProductPO.getProductPurchaseOrderID() + ") has been delivered to customer successfully!", ""));
-        selectedProductPO = new ProductPurchaseOrder();
+//        selectedProductPO = new ProductPurchaseOrder();
     }
 
     public void updatePORelayedStatus(String username) {
@@ -170,9 +172,9 @@ public class AdminProductPOManagedBean implements Serializable {
         emailManager.emailGermanySupplierToPurchase(selectedProductPO.getProductPurchaseOrderID(), this.retrieveEmailProductQuotationDescriptionList(selectedProductPO.getProductPurchaseOrderID()));
 
         receivedNewProductPOList = new ArrayList<>(productPurchaseOrderSessionBean.receivedCustomerNewProductPOList(status));
-        selectedProductPO = new ProductPurchaseOrder();
 
         FacesContext.getCurrentInstance().addMessage("msgs", new FacesMessage(FacesMessage.SEVERITY_INFO, "Product PO (#" + selectedProductPO.getProductPurchaseOrderID() + ") has been sent to supplier!", ""));
+        //  selectedProductPO = new ProductPurchaseOrder();
     }
 
     public ArrayList<ProductQuotationDescription> retrieveEmailProductQuotationDescriptionList(String purchaseOrderNo) {
@@ -200,8 +202,9 @@ public class AdminProductPOManagedBean implements Serializable {
             }
         }
 
-        selectedProductPO = new ProductPurchaseOrder();
         FacesContext.getCurrentInstance().addMessage("msgs", new FacesMessage(FacesMessage.SEVERITY_INFO, "Update notification for Product Purchase Order #" + selectedProductPO.getProductPurchaseOrderID() + " has been sent to customer successfully!", ""));
+
+//        selectedProductPO = new ProductPurchaseOrder();
     }
 
     /**

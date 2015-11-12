@@ -119,9 +119,9 @@ public class ProductChartView implements Serializable {
 
         Axis yAxisYear = barChart_AnnualRevPLPerYear.getAxis(AxisType.Y);
         yAxisYear.setLabel("Number of thousands (Revenue $)");
-        yAxisYear.setMin(-1000000);
-        yAxisYear.setMax(1000000);
-        yAxisYear.setTickInterval("500000");
+        yAxisYear.setMin(500000);
+        yAxisYear.setMax(4500000);
+        yAxisYear.setTickInterval("250000");
 
         Axis xAxisYear = barChart_AnnualRevPLPerYear.getAxis(AxisType.X);
         xAxisYear.setLabel("Years");
@@ -139,9 +139,9 @@ public class ProductChartView implements Serializable {
 
         Axis yAxisYear = lineChart_AnnualRevPLPerYearByProduct.getAxis(AxisType.Y);
         yAxisYear.setLabel("Number of thousands (Revenue $)");
-        yAxisYear.setMin(-200000);
+        yAxisYear.setMin(50000);
         yAxisYear.setMax(200000);
-        yAxisYear.setTickInterval("50000");
+        yAxisYear.setTickInterval("10000");
 
         Axis xAxisYear = lineChart_AnnualRevPLPerYearByProduct.getAxis(AxisType.X);
         xAxisYear.setLabel("Years");
@@ -161,7 +161,7 @@ public class ProductChartView implements Serializable {
         }
 
         barChartMonth_all = initBarModelMonth_all(item, series);
-        barChartMonth_all.setTitle("Monthly Profit/Loss Breakdown by Product for Year \"" + year + "\"");
+        barChartMonth_all.setTitle("Monthly Profit/Loss Breakdown by Product for Year " + year + "");
         barChartMonth_all.setAnimate(true);
         barChartMonth_all.setLegendPosition("e");
         barChartMonth_all.setLegendPlacement(LegendPlacement.OUTSIDEGRID);
@@ -169,8 +169,8 @@ public class ProductChartView implements Serializable {
 
         Axis yAxisMonth = barChartMonth_all.getAxis(AxisType.Y);
         yAxisMonth.setLabel("Number of thousands (Revenue $)");
-        yAxisMonth.setMin(-50000);
-        yAxisMonth.setMax(50000);
+        yAxisMonth.setMin(-10000);
+        yAxisMonth.setMax(25000);
         yAxisMonth.setTickInterval("5000");
 
         Axis xAxisMonth = barChartMonth_all.getAxis(AxisType.X);
@@ -243,9 +243,9 @@ public class ProductChartView implements Serializable {
 
         Axis yAxis = combinedModel_all.getAxis(AxisType.Y);
         yAxis.setLabel("Number of thousands (Revenue $)");
-        yAxis.setMin(-100000);
-        yAxis.setMax(100000);
-        yAxis.setTickInterval("10000");
+        yAxis.setMin(20000);
+        yAxis.setMax(1200000);
+        yAxis.setTickInterval("200000");
     }
 
     private void createCombinedModel(Integer item, Integer series) {
@@ -287,9 +287,9 @@ public class ProductChartView implements Serializable {
 
         Axis yAxis = combinedModel.getAxis(AxisType.Y);
         yAxis.setLabel("Number of thousands (Revenue $)");
-        yAxis.setMin(-100000);
-        yAxis.setMax(100000);
-        yAxis.setTickInterval("10000");
+        yAxis.setMin(0);
+        yAxis.setMax(250000);
+        yAxis.setTickInterval("25000");
     }
 
     private void createAnimatedModelMonth(Integer item, Integer series) {
@@ -328,7 +328,7 @@ public class ProductChartView implements Serializable {
 
         Axis yAxisMonth = barChartMonth.getAxis(AxisType.Y);
         yAxisMonth.setLabel("Number of thousands (Revenue $)");
-        yAxisMonth.setMin(-25000);
+        yAxisMonth.setMin(-10000);
         yAxisMonth.setMax(25000);
         yAxisMonth.setTickInterval("5000");
 
@@ -593,16 +593,17 @@ public class ProductChartView implements Serializable {
         pl[10] = 0;
         pl[11] = 0;
 
+        List<List<String>> machine_year;
         List<List<List<String>>> machine1 = allMachines.get(0);
         //System.out.println("machine1.size() expect 6 === " + machine1.size());
-        for (i = 0; i < machine1.size(); i++) { // 6 years
-            List<List<String>> machine_year = machine1.get(i);
-            //System.out.println("machine_year.get(i).size() expect 12 === " + machine_year.size());
-            for (j = 0; j < machine_year.size(); j++) { // 12 months
-                //System.out.println("Small Chamber Month Profit/Loss = " + machine_year.get(j).get(0) + " " + (int) round(Double.parseDouble(machine_year.get(j).get(2)), 0));
-                pl[j] = pl[j] + (int) round(Double.parseDouble(machine_year.get(j).get(2)), 0);
-            }
+//        for (i = 0; i < machine1.size(); i++) { // 6 years
+        machine_year = machine1.get(item);
+        //System.out.println("machine_year.get(i).size() expect 12 === " + machine_year.size());
+        for (j = 0; j < machine_year.size(); j++) { // 12 months
+            //System.out.println("Small Chamber Month Profit/Loss = " + machine_year.get(j).get(0) + " " + (int) round(Double.parseDouble(machine_year.get(j).get(2)), 0));
+            pl[j] = pl[j] + (int) round(Double.parseDouble(machine_year.get(j).get(2)), 0);
         }
+//        }
         series1.set("Jan", pl[0]);
         series1.set("Feb", pl[1]);
         series1.set("Mar", pl[2]);
@@ -635,14 +636,14 @@ public class ProductChartView implements Serializable {
 
         List<List<List<String>>> machine2 = allMachines.get(1);
         //System.out.println("machine1.size() expect 6 === " + machine1.size());
-        for (i = 0; i < machine2.size(); i++) { // 6 years
-            List<List<String>> machine_year = machine2.get(i);
-            //System.out.println("machine_year.get(i).size() expect 12 === " + machine_year.size());
-            for (j = 0; j < machine_year.size(); j++) { // 12 months
-                //System.out.println("Small Chamber Month Profit/Loss = " + machine_year.get(j).get(0) + " " + (int) round(Double.parseDouble(machine_year.get(j).get(2)), 0));
-                pl[j] = pl[j] + (int) round(Double.parseDouble(machine_year.get(j).get(2)), 0);
-            }
+//        for (i = 0; i < machine2.size(); i++) { // 6 years
+        machine_year = machine2.get(item);
+        //System.out.println("machine_year.get(i).size() expect 12 === " + machine_year.size());
+        for (j = 0; j < machine_year.size(); j++) { // 12 months
+            //System.out.println("Small Chamber Month Profit/Loss = " + machine_year.get(j).get(0) + " " + (int) round(Double.parseDouble(machine_year.get(j).get(2)), 0));
+            pl[j] = pl[j] + (int) round(Double.parseDouble(machine_year.get(j).get(2)), 0);
         }
+//        }
         series2.set("Jan", pl[0]);
         series2.set("Feb", pl[1]);
         series2.set("Mar", pl[2]);
@@ -675,14 +676,14 @@ public class ProductChartView implements Serializable {
 
         List<List<List<String>>> machine3 = allMachines.get(2);
         //System.out.println("machine1.size() expect 6 === " + machine1.size());
-        for (i = 0; i < machine3.size(); i++) { // 6 years
-            List<List<String>> machine_year = machine3.get(i);
-            //System.out.println("machine_year.get(i).size() expect 12 === " + machine_year.size());
-            for (j = 0; j < machine_year.size(); j++) { // 12 months
-                //System.out.println("Small Chamber Month Profit/Loss = " + machine_year.get(j).get(0) + " " + (int) round(Double.parseDouble(machine_year.get(j).get(2)), 0));
-                pl[j] = pl[j] + (int) round(Double.parseDouble(machine_year.get(j).get(2)), 0);
-            }
+//        for (i = 0; i < machine3.size(); i++) { // 6 years
+        machine_year = machine3.get(item);
+        //System.out.println("machine_year.get(i).size() expect 12 === " + machine_year.size());
+        for (j = 0; j < machine_year.size(); j++) { // 12 months
+            //System.out.println("Small Chamber Month Profit/Loss = " + machine_year.get(j).get(0) + " " + (int) round(Double.parseDouble(machine_year.get(j).get(2)), 0));
+            pl[j] = pl[j] + (int) round(Double.parseDouble(machine_year.get(j).get(2)), 0);
         }
+//        }
         series3.set("Jan", pl[0]);
         series3.set("Feb", pl[1]);
         series3.set("Mar", pl[2]);
@@ -715,14 +716,14 @@ public class ProductChartView implements Serializable {
 
         List<List<List<String>>> machine4 = allMachines.get(3);
         //System.out.println("machine1.size() expect 6 === " + machine1.size());
-        for (i = 0; i < machine4.size(); i++) { // 6 years
-            List<List<String>> machine_year = machine4.get(i);
-            //System.out.println("machine_year.get(i).size() expect 12 === " + machine_year.size());
-            for (j = 0; j < machine_year.size(); j++) { // 12 months
-                //System.out.println("Small Chamber Month Profit/Loss = " + machine_year.get(j).get(0) + " " + (int) round(Double.parseDouble(machine_year.get(j).get(2)), 0));
-                pl[j] = pl[j] + (int) round(Double.parseDouble(machine_year.get(j).get(2)), 0);
-            }
+//        for (i = 0; i < machine4.size(); i++) { // 6 years
+        machine_year = machine4.get(item);
+        //System.out.println("machine_year.get(i).size() expect 12 === " + machine_year.size());
+        for (j = 0; j < machine_year.size(); j++) { // 12 months
+            //System.out.println("Small Chamber Month Profit/Loss = " + machine_year.get(j).get(0) + " " + (int) round(Double.parseDouble(machine_year.get(j).get(2)), 0));
+            pl[j] = pl[j] + (int) round(Double.parseDouble(machine_year.get(j).get(2)), 0);
         }
+//        }
         series4.set("Jan", pl[0]);
         series4.set("Feb", pl[1]);
         series4.set("Mar", pl[2]);
@@ -755,14 +756,14 @@ public class ProductChartView implements Serializable {
 
         List<List<List<String>>> machine5 = allMachines.get(4);
         //System.out.println("machine1.size() expect 6 === " + machine1.size());
-        for (i = 0; i < machine5.size(); i++) { // 6 years
-            List<List<String>> machine_year = machine5.get(i);
-            //System.out.println("machine_year.get(i).size() expect 12 === " + machine_year.size());
-            for (j = 0; j < machine_year.size(); j++) { // 12 months
-                //System.out.println("Small Chamber Month Profit/Loss = " + machine_year.get(j).get(0) + " " + (int) round(Double.parseDouble(machine_year.get(j).get(2)), 0));
-                pl[j] = pl[j] + (int) round(Double.parseDouble(machine_year.get(j).get(2)), 0);
-            }
+//        for (i = 0; i < machine5.size(); i++) { // 6 years
+        machine_year = machine5.get(item);
+        //System.out.println("machine_year.get(i).size() expect 12 === " + machine_year.size());
+        for (j = 0; j < machine_year.size(); j++) { // 12 months
+            //System.out.println("Small Chamber Month Profit/Loss = " + machine_year.get(j).get(0) + " " + (int) round(Double.parseDouble(machine_year.get(j).get(2)), 0));
+            pl[j] = pl[j] + (int) round(Double.parseDouble(machine_year.get(j).get(2)), 0);
         }
+//        }
         series5.set("Jan", pl[0]);
         series5.set("Feb", pl[1]);
         series5.set("Mar", pl[2]);
@@ -795,14 +796,14 @@ public class ProductChartView implements Serializable {
 
         List<List<List<String>>> machine6 = allMachines.get(5);
         //System.out.println("machine1.size() expect 6 === " + machine1.size());
-        for (i = 0; i < machine6.size(); i++) { // 6 years
-            List<List<String>> machine_year = machine6.get(i);
-            //System.out.println("machine_year.get(i).size() expect 12 === " + machine_year.size());
-            for (j = 0; j < machine_year.size(); j++) { // 12 months
-                //System.out.println("Small Chamber Month Profit/Loss = " + machine_year.get(j).get(0) + " " + (int) round(Double.parseDouble(machine_year.get(j).get(2)), 0));
-                pl[j] = pl[j] + (int) round(Double.parseDouble(machine_year.get(j).get(2)), 0);
-            }
+//        for (i = 0; i < machine6.size(); i++) { // 6 years
+        machine_year = machine6.get(item);
+        //System.out.println("machine_year.get(i).size() expect 12 === " + machine_year.size());
+        for (j = 0; j < machine_year.size(); j++) { // 12 months
+            //System.out.println("Small Chamber Month Profit/Loss = " + machine_year.get(j).get(0) + " " + (int) round(Double.parseDouble(machine_year.get(j).get(2)), 0));
+            pl[j] = pl[j] + (int) round(Double.parseDouble(machine_year.get(j).get(2)), 0);
         }
+//        }
         series6.set("Jan", pl[0]);
         series6.set("Feb", pl[1]);
         series6.set("Mar", pl[2]);
@@ -835,14 +836,14 @@ public class ProductChartView implements Serializable {
 
         List<List<List<String>>> machine7 = allMachines.get(6);
         //System.out.println("machine1.size() expect 6 === " + machine1.size());
-        for (i = 0; i < machine7.size(); i++) { // 6 years
-            List<List<String>> machine_year = machine7.get(i);
-            //System.out.println("machine_year.get(i).size() expect 12 === " + machine_year.size());
-            for (j = 0; j < machine_year.size(); j++) { // 12 months
-                //System.out.println("Small Chamber Month Profit/Loss = " + machine_year.get(j).get(0) + " " + (int) round(Double.parseDouble(machine_year.get(j).get(2)), 0));
-                pl[j] = pl[j] + (int) round(Double.parseDouble(machine_year.get(j).get(2)), 0);
-            }
+//        for (i = 0; i < machine7.size(); i++) { // 6 years
+        machine_year = machine7.get(item);
+        //System.out.println("machine_year.get(i).size() expect 12 === " + machine_year.size());
+        for (j = 0; j < machine_year.size(); j++) { // 12 months
+            //System.out.println("Small Chamber Month Profit/Loss = " + machine_year.get(j).get(0) + " " + (int) round(Double.parseDouble(machine_year.get(j).get(2)), 0));
+            pl[j] = pl[j] + (int) round(Double.parseDouble(machine_year.get(j).get(2)), 0);
         }
+//        }
         series7.set("Jan", pl[0]);
         series7.set("Feb", pl[1]);
         series7.set("Mar", pl[2]);
@@ -1030,7 +1031,7 @@ public class ProductChartView implements Serializable {
         List<List<List<String>>> machine = allMachines.get(series);
         // item: 0 = year 2010, 1 = year 2011, ...
         List<List<String>> machine_quarter = machine.get(item);
-        
+
         System.out.println("series =================================================== " + series);
         System.out.println("item =================================================== " + item);
         System.out.println("machine_quarter.get(0).get(0) =================================================== " + machine_quarter.get(0).get(0));
