@@ -5,6 +5,7 @@
  */
 package session.stateless;
 
+import entity.Customer;
 import entity.DocumentControlEntity;
 import java.util.List;
 import javax.ejb.Local;
@@ -33,5 +34,7 @@ public interface DocumentSystemBeanLocal {
     public void updateServiceReport(String destination, String projID);
 
     public void updateComDO(String destination, String projID);
+
+    public Customer customerInfo(String CustomerKey);
     
 }

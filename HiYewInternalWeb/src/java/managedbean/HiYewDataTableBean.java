@@ -17,6 +17,7 @@ import javax.ejb.EJB;
 import javax.inject.Named;
 import javax.enterprise.context.RequestScoped;
 import session.stateless.HiYewSystemBeanLocal;
+import session.stateless.MachineSystemBeanLocal;
 
 /**
  *
@@ -27,6 +28,8 @@ import session.stateless.HiYewSystemBeanLocal;
 public class HiYewDataTableBean {
 
     @EJB
+    private MachineSystemBeanLocal machineSystemBean;
+    @EJB
     private HiYewSystemBeanLocal hiYewSystemBean;
 
     /**
@@ -36,28 +39,8 @@ public class HiYewDataTableBean {
 
     }
 
-    public List<MachineMaintainenceEntity> getMaintainenceMachineWeek() {
-        return hiYewSystemBean.machineMaintainenceListWeek();
-    }
-
-    public List<MachineMaintainenceEntity> getMaintainenceMachineExpired() {
-        return hiYewSystemBean.machineMaintainenceListExpired();
-    }
-
-    public List<MachineMaintainenceEntity> getMaintainenceMachine() {
-        return hiYewSystemBean.machineMaintainenceList();
-    }
-
     public List<Vector> getLeaves() {
         return hiYewSystemBean.viewAllLeave();
-    }
-
-    public List<MachineEntity> getMachines() {
-        return hiYewSystemBean.getAllMachine();
-    }
-
-    public List<MachineEntity> getExpiredMachines() {
-        return hiYewSystemBean.checkMachineExpiry();
     }
 
     public List<PayrollEntity> getReleasePay() {
@@ -68,24 +51,12 @@ public class HiYewDataTableBean {
         return hiYewSystemBean.payRecords();
     }
 
-    public List<String> getMachineNames() {
-        return hiYewSystemBean.machineNames();
-    }
-
-    public List<String> getMachineMaint() {
-        return hiYewSystemBean.machineMaintainenceNames();
-    }
-
     public List<String> getEmployeeNames() {
         return hiYewSystemBean.getEmployee();
     }
 
     public List<TrainingScheduleEntity> getTrainingSchedule() {
         return hiYewSystemBean.trainingScheduleListAvailable();
-    }
-    
-    public List<SupplierPurchaseOrder> getPurcOrders() {
-        return hiYewSystemBean.getAllPO();
     }
 
 }

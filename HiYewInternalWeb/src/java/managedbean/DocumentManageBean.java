@@ -5,6 +5,7 @@
  */
 package managedbean;
 
+import entity.Customer;
 import entity.DocumentControlEntity;
 import entity.Project;
 import java.io.File;
@@ -16,11 +17,14 @@ import java.io.Serializable;
 import java.sql.Timestamp;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Vector;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
+import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.inject.Named;
 import javax.faces.view.ViewScoped;
+import manager.EmailManager;
 import org.primefaces.event.FileUploadEvent;
 import session.stateless.DocumentSystemBeanLocal;
 
@@ -39,7 +43,7 @@ public class DocumentManageBean implements Serializable {
     private boolean check = false;
     private boolean checkPDFRender = false;
     private String projID;
-    private String destination = "C:\\Users\\User\\Desktop\\SouceTreeRepo\\IN05\\HiYewInternalWeb\\web\\projectDocuments\\";
+    private String destination = "C:\\Users\\JustHRJ\\Desktop\\IN05\\HiYewInternalWeb\\web\\projectDocuments\\";
     private String destinations = "/projectDocuments/";
     private String pdfURL = "";
 
@@ -59,10 +63,50 @@ public class DocumentManageBean implements Serializable {
         pdfURL = url;
     }
 
+    public boolean checkEmail(Project proj) {
+        if (proj != null) {
+            DocumentControlEntity document = proj.getDocuments();
+            Calendar c = Calendar.getInstance();
+            c.add(Calendar.DATE, 5);
+            c.set(Calendar.HOUR_OF_DAY, 0);
+            c.set(Calendar.MINUTE, 0);
+            c.set(Calendar.SECOND, 0);
+            c.set(Calendar.MILLISECOND, 0);
+            Timestamp timeNow = new Timestamp(c.getTime().getTime());
+            Timestamp timeExpected = null;
+            if (!proj.getProjectCompletion()) {
+                timeExpected = proj.getPlannedEnd();
+            }
+            if (proj.getProjectCompletion()) {
+
+                if (document.getCustDeliveryOrder() == null) {
+                    return true;
+                }
+
+                if (document.getPurchaseOrder() == null) {
+                    return true;
+                }
+                return false;
+            } else if (!(proj.getProjectCompletion()) && timeNow.after(timeExpected)) {
+                if (document.getCustDeliveryOrder() == null) {
+                    return true;
+                }
+
+                if (document.getPurchaseOrder() == null) {
+                    return true;
+                }
+                return false;
+            }
+            return false;
+        } else {
+            return false;
+        }
+    }
+
     public String checkFullSubmit(Project proj) {
         DocumentControlEntity document = proj.getDocuments();
         Calendar c = Calendar.getInstance();
-        c.add(Calendar.DATE, -5);
+        c.add(Calendar.DATE, 5);
         c.set(Calendar.HOUR_OF_DAY, 0);
         c.set(Calendar.MINUTE, 0);
         c.set(Calendar.SECOND, 0);
@@ -206,6 +250,33 @@ public class DocumentManageBean implements Serializable {
             return proj.getProjectNo();
         } else {
             return "";
+        }
+    }
+
+    public void sendEmail(Project proj) {
+        Customer cust = documentSystemBean.customerInfo(proj.getCustomerKey());
+        DocumentControlEntity doc = proj.getDocuments();
+        if (cust != null) {
+            String email = cust.getEmail();
+            EmailManager emailManager = new EmailManager();
+
+            Vector im = new Vector();
+
+            if (doc.getCustDeliveryOrder() == null) {
+                im.add("Customer Delivery Order");
+            }
+
+            if (doc.getPurchaseOrder() == null) {
+                im.add("Customer Purchase Order");
+            }
+
+            if (im != null) {
+                emailManager.emailReminder(email, im, proj.getProjectNo(), cust.getName());
+            }
+
+            FacesMessage msg = new FacesMessage("Email sent");
+            FacesContext.getCurrentInstance().addMessage(null, msg);
+
         }
     }
 

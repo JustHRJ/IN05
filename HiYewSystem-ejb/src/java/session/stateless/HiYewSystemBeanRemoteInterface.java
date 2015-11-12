@@ -21,15 +21,15 @@ import java.util.Date;
 import java.util.List;
 import java.util.Vector;
 import javax.ejb.Local;
+import javax.ejb.Remote;
 
 /**
  *
  * @author JustHRJ
  */
-@Local
-public interface HiYewSystemBeanLocal {
+@Remote
+public interface HiYewSystemBeanRemoteInterface {
 
- 
     public Vector addEmployee(String employee, String employee_passNumber, String employee_address, int number_of_leave, String position, String username, Timestamp expiry, String contact, String addressPostal, String unit, String optional, double pay, Date employedDate, String employeeEmail);
 
     public boolean updateEmployee(EmployeeEntity employee, String employeeA, String employeeUnit, String employeeOptional, String address_postal, String contact, Date pass, String position, double pay, int leave, String email);
@@ -59,7 +59,6 @@ public interface HiYewSystemBeanLocal {
 
     public List<LeaveEntity> viewEmployeeLeavePending(String employeeName);
 
- 
     public String login(String username, String password);
 
     public List<LeaveEntity> viewEmployeeLeaveU(String username);
@@ -96,7 +95,6 @@ public interface HiYewSystemBeanLocal {
 
     public boolean notExistExpiredName(String name);
 
- 
     public List<PayrollEntity> getReleasingPayRecords();
 
     public void releaseAllPay();
@@ -113,7 +111,6 @@ public interface HiYewSystemBeanLocal {
 
     public boolean deleteTrainingEmployee(TrainingScheduleEntity training, String employee);
 
-  
     public List<PayrollEntity> getPayroll(String employeeName);
 
     public boolean deleteTraining(String trainingCode);
@@ -122,7 +119,7 @@ public interface HiYewSystemBeanLocal {
 
     public boolean updateEmployee(EmployeeEntity employee, String employeeA, String employeeUnit, String employeeOptional, String address_postal, String contact, String email);
 
-
+  
 
     public void rejectLeaveID(Long id, String employee1);
 
@@ -156,7 +153,6 @@ public interface HiYewSystemBeanLocal {
 
     public List<Vector> employeeTrainingMonthUser(String username);
 
-      
     public void addNewAdmin(String employee, String employee_passNumber, String employee_address, int number_of_leave, String position, String username, Timestamp expiry, String contact, String addressPostal, String unit, String optional, double employeePay, Date employedDate, String email, String password);
 
     public boolean applyClaim(String employeeName, EmployeeClaimEntity claim, String destination);

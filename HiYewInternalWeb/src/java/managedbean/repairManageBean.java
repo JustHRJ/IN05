@@ -7,11 +7,14 @@ package managedbean;
 
 import entity.MachineEntity;
 import entity.MachineRepairEntity;
+import java.io.IOException;
 import java.util.Date;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.inject.Named;
 import javax.enterprise.context.RequestScoped;
+import javax.faces.context.ExternalContext;
+import javax.faces.context.FacesContext;
 import session.stateless.HiYewSystemBeanLocal;
 import session.stateless.MachineSystemBeanLocal;
 
@@ -44,8 +47,11 @@ public class repairManageBean {
         return machineSystemBean.repairList(selectedMachine);
     }
     
-    public void createRepair(){
+    public void createRepair() throws IOException{
         machineSystemBean.createRepair(machine, repairDate, machineName);
+         FacesContext facesCtx = FacesContext.getCurrentInstance();
+        ExternalContext externalContext = facesCtx.getExternalContext();
+        externalContext.redirect("/HiYewInternalWeb/mms-view-machine.xhtml");
     }
     
     

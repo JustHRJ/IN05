@@ -163,25 +163,7 @@ public class HiYewManagedBean {
 //        return supPONo;
 //    }
 //
-    public String addMachine() {
-        Timestamp machineTime = new Timestamp(machineNxtMaint.getTime());
-        if (machineType.equals("Laser")) {
-            machineSubMaint = 2;
-        } else if (machineType.equals("TIG")) {
-            machineSubMaint = 4;
-        } else {
-            machineSubMaint = 6;
-        }
-        boolean check = hiYewSystemBean.addMachine(machineName, machineId, machineTime, machineDescript, machineSubMaint);
-        if (check) {
-            return "mms-add-machine";
-        } else {
-            FacesMessage msg = new FacesMessage("Failed to Add", "Please check for existing machine number or machine name.");
-            FacesContext.getCurrentInstance().addMessage(null, msg);
-            return "";
-        }
-    }
-
+  
     public String formatCurrency(double amount) {
         NumberFormat nf = NumberFormat.getCurrencyInstance();
         return nf.format(amount);
@@ -221,39 +203,7 @@ public class HiYewManagedBean {
         FacesContext.getCurrentInstance().getExternalContext().redirect("/HiYewInternalWeb/changePassword.xhtml");
     }
 
-    public void deleteMachineMaintainence() throws IOException {
-
-        boolean check = false;
-        if (machineMaintainenceID.isEmpty()) {
-            FacesMessage msg = new FacesMessage("Nothing to delete.", machineMaintainenceID);
-            FacesContext.getCurrentInstance().addMessage(null, msg);
-            return;
-        } else {
-            check = hiYewSystemBean.deleteMachineMaintainence(machineMaintainenceID);
-        }
-        if (check) {
-            FacesContext facesCtx = FacesContext.getCurrentInstance();
-            ExternalContext externalContext = facesCtx.getExternalContext();
-            externalContext.redirect("/HiYewInternalWeb/mms-view-maintenence-schedule.xhtml");
-        } else {
-            FacesMessage msg = new FacesMessage("Maintenance ID does not exist.", machineMaintainenceID);
-            FacesContext.getCurrentInstance().addMessage(null, msg);
-        }
-    }
-
-    public void updateMachineSchedule(RowEditEvent event) throws IOException {
-        boolean check = hiYewSystemBean.updateMachineSchedule((MachineMaintainenceEntity) event.getObject(), mScheduleDate, mScheduleHour, mServiceProvider, mServiceContact);
-        if (check) {
-
-            FacesContext facesCtx = FacesContext.getCurrentInstance();
-            ExternalContext externalContext = facesCtx.getExternalContext();
-            externalContext.redirect("/HiYewInternalWeb/mms-view-maintenence-schedule.xhtml");
-        } else {
-            FacesMessage msg = new FacesMessage("Not Edited", ((MachineMaintainenceEntity) event.getObject()).getMachine().getMachine_name());
-            FacesContext.getCurrentInstance().addMessage(null, msg);
-        }
-    }
-
+   
     public void addTrainingSchedule() throws IOException {
         boolean check = false;
         if (trainingStartDate.after(trainingEndDate)) {
@@ -269,18 +219,7 @@ public class HiYewManagedBean {
         }
     }
 
-    public void addMachineSchedule() throws IOException {
-        boolean check = hiYewSystemBean.addMachineMaintainence(machineName, getmScheduleDate(), getmScheduleHour(), getMaintainenceComments(), getmServiceProvider(), getmServiceContact());
-        if (check) {
-            FacesMessage msg = new FacesMessage("Schedule Added", machineName + " has a maintainence schedule.");
-            FacesContext.getCurrentInstance().addMessage(null, msg);
-            FacesContext.getCurrentInstance().getExternalContext().redirect("/HiYewInternalWeb/mms-view-maintenence-schedule.xhtml");
-        } else {
-            FacesMessage msg = new FacesMessage("Failed to Add", "Please check for exisiting schedule.");
-            FacesContext.getCurrentInstance().addMessage(null, msg);
-        }
-    }
-
+   
     public double calculateTotal(double overtime, double basic, double bonus, double others, double taxi) {
         return basic + bonus + others + taxi + overtime;
     }
@@ -332,16 +271,7 @@ public class HiYewManagedBean {
         }
     }
 
-    public String extendMachine() {
-        boolean check = hiYewSystemBean.extendMachineExpiry(machineId);
-        if (check) {
-            return "mms-view-machine";
-        } else {
-            FacesMessage msg = new FacesMessage("Machine not updated.", "Please enter Machine ID.");
-            FacesContext.getCurrentInstance().addMessage(null, msg);
-            return "";
-        }
-    }
+  
 
     public Date getToday() {
         Calendar c = Calendar.getInstance();
@@ -415,20 +345,10 @@ public class HiYewManagedBean {
         }
     }
 
-    public String getMAlert() {
-
-        int noOfAlert = hiYewSystemBean.getNoAlert();
-
-        return "Machine Alert (" + String.valueOf(noOfAlert) + ")";
-    }
-
     public void setFireOrDisabled(String tes) {
         this.fireOrDisabled = tes;
     }
 
-    public void fireEmployee() {
-        hiYewSystemBean.disableEmployee(objectId);
-    }
 
     public List<EmployeeEntity> getEmployees() {
         return hiYewSystemBean.viewEmployee(objectId);
@@ -484,29 +404,13 @@ public class HiYewManagedBean {
         }
     }
 
-    public void onMachineChange() {
-        if (machineName != null && !machineName.equals("")) {
-            machineMaintainenceIDList = hiYewSystemBean.getMachineMaintID(machineName);
-        } else {
-            machineMaintainenceIDList = new ArrayList<Long>();
-        }
-    }
+  
 
     public void releaseAllPay() {
         hiYewSystemBean.releaseAllPay();
     }
 
-    public void updateMachinery(RowEditEvent event) {
-        boolean check = hiYewSystemBean.updateMachine(machineName, (MachineEntity) event.getObject(), machine_status, machineNxtMaint);
-        if (check) {
-            FacesMessage msg = new FacesMessage("Edited", ((MachineEntity) event.getObject()).getMachine_number());
-            FacesContext.getCurrentInstance().addMessage(null, msg);
-        } else {
-            FacesMessage msg = new FacesMessage("Not Edited", ((MachineEntity) event.getObject()).getMachine_number());
-            FacesContext.getCurrentInstance().addMessage(null, msg);
-        }
-    }
-
+  
 //    public void updatePO(RowEditEvent event) {
 //        boolean check = hiYewSystemBean.updatePO(termsOfPayment, (SupplierPurchaseOrder) event.getObject(), description, quantity);
 //        // supCompanyName,
@@ -773,10 +677,7 @@ public class HiYewManagedBean {
         }
     }
 
-    public void deleteMachine() {
-        hiYewSystemBean.deleteMachine(objectId);
-    }
-
+   
     /**
      * @return the username
      */

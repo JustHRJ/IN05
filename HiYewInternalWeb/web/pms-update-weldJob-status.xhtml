@@ -63,14 +63,14 @@
                         <p:cellEditor>
                             <f:facet name="output"><h:outputText style="text-align: left; font-weight: normal" value="#{wItem.quantityWelded}"/></f:facet>
                             <f:facet name="input">
-                                <h:inputText style="width:200px" value="#{weldJobProgressManagedBean.quantityWelded}" />
+                                <h:inputText style="width:200px" value="#{wItem.quantityWelded}" />
                             </f:facet> 
                         </p:cellEditor>
                     </p:column>
                     <p:column headerText="Progress (%)" width="6%">
                         <h:outputText value="#{weldJobProgressManagedBean.getProgress(wItem.totalQuantity, wItem.quantityWelded)}" />
                     </p:column>
-                    <p:column style="font-weight: bold" headerText="Edit" width="3%">
+                    <p:column style="font-weight: bold" headerText="Edit" width="3%" >
                         <p:rowEditor />
                     </p:column>
                 </p:dataTable>

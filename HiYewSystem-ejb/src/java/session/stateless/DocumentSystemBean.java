@@ -5,6 +5,7 @@
  */
 package session.stateless;
 
+import entity.Customer;
 import entity.DocumentControlEntity;
 import entity.Project;
 import java.util.ArrayList;
@@ -48,6 +49,12 @@ public class DocumentSystemBean implements DocumentSystemBeanLocal {
                 em.merge(d);
             }
         }
+    }
+
+    public Customer customerInfo(String CustomerKey) {
+        Customer cust = em.find(Customer.class, CustomerKey);
+        return cust;
+
     }
 
     public void updateCustDODestination(String destination, String projID) {
