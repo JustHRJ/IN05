@@ -72,6 +72,7 @@ public class ProductPurchaseOrderSessionBean implements ProductPurchaseOrderSess
 
     public void updateProductPOStatus(ProductPurchaseOrder inProductPurchaseOrder) {
         ProductPurchaseOrder ppo = em.find(ProductPurchaseOrder.class, inProductPurchaseOrder.getProductPurchaseOrderID());
+        System.out.println("updateProductPOStatus......................................... Processed");
         ppo.setStatus("Processed");
     }
 }
