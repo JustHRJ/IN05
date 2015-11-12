@@ -78,7 +78,7 @@
                     <p:column style="width:12px;text-align: center">
                         <p:commandButton id="quoteDescBtn" icon="ui-icon-search" title="View" update="quotationDetailPanel" action="#{adminQuotationManagedBean.selectQuotation(item)}"/>
                         <!--<p:dialog  widgetVar="dlg" modal="true" resizable="false" header="Values" showEffect="fade" >-->
-                        <p:overlayPanel for="quoteDescBtn" showEffect="fade" hideEffect="fade" dismissable="false" showCloseIcon="true" style="width:1200px">
+                        <p:overlayPanel for="quoteDescBtn" showEffect="fade" hideEffect="fade" dismissable="false" showCloseIcon="true" style="width:1300px">
 
                             <p:outputPanel id="quotationDetailPanel" style="text-align:center;" >
                                 <p:commandButton value="Update Quotation Details" action="#{adminQuotationManagedBean.updateQuotationPricesAndSample()}" update=":innerForm:msgs " disabled="#{loginControlBean.checkValid()}"  icon="ui-icon-check"/>
@@ -91,14 +91,14 @@
                                     <p:column headerText="Metal" width="15%">
                                         <h:outputText value="#{quoteDescItem.metalName}" />
                                     </p:column>
-                                    <p:column headerText="Instructions" width="30%">
+                                    <p:column headerText="Instructions" width="22%">
                                         <h:outputText value="#{quoteDescItem.itemDesc}" />
                                     </p:column>
 
                                     <p:column headerText="Qty" width="6%">
                                         <h:outputText value="#{quoteDescItem.qty}" />
                                     </p:column>
-                                    <p:column headerText="Surface Vol(cm3)" width="6%">
+                                    <p:column headerText="Surface Area(cm2)" width="8%">
                                         <h:outputText value="#{quoteDescItem.surfaceVol}" />
                                     </p:column>
                                     <p:column headerText="Welding Type" width="9%">
@@ -121,7 +121,7 @@
                                         <h:inputText value="#{quoteDescItem.remarksToCustomer}" style="width: 95%"/>
                                     </p:column>
 
-                                    <p:column style="width:12%;text-align: center">
+                                    <p:column style="width:9%;text-align: center">
                                         <p:commandButton  id="atpBtn" update=":innerForm:atpDetail :innerForm:costSection" value="Perform ATP" action="#{adminQuotationManagedBean.clickPerformATP()}" oncomplete="PF('atpDialog').show()" icon="ui-icon-search" title="ATP">
                                             <f:setPropertyActionListener value="#{quoteDescItem}" target="#{adminQuotationManagedBean.selectedQuotationDescription}" />
                                         </p:commandButton>

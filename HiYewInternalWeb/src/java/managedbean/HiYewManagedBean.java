@@ -131,6 +131,24 @@ public class HiYewManagedBean {
 //            FacesContext.getCurrentInstance().addMessage(null, msg);
 //        }
 //    }
+    public String retrieveAvailability(String employeeName, boolean check) {
+        
+        if (check == false) {
+            return "N";
+        } else {
+            List<LeaveEntity> records = hiYewSystemBean.employeeLeaveTodayUser(employeeName);
+            if (records != null) {
+                return "N";
+            }
+
+            List<Vector> records2 = hiYewSystemBean.employeeTrainingTodayUser(employeeName);
+            if (records2 != null) {
+                return "N";
+            }
+            return "Y";
+        }
+    }
+
     public List<TrainingScheduleEntity> getEmployeePastTraining() {
         if (selectedEmployeeTraining != null) {
             return hiYewSystemBean.pastEmployeeTraining(selectedEmployeeTraining);
@@ -139,14 +157,11 @@ public class HiYewManagedBean {
         }
     }
 
-    
-    public void resetLeaves(){
+    public void resetLeaves() {
         hiYewSystemTimer.resetLeaves();
         System.out.println("leaves should be reset");
     }
-    
-    
-    
+
 //    public void sendPO() {
 //        boolean check = hiYewSystemBean.updateSupPoStatus("Sent", selectedList);
 //        if (check) {
@@ -163,7 +178,6 @@ public class HiYewManagedBean {
 //        return supPONo;
 //    }
 //
-  
     public String formatCurrency(double amount) {
         NumberFormat nf = NumberFormat.getCurrencyInstance();
         return nf.format(amount);
@@ -203,7 +217,6 @@ public class HiYewManagedBean {
         FacesContext.getCurrentInstance().getExternalContext().redirect("/HiYewInternalWeb/changePassword.xhtml");
     }
 
-   
     public void addTrainingSchedule() throws IOException {
         boolean check = false;
         if (trainingStartDate.after(trainingEndDate)) {
@@ -219,7 +232,6 @@ public class HiYewManagedBean {
         }
     }
 
-   
     public double calculateTotal(double overtime, double basic, double bonus, double others, double taxi) {
         return basic + bonus + others + taxi + overtime;
     }
@@ -270,8 +282,6 @@ public class HiYewManagedBean {
             return "hrms-alert-employee";
         }
     }
-
-  
 
     public Date getToday() {
         Calendar c = Calendar.getInstance();
@@ -349,7 +359,6 @@ public class HiYewManagedBean {
         this.fireOrDisabled = tes;
     }
 
-
     public List<EmployeeEntity> getEmployees() {
         return hiYewSystemBean.viewEmployee(objectId);
     }
@@ -404,13 +413,10 @@ public class HiYewManagedBean {
         }
     }
 
-  
-
     public void releaseAllPay() {
         hiYewSystemBean.releaseAllPay();
     }
 
-  
 //    public void updatePO(RowEditEvent event) {
 //        boolean check = hiYewSystemBean.updatePO(termsOfPayment, (SupplierPurchaseOrder) event.getObject(), description, quantity);
 //        // supCompanyName,
@@ -677,7 +683,6 @@ public class HiYewManagedBean {
         }
     }
 
-   
     /**
      * @return the username
      */
@@ -737,6 +742,17 @@ public class HiYewManagedBean {
         this.endDate = endDate;
     }
 
+    public Date getEndYear(){
+        Calendar c = Calendar.getInstance();
+        c.add(Calendar.YEAR, 1);
+        c.set(Calendar.DATE, 1);
+        c.set(Calendar.MONTH, 0);
+        c.add(Calendar.DATE, -1);
+        
+        return c.getTime();
+    }
+    
+    
     /**
      * @return the employeePassExpiry
      */
@@ -1262,6 +1278,12 @@ public class HiYewManagedBean {
     public String getMonth() {
         Calendar c = Calendar.getInstance();
         c.add(Calendar.MONTH, -1);
+        SimpleDateFormat format = new SimpleDateFormat("MMM,yyyy");
+        return format.format(c.getTime());
+    }
+    
+    public String getMonth3(){
+        Calendar c = Calendar.getInstance();
         SimpleDateFormat format = new SimpleDateFormat("MMM,yyyy");
         return format.format(c.getTime());
     }

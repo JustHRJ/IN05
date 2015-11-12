@@ -18,6 +18,7 @@ import java.util.Date;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
+import javax.faces.application.FacesMessage;
 import javax.inject.Named;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
@@ -129,6 +130,9 @@ public class EmployeeClaimBean implements Serializable {
         if (check) {
             FacesContext.getCurrentInstance().getExternalContext().getSessionMap().remove("filename");
             FacesContext.getCurrentInstance().getExternalContext().redirect("/HiYewInternalWeb/hrms-view-approved-claim.xhtml");
+        } else {
+            FacesMessage msg = new FacesMessage("Failed to Apply - Exceed the entitled claim amount");
+            FacesContext.getCurrentInstance().addMessage(null, msg);
         }
     }
 
@@ -212,7 +216,7 @@ public class EmployeeClaimBean implements Serializable {
     public void search() {
         if (!("select").equals(employeeName)) {
             employeeClaimEntities = hiYewSystemBean.approvedClaimRecords(employeeName);
-        } 
+        }
     }
 
     /**

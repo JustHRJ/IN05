@@ -71,7 +71,7 @@
 
                         <p:commandButton id="weldJobBtn" icon="ui-icon-search" title="View" update="WeldJobPanel" action="#{projManagedBean.selectProject(pItem)}" style="padding-top: 5px; padding-bottom: 5px; padding-left: 5px; padding-right: 5px"/>
 
-                        <p:overlayPanel for="weldJobBtn" showEffect="fade" hideEffect="fade" dismissable="false" showCloseIcon="true" style="width:1000px">
+                        <p:overlayPanel for="weldJobBtn" showEffect="fade" hideEffect="fade" dismissable="false" showCloseIcon="true" style="width:1100px">
                             <p:outputPanel id="WeldJobPanel" style="text-align:center;" >
                                 <p:dataTable var="wItem" value="#{projManagedBean.receivedWeldJobs}" rows="5" paginator="true">
 
@@ -89,6 +89,9 @@
                                     </p:column>
                                     <p:column headerText= "Machine No" width="9%">
                                         <h:outputText value="#{wItem.machine.machine_number}" />
+                                    </p:column>
+                                    <p:column headerText= "SA (cm2)" width="9%">
+                                        <h:outputText value="#{wItem.surfaceArea}" />
                                     </p:column>
                                     <p:column headerText= "Qty" width="6%">
                                         <h:outputText value="#{wItem.totalQuantity}" />

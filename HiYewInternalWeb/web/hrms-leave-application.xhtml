@@ -44,7 +44,7 @@
                             <p:outputLabel style ="font-weight: bold" value ="Start Date"/>
                         </p:column>
                         <p:column>
-                            <p:calendar style="font-weight:normal" value = "#{hiYewManagedBean.startDate}"  pattern ="dd/MM/yyyy" required="true" requiredMessage="Please input start date" />
+                            <p:calendar style="font-weight:normal" value = "#{hiYewManagedBean.startDate}"  maxdate="#{hiYewManagedBean.endYear}" pattern ="dd/MM/yyyy" required="true" requiredMessage="Please input start date" />
                         </p:column>
                     </p:row>
                     <p:row>
@@ -52,7 +52,7 @@
                             <p:outputLabel  style ="font-weight: bold" value ="End Date"/>
                         </p:column>
                         <p:column>
-                            <p:calendar style="font-weight:normal" value = "#{hiYewManagedBean.endDate}"  pattern ="dd/MM/yyyy" required ="true" requiredMessage="Please input end date" />
+                            <p:calendar style="font-weight:normal" value = "#{hiYewManagedBean.endDate}" maxdate="#{hiYewManagedBean.endYear}" pattern ="dd/MM/yyyy" required ="true" requiredMessage="Please input end date" />
                         </p:column>
                     </p:row>
                     <p:row>
