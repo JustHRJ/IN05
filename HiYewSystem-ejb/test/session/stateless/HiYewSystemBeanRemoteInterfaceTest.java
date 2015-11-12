@@ -387,8 +387,8 @@ public class HiYewSystemBeanRemoteInterfaceTest {
         int days = 1;
         String remarks = "";
 
-        Date start = new Date("11/12/2015");
-        Date end = new Date("11/12/2015");
+        Date start = new Date("11/13/2015");
+        Date end = new Date("11/13/2015");
         String type = "paid";
         String expResult = "No such Employee";
         String result = HiYewSystemBeanInterface.applyLeave(employee, days, remarks, start, end, type);
@@ -439,8 +439,8 @@ public class HiYewSystemBeanRemoteInterfaceTest {
         int days = 1;
         String remarks = "";
 
-        Date start = new Date("11/12/2015");
-        Date end = new Date("11/12/2015");
+        Date start = new Date("11/13/2015");
+        Date end = new Date("11/13/2015");
         String type = "paid";
         String expResult = "Employee is disabled";
         String result = HiYewSystemBeanInterface.applyLeave(employee, days, remarks, start, end, type);
@@ -490,8 +490,8 @@ public class HiYewSystemBeanRemoteInterfaceTest {
         int days = 1;
         String remarks = "";
 
-        Date start = new Date("11/12/2015");
-        Date end = new Date("11/12/2015");
+        Date start = new Date("11/13/2015");
+        Date end = new Date("11/13/2015");
         String type = "paid";
         String expResult = "Cannot apply leave before employed Date";
         String result = HiYewSystemBeanInterface.applyLeave(employee, days, remarks, start, end, type);
@@ -504,7 +504,7 @@ public class HiYewSystemBeanRemoteInterfaceTest {
     public void testViewAllLeave() {
         System.out.println("viewAllLeave - Pending Leave has some records");
         List<Vector> result = HiYewSystemBeanInterface.viewAllLeave();
-        assertEquals(result.size(), 1);
+        assertEquals(result.size(), 2);
         // TODO review the generated test code and remove the default call to fail.
 
     }
@@ -580,10 +580,10 @@ public class HiYewSystemBeanRemoteInterfaceTest {
     @Test
     public void testViewEmployeeLeave() {
         System.out.println("viewEmployeeLeave view all leave for Jusin");
-        String employeeName = "Jit Cheong";
+        String employeeName = "Justin";
 
         List<LeaveEntity> result = HiYewSystemBeanInterface.viewEmployeeLeave(employeeName);
-        assertEquals(result.size(), 2);
+        assertEquals(result.size(), 1);
         // TODO review the generated test code and remove the default call to fail.
 
     }
@@ -770,7 +770,7 @@ public class HiYewSystemBeanRemoteInterfaceTest {
     @Test
     public void testViewEmployeeLeavePending2() {
         System.out.println("viewEmployeeLeavePending - Employee Has no Pending Leave");
-        String employeeName = "Jack";
+        String employeeName = "kat";
 
         List<LeaveEntity> result = HiYewSystemBeanInterface.viewEmployeeLeavePending(employeeName);
         assertNull(result);
@@ -847,7 +847,7 @@ public class HiYewSystemBeanRemoteInterfaceTest {
     public void testLogin3() {
         System.out.println("login - Username is disabled");
         String username = "testing";
-        String password = "krn5eermi9";
+        String password = "snq2nha5e8";
         String expResult = "disabled";
         String result = HiYewSystemBeanInterface.login(username, password);
         assertEquals(expResult, result);
@@ -859,7 +859,7 @@ public class HiYewSystemBeanRemoteInterfaceTest {
     public void testLogin4() {
         System.out.println("login - Username is first time");
         String username = "testing2";
-        String password = "kbissaeeuf";
+        String password = "3ivr2n518l";
         String expResult = "firstTime";
         String result = HiYewSystemBeanInterface.login(username, password);
         assertEquals(expResult, result);
@@ -1082,7 +1082,7 @@ public class HiYewSystemBeanRemoteInterfaceTest {
     public void testExpiredEmployees() {
         System.out.println("expiredEmployees - expired employees");
         List<EmployeeEntity> result = HiYewSystemBeanInterface.expiredEmployees();
-        assertEquals(result.size(), 16);
+        assertEquals(result.size(), 15);
 
     }
 //
@@ -1176,7 +1176,7 @@ public class HiYewSystemBeanRemoteInterfaceTest {
     public void testGetENoAlert() {
         System.out.println("getENoAlert");
 
-        int expResult = 16;
+        int expResult = 15;
         int result = HiYewSystemBeanInterface.getENoAlert();
         assertEquals(expResult, result);
         // TODO review the generated test code and remove the default call to fail.
@@ -1191,7 +1191,7 @@ public class HiYewSystemBeanRemoteInterfaceTest {
         System.out.println("payRecords - exisiting pay records");
 
         List<PayrollEntity> result = HiYewSystemBeanInterface.payRecords();
-        assertEquals(result.size(), 15);
+        assertEquals(result.size(), 13);
         // TODO review the generated test code and remove the default call to fail.
 
     }
@@ -1867,7 +1867,7 @@ public class HiYewSystemBeanRemoteInterfaceTest {
     public void testChangePassword() {
         System.out.println("changePassword - password change correct case");
         String employeeName = "Justin";
-        String oldPass = "password";
+        String oldPass = "jitcheong";
         String newPass = "password1";
 
         String expResult = "changed";
@@ -1906,9 +1906,9 @@ public class HiYewSystemBeanRemoteInterfaceTest {
 
     public void testChangePassword4() {
         System.out.println("changePassword - no such employee");
-        String employeeName = "Justin";
-        String oldPass = "password";
-        String newPass = "password";
+        String employeeName = "Justin123";
+        String oldPass = "password1";
+        String newPass = "password1";
 
         String expResult = "Password same as old password";
         String result = HiYewSystemBeanInterface.changePassword(employeeName, oldPass, newPass);
@@ -2522,7 +2522,7 @@ public class HiYewSystemBeanRemoteInterfaceTest {
     @Test
     public void testCheckActivationCode() {
         System.out.println("checkActivationCode - correct code");
-        String code = "73cshgujbq";
+        String code = "9u9k2qpbro";
 
         boolean result = HiYewSystemBeanInterface.checkActivationCode(code);
         assertTrue(result);
@@ -2565,7 +2565,7 @@ public class HiYewSystemBeanRemoteInterfaceTest {
     @Test
     public void testDeleteActivationCode() {
         System.out.println("deleteActivationCode - right case");
-        String code = "73cshgujbq";
+        String code = "9u9k2qpbro";
 
         HiYewSystemBeanInterface.deleteActivationCode(code);
         // TODO review the generated test code and remove the default call to fail.
