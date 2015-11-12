@@ -287,9 +287,9 @@ public class ProductChartView implements Serializable {
 
         Axis yAxis = combinedModel.getAxis(AxisType.Y);
         yAxis.setLabel("Number of thousands (Revenue $)");
-        yAxis.setMin(-80000);
-        yAxis.setMax(80000);
-        yAxis.setTickInterval("25000");
+        yAxis.setMin(-100000);
+        yAxis.setMax(100000);
+        yAxis.setTickInterval("10000");
     }
 
     private void createAnimatedModelMonth(Integer item, Integer series) {
@@ -338,19 +338,19 @@ public class ProductChartView implements Serializable {
 
     private void createAnimatedModelQuarter(Integer item, Integer series) {
         String machine = "";
-        if (item == 0) {
+        if (series == 0) {
             machine = "Small Chamber";
-        } else if (item == 1) {
+        } else if (series == 1) {
             machine = "V Flexx";
-        } else if (item == 2) {
+        } else if (series == 2) {
             machine = "V ERGO";
-        } else if (item == 3) {
+        } else if (series == 3) {
             machine = "V T-BaseV3";
-        } else if (item == 4) {
+        } else if (series == 4) {
             machine = "V MobileFlexx";
-        } else if (item == 5) {
+        } else if (series == 5) {
             machine = "V Unixx III";
-        } else if (item == 6) {
+        } else if (series == 6) {
             machine = "V UltraFlexx";
         }
 
@@ -368,19 +368,19 @@ public class ProductChartView implements Serializable {
 
     private void createAnimatedModelQuarter_PL(Integer item, Integer series) {
         String machine = "";
-        if (item == 0) {
+        if (series == 0) {
             machine = "Small Chamber";
-        } else if (item == 1) {
+        } else if (series == 1) {
             machine = "V Flexx";
-        } else if (item == 2) {
+        } else if (series == 2) {
             machine = "V ERGO";
-        } else if (item == 3) {
+        } else if (series == 3) {
             machine = "V T-BaseV3";
-        } else if (item == 4) {
+        } else if (series == 4) {
             machine = "V MobileFlexx";
-        } else if (item == 5) {
+        } else if (series == 5) {
             machine = "V Unixx III";
-        } else if (item == 6) {
+        } else if (series == 6) {
             machine = "V UltraFlexx";
         }
 
@@ -445,17 +445,11 @@ public class ProductChartView implements Serializable {
         revenue_year[0] = 0;
         revenue_year[1] = 0;
         revenue_year[2] = 0;
-        revenue_year[3] = 0;
-        revenue_year[4] = 0;
-        revenue_year[5] = 0;
 
         Integer[] profitLoss_year = new Integer[6];
         profitLoss_year[0] = 0;
         profitLoss_year[1] = 0;
         profitLoss_year[2] = 0;
-        profitLoss_year[3] = 0;
-        profitLoss_year[4] = 0;
-        profitLoss_year[5] = 0;
 
         // 7 machines, 6 years
         for (machineIndex = 0; machineIndex < allMachines.size(); machineIndex++) {
@@ -465,27 +459,21 @@ public class ProductChartView implements Serializable {
             }
         }
 
-        series1.set(2013, revenue_year[3]);
-        series1.set(2014, revenue_year[4]);
-        series1.set(2015, revenue_year[5]);
+        series1.set(2013, revenue_year[0]);
+        series1.set(2014, revenue_year[1]);
+        series1.set(2015, revenue_year[2]);
 
-        series2.set(2013, profitLoss_year[3]);
-        series2.set(2014, profitLoss_year[4]);
-        series2.set(2015, profitLoss_year[5]);
+        series2.set(2013, profitLoss_year[0]);
+        series2.set(2014, profitLoss_year[1]);
+        series2.set(2015, profitLoss_year[2]);
 
         System.out.println("revenue_year[0] ==== " + revenue_year[0]);
         System.out.println("revenue_year[1] ==== " + revenue_year[1]);
         System.out.println("revenue_year[2] ==== " + revenue_year[2]);
-        System.out.println("revenue_year[3] ==== " + revenue_year[3]);
-        System.out.println("revenue_year[4] ==== " + revenue_year[4]);
-        System.out.println("revenue_year[5] ==== " + revenue_year[5]);
 
         System.out.println("profitLoss_year[0] ==== " + profitLoss_year[0]);
         System.out.println("profitLoss_year[1] ==== " + profitLoss_year[1]);
         System.out.println("profitLoss_year[2] ==== " + profitLoss_year[2]);
-        System.out.println("profitLoss_year[3] ==== " + profitLoss_year[3]);
-        System.out.println("profitLoss_year[4] ==== " + profitLoss_year[4]);
-        System.out.println("profitLoss_year[5] ==== " + profitLoss_year[5]);
 
         model.addSeries(series1);
         model.addSeries(series2);
@@ -1042,6 +1030,13 @@ public class ProductChartView implements Serializable {
         List<List<List<String>>> machine = allMachines.get(series);
         // item: 0 = year 2010, 1 = year 2011, ...
         List<List<String>> machine_quarter = machine.get(item);
+        
+        System.out.println("series =================================================== " + series);
+        System.out.println("item =================================================== " + item);
+        System.out.println("machine_quarter.get(0).get(0) =================================================== " + machine_quarter.get(0).get(0));
+        System.out.println("machine_quarter.get(1).get(0) =================================================== " + machine_quarter.get(1).get(0));
+        System.out.println("machine_quarter.get(2).get(0) =================================================== " + machine_quarter.get(2).get(0));
+        System.out.println("machine_quarter.get(3).get(0) =================================================== " + machine_quarter.get(3).get(0));
 
 //        System.out.println("Revenue machine_quarter.size() expect size 4 = " + machine_quarter.size());
 //        System.out.println("Revenue machine_quarter.get(0).size() expect size 1 = " + machine_quarter.get(0).size());
