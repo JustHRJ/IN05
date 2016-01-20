@@ -102,7 +102,7 @@ public class ProjectsManagedBean implements Serializable {
 
         FacesContext.getCurrentInstance().getExternalContext().getSessionMap().remove("resourceAvailabilityMessage");
         FacesContext.getCurrentInstance().getExternalContext().getSessionMap().remove("fillerPickUpGuideMessage");
-        
+
     }
 
     public void filterByProjectNo() {
@@ -215,7 +215,7 @@ public class ProjectsManagedBean implements Serializable {
                 System.out.println("++++++++++++++++++++++++++++jobList.size() " + jobList.size());
                 if (jobList.get(i).getFiller() != null) {
                     FillerEntity f = jobList.get(i).getFiller();
-                    int qtyNeeded =  hiYewDSSSessionBean.quantityNeeded(f, jobList.get(i).getSurfaceArea(), jobList.get(i).getTotalQuantity());
+                    int qtyNeeded = hiYewDSSSessionBean.quantityNeeded(f, jobList.get(i).getSurfaceArea(), jobList.get(i).getTotalQuantity());
                     System.out.println("++++++++++++++++++++++++++++filler to reduce " + f.getFillerCode());
                     System.out.println("++++++++++++++++++++++++++++qty needed " + qtyNeeded);
                     map = hiYewDSSSessionBean.whichShelveToTake(f, qtyNeeded);
@@ -244,12 +244,12 @@ public class ProjectsManagedBean implements Serializable {
                 pickGuide = pickGuide + "" + String.format(toPickFrom.get(i) + "%n");
             }
             FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("fillerPickUpGuideMessage", pickGuide);
-            if(FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("icsPickingGuide")!=null){
-            String existing = FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("icsPickingGuide").toString();
-            FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("icsPickingGuide", existing + "" + pickGuide);
-        }else{
-             FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("icsPickingGuide", pickGuide);
-        }
+            if (FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("icsPickingGuide") != null) {
+                String existing = FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("icsPickingGuide").toString();
+                FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("icsPickingGuide", existing + "" + pickGuide);
+            } else {
+                FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("icsPickingGuide", pickGuide);
+            }
         }
         if (actualEnd != null) {
             selectedProject.setActualEnd(new Timestamp(actualEnd.getTime()));
@@ -271,7 +271,8 @@ public class ProjectsManagedBean implements Serializable {
                 str += selectedProject.getWeldJobs().get(i).getMachine().getMachine_number() + "\r\n";
 
                 projectSessionBean.setEmployeeAvailability(selectedProject.getWeldJobs().get(i).getEmpName(), false);
-                selectedProject.getWeldJobs().get(i).getMachine().setStatus("In use");
+                projectSessionBean.setMachineAvailability(selectedProject.getWeldJobs().get(i).getMachine().getMachine_number(), "In use");
+
             }
 
         } else { // after setting ending date
@@ -280,12 +281,25 @@ public class ProjectsManagedBean implements Serializable {
                 str += "Machine " + selectedProject.getWeldJobs().get(i).getMachine().getMachine_number() + " are currently available for use.\r\n";
 
                 projectSessionBean.setEmployeeAvailability(selectedProject.getWeldJobs().get(i).getEmpName(), true);
-                selectedProject.getWeldJobs().get(i).getMachine().setStatus("Available");
+                projectSessionBean.setMachineAvailability(selectedProject.getWeldJobs().get(i).getMachine().getMachine_number(), "Available");
+                System.out.println("employee and machine released");
+
+                WeldJob job = selectedProject.getWeldJobs().get(i);
+                job.setDuration(calculateDuration(selectedProject.getActualEnd(), selectedProject.getActualStart()));
+                projectSessionBean.saveWeldJob(job);
             }
         }
         FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("resourceAvailabilityMessage", str);
-        
+
         FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("msgColor", "orange");
+    }
+
+    private Integer calculateDuration(Timestamp end, Timestamp start) {
+        Date end1 = new Date(end.getTime());
+        Date start1 = new Date(start.getTime());
+        int diffInDays = (int) ((end1.getTime() - start1.getTime())
+                / (1000 * 60 * 60 * 24));
+        return (Integer) diffInDays + 1;
     }
 
     public void onEditRow(RowEditEvent event) {

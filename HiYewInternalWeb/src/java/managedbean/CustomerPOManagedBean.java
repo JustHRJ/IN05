@@ -1,4 +1,4 @@
-package managedBean;
+package managedbean;
 
 import entity.CustomerPO;
 import entity.EmployeeEntity;
@@ -46,10 +46,12 @@ public class CustomerPOManagedBean implements Serializable {
     @EJB
     private CustomerSessionBeanLocal customerSessionBean;
 
+    private String comment = "";
     private CustomerPO newPurOrder;
     //private Quotation quotation;
 
     private String username = "";
+    private Quotation selectedQuotation = new Quotation();
 
     //Attributes binded to view
     private String purOrderNo = "";
@@ -77,23 +79,25 @@ public class CustomerPOManagedBean implements Serializable {
         newPurOrder = new CustomerPO();
         receivedCustomerPO = new ArrayList<>();
         receivedCustomerWJ = new ArrayList<>();
+        selectedQuotation = new Quotation();
     }
 
     @PostConstruct
     public void init() {
-        if (FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("username") != null) {
-            username = FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("username").toString();
-            System.out.println("Q: Username is " + username);
-        }
-
+//        if (FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("username") != null) {
+//            username = FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("username").toString();
+//            System.out.println("Q: Username is " + username);
+//        }
+//
         orderDate = new SimpleDateFormat("dd/MM/yyyy").format(Calendar.getInstance().getTime());
         descriptions = "";
-        if (customerPOSessionBean.receivedCustomerPO(username) != null) {
-            receivedCustomerPO = new ArrayList<>(customerPOSessionBean.receivedCustomerPO(username));
-        }
-        if (projectSessionBean.receivedWeldJobs(username) != null) {
-            receivedCustomerWJ = new ArrayList<>(projectSessionBean.receivedWeldJobs(username));
-        }
+//        if (customerPOSessionBean.receivedCustomerPO(username) != null) {
+//            receivedCustomerPO = new ArrayList<>(customerPOSessionBean.receivedCustomerPO(username));
+//        }
+//        if (projectSessionBean.receivedWeldJobs(username) != null) {
+//            receivedCustomerWJ = new ArrayList<>(projectSessionBean.receivedWeldJobs(username));
+//        }
+        selectedQuotation = new Quotation();
     }
 
     public void receivedCustomerPO() {
@@ -110,12 +114,13 @@ public class CustomerPOManagedBean implements Serializable {
 
     public void createPurchaseOrder(Quotation q) {
         q.setStatus("Accepted");
+        System.out.println(q.getQuotationNo());
         quotationSessionBean.conductMerge(q);
 
         newPurOrder.setPoId(q.getQuotationNo());
         //newPurOrder.setExpectedStartDate(expectedStartDate);
         //newPurOrder.setExpectedEndDate(expectedEndDate);
-        newPurOrder.setTotalPrice(round(total,2));
+        newPurOrder.setTotalPrice(round(total, 2));
 
         if (newPurOrder.getMailingAddr1().equals("") && newPurOrder.getMailingAddr2().equals("")) {
             newPurOrder.setMailingAddr1(q.getCustomer().getAddress1());
@@ -183,7 +188,9 @@ public class CustomerPOManagedBean implements Serializable {
             days += dur;
 
             System.out.println("days taken: " + days);
-            newWeldJob.setDuration(dur);
+            if (dur > 0) {
+                newWeldJob.setDuration(dur);
+            }
 
             Integer projSelect = 1; //2 - earliest prog, 1 - proj with slack
 
@@ -218,10 +225,16 @@ public class CustomerPOManagedBean implements Serializable {
                     Timestamp today = new Timestamp(new Date().getTime());
                     project.setPlannedStart(today);
                     project.setPlannedEnd(projectSessionBean.addDays(project.getPlannedStart(), days));
+                    if (project.getPlannedEnd() == null) {
+                        project.setPlannedEnd(q.getCompanyEarliestEnd());
+                    }
                 }
             } else // if days < 0 means no proj reference
             {
                 System.out.println("p1 and p2 is null");
+                if (project.getPlannedEnd() == null) {
+                    project.setPlannedEnd(q.getCompanyEarliestEnd());
+                }
                 if (p2 != null) {
                     project.setPlannedStart(p2.getPlannedEnd());
                     projSelect = 2;
@@ -259,8 +272,8 @@ public class CustomerPOManagedBean implements Serializable {
                 projectSessionBean.conductMachineMerge(machine);
             } else {
                 Project p = getEarliestProjectWithMachineType(q.getQuotationDescriptions().get(i).getWeldingType());
-                for(WeldJob w: p.getWeldJobs()){
-                    if(w.getMachine().getMachine_type().equals(q.getQuotationDescriptions().get(i).getWeldingType())){
+                for (WeldJob w : p.getWeldJobs()) {
+                    if (w.getMachine().getMachine_type().equals(q.getQuotationDescriptions().get(i).getWeldingType())) {
                         newWeldJob.setMachine(w.getMachine());
                     }
                 }
@@ -289,7 +302,7 @@ public class CustomerPOManagedBean implements Serializable {
         ArrayList<Project> projects = new ArrayList<>(projectSessionBean.getUncompletedStartedProjects());
         if (projects != null) {
             projects = getProjectWithMachineType(machineType, projects);
-            
+
         }
         return getEarliestProject(projects);
     }
@@ -343,6 +356,19 @@ public class CustomerPOManagedBean implements Serializable {
         return bd.doubleValue();
     }
 
+    public void updateRejection() {
+        selectedQuotation.setComment(comment);
+        quotationSessionBean.conductMerge(selectedQuotation);
+        comment = "";
+    }
+
+    public void updateReject(Quotation q) {
+        System.out.println(q.getQuotationNo());
+        q.setStatus("Rejected");
+        selectedQuotation = q;
+        showDialog2();
+    }
+
     public void generatePurchaseOrder(Quotation q) {
         System.out.println("Customer sent purchase order!");
         //purOrderNo = q.getQuotationNo();
@@ -357,6 +383,8 @@ public class CustomerPOManagedBean implements Serializable {
         //Timestamp thirtyDaysLater = new Timestamp(now.getTime());
         //expectedEndDate = thirtyDaysLater;
         // expectedEnd = formatDate(thirtyDaysLater);
+        descriptions = "";
+        total = 0.0;
 
         for (QuotationDescription qd : q.getQuotationDescriptions()) {
 
@@ -392,7 +420,13 @@ public class CustomerPOManagedBean implements Serializable {
     public void showDialog() {
         System.out.println("Show Dialog - AFTER Customer sent purchase order!");
         RequestContext context = RequestContext.getCurrentInstance();
-        context.execute("PF('myDialogVar').show();");
+        context.execute("PF('myDialogVar4').show();");
+    }
+
+    public void showDialog2() {
+        System.out.println("Show Dialog - Rejection for " + selectedQuotation.getQuotationNo());
+        RequestContext context = RequestContext.getCurrentInstance();
+        context.execute("PF('myDialogVar5').show();");
     }
 
     /**
@@ -561,6 +595,34 @@ public class CustomerPOManagedBean implements Serializable {
      */
     public void setReceivedCustomerWJ(ArrayList<WeldJob> receivedCustomerWJ) {
         this.receivedCustomerWJ = receivedCustomerWJ;
+    }
+
+    /**
+     * @return the selectedQuotation
+     */
+    public Quotation getSelectedQuotation() {
+        return selectedQuotation;
+    }
+
+    /**
+     * @param selectedQuotation the selectedQuotation to set
+     */
+    public void setSelectedQuotation(Quotation selectedQuotation) {
+        this.selectedQuotation = selectedQuotation;
+    }
+
+    /**
+     * @return the comment
+     */
+    public String getComment() {
+        return comment;
+    }
+
+    /**
+     * @param comment the comment to set
+     */
+    public void setComment(String comment) {
+        this.comment = comment;
     }
 
 }

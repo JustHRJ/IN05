@@ -19,99 +19,135 @@
             <h3>Editing for: #{documentManageBean.retrieveProjectName()}</h3>
 
             <h:form id ="form2" >
-                <p:panelGrid>
-                    <p:row rendered="#{documentManageBean.checkForNull(documentManageBean.document.requestForm)}">
+                <p:growl id ="msgs"/>
+                <p:panelGrid id ="panel1">
+                    <p:row>
                         <p:column>
                             <p:outputLabel value ="Request For Quotation" />
                         </p:column>
-                        <p:column >
+                        <p:column>
+                            <p:fileUpload fileUploadListener="#{documentManageBean.uploadRequestForm}" />
+                        </p:column>
+                        <p:column rendered = "#{documentManageBean.checkForNull3(documentManageBean.document.requestForm)}">
                             <p:commandButton value ="view" action ="#{documentManageBean.sendURL(documentManageBean.document.requestForm)}" update ="form3"/>
                         </p:column>
                         <p:column>
-                            <p:fileUpload fileUploadListener="#{documentManageBean.uploadRequestForm}"   />
+                            <p:commandButton value ="received" action = "#{documentManageBean.changeRequestForm}"  update=":form2:msgs"/>
                         </p:column>
-                    </p:row>
-                    <p:row rendered="#{documentManageBean.checkForNull(documentManageBean.document.purchaseOrder)}" >
+                        <p:column rendered="#{documentManageBean.checkForNull(documentManageBean.document.requestForm)}">
+                            <p:commandButton value ="Revert" action ="#{documentManageBean.revertRequestForm}"   update=":form2:msgs"/>
+                        </p:column>
+                    </p:row> 
+                    <p:row>
                         <p:column>
                             <p:outputLabel value ="Purchase Order" />
                         </p:column>
                         <p:column>
+                            <p:fileUpload fileUploadListener="#{documentManageBean.uploadPO}"   />
+                        </p:column> 
+                        <p:column rendered = "#{documentManageBean.checkForNull3(documentManageBean.document.purchaseOrder)}">
                             <p:commandButton value ="view" action ="#{documentManageBean.sendURL(documentManageBean.document.purchaseOrder)}" update ="form3"/>
                         </p:column>
                         <p:column>
-                            <p:fileUpload fileUploadListener="#{documentManageBean.uploadPO}" />
-                        </p:column> 
-
+                            <p:commandButton value ="received" action = "#{documentManageBean.changePO}"  update=":form2:msgs"/>
+                        </p:column>
+                        <p:column rendered="#{documentManageBean.checkForNull(documentManageBean.document.purchaseOrder)}" >
+                            <p:commandButton value ="Revert" action = "#{documentManageBean.revertPO}" update=":form2:msgs" />
+                        </p:column>
                     </p:row>
-                    <p:row  rendered="#{documentManageBean.checkForNull(documentManageBean.document.custDeliveryOrder)}">
+                    <p:row>
                         <p:column>
                             <p:outputLabel value ="Customer Delivery Order" />
                         </p:column>
                         <p:column>
+                            <p:fileUpload fileUploadListener="#{documentManageBean.uploadCustDO}" />
+                        </p:column>
+                        <p:column rendered = "#{documentManageBean.checkForNull3(documentManageBean.document.custDeliveryOrder)}">
                             <p:commandButton value ="view" action ="#{documentManageBean.sendURL(documentManageBean.document.custDeliveryOrder)}" update ="form3"/>
                         </p:column>
                         <p:column>
-                            <p:fileUpload fileUploadListener="#{documentManageBean.uploadCustDO}"   />
+                            <p:commandButton value ="received" action = "#{documentManageBean.changeCustDO}"  update=":form2:msgs" />
+                        </p:column>
+                        <p:column rendered="#{documentManageBean.checkForNull(documentManageBean.document.custDeliveryOrder)}">
+                            <p:commandButton value ="Revert" action ="#{documentManageBean.revertCustDO}"  update=":form2:msgs"/>
                         </p:column>
                     </p:row>
-
-                    <p:row rendered="#{documentManageBean.checkForNull(documentManageBean.document.productWeldSheet)}" >
+                    <p:row>
                         <p:column>
                             <p:outputLabel value ="Production Weld Sheet" />
                         </p:column>
-                        <p:column >
+                        <p:column>
+                            <p:fileUpload fileUploadListener="#{documentManageBean.uploadPWS}"  />
+                        </p:column>
+                        <p:column rendered = "#{documentManageBean.checkForNull3(documentManageBean.document.productWeldSheet)}">
                             <p:commandButton value ="view" action ="#{documentManageBean.sendURL(documentManageBean.document.productWeldSheet)}" update ="form3"/>
                         </p:column>
                         <p:column>
-                            <p:fileUpload fileUploadListener="#{documentManageBean.uploadPWS}"   />
+                            <p:commandButton value ="received" action = "#{documentManageBean.changePWS}"  update=":form2:msgs" />
+                        </p:column>
+                        <p:column rendered="#{documentManageBean.checkForNull(documentManageBean.document.productWeldSheet)}">
+                            <p:commandButton value ="Revert" action ="#{documentManageBean.revertPWS}"  update=":form2:msgs panel1" />
                         </p:column>
 
                     </p:row>
 
-                    <p:row rendered="#{documentManageBean.checkForNull(documentManageBean.document.serviceReport)}" >
+                    <p:row>
                         <p:column>
                             <p:outputLabel value ="Service Report" />
                         </p:column>
-
                         <p:column>
+                            <p:fileUpload fileUploadListener="#{documentManageBean.uploadServiceReport}" />
+                        </p:column>
+                        <p:column rendered = "#{documentManageBean.checkForNull3(documentManageBean.document.serviceReport)}">
                             <p:commandButton value ="view" action ="#{documentManageBean.sendURL(documentManageBean.document.serviceReport)}" update ="form3"/>
                         </p:column>
                         <p:column>
-                            <p:fileUpload fileUploadListener="#{documentManageBean.uploadServiceReport}"  />
+                            <p:commandButton value ="received" action = "#{documentManageBean.changeServiceReport}"  update=":form2:msgs" />
+                        </p:column>
+                        <p:column rendered="#{documentManageBean.checkForNull(documentManageBean.document.serviceReport)}">
+                            <p:commandButton value ="Revert" action ="#{documentManageBean.revertServiceReport}"   update=":form2:msgs"/>
                         </p:column>
                     </p:row>
-
-                    <p:row rendered="#{documentManageBean.checkForNull(documentManageBean.document.comDeliveyOrder)}">
+                    <p:row>
                         <p:column>
                             <p:outputLabel value ="Company Delivery Order" />
                         </p:column>
-                        <p:column >
+                        <p:column>
+                            <p:fileUpload fileUploadListener="#{documentManageBean.uploadComDO}" />
+                        </p:column>
+                        <p:column rendered = "#{documentManageBean.checkForNull3(documentManageBean.document.comDeliveyOrder)}">
                             <p:commandButton value ="view" action ="#{documentManageBean.sendURL(documentManageBean.document.comDeliveyOrder)}" update ="form3"/>
                         </p:column>
                         <p:column>
-                            <p:fileUpload fileUploadListener="#{documentManageBean.uploadComDO}"  />
+                            <p:commandButton value ="received" action = "#{documentManageBean.changeComDO}"  update=":form2:msgs" />
+                        </p:column>
+                        <p:column rendered="#{documentManageBean.checkForNull(documentManageBean.document.comDeliveyOrder)}">
+                            <p:commandButton value ="Revert" action ="#{documentManageBean.revertComDO}"  update=":form2:msgs" />
                         </p:column>
                     </p:row>
-
-                    <p:row rendered="#{documentManageBean.checkForNull(documentManageBean.document.invoice)}">
+                    <p:row>
                         <p:column>
                             <p:outputLabel value ="Invoice" />
                         </p:column>
                         <p:column>
+                            <p:fileUpload fileUploadListener="#{documentManageBean.uploadInvoice}"  />
+                        </p:column>
+                        <p:column rendered = "#{documentManageBean.checkForNull3(documentManageBean.document.invoice)}">
                             <p:commandButton value ="view" action ="#{documentManageBean.sendURL(documentManageBean.document.invoice)}" update ="form3"/>
                         </p:column>
                         <p:column>
-                            <p:fileUpload fileUploadListener="#{documentManageBean.uploadInvoice}" />
+                            <p:commandButton value ="received" action = "#{documentManageBean.changeInvoice}"  update=":form2:msgs" />
                         </p:column>
-
+                        <p:column rendered="#{documentManageBean.checkForNull(documentManageBean.document.invoice)}">
+                            <p:commandButton value ="Revert" action ="#{documentManageBean.revertInvoice}"  update=":form2:msgs" />
+                        </p:column>
                     </p:row>
-
-
                 </p:panelGrid>
+
             </h:form>
 
             <h:form id ="form3">
-                <pe:documentViewer height ="600" url ="#{documentManageBean.retrievePDF()}" rendered="#{documentManageBean.checkPDFRender}" />
+                <pe:documentViewer height ="600" url ="#{documentManageBean.pdfURL}" rendered="#{documentManageBean.checkPDFRender}" />
             </h:form>
 
 

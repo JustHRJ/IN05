@@ -43,7 +43,7 @@ public class DocumentManageBean implements Serializable {
     private boolean check = false;
     private boolean checkPDFRender = false;
     private String projID;
-    private String destination = "C:\\Users\\JustHRJ\\Desktop\\IN05\\HiYewInternalWeb\\web\\projectDocuments\\";
+    private String destination = "C:\\Users\\JustHRJ\\Desktop\\Final Presentation\\IN05\\HiYewInternalWeb\\web\\projectDocuments\\";
     private String destinations = "/projectDocuments/";
     private String pdfURL = "";
 
@@ -104,6 +104,9 @@ public class DocumentManageBean implements Serializable {
     }
 
     public String checkFullSubmit(Project proj) {
+        if (proj == null) {
+            return "ui-icon-alert";
+        }
         DocumentControlEntity document = proj.getDocuments();
         Calendar c = Calendar.getInstance();
         c.add(Calendar.DATE, 5);
@@ -140,26 +143,26 @@ public class DocumentManageBean implements Serializable {
                 return "ui-icon-alert";
             }
             return "ui-icon-check";
-        } else if (!(proj.getProjectCompletion()) && timeNow.after(timeExpected)) {
-            if (document.getComDeliveyOrder() == null) {
-                return "ui-icon-notice";
-            }
-            if (document.getCustDeliveryOrder() == null) {
-                return "ui-icon-notice";
-            }
-            if (document.getProductWeldSheet() == null) {
-                return "ui-icon-notice";
-            }
-            if (document.getPurchaseOrder() == null) {
-                return "ui-icon-notice";
-            }
-            if (document.getRequestForm() == null) {
-                return "ui-icon-notice";
-            }
-            if (document.getServiceReport() == null) {
-                return "ui-icon-notice";
-            }
-            return "ui-icon-script";
+//        } else if (!(proj.getProjectCompletion()) && timeNow.after(timeExpected)) {
+//            if (document.getComDeliveyOrder() == null) {
+//                return "ui-icon-notice";
+//            }
+//            if (document.getCustDeliveryOrder() == null) {
+//                return "ui-icon-notice";
+//            }
+//            if (document.getProductWeldSheet() == null) {
+//                return "ui-icon-notice";
+//            }
+//            if (document.getPurchaseOrder() == null) {
+//                return "ui-icon-notice";
+//            }
+//            if (document.getRequestForm() == null) {
+//                return "ui-icon-notice";
+//            }
+//            if (document.getServiceReport() == null) {
+//                return "ui-icon-notice";
+//            }
+//            return "ui-icon-script";
         } else {
             if (document.getComDeliveyOrder() == null) {
                 return "ui-icon-script";
@@ -187,16 +190,7 @@ public class DocumentManageBean implements Serializable {
     }
 
     public String retrievePDF() {
-        try {
-            System.out.println("pdfURl =" + pdfURL);
-            if (pdfURL.equals("")) {
-                return "";
-            } else {
-                return pdfURL;
-            }
-        } catch (Exception ex) {
-            return "";
-        }
+        return pdfURL;
     }
 
     /**
@@ -221,6 +215,19 @@ public class DocumentManageBean implements Serializable {
         if (projID != null) {
             document = documentSystemBean.retrieveDocument(projID);
             check = true;
+        }
+    }
+
+    public boolean checkForNull3(String documentLink) {
+        System.out.println(documentLink);
+        if (documentLink == null || documentLink.isEmpty()) {
+            return false;
+        } else {
+            if (documentLink.equals("Received")) {
+                return false;
+            } else {
+                return true;
+            }
         }
     }
 
@@ -447,6 +454,90 @@ public class DocumentManageBean implements Serializable {
      */
     public void setCheckPDFRender(boolean checkPDFRender) {
         this.checkPDFRender = checkPDFRender;
+    }
+
+    public void changeRequestForm() {
+        documentSystemBean.changeStatus(projID, "RequestForm", "Received");
+        FacesMessage msg = new FacesMessage("Receive Request Form Success");
+        FacesContext.getCurrentInstance().addMessage(null, msg);
+    }
+
+    public void changePO() {
+        documentSystemBean.changeStatus(projID, "PurchaseOrder", "Received");
+        FacesMessage msg = new FacesMessage("Receive Purchase Order Success");
+        FacesContext.getCurrentInstance().addMessage(null, msg);
+    }
+
+    public void changeCustDO() {
+        documentSystemBean.changeStatus(projID, "CustDeliveryOrder", "Received");
+        FacesMessage msg = new FacesMessage("Receive Customer Delivery Order Success");
+        FacesContext.getCurrentInstance().addMessage(null, msg);
+    }
+
+    public void changePWS() {
+        documentSystemBean.changeStatus(projID, "ProductWeldSheet", "Received");
+        FacesMessage msg = new FacesMessage("Receive Product Weld Sheet Success");
+        FacesContext.getCurrentInstance().addMessage(null, msg);
+    }
+
+    public void changeServiceReport() {
+        documentSystemBean.changeStatus(projID, "ServiceReport", "Received");
+        FacesMessage msg = new FacesMessage("Receive Service Report Success");
+        FacesContext.getCurrentInstance().addMessage(null, msg);
+    }
+
+    public void changeComDO() {
+        documentSystemBean.changeStatus(projID, "ComDeliveryOrder", "Received");
+        FacesMessage msg = new FacesMessage("Receive Company Delivery Order Success");
+        FacesContext.getCurrentInstance().addMessage(null, msg);
+    }
+
+    public void changeInvoice() {
+        documentSystemBean.changeStatus(projID, "Invoice", "Received");
+        FacesMessage msg = new FacesMessage("Receive Invoice Success");
+        FacesContext.getCurrentInstance().addMessage(null, msg);
+    }
+
+    public void revertRequestForm() {
+        documentSystemBean.changeStatus(projID, "RequestForm", null);
+        FacesMessage msg = new FacesMessage("Revert Request Form Success");
+        FacesContext.getCurrentInstance().addMessage(null, msg);
+    }
+
+    public void revertPO() {
+        documentSystemBean.changeStatus(projID, "PurchaseOrder", null);
+        FacesMessage msg = new FacesMessage("Revert Purchase Order Success");
+        FacesContext.getCurrentInstance().addMessage(null, msg);
+    }
+
+    public void revertCustDO() {
+        documentSystemBean.changeStatus(projID, "CustDeliveryOrder", null);
+        FacesMessage msg = new FacesMessage("Revert Customer Delivery Order Success");
+        FacesContext.getCurrentInstance().addMessage(null, msg);
+    }
+
+    public void revertPWS() {
+        documentSystemBean.changeStatus(projID, "ProductWeldSheet", null);
+        FacesMessage msg = new FacesMessage("Revert Product Weld Sheet Success");
+        FacesContext.getCurrentInstance().addMessage(null, msg);
+    }
+
+    public void revertServiceReport() {
+        documentSystemBean.changeStatus(projID, "ServiceReport", null);
+        FacesMessage msg = new FacesMessage("Revert Service Reports Success");
+        FacesContext.getCurrentInstance().addMessage(null, msg);
+    }
+
+    public void revertComDO() {
+        documentSystemBean.changeStatus(projID, "ComDeliveryOrder", null);
+        FacesMessage msg = new FacesMessage("Revert Company Delivery Order Success");
+        FacesContext.getCurrentInstance().addMessage(null, msg);
+    }
+
+    public void revertInvoice() {
+        documentSystemBean.changeStatus(projID, "Invoice", null);
+        FacesMessage msg = new FacesMessage("Revert Invoice Success");
+        FacesContext.getCurrentInstance().addMessage(null, msg);
     }
 
 }

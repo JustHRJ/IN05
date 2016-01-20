@@ -155,6 +155,19 @@
                                 <p:message for="diameter"/>
                             </p:column>
                         </p:row>
+                        <p:row style="vertical-align:bottom">   
+                            <p:column>
+                                <p:outputLabel for ="density" style ="font-weight: bold" value ="Density (g)"/>
+                            </p:column>
+                            <p:column>
+                                <p:inputText style="font-weight:normal;width:100%" id="density" maxlength="4" value="#{addItemManagedBean.newItem.density}" label="Density" converterMessage="Invalid Input! Please enter a positive number from 7.8 to 8.4. Example: 7.8 or 8.1">
+                                    <f:validateDoubleRange minimum="7.8" maximum="8.4"  />
+                                </p:inputText>
+                            </p:column>
+                            <p:column>
+                                <p:message for="density"/>
+                            </p:column>
+                        </p:row>
                     </p:panelGrid>
                     <br />
                     <p:commandButton style="margin-right:10px" value="Add New Filler" update="grid msg" action="#{addItemManagedBean.createItem()}" icon="" validateClient="true"/>

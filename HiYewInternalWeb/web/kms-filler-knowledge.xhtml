@@ -213,6 +213,325 @@
                 &nbsp;&nbsp;
                 <p:commandButton value ="Transfer into Excel File" action ="#{knowledgeManageBean.writeFile2()}" update=":formMain:msgs" /> 
             </h:form>
+
+
+            <h:form id ="form2">
+                <div class="page-heading animated fadeInDownBig" style="padding:20px!important;padding-bottom:10px!important;">
+                    <h1>Filler Knowledge Variance Sorting</h1>
+                </div>
+                <p:panelGrid>
+                    <p:row>
+                        <h3>Elements</h3>
+                    </p:row>
+                    <p:row>
+                        <p:column>
+                            Copper: 
+                        </p:column>
+                        <p:column>
+                            <p:inputText value ="#{knowledgeManageBean.sortedFiller.copper}"  validatorMessage="please key in proper value range">
+                                <f:validateDoubleRange minimum="0" maximum="100" />
+                            </p:inputText>
+                        </p:column>
+                    </p:row>
+
+                    <p:row>
+                        <p:column>
+                            Zinc: 
+                        </p:column>
+                        <p:column>
+                            <p:inputText value ="#{knowledgeManageBean.sortedFiller.zinc}"  validatorMessage="please key in proper value range">
+                                <f:validateDoubleRange minimum="0" maximum="100" />
+                            </p:inputText>
+                        </p:column>
+                    </p:row>
+
+                    <p:row>
+                        <p:column>
+                            Iron: 
+                        </p:column>
+                        <p:column>
+                            <p:inputText value ="#{knowledgeManageBean.sortedFiller.iron}"  validatorMessage="please key in proper value range">
+                                <f:validateDoubleRange minimum="0" maximum="100" />
+                            </p:inputText>
+                        </p:column>
+                    </p:row>
+
+                    <p:row>
+                        <p:column>
+                            Aluminium: 
+                        </p:column>
+                        <p:column>
+                            <p:inputText value ="#{knowledgeManageBean.sortedFiller.aluminium}"  validatorMessage="please key in proper value range">
+                                <f:validateDoubleRange minimum="0" maximum="100" />
+                            </p:inputText>
+                        </p:column>
+                    </p:row>
+
+                    <p:row>
+                        <p:column>
+                            Carbon: 
+                        </p:column>
+                        <p:column>
+                            <p:inputText value ="#{knowledgeManageBean.sortedFiller.carbon}"  validatorMessage="please key in proper value range">
+                                <f:validateDoubleRange minimum="0" maximum="100" />
+                            </p:inputText>
+                        </p:column>
+                    </p:row>
+
+                    <p:row>
+                        <p:column>
+                            Nickel: 
+                        </p:column>
+                        <p:column>
+                            <p:inputText value ="#{knowledgeManageBean.sortedFiller.nickel}"  validatorMessage="please key in proper value range">
+                                <f:validateDoubleRange minimum="0" maximum="100" />
+                            </p:inputText>
+                        </p:column>
+                    </p:row>
+
+                    <p:row>
+                        <p:column>
+                            Manganese: 
+                        </p:column>
+                        <p:column>
+                            <p:inputText value ="#{knowledgeManageBean.sortedFiller.manganese}"  validatorMessage="please key in proper value range">
+                                <f:validateDoubleRange minimum="0" maximum="100" />
+                            </p:inputText>
+                        </p:column>
+                    </p:row>
+
+                    <p:row>
+                        <p:column>
+                            Silicon: 
+                        </p:column>
+                        <p:column>
+                            <p:inputText value ="#{knowledgeManageBean.sortedFiller.silicon}"  validatorMessage="please key in proper value range">
+                                <f:validateDoubleRange minimum="0" maximum="100" />
+                            </p:inputText>
+                        </p:column>
+                    </p:row>
+
+                    <p:row>
+                        <p:column>
+                            Chromium: 
+                        </p:column>
+                        <p:column>
+                            <p:inputText value ="#{knowledgeManageBean.sortedFiller.chromium}"  validatorMessage="please key in proper value range">
+                                <f:validateDoubleRange minimum="0" maximum="100" />
+                            </p:inputText>
+                        </p:column>
+                    </p:row>
+
+                    <p:row>
+                        <p:column>
+                            Lead: 
+                        </p:column>
+                        <p:column>
+                            <p:inputText value ="#{knowledgeManageBean.sortedFiller.lead}"  validatorMessage="please key in proper value range">
+                                <f:validateDoubleRange minimum="0" maximum="100" />
+                            </p:inputText>
+                        </p:column>
+                    </p:row>
+                </p:panelGrid>
+                <p:commandButton value ="Search"  update =":form3" /> 
+            </h:form>
+
+
+            <h:form id ="form3">
+
+                <p:dataTable  id ="table" var="im" value="#{knowledgeManageBean.sortedFillers}" widgetVar="fillerTable"  scrollable="true" scrollWidth="100%"  emptyMessage="No filler found with given criteria" filteredValue="#{knowledgeManageBean.filteredFillers}">
+                    <f:facet name="header" >
+                        <p:outputPanel style="text-align:left">
+                            <h:outputText value="Search all fields:" />&nbsp;&nbsp;
+                            <p:inputText id="globalFilter" onkeyup="PF('fillerTable').filter()" style="font-weight:normal;width:150px" placeholder="Enter keyword" />
+                        </p:outputPanel>
+                    </f:facet>
+
+
+                    <p:column styleClass="metalFilter" filterBy="#{im.id}" headerText="ID"  filterMatchMode="contains" width ="92" >
+                        <h:outputText styleClass="metalFilter" value="#{im.id}" />
+                    </p:column>
+
+                    <p:column styleClass="metalFilter" filterBy="#{im.name}" headerText="Name" filterMatchMode="contains"  width ="92">
+                        <h:outputText styleClass="metalFilter" value="#{im.name}" />
+                    </p:column>
+
+                    <p:column styleClass="metalFilter" filterBy="#{im.copper}" headerText="Copper"  filterMatchMode="lte" width ="93">
+                        <f:facet name="filter">
+                            <p:spinner onchange="PF('fillerTable').filter()" styleClass="year-spinner" >
+                                <f:converter converterId="javax.faces.Integer" />
+                            </p:spinner>
+                        </f:facet>
+
+                        <p:cellEditor>
+                            <f:facet name ="output"><p:outputLabel styleClass="metalFilter" value="#{im.copper}" /></f:facet>
+                            <f:facet name ="input"><p:inputText styleClass="metalFilter" value = "#{im.copper}" />
+                            </f:facet>
+                        </p:cellEditor>
+
+                    </p:column>
+
+                    <p:column styleClass="metalFilter" filterBy="#{im.zinc}" headerText="Zinc"  filterMatchMode="lte" width ="93" >
+                        <f:facet name="filter">
+                            <p:spinner onchange="PF('fillerTable').filter()" styleClass="year-spinner">
+                                <f:converter converterId="javax.faces.Integer" />
+                            </p:spinner>
+                        </f:facet>
+                        <h:outputText styleClass="metalFilter" value="#{im.zinc}" />
+                    </p:column>
+
+                    <p:column styleClass="metalFilter" filterBy="#{im.iron}" headerText="Iron"  filterMatchMode="lte" width ="93">
+                        <f:facet name="filter">
+                            <p:spinner onchange="PF('fillerTable').filter()" styleClass="year-spinner" >
+                                <f:converter converterId="javax.faces.Integer" />
+                            </p:spinner>
+                        </f:facet>
+                        <h:outputText styleClass="metalFilter" value="#{im.iron}" />
+                    </p:column>
+
+
+                    <p:column styleClass="metalFilter" filterBy="#{im.aluminium}" headerText="Aluminium"  filterMatchMode="lte" width ="93">
+                        <f:facet name="filter">
+                            <p:spinner onchange="PF('fillerTable').filter()" styleClass="year-spinner">
+                                <f:converter converterId="javax.faces.Integer" />
+                            </p:spinner>
+                        </f:facet>
+                        <h:outputText styleClass="metalFilter" value="#{im.aluminium}" />
+                    </p:column>
+
+
+
+                    <p:column styleClass="metalFilter" filterBy="#{im.carbon}" headerText="Carbon"  filterMatchMode="lte" width ="93">
+                        <f:facet name="filter">
+                            <p:spinner onchange="PF('fillerTable').filter()" styleClass="year-spinner">
+                                <f:converter converterId="javax.faces.Integer" />
+                            </p:spinner>
+                        </f:facet>
+                        <h:outputText styleClass="metalFilter" value="#{im.carbon}" />
+                    </p:column>
+
+                    <p:column styleClass="metalFilter" filterBy="#{im.nickel}" headerText="Nickel"  filterMatchMode="lte" width ="100" >
+                        <f:facet name="filter">
+                            <p:spinner onchange="PF('fillerTable').filter()" styleClass="year-spinner">
+                                <f:converter converterId="javax.faces.Integer" />
+                            </p:spinner>
+                        </f:facet>
+                        <h:outputText styleClass="metalFilter" value="#{im.nickel}" />
+                    </p:column>
+
+                    <p:column styleClass="metalFilter" filterBy="#{im.manganese}" headerText="Manganese"  filterMatchMode="lte" width ="100">
+                        <f:facet name="filter">
+                            <p:spinner onchange="PF('fillerTable').filter()" styleClass="year-spinner">
+                                <f:converter converterId="javax.faces.Integer" />
+                            </p:spinner>
+                        </f:facet>
+                        <h:outputText styleClass="metalFilter" value="#{im.manganese}" />
+                    </p:column>
+
+
+                    <p:column styleClass="metalFilter" filterBy="#{im.silicon}" headerText="silicon"  filterMatchMode="lte" width ="100" >
+                        <f:facet name="filter">
+                            <p:spinner onchange="PF('fillerTable').filter()" styleClass="year-spinner">
+                                <f:converter converterId="javax.faces.Integer" />
+                            </p:spinner>
+                        </f:facet>
+                        <h:outputText styleClass="metalFilter" value="#{im.silicon}" />
+                    </p:column>
+
+                    <p:column styleClass="metalFilter" filterBy="#{im.chromium}" headerText="chromium"  filterMatchMode="lte"  width ="100">
+                        <f:facet name="filter">
+                            <p:spinner onchange="PF('fillerTable').filter()" styleClass="year-spinner">
+                                <f:converter converterId="javax.faces.Integer" />
+                            </p:spinner>
+                        </f:facet>
+                        <h:outputText styleClass="metalFilter" value="#{im.chromium}" />
+                    </p:column>
+
+
+                    <p:column styleClass="metalFilter" filterBy="#{im.lead}" headerText="Lead"  filterMatchMode="lte" width ="100" >
+                        <f:facet name="filter">
+                            <p:spinner onchange="PF('fillerTable').filter()" styleClass="year-spinner">
+                                <f:converter converterId="javax.faces.Integer" />
+                            </p:spinner>
+                        </f:facet>
+                        <h:outputText styleClass="metalFilter" value="#{im.lead}" />
+                    </p:column>
+
+
+                    <p:column style="width:32px;text-align: center">
+                        <p:commandButton update=":formMain:claimDetail" oncomplete="PF('claimDialog').show()" icon="ui-icon-search" title="View">
+                            <f:setPropertyActionListener value="#{im}" target="#{knowledgeManageBean.selectedFiller}" />
+                        </p:commandButton>
+                    </p:column>
+                </p:dataTable>
+
+
+
+                <p:dialog header="Filler Edit" widgetVar="claimDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="true">
+                    <p:outputPanel id="claimDetail" style="text-align:center;">
+                        <p:dataTable var ="im" value ="#{knowledgeManageBean.retrieveFiller}" paginator="true" rows="5" emptyMessage="No Filler to Show" scrollable="true" scrollWidth="95%" >
+                            <p:column  headerText="Id" width ="100"  >
+                                <h:outputText value="#{knowledgeManageBean.selectedFiller.id}" />
+                            </p:column>
+
+                            <p:column  headerText="Name"  width ="100">
+                                <h:outputText value="#{knowledgeManageBean.selectedFiller.name}" />
+                            </p:column>
+
+
+
+                            <p:column  headerText="Copper" width ="100">
+                                <h:inputText value="#{knowledgeManageBean.selectedFiller.copper}" />
+                            </p:column>
+
+                            <p:column  headerText="Zinc" width ="100">
+                                <h:inputText value="#{knowledgeManageBean.selectedFiller.zinc}" />
+                            </p:column>
+
+
+                            <p:column  headerText="Iron" width ="100">
+                                <h:inputText value="#{knowledgeManageBean.selectedFiller.iron}" />
+                            </p:column>
+
+
+                            <p:column  headerText="Aluminium" width ="100">
+                                <h:inputText value="#{knowledgeManageBean.selectedFiller.aluminium}" />
+                            </p:column>
+
+
+
+                            <p:column  headerText="Carbon" width ="100">
+                                <h:inputText value="#{knowledgeManageBean.selectedFiller.carbon}" />
+                            </p:column>
+
+
+                            <p:column  headerText="Nickel" width ="100">
+                                <h:inputText value="#{knowledgeManageBean.selectedFiller.nickel}" />
+                            </p:column>
+
+                            <p:column headerText="Manganese" width ="100">
+                                <h:inputText value="#{knowledgeManageBean.selectedFiller.manganese}" />
+                            </p:column>
+
+
+                            <p:column  headerText="Silicon" width ="100">
+                                <h:inputText value="#{knowledgeManageBean.selectedFiller.silicon}" />
+                            </p:column>
+
+                            <p:column  headerText="Chromium" width ="100">
+                                <h:inputText value="#{knowledgeManageBean.selectedFiller.chromium}" />
+                            </p:column>
+
+
+                            <p:column  headerText="Lead" width ="100" >
+                                <h:inputText value="#{knowledgeManageBean.selectedFiller.lead}" />
+                            </p:column>
+                        </p:dataTable>
+                        <p:commandButton value="Edit" action ="#{knowledgeManageBean.updateFiller()}" update ="formMain form3" />
+
+                    </p:outputPanel>
+                </p:dialog>
+            </h:form>
         </div>
     </ui:define>
 

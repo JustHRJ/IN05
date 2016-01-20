@@ -2,6 +2,11 @@ package managedBean;
 
 import entity.Quotation;
 import entity.QuotationDescription;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.io.Serializable;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
@@ -15,6 +20,8 @@ import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 import javax.inject.Named;
+import org.primefaces.context.RequestContext;
+import org.primefaces.event.FileUploadEvent;
 import session.stateless.CustomerSessionBeanLocal;
 import session.stateless.MetalSessionBeanLocal;
 import session.stateless.QuotationSessionBeanLocal;
@@ -40,12 +47,13 @@ public class QuotationManagedBean implements Serializable {
     private ArrayList<QuotationDescription> cacheList = new ArrayList<>();
     private Quotation newQuotation;
     private QuotationDescription newQuotationDesc;
-
+    private String destinations = "/projectDocuments/";
+    private String destination = "C:/Users/JustHRJ/Desktop/Final Presentation/IN05/HiYewInternalWeb/web/projectDocuments/";
     private ArrayList<Quotation> receivedQuotations;
     private ArrayList<QuotationDescription> displayQuotationDescriptions;
 
     private Date today = new Date();
-    
+
     public QuotationManagedBean() {
         System.out.println("QuotationManagedBean.java QuotationManagedBean()");
         newQuotation = new Quotation();
@@ -94,6 +102,15 @@ public class QuotationManagedBean implements Serializable {
         return results;
     }
 
+    public void redirectBack() throws IOException {
+        reset();
+        FacesContext.getCurrentInstance().getExternalContext().redirect("/HiYewExternalWeb/c-services.xhtml");
+    }
+
+    public void redirectForward() throws IOException {
+        FacesContext.getCurrentInstance().getExternalContext().redirect("/HiYewExternalWeb/newjsf.xhtml");
+    }
+
     public void receivedQuotations() {
         System.out.println("QuotationManagedBean.java receivedQuotations() ===== " + username);
 
@@ -107,12 +124,18 @@ public class QuotationManagedBean implements Serializable {
     }
 
     public String formatDate(Timestamp t) {
-        if(t != null){
-        SimpleDateFormat sd = new SimpleDateFormat("dd/MM/yyyy");
-        return sd.format(t.getTime());
+        if (t != null) {
+            SimpleDateFormat sd = new SimpleDateFormat("dd/MM/yyyy");
+            return sd.format(t.getTime());
         }
         return "";
 
+    }
+
+    public void showDialog2() {
+        System.out.println("Show Dialog2 -After sending request");
+        RequestContext context = RequestContext.getCurrentInstance();
+        context.execute("PF('myDialogVar2').show();");
     }
 
     public void selectQuotation(Quotation q) {
@@ -155,6 +178,42 @@ public class QuotationManagedBean implements Serializable {
         count = cacheList.size() + 1;
     }
 
+    public void uploadRequestForm(FileUploadEvent event) {
+        try {
+            System.out.println(quotationNo);
+            System.out.println("copying file: step 1 ");
+            System.out.println(event.getFile().getFileName());
+            copyFile(event.getFile().getFileName(), event.getFile().getInputstream());
+            quotationSessionBean.updateRequestForm(destinations + quotationNo + "/" + event.getFile().getFileName(), quotationNo);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void copyFile(String fileName, InputStream in) {
+        try {
+            // write the inputStream to a FileOutputStream
+            System.out.println("copying file: step 2");
+            OutputStream out = new FileOutputStream(new File(destination + quotationNo + "\\" + fileName));
+
+            int read = 0;
+            byte[] bytes = new byte[1024];
+
+            while ((read = in.read(bytes)) != -1) {
+                out.write(bytes, 0, read);
+            }
+
+            in.close();
+            out.flush();
+            out.close();
+
+            System.out.println("New file created!");
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
     public void createQuotation(ActionEvent event) {
         if (cacheList.size() < 1) {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "RFQ creation must have at least one item job!", ""));
@@ -165,23 +224,22 @@ public class QuotationManagedBean implements Serializable {
             newQuotation.setQuotationNo(quotationNo);
 
             if (latestEndDate != null) {
-            System.out.println("time is " + latestEndDate.getTime());
-              Timestamp t = new Timestamp(latestEndDate.getTime());
-              newQuotation.setCustomerLatestEnd(t);
-            }else{
-              System.out.println("latestStartDate is null");
+                System.out.println("time is " + latestEndDate.getTime());
+                Timestamp t = new Timestamp(latestEndDate.getTime());
+                newQuotation.setCustomerLatestEnd(t);
+            } else {
+                System.out.println("latestStartDate is null");
             }
-            
+
             //try {
             //    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss.SSS");
             //    Date parsedDate = dateFormat.parse(latestEndDate);
             //    Timestamp timestamp = new java.sql.Timestamp(parsedDate.getTime());
             //    newQuotation.setCustomerLatestStart(timestamp);
-           // } catch (Exception e) {
+            // } catch (Exception e) {
 //
-           // }
+            // }
             //
-
             newQuotation.setCustomer(customerSessionBean.getCustomerByUsername(username));
             //persist quotation
             quotationSessionBean.createQuotation(newQuotation);
@@ -201,12 +259,21 @@ public class QuotationManagedBean implements Serializable {
             //set count back to 1
             count = 1;
             //reinitialise quotation
-            newQuotation = new Quotation();
-            newQuotationDesc = new QuotationDescription();
             //set quotation tab to be selected
             //System.out.println("Your RFQ has been sent successfully!");
             latestEndDate = null;
-            FacesContext.getCurrentInstance().addMessage("msg", new FacesMessage("Your RFQ has been sent successfully!", ""));
+
+            File file = new File("C:\\Users\\JustHRJ\\Desktop\\Final Presentation\\IN05\\HiYewInternalWeb\\web\\projectDocuments\\" + quotationNo);
+            if (!file.exists()) {
+                if (file.mkdir()) {
+                    System.out.println("Directory is created!");
+                } else {
+                    System.out.println("Failed to create directory!");
+                }
+            }
+
+            showDialog2();
+            //  FacesContext.getCurrentInstance().addMessage("msg", new FacesMessage("Your RFQ has been sent successfully!", ""));
         }
     }
 
@@ -351,20 +418,19 @@ public class QuotationManagedBean implements Serializable {
     //public String getLatestStartDate() {
     //    return latestEndDate;
     //}
-
     /**
      * @param latestStartDate the latestStartDate to set
      */
     //public void setLatestStartDate(String latestEndDate) {
     //    this.latestEndDate = latestEndDate;
     //}
-
     /**
      * @return the latestEndDate
      */
     public Date getLatestEndDate() {
         return latestEndDate;
-     }
+    }
+
     /**
      * @param latestEndDate the latestEndDate to set
      */

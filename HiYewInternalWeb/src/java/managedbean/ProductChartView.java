@@ -118,7 +118,7 @@ public class ProductChartView implements Serializable {
         barChart_AnnualRevPLPerYear.setLegendPlacement(LegendPlacement.OUTSIDEGRID);
 
         Axis yAxisYear = barChart_AnnualRevPLPerYear.getAxis(AxisType.Y);
-        yAxisYear.setLabel("Number of thousands (Revenue $)");
+        yAxisYear.setLabel("($)");
         yAxisYear.setMin(500000);
         yAxisYear.setMax(4500000);
         yAxisYear.setTickInterval("250000");
@@ -138,7 +138,7 @@ public class ProductChartView implements Serializable {
         lineChart_AnnualRevPLPerYearByProduct.setLegendPlacement(LegendPlacement.OUTSIDEGRID);
 
         Axis yAxisYear = lineChart_AnnualRevPLPerYearByProduct.getAxis(AxisType.Y);
-        yAxisYear.setLabel("Number of thousands (Revenue $)");
+        yAxisYear.setLabel("($)");
         yAxisYear.setMin(50000);
         yAxisYear.setMax(200000);
         yAxisYear.setTickInterval("10000");
@@ -168,7 +168,7 @@ public class ProductChartView implements Serializable {
         barChartMonth_all.setExtender("pieExtender");
 
         Axis yAxisMonth = barChartMonth_all.getAxis(AxisType.Y);
-        yAxisMonth.setLabel("Number of thousands (Revenue $)");
+        yAxisMonth.setLabel("($)");
         yAxisMonth.setMin(-10000);
         yAxisMonth.setMax(25000);
         yAxisMonth.setTickInterval("5000");
@@ -242,7 +242,7 @@ public class ProductChartView implements Serializable {
         combinedModel_all.setShowPointLabels(true);
 
         Axis yAxis = combinedModel_all.getAxis(AxisType.Y);
-        yAxis.setLabel("Number of thousands (Revenue $)");
+        yAxis.setLabel("($)");
         yAxis.setMin(20000);
         yAxis.setMax(1200000);
         yAxis.setTickInterval("200000");
@@ -286,7 +286,7 @@ public class ProductChartView implements Serializable {
         combinedModel.setShowPointLabels(true);
 
         Axis yAxis = combinedModel.getAxis(AxisType.Y);
-        yAxis.setLabel("Number of thousands (Revenue $)");
+        yAxis.setLabel("($)");
         yAxis.setMin(0);
         yAxis.setMax(250000);
         yAxis.setTickInterval("25000");
@@ -327,7 +327,7 @@ public class ProductChartView implements Serializable {
         barChartMonth.setExtender("pieExtender");
 
         Axis yAxisMonth = barChartMonth.getAxis(AxisType.Y);
-        yAxisMonth.setLabel("Number of thousands (Revenue $)");
+        yAxisMonth.setLabel("($)");
         yAxisMonth.setMin(-10000);
         yAxisMonth.setMax(25000);
         yAxisMonth.setTickInterval("5000");

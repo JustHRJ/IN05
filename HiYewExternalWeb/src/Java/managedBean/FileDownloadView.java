@@ -8,6 +8,7 @@ import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.Element;
 import com.itextpdf.text.Font;
+import com.itextpdf.text.Image;
 import com.itextpdf.text.ListItem;
 import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.Phrase;
@@ -40,6 +41,7 @@ public class FileDownloadView {
     private static Font subFont = new Font(Font.FontFamily.HELVETICA, 16, Font.BOLD);
     private static Font smallBold = new Font(Font.FontFamily.HELVETICA, 12, Font.BOLD);
     private static Font small = new Font(Font.FontFamily.HELVETICA, 12, Font.NORMAL);
+    private static Font catFontUnderLine = new Font(Font.FontFamily.HELVETICA, 18, Font.BOLD + Font.UNDERLINE);
 
     private ProductPurchaseOrder po;
     private ProductQuotation quotation;
@@ -92,13 +94,19 @@ public class FileDownloadView {
         document.addCreator("Lars Vogel");
     }
 
-    private void addTitlePage(Document document) throws DocumentException {
+    private void addTitlePage(Document document) throws DocumentException, IOException {
         Date dNow = new Date();
         SimpleDateFormat ft = new SimpleDateFormat("E yyyy.MM.dd 'at' hh:mm:ss a zzz");
 
         Paragraph preface = new Paragraph();
 
-        preface.add(new Paragraph("Hi-Yew Technology Pte Ltd", catFont));
+        Image image = Image.getInstance("C:\\Users\\JustHRJ\\Desktop\\Final Presentation\\IN05\\HiYewExternalWeb\\web\\images\\logo6.png");
+       
+        document.add(image);
+
+        addEmptyLine(preface, 1);
+
+   
         addEmptyLine(preface, 1);
 
         preface.add(new Paragraph("Dear " + po.getCustomer().getName() + ", ", small));

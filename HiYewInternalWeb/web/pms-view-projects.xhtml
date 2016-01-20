@@ -34,18 +34,6 @@
                     <p:column style="font-weight: bold"  headerText="Project No" width="10%" filterBy="#{pItem.projectNo}">
                         <p:outputLabel style="font-weight: normal" value="#{pItem.projectNo}"/>
                     </p:column>
-                    <p:column style="font-weight: bold" sortBy="#{projManagedBean.formatDate(pItem.actualStart)}" headerText="Actual Start Date (dd/mm/yyyy)" width="8%">
-                        <h:outputText style="font-weight: normal" value="#{projManagedBean.formatDate(pItem.actualStart) eq '' ? 'N.A' : projManagedBean.formatDate(pItem.actualStart)}"/>
-                    </p:column>
-                    <p:column style="font-weight: bold" sortBy="#{projManagedBean.formatDate(pItem.actualEnd)}" headerText="Actual End Date (dd/mm/yyyy)" width="8%">
-                        <h:outputText style="font-weight: normal" value="#{projManagedBean.formatDate(pItem.actualEnd) eq '' ? 'N.A' :  projManagedBean.formatDate(pItem.actualEnd)}"/>
-                    </p:column>
-                    <p:column style="font-weight: bold" sortBy="#{projManagedBean.formatDate(pItem.plannedStart)}" headerText="Planned Start Date (dd/mm/yyyy)" width="9%">
-                        <h:outputText style="font-weight: normal" value="#{projManagedBean.formatDate(pItem.plannedStart)}"/>
-                    </p:column>
-                    <p:column style="font-weight: bold" sortBy="#{projManagedBean.formatDate(pItem.plannedEnd)}" headerText="Planned End Date (dd/mm/yyyy)" width="8%">
-                        <h:outputText style="font-weight: normal" value="#{projManagedBean.formatDate(pItem.plannedEnd)}"/>
-                    </p:column>
                     <p:column style="font-weight: bold" headerText="Customer Name" width="8%" filterBy="#{projManagedBean.getCustomerName(pItem.customerKey)}">
                         <h:outputText style="font-weight: normal" value="#{projManagedBean.getCustomerName(pItem.customerKey)}"/>
                     </p:column>
@@ -59,11 +47,28 @@
                         </f:facet>
                         <h:outputText style="font-weight: normal" value="#{projManagedBean.getProjectStatus(pItem.projectCompletion)}"/>
                     </p:column>
-                    <p:column style="font-weight: bold" headerText="Progress (%)" width="4%">
-                        <h:outputText style="font-weight: normal" value="#{pItem.projectProgress}"/>
+
+
+                    <p:column headerText ="Request For Quotation">
+                        <p:outputLabel value ="#{pItem.documents.requestForm eq null? 'not submitted':'submitted'}"  />
                     </p:column>
-                    <p:column style="font-weight: bold" headerText="Dur (days)" width="4%">
-                        <h:outputText style="font-weight: normal" value="#{projManagedBean.getDurationForCompletedProjects(pItem.projectCompletion,pItem.actualStart,pItem.actualEnd)}"/>
+                    <p:column headerText ="Purchase Order">
+                        <p:outputLabel value ="#{pItem.documents.purchaseOrder eq null? 'not submitted' : 'submitted'}"/>
+                    </p:column>
+                    <p:column headerText ="Customer Delivery Order">
+                        <p:outputLabel value ="#{pItem.documents.custDeliveryOrder eq null? 'not submitted':'submitted'}"  />
+                    </p:column>
+                    <p:column headerText ="Product Weld Sheet">
+                        <p:outputLabel value ="#{pItem.documents.productWeldSheet eq null? 'not submitted' : 'submitted'}"/>
+                    </p:column>
+                    <p:column headerText ="Service Report">
+                        <p:outputLabel value ="#{pItem.documents.serviceReport eq null? 'not submitted':'submitted'}"  />
+                    </p:column>
+                    <p:column headerText ="Com Delivery Order">
+                        <p:outputLabel value ="#{pItem.documents.comDeliveyOrder eq null? 'not submitted' : 'submitted'}"/>
+                    </p:column>
+                    <p:column headerText ="Invoice">
+                        <p:outputLabel value ="#{pItem.documents.invoice eq null? 'not submitted':'submitted'}"  />
                     </p:column>
 
 
@@ -90,17 +95,11 @@
                                     <p:column headerText= "Machine No" width="9%">
                                         <h:outputText value="#{wItem.machine.machine_number}" />
                                     </p:column>
-                                    <p:column headerText= "SA (cm2)" width="9%">
-                                        <h:outputText value="#{wItem.surfaceArea}" />
-                                    </p:column>
                                     <p:column headerText= "Qty" width="6%">
                                         <h:outputText value="#{wItem.totalQuantity}" />
                                     </p:column>
                                     <p:column headerText= "Welding Type" width="11%">
                                         <h:outputText value="#{wItem.weldingType}" />
-                                    </p:column>
-                                    <p:column headerText= "Dur (days)" width="8%">
-                                        <h:outputText value="#{wItem.duration}" />
                                     </p:column>
                                 </p:dataTable>
                             </p:outputPanel>
@@ -112,40 +111,11 @@
                             <f:setPropertyActionListener value="#{pItem}" target="#{documentManageBean.selectedProject}" />
                         </p:commandButton>
                     </p:column>
-
                 </p:dataTable>
 
-                <p:dialog header="List of Documents" widgetVar="matchDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="true">
+                <p:dialog header="reedit documents" widgetVar="matchDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="true">
                     <p:outputPanel id="matchDetail" style="text-align:center;">
-                        <p:dataTable var ="im" value ="#{documentManageBean.selectedProject.documents}" paginator="true" rows="5" emptyMessage="No Documents" scrollable="true" scrollWidth="95%" >
-                            <p:column headerText ="Request For Quotation">
-                                <p:outputLabel value ="#{im.requestForm eq null? 'not submitted':'submitted'}"  />
-                            </p:column>
-                            <p:column headerText ="Purchase Order">
-                                <p:outputLabel value ="#{im.purchaseOrder eq null? 'not submitted' : 'submitted'}"/>
-                            </p:column>
-                            <p:column headerText ="Customer Delivery Order">
-                                <p:outputLabel value ="#{im.custDeliveryOrder eq null? 'not submitted':'submitted'}"  />
-                            </p:column>
-                            <p:column headerText ="Product Weld Sheet">
-                                <p:outputLabel value ="#{im.productWeldSheet eq null? 'not submitted' : 'submitted'}"/>
-                            </p:column>
-                            <p:column headerText ="Service Report">
-                                <p:outputLabel value ="#{im.serviceReport eq null? 'not submitted':'submitted'}"  />
-                            </p:column>
-                            <p:column headerText ="Customer Delivery Order">
-                                <p:outputLabel value ="#{im.comDeliveyOrder eq null? 'not submitted' : 'submitted'}"/>
-                            </p:column>
-                            <p:column headerText ="Invoice">
-                                <p:outputLabel value ="#{im.invoice eq null? 'not submitted':'submitted'}"  />
-                            </p:column>
-                            <p:column>
-                                <p:commandButton value ="View/Reupload" action ="#{documentManageBean.redirectToEdit}" />
-                            </p:column>
-                        </p:dataTable>
-                        
-                        <p:commandButton value ="send email reminder" action ="#{documentManageBean.sendEmail(documentManageBean.selectedProject)}" rendered ="#{documentManageBean.checkEmail(documentManageBean.selectedProject)}" update=":formMain:msgs" />
-
+                        <p:commandButton value ="View/Reupload" action ="#{documentManageBean.redirectToEdit}" />
                     </p:outputPanel>
 
                 </p:dialog>

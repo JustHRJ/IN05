@@ -5,7 +5,9 @@
                 xmlns:h="http://xmlns.jcp.org/jsf/html"
                 xmlns:f="http://xmlns.jcp.org/jsf/core"
                 xmlns:p="http://primefaces.org/ui"
-                template="./template.xhtml">
+                xmlns:pe="http://primefaces.org/ui/extensions"
+                template="./template.xhtml"
+                xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
 
     <ui:define name="content">
         <style>
@@ -76,13 +78,13 @@
                         <p:rowEditor />
                     </p:column>
                     <p:column style="width:12px;text-align: center">
-                        <p:commandButton id="quoteDescBtn" icon="ui-icon-search" title="View" update="quotationDetailPanel" action="#{adminQuotationManagedBean.selectQuotation(item)}"/>
+                        <p:commandButton id="quoteDescBtn" icon="ui-icon-search" title="View" update="quotationDetailPanel" action="#{adminQuotationManagedBean.selectQuotation(item)}" />
                         <!--<p:dialog  widgetVar="dlg" modal="true" resizable="false" header="Values" showEffect="fade" >-->
                         <p:overlayPanel for="quoteDescBtn" showEffect="fade" hideEffect="fade" dismissable="false" showCloseIcon="true" style="width:1300px">
 
                             <p:outputPanel id="quotationDetailPanel" style="text-align:center;" >
                                 <p:commandButton value="Update Quotation Details" action="#{adminQuotationManagedBean.updateQuotationPricesAndSample()}" update=":innerForm:msgs " disabled="#{loginControlBean.checkValid()}"  icon="ui-icon-check"/>
-                                <p:commandButton value="Forward to Customer" action="#{adminQuotationManagedBean.updateQuotationStatus()}" update=":innerForm:msgs rcvQuote" icon="ui-icon-check" disabled="#{loginControlBean.checkValid()}" />
+                                <p:commandButton value="Forward to Customer" action="#{adminQuotationManagedBean.updateQuotationStatus()}" update=":innerForm:msgs innerForm" icon="ui-icon-check" disabled="#{loginControlBean.checkValid()}" />
 
                                 <p:dataTable var="quoteDescItem" value="#{adminQuotationManagedBean.displayQuotationDescriptions}" rows="5" paginator="true">
                                     <p:column headerText="ID" width="5%">
@@ -106,7 +108,7 @@
                                     </p:column>
                                     <p:column headerText="Quoted Price Per Piece (SGD)" width="15%">
                                         <h:inputText value="#{quoteDescItem.price}" style="width: 60%"
-                                                     maxlength="7" converterMessage="Quantity must be a number consisting of one or more digits." disabled="#{loginControlBean.checkValid()}">
+                                                     maxlength="7" converterMessage="Quantity must be a number consisting of one or more digits." disabled="#{loginControlBean.checkValid() || adminQuotationManagedBean.checkAccepted()}">
                                             <f:validateLongRange minimum="1" />
                                         </h:inputText>
                                     </p:column>
@@ -122,7 +124,7 @@
                                     </p:column>
 
                                     <p:column style="width:9%;text-align: center">
-                                        <p:commandButton  id="atpBtn" update=":innerForm:atpDetail :innerForm:costSection" value="Perform ATP" action="#{adminQuotationManagedBean.clickPerformATP()}" oncomplete="PF('atpDialog').show()" icon="ui-icon-search" title="ATP">
+                                        <p:commandButton  id="atpBtn" update=":innerForm:atpDetail " value="Perform ATP" action="#{adminQuotationManagedBean.clickPerformATP()}" oncomplete="PF('atpDialog').show()" icon="ui-icon-search" title="ATP">
                                             <f:setPropertyActionListener value="#{quoteDescItem}" target="#{adminQuotationManagedBean.selectedQuotationDescription}" />
                                         </p:commandButton>
                                     </p:column>
@@ -130,12 +132,195 @@
                                 </p:dataTable>
 
                             </p:outputPanel>
-
                         </p:overlayPanel>
                         <!--</p:dialog>-->
                     </p:column>
+                    <p:column style="font-weight: bold" headerText="" width="3%"  rendered="#{adminQuotationManagedBean.checkPending2()}">
+                        <p:commandButton value ="view Doc" action ="#{adminQuotationManagedBean.showDialog4(item)}" update = ":innerForm:myDialogID6" />
+                    </p:column>
 
+                    <p:column style="font-weight: bold" headerText="" width="3%"  rendered="#{adminQuotationManagedBean.checkPending()}">
+
+                        <p:commandLink value="Accept" style="color: green; font-weight: bold; font-family: 'Open Sans'; font-size: 14px;" action="#{pOManagedBean.generatePurchaseOrder(item)}" update="myDialogID4" /> &nbsp;|&nbsp;
+                        <p:commandLink value="Reject" style="color: red; font-weight: bold; font-family: 'Open Sans'; font-size: 14px;" action ="#{pOManagedBean.updateReject(item)}" update = "myDialogID5"  />
+
+                        <p:dialog style="max-height:2000px" styleClass="rfq" id="myDialogID5"  widgetVar="myDialogVar5" modal="true" resizable="false" header="Rejetion Update (#{pOManagedBean.selectedQuotation.quotationNo})" showEffect="fade" width="500px">
+                            <p:panelGrid>
+                                <p:row>
+                                    <p:column>
+                                        Reason for rejection
+                                    </p:column>
+                                    <p:column>
+                                        <p:inputText value ="#{pOManagedBean.comment}"/>
+                                    </p:column>
+                                </p:row>
+                                <p:commandButton value ="Rejected Quotation" action ="#{pOManagedBean.updateRejection()}" update ="innerForm" />
+                            </p:panelGrid>
+                        </p:dialog>
+
+                        <p:dialog style="max-height:2000px" styleClass="rfq" id="myDialogID4"  widgetVar="myDialogVar4" modal="true" resizable="false" header="Purchase Order" showEffect="fade" width="500px">
+                            <p:scrollPanel mode="native" style="max-height:500px">
+
+                                <p:panelGrid id="display" columns="2" columnClasses="label,value">
+                                    <h:outputText value="Purchase No.: " style="width: 10%; font-weight: bolder; vertical-align: middle"/>
+
+                                    <p:inputText style="width: 210px; margin-top: 1px;font-weight: normal; font-size: 14px; font-family: 'Open Sans';" requiredMessage="PO number must be filled in!"  value="#{pOManagedBean.newPurOrder.customerRefPoNumber}" id="customerRefPoId"  />
+
+
+                                    <h:outputText value="Attention: " style="width: 10%; font-weight: bolder; vertical-align: middle"/>
+                                    <h:outputText id="attnId" value="#{pOManagedBean.attn}" />
+
+                                    <h:outputText value="Terms of Payment: " style="width: 10%; font-weight: bolder; vertical-align: middle" />
+                                    <h:outputText id="topID" value="#{pOManagedBean.paymentTerms}" />
+
+                                    <h:outputText value="Order Date: " style="width: 10%; font-weight: bolder"/>
+                                    <h:outputText id="orderDateId" value="#{pOManagedBean.orderDate}" />
+
+                                    <h:outputText value="Item Jobs: " style="width: 15%; font-weight: bolder"/>
+                                    <h:outputText id="descId" value="#{pOManagedBean.descriptions}" style="white-space: pre-wrap" escape="false"/>
+
+                                    <h:outputText value="Total Price (SGD): " style="width: 10%; font-weight: bolder"/>
+                                    <h:outputText id="totalPriceId" value="#{pOManagedBean.totalPrice}" />
+
+                                    <p:column>
+                                        <p:outputLabel for="mailingAddr1" value="Mailing Address:" style="width: 10%; font-weight: bolder"/>
+                                        <br />
+                                        <p:outputLabel value="*Please do not fill in if the mailing address is " style="font-size: 80%;color: red" />
+                                        <br />
+                                        <p:outputLabel value="the same as your home address." style="font-size: 80%;color: red" />
+                                    </p:column>
+                                    <p:column>
+                                        <p:inputText style="width: 210px; margin-top: 1px;font-weight: normal; font-size: 14px; font-family: 'Open Sans';" placeholder="e.g. Beach Road" value="#{pOManagedBean.newPurOrder.mailingAddr1}" id="mailingAddr1"  />
+                                        <br />
+                                        <p:inputText style="width: 210px; margin-top: 5px; font-weight: normal; font-size: 14px; font-family: 'Open Sans';" placeholder="e.g. 12, #01-02" value="#{pOManagedBean.newPurOrder.mailingAddr2}" id="mailingAddr2"  />
+                                        <br />
+                                    </p:column>
+                                </p:panelGrid>
+                                <br />
+                                <p:commandButton icon="" value="Send Purchase Order" action="#{pOManagedBean.createPurchaseOrder(item)}" update ="innerForm:rcvQuote" style="padding-top: 5px; padding-bottom: 5px; padding-left: 22px; padding-right: 22px" />
+                                <br /><br />
+
+                            </p:scrollPanel>
+
+                        </p:dialog>
+                    </p:column>
                 </p:dataTable>
+
+                <p:dialog style="max-height:2000px" styleClass="rfq" id="myDialogID3"  widgetVar="myDialogVar3" modal="true" resizable="false" header="Editing Description Message" showEffect="fade" width="1000px">
+                    <p:dataTable var="quoteDescItem" value="#{adminQuotationManagedBean.displayQuotationDescriptions}" rows="5" paginator="true">
+                        <p:column headerText="ID" width="5%">
+                            <h:outputText value="#{quoteDescItem.quotationDescNo}" />
+                        </p:column>
+                        <p:column headerText="Metal" width="15%">
+                            <h:outputText value="#{quoteDescItem.metalName}" />
+                        </p:column>
+                        <p:column headerText="Instructions" width="22%">
+                            <p:inputTextarea value ="#{quoteDescItem.itemDesc}" cols="20" rows="5" />
+                        </p:column>
+
+                        <p:column headerText="Qty" width="6%">
+                            <h:outputText value="#{quoteDescItem.qty}" />
+                        </p:column>
+                        <p:column headerText="Surface Area(cm2)" width="8%">
+                            <h:outputText value="#{quoteDescItem.surfaceVol}" />
+                        </p:column>
+                        <p:column headerText="Welding Type" width="9%">
+                            <h:outputText value="#{quoteDescItem.weldingType}" />
+                        </p:column>
+                        <p:column headerText="Quoted Price Per Piece (SGD)" width="15%">
+                            <h:outputText value="#{quoteDescItem.price}" style="width: 60%"/>
+                        </p:column>
+                        <p:column headerText="Remarks" width="15%">
+                            <h:inputText value="#{quoteDescItem.remarksToCustomer}" style="width: 95%"/>
+                        </p:column>
+                    </p:dataTable>
+                    <p:commandButton value ="Continue to Email Template" action ="#{adminQuotationManagedBean.showDialog()}" update = "myDialogID" />
+                </p:dialog>
+
+
+                <p:dialog style="max-height:2000px" styleClass="rfq" id="myDialogID2"  widgetVar="myDialogVar2" modal="true" resizable="false" header="Template Email Message" showEffect="fade" width="500px">
+                    <p:panelGrid>
+                        <p:row>
+                            <p:column>
+                                Mr/Ms/Miss
+                            </p:column>
+                            <p:column>
+                                <p:selectOneMenu value ="#{fileDownloadView.callSign}">
+                                    <f:selectItem itemValue="Mr" itemLabel="Mr"/>
+                                    <f:selectItem itemValue="Miss" itemLabel="Miss"/>
+                                    <f:selectItem itemValue="Mrs" itemLabel="Mrs"/>
+                                    <f:selectItem itemValue="Ms" itemLabel="Ms"/>
+
+                                </p:selectOneMenu>
+                            </p:column>
+                        </p:row>
+                        <p:row>
+                            <p:column>
+                                Blk number:
+                            </p:column>
+                            <p:column>
+                                <p:inputText value ="#{fileDownloadView.blkAddress}"/>
+                            </p:column>
+                        </p:row>
+                        <p:row>
+                            <p:column>
+                                Address Row 1:
+                            </p:column>
+                            <p:column>
+                                <p:inputText value ="#{fileDownloadView.row1Address}"/>
+                            </p:column>
+                        </p:row>
+                        <p:row>
+                            <p:column>
+                                Address Row 2
+                            </p:column>
+                            <p:column>
+                                <p:inputText value ="#{fileDownloadView.row2Address}"/>
+                            </p:column>
+                        </p:row>
+                        <p:row>
+                            <p:column>
+                                Postal Code:
+                            </p:column>
+                            <p:column>
+                                <p:inputText value ="#{fileDownloadView.postalCode}"/>
+                            </p:column>
+                        </p:row>
+
+                    </p:panelGrid>
+                    <p:commandButton update = "innerForm"  value ="Create Document" action ="#{fileDownloadView.getFile(adminQuotationManagedBean.selectedQuotation )}"/>
+                </p:dialog>
+
+
+                <p:dialog style="max-height:2000px" styleClass="rfq" id="myDialogID"  widgetVar="myDialogVar" modal="true" resizable="false" header="Template Email Message" showEffect="fade" width="500px">
+                    <p:panelGrid>
+                        <p:row>
+                            <p:column>
+                                Customer Name: 
+                            </p:column>
+                            <p:column>
+                                <p:outputLabel value ="#{adminQuotationManagedBean.populateCustName}"/>
+                            </p:column>
+                        </p:row>
+                        <p:row>
+                            <p:column>
+                                Email: 
+                            </p:column>
+                            <p:column>
+                                <p:outputLabel value ="#{adminQuotationManagedBean.populateCustMail}"/>
+                            </p:column>
+                        </p:row>
+                        <p:row>
+                            <p:column>
+                                Template Message: 
+                            </p:column>
+                            <p:column>
+                                <h:outputText escape="false" value ="#{adminQuotationManagedBean.populateMessage}"/>
+                            </p:column>
+                        </p:row>
+                    </p:panelGrid>
+                    <p:commandButton value ="Create Quotation Document" action ="#{fileDownloadView.showDialog2(adminQuotationManagedBean.selectedQuotation)}" update ="myDialogID2" />
+                </p:dialog>
 
                 <p:dialog header="(DSS)Available-to-Promise Result" widgetVar="atpDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false" style="max-height:10000px">
                     <p:scrollPanel mode="native" style="max-height:500px">
@@ -176,24 +361,50 @@
                                                                     <p:message for="secondMetalToWeld" />
                                                                 </p:column>
                                                             </p:row>-->
+                                <p:row style="vertical-align:bottom">
+                                    <p:column style="vertical-align:bottom">
+                                        <p:outputLabel for ="oldVolume" style ="font-weight: bold" value ="Old Volume(cm3) "/>
+                                    </p:column>
+                                    <p:column style="vertical-align:top">
+                                        <p:inputText style="font-weight:normal;width:100%" id="oldVolume" maxlength="10" value="#{adminQuotationManagedBean.oldVolume}" label="OldVolume" required="true" requiredMessage="Diameter is required" converterMessage="Invalid Input! Please enter a positive number with 2d.p. Example: 7.8 or 8.1">
+                                            <f:validateDoubleRange minimum="0.1"/>
+                                        </p:inputText>
+                                    </p:column>
+                                    <p:column>
+                                        <p:message for="oldVolume" />
+                                    </p:column>
+                                </p:row>
 
                                 <p:row style="vertical-align:bottom">
                                     <p:column style="vertical-align:bottom">
-                                        <p:outputLabel for ="saToWeld" style ="font-weight: bold" value ="Surface Area to Weld(cm2) "/>
+                                        <p:outputLabel for ="newVolume" style ="font-weight: bold" value ="New Volume(cm3) "/>
                                     </p:column>
                                     <p:column style="vertical-align:top">
-<!--                                        <p:inputText style="font-weight:normal;width:100%" id="saToWeld" maxlength="11" value="#{adminQuotationManagedBean.surfaceAreaToWeld}" label="SurfaceArea" required="true" requiredMessage="Surface Area is required" converterMessage="Invalid Input! Please enter a positive number(up to 2 decimal)">
-                                            <f:validateDoubleRange minimum="0" /> 
-                                        </p:inputText>-->
-                                        <h:outputText style="font-weight:bold;width:100%" id="saToWeld" value="#{adminQuotationManagedBean.selectedQuotationDescription.surfaceVol}" />
+                                        <p:inputText style="font-weight:normal;width:100%" id="newVolume" maxlength="10" value="#{adminQuotationManagedBean.newVolume}" label="OldVolume" required="true" requiredMessage="Diameter is required" converterMessage="Invalid Input! Please enter a positive number with 2d.p. Example: 7.8 or 8.1">
+                                            <f:validateDoubleRange minimum="0.1"/>
+                                        </p:inputText>
                                     </p:column>
                                     <p:column>
-                                        <p:message for="saToWeld" />
+                                        <p:message for="newVolume" />
+                                    </p:column>
+                                </p:row>
+
+                                <p:row style="vertical-align:bottom">
+                                    <p:column style="vertical-align:bottom">
+                                        <p:outputLabel for ="densityOfSteel" style ="font-weight: bold" value ="Density of Steel (g) "/>
+                                    </p:column>
+                                    <p:column>
+                                        <p:inputText style="font-weight:normal;width:100%" id="densityOfSteel" maxlength="4" value="#{adminQuotationManagedBean.densityOfSteel}" label="DensityOfSteel" converterMessage="Invalid Input! Please enter a positive number from 7.8 to 8.4. Example: 7.8 or 8.1">
+                                            <f:validateDoubleRange minimum="7.8" maximum="8.4"  />
+                                        </p:inputText>
+                                    </p:column>
+                                    <p:column>
+                                        <p:message for="densityOfSteel" />
                                     </p:column>
                                 </p:row>
                                 <p:row style="vertical-align:bottom">
                                     <p:column>
-                                        <p:commandButton value="Generate"  update="atpDetail kmsSection projectsSection costSection" actionListener="#{adminQuotationManagedBean.generateATP}" icon="ui-icon-check" validateClient="true" style="background-color: #529DDE;margin-bottom:20px;float: left" />
+                                        <p:commandButton value="Generate"  update="atpDetail kmsSection " actionListener="#{adminQuotationManagedBean.generateATP}" icon="ui-icon-check" validateClient="true" style="background-color: #529DDE;mprojectsSectargin-bottom:20px;float: left" />
                                     </p:column>
                                 </p:row>
                             </p:panelGrid>
@@ -230,14 +441,14 @@
                                         </p:column>
 
                                         <f:facet name="footer">
-                                            <p:commandButton process="matchingFillersTable" update="innerForm:costSection" action="#{adminQuotationManagedBean.clickUseForCalculation}" icon="ui-icon-search" value="Use for Calculation" style="background-color: #529DDE;"/>
+                                            <p:commandButton process="matchingFillersTable" update="innerForm" action="#{adminQuotationManagedBean.clickUseForCalculation}" icon="ui-icon-search" value="Use for Calculation" style="background-color: #529DDE;"/>
                                         </f:facet>
                                     </p:dataTable>
                                 </h:panelGrid>
                             </p:panel>
 
 
-                            <p:panel id="projectsSection" header="List of Similar Past Projects" toggleable="true" toggleSpeed="500" closeSpeed="500" collapsed="false" style="margin-bottom:20px">
+<!--                            <p:panel id="projectsSection" header="List of Similar Past Projects" toggleable="true" toggleSpeed="500" closeSpeed="500" collapsed="false" style="margin-bottom:20px">
                                 <h:panelGrid columns="1" cellpadding="10">
                                     <p:dataTable id="similarProjectsTable" var="similarProject" value="#{adminQuotationManagedBean.similarWeldJobs}" widgetVar="similarProjectsWidTable" 
                                                  emptyMessage="No Similar Projects Found!" >
@@ -289,9 +500,9 @@
                                         <p:column style="vertical-align:top">
                                             <h:outputText style="font-weight:bold;width:100%" id="totalEstimatedDurations" value="#{adminQuotationManagedBean.weldJobAvgDuration ge 0 ? adminQuotationManagedBean.weldJobAvgDuration  : 'Unable to derive'}" />
                                         </p:column>
-                                        <!--                                        <p:column>
+                                                                                <p:column>
                                                                                     <p:message for="totalEstimatedDurations" />
-                                                                                </p:column>-->
+                                                                                </p:column>
                                     </p:row>
 
                                     <p:row style="vertical-align:bottom">
@@ -301,9 +512,9 @@
                                         <p:column style="vertical-align:top">
                                             <h:outputText style="font-weight: bold;width:100%" id="fillerTotalCost" value="#{adminQuotationManagedBean.weldJobMaterialCost gt 0 ? adminQuotationManagedBean.weldJobMaterialCost  : 'Unable to derive'}" />
                                         </p:column>
-                                        <!--                                        <p:column>
+                                                                                <p:column>
                                                                                     <p:message for="fillerTotalCost" />
-                                                                                </p:column>-->
+                                                                                </p:column>
                                     </p:row>
                                     <p:row style="vertical-align:bottom">
                                         <p:column style="vertical-align:bottom">
@@ -312,9 +523,9 @@
                                         <p:column style="vertical-align:top">
                                             <h:outputText style="font-weight: bold;width:100%" id="manpowerCost" value="#{adminQuotationManagedBean.weldJobManpowerCost gt 0 ? adminQuotationManagedBean.weldJobManpowerCost  : 'Unable to derive'}" />
                                         </p:column>
-                                        <!--                                        <p:column>
+                                                                                <p:column>
                                                                                     <p:message for="manpowerCost" />
-                                                                                </p:column>-->
+                                                                                </p:column>
                                     </p:row>
 
                                     <p:row style="vertical-align:bottom">
@@ -324,9 +535,9 @@
                                         <p:column style="vertical-align:top">
                                             <h:outputText style="font-weight:bold;width:100%" id="totalCost" value="#{adminQuotationManagedBean.weldJobMaterialCost ge 0 ? (adminQuotationManagedBean.weldJobMaterialCost + adminQuotationManagedBean.weldJobManpowerCost) : (adminQuotationManagedBean.weldJobMaterialCost + 1 + adminQuotationManagedBean.weldJobManpowerCost)}" />
                                         </p:column>
-                                        <!--                                        <p:column>
+                                                                                <p:column>
                                                                                     <p:message for="totalCost" />
-                                                                                </p:column>-->
+                                                                                </p:column>
                                     </p:row>
 
                                     <p:row style="vertical-align:bottom">
@@ -335,12 +546,12 @@
                                         </p:column>
                                         <p:column style="vertical-align:top">
                                             <p:spinner onkeypress="return false" id="profitMargin" value="#{adminQuotationManagedBean.profitMargin}" min="-100" max="300" suffix="%" stepFactor="5">
-                                                <p:ajax listener="#{adminQuotationManagedBean.handleKeyEvent}" update="totalPriceToQuote priceToQuotePerUnit" process="@this" />
+                                                <p:ajax listener=" update="totalPriceToQuote priceToQuotePerUnit" process="@this" />
                                             </p:spinner>
                                         </p:column>
-                                        <!--                                        <p:column>
+                                                                                <p:column>
                                                                                     <p:message for="profitMargin" />
-                                                                                </p:column>-->
+                                                                                </p:column>
                                     </p:row>
 
                                     <p:row style="vertical-align:bottom">
@@ -350,9 +561,9 @@
                                         <p:column style="vertical-align:top">
                                             <h:outputText style="font-weight:bold;width:100%" id="totalPriceToQuote" value="#{adminQuotationManagedBean.weldJobPriceToQuote}" />
                                         </p:column>
-                                        <!--                                        <p:column>
+                                                                                <p:column>
                                                                                     <p:message for="totalPriceToQuote" />
-                                                                                </p:column>-->
+                                                                                </p:column>
                                     </p:row>
 
                                     <p:row style="vertical-align:bottom">
@@ -362,28 +573,66 @@
                                         <p:column style="vertical-align:top">
                                             <h:outputText style="font-weight:bold;width:100%" id="priceToQuotePerUnit" value="#{adminQuotationManagedBean.weldJobPriceToQuotePerQty}" />
                                         </p:column>
-                                        <!--                                        <p:column>
+                                                                                <p:column>
                                                                                     <p:message for="priceToQuotePerUnit" />
-                                                                                </p:column>-->
-                                    </p:row>
+                                                                                </p:column>
+                                    </p:row>-->
 
                                     <p:row style="vertical-align:bottom">
                                         <p:column style="vertical-align:bottom">
                                             <p:commandButton oncomplete="PF('atpDialog').hide();" value="Use Findings" update="rcvQuote"  icon="ui-icon-check" action="#{adminQuotationManagedBean.clickTransfer()}" style="background-color: #529DDE;margin-bottom:20px;margin-right:20px;margin-left:40px;float: left">                      
-<!--                                               <f:ajax event="click" onevent="atpDialog.hide()" />-->
+                                                <!--                                               <f:ajax event="click" onevent="atpDialog.hide()" />-->
                                             </p:commandButton>
                                         </p:column>
 
                                     </p:row>
 
-                                </h:panelGrid>
+                          
                             </p:panel>
 
-                        </p:panel>
+                  
                     </p:scrollPanel>
                 </p:dialog>
+
+
+                <p:dialog style="max-height:2000px" styleClass="rfq" id="myDialogID6"  widgetVar="myDialogVar6" modal="true" resizable="false" header="Rejetion Update (#{pOManagedBean.selectedQuotation.quotationNo})" showEffect="fade" width="500px">
+                    <p:panelGrid>
+                        <p:row>
+                            <p:column>
+                                File Destination 
+                            </p:column>
+                            <p:column colspan="2">
+                                <p:outputLabel value ="#{adminQuotationManagedBean.selectedQuotation.document}"/>
+                            </p:column>
+                        </p:row>
+
+                        <p:row>
+                            <p:column>
+                                view as:
+                            </p:column>
+                            <p:column>
+                                <p:commandButton value ="Image" action ="#{adminQuotationManagedBean.showDialog7()}" update ="innerForm" />
+                            </p:column>
+                            <p:column>
+                                <p:commandButton value ="PDF" action = "#{adminQuotationManagedBean.showDialog8()}" update ="innerForm" />
+                            </p:column>
+                        </p:row>
+                        <p:commandButton value ="Rejected Quotation" action ="#{pOManagedBean.updateRejection()}" update ="innerForm" />
+                    </p:panelGrid>
+                </p:dialog>
+                <p:graphicImage rendered="#{adminQuotationManagedBean.checkForImg()}" id = "img" url = "#{adminQuotationManagedBean.link}" /> 
+                <p:resizable for="img" minWidth="200" maxWidth="400" minHeight="100" maxHeight="200" />
+
+                <pe:documentViewer height ="600" value ="#{adminQuotationManagedBean.link}" rendered="#{adminQuotationManagedBean.checkForPdf()}" />
+
+
+
+
+                <!-- why does the quotation number not show up? -->
+
             </h:form>
         </div>
     </ui:define>
 
 </ui:composition>
+

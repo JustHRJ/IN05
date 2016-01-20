@@ -5,6 +5,7 @@
                 xmlns:h="http://xmlns.jcp.org/jsf/html"
                 xmlns:f="http://xmlns.jcp.org/jsf/core"
                 xmlns:p="http://primefaces.org/ui"
+                xmlns:pe="http://primefaces.org/ui/extensions"
                 template="./c-template.xhtml">
 
     <ui:define name="content">        
@@ -68,6 +69,7 @@
                                     <h:selectOneMenu value="#{quotationManagedBean.newQuotationDesc.weldingType}" style="width:170px" >
                                         <f:selectItem itemValue="T.I.G" itemLabel="T.I.G" />
                                         <f:selectItem itemValue="Laser" itemLabel="Laser" />
+                                        <f:selectItem itemValue="Brazing" itemLabel="Brazing / Souldering" />
                                     </h:selectOneMenu>
                                 </div>
                                 <p:commandButton value="Add" actionListener="#{quotationManagedBean.addToCacheList}" update=":notiForm :logoutForm :logoutForm2 :mainForm:msgs mydata weldPanel" icon="" style="padding-top: 5px; padding-bottom: 5px; padding-left: 22px; padding-right: 22px">
@@ -155,6 +157,8 @@
                     </p:dataTable>
                     <br />
 
+
+
                     <p:outputLabel style="font-weight:bold" for="latestEndDate" value ="Latest End Date:&nbsp;" />
                     <p:calendar id="latestEndDate" value="#{quotationManagedBean.latestEndDate}" mindate="#{quotationManagedBean.today}" pattern ="dd/MM/yyyy" requiredMessage="Please enter latest start date for welding activities." />
                     <!--<p:inputText style="font-weight: normal; width:169px" id="latestStartDate" value="" />
@@ -163,6 +167,13 @@
                     <br /><br />
                     <p:commandButton value="Send Request" actionListener="#{quotationManagedBean.createQuotation}" update=":notiForm :logoutForm :logoutForm2 rfqMsg mydata weldPanel rcvQuote latestEndDate" icon="" style="padding-top: 5px; padding-bottom: 5px; padding-left: 22px; padding-right: 22px">
                     </p:commandButton>
+                    <p:dialog style="max-height:2000px"  id="myDialogID2"  widgetVar="myDialogVar2" modal="true"  header="Document Uploads" showEffect="fade">
+
+                        <br />
+                        <p:commandButton icon="" value="Skip upload file" action ="#{quotationManagedBean.redirectBack}"  style="padding-top: 5px; padding-bottom: 5px; padding-left: 22px; padding-right: 22px" />
+                        <p:commandButton icon="" value="Redirect to uploadfile" action ="#{quotationManagedBean.redirectForward}"  style="padding-top: 5px; padding-bottom: 5px; padding-left: 22px; padding-right: 22px" />
+
+                    </p:dialog>
 
                 </p:tab>
                 <p:tab title="View Quotations">
@@ -226,7 +237,7 @@
                         </p:column>
                         <p:column style="font-weight: bold" headerText="" width="11%" >
                             <p:panel id="approvalPanel"  visible="#{quotationManagedBean.setVisibility(item)}" style="border:0px;background: none;">
-                                <p:commandLink value="Accept" style="color: green; font-weight: bold; font-family: 'Open Sans'; font-size: 14px;" action="#{pOManagedBean.generatePurchaseOrder(item)}" update="myDialogID" /> &nbsp;|&nbsp;
+                                <p:commandLink value="Accept" style="color: green; font-weight: bold; font-family: 'Open Sans'; font-size: 14px;"  update="myDialogID" /> &nbsp;|&nbsp;
                                 <p:commandLink value="Reject" style="color: red; font-weight: bold; font-family: 'Open Sans'; font-size: 14px;" action="#{quotationManagedBean.setRejectionStatus(item)}" update="rcvQuote"/>
                             </p:panel>
                             <p:dialog style="max-height:2000px" styleClass="rfq" id="myDialogID"  widgetVar="myDialogVar" modal="true" resizable="false" header="Purchase Order" showEffect="fade" width="500px">
@@ -235,23 +246,23 @@
                                     <p:panelGrid id="display" columns="2" columnClasses="label,value">
                                         <h:outputText value="Purchase No.: " style="width: 10%; font-weight: bolder; vertical-align: middle"/>
 
-                                        <p:inputText style="width: 210px; margin-top: 1px;font-weight: normal; font-size: 14px; font-family: 'Open Sans';" requiredMessage="PO number must be filled in!"  value="#{pOManagedBean.newPurOrder.customerRefPoNumber}" id="customerRefPoId"  />
+                                        <p:inputText style="width: 210px; margin-top: 1px;font-weight: normal; font-size: 14px; font-family: 'Open Sans';" requiredMessage="PO number must be filled in!"   id="customerRefPoId"  />
 
 
                                         <h:outputText value="Attention: " style="width: 10%; font-weight: bolder; vertical-align: middle"/>
-                                        <h:outputText id="attnId" value="#{pOManagedBean.attn}" />
+                                        <h:outputText id="attnId" />
 
                                         <h:outputText value="Terms of Payment: " style="width: 10%; font-weight: bolder; vertical-align: middle" />
-                                        <h:outputText id="topID" value="#{pOManagedBean.paymentTerms}" />
+                                        <h:outputText id="topID"  />
 
                                         <h:outputText value="Order Date: " style="width: 10%; font-weight: bolder"/>
-                                        <h:outputText id="orderDateId" value="#{pOManagedBean.orderDate}" />
+                                        <h:outputText id="orderDateId"  />
 
                                         <h:outputText value="Item Jobs: " style="width: 15%; font-weight: bolder"/>
-                                        <h:outputText id="descId" value="#{pOManagedBean.descriptions}" style="white-space: pre-wrap" escape="false"/>
+                                        <h:outputText id="descId" style="white-space: pre-wrap" escape="false"/>
 
                                         <h:outputText value="Total Price (SGD): " style="width: 10%; font-weight: bolder"/>
-                                        <h:outputText id="totalPriceId" value="#{pOManagedBean.totalPrice}" />
+                                        <h:outputText id="totalPriceId" />
 
                                         <p:column>
                                             <p:outputLabel for="mailingAddr1" value="Mailing Address:" style="width: 10%; font-weight: bolder"/>
@@ -261,14 +272,14 @@
                                             <p:outputLabel value="the same as your home address." style="font-size: 80%;color: red" />
                                         </p:column>
                                         <p:column>
-                                            <p:inputText style="width: 210px; margin-top: 1px;font-weight: normal; font-size: 14px; font-family: 'Open Sans';" placeholder="e.g. Beach Road" value="#{pOManagedBean.newPurOrder.mailingAddr1}" id="mailingAddr1"  />
+                                            <p:inputText style="width: 210px; margin-top: 1px;font-weight: normal; font-size: 14px; font-family: 'Open Sans';" placeholder="e.g. Beach Road"  id="mailingAddr1"  />
                                             <br />
-                                            <p:inputText style="width: 210px; margin-top: 5px; font-weight: normal; font-size: 14px; font-family: 'Open Sans';" placeholder="e.g. 12, #01-02" value="#{pOManagedBean.newPurOrder.mailingAddr2}" id="mailingAddr2"  />
+                                            <p:inputText style="width: 210px; margin-top: 5px; font-weight: normal; font-size: 14px; font-family: 'Open Sans';" placeholder="e.g. 12, #01-02"  id="mailingAddr2"  />
                                             <br />
                                         </p:column>
                                     </p:panelGrid>
                                     <br />
-                                    <p:commandButton icon="" value="Send Purchase Order" action="#{pOManagedBean.createPurchaseOrder(item)}" update="rcvQuote" style="padding-top: 5px; padding-bottom: 5px; padding-left: 22px; padding-right: 22px" />
+                                    <p:commandButton icon="" value="Send Purchase Order"  update="rcvQuote" style="padding-top: 5px; padding-bottom: 5px; padding-left: 22px; padding-right: 22px" />
                                     <br /><br />
 
                                 </p:scrollPanel>
@@ -279,17 +290,17 @@
                 </p:tab>
                 <p:tab title="Purchase Orders">
                     <p:messages id="poMsg"  showDetail="false" />
-                    <p:commandButton value="Refresh" actionListener="#{pOManagedBean.receivedCustomerPO}" update="poMsg rcvPO" icon="" style="padding-top: 5px; padding-bottom: 5px; padding-left: 22px; padding-right: 22px" />
+                    <p:commandButton value="Refresh"  update="poMsg rcvPO" icon="" style="padding-top: 5px; padding-bottom: 5px; padding-left: 22px; padding-right: 22px" />
                     <br /><br />
-                    <p:dataTable value="#{pOManagedBean.receivedCustomerPO}" var="poItem" id="rcvPO" editable="true" emptyMessage="No records">
+                    <p:dataTable  var="poItem" id="rcvPO" editable="true" emptyMessage="No records">
                         <p:column style="font-weight: bold" headerText="PO No" width="15%">
                             <p:outputLabel style="font-weight: normal" value="#{poItem.customerRefPoNumber}"/>
                         </p:column>
                         <p:column style="font-weight: bold" headerText="PO Date (dd/mm/yyyy)" width="11%">
-                            <h:outputText style="font-weight: normal" value="#{pOManagedBean.formatDate(poItem.poDate)}"/>
+                            <h:outputText style="font-weight: normal" />
                         </p:column>
                         <p:column style="font-weight: bold" headerText="Delivery Date (dd/mm/yyyy)" width="11%">
-                            <h:outputText style="font-weight: normal" value="#{pOManagedBean.formatDate(poItem.deliveryDate)}"/>
+                            <h:outputText style="font-weight: normal" />
                         </p:column>
                         <p:column style="font-weight: bold" headerText="Total Price" width="8%">
                             <h:outputText style="font-weight: normal" value="#{poItem.totalPrice}"/>
@@ -302,18 +313,18 @@
                 <p:tab title="Welding Jobs">
 
                     <p:messages id="wjMsg"  showDetail="false" />
-                    <p:commandButton value="Refresh" actionListener="#{pOManagedBean.receivedCustomerWJ()}" update="wjMsg rcvWJ" icon="" style="padding-top: 5px; padding-bottom: 5px; padding-left: 22px; padding-right: 22px" />
+                    <p:commandButton value="Refresh"  update="wjMsg rcvWJ" icon="" style="padding-top: 5px; padding-bottom: 5px; padding-left: 22px; padding-right: 22px" />
                     <br /><br />
-                    <p:dataTable value="#{pOManagedBean.receivedCustomerWJ}" var="wjItem" id="rcvWJ" editable="true" emptyMessage="No records">
+                    <p:dataTable var="wjItem" id="rcvWJ" editable="true" emptyMessage="No records">
                         <p:column style="font-weight: bold" headerText="PO No" width="15%">
                             <p:outputLabel style="font-weight: normal" value="#{wjItem.projectNo}"/>
                         </p:column>
 
                         <p:column style="font-weight: bold" headerText="Expected Start (dd/mm/yyyy)" width="11%">
-                            <h:outputText style="font-weight: normal" value="#{pOManagedBean.formatDate(wjItem.project.plannedStart)}"/>
+                            <h:outputText style="font-weight: normal" />
                         </p:column>
                         <p:column style="font-weight: bold" headerText="Expected End (dd/mm/yyyy)" width="11%">
-                            <h:outputText style="font-weight: normal" value="#{pOManagedBean.formatDate(wjItem.project.plannedEnd)}"/>
+                            <h:outputText style="font-weight: normal" />
                         </p:column>
                         <p:column style="font-weight: bold" headerText="Metal1" width="8%">
                             <h:outputText style="font-weight: normal" value="#{wjItem.metal1}"/>

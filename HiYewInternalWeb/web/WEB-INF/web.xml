@@ -13,6 +13,10 @@
         <filter-name>PrimeFaces FileUpload Filter</filter-name>
         <filter-class>org.primefaces.webapp.filter.FileUploadFilter</filter-class>
     </filter>
+    <mime-mapping>
+        <extension>jsp <!--{or the extension of file}--></extension>
+        <mime-type>text/html</mime-type>
+    </mime-mapping>
     <filter-mapping>
         <filter-name>PrimeFaces FileUpload Filter</filter-name>
         <servlet-name>Faces Servlet</servlet-name>

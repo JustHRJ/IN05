@@ -52,6 +52,7 @@ public class KnowledgeManageBean implements Serializable {
     private List<Metal> MetalRecords;
     private FillerComposition selectedFiller;
     private Metal selectedMetal;
+    private List<FillerComposition> sortedFillerList;
     private List<Vector> result3 = new ArrayList<Vector>();
     private List<Vector> results2 = new ArrayList<Vector>();
     private String metalName = "";
@@ -61,6 +62,7 @@ public class KnowledgeManageBean implements Serializable {
     private String knowledge = "";
     private boolean FillerAdd = false;
     private boolean MetalAdd = false;
+    private FillerComposition sortedFiller;
 
     /**
      * Creates a new instance of KnowledgeManageBean
@@ -78,7 +80,8 @@ public class KnowledgeManageBean implements Serializable {
         if (FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("ItemToPassToComposition") != null) {
             selectedFiller = knowledgeSystemBean.retrieveFiller((FillerEntity) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("ItemToPassToComposition"));
         }
-
+        setSortedFiller(new FillerComposition());
+        setSortedFillerList(null);
     }
 
     public void addNewFillerInfo() throws IOException {
@@ -181,6 +184,12 @@ public class KnowledgeManageBean implements Serializable {
     public List<FillerComposition> getAllFillers() {
         fillerRecords = knowledgeSystemBean.fillerRecords();
         return fillerRecords;
+    }
+
+    public List<FillerComposition> getSortedFillers() {
+        sortedFillerList = knowledgeSystemBean.sortedFillerRecords(sortedFiller);
+        return sortedFillerList;
+
     }
 
     public List<Metal> getAllMetals() {
@@ -683,7 +692,7 @@ public class KnowledgeManageBean implements Serializable {
     }
 
     public void readFile3() throws IOException {
-        
+
         List<Vector> result = read3();
         knowledgeSystemBean.addMatch(result);
         FacesMessage msg = new FacesMessage("Matched Metals and Fillers have been updated");
@@ -727,7 +736,7 @@ public class KnowledgeManageBean implements Serializable {
     }
 
     public void writeFile4() throws IOException, WriteException, BiffException {
-       
+
         metalMatchingList();
         write4();
         FacesMessage msg = new FacesMessage("Matched Metal is Exported");
@@ -825,6 +834,34 @@ public class KnowledgeManageBean implements Serializable {
      */
     public void setMetalAdd(boolean MetalAdd) {
         this.MetalAdd = MetalAdd;
+    }
+
+    /**
+     * @return the sortedFiller
+     */
+    public FillerComposition getSortedFiller() {
+        return sortedFiller;
+    }
+
+    /**
+     * @param sortedFiller the sortedFiller to set
+     */
+    public void setSortedFiller(FillerComposition sortedFiller) {
+        this.sortedFiller = sortedFiller;
+    }
+
+    /**
+     * @return the sortedFillerList
+     */
+    public List<FillerComposition> getSortedFillerList() {
+        return sortedFillerList;
+    }
+
+    /**
+     * @param sortedFillerList the sortedFillerList to set
+     */
+    public void setSortedFillerList(List<FillerComposition> sortedFillerList) {
+        this.sortedFillerList = sortedFillerList;
     }
 
 }
