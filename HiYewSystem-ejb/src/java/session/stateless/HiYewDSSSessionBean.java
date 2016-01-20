@@ -61,11 +61,11 @@ public class HiYewDSSSessionBean implements HiYewDSSSessionBeanLocal {
     }
 
     @Override
-    public int quantityNeeded(FillerEntity filler, double surfaceAreaToweld, int qty) {
-        double fillerVolume = getWireVolume(filler);
-        System.out.println("Surface Area = " + surfaceAreaToweld);
-        System.out.println("Filler Volume = " + fillerVolume);
-        int qtyNeeded = (int) roundUp(((surfaceAreaToweld * qty) / fillerVolume), 0);
+    public int quantityNeeded(FillerEntity filler, double massOfFillerReq, int qty) {
+     
+        System.out.println("Surface Area = " + massOfFillerReq);
+        System.out.println("Filler Mass = " + filler.getMass());
+        int qtyNeeded = (int) roundUp(((massOfFillerReq * qty) / filler.getMass()), 0);
         return qtyNeeded;
     }
 

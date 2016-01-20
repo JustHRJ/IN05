@@ -24,4 +24,6 @@ public interface QuotationSessionBeanLocal {
     public void updateQuotationPrices(ArrayList<QuotationDescription> list);
 
     public void updateQuotationStatus(Quotation q);
+
+    public void updateRequestForm(String link, String quotationNo);
 }

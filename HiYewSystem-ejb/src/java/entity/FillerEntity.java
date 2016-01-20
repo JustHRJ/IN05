@@ -52,6 +52,12 @@ public class FillerEntity implements Serializable {
     
     @Digits(integer = 9, fraction = 2, message = "Invalid input! Note: only up to 9 integers and 2 decimal places. Example: 1234.32")
     private double diameter;
+    
+    @Digits(integer = 9, fraction = 2, message = "Invalid input! Note: only up to 9 integers and 2 decimal places. Example: 1234.32")
+    private double density;
+    
+    @Digits(integer = 9, fraction = 2, message = "Invalid input! Note: only up to 9 integers and 2 decimal places. Example: 1234.32")
+    private double mass;
 
     @OneToMany(mappedBy = "item")
     private Set<StorageInfoEntity> storageInfos = new HashSet<StorageInfoEntity>();
@@ -276,6 +282,34 @@ public class FillerEntity implements Serializable {
      */
     public void setBookedQuantity(int bookedQuantity) {
         this.bookedQuantity = bookedQuantity;
+    }
+
+    /**
+     * @return the mass
+     */
+    public double getMass() {
+        return mass;
+    }
+
+    /**
+     * @param mass the mass to set
+     */
+    public void setMass(double mass) {
+        this.mass = mass;
+    }
+
+    /**
+     * @return the density
+     */
+    public double getDensity() {
+        return density;
+    }
+
+    /**
+     * @param density the density to set
+     */
+    public void setDensity(double density) {
+        this.density = density;
     }
 
     /**

@@ -70,5 +70,11 @@ public interface ProjectSessionBeanLocal {
     public List<Project> getCompletedProjects();
 
     public List<EmployeeEntity> getAllEmployees();
+
+    public void setMachineAvailability(String number, String status);
+
+    public void saveWeldJob(WeldJob job);
+
+  
     
 }

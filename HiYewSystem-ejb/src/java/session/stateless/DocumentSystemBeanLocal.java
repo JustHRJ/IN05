@@ -36,5 +36,7 @@ public interface DocumentSystemBeanLocal {
     public void updateComDO(String destination, String projID);
 
     public Customer customerInfo(String CustomerKey);
+
+    public void changeStatus(String projID, String document, String status);
     
 }

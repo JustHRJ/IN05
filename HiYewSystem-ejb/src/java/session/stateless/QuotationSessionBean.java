@@ -3,6 +3,7 @@ package session.stateless;
 import entity.Customer;
 import entity.Quotation;
 import entity.QuotationDescription;
+import java.io.File;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -44,14 +45,42 @@ public class QuotationSessionBean implements QuotationSessionBeanLocal {
         } else {
             newQuotationNo = custName;
         }
-        newQuotationNo += new SimpleDateFormat("yyyyMMddhhmmss").format(Calendar.getInstance().getTime());
+        newQuotationNo += new SimpleDateFormat("ddMMyyss").format(Calendar.getInstance().getTime());
 
         return newQuotationNo;
     }
 
+    public void updateRequestForm(String link, String quotationNo){
+        Quotation quote = em.find(Quotation.class, quotationNo);
+        if(quote == null){
+            System.out.println("quotation not found");
+        } else{
+            quote.setDocument(link);
+            em.merge(quote);
+        }
+    }
+    
     
     public void conductMerge(Quotation q) {
-        em.merge(q);
+        System.out.println("here");
+        String id = q.getQuotationNo();
+        Quotation merging = em.find(Quotation.class, id);
+        if(merging == null){
+            System.out.println("got problem");
+        } else{
+            System.out.println(q.getQuotationNo());
+            merging = q;
+            em.merge(merging);
+        }
+     
+//        String folderName = q.getQuotationNo();
+//        boolean check = new File("C:\\Users\\JustHRJ\\Desktop\\Final Presentation\\IN05\\HiYewInternalWeb\\web\\projectDocuments\\" + folderName).mkdir();
+//        if (check) {
+//            System.out.println("folder has been created");
+//        } else {
+//            System.out.println("folder has not been created");
+//        }
+
     }
 
     @Override
@@ -67,7 +96,7 @@ public class QuotationSessionBean implements QuotationSessionBeanLocal {
 
     @Override
     public List<Quotation> receivedQuotations(String username) {
-
+        em.flush();
         System.out.println("QuotationSessionBean.java receivedQuotations(String username) username ===== " + username);
 
         Query query = em.createQuery("Select q FROM Quotation AS q where q.date >= :threeDaysAgo AND q.customer.userName=:username ");
@@ -132,7 +161,14 @@ public class QuotationSessionBean implements QuotationSessionBeanLocal {
         query.setParameter("firstDayOfYear", firstDayOfYear);
         query.setParameter("lastDayOfYear", lastDayOfYear);
 
-        List<Quotation> quotations = query.getResultList();
+        List<Quotation> quotations = new ArrayList<Quotation>();
+        
+        for(Object o: query.getResultList()){
+            Quotation q = (Quotation) o;
+            q.getCustomer();
+            quotations.add(q);
+        }
+        
         System.out.println("quotation size is " + quotations.size());
         return quotations;
     }

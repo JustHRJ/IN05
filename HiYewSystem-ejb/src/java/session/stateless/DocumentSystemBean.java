@@ -26,7 +26,7 @@ public class DocumentSystemBean implements DocumentSystemBeanLocal {
     // "Insert Code > Add Business Method")
     @PersistenceContext
     private EntityManager em;
-
+    
     public DocumentControlEntity retrieveDocument(String projID) {
         Project project = em.find(Project.class, projID);
         if (project == null) {
@@ -35,14 +35,14 @@ public class DocumentSystemBean implements DocumentSystemBeanLocal {
             return project.getDocuments();
         }
     }
-
+    
     public void updatePODestination(String destination, String projID) {
         if (projID.isEmpty() || destination.isEmpty()) {
-
+            
         } else {
             Project p = em.find(Project.class, projID);
             if (p == null) {
-
+                
             } else {
                 DocumentControlEntity d = p.getDocuments();
                 d.setPurchaseOrder(destination);
@@ -50,20 +50,20 @@ public class DocumentSystemBean implements DocumentSystemBeanLocal {
             }
         }
     }
-
+    
     public Customer customerInfo(String CustomerKey) {
         Customer cust = em.find(Customer.class, CustomerKey);
         return cust;
-
+        
     }
-
+    
     public void updateCustDODestination(String destination, String projID) {
         if (projID.isEmpty() || destination.isEmpty()) {
-
+            
         } else {
             Project p = em.find(Project.class, projID);
             if (p == null) {
-
+                
             } else {
                 DocumentControlEntity d = p.getDocuments();
                 d.setCustDeliveryOrder(destination);
@@ -71,14 +71,14 @@ public class DocumentSystemBean implements DocumentSystemBeanLocal {
             }
         }
     }
-
+    
     public void updateRequestForm(String destination, String projID) {
         if (projID.isEmpty() || destination.isEmpty()) {
-
+            
         } else {
             Project p = em.find(Project.class, projID);
             if (p == null) {
-
+                
             } else {
                 DocumentControlEntity d = p.getDocuments();
                 d.setRequestForm(destination);
@@ -86,14 +86,14 @@ public class DocumentSystemBean implements DocumentSystemBeanLocal {
             }
         }
     }
-
+    
     public void updatePWS(String destination, String projID) {
         if (projID.isEmpty() || destination.isEmpty()) {
-
+            
         } else {
             Project p = em.find(Project.class, projID);
             if (p == null) {
-
+                
             } else {
                 DocumentControlEntity d = p.getDocuments();
                 d.setProductWeldSheet(destination);
@@ -101,14 +101,14 @@ public class DocumentSystemBean implements DocumentSystemBeanLocal {
             }
         }
     }
-
+    
     public void updateInvoice(String destination, String projID) {
         if (projID.isEmpty() || destination.isEmpty()) {
-
+            
         } else {
             Project p = em.find(Project.class, projID);
             if (p == null) {
-
+                
             } else {
                 DocumentControlEntity d = p.getDocuments();
                 d.setInvoice(destination);
@@ -116,14 +116,14 @@ public class DocumentSystemBean implements DocumentSystemBeanLocal {
             }
         }
     }
-
+    
     public void updateServiceReport(String destination, String projID) {
         if (projID.isEmpty() || destination.isEmpty()) {
-
+            
         } else {
             Project p = em.find(Project.class, projID);
             if (p == null) {
-
+                
             } else {
                 DocumentControlEntity d = p.getDocuments();
                 d.setServiceReport(destination);
@@ -131,14 +131,14 @@ public class DocumentSystemBean implements DocumentSystemBeanLocal {
             }
         }
     }
-
+    
     public void updateComDO(String destination, String projID) {
         if (projID.isEmpty() || destination.isEmpty()) {
-
+            
         } else {
             Project p = em.find(Project.class, projID);
             if (p == null) {
-
+                
             } else {
                 DocumentControlEntity d = p.getDocuments();
                 d.setComDeliveyOrder(destination);
@@ -146,7 +146,7 @@ public class DocumentSystemBean implements DocumentSystemBeanLocal {
             }
         }
     }
-
+    
     public List<String> retrieveProjectList() {
         Query q = em.createQuery("select c from Project c");
         List<String> result = new ArrayList<String>();
@@ -154,11 +154,35 @@ public class DocumentSystemBean implements DocumentSystemBeanLocal {
             Project p = (Project) o;
             result.add(p.getProjectNo());
         }
-
+        
         if (result.isEmpty()) {
             return null;
         } else {
             return result;
         }
     }
+    
+    public void changeStatus(String projID, String document, String status) {
+        Project p = em.find(Project.class, projID);
+        if (p != null) {
+            DocumentControlEntity doc = p.getDocuments();
+            if (document.equals("RequestForm")) {
+                doc.setRequestForm(status);
+            } else if (document.equals("PurchaseOrder")) {
+                doc.setPurchaseOrder(status);
+            } else if (document.equals("CustDeliveryOrder")) {
+                doc.setCustDeliveryOrder(status);
+            } else if (document.equals("ProductWeldSheet")) {
+                doc.setProductWeldSheet(status);
+            } else if (document.equals("ServiceReport")) {
+                doc.setServiceReport(status);
+            } else if (document.equals("ComDeliveryOrder")) {
+                doc.setComDeliveyOrder(status);
+            } else if (document.equals("Invoice")) {
+                doc.setInvoice(status);
+            }
+            
+        }
+    }
+    
 }

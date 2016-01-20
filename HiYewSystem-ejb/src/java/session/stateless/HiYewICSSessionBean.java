@@ -35,6 +35,7 @@ public class HiYewICSSessionBean implements HiYewICSSessionBeanLocal {
 
     @Override
     public void createItem(FillerEntity item) {
+        item.setMass(round(getWireVolume(item)*item.getDensity(), 2));
         em.persist(item);
     }
 
@@ -96,6 +97,8 @@ public class HiYewICSSessionBean implements HiYewICSSessionBeanLocal {
         i.setAverageWeight(item.getAverageWeight());
         i.setWireLength(item.getWireLength());
         i.setDiameter(item.getDiameter());
+        i.setDensity(item.getDensity());
+        i.setMass(round(getWireVolume(item)*item.getDensity(), 2));
     }
 
     @Override

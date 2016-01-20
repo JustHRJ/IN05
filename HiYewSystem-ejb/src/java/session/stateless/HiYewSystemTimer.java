@@ -10,6 +10,7 @@ import entity.EmployeeClaimEntity;
 import entity.EmployeeEntity;
 import entity.LeaveEntity;
 import entity.PayrollEntity;
+import entity.Quotation;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -42,7 +43,6 @@ public class HiYewSystemTimer {
     private final Logger log = Logger
             .getLogger(HiYewSystemTimer.class.getName());
 
-    
     // this method activates every beginning of the year, and checks for all "approved" leave, so that all the leaves that has been accumulated has been replaced in the new year
     @Schedule(dayOfMonth = "1", month = "1", year = "*")
     public void resetLeaves() {
@@ -74,9 +74,9 @@ public class HiYewSystemTimer {
                     }
                     em.merge(l);
                 }
-                if(l.getType().equals("paid") && l.getStatus().equals("pending")){
+                if (l.getType().equals("paid") && l.getStatus().equals("pending")) {
                     String appliedYear = format.format(new Date(l.getAppliedTime().getTime()));
-                    if(appliedYear.equals(pastYear)){
+                    if (appliedYear.equals(pastYear)) {
                         l.setStatus("rejected");
                         l.setRemarks("Notice - past overdue leave application");
                         em.merge(l);
@@ -84,7 +84,7 @@ public class HiYewSystemTimer {
                 }
             }
             e.setNumber_of_leaves(leaveSum + e.getNumber_of_leaves());
-            
+
             em.merge(e);
         }
     }
@@ -130,6 +130,30 @@ public class HiYewSystemTimer {
     public void runEveryMinute() {
         log.log(Level.INFO,
                 "running every minute .. now it's: " + new Date().toString());
+    }
+
+    @Schedule(dayOfWeek = "*")
+    public void runEveryDay() {
+        em.flush();
+        Query q = em.createQuery("Select c FROM Quotation c");
+        Calendar c = Calendar.getInstance();
+        c.add(Calendar.MONTH, -3 );
+        Timestamp timeNow = new Timestamp(c.getTime().getTime());
+        System.out.println("got into here");
+        
+        for (Object o : q.getResultList()) {
+            Quotation quote = (Quotation) o;
+            System.out.println(quote.getStatus());
+            Timestamp time = quote.getDate();
+            if (timeNow.after(time)) {
+                if (("Processed").equals(quote.getStatus())) {
+                    quote.setStatus("Rejected");
+                    quote.setComment("Timeframe Expired");
+                    em.merge(quote);
+                    System.out.println("A Processed Quotation has been rejected");
+                }
+            }
+        }
     }
 
     @Schedule(hour = "*")

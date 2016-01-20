@@ -219,8 +219,8 @@ public class KnowledgeSystemBean implements KnowledgeSystemBeanLocal, KnowledgeS
     }
 
     public List<String> FillersNotAssociated(String metalName) {
-        if(metalName == null || metalName.isEmpty()){
-             return new ArrayList<String>();
+        if (metalName == null || metalName.isEmpty()) {
+            return new ArrayList<String>();
         }
         Metal m = new Metal();
         List<String> result = new ArrayList<String>();
@@ -416,7 +416,7 @@ public class KnowledgeSystemBean implements KnowledgeSystemBeanLocal, KnowledgeS
     }
 
     public boolean checkFillerID(String id) {
-        if(id == null || ("").equals(id)){
+        if (id == null || ("").equals(id)) {
             return false;
         }
         FillerComposition f = em.find(FillerComposition.class, id);
@@ -428,7 +428,7 @@ public class KnowledgeSystemBean implements KnowledgeSystemBeanLocal, KnowledgeS
     }
 
     public boolean checkMetalName(String id) {
-        if(id == null || id.equals("")){
+        if (id == null || id.equals("")) {
             return false;
         }
         Metal f = em.find(Metal.class, id);
@@ -440,7 +440,7 @@ public class KnowledgeSystemBean implements KnowledgeSystemBeanLocal, KnowledgeS
     }
 
     public boolean checkFillerName(String id) {
-        if(id == null || id.equals("")){
+        if (id == null || id.equals("")) {
             return false;
         }
         FillerComposition f = new FillerComposition();
@@ -525,6 +525,40 @@ public class KnowledgeSystemBean implements KnowledgeSystemBeanLocal, KnowledgeS
 
         } catch (Exception ex) {
             return null;
+        }
+    }
+
+    public List<FillerComposition> sortedFillerRecords(FillerComposition filler) {
+        Query q = em.createQuery("select c from FillerComposition c");
+        List<FillerComposition> result = new ArrayList<FillerComposition>();
+        for (Object o : q.getResultList()) {
+            FillerComposition f = (FillerComposition) o;
+            if (f.getCopper() <= filler.getCopper() + 1 && f.getCopper() >= filler.getCopper() - 1) {
+                if (f.getCarbon() <= filler.getCarbon() + 1 && f.getCarbon() >= filler.getCarbon() - 1) {
+                    if (f.getChromium() <= filler.getChromium() + 1 && f.getChromium() >= filler.getChromium() - 1) {
+                        if (f.getAluminium() <= filler.getAluminium() + 1 && f.getAluminium() >= filler.getAluminium() - 1) {
+                            if (f.getIron() <= filler.getIron() + 1 && f.getIron() >= filler.getIron() - 1) {
+                                if (f.getLead() <= filler.getLead() + 1 && f.getLead() >= filler.getLead() - 1) {
+                                    if (f.getManganese() <= filler.getManganese() + 1 && f.getManganese() >= filler.getManganese() - 1) {
+                                        if (f.getNickel() <= filler.getNickel() + 1 && f.getNickel() >= filler.getNickel() - 1) {
+                                            if (f.getSilicon() <= filler.getSilicon() + 1 && f.getSilicon() >= filler.getSilicon() - 1) {
+                                                if (f.getZinc() <= filler.getZinc() + 1 && f.getZinc() >= filler.getZinc() - 1) {
+                                                    result.add(f);
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        if (result.isEmpty()) {
+            return null;
+        } else {
+            return result;
         }
     }
 

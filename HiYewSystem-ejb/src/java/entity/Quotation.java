@@ -22,6 +22,8 @@ public class Quotation implements Serializable {
     private String status; //Processed, Pending, Accepted, Rejected
     private Timestamp customerLatestEnd;
     private Timestamp companyEarliestEnd;
+    private String document;
+    private String comment;
     
     @OneToMany(mappedBy = "quotation")
     private List<QuotationDescription> quotationDescriptions = new ArrayList<>();
@@ -188,6 +190,34 @@ public class Quotation implements Serializable {
     public void setCompanyEarliestEnd(Timestamp companyEarliestEnd) {
         this.companyEarliestEnd = companyEarliestEnd;
         
+    }
+
+    /**
+     * @return the document
+     */
+    public String getDocument() {
+        return document;
+    }
+
+    /**
+     * @param document the document to set
+     */
+    public void setDocument(String document) {
+        this.document = document;
+    }
+
+    /**
+     * @return the comment
+     */
+    public String getComment() {
+        return comment;
+    }
+
+    /**
+     * @param comment the comment to set
+     */
+    public void setComment(String comment) {
+        this.comment = comment;
     }
 
 }

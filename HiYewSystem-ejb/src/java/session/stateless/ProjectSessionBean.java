@@ -35,18 +35,26 @@ public class ProjectSessionBean implements ProjectSessionBeanLocal {
     @PersistenceContext(unitName = "HiYewSystem-ejbPU")
     private EntityManager em;
 
+    public void saveWeldJob(WeldJob job) {
+        Integer id = job.getWeldJobId();
+        System.out.println(id);
+        try {
+            WeldJob job1 = new WeldJob();
+            Query q = em.createQuery("select job1 from WeldJob job1 where job1.weldJobId=:id ");
+            q.setParameter("id", id);
+            job1 = (WeldJob) q.getSingleResult();
+            job1.setDuration(job.getDuration());
+            em.merge(job1);
+        } catch (Exception ex) {
+
+        }
+    }
+
     @Override
     public void createProject(Project project) {
         //initialise document entity for new project
         DocumentControlEntity d = new DocumentControlEntity();
         em.persist(d);
-        String folderName = project.getProjectNo();
-        boolean check = new File("C:\\Users\\JustHRJ\\Desktop\\IN05\\HiYewInternalWeb\\web\\projectDocuments\\" + folderName).mkdir();
-        if (check) {
-            System.out.println("folder has been created");
-        } else {
-            System.out.println("folder has not been created");
-        }
         project.setDocuments(d);
         //create project
         em.persist(project);
@@ -75,6 +83,19 @@ public class ProjectSessionBean implements ProjectSessionBeanLocal {
     @Override
     public void conductEmployeeMerge(EmployeeEntity e) {
         em.merge(e);
+    }
+
+    public void setMachineAvailability(String number, String status) {
+        MachineEntity machine = null;
+        try {
+            Query q = em.createQuery("select machine from MachineEntity machine where machine.machine_number =:id");
+            q.setParameter("id", number);
+            machine = (MachineEntity) q.getSingleResult();
+            machine.setStatus(status);
+            em.merge(machine);
+        } catch (Exception ex) {
+
+        }
     }
 
     @Override
@@ -107,7 +128,6 @@ public class ProjectSessionBean implements ProjectSessionBeanLocal {
     }
 
     //return null if there is no available employee
-
     @Override
     public List<EmployeeEntity> getAllEmployees() {
         Query query = em.createQuery("Select e FROM EmployeeEntity AS e where e.employee_account_status=:status");
@@ -302,7 +322,7 @@ public class ProjectSessionBean implements ProjectSessionBeanLocal {
         Date d1 = new Date(t1.getTime());
         Date d2 = new Date(t2.getTime());
         long diff = d2.getTime() - d1.getTime();
-        return (int) (TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS));
+        return (int) (TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS)) + 1;
     }
 
     @Override

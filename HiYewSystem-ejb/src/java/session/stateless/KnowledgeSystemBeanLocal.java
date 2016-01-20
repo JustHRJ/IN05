@@ -66,5 +66,7 @@ public interface KnowledgeSystemBeanLocal {
     public boolean checkFillerName(String id);
 
     public boolean checkMetalName(String id);
+
+    public List<FillerComposition> sortedFillerRecords(FillerComposition filler);
     
 }
